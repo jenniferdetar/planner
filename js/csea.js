@@ -1,5 +1,5 @@
-const stewards = [
-  { name: 'Gema Larios', role: 'Chief Steward' },
+const fallbackStewards = [
+  { name: 'Gema Larios', role: 'Chief Steward, Steward' },
   { name: 'Anita Persoff', role: 'Steward' },
   { name: 'Belva Douglas', role: 'Steward' },
   { name: 'Caden Stearns', role: 'Steward' },
@@ -11,8 +11,10 @@ const stewards = [
   { name: 'Letetsia Fox', role: 'Steward' },
   { name: 'Marcia Scott', role: 'Steward' },
   { name: 'Matthew Korn', role: 'Steward' },
+  { name: 'Karla Toscano', role: 'Steward' },
   { name: 'Ronald Baucume', role: 'Steward' }
 ]
+let stewards = [...fallbackStewards]
 
 const issueTypes = ['Grievance', 'Gripe', 'Complaint']
 const issuePriorities = ['Low', 'Medium', 'High']
@@ -222,6 +224,19 @@ async function loadMemberIdsFromCsv() {
   }
 }
 
+async function loadStewardsFromJson() {
+  try {
+    const res = await fetch('data/csea_stewards.json?v=20260108', { cache: 'no-store' })
+    if (!res.ok) throw new Error('Steward file unavailable')
+    const data = await res.json()
+    if (Array.isArray(data) && data.length) {
+      stewards = data
+    }
+  } catch (err) {
+    console.warn('Falling back to built-in steward list', err)
+  }
+}
+
 function getFilteredIssues(searchTerm = '') {
   if (!searchTerm.trim()) {
     return issues
@@ -338,7 +353,8 @@ function updateStats() {
   document.getElementById('stat-resolved').textContent = issues.filter(i => i.status === 'Resolved').length
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadStewardsFromJson()
   renderIssues()
   loadMemberIdsFromCsv()
 
