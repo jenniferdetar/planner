@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Management - Opus One Planner</title>
+  <link rel="stylesheet" href="css/opus-core.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/calendar.css">
+    <link rel="stylesheet" href="css/data-management.css">
+</head>
+<body>
+  <div class="planner-container">
+                                <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="calendar.html" class="planner-sidebar-item">Calendar</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+                                </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Data Management</h1>
+          <p>Backup, restore, and manage your data</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
+
+      <main class="planner-main"><section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📥</span>
+            <h2 class="planner-section-title">Export Data</h2>
+          </div>
+          <div class="planner-section-content">
+            <p class="opus-text-secondary opus-mb-md">Download a complete backup of all your data as a JSON file.</p>
+            <button id="export-btn" class="planner-button planner-button-primary">Export as JSON</button>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📤</span>
+            <h2 class="planner-section-title">Import Data</h2>
+          </div>
+          <div class="planner-section-content">
+            <p class="opus-text-secondary opus-mb-md">Restore data from a previously exported JSON file.</p>
+            <input type="file" id="import-file" accept=".json" class="opus-hidden" />
+            <div class="opus-row-center-gap-md">
+              <button id="import-btn" type="button" class="planner-button planner-button-primary">Choose File</button>
+              <span id="file-name" class="opus-text-secondary opus-text-sm"></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📋</span>
+            <h2 class="planner-section-title">Bulk Import Tasks</h2>
+          </div>
+          <div class="planner-section-content">
+            <p class="opus-text-secondary opus-mb-md">Add tasks from an external JSON file. Format: [{&quot;text&quot;: &quot;...&quot;, &quot;due&quot;: &quot;YYYY-MM-DD&quot;, &quot;completed&quot;: false}]</p>
+            <input type="file" id="bulk-import-file" accept=".json" class="opus-hidden" />
+            <div class="opus-row-center-gap-md">
+              <button id="bulk-import-btn" type="button" class="planner-button planner-button-primary">Choose File</button>
+              <span id="bulk-file-name" class="opus-text-secondary opus-text-sm"></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-section" style="border-color: var(--opus-danger); background: rgba(198, 40, 40, 0.05);">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">⚠️</span>
+            <h2 class="planner-section-title" style="color: var(--opus-danger);">Danger Zone</h2>
+          </div>
+          <div class="planner-section-content">
+            <p class="opus-text-secondary opus-mb-md">Permanently delete all your data. This action cannot be undone.</p>
+            <button id="clear-btn" class="planner-button planner-button-danger">Clear All Data</button>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📊</span>
+            <h2 class="planner-section-title">Data Statistics</h2>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <div style="background: var(--opus-bg-light); padding: 16px; border-radius: 4px;">
+              <div style="font-size: 0.9rem; color: var(--opus-text-secondary); margin-bottom: 4px;">Tasks</div>
+              <div id="task-count" style="font-size: 1.8rem; font-weight: 600; color: var(--opus-primary);">0</div>
+            </div>
+            <div style="background: var(--opus-bg-light); padding: 16px; border-radius: 4px;">
+              <div style="font-size: 0.9rem; color: var(--opus-text-secondary); margin-bottom: 4px;">Goals</div>
+              <div id="goal-count" style="font-size: 1.8rem; font-weight: 600; color: var(--opus-primary);">0</div>
+            </div>
+            <div style="background: var(--opus-bg-light); padding: 16px; border-radius: 4px;">
+              <div style="font-size: 0.9rem; color: var(--opus-text-secondary); margin-bottom: 4px;">Notes</div>
+              <div id="note-count" style="font-size: 1.8rem; font-weight: 600; color: var(--opus-primary);">0</div>
+            </div>
+            <div style="background: var(--opus-bg-light); padding: 16px; border-radius: 4px;">
+              <div style="font-size: 0.9rem; color: var(--opus-text-secondary); margin-bottom: 4px;">Meetings</div>
+              <div id="meeting-count" style="font-size: 1.8rem; font-weight: 600; color: var(--opus-primary);">0</div>
+            </div>
+            <div style="background: var(--opus-bg-light); padding: 16px; border-radius: 4px;">
+              <div style="font-size: 0.9rem; color: var(--opus-text-secondary); margin-bottom: 4px;">Master Tasks</div>
+              <div id="master-task-count" style="font-size: 1.8rem; font-weight: 600; color: var(--opus-primary);">0</div>
+            </div>
+            <div style="background: var(--opus-bg-light); padding: 16px; border-radius: 4px;">
+              <div style="font-size: 0.9rem; color: var(--opus-text-secondary); margin-bottom: 4px;">Last Backup</div>
+              <div id="last-backup" style="font-size: 0.95rem; font-weight: 600; color: var(--opus-primary);">Never</div>
+            </div>
+          </div>
+        </section>
+</main>
+
+      <footer class="planner-footer">
+        Keep your data safe with regular backups.
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/opus-storage.js"></script>
+  <script src="js/opus-data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/bulk-import-tasks.js"></script>
+  <script src="js/data-management.js"></script>
+  <script>
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  </script>
+<script src="js/calendar-embed.js"></script>
+</body>
+</html>

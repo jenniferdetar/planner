@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bill Payment Schedule - Opus One Planner</title>
+  <link rel="stylesheet" href="css/opus-core.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/calendar.css">
+  <link rel="stylesheet" href="css/bill-payment-schedule.css">
+</head>
+<body>
+  <div class="planner-container">
+                                <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="calendar.html" class="planner-sidebar-item">Calendar</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+                                </aside>
+
+    <div class="planner-content">
+      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
+      <main class="planner-main">
+        <section class="planner-section bill-schedule">
+          <div class="bill-schedule-card">
+            <div class="bill-schedule-header">
+              <div class="bill-schedule-icon">$</div>
+              <h1 class="bill-schedule-title">Bill Payment Schedule</h1>
+              <p class="bill-schedule-subtitle">
+                Keep track of your bill payments by listing recurring expenses, including how
+                much they cost and what date they are typically paid. Check them off
+                the list below as you pay your bills each month.
+              </p>
+            </div>
+            <div class="bill-schedule-divider"></div>
+            <div class="bill-schedule-table-wrap">
+              <table class="bill-schedule-table">
+                <thead>
+                  <tr>
+                    <th class="col-category">Category</th>
+                    <th class="col-item">Item</th>
+                    <th class="col-amount">Amount</th>
+                    <th>
+                      <div class="months-head">
+                        <span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span>
+                        <span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="category-auto">
+                    <td data-label="Category">Auto</td>
+                    <td data-label="Item">Auto Maintenance</td>
+                    <td class="col-amount" data-label="Amount">$100</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-auto">
+                    <td data-label="Category">Auto</td>
+                    <td data-label="Item">Mercury Auto Insurance</td>
+                    <td class="col-amount" data-label="Amount">$388</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-auto">
+                    <td data-label="Category">Auto</td>
+                    <td data-label="Item">Tahoe Registration</td>
+                    <td class="col-amount" data-label="Amount">$15</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-auto">
+                    <td data-label="Category">Auto</td>
+                    <td data-label="Item">Trailblazer Registration</td>
+                    <td class="col-amount" data-label="Amount">$28</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-bill-pay">
+                    <td data-label="Category">Bill Pay</td>
+                    <td data-label="Item">DWP</td>
+                    <td class="col-amount" data-label="Amount">$100</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-bill-pay">
+                    <td data-label="Category">Bill Pay</td>
+                    <td data-label="Item">Jeff's Credit Cards</td>
+                    <td class="col-amount" data-label="Amount">$500</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-bill-pay">
+                    <td data-label="Category">Bill Pay</td>
+                    <td data-label="Item">Jennifer's Student Loans</td>
+                    <td class="col-amount" data-label="Amount">$150</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-bill-pay">
+                    <td data-label="Category">Bill Pay</td>
+                    <td data-label="Item">Schools First Loan</td>
+                    <td class="col-amount" data-label="Amount">$142</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-cash">
+                    <td data-label="Category">Cash</td>
+                    <td data-label="Item">Cleaning Lady</td>
+                    <td class="col-amount" data-label="Amount">$200</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-cash">
+                    <td data-label="Category">Cash</td>
+                    <td data-label="Item">Gas</td>
+                    <td class="col-amount" data-label="Amount">$600</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-cash">
+                    <td data-label="Category">Cash</td>
+                    <td data-label="Item">Laundry</td>
+                    <td class="col-amount" data-label="Amount">$80</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-credit-card">
+                    <td data-label="Category">Credit Card</td>
+                    <td data-label="Item">ADT</td>
+                    <td class="col-amount" data-label="Amount">$53</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-credit-card">
+                    <td data-label="Category">Credit Card</td>
+                    <td data-label="Item">Amazon</td>
+                    <td class="col-amount" data-label="Amount">$100</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-credit-card">
+                    <td data-label="Category">Credit Card</td>
+                    <td data-label="Item">Groceries</td>
+                    <td class="col-amount" data-label="Amount">$600</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-credit-card">
+                    <td data-label="Category">Credit Card</td>
+                    <td data-label="Item">Hair</td>
+                    <td class="col-amount" data-label="Amount">$110</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-credit-card">
+                    <td data-label="Category">Credit Card</td>
+                    <td data-label="Item">Orkin</td>
+                    <td class="col-amount" data-label="Amount">$50</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-housing">
+                    <td data-label="Category">Housing</td>
+                    <td data-label="Item">HELOC</td>
+                    <td class="col-amount" data-label="Amount">$357</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-housing">
+                    <td data-label="Category">Housing</td>
+                    <td data-label="Item">HOA</td>
+                    <td class="col-amount" data-label="Amount">$520</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-housing">
+                    <td data-label="Category">Housing</td>
+                    <td data-label="Item">Mortgage</td>
+                    <td class="col-amount" data-label="Amount">$2,250</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-housing">
+                    <td data-label="Category">Housing</td>
+                    <td data-label="Item">Spectrum</td>
+                    <td class="col-amount" data-label="Amount">$197</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-housing">
+                    <td data-label="Category">Housing</td>
+                    <td data-label="Item">Verizon</td>
+                    <td class="col-amount" data-label="Amount">$283</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-savings">
+                    <td data-label="Category">Savings</td>
+                    <td data-label="Item">Blow</td>
+                    <td class="col-amount" data-label="Amount">$200</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-savings">
+                    <td data-label="Category">Savings</td>
+                    <td data-label="Item">HSA</td>
+                    <td class="col-amount" data-label="Amount">$200</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-savings">
+                    <td data-label="Category">Savings</td>
+                    <td data-label="Item">Summer Saver</td>
+                    <td class="col-amount" data-label="Amount">$400</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-savings">
+                    <td data-label="Category">Savings</td>
+                    <td data-label="Item">Tahoe's Major Repairs</td>
+                    <td class="col-amount" data-label="Amount">$200</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="category-savings">
+                    <td data-label="Category">Savings</td>
+                    <td data-label="Item">Vacation</td>
+                    <td class="col-amount" data-label="Amount">$125</td>
+                    <td class="months-cell" data-label="Months">
+                      <div class="months-grid">
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                        <span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span><span class="month-box"></span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        Bill Payment Schedule • Track your recurring monthly expenses
+      </footer>
+    </div>
+  </div>
+<script src="js/calendar-embed.js"></script>
+</body>
+</html>

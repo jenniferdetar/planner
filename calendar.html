@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar - Opus One Planner</title>
+  <link rel="stylesheet" href="css/opus-core.css">
+  <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/calendar.css">
+  <style>
+    .planner-header {
+      position: relative;
+    }
+
+    .planner-header-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .planner-header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .planner-header-pill {
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #99B3C5;
+      border: 1px solid rgba(10, 47, 95, 0.25);
+      color: #0a2f5f;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .planner-header-pill:hover {
+      background: #ffffff;
+      border-color: rgba(10, 47, 95, 0.5);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .planner-header {
+        flex-wrap: wrap;
+      }
+
+      .planner-header-actions {
+        position: static;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="planner-container">
+                                <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="calendar.html" class="planner-sidebar-item active">Calendar</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+                                </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Calendar</h1>
+          <p>Monthly View & Events</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="index.html" class="planner-header-pill">Personal Planner</a>
+            <a href="work-planner.html" class="planner-header-pill">Work Planner</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
+
+      <footer class="planner-footer">
+        <p>&copy; 2025 Opus One Planner. Calendar.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script>
+    function updateDate() {
+      const today = new Date();
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      document.getElementById('today-date').textContent = today.toLocaleDateString('en-US', options);
+    }
+    updateDate();
+  </script>
+  <script src="js/calendar-embed.js"></script>
+</body>
+</html>

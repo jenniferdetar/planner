@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Books to Read</title>
+  <link rel="stylesheet" href="css/opus-core.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/calendar.css">
+  <link rel="stylesheet" href="css/books-to-read.css">
+</head>
+<body>
+  <div class="planner-container">
+    <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="calendar.html" class="planner-sidebar-item">Calendar</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Books to Read</h1>
+          <p>Track the titles that support your reading goal.</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
+
+      <main class="planner-main books-page-icons">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <h2 class="planner-section-title">Add a Title</h2>
+          </div>
+          <form id="books-form" class="planner-section-content books-form">
+            <div class="books-form-row">
+              <label class="planner-form-label" for="book-title">Book title</label>
+              <label class="planner-form-label" for="book-author">Author (optional)</label>
+            </div>
+            <div class="books-form-row">
+              <input id="book-title" class="planner-form-input" type="text" placeholder="Add a book you want to read" required>
+              <input id="book-author" class="planner-form-input" type="text" placeholder="Author name">
+            </div>
+            <button type="submit" class="planner-button planner-button-primary">Add Book</button>
+          </form>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <div class="bookshelf-header-row">
+              <h2 class="planner-section-title">Bookshelf</h2>
+              <div class="books-progress-meta">
+                <span id="books-progress-text">0 of 0 completed</span>
+                <span id="books-progress-percent">0%</span>
+              </div>
+            </div>
+          </div>
+          <div class="planner-section-content">
+            <div class="books-progress">
+              <div class="books-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                <div id="books-progress-fill" class="books-progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+            <div id="bookshelf" class="bookshelf"></div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        Books to Read • Saved locally in your browser.
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/books-to-read.js"></script>
+  <script>
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+  </script>
+<script src="js/calendar-embed.js"></script>
+</body>
+</html>
+

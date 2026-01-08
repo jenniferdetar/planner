@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission - Opus One Planner</title>
+  <link rel="stylesheet" href="css/opus-core.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/calendar.css">
+    <link rel="stylesheet" href="css/mission.css">
+</head>
+<body>
+  <div class="planner-container">
+                                <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="calendar.html" class="planner-sidebar-item">Calendar</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+                                </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Mission & Values</h1>
+          <p>Define your personal mission statement</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
+
+      <main class="planner-main"><section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">🌟</span>
+            <h2 class="planner-section-title">Mission Statement</h2>
+          </div>
+          <form id="mission-form" class="planner-section-content">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="mission-text">Your Mission</label>
+              <textarea id="mission-text" class="planner-form-textarea" placeholder="Write your personal mission statement..." style="min-height: 150px;">To build a business that empowers others--by providing trustworthy, efficient financial and virtual support, creating flexible jobs for those who need them, and giving small business owners the peace of mind to rest easy knowing their operations are in good hands.</textarea>
+            </div>
+            <button type="submit" class="planner-button planner-button-primary">Save Mission</button>
+          </form>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">💎</span>
+            <h2 class="planner-section-title">Core Values</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="opus-row-gap-sm opus-mb-md">
+              <input type="text" id="value-input" class="planner-form-input opus-flex-1" placeholder="Add a core value" />
+              <button type="button" class="planner-button planner-button-secondary" id="add-value-btn">Add Value</button>
+            </div>
+            <div id="values-list" class="opus-col-gap-sm"></div>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📖</span>
+            <h2 class="planner-section-title">Last Updated</h2>
+          </div>
+          <div class="planner-section-content">
+            <p id="last-updated" class="opus-text-secondary">Never</p>
+          </div>
+        </section>
+</main>
+
+      <footer class="planner-footer">
+        Your mission guides all your planning decisions.
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/opus-storage.js"></script>
+  <script src="js/opus-data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/mission.js"></script>
+  <script>
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  </script>
+<script src="js/calendar-embed.js"></script>
+</body>
+</html>

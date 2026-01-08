@@ -1,0 +1,477 @@
+/* Budget Module - Leather Planner Aesthetic */
+
+.budget-grid,
+.checkbook-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  background: linear-gradient(135deg, #ffffff 0%, var(--opus-info) 100%);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.budget-grid thead,
+.checkbook-table thead {
+  background: linear-gradient(135deg, #004a9c 0%, #00326b 100%);
+  color: #ffffff;
+}
+
+.budget-grid thead th,
+.checkbook-table thead th {
+  background: linear-gradient(135deg, #004a9c 0%, #00326b 100%);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 6px 10px;
+  border: 1px solid #00326b;
+  text-align: center;
+  height: 26px;
+  line-height: 1.1;
+}
+
+.budget-grid tbody tr,
+.checkbook-table tbody tr {
+  background-color: #ffffff;
+}
+
+.budget-grid tbody td,
+.checkbook-table tbody td {
+  padding: 4px 10px;
+  border: 1px solid #c8d6eb;
+  line-height: 1.2;
+  height: 28px;
+  background: transparent;
+  color: #222222;
+  text-align: center;
+}
+
+.budget-grid tbody tr:nth-child(even),
+.checkbook-table tbody tr:nth-child(even) {
+  background: #f0f5fa;
+}
+
+.budget-grid tbody tr:hover,
+.checkbook-table tbody tr:hover {
+  background: var(--leather-light);
+}
+
+.budget-grid tfoot,
+.checkbook-table tfoot {
+  background: linear-gradient(135deg, #c8d6eb 0%, #c8d6eb 100%);
+}
+
+.budget-grid tfoot td,
+.checkbook-table tfoot td {
+  background: linear-gradient(135deg, #c8d6eb 0%, #c8d6eb 100%);
+  font-weight: 700;
+  color: #00326b;
+  padding: 10px;
+  border: 1px solid #c8d6eb;
+}
+
+.budget-grid .category,
+.budget-grid .item,
+.budget-grid .amount,
+.budget-grid .budget-amount,
+.budget-grid .actual-amount,
+.budget-grid .variance,
+.budget-grid .type {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-grid .category {
+  font-weight: 500;
+  width: 120px;
+  color: #00326b;
+}
+
+.budget-grid .item {
+  width: auto;
+  color: #222222;
+}
+
+.budget-overview-grid .item {
+  width: 180px;
+}
+
+.budget-overview-grid th,
+.budget-overview-grid td {
+  text-align: center;
+}
+
+
+.budget-grid .amount,
+.budget-grid .budget-amount,
+.budget-grid .actual-amount,
+.budget-grid .variance {
+  width: 110px;
+  color: #222222;
+}
+
+.budget-grid .type {
+  width: 90px;
+  color: #53575A;
+  font-size: 0.85rem;
+}
+
+.budget-grid .positive {
+  color: var(--opus-success);
+  font-weight: 500;
+}
+
+.budget-grid .negative {
+  color: var(--opus-danger);
+  font-weight: 500;
+}
+
+/* Spreadsheet-style layout for the checkbook table */
+.checkbook-table {
+  background: #ffffff;
+  border: 1px solid #c8d6eb;
+  font-family: var(--form-font-family) !important;
+}
+
+.checkbook-table thead,
+.checkbook-table tfoot {
+  background: transparent;
+}
+
+.checkbook-table thead th {
+  background: #f0f4fa;
+  color: #111111;
+  border: 1px solid #c8d6eb;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  padding: 4px 6px;
+  font-weight: 700;
+}
+
+.checkbook-table thead .plan-title-row th {
+  background: var(--leather-dark);
+  color: #ffffff;
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  border: 1px solid #c8d6eb;
+  padding: 6px 8px;
+}
+
+.checkbook-table tbody td,
+.checkbook-table tfoot td {
+  background: transparent;
+  border: 1px solid #c8d6eb;
+  padding: 3px 6px;
+}
+
+.checkbook-table tbody tr:nth-child(even),
+.checkbook-table tbody tr:hover {
+  /* Inherit background from global rules above */
+}
+
+.checkbook-table .group-header,
+.checkbook-table .sub-header {
+  background: #f0f4fa; /* Lighter blue to minimize space impact */
+  color: #111111;
+  text-align: center;
+}
+
+.checkbook-table .category-row td {
+  background: var(--leather-dark);
+  color: #ffffff;
+  text-align: left;
+  padding: 4px 6px;
+  font-weight: 700;
+}
+
+.checkbook-table .summary-row td {
+  background: #f4f7fa; /* Lighter blue for summary rows */
+  font-weight: 700;
+  color: #111111;
+}
+
+.checkbook-table .section-total td {
+  background: #f4f7fa; /* Lighter blue for section totals */
+  font-weight: 700;
+  color: #111111;
+}
+
+.checkbook-table .budget-col,
+.checkbook-table .money-col,
+.checkbook-table .actual-col,
+.checkbook-table .remaining-col {
+  text-align: center;
+}
+
+.checkbook-table input.money-input {
+  width: 100%;
+  border: 1px solid #c8d6eb;
+  background: #ffffff;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 8px;
+  height: 24px;
+  font-size: 1rem;
+  font-family: var(--form-font-family) !important;
+  color: #222222;
+  border-radius: 0;
+  font-weight: 600;
+}
+
+.checkbook-table input.money-input:focus {
+  outline: none;
+  border-color: #004a9c;
+  box-shadow: 0 0 0 2px rgba(49, 100, 160, 0.1);
+}
+
+.budget-table-wrapper {
+  overflow-x: auto;
+  margin: 12px 0;
+}
+
+/* Print Styles */
+@media print {
+  .budget-grid,
+  .checkbook-table {
+    border: 1px solid #00326b;
+  }
+
+  .budget-grid thead th,
+  .checkbook-table thead th,
+  .checkbook-table .group-header,
+  .checkbook-table .sub-header,
+  .checkbook-table .category-row td,
+  .checkbook-table .section-total td,
+  .checkbook-table .summary-row td,
+  .budget-grid tfoot td,
+  .checkbook-table tfoot td {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .budget-grid tbody tr {
+    page-break-inside: avoid;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .budget-grid,
+  .checkbook-table {
+    font-size: 0.85rem;
+  }
+
+  .budget-grid thead th,
+  .checkbook-table thead th {
+    padding: 8px;
+    height: 28px;
+  }
+
+  .budget-grid tbody td,
+  .checkbook-table tbody td {
+    padding: 6px 8px;
+    height: 28px;
+  }
+
+  .budget-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 768px) {
+  .budget-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -14px;
+    padding: 0 14px;
+  }
+
+  .budget-grid,
+  .checkbook-table {
+    font-size: 0.8rem;
+    min-width: 700px;
+  }
+
+  .budget-grid thead th,
+  .checkbook-table thead th {
+    padding: 7px;
+    height: 26px;
+  }
+
+  .budget-grid tbody td,
+  .checkbook-table tbody td {
+    padding: 5px 7px;
+    height: 26px;
+  }
+
+  .budget-grid .category {
+    width: 100px;
+  }
+
+  .budget-grid .amount,
+  .budget-grid .budget-amount,
+  .budget-grid .actual-amount,
+  .budget-grid .variance {
+    width: 90px;
+  }
+
+  .budget-grid .type {
+    width: 80px;
+  }
+
+  .checkbook-table input.money-input {
+    height: 26px;
+    padding: 5px 7px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .budget-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -10px;
+    padding: 0 10px;
+  }
+
+  .budget-grid,
+  .checkbook-table {
+    font-size: 0.75rem;
+    min-width: 600px;
+  }
+
+  .budget-grid thead th,
+  .checkbook-table thead th {
+    padding: 6px;
+    height: 24px;
+  }
+
+  .budget-grid tbody td,
+  .checkbook-table tbody td {
+    padding: 4px 6px;
+    height: 24px;
+  }
+
+  .budget-grid .category {
+    width: 80px;
+  }
+
+  .budget-grid .item {
+    width: auto;
+    min-width: 120px;
+  }
+
+  .budget-grid .amount,
+  .budget-grid .budget-amount,
+  .budget-grid .actual-amount,
+  .budget-grid .variance {
+    width: 75px;
+  }
+
+  .budget-grid .type {
+    width: 70px;
+  }
+
+  .checkbook-table input.money-input {
+    height: 24px;
+    padding: 4px 6px;
+    font-size: 0.8rem;
+  }
+
+  .checkbook-table .budget-col {
+    width: 70px;
+  }
+
+  .checkbook-table .money-col {
+    width: 65px;
+  }
+}
+
+@media (max-width: 480px) {
+  .budget-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -8px;
+    padding: 0 8px;
+  }
+
+  .budget-grid,
+  .checkbook-table {
+    font-size: 0.7rem;
+    min-width: 550px;
+  }
+
+  .budget-grid thead th,
+  .checkbook-table thead th {
+    padding: 5px;
+    height: 22px;
+  }
+
+  .budget-grid tbody td,
+  .checkbook-table tbody td {
+    padding: 3px 5px;
+    height: 22px;
+  }
+
+  .budget-grid .category {
+    width: 70px;
+  }
+
+  .budget-grid .item {
+    width: 100px;
+  }
+
+  .budget-grid .amount,
+  .budget-grid .budget-amount,
+  .budget-grid .actual-amount,
+  .budget-grid .variance {
+    width: 60px;
+  }
+
+  .budget-grid .type {
+    width: 60px;
+  }
+
+  .checkbook-table input.money-input {
+    height: 22px;
+    padding: 3px 5px;
+    font-size: 0.75rem;
+  }
+}
+
+.checkbook-table {
+  table-layout: fixed;
+}
+
+.checkbook-table td.money-col {
+  padding: 0;
+}
+
+.checkbook-table td.money-col input.money-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.checkbook-table th,
+.checkbook-table td {
+  height: 26px;
+}
+
+.checkbook-table td.money-col input.money-input {
+  height: 100%;
+}
+
+.checkbook-table th,
+.checkbook-table td {
+  width: 10%;
+}
+
+.checkbook-table td.budget-col,
+.checkbook-table td.money-col,
+.checkbook-table td.actual-col,
+.checkbook-table td.remaining-col,
+.checkbook-table td:first-child {
+  width: 10%;
+}
