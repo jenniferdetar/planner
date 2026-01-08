@@ -1,2 +1,8 @@
+# Asset passthrough
+/css/*  /css/:splat  200
+/js/*  /js/:splat  200
+/data/*  /data/:splat  200
+/images/*  /images/:splat  200
+
 # Homepage
 /  /index.html  200
