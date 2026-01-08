@@ -1,8 +1,8 @@
 const SidebarModule = (() => {
   const sidebarItems = [
     { href: '/', text: 'Home' },
-    { href: '/', text: 'Personal Planner' },
-    { href: '/work-planner.html', text: 'Work Planner' },
+    { href: '/personal-planner/', text: 'Personal Planner' },
+    { href: '/work-planner/', text: 'Work Planner' },
     { href: '/planning/', text: 'Planning' },
     { href: '/csea/', text: 'CSEA' },
     { href: '/icaap/', text: 'iCAAP' },
