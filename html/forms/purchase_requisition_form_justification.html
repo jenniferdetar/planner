@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PR — Justification</title>
+<style>
+  .wrap{ width:100%; text-align:left }
+  .grid{ display:grid; grid-template-columns:max-content 1fr; column-gap:30px; width:100% }
+  .inline-row{ align-items:center; padding:0 0 6px 0 }
+  .label{ font-size:18px; white-space:nowrap }
+  .heading{ font-weight:700; font-size:20px; margin:0 0 4px 0; text-align:left; color:var(--accent) }
+  @media print{ .heading{ font-size:18px } }
+</style>
+</head>
+<body>
+  <div class="wrap" aria-label="Justification">
+    <div class="grid inline-row">
+      <div class="label">Item(s) to be used by:</div>
+      <input class="fill-inline" type="text" value="" />
+    </div>
+
+    <p class="heading">JUSTIFICATION (Reason for Request):</p>
+    <div class="line" contenteditable="true" role="textbox" aria-label="Justification line 1"></div>
+    <div class="line" contenteditable="true" role="textbox" aria-label="Justification line 2"></div>
+  </div>
+</body>
+</html>

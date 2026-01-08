@@ -1,0 +1,575 @@
+:root {
+  --habit-pink: #f6a6ad;
+  --habit-peach: #f7c995;
+  --habit-teal: #a7d9dd;
+  --habit-slate: #9fb1c4;
+  --habit-ink: #2f3f55;
+  --habit-line: #c9c9c9;
+  --planner-line-height: 32px;
+  --planner-header-height: 28px;
+}
+
+body {
+  background: linear-gradient(180deg, #00326b 0%, #004a9c 45%, #c8d6eb 100%);
+  font-size: clamp(8pt, 1.15vw, 12pt);
+}
+
+.personal-planner-page table,
+.personal-planner-page th,
+.personal-planner-page td {
+  font-family: "Coming Soon", cursive;
+}
+
+.planner-container {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  padding: var(--opus-spacing-sm);
+  align-items: start;
+}
+
+.planner-content {
+  padding: 0;
+}
+
+.personal-planner-content {
+  padding: 0;
+}
+
+.personal-planner-page {
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 4px 12px 12px;
+  border-top: 6px solid #3f6f8a;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  font-family: "Coming Soon", cursive;
+}
+
+.personal-planner-scale {
+  transform-origin: top left;
+  width: 100%;
+}
+
+.week-controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.week-nav-btn {
+  border: 1px solid #3f6f8a;
+  background: #ffffff;
+  color: #3f6f8a;
+  font-weight: 700;
+  font-size: 0.85rem;
+  min-height: 36px;
+  min-width: 110px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.week-nav-btn:hover {
+  background: #3f6f8a;
+  color: #ffffff;
+}
+
+.week-range-banner {
+  background: #3f6f8a;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 10pt;
+  border-radius: 2px;
+  margin: 0;
+}
+
+.week-range-subtitle,
+.planner-header-date {
+  display: none;
+}
+
+.habit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 32px;
+  margin-bottom: 4px;
+  border-bottom: none;
+  padding-bottom: 6px;
+}
+
+.habit-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.habit-card {
+  border-bottom: none;
+  padding-bottom: 6px;
+}
+
+.habit-card:nth-last-child(-n + 2) {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.habit-card:nth-child(odd) {
+  padding-right: 8px;
+  border-right: none;
+}
+
+.habit-card:nth-child(even) {
+  padding-left: 8px;
+}
+
+.habit-title {
+  margin: 0;
+  text-align: center;
+  font-size: 12pt;
+  font-weight: 700;
+  color: var(--habit-ink);
+  font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+}
+
+.habit-content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: center;
+}
+
+.mini-week {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mini-week-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 16px);
+  gap: 5px;
+  justify-items: center;
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1;
+  font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+}
+
+.mini-week-labels span:nth-child(1),
+.mini-week-labels span:nth-child(5) {
+  color: #e27a7a;
+}
+
+.mini-week-labels span:nth-child(2),
+.mini-week-labels span:nth-child(6) {
+  color: #d49a5c;
+}
+
+.mini-week-labels span:nth-child(3),
+.mini-week-labels span:nth-child(7) {
+  color: #6cb5ba;
+}
+
+.mini-week-labels span:nth-child(4) {
+  color: #3a5573;
+}
+
+.mini-week-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mini-week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 16px);
+  gap: 5px;
+}
+
+.mini-week-row span {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: #f2f2f2;
+  position: relative;
+}
+
+.mini-week-row span.completed::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.mini-week-row span.day-sun { background: var(--habit-pink); }
+.mini-week-row span.day-mon { background: var(--habit-peach); }
+.mini-week-row span.day-tue { background: var(--habit-teal); }
+.mini-week-row span.day-wed { background: var(--habit-slate); }
+.mini-week-row span.day-thu { background: var(--habit-pink); }
+.mini-week-row span.day-fri { background: var(--habit-peach); }
+.mini-week-row span.day-sat { background: var(--habit-teal); }
+
+.habit-list {
+  list-style: none;
+  margin: calc(0.5rem + 6px) 0 0;
+  padding: 0;
+  font-size: 12pt;
+  line-height: 1.3;
+  color: #4c4c4c;
+  font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+}
+
+.family-banner {
+  background: #f3a4a6;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  font-size: 0.55rem;
+  padding: 5px 8px;
+  border-radius: 3px;
+  margin: 6px 0 8px;
+}
+
+.day-blocks {
+  border-top: none;
+  font-family: "Ink Free", "Shadows Into Light", "Indie Flower", "Bradley Hand", "Chalkboard SE", "Marker Felt", "Comic Sans MS", cursive !important;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.day-blocks .day-left,
+.day-blocks .day-right {
+  font-family: "Coming Soon", cursive !important;
+  font-size: 1.1rem;
+}
+
+.day-blocks .left-list,
+.day-blocks .line-rule {
+  font-size: 1.1rem;
+}
+
+.day-blocks .day-left,
+.day-blocks .day-left .left-list,
+.day-blocks .day-left .left-item {
+  font-size: 1.1rem;
+}
+
+.day-blocks .left-list,
+.day-blocks .left-list li,
+.day-blocks .left-list .left-item {
+  font-size: 1.1rem !important;
+  line-height: 1.25;
+}
+
+.day-block {
+  display: grid;
+  grid-template-columns: 35% 65%;
+  border-bottom: none;
+  min-height: 118px;
+}
+
+.day-left {
+  padding: 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-left::before {
+  content: "";
+  display: block;
+  height: var(--planner-header-height);
+}
+
+.left-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  color: #4c4c4c;
+}
+
+.left-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  width: 100%;
+  height: var(--planner-line-height);
+}
+
+.left-list .left-item {
+  display: flex;
+  align-items: center;
+}
+
+.left-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.left-dot.sunday { background: var(--habit-pink); }
+.left-dot.monday { background: var(--habit-peach); }
+.left-dot.tuesday { background: var(--habit-teal); }
+.left-dot.wednesday { background: var(--habit-slate); }
+.left-dot.thursday { background: var(--habit-pink); }
+.left-dot.friday { background: var(--habit-peach); }
+.left-dot.saturday { background: var(--habit-teal); }
+
+.left-icons {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 0.7rem;
+  color: #f19a9a;
+}
+
+.icon-row {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  height: var(--planner-line-height);
+}
+
+.left-icons .icon-row:nth-child(3) {
+  border-bottom: none;
+}
+
+.icon {
+  font-size: 0.75rem;
+  color: #f19a9a;
+}
+
+.icon-line {
+  flex: 1;
+  border-bottom: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.day-right {
+  border-left: none;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--planner-header-height);
+  padding: 0 8px;
+  text-transform: uppercase;
+  font-size: 9pt;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  white-space: nowrap;
+  gap: 10px;
+  font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+  line-height: 1;
+}
+
+.day-block.day-sunday { border-top: 2px solid var(--habit-pink); }
+.day-block.day-monday { border-top: 2px solid var(--habit-peach); }
+.day-block.day-tuesday { border-top: 2px solid var(--habit-teal); }
+.day-block.day-wednesday { border-top: 2px solid var(--habit-slate); }
+.day-block.day-thursday { border-top: 2px solid var(--habit-pink); }
+.day-block.day-friday { border-top: 2px solid var(--habit-peach); }
+.day-block.day-saturday { border-top: 2px solid var(--habit-teal); }
+
+.day-header-sunday { color: #d86b6b; }
+.day-header-monday { color: #c9822b; }
+.day-header-tuesday { color: #5aa6ae; }
+.day-header-wednesday { color: #3a5573; }
+.day-header-thursday { color: #d86b6b; }
+.day-header-friday { color: #c9822b; }
+.day-header-saturday { color: #5aa6ae; }
+
+.day-label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.day-note {
+  font-weight: 700;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+}
+
+.day-lines {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px 10px;
+}
+
+.line-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--planner-line-height);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.line-item:last-child {
+  border-bottom: none;
+}
+
+.line-box {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+
+.line-box.sunday { background: var(--habit-pink); }
+.line-box.monday { background: var(--habit-peach); }
+.line-box.tuesday { background: var(--habit-teal); }
+.line-box.wednesday { background: var(--habit-slate); }
+.line-box.thursday { background: var(--habit-pink); }
+.line-box.friday { background: var(--habit-peach); }
+.line-box.saturday { background: var(--habit-teal); }
+
+.line-rule {
+  flex: 1;
+  border-bottom: 0;
+  font-size: 0.65rem;
+  color: #444444;
+  padding-bottom: 0;
+  align-self: center;
+  line-height: 1.2;
+}
+
+.day-right .line-rule {
+  display: flex;
+  align-items: center;
+}
+
+.day-right .calendar-event {
+  display: inline-flex;
+  width: auto;
+  max-width: 100%;
+}
+
+.personal-hidden-data {
+  display: none;
+}
+
+.weekly-tasks-summary {
+  background: #fffdf2;
+  border: 1px dashed #d86b6b;
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(216, 107, 107, 0.05);
+}
+
+.weekly-tasks-title {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: #d86b6b;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  border-bottom: 1px solid #f6a6ad;
+  padding-bottom: 4px;
+  display: inline-block;
+}
+
+.weekly-tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 20px;
+}
+
+.weekly-tasks-list li {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #333;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  break-inside: avoid;
+}
+
+.weekly-tasks-list li::before {
+  content: "☐";
+  color: #d86b6b;
+  font-weight: bold;
+}
+
+.weekly-tasks-list li.completed {
+  color: #888;
+  text-decoration: line-through;
+}
+
+.weekly-tasks-list li.completed::before {
+  content: "☑";
+}
+
+.weekly-progress-container {
+  margin-bottom: 12px;
+  background: rgba(216, 107, 107, 0.05);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px dashed rgba(216, 107, 107, 0.2);
+}
+
+.weekly-progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #d86b6b;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.weekly-progress-bar {
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.weekly-progress-fill {
+  height: 100%;
+  background: #d86b6b;
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 900px) {
+  .habit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .day-block {
+    grid-template-columns: 1fr;
+  }
+
+  .day-right {
+    border-left: none;
+  }
+}

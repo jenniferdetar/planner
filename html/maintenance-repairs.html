@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maintenance & Repairs - HOA</title>
+  <link rel="stylesheet" href="../css/opus-core.css">
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+  <div class="planner-container">
+    <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item active">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Maintenance & Repairs</h1>
+          <p>HOA Work Orders & Vendor History</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">🛠️</span>
+            <h2 class="planner-section-title">Active Work Orders</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="planner-grid">
+              <div class="planner-card">
+                <h3 class="planner-card-title">Gutter Cleaning</h3>
+                <p class="planner-card-content">Scheduled for next Tuesday. Vendor: Precision Gutters.</p>
+              </div>
+              <div class="planner-card">
+                <h3 class="planner-card-title">Pool Pump Repair</h3>
+                <p class="planner-card-content">Awaiting parts. Quote approved on Jan 2nd.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📜</span>
+            <h2 class="planner-section-title">Vendor History</h2>
+          </div>
+          <div class="planner-section-content">
+            <p class="planner-card-content">Track past maintenance jobs and vendor performance.</p>
+            <div style="margin-top: 16px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead>
+                  <tr style="text-align: left; border-bottom: 1px solid #eee;">
+                    <th style="padding: 8px;">Date</th>
+                    <th style="padding: 8px;">Unit</th>
+                    <th style="padding: 8px;">Vendor</th>
+                    <th style="padding: 8px;">Service</th>
+                    <th style="padding: 8px;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid #f9f9f9;">
+                    <td style="padding: 8px;">Dec 15, 2025</td>
+                    <td style="padding: 8px;">112</td>
+                    <td style="padding: 8px;">Green Scapes</td>
+                    <td style="padding: 8px;">Landscaping</td>
+                    <td style="padding: 8px;"><span style="color: green;">Completed</span></td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #f9f9f9;">
+                    <td style="padding: 8px;">Nov 20, 2025</td>
+                    <td style="padding: 8px;">045</td>
+                    <td style="padding: 8px;">Safe-T Security</td>
+                    <td style="padding: 8px;">Gate Sensor Fix</td>
+                    <td style="padding: 8px;"><span style="color: green;">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        HOA Saved locally in your browser.
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script>
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+  </script>
+</body>
+</html>

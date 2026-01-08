@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision Board - Professional Growth</title>
+  <link rel="stylesheet" href="../css/opus-core.css">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/vision-board.css">
+</head>
+<body>
+  <div class="planner-container">
+    <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item active">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Vision Board: Professional Growth</h1>
+          <p>Map the impact, leadership, and opportunities you want next.</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">💼</span>
+            <h2 class="planner-section-title">Vision Focus</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="vision-professional-growth-notes">Notes & ideas</label>
+              <textarea id="vision-professional-growth-notes" class="planner-form-textarea" placeholder="Add roles, projects, recognition, and skills to build..."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-content">
+            <div class="vision-photo-board">
+              <div class="vision-photo-header">
+                <div>
+                  <h3 class="vision-photo-title">Professional Growth Gallery</h3>
+                  <p class="vision-photo-sub">Highlight roles, wins, and leadership moments.</p>
+                </div>
+                <div class="vision-photo-actions">
+                  <button class="vision-photo-button" type="button" data-vision-upload="vision-professional-growth-photos">Add photos</button>
+                  <span class="vision-photo-hint">Stored locally in your browser</span>
+                </div>
+              </div>
+              <input class="vision-photo-input" id="vision-professional-growth-photos" type="file" accept="image/*" multiple>
+              <div class="vision-photo-grid" id="vision-professional-growth-photo-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📖</span>
+            <h2 class="planner-section-title">Reading Tracker</h2>
+          </div>
+          <div class="planner-section-content vision-reading-tracker">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="reading-current-book">Current business book</label>
+              <select id="reading-current-book" class="planner-form-select"></select>
+            </div>
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="reading-chapters-today">Chapters read today</label>
+              <select id="reading-chapters-today" class="planner-form-select"></select>
+            </div>
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="reading-notes">Notes</label>
+              <textarea id="reading-notes" class="planner-form-textarea" placeholder="Key takeaways"></textarea>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        Vision Board • Professional Growth
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/vision-board-photos.js"></script>
+  <script>
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+    if (window.VisionPhotoBoard) {
+      window.VisionPhotoBoard.init({
+        inputId: 'vision-professional-growth-photos',
+        gridId: 'vision-professional-growth-photo-grid',
+        storageKey: 'vision-board:professional-growth',
+        emptyText: 'Add photos that reflect your professional growth.'
+      });
+    }
+
+    (function () {
+      const storageKey = 'vision-board:professional-growth:reading';
+      const currentBookEl = document.getElementById('reading-current-book');
+      const chaptersEl = document.getElementById('reading-chapters-today');
+      const notesEl = document.getElementById('reading-notes');
+
+      function getBooks() {
+        try {
+          const stored = localStorage.getItem('booksToRead');
+          const parsed = stored ? JSON.parse(stored) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function populateChapterOptions(selectedValue) {
+        if (!chaptersEl) return;
+        chaptersEl.innerHTML = '';
+        for (let i = 0; i <= 30; i += 1) {
+          const option = document.createElement('option');
+          option.value = String(i);
+          option.textContent = `${i} chapter${i === 1 ? '' : 's'}`;
+          if (selectedValue !== undefined && String(selectedValue) === String(i)) {
+            option.selected = true;
+          }
+          chaptersEl.appendChild(option);
+        }
+      }
+
+      function populateBooks(selectedId, fallbackTitle) {
+        if (!currentBookEl) return;
+        currentBookEl.innerHTML = '';
+
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Select a business book';
+        currentBookEl.appendChild(placeholder);
+
+        const books = getBooks();
+        books.forEach(book => {
+          const option = document.createElement('option');
+          option.value = book.id || book.title || '';
+          option.textContent = book.author ? `${book.title} — ${book.author}` : book.title;
+          if (selectedId && option.value === selectedId) {
+            option.selected = true;
+          }
+          currentBookEl.appendChild(option);
+        });
+
+        if (fallbackTitle && !currentBookEl.value) {
+          const manual = document.createElement('option');
+          manual.value = fallbackTitle;
+          manual.textContent = fallbackTitle;
+          manual.selected = true;
+          currentBookEl.appendChild(manual);
+        }
+      }
+
+      function load() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(storageKey) || '{}');
+          populateBooks(stored.bookId, stored.bookTitle);
+          populateChapterOptions(typeof stored.chaptersToday === 'number' ? stored.chaptersToday : 0);
+          if (stored.notes) notesEl.value = stored.notes;
+        } catch (e) {
+          populateBooks();
+          populateChapterOptions(0);
+        }
+      }
+
+      function save() {
+        const selectedOption = currentBookEl.options[currentBookEl.selectedIndex];
+        const payload = {
+          bookId: currentBookEl.value,
+          bookTitle: selectedOption ? selectedOption.textContent : '',
+          chaptersToday: chaptersEl.value ? Number(chaptersEl.value) : 0,
+          notes: notesEl.value.trim()
+        };
+        localStorage.setItem(storageKey, JSON.stringify(payload));
+      }
+
+      [currentBookEl, chaptersEl, notesEl].forEach(el => {
+        if (!el) return;
+        el.addEventListener('input', save);
+        el.addEventListener('change', save);
+      });
+
+      load();
+    })();
+  </script>
+</body>
+</html>
