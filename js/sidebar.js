@@ -4,7 +4,7 @@ const SidebarModule = (() => {
     { href: 'index.html', text: 'Personal Planner' },
     { href: 'work-planner.html', text: 'Work Planner' },
     { href: 'planning.html', text: 'Planning' },
-    { href: 'csea.html', text: 'CSEA' },
+    { href: '/csea/', text: 'CSEA' },
     { href: 'icaap.html', text: 'iCAAP' },
     { href: 'health.html', text: 'Health' },
     { href: 'finance.html', text: 'Finance' }
