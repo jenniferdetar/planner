@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes - Opus One Planner</title>
+  <link rel="stylesheet" href="../css/opus-core.css">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/notes.css">
+  <style>
+    .notes-roster {
+      margin-top: 16px;
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+      align-self: start;
+      grid-column: 1 / 2;
+      background: #ffffff;
+      padding: 12px 40px 16px 80px;
+      position: relative;
+      z-index: 0;
+    }
+    .notes-roster h3 {
+      text-align: center;
+      margin-top: 0;
+    }
+    .notes-roster-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+      width: 100%;
+    }
+    .notes-roster-section {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: visible;
+    }
+    .notes-roster-section h4 {
+      margin: 0 0 4px;
+    }
+    .notes-roster-table {
+      width: 100%;
+      max-width: none;
+      border-collapse: collapse;
+      table-layout: auto;
+      font-size: 10pt;
+      border: 1px solid #bbb;
+      flex: 1;
+      overflow: visible;
+      margin: 0;
+    }
+    .notes-roster-table th,
+    .notes-roster-table td {
+      text-align: left;
+      padding: 4px 6px;
+      height: 26px;
+      line-height: 1.2;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 1px solid #bbb;
+    }
+    .notes-roster-table thead th {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="planner-container">
+                                <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+                                </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Notes</h1>
+          <p>Daily reflections and notes</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main">
+        <div class="notes-layout">
+          <div class="notes-page">
+            <div class="notes-floral">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#FFB7C5" d="M100,20 Q120,40 100,60 Q80,40 100,20" transform="rotate(0,100,100)"/>
+                <path fill="#FFB7C5" d="M100,20 Q120,40 100,60 Q80,40 100,20" transform="rotate(45,100,100)"/>
+                <path fill="#FFB7C5" d="M100,20 Q120,40 100,60 Q80,40 100,20" transform="rotate(90,100,100)"/>
+                <path fill="#FFB7C5" d="M100,20 Q120,40 100,60 Q80,40 100,20" transform="rotate(135,100,100)"/>
+                <path fill="#FFB7C5" d="M100,20 Q120,40 100,60 Q80,40 100,20" transform="rotate(180,100,100)"/>
+                <path fill="#FFB7C5" d="M100,20 Q120,40 100,60 Q80,40 100,20" transform="rotate(225,100,100)"/>
+                <path fill="#FFB7C5" d="M100,20 Q120,40 100,60 Q80,40 100,20" transform="rotate(270,100,100)"/>
+                <path fill="#FFB7C5" d="M100,20 Q120,40 100,60 Q80,40 100,20" transform="rotate(315,100,100)"/>
+                <circle fill="#F3E5AB" cx="100" cy="100" r="15"/>
+                <path fill="#90EE90" d="M100,100 Q150,80 140,140 Q100,120 100,100" opacity="0.6"/>
+                <path fill="#90EE90" d="M100,100 Q50,120 60,60 Q100,80 100,100" opacity="0.6"/>
+              </svg>
+            </div>
+            
+            <div class="notes-container-lined">
+              <div class="notes-header-lined">
+                <h2 id="selected-date-display">Today's Note</h2>
+                <div class="date-navigation">
+                  <button id="prev-date-btn" class="planner-button planner-button-small">&lt;</button>
+                  <input type="date" id="notes-date" class="planner-form-input" style="width: auto; height: 32px; padding: 0 10px;">
+                  <button id="next-date-btn" class="planner-button planner-button-small">&gt;</button>
+                </div>
+              </div>
+
+              <form id="notes-form">
+                <textarea id="note-content" class="planner-form-textarea lined-textarea" placeholder="Start writing your thoughts here..."></textarea>
+                
+                <div class="tags-section">
+                  <div class="tags-input-group">
+                    <input type="text" id="tag-input" class="planner-form-input" placeholder="Add a tag..." />
+                    <button type="button" class="planner-button planner-button-secondary" id="add-tag-btn">Add Tag</button>
+                  </div>
+                  <ul id="tags-list" class="tags-list"></ul>
+                </div>
+                
+                <div class="notes-actions">
+                  <button type="submit" class="planner-button planner-button-primary">Save Changes</button>
+                </div>
+                
+                <div id="notes-updated" class="notes-updated" style="display: none;">
+                  <i class="fas fa-check-circle"></i>
+                  <p>Last saved: <span id="updated-time"></span></p>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+          <aside class="notes-sidebar">
+            <div class="notes-history">
+              <h3><i class="fas fa-history"></i> Note History</h3>
+              <div class="notes-search">
+                <input type="text" id="notes-search" class="planner-form-input" placeholder="Search your notes..." />
+              </div>
+              <ul id="notes-history-list" class="notes-history-list">
+                <li class="empty-history">Loading history...</li>
+              </ul>
+            </div>
+
+            <div class="notes-tips">
+              <h3><i class="fas fa-lightbulb"></i> Tips</h3>
+              <ul class="tips-list">
+                <li>Your notes are saved automatically as you type.</li>
+                <li>Use tags to organize your thoughts by category.</li>
+                <li>Search history to find past reflections quickly.</li>
+              </ul>
+            </div>
+
+            <div class="sticky-note">
+              <p>Please upload to <a href="https://forms.office.com/r/XkxeMXQyXz" target="_blank" rel="noopener">https://forms.office.com/r/XkxeMXQyXz</a>.<br>You do not need to email it to me.</p>
+            </div>
+
+            <div class="sticky-note">
+              <p>iCAAP Funding<br>Cost Center: 1089001<br>Fund: 010-6266<br>Functional: 1110-2100-7182U</p>
+            </div>
+
+            <div class="sticky-note">
+              <p>Illness -> Green<br>Non-Illness -> Yellow</p>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <footer class="planner-footer">
+        &copy; 2025 Opus One Planner • Your peace is protected on purpose.
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/opus-storage.js"></script>
+  <script src="../js/opus-data.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/notes.js"></script>
+  <script>
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  </script>
+</body>
+</html>

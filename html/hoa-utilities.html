@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilities - HOA Financials</title>
+  <link rel="stylesheet" href="../css/opus-core.css">
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+  <div class="planner-container">
+    <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item active">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Utilities</h1>
+          <p>HOA Financials</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">⚡</span>
+            <h2 class="planner-section-title">Utilities</h2>
+          </div>
+          <div class="planner-section-content">
+            <p class="planner-card-content">Add notes, statements, or uploads for Utilities.</p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        HOA Saved locally in your browser.
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script>
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+  </script>
+</body>
+</html>

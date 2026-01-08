@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Review - Opus One Planner</title>
+  <link rel="stylesheet" href="../css/opus-core.css">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/monthly-review.css">
+</head>
+<body>
+  <div class="planner-container">
+                                <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+                                </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Monthly Review</h1>
+          <p>Celebrate Your Success</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main">
+        <div class="review-page">
+          <div class="review-header">
+            <span class="review-top-label">CELEBRATE YOUR SUCCESS</span>
+            <h1 class="review-title">MONTHLY REVIEW</h1>
+            <p class="review-intro">
+              Reflect on the past month to identify your biggest successes and challenges. Set yourself up for success next month by clarifying your next goal and what you're looking forward to.
+            </p>
+          </div>
+
+          <div class="review-grid">
+            <div class="review-box">
+              <label>What was your biggest win this month?</label>
+              <textarea id="biggest-win" class="handwriting-input" placeholder="My biggest win was..."></textarea>
+            </div>
+            <div class="review-box">
+              <label>What do you wish you'd done differently in the last few weeks?</label>
+              <textarea id="done-differently" class="handwriting-input" placeholder="I wish I had..."></textarea>
+            </div>
+            
+            <div class="review-box full-width">
+              <label>What did you do that was fun, personally or professionally, this month?</label>
+              <textarea id="fun-activities" class="handwriting-input" placeholder="This month I enjoyed..."></textarea>
+            </div>
+
+            <div class="review-box">
+              <label>What change did you make that you want to continue?</label>
+              <textarea id="change-to-continue" class="handwriting-input" placeholder="I started..."></textarea>
+            </div>
+            <div class="review-box">
+              <label>What did you manage well over the last few weeks?</label>
+              <textarea id="managed-well" class="handwriting-input" placeholder="I managed..."></textarea>
+            </div>
+
+            <div class="review-box">
+              <label>What's your biggest goal for the upcoming month?</label>
+              <textarea id="next-month-goal" class="handwriting-input" placeholder="Next month, I want to..."></textarea>
+            </div>
+            <div class="review-box">
+              <label>What are you looking forward to in the next few weeks?</label>
+              <textarea id="looking-forward" class="handwriting-input" placeholder="I am looking forward to..."></textarea>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="planner-footer">
+        &copy; 2025 Opus One Planner • Your peace is protected on purpose.
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/monthly-review.js"></script>
+  <script>
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  </script>
+</body>
+</html>

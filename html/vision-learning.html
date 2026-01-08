@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision Board - Learning</title>
+  <link rel="stylesheet" href="../css/opus-core.css">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/vision-board.css">
+</head>
+<body>
+  <div class="planner-container">
+    <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item active">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Vision Board: Learning</h1>
+          <p>Capture skills, certifications, and projects to grow into.</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">🧠</span>
+            <h2 class="planner-section-title">Vision Focus</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="vision-learning-notes">Notes & ideas</label>
+              <textarea id="vision-learning-notes" class="planner-form-textarea" placeholder="Add themes, milestones, images, and actions..."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-content">
+            <div class="vision-photo-board">
+              <div class="vision-photo-header">
+                <div>
+                  <h3 class="vision-photo-title">Learning Gallery</h3>
+                  <p class="vision-photo-sub">Add photos that represent the skills you want to grow.</p>
+                </div>
+                <div class="vision-photo-actions">
+                  <button class="vision-photo-button" type="button" data-vision-upload="vision-learning-photos">Add photos</button>
+                  <span class="vision-photo-hint">Stored locally in your browser</span>
+                </div>
+              </div>
+              <input class="vision-photo-input" id="vision-learning-photos" type="file" accept="image/*" multiple>
+              <div class="vision-photo-grid" id="vision-learning-photo-grid"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        Vision Board • Learning
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/vision-board-photos.js"></script>
+  <script>
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+    if (window.VisionPhotoBoard) {
+      window.VisionPhotoBoard.init({
+        inputId: 'vision-learning-photos',
+        gridId: 'vision-learning-photo-grid',
+        storageKey: 'vision-board:learning',
+        emptyText: 'Add photos that inspire your learning goals.'
+      });
+    }
+  </script>
+</body>
+</html>

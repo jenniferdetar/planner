@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase Requisition Form - Opus One Planner</title>
+  <link rel="stylesheet" href="../css/opus-core.css">
+  <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/forms.css">
+</head>
+<body>
+  <div class="planner-container">
+                                <aside class="planner-sidebar">
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+                                </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Purchase Requisition</h1>
+          <p>LAUSD Requisition Form</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main"><div class="page" id="sections" aria-label="Purchase Requisition Form"></div>
+</main>
+
+      <footer class="planner-footer">
+        <p>&copy; 2025 Opus One Planner. Purchase Requisition Form.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script>
+    const SECTIONS = [
+      "./forms/purchase_requisition_form_header.html",
+      "./forms/purchase_requisition_form_checkboxes.html",
+      "./forms/purchase_requisition_form_vendor_office.html",
+      "./forms/purchase_requisition_form_items.html",
+      "./forms/purchase_requisition_form_justification.html",
+      "./forms/purchase_requisition_form_accounting.html",
+      "./forms/purchase_requisition_form_approval.html"
+    ];
+
+    async function loadSections() {
+      const root = document.getElementById("sections");
+
+      for (const file of SECTIONS) {
+        try {
+          const res = await fetch(file, { cache: "no-cache" });
+          const html = await res.text();
+
+          const div = document.createElement("div");
+          div.className = "section";
+          div.innerHTML = html;
+
+          root.appendChild(div);
+
+          div.querySelectorAll("script").forEach((oldScript) => {
+            const newScript = document.createElement("script");
+
+            for (const { name, value } of [...oldScript.attributes]) {
+              newScript.setAttribute(name, value);
+            }
+
+            newScript.textContent = oldScript.textContent;
+            oldScript.replaceWith(newScript);
+          });
+
+        } catch (e) {
+          const err = document.createElement("pre");
+          err.textContent = `Error loading ${file}`;
+          root.appendChild(err);
+        }
+      }
+    }
+
+    function attachVendorListeners() {
+      const fields = document.querySelectorAll(`
+        #vendor_name,
+        #vendor_street,
+        #vendor_city,
+        #vendor_state,
+        #vendor_zip,
+        #vendor_phone,
+        #vendor_email,
+        #vendor_contact
+      `);
+
+      fields.forEach((field) => {
+        field.addEventListener("input", () => {
+          // Vendor field change handling
+        });
+      });
+    }
+
+    function initDate() {
+      const dateEl = document.getElementById("today-date");
+      if (dateEl) {
+        const now = new Date();
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        dateEl.textContent = now.toLocaleDateString('en-US', options);
+      }
+    }
+
+    (async () => {
+      await loadSections();
+
+      setTimeout(() => {
+        attachVendorListeners();
+        initDate();
+      }, 200);
+    })();
+  </script>
+</body>
+</html>
