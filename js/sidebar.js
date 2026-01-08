@@ -1,23 +1,24 @@
 const SidebarModule = (() => {
   const sidebarItems = [
-    { href: 'index.html', text: 'Home' },
-    { href: 'index.html', text: 'Personal Planner' },
-    { href: 'work-planner.html', text: 'Work Planner' },
-    { href: 'planning.html', text: 'Planning' },
+    { href: '/', text: 'Home' },
+    { href: '/', text: 'Personal Planner' },
+    { href: '/work-planner.html', text: 'Work Planner' },
+    { href: '/planning/', text: 'Planning' },
     { href: '/csea/', text: 'CSEA' },
-    { href: 'icaap.html', text: 'iCAAP' },
-    { href: 'health.html', text: 'Health' },
-    { href: 'finance.html', text: 'Finance' }
+    { href: '/icaap/', text: 'iCAAP' },
+    { href: '/health/', text: 'Health' },
+    { href: '/finance/', text: 'Finance' }
   ];
 
   function init() {
     const sidebar = document.querySelector('.planner-sidebar');
     if (!sidebar) return;
 
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const normalizedPath = window.location.pathname.replace(/\\/g, '/').replace(/\/$/, '') || '/';
     
     sidebar.innerHTML = sidebarItems.map(item => {
-      const isActive = item.href === currentPage || (currentPage === '' && item.href === 'index.html');
+      const targetPath = item.href.replace(/\\/g, '').replace(/\/$/, '') || '/';
+      const isActive = normalizedPath === targetPath;
       return `<a href="${item.href}" class="planner-sidebar-item ${isActive ? 'active' : ''}">${item.text}</a>`;
     }).join('');
   }
