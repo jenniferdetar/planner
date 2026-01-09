@@ -278,20 +278,7 @@ body {
 }
 
 .habit-list li {
-  position: relative;
-  padding-left: 18px;
-}
-
-.habit-list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 5px;
-  width: 10px;
-  height: 10px;
-  border: 2px solid #f3a4a6;
-  border-radius: 3px;
-  background: #fff;
+  margin-bottom: 4px;
 }
 
 .medication-grid {
