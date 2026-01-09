@@ -138,7 +138,7 @@
       ]
     },
     {
-      "title": "Medications",
+      "title": "Medications (Daily Routine)",
       "items": [
         {
           "name": "Take Ozempic (Sun AM)",
@@ -205,7 +205,12 @@
             5,
             6
           ]
-        },
+        }
+      ]
+    },
+    {
+      "title": "Medications (Supplements)",
+      "items": [
         {
           "name": "Take Buspirone 10 mg (AM)",
           "days": [
