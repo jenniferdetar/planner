@@ -135,6 +135,119 @@
   outline-offset: 3px;
 }
 
+.csea-hero-panel {
+  padding: var(--opus-spacing-sm) 0;
+}
+
+.csea-hero-section .planner-section-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--opus-spacing-sm);
+  padding: var(--opus-spacing-sm);
+}
+
+.csea-hero {
+  background: linear-gradient(135deg, #002050 0%, #004a9c 55%, #66b2ff 100%);
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: var(--opus-shadow-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.csea-hero h1 {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+}
+
+.csea-hero p {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.csea-hero-icon {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 10px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.csea-pills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.csea-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0f2c57;
+  border: 2px solid #e2e8f0;
+  box-shadow: var(--opus-shadow-sm);
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.csea-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--opus-shadow-md);
+}
+
+.csea-pill:nth-child(3n+1) {
+  background: #fef3c7;
+  border-color: #fcd34d;
+}
+
+.csea-pill:nth-child(3n+2) {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+
+.csea-pill:nth-child(3n+3) {
+  background: #fef9c3;
+  border-color: #facc15;
+}
+
+.csea-pill-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #0f2c57;
+  border: 2px solid rgba(15, 44, 87, 0.2);
+}
+
+.csea-pill-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.csea-pill-label {
+  font-size: 1rem;
+}
+
+.csea-pill-sub {
+  font-size: 0.8rem;
+  color: #475569;
+  font-weight: 600;
+}
+
 .planner-header {
   flex-direction: column;
   align-items: center;

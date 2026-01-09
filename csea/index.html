@@ -53,22 +53,58 @@
           <h1>CSEA Tracker</h1>
           <p>Stewarded member issues at a glance</p>
         </div>
-      <div class="planner-header-right">
-        <div class="csea-cta-row">
-          <button type="button" id="grievance-pill-btn" class="csea-cta-pill">
-            <i class="fa-solid fa-capsules text-base"></i>
-            <span>Grievance Form</span>
-          </button>
-          <a href="/csea/csea-meeting-notes.html" class="csea-cta-pill">Meeting Notes</a>
-          <a href="/csea/csea-notes.html" class="csea-cta-pill">Notes</a>
-          <a href="/csea/issue-log.html" class="csea-cta-pill">Issue Log</a>
+        <div class="planner-header-right">
+          <div class="csea-cta-row">
+            <button type="button" id="grievance-pill-btn" class="csea-cta-pill">
+              <i class="fa-solid fa-capsules text-base"></i>
+              <span>Grievance Form</span>
+            </button>
+            <a href="/csea/csea-meeting-notes.html" class="csea-cta-pill">Meeting Notes</a>
+            <a href="/csea/csea-notes.html" class="csea-cta-pill">Notes</a>
+            <a href="/csea/issue-log.html" class="csea-cta-pill">Issue Log</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
         </div>
-        <div class="planner-header-date" id="today-date"></div>
+      </header>
+      <div class="planner-main csea-hero-panel">
+        <section class="planner-section csea-hero-section">
+          <div class="planner-section-content">
+            <div class="csea-hero">
+              <div>
+                <h1>CSEA Hub</h1>
+                <p>Search issues, monitor progress, and jump straight to the log.</p>
+              </div>
+              <div class="csea-hero-icon">CSEA</div>
+            </div>
+            <div class="csea-pills">
+              <a class="csea-pill" href="#search-issues">
+                <span class="csea-pill-icon">SI</span>
+                <span class="csea-pill-text">
+                  <span class="csea-pill-label">Search Issues</span>
+                  <span class="csea-pill-sub">Filter members, ID, or steward</span>
+                </span>
+              </a>
+              <a class="csea-pill" href="#issue-summary">
+                <span class="csea-pill-icon">IS</span>
+                <span class="csea-pill-text">
+                  <span class="csea-pill-label">Issue Summary</span>
+                  <span class="csea-pill-sub">Track totals by status</span>
+                </span>
+              </a>
+              <a class="csea-pill" href="/csea/issue-log.html">
+                <span class="csea-pill-icon">IL</span>
+                <span class="csea-pill-text">
+                  <span class="csea-pill-label">Issue Log</span>
+                  <span class="csea-pill-sub">Review or export entries</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </section>
       </div>
-    </header>
       <main class="planner-main">
         <div class="planner-section-row">
-          <section class="planner-section csea-summary-section">
+          <section class="planner-section csea-summary-section" id="search-issues">
             <div class="planner-section-header">
               <span class="planner-section-icon">🔍</span>
               <h2 class="planner-section-title">Search Issues</h2>
@@ -80,7 +116,7 @@
               </div>
             </div>
           </section>
-          <section class="planner-section csea-search-section">
+          <section class="planner-section csea-search-section" id="issue-summary">
             <div class="planner-section-header">
               <span class="planner-section-icon">📊</span>
               <h2 class="planner-section-title">Issue Summary</h2>
