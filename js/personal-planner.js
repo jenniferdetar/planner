@@ -15,6 +15,8 @@ const personalPlanner = (() => {
   let recurringEvents = [];
   let eventsByDate = {};
   let habits = [];
+  const TIMED_EVENT_CHECKS_KEY = 'personalPlannerTimedEventChecks';
+  let timedEventChecks = {};
   const styleMap = {
     due:    { bg: '#ffd6e2', border: '#ff6b98', text: '#7a0f2b' },
     holiday:{ bg: '#ffe1b0', border: '#f59e0b', text: '#9a4d00' },
@@ -52,6 +54,7 @@ const personalPlanner = (() => {
       eventsByDate = calendarData.byDate || {};
       habits = calendarData.habits || [];
       
+      loadTimedEventChecks();
       setupEventListeners();
       updateWeekDisplay();
       setDefaultDate();
@@ -201,6 +204,25 @@ const personalPlanner = (() => {
     opusData.addEventListener('task-updated', () => { renderTasks(); renderPlannerSheet(); });
     opusData.addEventListener('task-deleted', () => { renderTasks(); renderPlannerSheet(); });
     opusData.addEventListener('task-scheduled', () => { renderTasks(); renderPlannerSheet(); });
+  }
+
+  function loadTimedEventChecks() {
+    try {
+      timedEventChecks = JSON.parse(localStorage.getItem(TIMED_EVENT_CHECKS_KEY) || '{}');
+    } catch (e) {
+      timedEventChecks = {};
+    }
+  }
+
+  function saveTimedEventChecks() {
+    localStorage.setItem(TIMED_EVENT_CHECKS_KEY, JSON.stringify(timedEventChecks));
+  }
+
+  function getTimedEventKey(dateKey, event) {
+    const title = (event.title || '').trim().toLowerCase();
+    const start = to24h(event.time);
+    const end = to24h(event.endTime);
+    return `${dateKey}|${start}|${end}|${title}`;
   }
 
   function handleAddTask(e) {
@@ -637,8 +659,34 @@ const personalPlanner = (() => {
             const startTime = formatDisplayTime(event.time);
             const endTime = event.endTime ? ` - ${formatDisplayTime(event.endTime)}` : '';
             const timeLabel = `${startTime}${endTime} - ${event.title}`;
-            lines[lineIndex].textContent = '';
-            lines[lineIndex].appendChild(buildEventPill(event, timeLabel));
+            const lineRule = lines[lineIndex];
+            const eventKey = getTimedEventKey(dateKey, event);
+            const isChecked = Boolean(timedEventChecks[eventKey]);
+            lineRule.textContent = '';
+
+            const eventContainer = document.createElement('div');
+            eventContainer.className = 'day-line-event';
+            if (isChecked) eventContainer.classList.add('completed');
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'day-event-checkbox';
+            checkbox.checked = isChecked;
+            checkbox.setAttribute('aria-label', 'Mark event complete');
+            checkbox.addEventListener('change', (e) => {
+              const checked = e.target.checked;
+              if (checked) {
+                timedEventChecks[eventKey] = true;
+              } else {
+                delete timedEventChecks[eventKey];
+              }
+              saveTimedEventChecks();
+              eventContainer.classList.toggle('completed', checked);
+            });
+
+            eventContainer.appendChild(checkbox);
+            eventContainer.appendChild(buildEventPill(event, timeLabel));
+            lineRule.appendChild(eventContainer);
             lineIndex++;
           }
         }
