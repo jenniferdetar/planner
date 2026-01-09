@@ -637,11 +637,20 @@ const personalPlanner = (() => {
             const startTime = formatDisplayTime(event.time);
             const endTime = event.endTime ? ` - ${formatDisplayTime(event.endTime)}` : '';
             const timeLabel = `${startTime}${endTime} - ${event.title}`;
-          lines[lineIndex].textContent = '';
-          lines[lineIndex].appendChild(buildEventPill(event, timeLabel));
-            lineIndex++;
-          }
+          const lineRule = lines[lineIndex];
+          lineRule.textContent = '';
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = 'line-checkbox';
+          checkbox.tabIndex = -1;
+          checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();
+          });
+          lineRule.appendChild(checkbox);
+          lineRule.appendChild(buildEventPill(event, timeLabel));
+          lineIndex++;
         }
+      }
       });
 
       // Update dollar icon amount
@@ -787,6 +796,8 @@ const personalPlanner = (() => {
       lineBox.className = `line-box ${dayClass}`;
       const lineRule = document.createElement('span');
       lineRule.className = 'line-rule';
+      lineRule.classList.add(dayClass);
+      lineRule.setAttribute('contenteditable', 'true');
       lineItem.appendChild(lineBox);
       lineItem.appendChild(lineRule);
       container.appendChild(lineItem);
