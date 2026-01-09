@@ -4,297 +4,247 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSEA Hub - Opus One Planner</title>
-  <link rel="stylesheet" href="/css/opus-core.css?v=20260108">
-  <link rel="stylesheet" href="/css/home.css?v=20260108">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?v=20260108">
-  <link rel="stylesheet" href="/css/csea.css?v=20260108">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#00326b',
-            primaryDark: '#002050',
-            primaryLight: '#004a9c'
-          }
-        }
-      }
+  <link rel="stylesheet" href="css/opus-core.css?v=20260108">
+  <link rel="stylesheet" href="css/home.css?v=20260108">
+  <link rel="stylesheet" href="css/calendar.css?v=20260108">
+  <style>
+    .hoa-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
-  </script>
+
+    .hoa-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: #99B3C5;
+      border-radius: 16px;
+      padding: 14px 16px;
+      border-color: rgba(10, 47, 95, 0.25);
+    }
+
+    .hoa-card:nth-child(4n+1) { background: #99B3C5; }
+    .hoa-card:nth-child(4n+2) { background: #FFA1AB; }
+    .hoa-card:nth-child(4n+3) { background: #FFC68D; }
+    .hoa-card:nth-child(4n+4) { background: #9ADBDE; }
+
+    .hoa-card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 14px;
+      min-width: 64px;
+      border-radius: 999px;
+      font-size: 1rem;
+      color: #0a2f5f;
+      border: 1px solid rgba(10, 47, 95, 0.25);
+      background: #99B3C5;
+      flex-shrink: 0;
+    }
+
+    .hoa-card:nth-child(4n+1) .hoa-card-icon { background: #99B3C5; }
+    .hoa-card:nth-child(4n+2) .hoa-card-icon { background: #FFA1AB; }
+    .hoa-card:nth-child(4n+3) .hoa-card-icon { background: #FFC68D; }
+    .hoa-card:nth-child(4n+4) .hoa-card-icon { background: #9ADBDE; }
+
+    .hoa-card-title {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.1;
+      color: var(--opus-primary);
+    }
+
+    .hoa-card-note {
+      margin: 4px 0 0;
+      font-size: 0.8rem;
+      line-height: 1.2;
+      color: var(--opus-text-secondary);
+    }
+
+    .hoa-units-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 10px 12px;
+      margin-top: 16px;
+    }
+
+    .hoa-unit-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(10, 47, 95, 0.2);
+      font-size: 0.8rem;
+      color: #0a2f5f;
+      line-height: 1;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .hoa-unit-badge:hover {
+      background: #fff;
+      border-color: var(--opus-primary);
+      transform: translateY(-1px);
+    }
+  </style>
 </head>
 <body>
   <div class="planner-container">
     <aside class="planner-sidebar">
-      <a href="/" class="planner-sidebar-item">Home</a>
+      <a href="index.html" class="planner-sidebar-item">Home</a>
+      <a href="calendar.html" class="planner-sidebar-item">Calendar</a>
+      <a href="/csea/" class="planner-sidebar-item">CSEA</a>
+      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="health.html" class="planner-sidebar-item">Health</a>
       <a href="/csea/" class="planner-sidebar-item active">CSEA</a>
-      <a href="/finance.html" class="planner-sidebar-item">Finance</a>
-      <a href="/health.html" class="planner-sidebar-item">Health</a>
-      <a href="/hoa.html" class="planner-sidebar-item">HOA</a>
-      <a href="/icaap.html" class="planner-sidebar-item">iCAAP</a>
-      <a href="/planning.html" class="planner-sidebar-item">Planning</a>
+      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="planning.html" class="planner-sidebar-item">Planning</a>
     </aside>
 
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
           <h1>CSEA Hub</h1>
-          <p>Stewarded member issues at a glance</p>
+          <p>Stewarded member issues at a glance.</p>
         </div>
         <div class="planner-header-right">
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
+      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
 
       <main class="planner-main">
-        <section class="planner-section csea-hero-section">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">🏡</span>
+            <h2 class="planner-section-title">CSEA Resource Center</h2>
+          </div>
           <div class="planner-section-content">
-            <div class="csea-hero">
-              <div>
-                <h1>CSEA Hub</h1>
-                <p>Everything CSEA in one place — search issues, track stats, and stay prepared.</p>
-              </div>
-            </div>
-            <div class="csea-pills">
-              <a class="csea-pill" href="#search-issues">
-                <span class="csea-pill-icon">SI</span>
-                <span class="csea-pill-text">
-                  <span class="csea-pill-label">Search Issues</span>
-                  <span class="csea-pill-sub">Filter members, ID, or steward</span>
-                </span>
-              </a>
-              <a class="csea-pill" href="#issue-summary">
-                <span class="csea-pill-icon">IS</span>
-                <span class="csea-pill-text">
-                  <span class="csea-pill-label">Issue Summary</span>
-                  <span class="csea-pill-sub">Track totals by status</span>
-                </span>
-              </a>
-              <a class="csea-pill" href="/csea/issue-log.html">
-                <span class="csea-pill-icon">IL</span>
-                <span class="csea-pill-text">
-                  <span class="csea-pill-label">Issue Log</span>
-                  <span class="csea-pill-sub">Download or review records</span>
-                </span>
-              </a>
-              <a class="csea-pill" href="/csea/csea-notes.html">
-                <span class="csea-pill-icon">NT</span>
-                <span class="csea-pill-text">
-                  <span class="csea-pill-label">Notes</span>
-                  <span class="csea-pill-sub">Capture meeting follow-ups</span>
-                </span>
-              </a>
-            </div>
-            <section class="csea-notes" aria-label="CSEA notes">
-              <h2>Notes</h2>
-              <textarea id="csea-notes" placeholder="Add quick reminders or follow-ups..."></textarea>
-              <div class="csea-tags">
-                <div class="csea-tags-input">
-                  <input id="csea-tag-input" type="text" placeholder="Add a tag..." />
-                  <button type="button" class="csea-tags-add" id="csea-tag-add">Add Tag</button>
+            <p class="planner-card-content">Quick access to your most-used CSEA folders and records.</p>
+            <div class="planner-grid hoa-grid">
+              <div class="planner-card hoa-card">
+                <div class="hoa-card-icon">📣</div>
+                <div>
+                  <h3 class="hoa-card-title">Announcements</h3>
+                  <p class="hoa-card-note">Community updates and notices.</p>
                 </div>
-                <ul class="csea-tags-list" id="csea-tags-list"></ul>
               </div>
-              <div class="csea-notes-actions">
-                <button type="button" class="csea-notes-save" id="csea-notes-save">Save</button>
-                <span class="csea-notes-status" id="csea-notes-status">Not saved</span>
+              <div class="planner-card hoa-card">
+                <div class="hoa-card-icon">👥</div>
+                <div>
+                  <h3 class="hoa-card-title">BOD</h3>
+                  <p class="hoa-card-note">Board of Directors contacts.</p>
+                </div>
               </div>
-              <div class="csea-saved">
-                <h3>Saved Items</h3>
-                <ul class="csea-saved-list" id="csea-saved-list"></ul>
+              <a href="financials.html" class="planner-card hoa-card link-unstyled">
+                <div class="hoa-card-icon">💵</div>
+                <div>
+                  <h3 class="hoa-card-title">Financials</h3>
+                  <p class="hoa-card-note">Budgets, expenses, and dues.</p>
+                </div>
+              </a>
+              <div class="planner-card hoa-card">
+                <div class="hoa-card-icon">📂</div>
+                <div>
+                  <h3 class="hoa-card-title">Homeowner Documents</h3>
+                  <p class="hoa-card-note">Policies, bylaws, and forms.</p>
+                </div>
               </div>
-            </section>
+              <div class="planner-card hoa-card">
+                <div class="hoa-card-icon">🛡️</div>
+                <div>
+                  <h3 class="hoa-card-title">Insurance</h3>
+                  <p class="hoa-card-note">Coverage and claim details.</p>
+                </div>
+              </div>
+              <div class="planner-card hoa-card">
+                <div class="hoa-card-icon">⚖️</div>
+                <div>
+                  <h3 class="hoa-card-title">Legal</h3>
+                  <p class="hoa-card-note">Compliance and legal records.</p>
+                </div>
+              </div>
+              <a href="maintenance-repairs.html" class="planner-card hoa-card link-unstyled">
+                <div class="hoa-card-icon">🛠️</div>
+                <div>
+                  <h3 class="hoa-card-title">Maintenance &amp; Repairs</h3>
+                  <p class="hoa-card-note">Work orders and vendor history.</p>
+                </div>
+              </a>
+              <div class="planner-card hoa-card">
+                <div class="hoa-card-icon">🧾</div>
+                <div>
+                  <h3 class="hoa-card-title">Statements</h3>
+                  <p class="hoa-card-note">Monthly statements and summaries.</p>
+                </div>
+              </div>
+              <a href="units.html" class="planner-card hoa-card link-unstyled">
+                <div class="hoa-card-icon">🏘️</div>
+                <div>
+                  <h3 class="hoa-card-title">Units</h3>
+                  <p class="hoa-card-note">Unit roster and owner info.</p>
+                </div>
+              </a>
+            </div>
           </div>
         </section>
-        <section class="planner-section" id="search-issues">
+
+        <section class="planner-section">
           <div class="planner-section-header">
-            <span class="planner-section-icon">🔍</span>
-            <h2 class="planner-section-title">Search Issues</h2>
+            <span class="planner-section-icon">🏘️</span>
+            <h2 class="planner-section-title">Directory</h2>
           </div>
           <div class="planner-section-content">
-            <div class="relative max-w-2xl">
-              <input type="text" id="searchInput" placeholder="Search by member name, ID, description, or steward..." class="w-full px-4 py-1.5 pl-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none">
-              <i class="fa-solid fa-search absolute left-3 top-2.5 text-gray-400"></i>
+            <p class="planner-card-content">Quick access to unit information.</p>
+            <div class="hoa-units-list">
+                <a href="units.html" class="hoa-unit-badge">Unit 001</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 002</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 003</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 004</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 005</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 006</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 007</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 008</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 009</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 010</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 011</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 012</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 013</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 014</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 015</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 016</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 017</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 018</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 019</a>
+                <a href="units.html" class="hoa-unit-badge">Unit 020</a>
             </div>
-          </div>
-        </section>
-        <section class="planner-section" id="issue-summary">
-          <div class="planner-section-header">
-            <span class="planner-section-icon">📊</span>
-            <h2 class="planner-section-title">Issue Summary</h2>
-          </div>
-          <div class="grid grid-cols-4 gap-4 csea-stats-grid">
-            <div class="bg-white rounded-lg shadow-md p-4 csea-stat-card border border-gray-100">
-              <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Issues</p>
-              <p class="text-2xl font-bold text-primary mt-1" id="stat-total">0</p>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-4 csea-stat-card border border-gray-100">
-              <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Open</p>
-              <p class="text-2xl font-bold text-blue-600 mt-1" id="stat-open">0</p>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-4 csea-stat-card border border-gray-100">
-              <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">In Progress</p>
-              <p class="text-2xl font-bold text-yellow-600 mt-1" id="stat-progress">0</p>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-4 csea-stat-card border border-gray-100">
-              <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Resolved</p>
-              <p class="text-2xl font-bold text-green-600 mt-1" id="stat-resolved">0</p>
+            <div style="margin-top: 16px; text-align: center;">
+              <a href="units.html" class="planner-button planner-button-secondary">View All Units</a>
             </div>
           </div>
         </section>
       </main>
+
+      <footer class="planner-footer">
+        CSEA Hub data stored locally in your browser.
+      </footer>
     </div>
   </div>
 
+  <script src="js/utils.js?v=20260108"></script>
   <script>
-    const todayDate = document.getElementById('today-date');
-    if (todayDate) {
-      todayDate.textContent = new Date().toLocaleDateString('en-US', {
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
         weekday: 'short',
         year: 'numeric',
         month: 'short',
         day: 'numeric'
       });
     }
-
-    const notesField = document.getElementById('csea-notes');
-    const notesSaveButton = document.getElementById('csea-notes-save');
-    const notesStatus = document.getElementById('csea-notes-status');
-    const savedList = document.getElementById('csea-saved-list');
-    const tagInput = document.getElementById('csea-tag-input');
-    const tagAdd = document.getElementById('csea-tag-add');
-    const tagList = document.getElementById('csea-tags-list');
-
-    const formatSavedDate = (isoString) => {
-      const date = new Date(isoString);
-      if (Number.isNaN(date.getTime())) return isoString;
-      return date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    };
-
-    const loadSavedItems = () => {
-      const raw = localStorage.getItem('cseaNotesSaved');
-      if (!raw) return [];
-      try {
-        const items = JSON.parse(raw);
-        return Array.isArray(items) ? items : [];
-      } catch (error) {
-        return [];
-      }
-    };
-
-    const loadTags = () => {
-      const raw = localStorage.getItem('cseaNotesTags');
-      if (!raw) return [];
-      try {
-        const tags = JSON.parse(raw);
-        return Array.isArray(tags) ? tags : [];
-      } catch (error) {
-        return [];
-      }
-    };
-
-    const renderTags = () => {
-      if (!tagList) return;
-      const tags = loadTags();
-      tagList.innerHTML = tags.map((tag, index) => `
-        <li class="csea-tag">
-          <span>${tag}</span>
-          <button type="button" class="csea-tag-delete" data-index="${index}">x</button>
-        </li>
-      `).join('');
-      tagList.querySelectorAll('.csea-tag-delete').forEach((button) => {
-        button.addEventListener('click', () => {
-          const idx = Number(button.getAttribute('data-index'));
-          const tagsList = loadTags();
-          if (Number.isNaN(idx) || idx < 0 || idx >= tagsList.length) return;
-          tagsList.splice(idx, 1);
-          localStorage.setItem('cseaNotesTags', JSON.stringify(tagsList));
-          renderTags();
-        });
-      });
-    };
-
-    const addTag = () => {
-      if (!tagInput) return;
-      const value = tagInput.value.trim();
-      if (!value) return;
-      const tags = loadTags();
-      if (!tags.includes(value)) {
-        tags.push(value);
-        localStorage.setItem('cseaNotesTags', JSON.stringify(tags));
-        renderTags();
-      }
-      tagInput.value = '';
-    };
-
-    const renderSavedItems = () => {
-      if (!savedList) return;
-      const items = loadSavedItems();
-      savedList.innerHTML = items.map((item, index) => `
-        <li class="csea-saved-item">
-          <div class="csea-saved-row">
-            <div>
-              <div class="csea-saved-date">${formatSavedDate(item.savedAt)}</div>
-              <p class="csea-saved-text">${item.text}</p>
-            </div>
-            <button type="button" class="csea-saved-delete" data-index="${index}">Delete</button>
-          </div>
-        </li>
-      `).join('');
-      savedList.querySelectorAll('.csea-saved-delete').forEach((button) => {
-        button.addEventListener('click', () => {
-          const idx = Number(button.getAttribute('data-index'));
-          const itemsList = loadSavedItems();
-          if (Number.isNaN(idx) || idx < 0 || idx >= itemsList.length) return;
-          itemsList.splice(idx, 1);
-          localStorage.setItem('cseaNotesSaved', JSON.stringify(itemsList));
-          renderSavedItems();
-        });
-      });
-    };
-
-    if (notesField) {
-      const storedNotes = localStorage.getItem('cseaNotes');
-      if (storedNotes !== null) {
-        notesField.value = storedNotes;
-        if (notesStatus) notesStatus.textContent = 'Saved';
-      }
-      renderTags();
-      renderSavedItems();
-      notesField.addEventListener('input', () => {
-        if (notesStatus) notesStatus.textContent = 'Not saved';
-      });
-      if (tagInput) {
-        tagInput.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            addTag();
-          }
-        });
-      }
-      if (tagAdd) {
-        tagAdd.addEventListener('click', addTag);
-      }
-      if (notesSaveButton) {
-        notesSaveButton.addEventListener('click', () => {
-          const text = notesField.value.trim();
-          localStorage.setItem('cseaNotes', notesField.value);
-          if (notesStatus) notesStatus.textContent = 'Saved';
-          if (text) {
-            const items = loadSavedItems();
-            items.unshift({ text, savedAt: new Date().toISOString() });
-            localStorage.setItem('cseaNotesSaved', JSON.stringify(items.slice(0, 20)));
-            renderSavedItems();
-          }
-        });
-      }
-    }
   </script>
+<script src="js/calendar-embed.js?v=20260108"></script>
 </body>
 </html>
