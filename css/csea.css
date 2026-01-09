@@ -50,10 +50,6 @@
   border-radius: 12px;
   padding: 18px 20px;
   box-shadow: var(--opus-shadow-md);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
 }
 
 .csea-hero h1 {
@@ -65,14 +61,6 @@
   margin: 0;
   font-size: 0.95rem;
   opacity: 0.95;
-}
-
-.csea-hero-icon {
-  font-size: 2rem;
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
-  padding: 8px 14px;
 }
 
 .csea-pills {
