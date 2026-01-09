@@ -46,7 +46,7 @@ const personalPlanner = (() => {
     const calendarPath = document.body?.dataset.calendarSrc || './data/calendar-data.json';
     Promise.all([
       opusData.initialize(),
-      fetch(calendarPath).then(res => res.json())
+      fetch(calendarPath, { cache: 'no-store' }).then(res => res.json())
     ]).then(([_, calendarData]) => {
       recurringEvents = calendarData.recurring || [];
       eventsByDate = calendarData.byDate || {};
