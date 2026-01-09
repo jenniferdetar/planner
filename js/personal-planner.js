@@ -798,6 +798,7 @@ const personalPlanner = (() => {
       lineRule.className = 'line-rule';
       lineRule.classList.add(dayClass);
       lineRule.setAttribute('contenteditable', 'true');
+      lineRule.tabIndex = 0;
       lineItem.appendChild(lineBox);
       lineItem.appendChild(lineRule);
       container.appendChild(lineItem);

@@ -7,6 +7,8 @@
   --habit-line: #c9c9c9;
   --planner-line-height: 32px;
   --planner-header-height: 28px;
+  --planner-checkbox-size: 8px;
+  --planner-checkbox-focus: rgba(0, 0, 0, 0.25);
 }
 
 body {
@@ -33,6 +35,42 @@ body {
 
 .personal-planner-content {
   padding: 0;
+}
+
+.planner-subpage-nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0 16px;
+  padding: 4px 0;
+  border-radius: 8px;
+}
+
+.planner-subpage-pill {
+  min-width: 140px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid #bdd3ef;
+  background: #dbe8ff;
+  color: #0d2b5d;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  text-align: center;
+  font-weight: 700;
+  transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.planner-subpage-pill.active {
+  background: linear-gradient(135deg, #5d8ad6, #4f6db5);
+  color: #ffffff;
+  border-color: #283f73;
+  transform: translateY(-1px);
+}
+
+.planner-subpage-pill:hover:not(.active) {
+  background: #c9defa;
 }
 
 .personal-planner-page {
@@ -406,13 +444,34 @@ body {
   line-height: 1;
 }
 
-.day-block.day-sunday { border-top: 2px solid var(--habit-pink); }
-.day-block.day-monday { border-top: 2px solid var(--habit-peach); }
-.day-block.day-tuesday { border-top: 2px solid var(--habit-teal); }
-.day-block.day-wednesday { border-top: 2px solid var(--habit-slate); }
-.day-block.day-thursday { border-top: 2px solid var(--habit-pink); }
-.day-block.day-friday { border-top: 2px solid var(--habit-peach); }
-.day-block.day-saturday { border-top: 2px solid var(--habit-teal); }
+.day-block.day-sunday {
+  border-top: 2px solid var(--habit-pink);
+  --line-checkbox-color: var(--habit-pink);
+}
+.day-block.day-monday {
+  border-top: 2px solid var(--habit-peach);
+  --line-checkbox-color: var(--habit-peach);
+}
+.day-block.day-tuesday {
+  border-top: 2px solid var(--habit-teal);
+  --line-checkbox-color: var(--habit-teal);
+}
+.day-block.day-wednesday {
+  border-top: 2px solid var(--habit-slate);
+  --line-checkbox-color: var(--habit-slate);
+}
+.day-block.day-thursday {
+  border-top: 2px solid var(--habit-pink);
+  --line-checkbox-color: var(--habit-pink);
+}
+.day-block.day-friday {
+  border-top: 2px solid var(--habit-peach);
+  --line-checkbox-color: var(--habit-peach);
+}
+.day-block.day-saturday {
+  border-top: 2px solid var(--habit-teal);
+  --line-checkbox-color: var(--habit-teal);
+}
 
 .day-header-sunday { color: #d86b6b; }
 .day-header-monday { color: #c9822b; }
@@ -463,36 +522,47 @@ body {
 
 .line-rule {
   flex: 1;
-  border-bottom: 0;
-  font-size: 0.65rem;
-  color: #444444;
-  padding-bottom: 0;
-  align-self: center;
+  font-size: 0.85rem;
+  color: #2f3b46;
   line-height: 1.2;
   display: flex;
   align-items: center;
   gap: 10px;
+  min-height: 28px;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.line-rule:focus-visible {
+  outline: none;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px var(--planner-checkbox-focus);
 }
 
 .day-right .line-checkbox {
-  width: 10px;
-  height: 10px;
-  border: 2px solid #d86b6b;
+  width: var(--planner-checkbox-size);
+  height: var(--planner-checkbox-size);
+  border: 2px solid var(--line-checkbox-color, #d86b6b);
   border-radius: 3px;
   background: transparent;
   appearance: none;
   cursor: pointer;
   padding: 0;
   margin: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
 }
 
-.day-block.day-sunday .day-right .line-checkbox { border-color: var(--habit-pink); }
-.day-block.day-monday .day-right .line-checkbox { border-color: var(--habit-peach); }
-.day-block.day-tuesday .day-right .line-checkbox { border-color: var(--habit-teal); }
-.day-block.day-wednesday .day-right .line-checkbox { border-color: var(--habit-slate); }
-.day-block.day-thursday .day-right .line-checkbox { border-color: var(--habit-pink); }
-.day-block.day-friday .day-right .line-checkbox { border-color: var(--habit-peach); }
-.day-block.day-saturday .day-right .line-checkbox { border-color: var(--habit-teal); }
+.day-right .line-checkbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--planner-checkbox-focus);
+}
+
+.day-right .line-checkbox:checked {
+  background: var(--line-checkbox-color, #d86b6b);
+  border-color: var(--line-checkbox-color, #d86b6b);
+}
 
 .day-right .calendar-event {
   display: inline-flex;
