@@ -294,6 +294,83 @@ body {
   background: #fff;
 }
 
+.medication-grid {
+  margin: 18px 0;
+}
+
+.medication-card {
+  background: #fffdf2;
+  border: 1px solid #e6d1ca;
+  border-radius: 10px;
+  padding: 16px 18px 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.medication-week {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.medication-week span {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #f3a4a6 0%, #f7c995 100%);
+}
+
+.medication-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 6px 12px;
+}
+
+.medication-list li {
+  font-family: "Arial", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.medication-list label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.medication-list input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d86b6b;
+  border-radius: 4px;
+  appearance: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.medication-list input[type='checkbox']:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid #d86b6b;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 .family-banner {
   background: #f3a4a6;
   color: #ffffff;
