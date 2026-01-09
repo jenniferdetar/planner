@@ -446,6 +446,8 @@ body {
   gap: 8px;
   height: var(--planner-line-height);
   border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  padding-left: 16px;
 }
 
 .line-item:last-child {
@@ -453,18 +455,8 @@ body {
 }
 
 .line-box {
-  width: 7px;
-  height: 7px;
-  border-radius: 2px;
+  display: none;
 }
-
-.line-box.sunday { background: var(--habit-pink); }
-.line-box.monday { background: var(--habit-peach); }
-.line-box.tuesday { background: var(--habit-teal); }
-.line-box.wednesday { background: var(--habit-slate); }
-.line-box.thursday { background: var(--habit-pink); }
-.line-box.friday { background: var(--habit-peach); }
-.line-box.saturday { background: var(--habit-teal); }
 
 .line-rule {
   flex: 1;
@@ -476,9 +468,22 @@ body {
   line-height: 1.2;
 }
 
-.day-right .line-rule {
+ .day-right .line-rule {
   display: flex;
   align-items: center;
+}
+
+ .day-block .day-right .line-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--habit-pink);
+  border-radius: 3px;
+  background: transparent;
 }
 
 .day-right .calendar-event {
