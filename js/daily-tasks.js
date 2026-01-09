@@ -1,11 +1,6 @@
 const dailyTasks = (() => {
-  const STORAGE_KEY = 'dailyTasks';
   const HABITS_KEY = 'dailyHabits';
   const HABIT_STATUS_KEY = 'dailyHabitStatus';
-
-  const SCHEDULED_TASKS = [];
-
-  const DEFAULT_HABITS = [];
 
   const REMOVED_HABITS = new Set([
     'make beds (home care)',
@@ -28,18 +23,6 @@ const dailyTasks = (() => {
     'listen to bible app (weekdays)'
   ]);
 
-  function loadTasks() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    } catch (e) {
-      return {};
-    }
-  }
-
-  function saveTasks(tasksByDate) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasksByDate));
-  }
-
   function loadHabits() {
     try {
       const stored = JSON.parse(localStorage.getItem(HABITS_KEY) || '[]');
@@ -49,24 +32,10 @@ const dailyTasks = (() => {
     }
   }
 
-  function filterMedicationHabits(habits) {
-    const banned = [
-      'self care: take glipizide (am & pm)',
-      'self care: take remaining meds (am)',
-      'self care: take remaining medication (morning)'
-    ];
-    return habits.filter(habit => !banned.includes(String(habit.name || '').toLowerCase()));
-  }
-
-  function filterRemovedHabits(habits) {
-    return habits.filter(habit => !REMOVED_HABITS.has(String(habit.name || '').toLowerCase()));
-  }
-
   function saveHabits(habits) {
     try {
       localStorage.setItem(HABITS_KEY, JSON.stringify(habits));
     } catch (e) {
-      // Ignore storage errors so UI still updates.
     }
   }
 
@@ -75,6 +44,13 @@ const dailyTasks = (() => {
       return JSON.parse(localStorage.getItem(HABIT_STATUS_KEY) || '{}');
     } catch (e) {
       return {};
+    }
+  }
+
+  function saveHabitStatus(statusByDate) {
+    try {
+      localStorage.setItem(HABIT_STATUS_KEY, JSON.stringify(statusByDate));
+    } catch (e) {
     }
   }
 
@@ -130,12 +106,17 @@ const dailyTasks = (() => {
     return habits;
   }
 
-  function saveHabitStatus(statusByDate) {
-    try {
-      localStorage.setItem(HABIT_STATUS_KEY, JSON.stringify(statusByDate));
-    } catch (e) {
-      // Ignore storage errors so UI still updates.
-    }
+  function filterMedicationHabits(habits) {
+    const banned = [
+      'self care: take glipizide (am & pm)',
+      'self care: take remaining meds (am)',
+      'self care: take remaining medication (morning)'
+    ];
+    return habits.filter(habit => !banned.includes(String(habit.name || '').toLowerCase()));
+  }
+
+  function filterRemovedHabits(habits) {
+    return habits.filter(habit => !REMOVED_HABITS.has(String(habit.name || '').toLowerCase()));
   }
 
   function setToday() {
@@ -147,102 +128,19 @@ const dailyTasks = (() => {
     }
   }
 
-  function getDateKey(dateInput) {
-    if (!dateInput.value) {
-      const today = new Date();
-      return today.toISOString().slice(0, 10);
-    }
-    return dateInput.value;
+  function getDateKey() {
+    const today = new Date();
+    return today.toISOString().slice(0, 10);
   }
 
-  function shouldShowOnDate(entry, dateKey) {
-    const date = new Date(dateKey);
-    if (Number.isNaN(date.getTime())) return false;
-    const dayKey = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][date.getDay()];
-    if (entry.days.includes('daily')) return true;
-    return entry.days.includes(dayKey);
-  }
-
-  function ensureScheduledTasks(dateKey, tasksByDate) {
-    tasksByDate[dateKey] = tasksByDate[dateKey] || [];
-    const tasks = tasksByDate[dateKey];
-    const existing = new Set(tasks.map(t => `${(t.category || '').toLowerCase()}::${(t.text || '').toLowerCase()}`));
-
-    SCHEDULED_TASKS.forEach(entry => {
-      if (!shouldShowOnDate(entry, dateKey)) return;
-      const key = `${entry.category.toLowerCase()}::${entry.text.toLowerCase()}`;
-      if (existing.has(key)) return;
-      tasks.push({
-        id: `sched-${key.replace(/[^a-z0-9]+/g, '-')}-${dateKey}`,
-        text: entry.text,
-        category: entry.category,
-        completed: false
-      });
-      existing.add(key);
-    });
-    saveTasks(tasksByDate);
-  }
-
-  function renderTasks(tasksByDate, dateInput) {
-    const list = document.getElementById('tasks-list');
-    const empty = document.getElementById('tasks-empty');
-    if (!list || !empty) return;
-
-    const key = getDateKey(dateInput);
-    ensureScheduledTasks(key, tasksByDate);
-    const tasks = tasksByDate[key] || [];
-    list.innerHTML = '';
-
-    if (!tasks.length) {
-      empty.style.display = 'block';
-      return;
-    }
-
-    empty.style.display = 'none';
-    tasks.forEach(task => {
-      const item = document.createElement('li');
-      item.className = 'tasks-item';
-      if (task.completed) item.classList.add('completed');
-
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.checked = task.completed;
-      checkbox.addEventListener('change', () => {
-        task.completed = checkbox.checked;
-        saveTasks(tasksByDate);
-        renderTasks(tasksByDate, dateInput);
-      });
-
-      const text = document.createElement('span');
-      text.className = 'tasks-text';
-      text.textContent = task.category ? `${task.text} (${task.category})` : task.text;
-
-      const remove = document.createElement('button');
-      remove.type = 'button';
-      remove.className = 'planner-button planner-button-small planner-button-danger';
-      remove.textContent = 'Delete';
-      remove.addEventListener('click', () => {
-        const next = tasks.filter(t => t.id !== task.id);
-        tasksByDate[key] = next;
-        saveTasks(tasksByDate);
-        renderTasks(tasksByDate, dateInput);
-      });
-
-      item.appendChild(checkbox);
-      item.appendChild(text);
-      item.appendChild(remove);
-      list.appendChild(item);
-    });
-  }
-
-  function renderHabits(habits, statusByDate, dateInput) {
+  function renderHabits(habits, statusByDate) {
     const list = document.getElementById('habits-list');
     const empty = document.getElementById('habits-empty');
     const progressText = document.getElementById('habits-progress-text');
     const progressBar = document.getElementById('habits-progress-bar');
     if (!list || !empty || !progressText || !progressBar) return;
 
-    const dateKey = getDateKey(dateInput);
+    const dateKey = getDateKey();
     const dayStatus = statusByDate[dateKey] || {};
     list.innerHTML = '';
 
@@ -272,7 +170,7 @@ const dailyTasks = (() => {
         statusByDate[dateKey] = statusByDate[dateKey] || {};
         statusByDate[dateKey][habit.id] = nextValue;
         saveHabitStatus(statusByDate);
-        renderHabits(habits, statusByDate, dateInput);
+        renderHabits(habits, statusByDate);
       });
 
       const text = document.createElement('span');
@@ -295,7 +193,7 @@ const dailyTasks = (() => {
         });
         saveHabits(habits);
         saveHabitStatus(statusByDate);
-        renderHabits(habits, statusByDate, dateInput);
+        renderHabits(habits, statusByDate);
       });
 
       if (dayStatus[habit.id]) completedCount += 1;
@@ -312,37 +210,7 @@ const dailyTasks = (() => {
     progressBar.style.width = `${percent}%`;
   }
 
-  function handleDateChange(tasksByDate, habits, statusByDate, dateInput) {
-    dateInput.addEventListener('change', () => {
-      renderTasks(tasksByDate, dateInput);
-      renderHabits(habits, statusByDate, dateInput);
-    });
-  }
-
-  function handleForm(tasksByDate, dateInput) {
-    const form = document.getElementById('task-form');
-    const input = document.getElementById('task-input');
-    if (!form || !input) return;
-
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
-      const key = getDateKey(dateInput);
-      tasksByDate[key] = tasksByDate[key] || [];
-      tasksByDate[key].unshift({
-        id: String(Date.now()),
-        text,
-        category: (document.getElementById('task-category')?.value || '').trim(),
-        completed: false
-      });
-      saveTasks(tasksByDate);
-      input.value = '';
-      renderTasks(tasksByDate, dateInput);
-    });
-  }
-
-  function handleHabitForm(habits, statusByDate, dateInput) {
+  function handleHabitForm(habits, statusByDate) {
     const form = document.getElementById('habit-form');
     const input = document.getElementById('habit-input');
     if (!form || !input) return;
@@ -358,7 +226,7 @@ const dailyTasks = (() => {
       habits.unshift({ id, name });
       saveHabits(habits);
       input.value = '';
-      renderHabits(habits, statusByDate, dateInput);
+      renderHabits(habits, statusByDate);
     };
 
     form.addEventListener('submit', event => {
@@ -366,7 +234,7 @@ const dailyTasks = (() => {
       submitHabit();
     });
 
-    const addButton = form.querySelector('button[type=\"submit\"]');
+    const addButton = form.querySelector('button[type="submit"]');
     if (addButton) {
       addButton.addEventListener('click', event => {
         event.preventDefault();
@@ -376,15 +244,9 @@ const dailyTasks = (() => {
   }
 
   async function initialize() {
-    const dateInput = document.getElementById('task-date');
-    if (dateInput) {
-      dateInput.value = new Date().toISOString().slice(0, 10);
-    }
-    const tasksByDate = loadTasks();
     const habits = loadHabits();
     const statusByDate = loadHabitStatus();
     setToday();
-    renderTasks(tasksByDate, dateInput);
     await syncHabitsFromPlanner(habits);
     const cleanedHabits = filterRemovedHabits(filterMedicationHabits(habits));
     if (cleanedHabits.length !== habits.length) {
@@ -392,17 +254,8 @@ const dailyTasks = (() => {
       cleanedHabits.forEach(h => habits.push(h));
       saveHabits(habits);
     }
-    DEFAULT_HABITS.forEach(name => {
-      const id = createHabitId(name);
-      if (!habits.find(h => h.id === id)) {
-        habits.push({ id, name });
-      }
-    });
-    saveHabits(habits);
-    renderHabits(habits, statusByDate, dateInput);
-    handleDateChange(tasksByDate, habits, statusByDate, dateInput);
-    handleForm(tasksByDate, dateInput);
-    handleHabitForm(habits, statusByDate, dateInput);
+    renderHabits(habits, statusByDate);
+    handleHabitForm(habits, statusByDate);
   }
 
   return { initialize };
