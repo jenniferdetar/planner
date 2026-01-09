@@ -5,19 +5,28 @@ const dailyTasks = (() => {
 
   const SCHEDULED_TASKS = [];
 
-  const DEFAULT_HABITS = [
-    'Make beds (Home Care)',
-    'Recycling (Home Care)',
-    'Read (Self Care)',
-    'Bring lunch to work (Self Care)',
-    'Take Metformin (AM) (Self Care)',
-    'Take Metformin (PM) (Self Care)',
-    'Take Glipizide (AM) (Self Care)',
-    'Take Glipizide (PM) (Self Care)',
-    'Take Rosuvastatin 20 mg (AM) (Self Care)',
-    'Take Buspirone 10 mg (AM) (Self Care)',
-    'Take Jardiance 25 mg (AM) (Self Care)'
-  ];
+  const DEFAULT_HABITS = [];
+
+  const REMOVED_HABITS = new Set([
+    'make beds (home care)',
+    'recycling (home care)',
+    'read (self care)',
+    'bring lunch to work (self care)',
+    'take metformin (am) (self care)',
+    'take metformin (pm) (self care)',
+    'take glipizide (am) (self care)',
+    'take glipizide (pm) (self care)',
+    'take rosuvastatin 20 mg (am) (self care)',
+    'take buspirone 10 mg (am) (self care)',
+    'take jardiance 25 mg (am) (self care)',
+    'take estradiol 2 mg (am) (self care)',
+    'take bupropion xl 300 mg (am) (self care)',
+    'take nexium 24hr 20 mg (am) (self care)',
+    'get up at 5:00 am (weekdays)',
+    'leave work at 3:30 pm (weekdays)',
+    'take train to work (weekdays)',
+    'listen to bible app (weekdays)'
+  ]);
 
   function loadTasks() {
     try {
@@ -47,6 +56,10 @@ const dailyTasks = (() => {
       'self care: take remaining medication (morning)'
     ];
     return habits.filter(habit => !banned.includes(String(habit.name || '').toLowerCase()));
+  }
+
+  function filterRemovedHabits(habits) {
+    return habits.filter(habit => !REMOVED_HABITS.has(String(habit.name || '').toLowerCase()));
   }
 
   function saveHabits(habits) {
@@ -373,7 +386,7 @@ const dailyTasks = (() => {
     setToday();
     renderTasks(tasksByDate, dateInput);
     await syncHabitsFromPlanner(habits);
-    const cleanedHabits = filterMedicationHabits(habits);
+    const cleanedHabits = filterRemovedHabits(filterMedicationHabits(habits));
     if (cleanedHabits.length !== habits.length) {
       habits.length = 0;
       cleanedHabits.forEach(h => habits.push(h));
