@@ -71,7 +71,7 @@ const workPlanner = (() => {
 
     Promise.all([
       opusData.initialize(),
-      fetch('data/calendar-data.json', { cache: 'no-store' }).then(r => r.json())
+      fetch('/data/calendar-data.json', { cache: 'no-store' }).then(r => r.json())
     ]).then(([_, calendarData]) => {
       eventsByDate = calendarData.byDate || {};
       recurringEvents = calendarData.recurring || [];
