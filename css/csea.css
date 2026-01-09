@@ -7,33 +7,19 @@
 }
 
 .planner-content {
-  gap: 6px;
+  gap: var(--opus-spacing-xs);
 }
 
 .planner-main {
-  gap: 6px;
+  gap: var(--opus-spacing-xs);
 }
 
 .planner-section {
-  padding: var(--opus-spacing-xs);
+  padding: var(--opus-spacing-sm);
 }
 
 .planner-section-header {
-  margin-bottom: 6px;
-}
-
-.planner-section-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--opus-primary);
-  color: #fff;
-  font-size: 0.75rem;
-  letter-spacing: 0.25rem;
-  font-weight: 700;
-  text-transform: uppercase;
+  margin-bottom: var(--opus-spacing-sm);
 }
 
 #searchInput {
