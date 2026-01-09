@@ -153,13 +153,10 @@
     {
       "title": "CSEA NEO",
       "frequency": "monthly",
-      "pattern": "third Thursday",
+      "pattern": "fourth Thursday",
       "startDate": "2026-01-01",
       "time": "12:00 pm",
       "endTime": "1:00 pm",
-      "skipDates": [
-        "2026-01-15"
-      ]
     },
     {
       "title": "CSEA MB Committee",
@@ -180,14 +177,11 @@
     {
       "title": "CSEA Chapter E-Board",
       "frequency": "monthly",
-      "pattern": "first Thursday",
+      "pattern": "third Thursday",
       "time": "5:30 pm",
       "endTime": "7:00 pm",
       "endDate": "2026-12-31",
       "skipHolidays": true,
-      "skipDates": [
-        "2026-01-08"
-      ]
     },
     {
       "title": "ADT Due",
@@ -627,12 +621,6 @@
         "endTime": "3:05 pm",
         "category": "personal"
       },
-      {
-        "title": "CSEA Chapter E-Board",
-        "time": "5:30 pm",
-        "endTime": "7:00 pm",
-        "category": "csea"
-      }
     ],
     "2026-01-17": [
       {
@@ -667,12 +655,6 @@
         "title": "CSEA MB Committee in San Jose",
         "allDay": true
       },
-      {
-        "title": "CSEA NEO",
-        "time": "12:00 pm",
-        "endTime": "1:00 pm",
-        "category": "csea"
-      }
     ],
     "2026-01-26": [
       {
