@@ -7,19 +7,19 @@
 }
 
 .planner-content {
-  gap: var(--opus-spacing-xs);
+  gap: 6px;
 }
 
 .planner-main {
-  gap: var(--opus-spacing-xs);
+  gap: 6px;
 }
 
 .planner-section {
-  padding: var(--opus-spacing-sm);
+  padding: var(--opus-spacing-xs);
 }
 
 .planner-section-header {
-  margin-bottom: var(--opus-spacing-sm);
+  margin-bottom: 6px;
 }
 
 #searchInput {
