@@ -181,7 +181,10 @@
       "time": "5:30 pm",
       "endTime": "7:00 pm",
       "endDate": "2026-12-31",
-      "skipHolidays": true
+      "skipHolidays": true,
+      "skipDates": [
+        "2026-01-08"
+      ]
     },
     {
       "title": "ADT Due",
@@ -620,6 +623,12 @@
         "time": "2:05 pm",
         "endTime": "3:05 pm",
         "category": "personal"
+      },
+      {
+        "title": "CSEA Chapter E-Board",
+        "time": "5:30 pm",
+        "endTime": "7:00 pm",
+        "category": "csea"
       }
     ],
     "2026-01-17": [
