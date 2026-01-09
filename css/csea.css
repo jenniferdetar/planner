@@ -22,18 +22,18 @@
   margin-bottom: 6px;
 }
 
-.planner-section-title-pill {
+.planner-section-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 14px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: #00326b;
+  background: var(--opus-primary);
   color: #fff;
   font-size: 0.75rem;
-  text-transform: uppercase;
   letter-spacing: 0.25rem;
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 #searchInput {
