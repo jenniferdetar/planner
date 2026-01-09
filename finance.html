@@ -3,240 +3,198 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finance Hub - Opus One Planner</title>
+  <title>Finance Hub</title>
   <link rel="stylesheet" href="css/opus-core.css?v=20260108">
   <link rel="stylesheet" href="css/home.css?v=20260108">
   <link rel="stylesheet" href="css/calendar.css?v=20260108">
   <style>
-    .hoa-grid {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    .hoa-card {
+    .finance-hero {
+      background: linear-gradient(135deg, #0f4c75 0%, #3282b8 50%, #bbe1fa 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: var(--opus-shadow-md);
       display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      background: #99B3C5;
-      border-radius: 16px;
-      padding: 14px 16px;
-      border-color: rgba(10, 47, 95, 0.25);
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
 
-    .hoa-card:nth-child(4n+1) { background: #99B3C5; }
-    .hoa-card:nth-child(4n+2) { background: #FFA1AB; }
-    .hoa-card:nth-child(4n+3) { background: #FFC68D; }
-    .hoa-card:nth-child(4n+4) { background: #9ADBDE; }
+    .finance-hero h1 {
+      margin: 0 0 4px;
+      font-size: 1.6rem;
+    }
 
-    .hoa-card-icon {
+    .finance-hero p {
+      margin: 0;
+      font-size: 0.95rem;
+      opacity: 0.95;
+    }
+
+    .finance-hero-icon {
+      font-size: 2rem;
+    }
+
+    .finance-pills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .finance-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #0f4c75;
+      border: 2px solid #dbeafe;
+      box-shadow: var(--opus-shadow-sm);
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      font-weight: 700;
+    }
+
+    .finance-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--opus-shadow-md);
+    }
+
+    .finance-pill:nth-child(4n+1) {
+      background: #99B3C5;
+      border-color: #7f9db3;
+      color: #0a2f5f;
+    }
+
+    .finance-pill:nth-child(4n+2) {
+      background: #FFA1AB;
+      border-color: #ef8f9a;
+      color: #0a2f5f;
+    }
+
+    .finance-pill:nth-child(4n+3) {
+      background: #FFC68D;
+      border-color: #e7b078;
+      color: #0a2f5f;
+    }
+
+    .finance-pill:nth-child(4n+4) {
+      background: #9ADBDE;
+      border-color: #7cc8cc;
+      color: #0a2f5f;
+    }
+
+    .finance-pill-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #e0f2fe;
       display: grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      font-size: 1.3rem;
-      color: #0a2f5f;
-      border: 1px solid rgba(10, 47, 95, 0.25);
-      background: #99B3C5;
-      flex-shrink: 0;
+      font-size: 1.2rem;
+      color: #0ea5e9;
+      border: 2px solid #bfdbfe;
     }
 
-    .hoa-card:nth-child(4n+1) .hoa-card-icon { background: #99B3C5; }
-    .hoa-card:nth-child(4n+2) .hoa-card-icon { background: #FFA1AB; }
-    .hoa-card:nth-child(4n+3) .hoa-card-icon { background: #FFC68D; }
-    .hoa-card:nth-child(4n+4) .hoa-card-icon { background: #9ADBDE; }
-
-    .hoa-card-title {
-      margin: 0;
-      font-size: 0.9rem;
-      line-height: 1.1;
-      color: var(--opus-primary);
-    }
-
-    .hoa-card-note {
-      margin: 4px 0 0;
-      font-size: 0.8rem;
+    .finance-pill-text {
+      display: flex;
+      flex-direction: column;
       line-height: 1.2;
-      color: var(--opus-text-secondary);
     }
 
-    .hoa-units-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      gap: 10px 12px;
-      margin-top: 16px;
+    .finance-pill-label {
+      font-size: 1rem;
     }
 
-    .hoa-unit-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid rgba(10, 47, 95, 0.2);
-      font-size: 0.8rem;
-      color: #0a2f5f;
-      line-height: 1;
-      white-space: nowrap;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-
-    .hoa-unit-badge:hover {
-      background: #fff;
-      border-color: var(--opus-primary);
-      transform: translateY(-1px);
+    .finance-pill-sub {
+      font-size: 0.85rem;
+      color: #475569;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
   <div class="planner-container">
-    <aside class="planner-sidebar">
+                            <aside class="planner-sidebar">
       <a href="index.html" class="planner-sidebar-item">Home</a>
       <a href="calendar.html" class="planner-sidebar-item">Calendar</a>
       <a href="/csea/" class="planner-sidebar-item">CSEA</a>
-      <a href="finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="finance.html" class="planner-sidebar-item active">Finance</a>
       <a href="health.html" class="planner-sidebar-item">Health</a>
-      <a href="/finance.html" class="planner-sidebar-item active">Finance</a>
+      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
       <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
       <a href="planning.html" class="planner-sidebar-item">Planning</a>
-    </aside>
+                            </aside>
 
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
-          <h1>Finance</h1>
-          <p>Manage budgets, paylogs, and financial notes.</p>
+          <h1>Finance Hub</h1>
+          <p>Quick access to your money tools</p>
         </div>
         <div class="planner-header-right">
           <div class="planner-header-date" id="today-date"></div>
         </div>
-      </header>
-      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
-
-      <main class="planner-main">
+      </header>      <main class="planner-main">
         <section class="planner-section">
-          <div class="planner-section-header">
-            <span class="planner-section-icon">🏡</span>
-            <h2 class="planner-section-title">Finance Library</h2>
-          </div>
           <div class="planner-section-content">
-            <p class="planner-card-content">Quick access to your most-used HOA folders and records.</p>
-            <div class="planner-grid hoa-grid">
-              <div class="planner-card hoa-card">
-                <div class="hoa-card-icon">📣</div>
-                <div>
-                  <h3 class="hoa-card-title">Announcements</h3>
-                  <p class="hoa-card-note">Community updates and notices.</p>
-                </div>
+            <div class="finance-hero">
+              <div>
+                <h1>Stay on top of your money</h1>
+                <p>Budgets, bills, and savings—organized in one spot.</p>
               </div>
-              <div class="planner-card hoa-card">
-                <div class="hoa-card-icon">👥</div>
-                <div>
-                  <h3 class="hoa-card-title">BOD</h3>
-                  <p class="hoa-card-note">Board of Directors contacts.</p>
-                </div>
-              </div>
-              <a href="financials.html" class="planner-card hoa-card link-unstyled">
-                <div class="hoa-card-icon">💵</div>
-                <div>
-                  <h3 class="hoa-card-title">Financials</h3>
-                  <p class="hoa-card-note">Budgets, expenses, and dues.</p>
-                </div>
-              </a>
-              <div class="planner-card hoa-card">
-                <div class="hoa-card-icon">📂</div>
-                <div>
-                  <h3 class="hoa-card-title">Homeowner Documents</h3>
-                  <p class="hoa-card-note">Policies, bylaws, and forms.</p>
-                </div>
-              </div>
-              <div class="planner-card hoa-card">
-                <div class="hoa-card-icon">🛡️</div>
-                <div>
-                  <h3 class="hoa-card-title">Insurance</h3>
-                  <p class="hoa-card-note">Coverage and claim details.</p>
-                </div>
-              </div>
-              <div class="planner-card hoa-card">
-                <div class="hoa-card-icon">⚖️</div>
-                <div>
-                  <h3 class="hoa-card-title">Legal</h3>
-                  <p class="hoa-card-note">Compliance and legal records.</p>
-                </div>
-              </div>
-              <a href="maintenance-repairs.html" class="planner-card hoa-card link-unstyled">
-                <div class="hoa-card-icon">🛠️</div>
-                <div>
-                  <h3 class="hoa-card-title">Maintenance &amp; Repairs</h3>
-                  <p class="hoa-card-note">Work orders and vendor history.</p>
-                </div>
-              </a>
-              <div class="planner-card hoa-card">
-                <div class="hoa-card-icon">🧾</div>
-                <div>
-                  <h3 class="hoa-card-title">Statements</h3>
-                  <p class="hoa-card-note">Monthly statements and summaries.</p>
-                </div>
-              </div>
-              <a href="units.html" class="planner-card hoa-card link-unstyled">
-                <div class="hoa-card-icon">🏘️</div>
-                <div>
-                  <h3 class="hoa-card-title">Units</h3>
-                  <p class="hoa-card-note">Unit roster and owner info.</p>
-                </div>
-              </a>
+              <div class="finance-hero-icon">💰</div>
             </div>
-          </div>
-        </section>
 
-        <section class="planner-section">
-          <div class="planner-section-header">
-            <span class="planner-section-icon">🏘️</span>
-            <h2 class="planner-section-title">Unit Directory</h2>
-          </div>
-          <div class="planner-section-content">
-            <p class="planner-card-content">Quick access to unit information.</p>
-            <div class="hoa-units-list">
-                <a href="units.html" class="hoa-unit-badge">Unit 001</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 002</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 003</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 004</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 005</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 006</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 007</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 008</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 009</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 010</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 011</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 012</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 013</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 014</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 015</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 016</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 017</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 018</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 019</a>
-                <a href="units.html" class="hoa-unit-badge">Unit 020</a>
-            </div>
-            <div style="margin-top: 16px; text-align: center;">
-              <a href="units.html" class="planner-button planner-button-secondary">View All Units</a>
+            <div class="finance-pills">
+              <a class="finance-pill" href="/bill-payment-schedule/">
+                <span class="finance-pill-icon">📆</span>
+                <span class="finance-pill-text">
+                  <span class="finance-pill-label">Bill Payment Schedule</span>
+                  <span class="finance-pill-sub">Never miss a due date</span>
+                </span>
+              </a>
+
+              <a class="finance-pill" href="budget-overview.html">
+                <span class="finance-pill-icon">📊</span>
+                <span class="finance-pill-text">
+                  <span class="finance-pill-label">Budget Overview</span>
+                  <span class="finance-pill-sub">Dashboard at a glance</span>
+                </span>
+              </a>
+
+              <a class="finance-pill" href="/savings-goals/">
+                <span class="finance-pill-icon">🏦</span>
+                <span class="finance-pill-text">
+                  <span class="finance-pill-label">Savings Goal</span>
+                  <span class="finance-pill-sub">Build your reserves</span>
+                </span>
+              </a>
+
+              <a class="finance-pill" href="/budget/">
+                <span class="finance-pill-icon">🧾</span>
+                <span class="finance-pill-text">
+                  <span class="finance-pill-label">Spending Plan</span>
+                  <span class="finance-pill-sub">Track income & expenses</span>
+                </span>
+              </a>
             </div>
           </div>
         </section>
       </main>
 
       <footer class="planner-footer">
-        Finance hub data stored locally in your browser.
+        Finance Hub • All data stored locally in your browser.
       </footer>
     </div>
   </div>
 
-  <script src="js/utils.js?v=20260108"></script>
   <script>
-    const todayDateEl = document.getElementById('today-date');
-    if (todayDateEl) {
-      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+    const todayDate = document.getElementById('today-date');
+    if (todayDate) {
+      todayDate.textContent = new Date().toLocaleDateString('en-US', {
         weekday: 'short',
         year: 'numeric',
         month: 'short',
