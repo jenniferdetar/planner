@@ -156,7 +156,10 @@
       "pattern": "third Thursday",
       "startDate": "2026-01-01",
       "time": "12:00 pm",
-      "endTime": "1:00 pm"
+      "endTime": "1:00 pm",
+      "skipDates": [
+        "2026-01-15"
+      ]
     },
     {
       "title": "CSEA MB Committee",
@@ -663,6 +666,12 @@
       {
         "title": "CSEA MB Committee in San Jose",
         "allDay": true
+      },
+      {
+        "title": "CSEA NEO",
+        "time": "12:00 pm",
+        "endTime": "1:00 pm",
+        "category": "csea"
       }
     ],
     "2026-01-26": [

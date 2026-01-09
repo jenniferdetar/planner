@@ -638,8 +638,36 @@ const personalPlanner = (() => {
             const startTime = formatDisplayTime(event.time);
             const endTime = event.endTime ? ` - ${formatDisplayTime(event.endTime)}` : '';
             const timeLabel = `${startTime}${endTime} - ${event.title}`;
-            lines[lineIndex].textContent = '';
-            lines[lineIndex].appendChild(buildEventPill(event, timeLabel));
+            const lineRule = lines[lineIndex];
+            const eventKey = getTimedEventKey(dateKey, event);
+            const isChecked = Boolean(timedEventChecks[eventKey]);
+            lineRule.textContent = '';
+
+            const eventContainer = document.createElement('div');
+            eventContainer.className = 'day-line-event';
+            if (isChecked) {
+              eventContainer.classList.add('completed');
+            }
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'day-event-checkbox';
+            checkbox.checked = isChecked;
+            checkbox.setAttribute('aria-label', 'Mark event complete');
+            checkbox.addEventListener('change', (e) => {
+              const checked = e.target.checked;
+              if (checked) {
+                timedEventChecks[eventKey] = true;
+              } else {
+                delete timedEventChecks[eventKey];
+              }
+              saveTimedEventChecks();
+              eventContainer.classList.toggle('completed', checked);
+            });
+
+            eventContainer.appendChild(checkbox);
+            eventContainer.appendChild(buildEventPill(event, timeLabel));
+            lineRule.appendChild(eventContainer);
             lineIndex++;
           }
         }
