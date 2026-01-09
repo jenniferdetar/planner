@@ -279,7 +279,7 @@ body {
 
 .habit-card-medications .habit-list {
   font-size: 11pt;
-  line-height: 1.35;
+  line-height: 16px;
   margin-top: calc(0.5rem + 6px);
 }
 
