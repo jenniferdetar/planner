@@ -136,6 +136,137 @@
           ]
         }
       ]
+    },
+    {
+      "title": "Medications",
+      "items": [
+        {
+          "name": "Take Ozempic (Sun AM)",
+          "days": [
+            0
+          ]
+        },
+        {
+          "name": "Take Metformin (AM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Metformin (PM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Glipizide (AM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Glipizide (PM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Rosuvastatin 20 mg (AM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Buspirone 10 mg (AM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Jardiance 25 mg (AM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Estradiol 2 mg (AM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Bupropion XL 300 mg (AM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "name": "Take Nexium 24HR 20 mg (AM)",
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
     }
   ],
   "recurring": [
