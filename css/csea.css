@@ -22,6 +22,20 @@
   margin-bottom: 6px;
 }
 
+.planner-section-title-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: #00326b;
+  color: #fff;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25rem;
+  font-weight: 700;
+}
+
 #searchInput {
   padding-top: 4px;
   padding-bottom: 4px;
