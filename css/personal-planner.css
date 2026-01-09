@@ -507,6 +507,19 @@ body {
 .day-right .line-rule {
   display: flex;
   align-items: center;
+  gap: 10px;
+}
+
+.day-event-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #0a2f5f;
+  cursor: pointer;
+}
+
+.day-right .line-rule.completed .calendar-event {
+  opacity: 0.6;
+  filter: grayscale(60%);
 }
 
 .day-right .calendar-event {
