@@ -22,6 +22,16 @@
   margin-bottom: var(--opus-spacing-sm);
 }
 
+.planner-section-row {
+  display: flex;
+  gap: var(--opus-spacing-xs);
+  flex-wrap: wrap;
+}
+
+.planner-section-row .planner-section {
+  flex: 1 1 320px;
+}
+
 #searchInput {
   padding-top: 4px;
   padding-bottom: 4px;
