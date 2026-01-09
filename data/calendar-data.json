@@ -141,13 +141,13 @@
       "title": "Medications (Daily Routine)",
       "items": [
         {
-          "name": "Take Ozempic (Sun AM)",
+          "name": "Ozempic",
           "days": [
             0
           ]
         },
         {
-          "name": "Take Metformin (AM)",
+          "name": "Metformin - morning",
           "days": [
             0,
             1,
@@ -159,7 +159,7 @@
           ]
         },
         {
-          "name": "Take Metformin (PM)",
+          "name": "Metformin - evening",
           "days": [
             0,
             1,
@@ -171,7 +171,7 @@
           ]
         },
         {
-          "name": "Take Glipizide (AM)",
+          "name": "Glipizide - morning",
           "days": [
             0,
             1,
@@ -183,7 +183,7 @@
           ]
         },
         {
-          "name": "Take Glipizide (PM)",
+          "name": "Glipizide - evening",
           "days": [
             0,
             1,
@@ -195,7 +195,7 @@
           ]
         },
         {
-          "name": "Take Rosuvastatin 20 mg (AM)",
+          "name": "Rosuvastatin",
           "days": [
             0,
             1,
@@ -212,7 +212,7 @@
       "title": "Medications (Supplements)",
       "items": [
         {
-          "name": "Take Buspirone 10 mg (AM)",
+          "name": "Buspirone",
           "days": [
             0,
             1,
@@ -224,7 +224,7 @@
           ]
         },
         {
-          "name": "Take Jardiance 25 mg (AM)",
+          "name": "Jardiance",
           "days": [
             0,
             1,
@@ -236,7 +236,7 @@
           ]
         },
         {
-          "name": "Take Estradiol 2 mg (AM)",
+          "name": "Estradiol",
           "days": [
             0,
             1,
@@ -248,7 +248,7 @@
           ]
         },
         {
-          "name": "Take Bupropion XL 300 mg (AM)",
+          "name": "Bupropion",
           "days": [
             0,
             1,
@@ -260,7 +260,7 @@
           ]
         },
         {
-          "name": "Take Nexium 24HR 20 mg (AM)",
+          "name": "Nexium",
           "days": [
             0,
             1,
