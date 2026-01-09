@@ -136,7 +136,13 @@
 }
 
 .csea-hero-panel {
-  padding: var(--opus-spacing-sm) 0;
+  background: #fff;
+  border: 2px solid #f9c64e;
+  border-radius: 16px;
+  padding: var(--opus-spacing-sm);
+  box-shadow: var(--opus-shadow-md);
+  margin-top: -24px;
+  margin-bottom: 12px;
 }
 
 .csea-hero-section .planner-section-content {
