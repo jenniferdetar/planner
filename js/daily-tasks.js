@@ -3,30 +3,20 @@ const dailyTasks = (() => {
   const HABITS_KEY = 'dailyHabits';
   const HABIT_STATUS_KEY = 'dailyHabitStatus';
 
-  const SCHEDULED_TASKS = [
-    { category: 'Home Care', text: 'Make beds', days: ['daily'] },
-    { category: 'Home Care', text: 'Ana - Cleaning', days: ['sun'] },
-    { category: 'Home Care', text: 'Recycling', days: ['daily'] },
-    { category: 'Self Care', text: 'Read', days: ['daily'] },
-    { category: 'Self Care', text: 'Bring lunch to work', days: ['mon', 'tue', 'wed', 'thu', 'fri'] },
-    { category: 'Self Care', text: 'Take Ozempic (Sun AM)', days: ['sun'] },
-    { category: 'Self Care', text: 'Take Metformin (AM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Metformin (PM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Glipizide (AM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Glipizide (PM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Rosuvastatin 20 mg (AM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Buspirone 10 mg (AM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Jardiance 25 mg (AM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Estradiol 2 mg (AM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Bupropion XL 300 mg (AM)', days: ['daily'] },
-    { category: 'Self Care', text: 'Take Nexium 24HR 20 mg (AM)', days: ['daily'] },
-    { category: 'Weekdays', text: 'Get up at 5:00 am', days: ['mon', 'tue', 'wed', 'thu', 'fri'] },
-    { category: 'Weekdays', text: 'Leave work at 3:30 pm', days: ['mon', 'tue', 'wed', 'thu', 'fri'] },
-    { category: 'Weekdays', text: 'Take train to work', days: ['mon', 'tue', 'wed', 'thu', 'fri'] },
-    { category: 'Weekdays', text: 'Listen to Bible app', days: ['mon', 'tue', 'wed', 'thu', 'fri'] },
-    { category: 'Weekends', text: 'Get up at 7:00 am', days: ['sat', 'sun'] },
-    { category: 'Weekends', text: 'Plan/prep meals for the week', days: ['sun'] },
-    { category: 'Weekends', text: 'Laundry', days: ['sun'] }
+  const SCHEDULED_TASKS = [];
+
+  const DEFAULT_HABITS = [
+    'Make beds (Home Care)',
+    'Recycling (Home Care)',
+    'Read (Self Care)',
+    'Bring lunch to work (Self Care)',
+    'Take Metformin (AM) (Self Care)',
+    'Take Metformin (PM) (Self Care)',
+    'Take Glipizide (AM) (Self Care)',
+    'Take Glipizide (PM) (Self Care)',
+    'Take Rosuvastatin 20 mg (AM) (Self Care)',
+    'Take Buspirone 10 mg (AM) (Self Care)',
+    'Take Jardiance 25 mg (AM) (Self Care)'
   ];
 
   function loadTasks() {
@@ -389,6 +379,13 @@ const dailyTasks = (() => {
       cleanedHabits.forEach(h => habits.push(h));
       saveHabits(habits);
     }
+    DEFAULT_HABITS.forEach(name => {
+      const id = createHabitId(name);
+      if (!habits.find(h => h.id === id)) {
+        habits.push({ id, name });
+      }
+    });
+    saveHabits(habits);
     renderHabits(habits, statusByDate, dateInput);
     handleDateChange(tasksByDate, habits, statusByDate, dateInput);
     handleForm(tasksByDate, dateInput);
