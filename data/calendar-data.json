@@ -287,7 +287,7 @@
       "pattern": "fourth Thursday",
       "startDate": "2026-01-01",
       "time": "12:00 pm",
-      "endTime": "1:00 pm",
+      "endTime": "1:00 pm"
     },
     {
       "title": "CSEA MB Committee",
@@ -312,7 +312,7 @@
       "time": "5:30 pm",
       "endTime": "7:00 pm",
       "endDate": "2026-12-31",
-      "skipHolidays": true,
+      "skipHolidays": true
     },
     {
       "title": "ADT Due",
@@ -751,7 +751,7 @@
         "time": "2:05 pm",
         "endTime": "3:05 pm",
         "category": "personal"
-      },
+      }
     ],
     "2026-01-17": [
       {
@@ -785,7 +785,7 @@
       {
         "title": "CSEA MB Committee in San Jose",
         "allDay": true
-      },
+      }
     ],
     "2026-01-26": [
       {
