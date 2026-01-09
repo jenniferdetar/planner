@@ -232,6 +232,23 @@ body {
   font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
 }
 
+.habit-list li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.habit-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #f3a4a6;
+  border-radius: 3px;
+  background: #fff;
+}
+
 .family-banner {
   background: #f3a4a6;
   color: #ffffff;
