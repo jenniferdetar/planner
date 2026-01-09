@@ -657,14 +657,14 @@ const personalPlanner = (() => {
 
       if (leftList) {
         const items = Array.from(leftList.querySelectorAll('li'));
-          while (items.length < 3) {
-            const li = document.createElement('li');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = `left-bullet-checkbox ${day}`;
-            checkbox.disabled = true;
-            checkbox.tabIndex = -1;
-            li.appendChild(checkbox);
+        while (items.length < 3) {
+          const li = document.createElement('li');
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = `left-bullet-checkbox ${day}`;
+          checkbox.disabled = true;
+          checkbox.tabIndex = -1;
+          li.appendChild(checkbox);
           li.classList.add('left-item');
           leftList.appendChild(li);
           items.push(li);
