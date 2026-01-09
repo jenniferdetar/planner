@@ -607,9 +607,10 @@ const personalPlanner = (() => {
             if (leftSeen.has(titleKey)) return;
             leftSeen.add(titleKey);
             const li = document.createElement('li');
-            const span = document.createElement('span');
-            span.className = `left-dot ${day}`;
-            li.appendChild(span);
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = `left-bullet-checkbox ${day}`;
+            li.appendChild(checkbox);
             li.title = event.title;
             
             li.appendChild(buildEventPill(event));
@@ -656,11 +657,14 @@ const personalPlanner = (() => {
 
       if (leftList) {
         const items = Array.from(leftList.querySelectorAll('li'));
-        while (items.length < 3) {
-          const li = document.createElement('li');
-          const span = document.createElement('span');
-          span.className = `left-dot ${day}`;
-          li.appendChild(span);
+          while (items.length < 3) {
+            const li = document.createElement('li');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = `left-bullet-checkbox ${day}`;
+            checkbox.disabled = true;
+            checkbox.tabIndex = -1;
+            li.appendChild(checkbox);
           li.classList.add('left-item');
           leftList.appendChild(li);
           items.push(li);

@@ -335,20 +335,48 @@ body {
   align-items: center;
 }
 
-.left-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 2px;
-  display: inline-block;
+.left-bullet-checkbox {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 2px solid var(--left-bullet-color, #0a2f5f);
+  background: #ffffff;
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.left-dot.sunday { background: var(--habit-pink); }
-.left-dot.monday { background: var(--habit-peach); }
-.left-dot.tuesday { background: var(--habit-teal); }
-.left-dot.wednesday { background: var(--habit-slate); }
-.left-dot.thursday { background: var(--habit-pink); }
-.left-dot.friday { background: var(--habit-peach); }
-.left-dot.saturday { background: var(--habit-teal); }
+.left-bullet-checkbox::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.left-bullet-checkbox:checked {
+  background: var(--left-bullet-color, #0a2f5f);
+  border-color: var(--left-bullet-color, #0a2f5f);
+}
+
+.left-bullet-checkbox:checked::after {
+  opacity: 1;
+}
+
+.left-bullet-checkbox.sunday { --left-bullet-color: var(--habit-pink); }
+.left-bullet-checkbox.monday { --left-bullet-color: var(--habit-peach); }
+.left-bullet-checkbox.tuesday { --left-bullet-color: var(--habit-teal); }
+.left-bullet-checkbox.wednesday { --left-bullet-color: var(--habit-slate); }
+.left-bullet-checkbox.thursday { --left-bullet-color: var(--habit-pink); }
+.left-bullet-checkbox.friday { --left-bullet-color: var(--habit-peach); }
+.left-bullet-checkbox.saturday { --left-bullet-color: var(--habit-teal); }
 
 .left-icons {
   display: flex;
@@ -479,25 +507,6 @@ body {
 .day-right .line-rule {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.day-line-event {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.day-event-checkbox {
-  width: 18px;
-  height: 18px;
-  accent-color: #0a2f5f;
-  cursor: pointer;
-}
-
-.day-line-event.completed .calendar-event {
-  opacity: 0.6;
-  filter: grayscale(60%);
 }
 
 .day-right .calendar-event {
