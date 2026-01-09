@@ -446,6 +446,8 @@ body {
   gap: 8px;
   height: var(--planner-line-height);
   border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  padding-left: 16px;
 }
 
 .line-item:last-child {
@@ -456,15 +458,8 @@ body {
   width: 7px;
   height: 7px;
   border-radius: 2px;
+  display: none;
 }
-
-.line-box.sunday { background: var(--habit-pink); }
-.line-box.monday { background: var(--habit-peach); }
-.line-box.tuesday { background: var(--habit-teal); }
-.line-box.wednesday { background: var(--habit-slate); }
-.line-box.thursday { background: var(--habit-pink); }
-.line-box.friday { background: var(--habit-peach); }
-.line-box.saturday { background: var(--habit-teal); }
 
 .line-rule {
   flex: 1;
@@ -480,6 +475,27 @@ body {
   display: flex;
   align-items: center;
 }
+
+.day-block .day-right .line-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border: 2px solid #d86b6b;
+  border-radius: 3px;
+  background: transparent;
+}
+
+.day-block.day-sunday .day-right .line-item::before { border-color: var(--habit-pink); }
+.day-block.day-monday .day-right .line-item::before { border-color: var(--habit-peach); }
+.day-block.day-tuesday .day-right .line-item::before { border-color: var(--habit-teal); }
+.day-block.day-wednesday .day-right .line-item::before { border-color: var(--habit-slate); }
+.day-block.day-thursday .day-right .line-item::before { border-color: var(--habit-pink); }
+.day-block.day-friday .day-right .line-item::before { border-color: var(--habit-peach); }
+.day-block.day-saturday .day-right .line-item::before { border-color: var(--habit-teal); }
 
 .day-right .calendar-event {
   display: inline-flex;
