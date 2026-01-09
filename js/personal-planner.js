@@ -886,8 +886,12 @@ const personalPlanner = (() => {
     const weekKey = toKey(currentWeekStart);
 
     habits.forEach(habit => {
+      const isMedicationGroup = /medications?/i.test(habit.title);
       const card = document.createElement('div');
       card.className = 'habit-card';
+      if (isMedicationGroup) {
+        card.classList.add('habit-card-medications');
+      }
 
       const title = document.createElement('h2');
       title.className = 'habit-title';

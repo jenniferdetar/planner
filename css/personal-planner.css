@@ -277,6 +277,11 @@ body {
   font-family: "Avenir Next", "Arial", "Trebuchet MS", sans-serif;
 }
 
+.habit-card-medications .habit-list {
+  font-size: 10pt;
+  line-height: 1.5;
+}
+
 .habit-list li {
   margin-bottom: 4px;
 }
