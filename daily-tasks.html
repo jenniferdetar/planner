@@ -218,6 +218,29 @@
       <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
 
       <main class="planner-main tasks-layout">
+        <section class="tasks-card habits-card">
+          <div class="habits-header">
+            <div>
+              <h2 class="habits-title">Habit Grid</h2>
+              <p class="habits-subtitle">Check off daily habits and track your progress.</p>
+            </div>
+            <div class="habits-progress">
+              <div class="habits-progress-text" id="habits-progress-text">0/0 completed</div>
+              <div class="opus-progress-bar">
+                <div class="opus-progress-bar-fill" id="habits-progress-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <form id="habit-form" class="habits-form">
+            <input class="planner-form-input" id="habit-input" type="text" placeholder="Add a habit..." required>
+            <button type="submit" class="planner-button planner-button-secondary">Add Habit</button>
+          </form>
+
+          <ul class="habits-grid" id="habits-list"></ul>
+          <div class="habits-empty" id="habits-empty">No habits yet. Add one to start tracking.</div>
+        </section>
+
         <section class="tasks-card">
           <div class="tasks-toolbar">
             <div class="planner-form-group">
@@ -247,29 +270,6 @@
 
           <ul class="tasks-list" id="tasks-list"></ul>
           <div class="tasks-empty" id="tasks-empty">No tasks for this day yet.</div>
-        </section>
-
-        <section class="tasks-card habits-card">
-          <div class="habits-header">
-            <div>
-              <h2 class="habits-title">Habit Grid</h2>
-              <p class="habits-subtitle">Check off daily habits and track your progress.</p>
-            </div>
-            <div class="habits-progress">
-              <div class="habits-progress-text" id="habits-progress-text">0/0 completed</div>
-              <div class="opus-progress-bar">
-                <div class="opus-progress-bar-fill" id="habits-progress-bar" style="width: 0%;"></div>
-              </div>
-            </div>
-          </div>
-
-          <form id="habit-form" class="habits-form">
-            <input class="planner-form-input" id="habit-input" type="text" placeholder="Add a habit..." required>
-            <button type="submit" class="planner-button planner-button-secondary">Add Habit</button>
-          </form>
-
-          <ul class="habits-grid" id="habits-list"></ul>
-          <div class="habits-empty" id="habits-empty">No habits yet. Add one to start tracking.</div>
         </section>
       </main>
 
