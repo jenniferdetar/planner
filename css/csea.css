@@ -44,6 +44,29 @@
   padding: var(--opus-spacing-sm);
 }
 
+.csea-top-row {
+  display: flex;
+  gap: var(--opus-spacing-sm);
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+
+.csea-top-left {
+  flex: 2 1 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--opus-spacing-sm);
+}
+
+.csea-top-right {
+  flex: 1 1 260px;
+  background: #fff;
+  border-radius: 16px;
+  padding: var(--opus-spacing-sm);
+  border: 2px solid #f9c64e;
+  box-shadow: var(--opus-shadow-md);
+}
+
 .csea-hero {
   background: linear-gradient(135deg, #00326b 0%, #5d84b2 55%, #9ad1d6 100%);
   color: #ffffff;
