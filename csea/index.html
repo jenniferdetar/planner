@@ -53,19 +53,20 @@
           <h1>CSEA Tracker</h1>
           <p>Stewarded member issues at a glance</p>
         </div>
-        <div class="planner-header-right">
-          <div class="csea-cta-row">
-            <button type="button" id="grievance-pill-btn" class="csea-cta-pill">
-              <i class="fa-solid fa-capsules text-base"></i>
-              <span>Grievance Form</span>
-            </button>
-            <a href="/csea/csea-meeting-notes.html" class="csea-cta-pill">Meeting Notes</a>
-            <a href="/csea/csea-notes.html" class="csea-cta-pill">Notes</a>
-          </div>
-          <div class="planner-header-date" id="today-date"></div>
+      <div class="planner-header-right">
+        <div class="csea-cta-row">
+          <button type="button" id="grievance-pill-btn" class="csea-cta-pill">
+            <i class="fa-solid fa-capsules text-base"></i>
+            <span>Grievance Form</span>
+          </button>
+          <a href="/csea/csea-meeting-notes.html" class="csea-cta-pill">Meeting Notes</a>
+          <a href="/csea/csea-notes.html" class="csea-cta-pill">Notes</a>
+          <a href="/csea/issue-log.html" class="csea-cta-pill">Issue Log</a>
         </div>
-      </header>
-            <main class="planner-main">
+        <div class="planner-header-date" id="today-date"></div>
+      </div>
+    </header>
+      <main class="planner-main">
         <div class="planner-section-row">
           <section class="planner-section csea-summary-section">
             <div class="planner-section-header">
@@ -104,29 +105,6 @@
             </div>
           </section>
         </div>
-        <section class="planner-section">
-          <div class="planner-section-header">
-            <span class="planner-section-icon">📋</span>
-            <h2 class="planner-section-title">Issue Log</h2>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full csea-table">
-              <thead class="bg-primary text-white">
-                <tr>
-                  <th class="px-3 py-3 text-center text-sm font-semibold uppercase tracking-wider">Member ID</th>
-                  <th class="px-3 py-3 text-center text-sm font-semibold uppercase tracking-wider">Member Name</th>
-                  <th class="px-3 py-3 text-center text-sm font-semibold uppercase tracking-wider">Issue Type</th>
-                  <th class="px-3 py-3 text-left text-sm font-semibold uppercase tracking-wider">Issue Description</th>
-                  <th class="px-3 py-3 text-center text-sm font-semibold uppercase tracking-wider">Steward</th>
-                  <th class="px-3 py-3 text-center text-sm font-semibold uppercase tracking-wider">Issue Priority</th>
-                  <th class="px-3 py-3 text-center text-sm font-semibold uppercase tracking-wider">Issue Status</th>
-                  <th class="px-3 py-3 text-center text-sm font-semibold uppercase tracking-wider">Issue Date</th>
-                </tr>
-              </thead>
-              <tbody id="issuesBody" class="divide-y divide-gray-200 text-center csea-table-body"></tbody>
-            </table>
-          </div>
-        </section>
       </main>
 
       <footer class="planner-footer">
