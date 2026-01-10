@@ -152,8 +152,12 @@ const workPlanner = (() => {
   function coversSlot(event, slotTime) {
     const start = timeToMinutes(normalizeTime(event.time));
     if (start === null) return false;
-    const end = event.endTime ? timeToMinutes(normalizeTime(event.endTime)) : start;
+    let end = event.endTime ? timeToMinutes(normalizeTime(event.endTime)) : start;
     if (end === null) return false;
+    
+    // Ensure zero-duration events show up in their starting slot
+    if (end <= start) end = start + 1;
+    
     return slotTime >= start && slotTime < end;
   }
 
