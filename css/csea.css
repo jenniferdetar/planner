@@ -47,19 +47,20 @@
 .csea-top-row {
   display: flex;
   gap: var(--opus-spacing-sm);
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: flex-start;
+  width: 100%;
 }
 
 .csea-top-left {
-  flex: 2 1 420px;
+  flex: 1 1 500px;
   display: flex;
   flex-direction: column;
   gap: var(--opus-spacing-sm);
 }
 
 .csea-top-right {
-  flex: 1 1 260px;
+  flex: 1 1 300px;
   background: #fff;
   border-radius: 16px;
   padding: var(--opus-spacing-sm);
