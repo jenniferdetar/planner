@@ -106,6 +106,59 @@ export const opusRepository = {
     return data || []
   },
 
+  // Work Planner Persistence
+  async getWorkPlannerEdits() {
+    const supabase = createClient()
+    const { data, error } = await supabase.from('work_planner_edits').select('*')
+    if (error) throw error
+    
+    const edits: Record<string, any> = {}
+    data?.forEach(e => {
+      if (!edits[e.date_key]) edits[e.date_key] = {}
+      edits[e.date_key][e.slot_key] = e.value
+    })
+    return edits
+  },
+
+  async upsertWorkPlannerEdit(dateKey: string, slotKey: string, value: string) {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    const { error } = await supabase.from('work_planner_edits').upsert({
+      date_key: dateKey,
+      slot_key: slotKey,
+      value: value,
+      user_id: user?.id
+    }, { onConflict: 'date_key,slot_key,user_id' })
+    
+    if (error) throw error
+  },
+
+  async getUserPriorities() {
+    const supabase = createClient()
+    const { data, error } = await supabase.from('user_priorities').select('*')
+    if (error) throw error
+    
+    const priorities: Record<string, string> = {}
+    data?.forEach(p => {
+      priorities[p.key] = p.value
+    })
+    return priorities
+  },
+
+  async upsertUserPriority(key: string, value: string) {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    const { error } = await supabase.from('user_priorities').upsert({
+      key: key,
+      value: value,
+      user_id: user?.id
+    }, { onConflict: 'key,user_id' })
+    
+    if (error) throw error
+  },
+
   // Assets (Storage)
   async getAssetUrl(path: string, bucket: string = 'assets') {
     const supabase = createClient()

@@ -47,18 +47,21 @@ export default function WorkPlannerPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [recurring, byDate] = await Promise.all([
+        const [recurring, byDate, cloudEdits, cloudPriorities] = await Promise.all([
           opusRepository.getRecurringEvents(),
-          opusRepository.getEventsByDate()
+          opusRepository.getEventsByDate(),
+          opusRepository.getWorkPlannerEdits(),
+          opusRepository.getUserPriorities()
         ])
         setPlanner(recurring)
         setEventsByDate(byDate)
         
-        // Load localStorage data
+        // Load localStorage data as secondary fallback if cloud is empty
         const savedEdits = JSON.parse(localStorage.getItem('workPlannerEdits') || '{}')
         const savedPriorities = JSON.parse(localStorage.getItem('workPlannerPriorities') || '{}')
-        setEdits(savedEdits)
-        setPriorities(savedPriorities)
+        
+        setEdits({ ...savedEdits, ...cloudEdits })
+        setPriorities({ ...savedPriorities, ...cloudPriorities })
       } catch (err) {
         console.error('Failed to load work planner data', err)
       } finally {
@@ -84,13 +87,18 @@ export default function WorkPlannerPage() {
     setWeekStart(next)
   }
 
-  const handlePriorityChange = (key: string, value: string) => {
+  const handlePriorityChange = async (key: string, value: string) => {
     const next = { ...priorities, [key]: value }
     setPriorities(next)
     localStorage.setItem('workPlannerPriorities', JSON.stringify(next))
+    try {
+      await opusRepository.upsertUserPriority(key, value)
+    } catch (err) {
+      console.error('Failed to save priority to cloud', err)
+    }
   }
 
-  const handleEditChange = (dateKey: string, slotKey: string, value: string) => {
+  const handleEditChange = async (dateKey: string, slotKey: string, value: string) => {
     const next = { ...edits }
     if (!next[dateKey]) next[dateKey] = {}
     if (value) {
@@ -101,6 +109,11 @@ export default function WorkPlannerPage() {
     }
     setEdits(next)
     localStorage.setItem('workPlannerEdits', JSON.stringify(next))
+    try {
+      await opusRepository.upsertWorkPlannerEdit(dateKey, slotKey, value)
+    } catch (err) {
+      console.error('Failed to save edit to cloud', err)
+    }
   }
 
   if (loading) return <div className="p-8 text-center">Loading work planner...</div>
