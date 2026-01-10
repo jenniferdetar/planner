@@ -53,14 +53,15 @@
 }
 
 .csea-top-left {
-  flex: 1 1 100%;
+  flex: 1 1 0px;
+  min-width: 500px;
   display: flex;
   flex-direction: column;
   gap: var(--opus-spacing-sm);
 }
 
 .csea-top-right {
-  flex: 1 1 100%;
+  flex: 0 0 400px;
   background: #fff;
   border-radius: 16px;
   padding: var(--opus-spacing-sm);
