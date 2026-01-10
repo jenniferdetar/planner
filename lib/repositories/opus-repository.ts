@@ -29,49 +29,87 @@ export const opusRepository = {
     if (error) throw error
   },
 
+  // Calendar
+  async getRecurringEvents() {
+    const supabase = createClient()
+    const { data, error } = await supabase.from('calendar_recurring').select('*')
+    if (error) throw error
+    return (data || []).map(ev => ({
+      title: ev.title,
+      frequency: ev.frequency,
+      startDate: ev.start_date,
+      endDate: ev.end_date,
+      time: ev.time,
+      endTime: ev.end_time,
+      pattern: ev.pattern,
+      dayOfMonth: ev.day_of_month,
+      weekdays: ev.weekdays,
+      skipMonths: ev.skip_months,
+      skipHolidays: ev.skip_holidays,
+      skipDates: ev.skip_dates,
+      category: ev.category
+    }))
+  },
+
+  async getEventsByDate() {
+    const supabase = createClient()
+    const { data, error } = await supabase.from('calendar_by_date').select('*')
+    if (error) throw error
+    
+    const byDate: Record<string, any[]> = {}
+    data?.forEach(ev => {
+      if (!byDate[ev.date]) byDate[ev.date] = []
+      byDate[ev.date].push({
+        title: ev.title,
+        category: ev.category
+      })
+    })
+    return byDate
+  },
+
   // Goals
-  async getGoals() {
+  async getSMARTGoals() {
     const supabase = createClient()
     const { data, error } = await supabase.from('goals').select('*')
     if (error) throw error
-    return data
+    
+    const goals: Record<string, any> = {}
+    data?.forEach(g => {
+      goals[g.title] = {
+        category: g.category,
+        specific: g.specific,
+        measurable: g.measurable,
+        achievable: g.achievable,
+        relevant: g.relevant,
+        timebound: g.timebound,
+        statement: g.statement,
+        weeklyTasks: g.weekly_tasks,
+        tiesTo: g.ties_to
+      }
+    })
+    return goals
   },
 
-  async createGoal(goal: any) {
+  // Hours Worked
+  async getHoursWorked() {
     const supabase = createClient()
-    const { data, error } = await supabase.from('goals').insert(goal).select().single()
+    const { data, error } = await supabase.from('hours_worked').select('*').order('name')
     if (error) throw error
-    return data
+    return data || []
   },
 
-  // Notes
-  async getNotes() {
+  // Vision Board
+  async getVisionBoardPhotos() {
     const supabase = createClient()
-    const { data, error } = await supabase.from('notes').select('*')
+    const { data, error } = await supabase.from('vision_board_photos').select('*')
     if (error) throw error
-    return data
+    return data || []
   },
 
-  // Meetings
-  async getMeetings() {
+  // Assets (Storage)
+  async getAssetUrl(path: string, bucket: string = 'assets') {
     const supabase = createClient()
-    const { data, error } = await supabase.from('meetings').select('*')
-    if (error) throw error
-    return data
-  },
-
-  // Preferences
-  async getPreferences() {
-    const supabase = createClient()
-    const { data, error } = await supabase.from('preferences').select('*').single()
-    if (error) throw error
-    return data
-  },
-
-  async updatePreference(key: string, value: any) {
-    const supabase = createClient()
-    const { data, error } = await supabase.from('preferences').update({ [key]: value }).select().single()
-    if (error) throw error
-    return data
+    const { data } = supabase.storage.from(bucket).getPublicUrl(path)
+    return data.publicUrl
   }
 }

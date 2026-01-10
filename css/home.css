@@ -8,8 +8,8 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
-  gap: var(--opus-spacing-sm);
-  padding: var(--opus-spacing-sm);
+  gap: 4px;
+  padding: 8px;
   min-height: 100vh;
   box-sizing: border-box;
   align-items: start;
@@ -23,7 +23,7 @@ body {
   align-items: center;
   width: 100%;
   font-family: "Avenir Next", "Avenir", "Gill Sans", "Trebuchet MS", sans-serif;
-  margin-bottom: var(--opus-spacing-xs);
+  margin-bottom: 2px;
 }
 
 .planner-sidebar-item {
@@ -68,7 +68,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin: 0 var(--opus-spacing-sm) 0;
+  margin: 0;
 }
 
 .planner-subpage-pill {
@@ -101,7 +101,7 @@ body {
 .planner-content {
   display: flex;
   flex-direction: column;
-  gap: var(--opus-spacing-sm);
+  gap: 4px;
 }
 
 .planner-header {
@@ -145,7 +145,7 @@ body {
 .planner-main {
   display: flex;
   flex-direction: column;
-  gap: var(--opus-spacing-sm);
+  gap: 4px;
 }
 
 .planner-calendar-embed {

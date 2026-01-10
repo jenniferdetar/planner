@@ -1,4 +1,5 @@
 import Calendar from '@/components/Calendar'
+import Link from 'next/link'
 
 export default function HomePage() {
   return (
@@ -10,8 +11,9 @@ export default function HomePage() {
         </div>
         <div className="planner-header-right">
           <div className="planner-header-actions">
-            <a href="/personal-planner" className="planner-header-pill">Personal Planner</a>
-            <a href="/work-planner" className="planner-header-pill">Work Planner</a>
+            <Link href="/personal-planner" className="planner-header-pill">Personal Planner</Link>
+            <Link href="/work-planner" className="planner-header-pill">Work Planner</Link>
+            <Link href="/goals" className="planner-header-pill">Goals</Link>
           </div>
           <div className="planner-header-date">
             {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}

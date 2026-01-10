@@ -1,7 +1,7 @@
 .work-planner-page .planner-header {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
   padding: 0;
   background: transparent;
   border: none;
@@ -27,7 +27,7 @@
 .work-planner-main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .work-controls .week-nav {

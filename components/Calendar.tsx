@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { startOfGrid, toKey, expandPlannerForMonth, classifyEvent, styleMap } from '@/lib/calendar-utils'
+import { opusRepository } from '@/lib/repositories/opus-repository'
 
 export default function Calendar() {
   const [current, setCurrent] = useState(new Date())
@@ -12,10 +13,12 @@ export default function Calendar() {
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await fetch('/data/calendar-data.json')
-        const data = await res.json()
-        setPlanner(data.recurring || [])
-        setEventsByDate(data.byDate || {})
+        const [recurring, byDate] = await Promise.all([
+          opusRepository.getRecurringEvents(),
+          opusRepository.getEventsByDate()
+        ])
+        setPlanner(recurring)
+        setEventsByDate(byDate)
       } catch (err) {
         console.error('Failed to load calendar data', err)
       } finally {
