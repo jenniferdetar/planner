@@ -36,8 +36,21 @@
     </aside>
 
     <div class="planner-content">
-            <main class="planner-main">
+      <main class="planner-main">
         <section class="planner-section csea-top-row">
+          <div class="csea-top-right" id="search-issues">
+            <div class="planner-section-header">
+              <span class="planner-section-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <h2 class="planner-section-title">Search Issues</h2>
+            </div>
+            <div class="planner-section-content">
+              <div class="relative max-w-full">
+                <input type="text" id="searchInput" placeholder="Search by member name, ID, description, or steward..." class="w-full px-4 py-1.5 pl-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none">
+                <i class="fa-solid fa-search absolute left-3 top-2.5 text-gray-400"></i>
+              </div>
+            </div>
+          </div>
+
           <div class="csea-top-left">
             <div class="csea-hero">
               <div>
@@ -80,18 +93,6 @@
                 <ul class="csea-saved-list" id="csea-saved-list"></ul>
               </div>
             </section>
-          </div>
-          <div class="csea-top-right" id="search-issues">
-            <div class="planner-section-header">
-              <span class="planner-section-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-              <h2 class="planner-section-title">Search Issues</h2>
-            </div>
-            <div class="planner-section-content">
-              <div class="relative max-w-2xl">
-                <input type="text" id="searchInput" placeholder="Search by member name, ID, description, or steward..." class="w-full px-4 py-1.5 pl-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none">
-                <i class="fa-solid fa-search absolute left-3 top-2.5 text-gray-400"></i>
-              </div>
-            </div>
           </div>
         </section>
       </main>

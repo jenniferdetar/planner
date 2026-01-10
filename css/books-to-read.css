@@ -389,10 +389,7 @@
   .books-form-row {
     grid-template-columns: 1fr;
   }
-
-
-
-
+}
 
 .books-page-icons .planner-section-header .planner-section-title {
   margin: 0;
