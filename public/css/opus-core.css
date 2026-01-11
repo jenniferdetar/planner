@@ -1003,27 +1003,6 @@ body {
   padding: var(--opus-spacing-md);
 }
 
-.planner-sidebar-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
-  border-radius: var(--opus-border-radius);
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.planner-sidebar-item:hover,
-.planner-sidebar-item.active {
-  background: var(--opus-accent);
-  color: var(--opus-primary);
-  border-color: var(--opus-accent);
-  transform: translateX(4px);
-}
-
 @media (max-width: 960px) {
   .planner-container {
     grid-template-columns: 1fr;
