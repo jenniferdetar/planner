@@ -293,6 +293,8 @@
   </div>
 
   <script src="js/utils.js?v=20260108"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase-client.js"></script>
   <script>
     const todayDateEl = document.getElementById('today-date');
     if (todayDateEl) {
@@ -317,6 +319,12 @@
       summaryBox.textContent = 'Processing PDF…';
       summaryMeta.innerHTML = '';
       try {
+        const user = await requireSupabaseUser();
+        if (!user) {
+          summaryBox.textContent = 'Please log in to upload and sync PDFs.';
+          return;
+        }
+
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         let text = '';
@@ -329,10 +337,32 @@
         }
         const summary = summarizeText(text);
         const wordCount = text.split(/\s+/).filter(Boolean).length;
-        renderSummary(summary, { name: file.name, pages: pdf.numPages, words: wordCount });
+
+        const path = `${user.id}/hoa/${Date.now()}-${file.name}`;
+        const { error: uploadError } = await window.supabaseClient
+          .storage.from('hoa-unit-files')
+          .upload(path, file, { upsert: false });
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = window.supabaseClient
+          .storage.from('hoa-unit-files')
+          .getPublicUrl(path);
+        const fileUrl = publicUrlData?.publicUrl || '';
+
+        await window.supabaseClient.from('hoa_units').insert({
+          user_id: user.id,
+          unit_name: 'HOA Library',
+          file_name: file.name,
+          file_url: fileUrl,
+          summary,
+          pages: pdf.numPages,
+          words: wordCount
+        });
+
+        renderSummary(summary, { name: file.name, pages: pdf.numPages, words: wordCount, url: fileUrl });
       } catch (err) {
         console.error(err);
-        summaryBox.textContent = 'Unable to read that PDF. Please try another file.';
+        summaryBox.textContent = 'Unable to read or upload that PDF. Please try another file.';
       }
     });
 
@@ -354,7 +384,8 @@
       summaryMeta.innerHTML = [
         meta.name ? `<span class="hoa-summary-pill">File: ${meta.name}</span>` : '',
         meta.pages ? `<span class="hoa-summary-pill">Pages: ${meta.pages}</span>` : '',
-        meta.words ? `<span class="hoa-summary-pill">Words: ${meta.words}</span>` : ''
+        meta.words ? `<span class="hoa-summary-pill">Words: ${meta.words}</span>` : '',
+        meta.url ? `<span class="hoa-summary-pill"><a href="${meta.url}" target="_blank" rel="noopener">Open</a></span>` : ''
       ].filter(Boolean).join('');
     }
   </script>

@@ -312,6 +312,8 @@
   </div>
 
   <script src="../js/utils.js?v=20260108"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="../js/supabase-client.js"></script>
   <script>
     const todayDateEl = document.getElementById('today-date');
     if (todayDateEl) {
@@ -349,6 +351,12 @@
       unitSummary.textContent = 'Processing PDF…';
       unitMeta.innerHTML = '';
       try {
+        const user = await requireSupabaseUser();
+        if (!user) {
+          unitSummary.textContent = 'Please log in to upload and sync PDFs.';
+          return;
+        }
+
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         let text = '';
@@ -361,15 +369,39 @@
         }
         const summary = summarizeText(text);
         const wordCount = text.split(/\s+/).filter(Boolean).length;
+
+        const unitName = unitSelect?.value || 'Unit';
+        const path = `${user.id}/units/${unitName}/${Date.now()}-${file.name}`;
+        const { error: uploadError } = await window.supabaseClient
+          .storage.from('hoa-unit-files')
+          .upload(path, file, { upsert: false });
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = window.supabaseClient
+          .storage.from('hoa-unit-files')
+          .getPublicUrl(path);
+        const fileUrl = publicUrlData?.publicUrl || '';
+
+        await window.supabaseClient.from('hoa_units').insert({
+          user_id: user.id,
+          unit_name: unitName,
+          file_name: file.name,
+          file_url: fileUrl,
+          summary,
+          pages: pdf.numPages,
+          words: wordCount
+        });
+
         renderSummary(summary, {
           name: file.name,
           pages: pdf.numPages,
           words: wordCount,
-          unit: unitSelect?.value
+          unit: unitName,
+          url: fileUrl
         });
       } catch (err) {
         console.error(err);
-        unitSummary.textContent = 'Unable to read that PDF. Please try another file.';
+        unitSummary.textContent = 'Unable to read or upload that PDF. Please try another file.';
       }
     });
 
@@ -392,7 +424,8 @@
         meta.unit ? `<span class="unit-summary-pill">${meta.unit}</span>` : '',
         meta.name ? `<span class="unit-summary-pill">File: ${meta.name}</span>` : '',
         meta.pages ? `<span class="unit-summary-pill">Pages: ${meta.pages}</span>` : '',
-        meta.words ? `<span class="unit-summary-pill">Words: ${meta.words}</span>` : ''
+        meta.words ? `<span class="unit-summary-pill">Words: ${meta.words}</span>` : '',
+        meta.url ? `<span class="unit-summary-pill"><a href="${meta.url}" target="_blank" rel="noopener">Open</a></span>` : ''
       ].filter(Boolean).join('');
     }
   </script>

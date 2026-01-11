@@ -1,5 +1,7 @@
 const opusStorage = (() => {
   const STORAGE_KEY = 'opusData';
+  const supabaseClient = window.supabaseClient;
+  let supabaseUser = null;
   
   let data = {
     tasks: [],
@@ -72,13 +74,22 @@ const opusStorage = (() => {
     saveToLocalStorage();
   }
 
-  function initializeStorage() {
+  async function initializeStorage() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         data = JSON.parse(stored);
       } else {
         saveToLocalStorage();
+      }
+
+      if (supabaseClient) {
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+        supabaseUser = sessionData?.session?.user || null;
+        if (supabaseUser) {
+          await pullFromSupabase();
+          saveToLocalStorage();
+        }
       }
       return Promise.resolve();
     } catch (error) {
@@ -90,6 +101,9 @@ const opusStorage = (() => {
   function saveToLocalStorage() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (supabaseUser) {
+        pushToSupabase().catch(err => console.error('Supabase sync error', err));
+      }
     } catch (error) {
       console.error('Error saving to localStorage:', error);
       throw error;
@@ -105,6 +119,96 @@ const opusStorage = (() => {
     } catch (error) {
       console.error('Error loading from localStorage:', error);
       throw error;
+    }
+  }
+
+  async function pullFromSupabase() {
+    if (!supabaseClient || !supabaseUser) return;
+    const { data: tasksData, error: tasksError } = await supabaseClient
+      .from('planner_tasks')
+      .select('*')
+      .eq('user_id', supabaseUser.id);
+    if (tasksError) console.error(tasksError);
+    const { data: goalsData, error: goalsError } = await supabaseClient
+      .from('planner_goals')
+      .select('*')
+      .eq('user_id', supabaseUser.id);
+    if (goalsError) console.error(goalsError);
+
+    if (tasksData) {
+      data.tasks = tasksData.map(row => ({
+        id: row.id,
+        title: row.title,
+        description: row.description || '',
+        dueDate: row.due_date || null,
+        dueTime: row.due_time || null,
+        priority: row.priority || 'Medium',
+        completed: row.completed || false,
+        linkedGoalIds: row.linked_goal_ids || [],
+        category: row.category || 'General',
+        subtasks: row.subtasks || [],
+        createdAt: row.created_at,
+        updatedAt: row.updated_at
+      }));
+    }
+
+    if (goalsData) {
+      data.goals = goalsData.map(row => ({
+        id: row.id,
+        title: row.title,
+        description: row.description || '',
+        status: row.status || 'Active',
+        category: row.category || 'General',
+        missionAlignment: row.mission_alignment || [],
+        timeframe: row.timeframe || '',
+        linkedTaskIds: row.linked_task_ids || [],
+        progressPercent: row.progress_percent || 0,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at
+      }));
+    }
+  }
+
+  async function pushToSupabase() {
+    if (!supabaseClient || !supabaseUser) return;
+    const taskRows = data.tasks.map(t => ({
+      id: t.id,
+      user_id: supabaseUser.id,
+      title: t.title,
+      description: t.description,
+      due_date: t.dueDate,
+      due_time: t.dueTime,
+      priority: t.priority,
+      completed: t.completed,
+      linked_goal_ids: t.linkedGoalIds,
+      category: t.category,
+      subtasks: t.subtasks,
+      created_at: t.createdAt,
+      updated_at: t.updatedAt
+    }));
+
+    const goalRows = data.goals.map(g => ({
+      id: g.id,
+      user_id: supabaseUser.id,
+      title: g.title,
+      description: g.description,
+      status: g.status,
+      category: g.category,
+      mission_alignment: g.missionAlignment,
+      timeframe: g.timeframe,
+      linked_task_ids: g.linkedTaskIds,
+      progress_percent: g.progressPercent,
+      created_at: g.createdAt,
+      updated_at: g.updatedAt
+    }));
+
+    if (taskRows.length) {
+      await supabaseClient.from('planner_tasks').upsert(taskRows, { onConflict: 'id' });
+      await supabaseClient.from('planner_tasks').delete().eq('user_id', supabaseUser.id).not('id', 'in', taskRows.map(t => t.id));
+    }
+    if (goalRows.length) {
+      await supabaseClient.from('planner_goals').upsert(goalRows, { onConflict: 'id' });
+      await supabaseClient.from('planner_goals').delete().eq('user_id', supabaseUser.id).not('id', 'in', goalRows.map(g => g.id));
     }
   }
 
