@@ -18,7 +18,7 @@
 
 ### Architecture Overview
 
-The Opus One Planner will be built as a **modular, single-page application** extending the existing dashboard structure. Key design decisions:
+The Personal Organizational Management System will be built as a **modular, single-page application** extending the existing dashboard structure. Key design decisions:
 
 1. **Modular Component System**: Each feature (Daily Tasks, Goals, Notes, etc.) gets its own HTML page, CSS module, and JS module, following the existing project pattern (e.g., `calendar.html`, `to_do.html`).
 

@@ -3,7 +3,7 @@ description: Repository Information Overview
 alwaysApply: true
 ---
 
-# Opus One Planner - Repository Information
+# Personal Organizational Management System - Repository Information
 
 ## Summary
 
