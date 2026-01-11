@@ -90,6 +90,49 @@
       border-color: var(--opus-primary);
       transform: translateY(-1px);
     }
+
+    .hoa-upload {
+      display: grid;
+      gap: 12px;
+    }
+
+    .hoa-upload input[type="file"] {
+      padding: 10px;
+      border: 2px dashed #7f9db3;
+      border-radius: 12px;
+      background: #f8fafc;
+      cursor: pointer;
+    }
+
+    .hoa-summary {
+      background: #ffffff;
+      border: 2px solid #dbeafe;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: var(--opus-shadow-sm);
+      font-size: 0.95rem;
+      color: #0f172a;
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+
+    .hoa-summary-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #475569;
+    }
+
+    .hoa-summary-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #e6eef5;
+      border: 1px solid #7f9db3;
+      color: #0a2f5f;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
@@ -118,6 +161,20 @@
       <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
 
       <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📄</span>
+            <h2 class="planner-section-title">Upload & Summarize PDF</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="hoa-upload">
+              <input type="file" id="hoa-pdf-input" accept="application/pdf">
+              <div class="hoa-summary-meta" id="hoa-summary-meta" aria-live="polite"></div>
+              <div class="hoa-summary" id="hoa-summary-output">Select a PDF to generate a quick summary.</div>
+            </div>
+          </div>
+        </section>
+
         <section class="planner-section">
           <div class="planner-section-header">
             <span class="planner-section-icon">🏡</span>
@@ -245,6 +302,60 @@
         month: 'short',
         day: 'numeric'
       });
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha512-UaxU5iHoAKrjdWO9x4vFzUFnprQgGsjbqReb4zLGm03P9pn5SHmUfa/9ziXxFEqJhm8C+N1Am1+jNL56kfcZOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    const fileInput = document.getElementById('hoa-pdf-input');
+    const summaryBox = document.getElementById('hoa-summary-output');
+    const summaryMeta = document.getElementById('hoa-summary-meta');
+    const STOPWORDS = new Set(['the','and','of','to','in','a','for','on','at','by','with','is','it','as','be','an','or','from','that','this','are','was','were','will','can','may','not','your','you']);
+
+    fileInput?.addEventListener('change', async (evt) => {
+      const file = evt.target.files?.[0];
+      if (!file) return;
+      summaryBox.textContent = 'Processing PDF…';
+      summaryMeta.innerHTML = '';
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          const strings = content.items.map(item => item.str).join(' ');
+          text += ' ' + strings;
+          if (text.length > 12000) break;
+        }
+        const summary = summarizeText(text);
+        const wordCount = text.split(/\s+/).filter(Boolean).length;
+        renderSummary(summary, { name: file.name, pages: pdf.numPages, words: wordCount });
+      } catch (err) {
+        console.error(err);
+        summaryBox.textContent = 'Unable to read that PDF. Please try another file.';
+      }
+    });
+
+    function summarizeText(text) {
+      if (!text || !text.trim()) return 'No readable text found in this PDF.';
+      const sentences = text.replace(/\s+/g, ' ').split(/(?<=[.?!])\s+/).filter(s => s.length > 20);
+      const topSentences = sentences.slice(0, 3).join(' ');
+      const freq = {};
+      text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).forEach(word => {
+        if (!word || STOPWORDS.has(word)) return;
+        freq[word] = (freq[word] || 0) + 1;
+      });
+      const keywords = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([w]) => w).join(', ');
+      return `${topSentences || 'Summary unavailable.'}\n\nTop keywords: ${keywords || 'n/a'}`;
+    }
+
+    function renderSummary(summaryText, meta) {
+      summaryBox.textContent = summaryText;
+      summaryMeta.innerHTML = [
+        meta.name ? `<span class="hoa-summary-pill">File: ${meta.name}</span>` : '',
+        meta.pages ? `<span class="hoa-summary-pill">Pages: ${meta.pages}</span>` : '',
+        meta.words ? `<span class="hoa-summary-pill">Words: ${meta.words}</span>` : ''
+      ].filter(Boolean).join('');
     }
   </script>
 <script src="js/calendar-embed.js?v=20260108"></script>
