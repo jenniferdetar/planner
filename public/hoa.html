@@ -9,17 +9,18 @@
   <link rel="stylesheet" href="css/calendar.css?v=20260108">
   <style>
     .hoa-grid {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     }
 
     .hoa-card {
       display: flex;
-      align-items: flex-start;
-      gap: 14px;
+      align-items: center;
+      gap: 12px;
       background: #99B3C5;
-      border-radius: 16px;
-      padding: 14px 16px;
-      border-color: rgba(10, 47, 95, 0.25);
+      border-radius: 999px;
+      padding: 14px 18px;
+      border: 2px solid rgba(10, 47, 95, 0.15);
+      box-shadow: var(--opus-shadow-sm);
     }
 
     .hoa-card:nth-child(4n+1) { background: #99B3C5; }
@@ -30,14 +31,15 @@
     .hoa-card-icon {
       display: grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
       font-size: 1.3rem;
       color: #0a2f5f;
-      border: 1px solid rgba(10, 47, 95, 0.25);
-      background: #99B3C5;
+      border: 2px solid rgba(10, 47, 95, 0.2);
+      background: #ffffff;
       flex-shrink: 0;
+      box-shadow: var(--opus-shadow-xs);
     }
 
     .hoa-card:nth-child(4n+1) .hoa-card-icon { background: #99B3C5; }
@@ -47,14 +49,14 @@
 
     .hoa-card-title {
       margin: 0;
-      font-size: 0.9rem;
-      line-height: 1.1;
+      font-size: 0.95rem;
+      line-height: 1.15;
       color: var(--opus-primary);
     }
 
     .hoa-card-note {
       margin: 4px 0 0;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       line-height: 1.2;
       color: var(--opus-text-secondary);
     }
