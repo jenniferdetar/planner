@@ -15,7 +15,7 @@
       padding: 18px 20px;
       box-shadow: var(--opus-shadow-md);
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       gap: 12px;
     }
@@ -31,26 +31,18 @@
       opacity: 0.95;
     }
 
-    .icaap-hero-icon {
-      font-size: 2rem;
-      font-weight: 700;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 999px;
-      padding: 8px 14px;
-    }
-
     .icaap-pills {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
       margin-top: 14px;
     }
 
     .icaap-pill {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
+      gap: 10px;
+      padding: 12px 14px;
       border-radius: 999px;
       background: #ffffff;
       color: #0a2f5f;
@@ -82,13 +74,13 @@
     }
 
     .icaap-pill-icon {
-      width: 44px;
-      height: 44px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background: #ffffff;
       display: grid;
       place-items: center;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 800;
       color: #0a2f5f;
       border: 2px solid rgba(10, 47, 95, 0.2);
@@ -101,11 +93,11 @@
     }
 
     .icaap-pill-label {
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
     .icaap-pill-sub {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #475569;
       font-weight: 600;
     }
@@ -397,7 +389,6 @@
                 <h1>Everything iCAAP in one place</h1>
                 <p>Track hours, submit paylogs, and manage requisitions.</p>
               </div>
-              <div class="icaap-hero-icon">iCAAP</div>
             </div>
 
             <div class="icaap-pills">
