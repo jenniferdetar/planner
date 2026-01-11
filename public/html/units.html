@@ -46,6 +46,64 @@
       line-height: 1;
       white-space: nowrap;
     }
+
+    .unit-upload {
+      display: grid;
+      gap: 12px;
+      margin-bottom: var(--opus-spacing-md);
+    }
+
+    .unit-upload .form-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      align-items: center;
+    }
+
+    .unit-upload select,
+    .unit-upload input[type="file"] {
+      padding: 10px;
+      border: 2px solid #7f9db3;
+      border-radius: 12px;
+      background: #f8fafc;
+      font-size: 0.95rem;
+      color: #0a2f5f;
+    }
+
+    .unit-upload input[type="file"] {
+      border-style: dashed;
+      cursor: pointer;
+    }
+
+    .unit-summary {
+      background: #ffffff;
+      border: 2px solid #dbeafe;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: var(--opus-shadow-sm);
+      font-size: 0.95rem;
+      color: #0f172a;
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+
+    .unit-summary-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #475569;
+    }
+
+    .unit-summary-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #e6eef5;
+      border: 1px solid #7f9db3;
+      color: #0a2f5f;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
@@ -72,6 +130,23 @@
       </header>
 
       <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📄</span>
+            <h2 class="planner-section-title">Upload & Summarize Unit PDF</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="unit-upload">
+              <div class="form-row">
+                <select id="unit-select" aria-label="Choose unit for this upload"></select>
+                <input type="file" id="unit-pdf-input" accept="application/pdf">
+              </div>
+              <div class="unit-summary-meta" id="unit-summary-meta" aria-live="polite"></div>
+              <div class="unit-summary" id="unit-summary-output">Select a unit and choose a PDF to generate a quick summary.</div>
+            </div>
+          </div>
+        </section>
+
         <section class="hoa-units-page">
           <h2 class="hoa-units-title">Units 001–150</h2>
           <p class="hoa-units-subtitle">Select a unit number for quick reference.</p>
@@ -246,6 +321,79 @@
         month: 'short',
         day: 'numeric'
       });
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha512-UaxU5iHoAKrjdWO9x4vFzUFnprQgGsjbqReb4zLGm03P9pn5SHmUfa/9ziXxFEqJhm8C+N1Am1+jNL56kfcZOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    const unitSelect = document.getElementById('unit-select');
+    const unitFile = document.getElementById('unit-pdf-input');
+    const unitSummary = document.getElementById('unit-summary-output');
+    const unitMeta = document.getElementById('unit-summary-meta');
+    const STOPWORDS = new Set(['the','and','of','to','in','a','for','on','at','by','with','is','it','as','be','an','or','from','that','this','are','was','were','will','can','may','not','your','you']);
+
+    // Populate unit select 001-150
+    if (unitSelect) {
+      const frag = document.createDocumentFragment();
+      for (let i = 1; i <= 150; i++) {
+        const opt = document.createElement('option');
+        opt.value = `Unit ${String(i).padStart(3, '0')}`;
+        opt.textContent = opt.value;
+        frag.appendChild(opt);
+      }
+      unitSelect.appendChild(frag);
+    }
+
+    unitFile?.addEventListener('change', async (evt) => {
+      const file = evt.target.files?.[0];
+      if (!file) return;
+      unitSummary.textContent = 'Processing PDF…';
+      unitMeta.innerHTML = '';
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          const strings = content.items.map(item => item.str).join(' ');
+          text += ' ' + strings;
+          if (text.length > 12000) break;
+        }
+        const summary = summarizeText(text);
+        const wordCount = text.split(/\s+/).filter(Boolean).length;
+        renderSummary(summary, {
+          name: file.name,
+          pages: pdf.numPages,
+          words: wordCount,
+          unit: unitSelect?.value
+        });
+      } catch (err) {
+        console.error(err);
+        unitSummary.textContent = 'Unable to read that PDF. Please try another file.';
+      }
+    });
+
+    function summarizeText(text) {
+      if (!text || !text.trim()) return 'No readable text found in this PDF.';
+      const sentences = text.replace(/\s+/g, ' ').split(/(?<=[.?!])\s+/).filter(s => s.length > 20);
+      const topSentences = sentences.slice(0, 3).join(' ');
+      const freq = {};
+      text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).forEach(word => {
+        if (!word || STOPWORDS.has(word)) return;
+        freq[word] = (freq[word] || 0) + 1;
+      });
+      const keywords = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([w]) => w).join(', ');
+      return `${topSentences || 'Summary unavailable.'}\n\nTop keywords: ${keywords || 'n/a'}`;
+    }
+
+    function renderSummary(summaryText, meta) {
+      unitSummary.textContent = summaryText;
+      unitMeta.innerHTML = [
+        meta.unit ? `<span class="unit-summary-pill">${meta.unit}</span>` : '',
+        meta.name ? `<span class="unit-summary-pill">File: ${meta.name}</span>` : '',
+        meta.pages ? `<span class="unit-summary-pill">Pages: ${meta.pages}</span>` : '',
+        meta.words ? `<span class="unit-summary-pill">Words: ${meta.words}</span>` : ''
+      ].filter(Boolean).join('');
     }
   </script>
 </body>
