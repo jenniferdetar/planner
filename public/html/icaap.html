@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>iCAAP Hub - Opus One Planner</title>
-  <link rel="stylesheet" href="../css/opus-core.css?v=20260108">
-  <link rel="stylesheet" href="../css/home.css?v=20260108">
+  <link rel="stylesheet" href="css/base.css?v=20260108">
   <style>
     .icaap-hero {
       background: linear-gradient(135deg, #00326b 0%, #5d84b2 55%, #9ad1d6 100%);
@@ -365,26 +364,31 @@
 </head>
 <body>
   <div class="planner-container">
-                            <aside class="planner-sidebar">
-      <a href="index.html" class="planner-sidebar-item">Home</a>
-      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
-      <a href="finance.html" class="planner-sidebar-item">Finance</a>
-      <a href="health.html" class="planner-sidebar-item">Health</a>
-      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
-      <a href="icaap.html" class="planner-sidebar-item active">iCAAP</a>
-      <a href="planning.html" class="planner-sidebar-item">Planning</a>
-                            </aside>
+            <aside class="planner-sidebar">
+      <a href="/index.html" class="planner-sidebar-item">Home</a>
+      <a href="/csea/index.html" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="/health.html" class="planner-sidebar-item">Health</a>
+      <a href="/hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap.html" class="planner-sidebar-item active">iCAAP</a>
+      <a href="/planning.html" class="planner-sidebar-item">Planning</a>
+    </aside>
 
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
           <h1>iCAAP Hub</h1>
-          <p>Professional Expert tools and forms</p>
+          <p>Professional Expert Tools</p>
         </div>
-        <div class="planner-header-right">
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
+      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
 
       <main class="planner-main">
         <section class="planner-section">
@@ -617,5 +621,6 @@
       }
     }
   </script>
+<script src="/js/base.js?v=20260108"></script>
 </body>
 </html>

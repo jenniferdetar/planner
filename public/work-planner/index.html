@@ -4,33 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Work Planner</title>
-  <link rel="stylesheet" href="/css/opus-core.css?v=20260108" />
-  <link rel="stylesheet" href="/css/home.css?v=20260108" />
+  <link rel="stylesheet" href="/css/base.css?v=20260108" />
   <link rel="stylesheet" href="/css/personal-planner.css?v=20260108" />
   <link rel="stylesheet" href="/css/work-planner.css?v=20260108" />
 </head>
 <body>
   <div class="planner-container work-planner-page">
-                            <aside class="planner-sidebar">
-      <a href="/" class="planner-sidebar-item">Home</a>
-      <a href="/csea/" class="planner-sidebar-item">CSEA</a>
-      <a href="/finance/" class="planner-sidebar-item">Finance</a>
-      <a href="/health/" class="planner-sidebar-item">Health</a>
-      <a href="/hoa/" class="planner-sidebar-item">HOA</a>
-      <a href="/icaap/" class="planner-sidebar-item">iCAAP</a>
-      <a href="/planning/" class="planner-sidebar-item">Planning</a>
-                            </aside>
+                                    <aside class="planner-sidebar">
+      <a href="/index.html" class="planner-sidebar-item">Home</a>
+      <a href="/csea/index.html" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="/health.html" class="planner-sidebar-item">Health</a>
+      <a href="/hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning.html" class="planner-sidebar-item">Planning</a>
+    </aside>
 
     <div class="planner-content">
       <header class="planner-header">
-        <div class="planner-header-bar">
-          <div class="planner-header-left">
-            <h1>Work Planner</h1>
-            <p>Weekly schedule with editable lines</p>
+        <div class="planner-header-left">
+          <h1>Work Planner</h1>
+          <p>Weekly schedule with editable lines</p>
+        </div>
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill active">Work Planner</a>
           </div>
-          <div class="planner-header-right">
-            <div class="planner-header-date" id="today-date"></div>
-          </div>
+          <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
 
@@ -70,7 +71,7 @@
     </div>
   </div>
 
-  <script src="/js/utils.js?v=20260108"></script>
+  <script src="/js/base.js?v=20260108"></script>
   <script src="/js/opus-storage.js?v=20260108"></script>
   <script src="/js/opus-data.js?v=20260108"></script>
   <script type="module" src="/js/work-planner.js?v=20260108"></script>

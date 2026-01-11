@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Planning Hub</title>
-  <link rel="stylesheet" href="css/opus-core.css?v=20260108">
-  <link rel="stylesheet" href="css/home.css?v=20260108">
-  <link rel="stylesheet" href="css/calendar.css?v=20260108">
+  <link rel="stylesheet" href="css/base.css?v=20260108">
   <style>
     .planning-hero {
       background: linear-gradient(120deg, #0f3d91 0%, #3a7bd5 50%, #9ad4f2 100%);
@@ -313,23 +311,26 @@
 <body>
   <div class="planner-container">
             <aside class="planner-sidebar">
-      <a href="index.html" class="planner-sidebar-item">Home</a>
-      <a href="calendar.html" class="planner-sidebar-item">Calendar</a>
-      <a href="/csea/" class="planner-sidebar-item">CSEA</a>
-      <a href="finance.html" class="planner-sidebar-item">Finance</a>
-      <a href="health.html" class="planner-sidebar-item">Health</a>
-      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
-      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
-      <a href="planning.html" class="planner-sidebar-item active">Planning</a>
-            </aside>
+      <a href="/index.html" class="planner-sidebar-item">Home</a>
+      <a href="/csea/index.html" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="/health.html" class="planner-sidebar-item">Health</a>
+      <a href="/hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning.html" class="planner-sidebar-item active">Planning</a>
+    </aside>
 
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
           <h1>Planning Hub</h1>
-          <p>Quick links to your planning tools</p>
+          <p>Goals & Reflections</p>
         </div>
-        <div class="planner-header-right">
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
@@ -351,13 +352,6 @@
             </div>
 
             <div class="planning-grid">
-              <a class="planning-card" href="daily-tasks.html">
-                <span class="planning-card-icon">✅</span>
-                <span class="planning-card-text">
-                  <span class="planning-card-title">Daily Tasks</span>
-                  <span class="planning-card-sub">Quick checklist</span>
-                </span>
-              </a>
               <a class="planning-card" href="dream-big-index.html">
                 <span class="planning-card-icon">🏡</span>
                 <span class="planning-card-text">
@@ -445,7 +439,7 @@
                 </div>
               </div>
               <div class="vision-board-grid">
-                <a class="vision-board-card" href="vision-learning.html">
+                <a class="vision-board-card" href="vision-board.html#vision-learning">
                   <div class="vision-card-title">
                     <span class="vision-card-icon">🧠</span>
                     Learning
@@ -455,7 +449,7 @@
                     <span class="vision-card-tag">Certifications + practice</span>
                   </div>
                 </a>
-                <a class="vision-board-card" href="vision-living-space.html">
+                <a class="vision-board-card" href="vision-board.html#vision-living-space">
                   <div class="vision-card-title">
                     <span class="vision-card-icon">🏡</span>
                     Living Space
@@ -465,7 +459,7 @@
                     <span class="vision-card-tag">Declutter + cozy zones</span>
                   </div>
                 </a>
-                <a class="vision-board-card" href="vision-professional-growth.html">
+                <a class="vision-board-card" href="vision-board.html#vision-professional-growth">
                   <div class="vision-card-title">
                     <span class="vision-card-icon">💼</span>
                     Professional Growth
@@ -475,7 +469,7 @@
                     <span class="vision-card-tag">Promotions + mentorship</span>
                   </div>
                 </a>
-                <a class="vision-board-card" href="vision-relationships.html">
+                <a class="vision-board-card" href="vision-board.html#vision-relationships">
                   <div class="vision-card-title">
                     <span class="vision-card-icon">🤝</span>
                     Relationships
@@ -485,7 +479,7 @@
                     <span class="vision-card-tag">Weekly quality time</span>
                   </div>
                 </a>
-                <a class="vision-board-card" href="vision-well-being.html">
+                <a class="vision-board-card" href="vision-board.html#vision-well-being">
                   <div class="vision-card-title">
                     <span class="vision-card-icon">🌿</span>
                     Well-Being
@@ -495,7 +489,7 @@
                     <span class="vision-card-tag">Strength + recovery</span>
                   </div>
                 </a>
-                <a class="vision-board-card" href="vision-travel-play.html">
+                <a class="vision-board-card" href="vision-board.html#vision-travel-play">
                   <div class="vision-card-title">
                     <span class="vision-card-icon">✈️</span>
                     Travel & Play
@@ -520,9 +514,11 @@
 
   <script src="js/opus-storage.js?v=20260108"></script>
   <script src="js/opus-data.js?v=20260108"></script>
-  <script src="js/utils.js?v=20260108"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/base.js?v=20260108"></script>
   <script type="module">
-    import { GOALS } from '../data/goals-data.js';
+    import { GOALS } from '/data/goals-data.js';
 
     async function init() {
       await opusData.initialize();
@@ -609,6 +605,5 @@
 
     init();
   </script>
-<script src="js/calendar-embed.js?v=20260108"></script>
 </body>
 </html>

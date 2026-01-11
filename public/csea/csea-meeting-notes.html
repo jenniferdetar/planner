@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSEA Meeting Notes</title>
-  <link rel="stylesheet" href="../css/opus-core.css?v=20260108">
-  <link rel="stylesheet" href="../css/home.css?v=20260108">
+  <link rel="stylesheet" href="/css/base.css?v=20260108">
   <style>
     .notes-layout {
       display: grid;
@@ -96,14 +95,14 @@
 </head>
 <body>
   <div class="planner-container">
-    <aside class="planner-sidebar">
-      <a href="/" class="planner-sidebar-item">Home</a>
-      <a href="/csea/" class="planner-sidebar-item">CSEA</a>
-      <a href="/finance/" class="planner-sidebar-item">Finance</a>
-      <a href="/health/" class="planner-sidebar-item">Health</a>
-      <a href="/hoa/" class="planner-sidebar-item">HOA</a>
-      <a href="/icaap/" class="planner-sidebar-item">iCAAP</a>
-      <a href="/planning/" class="planner-sidebar-item">Planning</a>
+            <aside class="planner-sidebar">
+      <a href="/index.html" class="planner-sidebar-item">Home</a>
+      <a href="/csea/index.html" class="planner-sidebar-item active">CSEA</a>
+      <a href="/finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="/health.html" class="planner-sidebar-item">Health</a>
+      <a href="/hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning.html" class="planner-sidebar-item">Planning</a>
     </aside>
 
     <div class="planner-content">
@@ -112,7 +111,12 @@
           <h1>CSEA Meeting Notes</h1>
           <p>Capture summaries and follow-ups for member meetings</p>
         </div>
-        <div class="planner-header-right">
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/csea/index.html" class="planner-header-pill">Back to CSEA</a>
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
@@ -202,7 +206,7 @@
     </div>
   </div>
 
-  <script src="../js/utils.js?v=20260108"></script>
-  <script src="../js/csea-meeting-notes.js?v=20260108"></script>
+  <script src="/js/base.js?v=20260108"></script>
+  <script src="/js/csea-meeting-notes.js?v=20260108"></script>
 </body>
 </html>

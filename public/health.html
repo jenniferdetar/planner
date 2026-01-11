@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Health - Opus One Planner</title>
-  <link rel="stylesheet" href="css/opus-core.css?v=20260108">
-  <link rel="stylesheet" href="css/home.css?v=20260108">
-  <link rel="stylesheet" href="css/calendar.css?v=20260108">
+  <link rel="stylesheet" href="css/base.css?v=20260108">
   <link rel="stylesheet" href="css/notes.css?v=20260108">
   <style>
     .notes-page.market-page {
@@ -199,24 +197,27 @@
 </head>
 <body>
   <div class="planner-container">
-    <aside class="planner-sidebar">
-      <a href="index.html" class="planner-sidebar-item">Home</a>
-      <a href="calendar.html" class="planner-sidebar-item">Calendar</a>
-      <a href="/csea/" class="planner-sidebar-item">CSEA</a>
-      <a href="finance.html" class="planner-sidebar-item">Finance</a>
-      <a href="health.html" class="planner-sidebar-item active">Health</a>
-      <a href="hoa.html" class="planner-sidebar-item">HOA</a>
-      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
-      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+            <aside class="planner-sidebar">
+      <a href="/index.html" class="planner-sidebar-item">Home</a>
+      <a href="/csea/index.html" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="/health.html" class="planner-sidebar-item active">Health</a>
+      <a href="/hoa.html" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning.html" class="planner-sidebar-item">Planning</a>
     </aside>
 
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
-          <h1>Health</h1>
-          <p>Fresh Produce Inventory & Medication Tracker</p>
+          <h1>Health Hub</h1>
+          <p>Wellness & Medication Tracking</p>
         </div>
-        <div class="planner-header-right">
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
@@ -310,7 +311,9 @@
 
   <script src="js/opus-storage.js?v=20260108"></script>
   <script src="js/opus-data.js?v=20260108"></script>
-  <script src="js/utils.js?v=20260108"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/base.js?v=20260108"></script>
   <script src="js/health.js?v=20260108"></script>
   <script>
     function switchTab(tabId) {
@@ -332,6 +335,5 @@
       day: 'numeric'
     });
   </script>
-<script src="js/calendar-embed.js?v=20260108"></script>
 </body>
 </html>

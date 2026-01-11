@@ -22,8 +22,60 @@ const workPlanner = (() => {
   };
 
   let weekStart = startOfWeek(new Date());
-  let eventsByDate = {};
-  let recurringEvents = [];
+  let eventsByDate = {
+    '2026-01-01': ["New Year's Day"],
+    '2026-01-19': ["Martin Luther King Jr. Day"],
+    '2026-02-16': ["Presidents' Day"],
+    '2026-03-30': ["Cesar Chavez Day (Observed)"],
+    '2026-04-24': ["Armenian Genocide Remembrance Day"],
+    '2026-05-25': ["Memorial Day"],
+    '2026-06-19': ["Juneteenth"],
+    '2026-07-03': ["Independence Day (Observed)"],
+    '2026-07-04': ["Independence Day"],
+    '2026-08-31': ["Admission Day"],
+    '2026-09-07': ["Labor Day"],
+    '2026-11-11': ["Veterans Day"],
+    '2026-11-26': ["Thanksgiving Day"],
+    '2026-11-27': ["Day After Thanksgiving"],
+    '2026-12-25': ["Christmas Day"],
+    '2026-12-31': ["New Year's Eve"]
+  };
+  let recurringEvents = [
+    {
+      title: 'Jennifer Payday',
+      frequency: 'monthly',
+      dayOfMonth: 5,
+      category: 'payday',
+      type: 'event'
+    },
+    {
+      title: 'CSEA Chapter Meeting',
+      frequency: 'monthly',
+      pattern: 'third Wednesday',
+      time: '17:00',
+      endTime: '19:00',
+      category: 'csea',
+      type: 'meeting'
+    },
+    {
+      title: 'CSEA Executive Board Meeting',
+      frequency: 'monthly',
+      pattern: 'first Wednesday',
+      time: '17:00',
+      endTime: '18:30',
+      category: 'csea',
+      type: 'meeting'
+    },
+    {
+      title: 'CSEA Stewards Meeting',
+      frequency: 'monthly',
+      pattern: 'second Wednesday',
+      time: '17:00',
+      endTime: '18:30',
+      category: 'csea',
+      type: 'meeting'
+    }
+  ];
   let edits = {};
   let priorities = {};
 

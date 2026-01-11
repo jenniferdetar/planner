@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HOA</title>
-  <link rel="stylesheet" href="../css/opus-core.css?v=20260108">
-  <link rel="stylesheet" href="../css/home.css?v=20260108">
+  <link rel="stylesheet" href="css/base.css?v=20260108">
   <style>
     .hoa-grid {
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -90,26 +89,31 @@
 </head>
 <body>
   <div class="planner-container">
-    <aside class="planner-sidebar">
-      <a href="index.html" class="planner-sidebar-item">Home</a>
-      <a href="csea.html" class="planner-sidebar-item">CSEA</a>
-      <a href="finance.html" class="planner-sidebar-item">Finance</a>
-      <a href="health.html" class="planner-sidebar-item">Health</a>
-      <a href="hoa.html" class="planner-sidebar-item active">HOA</a>
-      <a href="icaap.html" class="planner-sidebar-item">iCAAP</a>
-      <a href="planning.html" class="planner-sidebar-item">Planning</a>
+            <aside class="planner-sidebar">
+      <a href="/index.html" class="planner-sidebar-item">Home</a>
+      <a href="/csea/index.html" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance.html" class="planner-sidebar-item">Finance</a>
+      <a href="/health.html" class="planner-sidebar-item">Health</a>
+      <a href="/hoa.html" class="planner-sidebar-item active">HOA</a>
+      <a href="/icaap.html" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning.html" class="planner-sidebar-item">Planning</a>
     </aside>
 
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
-          <h1>HOA</h1>
-          <p>Track HOA reminders, documents, and community updates.</p>
+          <h1>HOA Hub</h1>
+          <p>Community Management</p>
         </div>
-        <div class="planner-header-right">
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
+      <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
 
       <main class="planner-main">
         <section class="planner-section">
@@ -224,12 +228,14 @@
       </main>
 
       <footer class="planner-footer">
-        HOA Synced securely via Supabase (login required).
+        HOA Saved locally in your browser.
       </footer>
     </div>
   </div>
 
-  <script src="../js/utils.js?v=20260108"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/base.js?v=20260108"></script>
   <script>
     const todayDateEl = document.getElementById('today-date');
     if (todayDateEl) {
