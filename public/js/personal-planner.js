@@ -1,5 +1,3 @@
-import { GOALS } from '../data/goals-data.js';
-
 const personalPlanner = (() => {
   let currentView = 'list';
   let currentFilter = 'all';
@@ -58,12 +56,6 @@ const personalPlanner = (() => {
       renderTasks();
       setupDataListeners();
       dragDrop.enableTaskReordering('#tasks-list');
-
-      window.addEventListener('storage', (e) => {
-        if (e.key === WEEKLY_STATUS_KEY) {
-          renderWeeklyTasksSummary();
-        }
-      });
       
       // Observe changes to format currency automatically
       const observer = new MutationObserver((mutations) => {
@@ -535,8 +527,6 @@ const personalPlanner = (() => {
     const weekEvents = getEventsForRange(currentWeekStart, weekEnd);
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
-    renderWeeklyTasksSummary();
-
     days.forEach((day, index) => {
       const date = new Date(currentWeekStart);
       date.setDate(date.getDate() + index);
@@ -670,110 +660,7 @@ const personalPlanner = (() => {
     });
   }
 
-  const WEEKLY_STATUS_KEY = 'weeklyTaskStatus';
   const HABIT_STATUS_KEY = 'habitStatus';
-
-  function renderWeeklyTasksSummary() {
-    const container = document.getElementById('weekly-tasks-list');
-    if (!container) return;
-    
-    // Add progress bar if it doesn't exist
-    let progressWrapper = document.getElementById('weekly-progress-wrapper');
-    if (!progressWrapper) {
-      progressWrapper = document.createElement('div');
-      progressWrapper.id = 'weekly-progress-wrapper';
-      progressWrapper.className = 'weekly-progress-container';
-      container.parentNode.insertBefore(progressWrapper, container);
-    }
-    
-    container.innerHTML = '';
-    
-    let smartData = {};
-    try {
-      smartData = JSON.parse(localStorage.getItem('smartGoals') || '{}');
-    } catch (e) {
-      smartData = {};
-    }
-
-    let completionData = {};
-    try {
-      completionData = JSON.parse(localStorage.getItem(WEEKLY_STATUS_KEY) || '{}');
-    } catch (e) {
-      completionData = {};
-    }
-    
-    const weekKey = toKey(currentWeekStart);
-    const currentWeekCompletions = completionData[weekKey] || {};
-    
-    const activeGoals = opusData.goals || [];
-    let allWeeklyTasks = [];
-    
-    activeGoals.forEach(goal => {
-      const stored = smartData[goal.id] || {};
-      if (stored.weeklyTasks) {
-        const tasks = stored.weeklyTasks.split('\n').map(t => t.trim()).filter(t => t);
-        allWeeklyTasks = allWeeklyTasks.concat(tasks);
-      } else {
-        const template = GOALS[goal.title];
-        if (template && template.weeklyTasks) {
-          allWeeklyTasks = allWeeklyTasks.concat(template.weeklyTasks);
-        }
-      }
-    });
-
-    const uniqueTasks = [...new Set(allWeeklyTasks)].slice(0, 14);
-    
-    if (uniqueTasks.length === 0) {
-      progressWrapper.style.display = 'none';
-      const li = document.createElement('li');
-      li.textContent = 'Set goals to see tasks';
-      container.appendChild(li);
-      return;
-    }
-
-    progressWrapper.style.display = 'block';
-    let completedCount = 0;
-
-    uniqueTasks.forEach(task => {
-      const isCompleted = currentWeekCompletions[task] === true;
-      if (isCompleted) completedCount++;
-
-      const li = document.createElement('li');
-      li.textContent = task;
-      li.className = isCompleted ? 'completed' : '';
-      li.style.cursor = 'pointer';
-      li.addEventListener('click', () => {
-        toggleWeeklyTask(weekKey, task);
-      });
-      container.appendChild(li);
-    });
-
-    const percent = Math.round((completedCount / uniqueTasks.length) * 100);
-    progressWrapper.innerHTML = `
-      <div class="weekly-progress-text">
-        <span>Weekly Progress</span>
-        <span>${percent}%</span>
-      </div>
-      <div class="weekly-progress-bar">
-        <div class="weekly-progress-fill" style="width: ${percent}%"></div>
-      </div>
-    `;
-  }
-
-  function toggleWeeklyTask(weekKey, taskName) {
-    let completionData = {};
-    try {
-      completionData = JSON.parse(localStorage.getItem(WEEKLY_STATUS_KEY) || '{}');
-    } catch (e) {
-      completionData = {};
-    }
-
-    if (!completionData[weekKey]) completionData[weekKey] = {};
-    completionData[weekKey][taskName] = !completionData[weekKey][taskName];
-
-    localStorage.setItem(WEEKLY_STATUS_KEY, JSON.stringify(completionData));
-    renderWeeklyTasksSummary();
-  }
 
   function buildDayLines(container, dayClass) {
     if (!container) return [];

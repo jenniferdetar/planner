@@ -2,6 +2,12 @@ const opusStorage = (() => {
   const STORAGE_KEY = 'opusData';
   const supabaseClient = window.supabaseClient;
   let supabaseUser = null;
+
+  function requireLogin() {
+    if (!supabaseUser) {
+      throw new Error('Login required to sync data with Supabase.');
+    }
+  }
   
   let data = {
     tasks: [],
@@ -57,6 +63,7 @@ const opusStorage = (() => {
   }
 
   function updateItem(collection, id, updates, allowedFields) {
+    requireLogin();
     const item = findItem(collection, id);
     if (!item) throw new Error(`Item with id ${id} not found`);
     allowedFields.forEach(key => {
@@ -68,6 +75,7 @@ const opusStorage = (() => {
   }
 
   function deleteItem(collection, id) {
+    requireLogin();
     const idx = collection.findIndex(x => x.id === id);
     if (idx === -1) throw new Error(`Item with id ${id} not found`);
     collection.splice(idx, 1);
@@ -76,19 +84,11 @@ const opusStorage = (() => {
 
   async function initializeStorage() {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        data = JSON.parse(stored);
-      } else {
-        saveToLocalStorage();
-      }
-
       if (supabaseClient) {
         const { data: sessionData } = await supabaseClient.auth.getSession();
         supabaseUser = sessionData?.session?.user || null;
         if (supabaseUser) {
           await pullFromSupabase();
-          saveToLocalStorage();
         }
       }
       return Promise.resolve();
@@ -99,27 +99,14 @@ const opusStorage = (() => {
   }
 
   function saveToLocalStorage() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      if (supabaseUser) {
-        pushToSupabase().catch(err => console.error('Supabase sync error', err));
-      }
-    } catch (error) {
-      console.error('Error saving to localStorage:', error);
-      throw error;
+    // Local persistence disabled; rely on Supabase
+    if (supabaseUser) {
+      pushToSupabase().catch(err => console.error('Supabase sync error', err));
     }
   }
 
   function loadFromLocalStorage() {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        data = JSON.parse(stored);
-      }
-    } catch (error) {
-      console.error('Error loading from localStorage:', error);
-      throw error;
-    }
+    // Disabled: no localStorage fallback
   }
 
   async function pullFromSupabase() {
@@ -213,6 +200,7 @@ const opusStorage = (() => {
   }
 
   function createTask(taskData) {
+    requireLogin();
     validateTask(taskData);
     const task = {
       id: generateId(),
@@ -258,6 +246,7 @@ const opusStorage = (() => {
   }
 
   function createGoal(goalData) {
+    requireLogin();
     const goal = {
       id: generateId(),
       title: goalData.title,
@@ -293,6 +282,7 @@ const opusStorage = (() => {
   }
 
   function createNote(noteData) {
+    requireLogin();
     const note = {
       id: generateId(),
       date: noteData.date,
@@ -325,6 +315,7 @@ const opusStorage = (() => {
   }
 
   function createMeeting(meetingData) {
+    requireLogin();
     const meeting = {
       id: generateId(),
       title: meetingData.title,
@@ -361,6 +352,7 @@ const opusStorage = (() => {
   }
 
   function createMasterTask(taskData) {
+    requireLogin();
     validateTask(taskData);
     const task = {
       id: generateId(),
