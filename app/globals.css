@@ -1,0 +1,42 @@
+@import "../public/css/opus-core.css";
+@import "../public/css/home.css";
+@import "../public/css/calendar.css";
+@import "../public/css/bill-payment-schedule.css";
+@import "../public/css/books-to-read.css";
+@import "../public/css/budget.css";
+@import "../public/css/csea.css";
+@import "../public/css/data-management.css";
+@import "../public/css/dream-big-home.css";
+@import "../public/css/forms.css";
+@import "../public/css/goals.css";
+@import "../public/css/hours-worked.css";
+@import "../public/css/icaap-pay-log.css";
+@import "../public/css/intentions-dreams.css";
+@import "../public/css/mantra.css";
+@import "../public/css/max-completion-time.css";
+@import "../public/css/meetings.css";
+@import "../public/css/mission.css";
+@import "../public/css/monthly-review.css";
+@import "../public/css/notes.css";
+@import "../public/css/pay-log-styles.css";
+@import "../public/css/personal-planner.css";
+@import "../public/css/planner-views.css";
+@import "../public/css/purchase_requisition_form.css";
+@import "../public/css/savings-goals.css";
+@import "../public/css/settings.css";
+@import "../public/css/transcript-request.css";
+@import "../public/css/travel-itinerary.css";
+@import "../public/css/vision-board.css";
+@import "../public/css/work-planner.css";
+
+/* Base styles to handle Next.js defaults */
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
