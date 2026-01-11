@@ -400,7 +400,7 @@
 }
 
 /* Sidebar Styles */
-.planner-sidebar {
+.planner-layout .planner-sidebar {
   display: flex;
   flex-direction: column;
   gap: var(--opus-spacing-lg);

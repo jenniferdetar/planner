@@ -16,14 +16,17 @@ body {
 }
 
 .planner-sidebar {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 8px !important;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 100% !important;
   font-family: "Avenir Next", "Avenir", "Gill Sans", "Trebuchet MS", sans-serif;
   margin-bottom: var(--opus-spacing-xs);
+  position: relative !important;
+  top: auto !important;
+  height: auto !important;
 }
 
 .planner-sidebar-item {
