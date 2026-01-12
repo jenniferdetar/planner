@@ -1,0 +1,12 @@
+# Personal Ops Hub Robots Configuration
+User-agent: *
+Disallow: /js/
+Disallow: /css/
+Disallow: /data/
+Disallow: /settings.html
+Disallow: /data-management.html
+
+# Allow all other content
+Allow: /
+
+Sitemap: https://personal-ops-hub.neocities.org/sitemap.xml
