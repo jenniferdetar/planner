@@ -78,8 +78,7 @@
       if (error) {
         showMessage('Error: ' + error.message, 'error');
       } else {
-        showMessage('Logged in! Redirecting...', 'success');
-        window.location.href = '/calendar';
+        showMessage('Logged in!', 'success');
       }
     });
 
@@ -116,9 +115,7 @@
 
       const { error } = await window.supabaseClient.auth.signInWithOtp({
         email,
-        options: {
-          emailRedirectTo: window.location.origin + '/calendar'
-        }
+        options: {}
       });
 
       if (error) {

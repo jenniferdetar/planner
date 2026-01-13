@@ -1,15 +1,15 @@
 const SidebarModule = (() => {
   const sidebarItems = [
     { href: '/calendar', text: 'Home' },
-    { href: '/personal-planner/', text: 'Personal Planner' },
-    { href: '/work-planner/', text: 'Work Planner' },
-    { href: '/goals.html', text: 'Goals' },
-    { href: '/planning/', text: 'Planning' },
-    { href: '/csea/', text: 'CSEA' },
-    { href: '/icaap/', text: 'iCAAP' },
-    { href: '/health/', text: 'Health' },
-    { href: '/finance/', text: 'Finance' },
-    { href: '/hoa/', text: 'HOA' }
+    { href: '/personal-planner', text: 'Personal Planner' },
+    { href: '/work-planner', text: 'Work Planner' },
+    { href: '/goals', text: 'Goals' },
+    { href: '/planning', text: 'Planning' },
+    { href: '/csea', text: 'CSEA' },
+    { href: '/icaap', text: 'iCAAP' },
+    { href: '/health', text: 'Health' },
+    { href: '/finance', text: 'Finance' },
+    { href: '/hoa', text: 'HOA' }
   ];
 
   async function init() {
@@ -22,10 +22,10 @@ const SidebarModule = (() => {
       if (user) userEmail = user.email;
     }
 
-    const normalizedPath = window.location.pathname.replace(/\\/g, '/').replace(/\/$/, '') || '/';
+    const normalizedPath = window.location.pathname.replace(/\/$/, '') || '/';
     
     sidebar.innerHTML = sidebarItems.map(item => {
-      const targetPath = item.href.replace(/\\/g, '').replace(/\/$/, '') || '/';
+      const targetPath = item.href.replace(/\/$/, '') || '/';
       const isActive = normalizedPath === targetPath;
       return `<a href="${item.href}" class="planner-sidebar-item ${isActive ? 'active' : ''}">${item.text}</a>`;
     }).join('') + `
@@ -40,7 +40,6 @@ const SidebarModule = (() => {
       logoutBtn.addEventListener('click', async () => {
         if (window.supabaseClient) {
           await window.supabaseClient.auth.signOut();
-          window.location.href = '/login.html';
         }
       });
     }

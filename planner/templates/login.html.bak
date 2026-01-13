@@ -56,12 +56,7 @@
       messageDiv.textContent = 'Sending magic link...';
       messageDiv.className = '';
 
-      const { error } = await window.supabaseClient.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: window.location.origin + '/index.html'
-        }
-      });
+      const { error } = await window.supabaseClient.auth.signInWithOtp({ email });
 
       if (error) {
         messageDiv.textContent = 'Error: ' + error.message;

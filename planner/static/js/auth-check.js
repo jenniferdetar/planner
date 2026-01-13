@@ -5,9 +5,6 @@
     const { data: { session } } = await window.supabaseClient.auth.getSession();
     
     if (!session) {
-      if (!window.location.pathname.endsWith('/login.html')) {
-        window.location.href = '/login.html';
-      }
       return;
     }
 
