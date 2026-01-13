@@ -132,7 +132,7 @@ const utils = (() => {
     startDate.setDate(startDate.getDate() - firstDay.getDay());
     
     let currentDate = new Date(startDate);
-    while (currentDate <= lastDay || currentDate.getDay() !== 0) {
+    for (let i = 0; i < 42 && (currentDate <= lastDay || currentDate.getDay() !== 0); i++) {
       monthDates.push(currentDate.toISOString().split('T')[0]);
       currentDate.setDate(currentDate.getDate() + 1);
     }

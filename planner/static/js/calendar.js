@@ -157,7 +157,7 @@ function addMonthlyPatternOccurrences(item, rangeStart, rangeEnd, onDate) {
   let cursor = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
   const last = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth(), 1);
 
-  while (cursor <= last) {
+  for (let i = 0; i < 48 && cursor <= last; i++) {
     const year = cursor.getFullYear();
     const month = cursor.getMonth();
     const baseDate = getPatternDate(year, month, item.pattern);
@@ -184,7 +184,7 @@ function addMonthlyDayOccurrences(item, rangeStart, rangeEnd, onDate) {
   let cursor = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
   const last = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth(), 1);
 
-  while (cursor <= last) {
+  for (let i = 0; i < 48 && cursor <= last; i++) {
     const year = cursor.getFullYear();
     const month = cursor.getMonth();
     const candidate = new Date(year, month, item.dayOfMonth);
@@ -205,11 +205,11 @@ function addBiweeklyOccurrences(item, rangeStart, rangeEnd, onDate) {
   if (!anchor) return;
   let current = new Date(anchor);
 
-  while (current < rangeStart) {
+  for (let i = 0; i < 500 && current < rangeStart; i++) {
     current.setDate(current.getDate() + 14);
   }
 
-  while (current <= rangeEnd) {
+  for (let i = 0; i < 100 && current <= rangeEnd; i++) {
     if (withinSeries(current, item.startDate, item.endDate) && !isSkippedMonth(current, item.skipMonths)) {
       onDate(new Date(current));
     }
@@ -222,7 +222,7 @@ function addWeeklyOccurrences(item, rangeStart, rangeEnd, onDate) {
   let current = new Date(rangeStart);
   const skipDates = new Set((item.skipDates || []).filter(Boolean));
 
-  while (current <= rangeEnd) {
+  for (let i = 0; i < 366 && current <= rangeEnd; i++) {
     const iso = current.toISOString().slice(0, 10);
     if (skipDates.has(iso)) {
       current.setDate(current.getDate() + 1);
@@ -243,7 +243,8 @@ function adjustForHolidayRule(date, holidayRule, skipHolidays) {
   if (!holidayRule && !skipHolidays) return date;
   if (holidayRule === 'prevBusinessDay') {
     const adjusted = new Date(date);
-    while (isHoliday(adjusted) || adjusted.getDay() === 0 || adjusted.getDay() === 6) {
+    for (let i = 0; i < 10; i++) {
+      if (!(isHoliday(adjusted) || adjusted.getDay() === 0 || adjusted.getDay() === 6)) break;
       adjusted.setDate(adjusted.getDate() - 1);
     }
     return adjusted;

@@ -646,7 +646,7 @@ const personalPlanner = (() => {
 
       if (leftList) {
         const items = Array.from(leftList.querySelectorAll('li'));
-        while (items.length < 3) {
+        for (let i = 0; items.length < 3 && i < 10; i++) {
           const li = document.createElement('li');
           const span = document.createElement('span');
           span.className = `left-dot ${day}`;
@@ -842,7 +842,7 @@ const personalPlanner = (() => {
   function getEventsForRange(start, end) {
     const map = {};
     const cursor = new Date(start);
-    while (cursor <= end) {
+    for (let i = 0; i < 31 && cursor <= end; i++) {
       const key = toKey(cursor);
       map[key] = [];
       if (eventsByDate[key]) {
@@ -985,7 +985,7 @@ const personalPlanner = (() => {
   function addMonthlyPatternOccurrences(item, rangeStart, rangeEnd, onDate) {
     let cursor = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
     const last = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth(), 1);
-    while (cursor <= last) {
+    for (let i = 0; i < 48 && cursor <= last; i++) {
       const year = cursor.getFullYear(), month = cursor.getMonth();
       const baseDate = getPatternDate(year, month, item.pattern);
       if (baseDate) {
@@ -1003,7 +1003,7 @@ const personalPlanner = (() => {
   function addMonthlyDayOccurrences(item, rangeStart, rangeEnd, onDate) {
     let cursor = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
     const last = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth(), 1);
-    while (cursor <= last) {
+    for (let i = 0; i < 48 && cursor <= last; i++) {
       const year = cursor.getFullYear(), month = cursor.getMonth();
       const candidate = new Date(year, month, item.dayOfMonth);
       if (candidate.getMonth() === month && withinSeries(candidate, item.startDate, item.endDate) && !isSkippedMonth(candidate, item.skipMonths)) {
@@ -1018,8 +1018,8 @@ const personalPlanner = (() => {
     const anchor = parseISO(item.startDate);
     if (!anchor) return;
     let curr = new Date(anchor);
-    while (curr < rangeStart) curr.setDate(curr.getDate() + 14);
-    while (curr <= rangeEnd) {
+    for (let i = 0; i < 500 && curr < rangeStart; i++) curr.setDate(curr.getDate() + 14);
+    for (let i = 0; i < 100 && curr <= rangeEnd; i++) {
       if (withinSeries(curr, item.startDate, item.endDate) && !isSkippedMonth(curr, item.skipMonths)) onDate(new Date(curr));
       curr.setDate(curr.getDate() + 14);
     }
@@ -1029,7 +1029,7 @@ const personalPlanner = (() => {
     const weekdays = Array.isArray(item.weekdays) ? item.weekdays : [];
     let curr = new Date(rangeStart);
     const skipDates = new Set((item.skipDates || []).filter(Boolean));
-    while (curr <= rangeEnd) {
+    for (let i = 0; i < 366 && curr <= rangeEnd; i++) {
       const iso = toKey(curr);
       if (!skipDates.has(iso) && weekdays.includes(curr.getDay()) && withinSeries(curr, item.startDate, item.endDate) && !isSkippedMonth(curr, item.skipMonths)) {
         if (!(item.skipHolidays && isHoliday(curr))) onDate(new Date(curr));
@@ -1042,7 +1042,10 @@ const personalPlanner = (() => {
     if (!holidayRule && !skipHolidays) return date;
     if (holidayRule === 'prevBusinessDay') {
       const adjusted = new Date(date);
-      while (isHoliday(adjusted) || adjusted.getDay() === 0 || adjusted.getDay() === 6) adjusted.setDate(adjusted.getDate() - 1);
+      for (let i = 0; i < 10; i++) {
+        if (!(isHoliday(adjusted) || adjusted.getDay() === 0 || adjusted.getDay() === 6)) break;
+        adjusted.setDate(adjusted.getDate() - 1);
+      }
       return adjusted;
     }
     if ((skipHolidays || holidayRule === 'nextWeek') && isHoliday(date)) {

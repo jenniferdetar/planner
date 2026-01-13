@@ -44,7 +44,7 @@
     if (document.querySelector('script[data-calendar-embed-script]')) return;
 
     const script = document.createElement('script');
-    script.src = 'js/calendar.js';
+    script.src = '/static/js/calendar.js';
     script.dataset.calendarEmbedScript = 'true';
     document.body.appendChild(script);
   };

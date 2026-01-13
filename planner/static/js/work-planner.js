@@ -453,7 +453,7 @@ const workPlanner = (() => {
   function getEventsForRange(start, end) {
     const map = {};
     const cursor = new Date(start);
-    while (cursor <= end) {
+    for (let i = 0; i < 31 && cursor <= end; i++) {
       const key = toKey(cursor);
       map[key] = [];
       if (eventsByDate[key]) {
@@ -507,7 +507,7 @@ const workPlanner = (() => {
     const endMonth = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth(), 1);
 
     const iter = new Date(startMonth);
-    while (iter <= endMonth) {
+    for (let i = 0; i < 12 && iter <= endMonth; i++) {
       const year = iter.getFullYear();
       const month = iter.getMonth();
       const fifth = new Date(year, month, 5);
@@ -516,7 +516,8 @@ const workPlanner = (() => {
       // Add last business day of prior month
       const lastOfPrev = new Date(year, month, 0);
       let prev = new Date(lastOfPrev);
-      while (prev.getDay() === 0 || prev.getDay() === 6) {
+      for (let j = 0; j < 10; j++) {
+        if (!(prev.getDay() === 0 || prev.getDay() === 6)) break;
         prev.setDate(prev.getDate() - 1);
       }
       days.push(prev);
@@ -524,14 +525,15 @@ const workPlanner = (() => {
       // Add last business day of current month
       const lastOfCurrent = new Date(year, month + 1, 0);
       let lastBiz = new Date(lastOfCurrent);
-      while (lastBiz.getDay() === 0 || lastBiz.getDay() === 6) {
+      for (let j = 0; j < 10; j++) {
+        if (!(lastBiz.getDay() === 0 || lastBiz.getDay() === 6)) break;
         lastBiz.setDate(lastBiz.getDate() - 1);
       }
       days.push(lastBiz);
 
       // Add five business days leading up to and including the 5th
       let d = new Date(fifth);
-      while (days.length < 6) { // 1 (prev) + 5 business days to 5th
+      for (let j = 0; j < 20 && days.length < 6; j++) { // 1 (prev) + 5 business days to 5th
         const dow = d.getDay();
         if (dow !== 0 && dow !== 6) {
           days.push(new Date(d));
@@ -675,7 +677,10 @@ const workPlanner = (() => {
     if (!holidayRule && !skipHolidays) return date;
     if (holidayRule === 'prevBusinessDay') {
       const adjusted = new Date(date);
-      while (isHoliday(adjusted) || adjusted.getDay() === 0 || adjusted.getDay() === 6) adjusted.setDate(adjusted.getDate() - 1);
+      for (let i = 0; i < 10; i++) {
+        if (!(isHoliday(adjusted) || adjusted.getDay() === 0 || adjusted.getDay() === 6)) break;
+        adjusted.setDate(adjusted.getDate() - 1);
+      }
       return adjusted;
     }
     if ((skipHolidays || holidayRule === 'nextWeek') && isHoliday(date)) {
@@ -689,7 +694,7 @@ const workPlanner = (() => {
   function addMonthlyPatternOccurrences(item, rangeStart, rangeEnd, onDate) {
     let cursor = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
     const last = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth(), 1);
-    while (cursor <= last) {
+    for (let i = 0; i < 48 && cursor <= last; i++) {
       const year = cursor.getFullYear(), month = cursor.getMonth();
       const baseDate = getPatternDate(year, month, item.pattern);
       if (baseDate) {
@@ -707,7 +712,7 @@ const workPlanner = (() => {
   function addMonthlyDayOccurrences(item, rangeStart, rangeEnd, onDate) {
     let cursor = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
     const last = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth(), 1);
-    while (cursor <= last) {
+    for (let i = 0; i < 48 && cursor <= last; i++) {
       const year = cursor.getFullYear(), month = cursor.getMonth();
       const candidate = new Date(year, month, item.dayOfMonth);
       if (candidate.getMonth() === month && withinSeries(candidate, item.startDate, item.endDate) && !isSkippedMonth(candidate, item.skipMonths)) {
@@ -722,8 +727,8 @@ const workPlanner = (() => {
     const anchor = parseISO(item.startDate);
     if (!anchor) return;
     let curr = new Date(anchor);
-    while (curr < rangeStart) curr.setDate(curr.getDate() + 14);
-    while (curr <= rangeEnd) {
+    for (let i = 0; i < 500 && curr < rangeStart; i++) curr.setDate(curr.getDate() + 14);
+    for (let i = 0; i < 100 && curr <= rangeEnd; i++) {
       if (withinSeries(curr, item.startDate, item.endDate) && !isSkippedMonth(curr, item.skipMonths)) onDate(new Date(curr));
       curr.setDate(curr.getDate() + 14);
     }
@@ -733,10 +738,12 @@ const workPlanner = (() => {
     const weekdays = Array.isArray(item.weekdays) ? item.weekdays : [];
     let curr = new Date(rangeStart);
     const skipDates = new Set((item.skipDates || []).filter(Boolean));
-    while (curr <= rangeEnd) {
+    for (let i = 0; i < 366 && curr <= rangeEnd; i++) {
       const iso = toKey(curr);
       if (!skipDates.has(iso) && weekdays.includes(curr.getDay()) && withinSeries(curr, item.startDate, item.endDate) && !isSkippedMonth(curr, item.skipMonths)) {
-        if (!(item.skipHolidays && isHoliday(curr))) onDate(new Date(curr));
+        if (!(item.skipHolidays && isHoliday(curr))) {
+          onDate(new Date(curr));
+        }
       }
       curr.setDate(curr.getDate() + 1);
     }
