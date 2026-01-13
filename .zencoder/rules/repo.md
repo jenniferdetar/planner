@@ -6,58 +6,57 @@ alwaysApply: true
 # Opus Planner Information
 
 ## Summary
-Opus Planner is a Django-based personal organization and productivity suite. It provides specialized tools for financial tracking, goal management (SMART goals), health monitoring, and professional planning (meeting notes, task management). The application is optimized for deployment on Vercel and integrates with Supabase for data synchronization.
+Opus Planner is a sophisticated personal and professional organization system. It features a Django-based backend primarily used for serving templates and managing static assets, while the core application logic resides in a robust frontend built with vanilla JavaScript. The system leverages Supabase for real-time data synchronization, authentication, and cloud storage, allowing for a multi-device experience.
 
 ## Structure
-- **core/**: Project configuration containing settings, URL routing, and WSGI/ASGI entry points.
-- **planner/**: Main application logic including views, models, and a extensive collection of HTML templates.
-- **supabase/**: Contains SQL migration scripts for database schema and synchronization logic.
-- **public/**: Root-level static resources, primarily CSS.
-- **staticfiles/**: Directory for collected static files (generated during deployment).
+- **core/**: Django project configuration and settings.
+- **planner/**: The main application directory containing:
+    - **templates/**: Extensive collection of HTML templates for various modules (Calendar, Finance, Work Planner, etc.).
+    - **static/js/**: Frontend logic including Supabase integration (`supabase-client.js`) and state management (`opus-storage.js`).
+    - **static/css/**: Styling for the planner interfaces.
+- **supabase/migrations/**: SQL migration files defining the PostgreSQL schema, Row Level Security (RLS) policies, and tables for notes, meetings, habits, and metadata.
+- **public/**: Additional static resources.
+- **manage.py**: Django management script.
+- **requirements.txt**: Python dependencies.
+- **vercel.json**: Configuration for deployment on Vercel.
 
 ## Language & Runtime
-**Language**: Python  
-**Version**: 3.9 (as specified in `vercel.json`)  
-**Build System**: Vercel Python Runtime  
-**Package Manager**: pip
+**Language**: Python, JavaScript, HTML, CSS  
+**Version**: Python 3.9 (Runtime), Django 4.2.27  
+**Build System**: Vercel (Python Lambda)  
+**Package Manager**: pip (Python)
 
 ## Dependencies
 **Main Dependencies**:
-- **Django**: `4.2.27` - Core web framework.
-- **WhiteNoise**: `6.5.0` - Optimized static file serving for production.
-- **Supabase**: Used for data synchronization (as indicated by migration files).
+- **Django**: Web framework for template serving and routing.
+- **Whitenoise**: Static file serving for production.
+- **Supabase JS SDK**: Frontend client for real-time database and auth (loaded via CDN).
 
 ## Build & Installation
 ```bash
-# Install dependencies
+# Install Python dependencies
 pip install -r requirements.txt
-
-# Database setup
-python manage.py migrate
-
-# Collect static files
-python manage.py collectstatic
 
 # Run local development server
 python manage.py runserver
 ```
 
-## Deployment
-**Platform**: Vercel  
-**Configuration**: `vercel.json` defines the Python 3.9 runtime and routes all traffic to `vercel_app.py`.  
-**Entry Point**: `vercel_app.py` wraps the Django WSGI application for Vercel's serverless environment.
+## Main Files & Resources
+- **core/settings.py**: Main configuration, including static file handling and middleware.
+- **planner/views.py**: Dynamic template routing logic.
+- **planner/static/js/opus-storage.js**: Centralized event bus and storage synchronization logic.
+- **planner/static/js/supabase-client.js**: Initialization of the Supabase browser client.
+- **supabase/migrations/20260112000000_comprehensive_sync.sql**: Core database schema definition.
 
 ## Testing
-**Framework**: Django Test Framework  
-**Test Location**: `planner/tests.py`  
-**Naming Convention**: Standard Django `tests.py` pattern.
-
+**Framework**: Django Testing Framework (Standard)
+**Test Location**: `planner/tests.py`
 **Run Command**:
 ```bash
 python manage.py test
 ```
 
-## Project Architecture
-- **Dynamic Templates**: The `planner` app uses a dynamic template loader to serve various planning tools (e.g., `planner/templates/budget/`).
-- **Static Asset Management**: Uses `WhiteNoise` with `CompressedManifestStaticFilesStorage` for efficient delivery of CSS, JS, and image assets.
-- **Supabase Integration**: SQL migrations in `supabase/` suggest a robust backend synchronization strategy for persistent data.
+## Deployment
+**Platform**: Vercel
+**Configuration**: `vercel.json` defines the entry point as `vercel_app.py` using the `@vercel/python` builder.
+**Static Assets**: Managed via `whitenoise` and Django's `collectstatic`.
