@@ -20,7 +20,21 @@ const SidebarModule = (() => {
       const targetPath = item.href.replace(/\\/g, '').replace(/\/$/, '') || '/';
       const isActive = normalizedPath === targetPath;
       return `<a href="${item.href}" class="planner-sidebar-item ${isActive ? 'active' : ''}">${item.text}</a>`;
-    }).join('');
+    }).join('') + `
+      <div style="margin-top: auto; padding-top: 20px;">
+        <button id="logout-btn" class="planner-sidebar-item" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer; color: inherit; font: inherit;">Logout</button>
+      </div>
+    `;
+
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        if (window.supabaseClient) {
+          await window.supabaseClient.auth.signOut();
+          window.location.href = '/login.html';
+        }
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
