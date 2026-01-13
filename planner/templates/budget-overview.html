@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Overview - Opus One Planner</title>
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
+    <link rel="stylesheet" href="{% static 'css/budget.css' %}?v=20260108">
+</head>
+<body>
+  <div class="planner-container">
+            <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item active">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Budget Overview</h1>
+          <p>Monthly Budget & Variance Analysis</p>
+        </div>
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/finance" class="planner-header-pill">Back to Finance</a>
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>      <main class="planner-main"><section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">💵</span>
+            <h2 class="planner-section-title">Monthly Budget Overview</h2>
+          </div>
+          <div class="planner-section-content">
+            <table id="budget" class="budget-grid budget-overview-grid">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Budget</th>
+                  <th>Actual</th>
+                  <th>Variance</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="item">Auto Maintenance</td>
+                  <td class="budget-amount amount">100</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Mercury Auto Insurance</td>
+                  <td class="budget-amount amount">388</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Tahoe Registration</td>
+                  <td class="budget-amount amount">15</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Trailblazer Registration</td>
+                  <td class="budget-amount amount">28</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">DWP</td>
+                  <td class="budget-amount amount">100</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Jeff's Credit Cards</td>
+                  <td class="budget-amount amount">500</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Jennifer's Student Loans</td>
+                  <td class="budget-amount amount">150</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Schools First Loan</td>
+                  <td class="budget-amount amount">142</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Tithe</td>
+                  <td class="budget-amount amount">0</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Cleaning Lady</td>
+                  <td class="budget-amount amount">320</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Gas</td>
+                  <td class="budget-amount amount">600</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Laundry</td>
+                  <td class="budget-amount amount">80</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">ADT</td>
+                  <td class="budget-amount amount">53</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Amazon</td>
+                  <td class="budget-amount amount">100</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Groceries</td>
+                  <td class="budget-amount amount">600</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Hair</td>
+                  <td class="budget-amount amount">110</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Orkin</td>
+                  <td class="budget-amount amount">50</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">HELOC</td>
+                  <td class="budget-amount amount">357</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">HOA</td>
+                  <td class="budget-amount amount">520</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Mortgage</td>
+                  <td class="budget-amount amount">2250</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Spectrum</td>
+                  <td class="budget-amount amount">197</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Verizon</td>
+                  <td class="budget-amount amount">283</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Fixed</td>
+                </tr>
+                <tr>
+                  <td class="item">Blow</td>
+                  <td class="budget-amount amount">200</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">HSA</td>
+                  <td class="budget-amount amount">200</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Summer Saver</td>
+                  <td class="budget-amount amount">400</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Tahoe's Major Repairs</td>
+                  <td class="budget-amount amount">200</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+                <tr>
+                  <td class="item">Vacation</td>
+                  <td class="budget-amount amount">125</td>
+                  <td class="actual-amount amount"></td>
+                  <td class="variance amount"></td>
+                  <td class="type">Variable</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+</main>
+
+      <footer class="planner-footer">
+        Budget Overview • Analyze your budget vs actual spending
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="{% static 'js/supabase-client.js' %}?v=20260108"></script>
+  <script src="{% static 'js/auth-check.js' %}?v=20260108"></script>
+  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
+  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
+  <script src="{% static 'js/budget.js' %}?v=20260108" defer></script>
+  <script>
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  </script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+</body>
+</html>

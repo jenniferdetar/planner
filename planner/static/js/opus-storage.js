@@ -37,6 +37,8 @@ const opusStorage = (() => {
     cseaNotesTags: [],
     cseaNotesSaved: [],
     transactions: [],
+    budgetActuals: {},
+    budgetInputs: {},
     booksToRead: [],
     intentionsDreams: {},
     smartGoals: {},
@@ -378,6 +380,8 @@ const opusStorage = (() => {
         else if (row.key === 'cseaMeetingNotes') data.cseaMeetingNotes = row.value;
         else if (row.key === 'cseaNotesTags') data.cseaNotesTags = row.value;
         else if (row.key === 'cseaNotesSaved') data.cseaNotesSaved = row.value;
+        else if (row.key === 'budgetActuals') data.budgetActuals = row.value;
+        else if (row.key === 'budgetInputs') data.budgetInputs = row.value;
         else if (row.key === 'intentionsDreams') data.intentionsDreams = row.value;
         else if (row.key === 'smartGoals') data.smartGoals = row.value;
         else if (row.key === 'weeklyTaskStatus') data.weeklyTaskStatus = row.value;
@@ -559,6 +563,8 @@ const opusStorage = (() => {
       { user_id: supabaseUser.id, key: 'cseaMeetingNotes', value: data.cseaMeetingNotes, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaNotesTags', value: data.cseaNotesTags, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaNotesSaved', value: data.cseaNotesSaved, updated_at: new Date().toISOString() },
+      { user_id: supabaseUser.id, key: 'budgetActuals', value: data.budgetActuals, updated_at: new Date().toISOString() },
+      { user_id: supabaseUser.id, key: 'budgetInputs', value: data.budgetInputs, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'intentionsDreams', value: data.intentionsDreams, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'smartGoals', value: data.smartGoals, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'weeklyTaskStatus', value: data.weeklyTaskStatus, updated_at: new Date().toISOString() }
@@ -886,6 +892,24 @@ const opusStorage = (() => {
     saveToLocalStorage();
   }
 
+  function getBudgetActuals() {
+    return { ...data.budgetActuals };
+  }
+
+  function setBudgetActuals(actuals) {
+    data.budgetActuals = actuals;
+    saveToLocalStorage();
+  }
+
+  function getBudgetInputs() {
+    return { ...data.budgetInputs };
+  }
+
+  function setBudgetInputs(inputs) {
+    data.budgetInputs = inputs;
+    saveToLocalStorage();
+  }
+
   function getBooksToRead() {
     return [...data.booksToRead];
   }
@@ -989,6 +1013,8 @@ const opusStorage = (() => {
       cseaMeetingNotes: [],
       cseaNotesTags: [],
       cseaNotesSaved: [],
+      budgetActuals: {},
+      budgetInputs: {},
       booksToRead: [],
       intentionsDreams: {},
       smartGoals: {},
@@ -1051,6 +1077,10 @@ const opusStorage = (() => {
     setCseaNotesTags,
     getCseaNotesSaved,
     setCseaNotesSaved,
+    getBudgetActuals,
+    setBudgetActuals,
+    getBudgetInputs,
+    setBudgetInputs,
     getBooksToRead,
     setBooksToRead,
     getIntentionsDreams,
