@@ -175,12 +175,12 @@ const opusStorage = (() => {
     if (!supabaseClient || !supabaseUser) return;
 
     const tables = [
-      'opus_tasks', 'opus_goals', 'opus_notes', 'opus_meetings', 
+      'opus_tasks', 'goals', 'opus_notes', 'opus_meetings', 
       'opus_master_tasks', 'opus_mission', 'opus_preferences', 
-      'books', 'planner_metadata', 'hours_worked', 
-      'events', 'transactions', 
+      'books', 'hours_worked', 
+      'calendar_recurring', 'calendar_by_date', 'Check Breakdown', 
       'max_completion_times', 'approval_dates', 'vision_board_photos',
-      'csea_members', 'csea_issues'
+      'csea_members', 'csea_issues', 'tasks', 'planner_habits', 'planner_habit_status', 'work_planner_edits'
     ];
 
     tables.forEach(table => {
@@ -233,7 +233,7 @@ const opusStorage = (() => {
     }
 
     // Pull Goals
-    const { data: goalsData } = await supabaseClient.from('opus_goals').select('*').eq('user_id', supabaseUser.id);
+    const { data: goalsData } = await supabaseClient.from('goals').select('*').eq('user_id', supabaseUser.id);
     if (goalsData) {
       data.goals = goalsData.map(row => ({
         id: row.id,
@@ -346,21 +346,24 @@ const opusStorage = (() => {
     }
 
     // Pull Events
-    const { data: eventsData } = await supabaseClient.from('events').select('*').eq('user_id', supabaseUser.id);
-    if (eventsData) {
-      data.recurringEvents = eventsData.filter(e => e.event_type === 'recurring').map(e => e.details);
+    const { data: recurringData } = await supabaseClient.from('calendar_recurring').select('*').eq('user_id', supabaseUser.id);
+    if (recurringData) {
+      data.recurringEvents = recurringData.map(e => e.details || e);
+    }
+    const { data: byDateData } = await supabaseClient.from('calendar_by_date').select('*').eq('user_id', supabaseUser.id);
+    if (byDateData) {
       data.byDateEvents = {};
-      eventsData.filter(e => e.event_type === 'fixed').forEach(e => {
-        const date = e.details.date;
+      byDateData.forEach(e => {
+        const date = e.date || (e.details && e.details.date);
         if (date) {
           if (!data.byDateEvents[date]) data.byDateEvents[date] = [];
-          data.byDateEvents[date].push(e.details);
+          data.byDateEvents[date].push(e.details || e);
         }
       });
     }
 
-    // Pull Transactions
-    const { data: transactionsData } = await supabaseClient.from('transactions').select('*').eq('user_id', supabaseUser.id);
+    // Pull Transactions (Check Breakdown)
+    const { data: transactionsData } = await supabaseClient.from('Check Breakdown').select('*').eq('user_id', supabaseUser.id);
     if (transactionsData) {
       data.transactions = transactionsData.map(row => ({
         id: row.id,
@@ -373,23 +376,49 @@ const opusStorage = (() => {
     }
 
     // Pull Metadata (remaining generic keys)
-    const { data: metadataData } = await supabaseClient.from('planner_metadata').select('*').eq('user_id', supabaseUser.id);
+    const { data: metadataData } = await supabaseClient.from('opus_preferences').select('*').eq('user_id', supabaseUser.id);
     if (metadataData) {
       metadataData.forEach(row => {
-        if (row.key === 'cseaIssues') data.cseaIssues = row.value;
-        else if (row.key === 'cseaMeetingNotes') data.cseaMeetingNotes = row.value;
-        else if (row.key === 'cseaNotesTags') data.cseaNotesTags = row.value;
-        else if (row.key === 'cseaNotesSaved') data.cseaNotesSaved = row.value;
-        else if (row.key === 'budgetActuals') data.budgetActuals = row.value;
-        else if (row.key === 'budgetInputs') data.budgetInputs = row.value;
-        else if (row.key === 'intentionsDreams') data.intentionsDreams = row.value;
-        else if (row.key === 'smartGoals') data.smartGoals = row.value;
-        else if (row.key === 'weeklyTaskStatus') data.weeklyTaskStatus = row.value;
-        else data.metadata[row.key] = row.value;
+        const key = row.key;
+        const value = row.value;
+        if (key === 'cseaIssues') data.cseaIssues = value;
+        else if (key === 'cseaMeetingNotes') data.cseaMeetingNotes = value;
+        else if (key === 'cseaNotesTags') data.cseaNotesTags = value;
+        else if (key === 'cseaNotesSaved') data.cseaNotesSaved = value;
+        else if (key === 'budgetActuals') data.budgetActuals = value;
+        else if (key === 'budgetInputs') data.budgetInputs = value;
+        else if (key === 'intentionsDreams') data.intentionsDreams = value;
+        else if (key === 'smartGoals') data.smartGoals = value;
+        else if (key === 'weeklyTaskStatus') data.weeklyTaskStatus = value;
+        else data.metadata[key] = value;
       });
     }
 
-    // Pull CSEA Members and Issues (New specialized tables)
+    // Pull Habits
+    const { data: habitsData } = await supabaseClient.from('planner_habits').select('*').eq('user_id', supabaseUser.id);
+    if (habitsData) {
+      data.habits = habitsData.map(row => ({ id: row.id, name: row.name }));
+    }
+
+    const { data: habitStatusData } = await supabaseClient.from('planner_habit_status').select('*').eq('user_id', supabaseUser.id);
+    if (habitStatusData) {
+      data.habitStatus = {};
+      habitStatusData.forEach(row => {
+        if (!data.habitStatus[row.date]) data.habitStatus[row.date] = {};
+        data.habitStatus[row.date][row.habit_id] = row.completed;
+      });
+    }
+
+    // Pull specialized tables
+    const { data: workEditsData } = await supabaseClient.from('work_planner_edits').select('*').eq('user_id', supabaseUser.id);
+    if (workEditsData) {
+      if (!data.metadata.workPlannerEdits) data.metadata.workPlannerEdits = {};
+      workEditsData.forEach(row => {
+        if (!data.metadata.workPlannerEdits[row.date_key]) data.metadata.workPlannerEdits[row.date_key] = {};
+        data.metadata.workPlannerEdits[row.date_key][row.slot_key] = row.value;
+      });
+    }
+
     const { data: membersData } = await supabaseClient.from('csea_members').select('*').eq('user_id', supabaseUser.id);
     if (membersData && membersData.length > 0) {
       console.log('CSEA Members loaded from Supabase');
@@ -438,7 +467,7 @@ const opusStorage = (() => {
       updated_at: g.updatedAt || new Date().toISOString()
     }));
     if (goalRows.length) {
-      await supabaseClient.from('opus_goals').upsert(goalRows, { onConflict: 'id' });
+      await supabaseClient.from('goals').upsert(goalRows, { onConflict: 'id' });
     }
 
     // Push Notes
@@ -515,7 +544,7 @@ const opusStorage = (() => {
       await supabaseClient.from('books').upsert(bookRows, { onConflict: 'id' });
     }
 
-    // Push Transactions
+    // Push Transactions (Check Breakdown)
     const transactionRows = data.transactions.map(t => ({
       id: t.id,
       user_id: supabaseUser.id,
@@ -526,35 +555,35 @@ const opusStorage = (() => {
       updated_at: t.updatedAt || new Date().toISOString()
     }));
     if (transactionRows.length) {
-      await supabaseClient.from('transactions').upsert(transactionRows, { onConflict: 'id' });
+      await supabaseClient.from('Check Breakdown').upsert(transactionRows, { onConflict: 'id' });
     }
 
     // Push Events
-    // To keep it simple and handle the transition, we'll clear and re-push events
-    // In a production app with more data, we'd use a more granular approach
-    await supabaseClient.from('events').delete().eq('user_id', supabaseUser.id);
+    await supabaseClient.from('calendar_recurring').delete().eq('user_id', supabaseUser.id);
+    await supabaseClient.from('calendar_by_date').delete().eq('user_id', supabaseUser.id);
     
-    const eventRows = [];
-    data.recurringEvents.forEach(e => {
-      eventRows.push({
-        user_id: supabaseUser.id,
-        event_type: 'recurring',
-        details: e,
-        updated_at: new Date().toISOString()
-      });
-    });
+    const recurringRows = data.recurringEvents.map(e => ({
+      user_id: supabaseUser.id,
+      details: e,
+      updated_at: new Date().toISOString()
+    }));
+    if (recurringRows.length) {
+      await supabaseClient.from('calendar_recurring').insert(recurringRows);
+    }
+
+    const byDateRows = [];
     Object.entries(data.byDateEvents).forEach(([date, events]) => {
       events.forEach(e => {
-        eventRows.push({
+        byDateRows.push({
           user_id: supabaseUser.id,
-          event_type: 'fixed',
-          details: { ...e, date },
+          date: date,
+          details: e,
           updated_at: new Date().toISOString()
         });
       });
     });
-    if (eventRows.length) {
-      await supabaseClient.from('events').insert(eventRows);
+    if (byDateRows.length) {
+      await supabaseClient.from('calendar_by_date').insert(byDateRows);
     }
 
     // Push Metadata (remaining generic keys)
@@ -574,9 +603,9 @@ const opusStorage = (() => {
         metadataRows.push({ user_id: supabaseUser.id, key, value, updated_at: new Date().toISOString() });
       }
     });
-    await supabaseClient.from('planner_metadata').upsert(metadataRows, { onConflict: 'user_id,key' });
+    await supabaseClient.from('opus_preferences').upsert(metadataRows, { onConflict: 'user_id,key' });
 
-    // Push specialized tables
+    // Pull specialized tables
     if (data.metadata.hoursWorked) {
       await supabaseClient.from('hours_worked').upsert(data.metadata.hoursWorked.map(h => ({ ...h, user_id: supabaseUser.id })), { onConflict: 'id' });
     }
@@ -588,6 +617,50 @@ const opusStorage = (() => {
     }
     if (data.metadata.visionBoardPhotos) {
       await supabaseClient.from('vision_board_photos').upsert(data.metadata.visionBoardPhotos.map(v => ({ ...v, user_id: supabaseUser.id })), { onConflict: 'id' });
+    }
+
+    // Push Work Planner Edits
+    const workEdits = data.metadata.workPlannerEdits || {};
+    const workEditRows = [];
+    Object.entries(workEdits).forEach(([dateKey, slots]) => {
+      Object.entries(slots).forEach(([slotKey, value]) => {
+        workEditRows.push({
+          user_id: supabaseUser.id,
+          date_key: dateKey,
+          slot_key: slotKey,
+          value: value,
+          created_at: new Date().toISOString()
+        });
+      });
+    });
+    if (workEditRows.length) {
+      await supabaseClient.from('work_planner_edits').upsert(workEditRows, { onConflict: 'user_id,date_key,slot_key' });
+    }
+
+    // Push Habits
+    if (data.habits.length) {
+      const habitRows = data.habits.map(h => ({
+        id: h.id,
+        user_id: supabaseUser.id,
+        name: h.name,
+        created_at: new Date().toISOString()
+      }));
+      await supabaseClient.from('planner_habits').upsert(habitRows, { onConflict: 'id' });
+    }
+
+    const habitStatusRows = [];
+    Object.entries(data.habitStatus).forEach(([date, habits]) => {
+      Object.entries(habits).forEach(([habitId, completed]) => {
+        habitStatusRows.push({
+          user_id: supabaseUser.id,
+          date: date,
+          habit_id: habitId,
+          completed: completed
+        });
+      });
+    });
+    if (habitStatusRows.length) {
+      await supabaseClient.from('planner_habit_status').upsert(habitStatusRows, { onConflict: 'user_id,date,habit_id' });
     }
   }
 
