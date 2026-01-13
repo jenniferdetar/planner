@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health - Redirect</title>
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <meta http-equiv="refresh" content="0; url=/health">
+  <script>
+    window.location.replace('/health');
+  </script>
+</head>
+<body>
+  <div class="planner-container">
+    <div class="planner-content" style="padding:24px; text-align:center;">
+      <p>Redirecting to Health…</p>
+      <p><a href="/health">Go to Health</a></p>
+    </div>
+  </div>
+</body>
+</html>

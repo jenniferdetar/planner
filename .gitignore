@@ -1,0 +1,55 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+node_modules/
+.vscode/
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# django
+db.sqlite3
+staticfiles/
+__pycache__/
+*.pyc
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Data files
+*.csv
+*.xlsx
+*.pdf
+planner/local-storage.json
+planner/public/data/
+planner/public/js/approval-date-data.js
+planner/public/js/max-completion-time-data.js
+planner/public/js/books-to-read.js
+planner/public/js/vision-board-photos.js
+planner/public/js/hours-worked-data.js
+planner/public/data/fruits-vegetables.js
+planner/public/data/goals-data.js

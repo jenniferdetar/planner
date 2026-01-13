@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetings - Opus One Planner</title>
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
+    <link rel="stylesheet" href="{% static 'css/meetings.css' %}?v=20260108">
+</head>
+<body data-module="meetingsPage">
+  <div class="planner-container">
+            <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item active">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Meetings</h1>
+          <p>Schedule and manage your meetings</p>
+        </div>
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/planning" class="planner-header-pill">Back to Planning</a>
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      
+
+      <main class="planner-main"><section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">➕</span>
+            <h2 class="planner-section-title">Schedule Meeting</h2>
+          </div>
+          <form id="meeting-form" class="planner-section-content">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="meeting-title">Meeting Title *</label>
+              <input type="text" id="meeting-title" class="planner-form-input" placeholder="What is the meeting about?" required />
+            </div>
+
+            <div class="opus-grid-2">
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="meeting-date">Date *</label>
+                <input type="date" id="meeting-date" class="planner-form-input" required />
+              </div>
+              <div class="opus-grid-2">
+                <div class="planner-form-group">
+                  <label class="planner-form-label" for="meeting-start-time">Start Time *</label>
+                  <input type="time" id="meeting-start-time" class="planner-form-input" required />
+                </div>
+                <div class="planner-form-group">
+                  <label class="planner-form-label" for="meeting-end-time">End Time *</label>
+                  <input type="time" id="meeting-end-time" class="planner-form-input" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="meeting-location">Location</label>
+              <input type="text" id="meeting-location" class="planner-form-input" placeholder="Where will the meeting be?" />
+            </div>
+
+            <div class="planner-form-group">
+              <label class="planner-form-label">Attendees</label>
+              <div class="opus-row-gap-sm opus-mb-sm">
+                <select id="attendee-select" class="planner-form-select opus-flex-1"></select>
+                <input type="text" id="attendee-input" class="planner-form-input opus-flex-1" placeholder="Add attendee name" />
+                <button type="button" class="planner-button planner-button-secondary" id="add-attendee-btn">Add</button>
+              </div>
+              <div id="attendees-display" class="opus-row-wrap"></div>
+            </div>
+
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="meeting-agenda">Agenda</label>
+              <textarea id="meeting-agenda" class="planner-form-textarea" placeholder="What will be discussed?" style="min-height: 100px;"></textarea>
+            </div>
+
+            <button type="submit" class="planner-button planner-button-primary">Schedule Meeting</button>
+          </form>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📅</span>
+            <h2 class="planner-section-title">Upcoming Meetings</h2>
+          </div>
+          <div id="meetings-list" class="planner-section-content"></div>
+        <section id="meeting-edit-section" class="planner-section" style="display: none;">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">✏️</span>
+            <h2 class="planner-section-title">Edit Meeting</h2>
+          </div>
+          <form id="edit-meeting-form" class="planner-section-content">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="edit-meeting-title">Meeting Title *</label>
+              <input type="text" id="edit-meeting-title" class="planner-form-input" required />
+            </div>
+
+            <div class="opus-grid-2">
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="edit-meeting-date">Date *</label>
+                <input type="date" id="edit-meeting-date" class="planner-form-input" required />
+              </div>
+              <div class="opus-grid-2">
+                <div class="planner-form-group">
+                  <label class="planner-form-label" for="edit-meeting-start-time">Start Time *</label>
+                  <input type="time" id="edit-meeting-start-time" class="planner-form-input" required />
+                </div>
+                <div class="planner-form-group">
+                  <label class="planner-form-label" for="edit-meeting-end-time">End Time *</label>
+                  <input type="time" id="edit-meeting-end-time" class="planner-form-input" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="edit-meeting-location">Location</label>
+              <input type="text" id="edit-meeting-location" class="planner-form-input" placeholder="Where will the meeting be?" />
+            </div>
+
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="edit-meeting-attendees">Attendees (comma separated)</label>
+              <input type="text" id="edit-meeting-attendees" class="planner-form-input" placeholder="Attendee names separated by commas" />
+            </div>
+
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="edit-meeting-agenda">Agenda</label>
+              <textarea id="edit-meeting-agenda" class="planner-form-textarea" placeholder="What will be discussed?" style="min-height: 100px;"></textarea>
+            </div>
+
+            <div class="opus-modal-actions">
+              <button type="button" class="planner-button planner-button-secondary" id="modal-cancel">Cancel</button>
+              <button type="submit" class="planner-button planner-button-primary">Save Changes</button>
+              <button type="button" class="planner-button planner-button-danger" id="modal-delete">Delete Meeting</button>
+            </div>
+          </form>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        Total meetings: <span id="meeting-count">0</span>
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="{% static 'js/supabase-client.js' %}?v=20260108"></script>
+  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
+  <script src="{% static 'js/auth-check.js' %}?v=20260108"></script>
+  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
+  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
+  <script src="{% static 'js/meetings.js' %}?v=20260108"></script>
+  <script>
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  </script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+</body>
+</html>

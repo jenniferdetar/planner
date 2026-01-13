@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision Board - Living Space</title>
+  <link rel="stylesheet" href="../css/opus-core.css?v=20260108">
+  <link rel="stylesheet" href="../css/home.css?v=20260108">
+  <link rel="stylesheet" href="../css/vision-board.css?v=20260108">
+</head>
+<body>
+  <div class="planner-container">
+    <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item active">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Vision Board: Living Space</h1>
+          <p>Shape a home that feels calm, inviting, and creative.</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">🏡</span>
+            <h2 class="planner-section-title">Vision Focus</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="vision-living-space-notes">Notes & ideas</label>
+              <textarea id="vision-living-space-notes" class="planner-form-textarea" placeholder="Add design cues, routines, and spaces to create..."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-content">
+            <div class="vision-photo-board">
+              <div class="vision-photo-header">
+                <div>
+                  <h3 class="vision-photo-title">Living Space Gallery</h3>
+                  <p class="vision-photo-sub">Collect images for the vibe and layout you want.</p>
+                </div>
+                <div class="vision-photo-actions">
+                  <button class="vision-photo-button" type="button" data-vision-upload="vision-living-space-photos">Add photos</button>
+                  <span class="vision-photo-hint">Stored locally in your browser</span>
+                </div>
+              </div>
+              <input class="vision-photo-input" id="vision-living-space-photos" type="file" accept="image/*" multiple>
+              <div class="vision-photo-grid" id="vision-living-space-photo-grid"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        Vision Board • Living Space
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js?v=20260108"></script>
+  <script src="../js/vision-board-photos.js?v=20260108"></script>
+  <script>
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+    if (window.VisionPhotoBoard) {
+      window.VisionPhotoBoard.init({
+        inputId: 'vision-living-space-photos',
+        gridId: 'vision-living-space-photo-grid',
+        storageKey: 'vision-board:living-space',
+        emptyText: 'Add photos that define your ideal living space.'
+      });
+    }
+  </script>
+</body>
+</html>

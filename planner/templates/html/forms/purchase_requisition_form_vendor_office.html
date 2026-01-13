@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PR — Vendor &amp; Office</title>
+  <style>
+    .container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+      margin-top: 8px;
+    }
+    @media (max-width: 820px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media print {
+      .container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+    }
+    .box {
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--accent);
+      background: #ffffff;
+      color: #222222;
+    }
+    .title {
+      margin: 0 0 8px 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .fill,
+    .fill-area {
+      width: 100%;
+      box-sizing: border-box;
+      border: 0 !important;
+      outline: 0;
+      background: transparent;
+      font: inherit;
+      border-bottom: 0 !important;
+      box-shadow: none;
+    }
+    .fill {
+      height: 22px;
+    }
+    .fill-area {
+      height: 26px;
+      resize: vertical;
+    }
+    .vendor-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      column-gap: 14px;
+      row-gap: 12px;
+    }
+    .vendor-label {
+      font-weight: 700;
+    }
+    .vendor-value {
+      background: #ffffff;
+    }
+    .vendor-value,
+    .value {
+      border-bottom: 1px solid #222222;
+      padding-bottom: 2px;
+    }
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .sub {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      column-gap: 8px;
+      align-items: baseline;
+    }
+    .sub .mini-label {
+      font-weight: 700;
+    }
+    .row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .label {
+      width: 140px;
+      font-weight: 700;
+    }
+    .value {
+      flex: 1;
+      background: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="box">
+      <h2 class="title">Vendor</h2>
+      <div class="vendor-grid">
+        <div class="vendor-label">Company Name:</div>
+        <div class="vendor-value"><input id="vendor_name" class="fill" type="text" /></div>
+
+        <div class="vendor-label">Address:</div>
+        <div class="vendor-value"><textarea id="vendor_street" class="fill-area"></textarea></div>
+
+        <div class="vendor-label">City:</div>
+        <div class="vendor-value"><input id="vendor_city" class="fill" type="text" /></div>
+
+        <div class="vendor-label">State</div>
+        <div class="vendor-value">
+          <div class="pair">
+            <div class="sub">
+              <input id="vendor_state" class="fill" type="text" />
+            </div>
+            <div class="sub">
+              <span class="mini-label">Zip Code:</span>
+              <input id="vendor_zip" class="fill" type="text" />
+            </div>
+          </div>
+        </div>
+
+        <div class="vendor-label">Contact:</div>
+        <div class="vendor-value"><input id="vendor_contact" class="fill" type="text" /></div>
+
+        <div class="vendor-label">Phone:</div>
+        <div class="vendor-value">
+          <div class="pair">
+            <div class="sub">
+              <input id="vendor_phone" class="fill" type="text" />
+            </div>
+            <div class="sub">
+              <span class="mini-label">Email:</span>
+              <input id="vendor_email" class="fill" type="email" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2 class="title">Requesting Office</h2>
+      <div class="row">
+        <div class="label">Office Name:</div>
+        <div class="value"><input id="office_name" class="fill" type="text" value="" /></div>
+      </div>
+      <div class="row">
+        <div class="label">Requestor:</div>
+        <div class="value"><input id="requestor" class="fill" type="text" value="Patricia Pernin, Ed.D." /></div>
+      </div>
+      <div class="row">
+        <div class="label">Phone:</div>
+        <div class="value"><input id="office_phone" class="fill" type="text" value="213-241-2468" /></div>
+      </div>
+      <div class="row">
+        <div class="label">Cubicle #:</div>
+        <div class="value"><input id="cubicle" class="fill" type="text" value="15-162" /></div>
+      </div>
+      <div class="row">
+        <div class="label">Date:</div>
+        <div class="value"><input id="pr_date" class="fill" type="date" /></div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

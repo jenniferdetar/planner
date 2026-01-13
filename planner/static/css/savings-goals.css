@@ -1,0 +1,266 @@
+.savings-sheet {
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+
+.savings-sheet-card {
+  background: #ffffff;
+  border: 1px solid #e4e4e4;
+  border-top: 3px solid #f1a3a3;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  padding: 26px 28px 30px;
+  max-width: 100%;
+  margin: 0;
+}
+
+.savings-sheet-header {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.savings-sheet-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid #f1a3a3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f08a8a;
+  font-weight: 600;
+  margin: 0 auto 10px;
+}
+
+.savings-sheet-title {
+  font-size: 1.2rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #4a4a4a;
+  margin: 6px 0 6px;
+}
+
+.savings-sheet-subtitle {
+  max-width: 100%;
+  margin: 0;
+  font-size: 0.92rem;
+  color: #6a6a6a;
+  line-height: 1.5;
+}
+
+.savings-sheet-divider {
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 153, 153, 0.2), rgba(255, 153, 153, 0.9), rgba(255, 153, 153, 0.2));
+  margin: 18px 0 16px;
+}
+
+.savings-goals-lines {
+  border-top: 1px solid #bfbfbf;
+  margin-bottom: 18px;
+}
+
+.savings-line {
+  border-bottom: 1px solid #bfbfbf;
+  padding: 6px 8px;
+  font-family: "Ink Free", "Shadows Into Light", "Indie Flower", "Bradley Hand", "Chalkboard SE", "Marker Felt", "Comic Sans MS", cursive !important;
+  font-size: 0.98rem;
+  color: #2f2f2f;
+  text-align: center;
+}
+
+.savings-table-wrapper {
+  display: grid;
+  gap: 18px;
+  padding: 0;
+}
+
+.savings-grid,
+.savings-totals,
+.savings-summary {
+  width: 100%;
+  margin-left: 0;
+}
+
+.savings-grid {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-family: var(--form-font-family) !important;
+  color: #2f2f2f;
+  border-top: 1px solid #bfbfbf;
+}
+
+
+.savings-grid th,
+.savings-grid td {
+  padding: 2px 2px;
+  border-bottom: 1px solid #bfbfbf;
+}
+
+.savings-grid thead th {
+  font-family: var(--form-font-family);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: #6e6e6e;
+  border-bottom: 1px solid #bfbfbf;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.savings-grid thead .category-header {
+  font-family: var(--form-font-family) !important;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-size: 1rem;
+  color: #2f2f2f;
+  font-weight: 600;
+  text-align: left;
+}
+
+.savings-grid td {
+  text-align: right;
+  font-size: 0.98rem;
+}
+
+.savings-grid td:first-child,
+.savings-grid td:nth-child(4) {
+  text-align: left;
+}
+
+.savings-grid th:first-child,
+.savings-grid td:first-child,
+.savings-grid th:nth-child(4),
+.savings-grid td:nth-child(4) {
+  padding-right: 0;
+}
+
+.savings-grid th:nth-child(2),
+.savings-grid td:nth-child(2),
+.savings-grid th:nth-child(5),
+.savings-grid td:nth-child(5) {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.savings-grid th:nth-child(3),
+.savings-grid td:nth-child(3) {
+  padding-right: 10px;
+}
+
+.savings-grid th:nth-child(4),
+.savings-grid td:nth-child(4) {
+  padding-left: 150px;
+}
+
+.savings-grid thead th:nth-child(2),
+.savings-grid thead th:nth-child(3),
+.savings-grid thead th:nth-child(5),
+.savings-grid thead th:nth-child(6) {
+  text-align: right;
+}
+
+.subtotal-row td {
+  font-weight: 600;
+}
+
+.savings-totals {
+  border-top: 1px solid #bfbfbf;
+  border-bottom: 1px solid #bfbfbf;
+  padding: 8px 0;
+}
+
+.savings-totals-row {
+  display: grid;
+  grid-template-columns: 30% 10% 10% 30% 10% 10%;
+  gap: 0;
+  align-items: center;
+  font-family: "Ink Free", "Shadows Into Light", "Indie Flower", "Bradley Hand", "Chalkboard SE", "Marker Felt", "Comic Sans MS", cursive !important;
+  font-size: 0.98rem;
+  padding: 2px 3px;
+}
+
+.savings-total-label {
+  text-align: left;
+}
+
+.savings-total-amount {
+  text-align: right;
+}
+
+.savings-totals-row span:nth-child(3) {
+  padding-right: 2px;
+}
+
+.savings-totals-row span:nth-child(4) {
+  padding-left: 32px;
+}
+
+.savings-summary {
+  margin-top: 16px;
+  border-top: 1px solid #bfbfbf;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.savings-summary-head,
+.savings-summary-row {
+  display: grid;
+  grid-template-columns: 1.8fr 0.6fr 0.6fr;
+  gap: 2px;
+  align-items: center;
+  padding: 4px 4px;
+  border-bottom: 1px solid #bfbfbf;
+}
+
+.savings-summary-head {
+  font-family: "Inter", sans-serif;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: #6e6e6e;
+}
+
+.savings-summary-row {
+  font-family: "Ink Free", "Shadows Into Light", "Indie Flower", "Bradley Hand", "Chalkboard SE", "Marker Felt", "Comic Sans MS", cursive !important;
+  font-size: 0.98rem;
+}
+
+.savings-summary-row span:nth-child(2),
+.savings-summary-row span:nth-child(3),
+.savings-summary-head span:nth-child(2),
+.savings-summary-head span:nth-child(3) {
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .savings-sheet-card {
+    padding: 20px;
+  }
+
+  .savings-sheet-title {
+    letter-spacing: 0.18em;
+    font-size: 1.05rem;
+  }
+
+  .savings-grid,
+  .savings-totals-row,
+  .savings-summary-head,
+  .savings-summary-row {
+    font-size: 0.9rem;
+  }
+
+  .savings-totals-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 4px;
+  }
+
+  .savings-total-label:nth-child(4),
+  .savings-total-amount:nth-child(5),
+  .savings-total-amount:nth-child(6) {
+    grid-column: span 1;
+  }
+}

@@ -1,0 +1,328 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Planner</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}?v=20260108" />
+  <link rel="stylesheet" href="{% static 'css/personal-planner.css' %}?v=20260108" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap">
+</head>
+<body data-calendar-src="/data/calendar-data.json">
+  <div class="planner-container">
+            <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content personal-planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Personal Planner</h1>
+          <p>Weekly Schedule & Habits</p>
+        </div>
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/personal-planner/" class="planner-header-pill active">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      <main class="personal-planner-page">
+        <div class="personal-planner-scale">
+        <div class="week-controls">
+          <button class="week-nav-btn" id="prev-week-btn">Previous</button>
+          <div class="week-range-banner">December 28, 2025 - January 3, 2026</div>
+          <button class="week-nav-btn" id="next-week-btn">Next</button>
+        </div>
+        <div class="week-range-subtitle" id="current-date"></div>
+        <div class="planner-header-date" id="today-date"></div>
+
+        <section class="habit-grid">
+          <div class="habit-card">
+            <h2 class="habit-title">Home Care</h2>
+            <div class="habit-content">
+              <div class="mini-week">
+                <div class="mini-week-labels">
+                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <div class="mini-week-grid">
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                </div>
+              </div>
+              <ul class="habit-list">
+                <li>Make beds</li>
+                <li>Ana - Cleaning</li>
+                <li>Recycling</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="habit-card">
+            <h2 class="habit-title">Self Care</h2>
+            <div class="habit-content">
+              <div class="mini-week">
+                <div class="mini-week-labels">
+                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <div class="mini-week-grid">
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                </div>
+              </div>
+              <ul class="habit-list">
+                <li>Take a shower</li>
+                <li>Read</li>
+                <li>Bring lunch to work</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="habit-card">
+            <h2 class="habit-title">Weekdays</h2>
+            <div class="habit-content">
+              <div class="mini-week">
+                <div class="mini-week-labels">
+                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <div class="mini-week-grid">
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                </div>
+              </div>
+              <ul class="habit-list">
+                <li>Get up at 5:00 am</li>
+                <li>Leave work at 3:30 pm</li>
+                <li>Take train to work</li>
+                <li>Listen to Bible app</li>
+              </ul>
+            </div>
+          </div>
+
+
+          <div class="habit-card">
+            <h2 class="habit-title">Weekends</h2>
+            <div class="habit-content">
+              <div class="mini-week">
+                <div class="mini-week-labels">
+                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <div class="mini-week-grid">
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                  <div class="mini-week-row">
+                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
+                  </div>
+                </div>
+              </div>
+              <ul class="habit-list">
+                <li>Get up at 7:00 am</li>
+                <li>Plan/prep meals for the week</li>
+                <li>Laundry</li>
+              </ul>
+            </div>
+          </div>
+
+        </section>
+
+        <div class="family-banner">ENJOY YOUR FAMILY ♥</div>
+
+        <section class="day-blocks">
+          <article class="day-block day-sunday">
+<div class="day-left">
+              <ul class="left-list">
+              </ul>
+              <div class="left-icons">
+                <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">✿</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">$</span><span class="icon-line"></span></div>
+              </div>
+            </div>
+            <div class="day-right">
+              <div class="day-header day-header-sunday">
+                <span class="day-label">Sunday, December 28</span>
+                <span class="day-note"></span>
+              </div>
+              <div class="day-lines" data-lines="6"></div>
+            </div>
+          </article>
+
+          <article class="day-block day-monday">
+<div class="day-left">
+              <ul class="left-list">
+              </ul>
+              <div class="left-icons">
+                <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">✿</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">$</span><span class="icon-line"></span></div>
+              </div>
+            </div>
+            <div class="day-right">
+              <div class="day-header day-header-monday">
+                <span class="day-label">Monday, December 29</span>
+                <span class="day-note"></span>
+              </div>
+              <div class="day-lines" data-lines="6"></div>
+            </div>
+          </article>
+
+          <article class="day-block day-tuesday">
+<div class="day-left">
+              <ul class="left-list">
+              </ul>
+              <div class="left-icons">
+                <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">✿</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">$</span><span class="icon-line"></span></div>
+              </div>
+            </div>
+            <div class="day-right">
+              <div class="day-header day-header-tuesday">
+                <span class="day-label">Tuesday, December 30</span>
+                <span class="day-note"></span>
+              </div>
+              <div class="day-lines" data-lines="6"></div>
+            </div>
+          </article>
+
+          <article class="day-block day-wednesday">
+<div class="day-left">
+              <ul class="left-list">
+              </ul>
+              <div class="left-icons">
+                <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">✿</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">$</span><span class="icon-line"></span></div>
+              </div>
+            </div>
+            <div class="day-right">
+              <div class="day-header day-header-wednesday">
+                <span class="day-label">Wednesday, December 31</span>
+                <span class="day-note"></span>
+              </div>
+              <div class="day-lines" data-lines="6"></div>
+            </div>
+          </article>
+
+          <article class="day-block day-thursday">
+<div class="day-left">
+              <ul class="left-list">
+              </ul>
+              <div class="left-icons">
+                <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">✿</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">$</span><span class="icon-line"></span></div>
+              </div>
+            </div>
+            <div class="day-right">
+              <div class="day-header day-header-thursday">
+                <span class="day-label">Thursday, January 1</span>
+                <span class="day-note"></span>
+              </div>
+              <div class="day-lines" data-lines="6"></div>
+            </div>
+          </article>
+
+          <article class="day-block day-friday">
+<div class="day-left">
+              <ul class="left-list">
+              </ul>
+              <div class="left-icons">
+                <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">✿</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">$</span><span class="icon-line"></span></div>
+              </div>
+            </div>
+            <div class="day-right">
+              <div class="day-header day-header-friday">
+                <span class="day-label">Friday, January 2</span>
+                <span class="day-note"></span>
+              </div>
+              <div class="day-lines" data-lines="6"></div>
+            </div>
+          </article>
+
+          <article class="day-block day-saturday">
+<div class="day-left">
+              <ul class="left-list">
+              </ul>
+              <div class="left-icons">
+                <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">✿</span><span class="icon-line"></span></div>
+                <div class="icon-row"><span class="icon">$</span><span class="icon-line"></span></div>
+              </div>
+            </div>
+            <div class="day-right">
+              <div class="day-header day-header-saturday">
+                <span class="day-label">Saturday, January 3</span>
+                <span class="day-note"></span>
+              </div>
+              <div class="day-lines" data-lines="6"></div>
+            </div>
+          </article>
+        </section>
+
+        <div class="personal-hidden-data">
+          <div id="overbooked-alert"></div>
+          <div id="tasks-list-view"></div>
+          <div id="tasks-timeline-view"></div>
+          <div id="timeline-container"></div>
+          <div id="empty-state"></div>
+          <ul id="tasks-list"></ul>
+          <span id="task-count"></span>
+          <span id="stat-total">0</span>
+          <span id="stat-completed">0</span>
+          <span id="stat-remaining">0</span>
+          <div id="progress-fill"></div>
+        </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
+  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
+  <script src="{% static 'js/base.js' %}?v=20260108"></script>
+  <script src="{% static 'js/drag-drop.js' %}?v=20260108"></script>
+  <script type="module" src="{% static 'js/personal-planner.js' %}?v=20260108"></script>
+</body>
+</html>

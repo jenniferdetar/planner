@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Command International Security - HOA Financials</title>
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
+  <style>
+    .cis-invoice-link {
+      margin-top: 8px;
+      display: inline-flex;
+      align-self: flex-start;
+    }
+  </style>
+</head>
+<body>
+  <div class="planner-container">
+            <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item active">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Command International Security</h1>
+          <p>HOA Financials</p>
+        </div>
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/hoa" class="planner-header-pill">Back to HOA</a>
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      
+
+      <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">🛡️</span>
+            <h2 class="planner-section-title">Command International Security</h2>
+          </div>
+          <div class="planner-section-content">
+            <p class="planner-card-content">Add notes, statements, or uploads for Command International Security.</p>
+          </div>
+        </section>
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📄</span>
+            <h2 class="planner-section-title">Invoice Emails</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="planner-grid">
+              <!-- Invoice cards removed -->
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        HOA Synced securely via Supabase (login required).
+      </footer>
+    </div>
+  </div>
+
+  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
+  <script>
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+  </script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+</body>
+</html>

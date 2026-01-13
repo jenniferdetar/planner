@@ -1,0 +1,87 @@
+.review-page {
+  background-color: white;
+  min-height: 100%;
+  padding: 50px;
+  box-shadow: var(--opus-shadow-lg);
+  border-radius: var(--opus-border-radius);
+  color: #333;
+  font-family: "Inter", sans-serif;
+}
+
+.review-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.review-top-label {
+  display: block;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.review-title {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  font-weight: 300;
+  letter-spacing: 3px;
+}
+
+.review-intro {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.review-box {
+  background-color: #fffaf0;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #f3e5ab;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-box.full-width {
+  grid-column: span 2;
+}
+
+.review-box label {
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.handwriting-input {
+  width: 100%;
+  min-height: 120px;
+  background: transparent;
+  border: none;
+  font-family: var(--form-font-family) !important;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: #2c3e50;
+  resize: none;
+  padding: 0;
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+  .review-box.full-width {
+    grid-column: span 1;
+  }
+}

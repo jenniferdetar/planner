@@ -1,0 +1,1104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcript Request - Opus One Planner</title>
+  <link rel="stylesheet" href="../css/opus-core.css?v=20260108">
+  <link rel="stylesheet" href="../css/home.css?v=20260108">
+    <link rel="stylesheet" href="../css/forms.css?v=20260108">
+  <style>
+    .planner-main table {
+      width: 100%;
+      table-layout: fixed;
+      background: #ffffff;
+    }
+
+    .planner-main table th,
+    .planner-main table td {
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .transcript-form-table {
+      table-layout: auto;
+      border-collapse: collapse;
+    }
+
+    .transcript-form-table th {
+      text-align: center;
+      vertical-align: bottom;
+    }
+
+    .transcript-form-table td {
+      vertical-align: top;
+    }
+
+    .transcript-form-table textarea {
+      min-height: 5.5em;
+    }
+
+    .transcript-log-scroll {
+      overflow-x: auto;
+      overflow-y: visible;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .transcript-log-scroll table {
+      width: 100%;
+    }
+
+    .transcript-log-table {
+      border-collapse: collapse;
+      table-layout: auto;
+    }
+
+    .transcript-log-table th,
+    .transcript-log-table td {
+      border: 1px solid #0f172a;
+      padding: 6px 8px;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .transcript-log-table thead th {
+      background: #073763;
+      color: #ffffff;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .transcript-log-table tbody tr:nth-child(odd) {
+      background: #c7ecfb;
+    }
+
+    .transcript-log-table th:nth-child(6),
+    .transcript-log-table td:nth-child(6) {
+      width: 400px;
+      min-width: 400px;
+      text-align: left;
+    }
+
+    .transcript-log-table td:nth-child(6) {
+      line-height: 1.2;
+    }
+
+    .transcript-log-table th:nth-child(10),
+    .transcript-log-table td:nth-child(10) {
+      width: 400px;
+      min-width: 400px;
+    }
+
+    .transcript-log-table th:nth-child(1),
+    .transcript-log-table td:nth-child(1),
+    .transcript-log-table th:nth-child(2),
+    .transcript-log-table td:nth-child(2),
+    .transcript-log-table th:nth-child(3),
+    .transcript-log-table td:nth-child(3),
+    .transcript-log-table th:nth-child(4),
+    .transcript-log-table td:nth-child(4),
+    .transcript-log-table th:nth-child(5),
+    .transcript-log-table td:nth-child(5),
+    .transcript-log-table th:nth-child(7),
+    .transcript-log-table td:nth-child(7),
+    .transcript-log-table th:nth-child(8),
+    .transcript-log-table td:nth-child(8),
+    .transcript-log-table th:nth-child(9),
+    .transcript-log-table td:nth-child(9),
+    .transcript-log-table th:nth-child(11),
+    .transcript-log-table td:nth-child(11),
+    .transcript-log-table th:nth-child(12),
+    .transcript-log-table td:nth-child(12),
+    .transcript-log-table th:nth-child(13),
+    .transcript-log-table td:nth-child(13) {
+      width: 100px;
+      min-width: 100px;
+    }
+
+    .planner-header {
+      color: #ffffff;
+    }
+
+    .planner-header .planner-header-left h1,
+    .planner-header .planner-header-left p,
+    .planner-header-date {
+      color: #ffffff;
+    }
+
+    .planner-main table,
+    .planner-main table td {
+      font-size: 10pt;
+    }
+
+    .planner-main table th {
+      font-size: 12pt;
+    }
+
+    .transcript-section {
+      margin-top: var(--opus-spacing-md);
+      padding: var(--opus-spacing-md);
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      box-shadow: var(--opus-shadow-sm);
+    }
+
+    .transcript-section h2,
+    .transcript-section h3 {
+      margin: 0 0 12px;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+  <div class="planner-container">
+                                <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item">Planning</a>
+                                </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Transcript Request</h1>
+          <p>Education Records Form</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main">
+        <section class="transcript-section">
+          <h2>Transcript Request</h2>
+          <table class="transcript-form-table">
+            <thead>
+              <tr>
+                <th>EN</th>
+                <th>Teacher's Name</th>
+                <th>Request from (Salary Credit Assistants or Teacher)</th>
+                <th>Date request received</th>
+                <th>Program</th>
+                <th>Assigned Program Adviser</th>
+                <th>Nature of Inquiry</th>
+                <th>Date Sent</th>
+                <th>By</th>
+                <th>Notes</th>
+                <th>Date return from the Program Adviser</th>
+                <th>Date returned to Salary Allocation Unit</th>
+                <th>Sent to whom</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr>
+                <td><input type="text" class="en-input" placeholder="EN"></td>
+                <td><input type="text" class="teacher-name-input" placeholder="First Last"></td>
+                <td>
+                  <select>
+                    <option value="">Select...</option>
+                    <option>Salary Credit Assistants</option>
+                    <option>Teacher</option>
+                  </select>
+                </td>
+                <td><input type="date"></td>
+                <td>
+                  <select class="program-select">
+                    <option value="">Select Program...</option>
+                    <option>Preliminary Multiple Subject</option>
+                    <option>Preliminary Single Subject</option>
+                    <option>Preliminary Special Education Programs (Includes: MMSN/MMD, MOD/ESN, ECSE) CENTSE Programs and Preliminary Added Specialty Programs</option>
+                    <option>Portfolio (Preliminary Clinical Practice)</option>
+                    <option>AA/ASD</option>
+                    <option>AA/ECSE (Year 2 only)</option>
+                    <option>AA/BiLAA</option>
+                    <option>AA/RLAA</option>
+                    <option>Induction Program</option>
+                    <option>TPSL</option>
+                  </select>
+                </td>
+                <td><input type="text" class="adviser-output" placeholder="Adviser" readonly></td>
+                <td><textarea placeholder="Brief description"></textarea></td>
+                <td><input type="date"></td>
+                <td><input type="text" value="JD"></td>
+                <td><textarea placeholder="Notes"></textarea></td>
+                <td><input type="date"></td>
+                <td><input type="date"></td>
+                <td><input type="text" placeholder="Name/Unit"></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="transcript-section">
+          <h3>Transcript Request Log</h3>
+          <div class="planner-section-content transcript-log-scroll">
+            <table class="transcript-log-table">
+              <thead>
+                <tr>
+                  <th>EN</th>
+                  <th>Teacher Name</th>
+                  <th>Request from</th>
+                  <th>Date request received</th>
+                  <th>Program</th>
+                  <th>Nature of inquiry</th>
+                  <th>Sent to iCAAP Program Adviser</th>
+                  <th>Date Sent</th>
+                  <th>By</th>
+                  <th>Notes</th>
+                  <th>Date return from the Program Adviser</th>
+                  <th>Date returned to Salary Allocation Unit</th>
+                  <th>Sent to whom</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>723311</td>
+                <td>Susan Kang</td>
+                <td>Teacher</td>
+                <td>Dec 19 2024</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>Requesting her District Intern Program transcript from 2003. She holds a clear California credential but has been denied reciprocity in New York as their system shows only exam completion. She needs the transcript to prove she completed the required courses.</td>
+                <td>Rene Gaudet</td>
+                <td>Aug 07 2025</td>
+                <td>J. Detar</td>
+                <td>Office of Teaching Initiatives</td>
+                <td></td>
+                <td></td>
+                <td>New York State Education Department</td>
+              </tr>
+              <tr>
+                <td>1070649</td>
+                <td>Christian Vaca</td>
+                <td>Teacher</td>
+                <td>Jun 02 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>I hope all is well. I've attached a signed transcript request. Thank you for your assistance.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to alicia.smith@norris.k12.ca.us</td>
+                <td></td>
+                <td></td>
+                <td>Norris School District</td>
+              </tr>
+              <tr>
+                <td>923693</td>
+                <td>Falen Branch</td>
+                <td>Teacher</td>
+                <td>Jun 04 2025</td>
+                <td>Preliminary ECSE</td>
+                <td>Request for an official iCAAP transcript and detailed course descriptions (Student # 923693) for general purposes at LACOE, asking if any forms or fees are required, and requesting the documents be emailed to the name listed on the form.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to btpintern@lacoe.edu</td>
+                <td></td>
+                <td></td>
+                <td>The LACOE District Intern Program</td>
+              </tr>
+              <tr>
+                <td>1106695</td>
+                <td>Shumaila Hussain</td>
+                <td>Teacher</td>
+                <td>Jun 11 2025</td>
+                <td>Preliminary Single Subject</td>
+                <td>I am requesting the iCAAP transcript for Single subject math. I culminated on 6/3/2025. I was in cohort 123 for single subject math. iCAAP transcript form is attached here.</td>
+                <td>Zina Dixon</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>960639</td>
+                <td>Vanessa Beauchemin</td>
+                <td>Teacher</td>
+                <td>Jun 19 2025</td>
+                <td>Induction Program</td>
+                <td>Is there anyway to get official transcript? For employment? Or could I have you email her?</td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Jul 09 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Riverside Unified School District (RUSD)</td>
+                <td></td>
+                <td></td>
+                <td>Riverside Unified School District (RUSD)</td>
+              </tr>
+              <tr>
+                <td>1200187</td>
+                <td>Elizabeth Twomey</td>
+                <td>Teacher</td>
+                <td>Jun 26 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Following up again to check on my Induction transcript. Thank you.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Aug 07 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Irvine Unified School District (USD)</td>
+                <td></td>
+                <td></td>
+                <td>Irvine Unified School District (IUSD)</td>
+              </tr>
+              <tr>
+                <td>1036213</td>
+                <td>Angela Lee</td>
+                <td>Teacher</td>
+                <td>Jun 27 2025</td>
+                <td>Preliminary MOD/ESN</td>
+                <td>Ms.Bonnie, May I please have transcript what I took from iCAAP? I would like to keep for my copy of the transcript.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1193740</td>
+                <td>Braulio Rodriguez</td>
+                <td>Teacher</td>
+                <td>Jul 03 2025</td>
+                <td>Preliminary Single Subject</td>
+                <td>Nothing was stated in the email.</td>
+                <td>Zina Dixon</td>
+                <td>Aug 07 2025</td>
+                <td>J. Detar</td>
+                <td>Long Beach Unified School District</td>
+                <td></td>
+                <td></td>
+                <td>Long Beach Unified School District</td>
+              </tr>
+              <tr>
+                <td>1130610</td>
+                <td>Alberto Tercero</td>
+                <td>Teacher</td>
+                <td>Jul 08 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>I wanted to follow up on whether I can obtain my transcripts from iCAAP.</td>
+                <td>Eberardo Rodriguez</td>
+                <td></td>
+                <td>J. Detar</td>
+                <td>My response: Please specify where the transcript needs to be sent to at Cal State LA, including mailing address and to whose attention this needs to be addressed to.</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>733100</td>
+                <td>Erik Estrada</td>
+                <td>Teacher</td>
+                <td>Jul 15 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>Good morning, Please find the attached request for transcripts. Thank you, Erik Estrada.</td>
+                <td>Rene Gaudet</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to ed-gradstudies@csulb.edu</td>
+                <td></td>
+                <td></td>
+                <td>Cal State Long Beach</td>
+              </tr>
+              <tr>
+                <td>957604</td>
+                <td>Greg Weed</td>
+                <td>Teacher</td>
+                <td>Jul 16 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>I am requesting a copy of my iCAAP transcript. I might be an issue since I am not in the program and didn't complete it, short of submitting my Cal TPA2. Please feel free to contact with any questions.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1194400</td>
+                <td>Jean-Marc Berne</td>
+                <td>Teacher</td>
+                <td>Jul 28 2025</td>
+                <td>AA/BiLAA</td>
+                <td>I hope you had a great weekend! Thank you for taking the time to speak with me last week regarding receiving my transcript for the BiLAA program I completed last year. As suggested, I am attaching a transcript request to this email. Please confirm receipt when you get a chance. Thanks!</td>
+                <td>Zina Dixon</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to catherinecummings@ccusd.org</td>
+                <td></td>
+                <td></td>
+                <td>Culver City Unified School District</td>
+              </tr>
+              <tr>
+                <td>1140785</td>
+                <td>Erin Nassir</td>
+                <td>Teacher</td>
+                <td>Jul 20 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Hello, I am requesting my iCAAP transcripts to be sent to Pasadena USD and another copy to myself.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to ELLERBROCK.AMY@PUSD.US</td>
+                <td></td>
+                <td></td>
+                <td>PASADENA USD</td>
+              </tr>
+              <tr>
+                <td>787072</td>
+                <td>Teresa Palmer</td>
+                <td>Teacher</td>
+                <td>Jul 30 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td></td>
+                <td>Rene Gaudet</td>
+                <td>Aug 12 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to m.Rubin@bcchs.net</td>
+                <td></td>
+                <td></td>
+                <td>Birmingham Community Charter High School</td>
+              </tr>
+              <tr>
+                <td>690210</td>
+                <td>Candise Ketcham Partington</td>
+                <td>Teacher</td>
+                <td>Jun 06 2025</td>
+                <td>CENTSE</td>
+                <td>Hello- I have included my transcript request form. Thank you- Candise Partington</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Aug 11 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to ascher@ccs.k12.in.us</td>
+                <td></td>
+                <td></td>
+                <td>Carmel Clay Schools</td>
+              </tr>
+              <tr>
+                <td>710184</td>
+                <td>Angella Copley</td>
+                <td>Teacher</td>
+                <td>Jun 18 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td></td>
+                <td>Rene Gaudet</td>
+                <td>Aug 12 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1172962</td>
+                <td>Angelica Ortiz</td>
+                <td>Teacher</td>
+                <td>Aug 01 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>Hi Jennifer, I'm requesting an expedite on this transcript request. This person has a background history that warrants special attention. Thank you for your consideration. -Bonnie</td>
+                <td>Rene Gaudet</td>
+                <td>Aug 12 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to fpeliz@fullerton.edu</td>
+                <td></td>
+                <td></td>
+                <td>Cal State Fullerton</td>
+              </tr>
+              <tr>
+                <td>1156197</td>
+                <td>Michelle Cherner</td>
+                <td>Teacher</td>
+                <td>Aug 02 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Hello, I would like my unofficial iCAAP transcripts, please.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Aug 08 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1107828</td>
+                <td>Hector Garcia, Jr.</td>
+                <td>Teacher</td>
+                <td>Aug 07 2025</td>
+                <td>CENTSE</td>
+                <td>Requesting assistance or contact information regarding his DI transcript. He submitted the transcript request form in May via both email and mail but has not received any response. He needs the transcript to add an additional credential.</td>
+                <td>Eberardo Rodriguez</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>636247</td>
+                <td>Cesar Gaytan</td>
+                <td>Teacher</td>
+                <td>Aug 10 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>Dear Jennifer, Please send a copy of my transcript to kimroot-picq@antiochschools.net. I am attaching the form. With much appreciation, cg</td>
+                <td>Rene Gaudet</td>
+                <td>Aug 12 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to kimroot-picq@antiochschools.net</td>
+                <td></td>
+                <td></td>
+                <td>Antioch Unified School District</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Jillian Flynn</td>
+                <td>Teacher</td>
+                <td>Aug 29 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>Hi, I sent a request for the transcript of my course of study from the LAUSD Intern Program on July 9th and have not received a response. I graduated from the program in June of 2000. I have attached a copy of my transcript request as well as a copy of my program certificate. I was wondering if you could provide me with an update on this request. Please let me know if you have any questions or require additional information. Thank you, Jillian Flynn</td>
+                <td>Rene Gaudet</td>
+                <td>Sep 15 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Teacher</td>
+                <td>Sep 08 2025</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>614801</td>
+                <td>Sarah Tracey</td>
+                <td>Teacher</td>
+                <td>Sep 21 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>I am attaching the filled in form. The UK is asking for the official certificate of qualification and transcript as well as the certificate for my teaching qualification. They noted, they do not require the teaching license from the California Education Department, as this is not a qualification. Does that make sense to you? I really appreciate the help as they are trying to close my case.</td>
+                <td>Rene Gaudet</td>
+                <td>Sep 22 2025</td>
+                <td>J. Detar</td>
+                <td>Asked Brenda for P-Card</td>
+                <td>Sep 22 2025</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Makaila Hernandez</td>
+                <td>Teacher</td>
+                <td>Aug 27 2025</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Sep 08 2025</td>
+                <td>J. Detar</td>
+                <td>Sent link to request transcript</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Emma Schaedel</td>
+                <td>Teacher</td>
+                <td>Aug 26 2025</td>
+                <td>Induction Program</td>
+                <td></td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Sep 05 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Maikai, asking for Transcript</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1221141</td>
+                <td>Esteban Arteaga</td>
+                <td>Teacher</td>
+                <td>Aug 21 2025</td>
+                <td>Preliminary Single Subject</td>
+                <td></td>
+                <td>Zina Dixon</td>
+                <td>Sep 05 2025</td>
+                <td>J. Detar</td>
+                <td>Esteban Arteaga did not complete iCAAP Induction program, they completed Induction with TGI. I forward their request to Christina Mendez in TGI last week. - Wendy</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1083359</td>
+                <td>April Sequeda</td>
+                <td>Teacher</td>
+                <td></td>
+                <td>Preliminary Multiple Subject</td>
+                <td></td>
+                <td>Rene Gaudet</td>
+                <td>Aug 05 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Cal State Long Beach</td>
+              </tr>
+              <tr>
+                <td>624775</td>
+                <td>Rona Goldberg</td>
+                <td>Teacher</td>
+                <td>Sep 19 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>I am requesting my transcripts from the district intern program. I don't recall the actual years I was in. Most likely 1999-2001? My name at time was Rona Barthelemy. Thank you.</td>
+                <td>Rene Gaudet</td>
+                <td>Sep 20 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to teacher</td>
+                <td>Sep 22 2025</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>957604</td>
+                <td>Greg Weed</td>
+                <td>Teacher</td>
+                <td>Sep 05 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Here is my request for my transcript.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Sep 08 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>931446</td>
+                <td>Israel Garcia</td>
+                <td>Hamptonie, Danita</td>
+                <td>Sep 24 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>We are processing units for the above mentioned employee and noticed that the latter transcript does NOT have SPED 500 listed. Could you please review/update if the employee earned these units.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Sep 24 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Eberardo for clarification</td>
+                <td></td>
+                <td></td>
+                <td>Hamptonie, Danita</td>
+              </tr>
+              <tr>
+                <td>1208260</td>
+                <td>Kevin Lezak</td>
+                <td>Teacher</td>
+                <td>Sep 16 2025</td>
+                <td>Preliminary Single Subject</td>
+                <td>Hello. I was a district intern for the 2024-25 school year and would like a copy of my transcript. Please find my request form attached. Thank you!</td>
+                <td>Zina Dixon</td>
+                <td>Sep 22 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to mpimienta@teachps.org TEACH Public Schools</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1201073</td>
+                <td>Oscar Blas</td>
+                <td>Teacher</td>
+                <td>Sep 02 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Hello! Attached is my transcript request. If you could please let me know when it has been sent out. Email to: apply@umassglobal.edu Thank you! Oscar Blas</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Sep 23 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to apply@umassglobal.edu UMass Global</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>785494</td>
+                <td>Sandra Delgado</td>
+                <td>Teacher</td>
+                <td>Sep 11 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Please see attached request form for transcripts. Thank you, Sandra Delgado.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Sep 22 2025</td>
+                <td>J. Detar</td>
+                <td>Katrina Granado, 562-907-5961 kgranado@ewcsd.org East Whittier City School District</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>638693</td>
+                <td>Sarah Shiva</td>
+                <td>Teacher</td>
+                <td>Sep 02 2025</td>
+                <td>AA/RLAA</td>
+                <td>They've completed half of their RLAA coursework and are requesting a copy of their transcript for their records. They attached the transcript request form and expressed thanks.</td>
+                <td>Wendy Marrero &amp; Rene Gaudet</td>
+                <td>Sep 08 2025</td>
+                <td>J. Detar</td>
+                <td>Mailed 9/8 via snail mail</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1166875</td>
+                <td>Sufyan Tootla</td>
+                <td>Teacher</td>
+                <td>Sep 04 2025</td>
+                <td>Induction Program</td>
+                <td>I hope you are doing well. I am just attaching this request for a transcript. Please let me know if I need to add anything else to this in order to receive my transcript.</td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Sep 19 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to kgranado@ewcsd.org</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>804512</td>
+                <td>Tana Tea</td>
+                <td>Teacher</td>
+                <td>Sep 05 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Thank you for your help earlier. I do not see how I could add my signature on the form, please accept this email request as my signature. Could I please get 7 copies of my transcripts? I see that they are unofficial, is there anyway to get official copies?</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Sep 08 2025</td>
+                <td>J. Detar</td>
+                <td>Asked Brenda for P-Card</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>742361</td>
+                <td>Yenny Tagle</td>
+                <td>Teacher</td>
+                <td>Sep 16 2025</td>
+                <td>Preliminary Single Subject</td>
+                <td>Good morning, I am attaching my iCAAP Transcript Request Form. I am hoping to use some of those credits to qualify for a Single Subject Credential. I thank you in advance for your prompt attention to this request.</td>
+                <td>Zina Dixon</td>
+                <td>Sep 22 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Edward Salazar and Maria Sotomayor</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1156415</td>
+                <td>Alondra Chavez</td>
+                <td>Teacher</td>
+                <td>Sep 24 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>I've attached the transcript form to this email. Would like to get proof of PSO, pre-service orientation to keep working at the job site I am currently working in.</td>
+                <td>Rene Gaudet</td>
+                <td>Sep 24 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Alondra Chavez and Pamela Carriel</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>782671</td>
+                <td>Ashley Urrieta</td>
+                <td>Mejia, Maria</td>
+                <td>Sep 24 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Please see attached transcripts for Ashley Urrieta 782671. The first transcript included the courses below and the second transcript does not. Can you please advise.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Sep 24 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Eberardo for clarification</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1223987</td>
+                <td>Colleen Gwin</td>
+                <td>Teacher</td>
+                <td>Sep 24 2025</td>
+                <td>Preliminary Single Subject</td>
+                <td>Hello, I completed the summer PSO through iCAAP and attached is my transcript request. Thank you. Sincerely, Colleen Gwin</td>
+                <td>Zina Dixon</td>
+                <td>Sep 25 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to teacher</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1047349</td>
+                <td>Vernesha Thomas</td>
+                <td>Teacher</td>
+                <td>Sep 25 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>Attached please find my transcript request form.</td>
+                <td>Rene Gaudet</td>
+                <td>Oct 17 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to vmosby@compton.k12.ca.us at Compton Unified School District</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1155426</td>
+                <td>Jennifer Martinez</td>
+                <td>Teacher</td>
+                <td>Sep 26 2025</td>
+                <td>Induction Program</td>
+                <td>Below is the form for transcript request for induction. Thank you so much for your time.</td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Oct 17 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to sloera@rcoe.us at Riverside County Office of Education</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>713860</td>
+                <td>Trent Hall</td>
+                <td>Teacher</td>
+                <td>Oct 17 2025</td>
+                <td>Preliminary Single Subject</td>
+                <td>I am applying for a Teaching License in Minnesota. They asked for a sealed official transcript, but they want it sent to me so I can include it in a packet and they need the verification form for the credential filled out as well that I attached. Thank you for your attention to this matter.</td>
+                <td>Zina Dixon</td>
+                <td>Oct 22 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>734818</td>
+                <td>Desiree Hutchinson</td>
+                <td>Teacher</td>
+                <td>Nov 09 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>Good morning, I have been trying to request an official transcript or progress report for the iCAAP program. I need this so so can continue my classes to receive my credentials.</td>
+                <td>Rene Gaudet</td>
+                <td>Nov 10 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Esther Duran eduran@lapedu</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1115307</td>
+                <td>Joseph Waybright</td>
+                <td>Mejia, Maria</td>
+                <td>Nov 10 2025</td>
+                <td>Preliminary ECSE</td>
+                <td></td>
+                <td>Eberardo Rodriguez</td>
+                <td>Nov 10 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Mejia, Maria</td>
+              </tr>
+              <tr>
+                <td>735110</td>
+                <td>Bernard Rugayan</td>
+                <td>Staff</td>
+                <td>Nov 03 2025</td>
+                <td>Induction Program</td>
+                <td>Attached is Bernard Rugayan's transcript (EN 0073510). As noted, only the second year of induction appears on the transcript. Mr. Rugayan completed his first year of induction with the Orange County Department of Education. With the submission of this transcript, please inform Salary Allocation that the district and DI portions have been addressed.</td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Nov 14 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td>Nov 14 2025</td>
+                <td></td>
+                <td>Rito, Veronica</td>
+              </tr>
+              <tr>
+                <td>1158197</td>
+                <td>Michelle Cherner</td>
+                <td>Teacher</td>
+                <td>Nov 09 2025</td>
+                <td>Induction Program</td>
+                <td>I am requesting a copy of my unofficial transcripts for iCAAP when you have the chance. Attached is the form completed. Thank you!</td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Nov 14 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>968805</td>
+                <td>Juan Tobar</td>
+                <td>Mejia, Maria</td>
+                <td>Nov 17 2025</td>
+                <td>Preliminary MMSN/MMD</td>
+                <td>Can you please provide me with all the official transcripts for M. Tobar? I have the below dates, although it seems as if we are missing one transcript. 07/24/2023 02/14/2024 10/25/2024 01/07/2025.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Nov 17 2025</td>
+                <td>J. Detar</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Mejia, Maria</td>
+              </tr>
+              <tr>
+                <td>698799</td>
+                <td>LaToya Williams</td>
+                <td>Mejia, Maria</td>
+                <td>Nov 03 2025</td>
+                <td>Preliminary Multiple Subject</td>
+                <td>07/10/2025. The courses below do not reflect, and these were included on the first two transcripts attached dated 01/05/2023 &amp; 07/13/2023. Please advise. EED 652 - 1 salary point - completion date 11/15/2021; EED 409 - 1 salary point - completion.</td>
+                <td>Eberardo Rodriguez</td>
+                <td>Dec 12 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to Eberardo</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>981900</td>
+                <td>Fabiola Alvarez</td>
+                <td>Teacher</td>
+                <td>Nov 06 2025</td>
+                <td>Induction Program</td>
+                <td>I was informed you may be able to assist with the attached transcript request form. Please let me know if there is anything else I need to do.</td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Dec 12 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to vmosby@compton.k12.ca.us</td>
+                <td></td>
+                <td></td>
+                <td>Compton Unified</td>
+              </tr>
+              <tr>
+                <td>1153218</td>
+                <td>Alma Bocanegra</td>
+                <td>Teacher</td>
+                <td>Dec 01 2025</td>
+                <td>Induction Program</td>
+                <td>I completed the iCAAP preliminary credential program and also cleared my credential via iCAAP (employee ID 1153218). I would like to request my transcript (or completion record) to submit for a graduate program application. I have attached the transcript request form to this email. Thank you for your assistance.</td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Dec 12 2025</td>
+                <td>J. Detar</td>
+                <td>Sent email to etranscript@sjsu.edu</td>
+                <td></td>
+                <td></td>
+                <td>San Jose State University</td>
+              </tr>
+              <tr>
+                <td>683810</td>
+                <td>Jin Hee Kim</td>
+                <td>Teacher</td>
+                <td>Dec 02 2025</td>
+                <td></td>
+                <td>Requesting an official transcript from the LAUSD District Intern Program for employment verification. Notes a name change from Jin Hee Kim (during LAUSD employment) to Jin Kim Chang. Asks that the transcript be sent directly to recruiting@liberty.edu, with the subject line including either name, and offers to provide any additional information needed.</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Requested P-Card from Brenda</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>1147418</td>
+                <td>Katty Zacarias Torreblanca</td>
+                <td>Teacher</td>
+                <td>Dec 04 2025</td>
+                <td>Induction Program</td>
+                <td>Please find attached two official transcript request forms. One transcript is for my personal records, and the second is designated for submission to California State University, Dominguez Hills (CSUDH). Thank you for your assistance with this matter. Sincerely, Katty Zacarias ID: 1147418</td>
+                <td>Maikai Finnell &amp; Wendy Marrero</td>
+                <td>Dec 12 2025</td>
+                <td>J. Detar</td>
+                <td>Sent to jcombs7@csudh.edu</td>
+                <td></td>
+                <td></td>
+                <td>CSUDH</td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        <p>&copy; 2025 Opus One Planner. Transcript Request Form.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js?v=20260108"></script>
+  <script>
+    function updateDate() {
+      const today = new Date();
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      document.getElementById('today-date').textContent = today.toLocaleDateString('en-US', options);
+    }
+    updateDate();
+
+    const adviserMap = {
+      "Preliminary Multiple Subject": "Rene Gaudet",
+      "Preliminary Single Subject": "Zina Dixon",
+      "Preliminary Special Education Programs (Includes: MMSN/MMD, MOD/ESN, ECSE) CENTSE Programs and Preliminary Added Specialty Programs": "Eberardo Rodriguez",
+      "Portfolio (Preliminary Clinical Practice)": "Stephen Maccarone",
+      "AA/ASD": "Eberardo Rodriguez",
+      "AA/ECSE (Year 2 only)": "Eberardo Rodriguez",
+      "AA/BiLAA": "Zina Dixon",
+      "AA/RLAA": "Wendy Marrero & Rene Gaudet",
+      "Induction Program": "Maikai Finnell & Wendy Marrero",
+      "TPSL": "Eberardo Rodriguez"
+    };
+
+    function updateAdviser(selectEl) {
+      const adviserCell = document.querySelector(".adviser-output");
+      if (!adviserCell) return;
+      adviserCell.value = adviserMap[selectEl.value] || "";
+    }
+    document.querySelector(".program-select").addEventListener("change", e => updateAdviser(e.target));
+
+    function getDB() {
+      try { return JSON.parse(localStorage.getItem("teacherDB")) || {}; }
+      catch { return {}; }
+    }
+    function wireEN() {
+      const enInput = document.querySelector(".en-input");
+      const nameInput = document.querySelector(".teacher-name-input");
+      if (!enInput || !nameInput) return;
+      const fill = () => {
+        const db = getDB();
+        const en = (enInput.value || "").trim();
+        nameInput.value = db[en] || "";
+      };
+      ["blur","change"].forEach(evt => enInput.addEventListener(evt, fill));
+      enInput.addEventListener("keyup", e => { if (e.key === "Enter") fill(); });
+      enInput.addEventListener("paste", () => setTimeout(fill, 0));
+    }
+    wireEN();
+  </script>
+</body>
+</html>

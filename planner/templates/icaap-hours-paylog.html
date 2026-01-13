@@ -1,0 +1,329 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iCAAP Hours & Paylog - Opus One Planner</title>
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/forms.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/icaap-pay-log.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/hours-worked.css' %}?v=20260108">
+  <style>
+    .planner-header {
+      padding: 2px 8px;
+    }
+
+    .planner-header-left {
+      gap: 8px;
+    }
+
+    .planner-header-left h1 {
+      font-size: 1.2rem;
+      line-height: 1.1;
+    }
+
+    .planner-header-left p {
+      font-size: 0.8rem;
+      line-height: 1.1;
+    }
+
+    .planner-header-date {
+      font-size: 0.8rem;
+    }
+
+    .planner-main {
+      background: var(--opus-bg-white);
+      border: 2px solid var(--opus-accent);
+      border-radius: var(--opus-border-radius);
+      padding: var(--opus-spacing-xs);
+      gap: 4px;
+    }
+
+    .planner-content {
+      overflow-x: hidden;
+    }
+
+    .masthead {
+      margin-bottom: 0;
+      padding: 0;
+    }
+
+    .masthead .mh-inner {
+      padding: 1px 0;
+      line-height: 1;
+    }
+
+    .mh-district {
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .mh-division {
+      font-size: 18px;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+
+    .mh-title {
+      font-size: 18px;
+      margin: 6px 0 2px;
+      line-height: 1.1;
+    }
+
+    .mh-subtitle {
+      font-size: 13px;
+      margin-bottom: 2px;
+      line-height: 1.1;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-top: 1px;
+      padding-bottom: 2px;
+      margin-top: 0;
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .table-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 2px 0;
+      font-weight: 600;
+      color: #0a2f5f;
+    }
+
+    .table-controls select {
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid #7f9db3;
+      font-family: var(--form-font-family);
+      font-size: 10pt;
+      color: #0a2f5f;
+      background: #ffffff;
+    }
+
+    #hours-worked-table {
+      table-layout: auto;
+      border: 1px solid #7f9db3;
+      border-collapse: separate;
+      border-spacing: 0;
+      width: max-content;
+      min-width: 100%;
+      position: relative;
+    }
+
+    #hours-worked-table th,
+    #hours-worked-table td {
+      min-width: 72px;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      font-size: 10pt;
+      border-color: #7f9db3;
+    }
+
+    #hours-worked-table thead tr:nth-child(2) th:nth-child(3n+1),
+    #hours-worked-table tbody td:nth-child(3n+2) {
+      min-width: 90px;
+      width: 90px;
+    }
+
+    #hours-worked-table th:first-child,
+    #hours-worked-table td:first-child {
+      min-width: 220px;
+    }
+
+    #hours-worked-table thead th:first-child,
+    #hours-worked-table tbody td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 4;
+      background-clip: padding-box;
+      box-shadow: 2px 0 0 #7f9db3;
+    }
+
+    #hours-worked-table thead th:first-child {
+      z-index: 5;
+    }
+
+    #hours-worked-table thead th.group-head {
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #99B3C5;
+      color: #0a2f5f;
+      border-bottom: 2px solid #0a2f5f;
+    }
+
+    #hours-worked-table thead tr:first-child th:first-child,
+    #hours-worked-table tbody td:first-child {
+      background: #ffffff;
+      color: #0a2f5f;
+      border-color: #7f9db3;
+    }
+
+    #hours-worked-table thead tr:nth-child(2) th:nth-child(3n+1),
+    #hours-worked-table tbody td:nth-child(3n+2) {
+      background: #9ADBDE;
+      color: #0a2f5f;
+      border-color: #7f9db3;
+    }
+
+    #hours-worked-table thead tr:nth-child(2) th:first-child {
+      background: #9ADBDE !important;
+      color: #0a2f5f;
+      border-color: #7f9db3;
+    }
+
+    #hours-worked-table thead tr:nth-child(2) th:nth-child(3n+2),
+    #hours-worked-table tbody td:nth-child(3n+3) {
+      background: #FFA1AB;
+      color: #0a2f5f;
+      border-color: #7f9db3;
+    }
+
+    #hours-worked-table thead tr:nth-child(2) th:nth-child(3n),
+    #hours-worked-table tbody td:nth-child(3n+4) {
+      background: #FFC68D;
+      color: #0a2f5f;
+      border-color: #7f9db3;
+    }
+  </style>
+</head>
+<body>
+  <div class="planner-container">
+            <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item active">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>iCAAP Hours &amp; Paylog</h1>
+          <p>LAUSD Professional Expert</p>
+        </div>
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/icaap" class="planner-header-pill">Back to iCAAP</a>
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      
+
+      <main class="planner-main">
+        <div class="masthead">
+          <div class="mh-inner">
+            <div class="mh-title">LOS ANGELES UNIFIED SCHOOL DISTRICT � Division of Instruction � iCAAP HOURS + PAYLOG</div>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <div class="table-controls">
+            <label for="month-filter">Filter month</label>
+            <select id="month-filter">
+              <option value="all">All months</option>
+              <option value="jul">Jul 2025</option>
+              <option value="aug">Aug 2025</option>
+              <option value="sep">Sep 2025</option>
+              <option value="oct">Oct 2025</option>
+              <option value="nov">Nov 2025</option>
+              <option value="dec">Dec 2025</option>
+              <option value="jan">Jan 2026</option>
+              <option value="feb">Feb 2026</option>
+              <option value="mar">Mar 2026</option>
+              <option value="apr">Apr 2026</option>
+              <option value="may">May 2026</option>
+              <option value="jun">Jun 2026</option>
+            </select>
+          </div>
+          <table id="hours-worked-table" aria-label="Hours worked and paylog submission">
+            <thead>
+              <tr>
+                <th rowspan="2">Row Labels</th>
+                <th class="group-head" colspan="3">Jul<br/>2025</th>
+                <th class="group-head" colspan="3">Aug<br/>2025</th>
+                <th class="group-head" colspan="3">Sep<br/>2025</th>
+                <th class="group-head" colspan="3">Oct<br/>2025</th>
+                <th class="group-head" colspan="3">Nov<br/>2025</th>
+                <th class="group-head" colspan="3">Dec<br/>2025</th>
+                <th class="group-head" colspan="3">Jan<br/>2026</th>
+                <th class="group-head" colspan="3">Feb<br/>2026</th>
+                <th class="group-head" colspan="3">Mar<br/>2026</th>
+                <th class="group-head" colspan="3">Apr<br/>2026</th>
+                <th class="group-head" colspan="3">May<br/>2026</th>
+                <th class="group-head" colspan="3">Jun<br/>2026</th>
+              </tr>
+              <tr>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+                <th>Hours</th>
+                <th>Paylog</th>
+                <th>Approval</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Data loaded via js/icaap-merged.js -->
+            </tbody>
+          </table>
+        </div>
+      </main>
+
+      <footer class="planner-footer">
+        <p>&copy; 2025 Opus One Planner. iCAAP Hours &amp; Paylog.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="{% static 'js/hours-worked-data.js' %}?v=20260108"></script>
+  <script src="{% static 'js/max-completion-time-data.js' %}?v=20260108"></script>
+  <script src="{% static 'js/approval-date-data.js' %}?v=20260108"></script>
+  <script src="{% static 'js/icaap-merged.js' %}?v=20260108"></script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+.data-management-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--opus-spacing-lg);
+  background-color: var(--opus-bg-light);
+  color: var(--opus-text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.data-management-header {
+  margin-bottom: var(--opus-spacing-xl);
+  padding: var(--opus-spacing-xl) var(--opus-spacing-lg);
+  background: linear-gradient(135deg, var(--opus-primary), var(--opus-primary-light));
+  border-radius: var(--opus-border-radius-lg);
+  color: white;
+  text-align: center;
+}
+
+.data-management-header h1 {
+  font-size: 2.5rem;
+  margin: 0 0 var(--opus-spacing-sm) 0;
+  font-weight: 700;
+}
+
+.data-management-header p {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.95;
+  font-weight: 300;
+}
+
+.data-management-content {
+  flex: 1;
+  margin-bottom: var(--opus-spacing-xl);
+}
+
+.data-section {
+  background: var(--opus-bg-white);
+  border: 1px solid var(--opus-border);
+  border-radius: var(--opus-border-radius-lg);
+  padding: var(--opus-spacing-xl);
+  margin-bottom: var(--opus-spacing-lg);
+}
+
+.data-section h2 {
+  font-size: 1.4rem;
+  margin: 0 0 var(--opus-spacing-sm) 0;
+  color: var(--opus-text-primary);
+  font-weight: 600;
+}
+
+.data-section > p {
+  color: var(--opus-text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 var(--opus-spacing-lg) 0;
+  line-height: 1.5;
+}
+
+.action-box {
+  background: var(--opus-bg-light);
+  border: 2px dashed var(--opus-border);
+  border-radius: var(--opus-border-radius-lg);
+  padding: var(--opus-spacing-lg);
+  display: flex;
+  gap: var(--opus-spacing-lg);
+  align-items: flex-start;
+}
+
+.action-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.action-content {
+  flex: 1;
+}
+
+.action-content h3 {
+  margin: 0 0 var(--opus-spacing-sm) 0;
+  font-size: 1.2rem;
+  color: var(--opus-text-primary);
+  font-weight: 600;
+}
+
+.action-content p {
+  margin: 0 0 var(--opus-spacing-md) 0;
+  color: var(--opus-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.btn-primary,
+.btn-danger {
+  padding: var(--opus-spacing-sm) var(--opus-spacing-lg);
+  border: none;
+  border-radius: var(--opus-border-radius-sm);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background-color: var(--opus-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--opus-primary-light);
+  transform: translateY(-1px);
+  box-shadow: var(--opus-shadow-md);
+}
+
+.btn-danger {
+  background-color: var(--opus-danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #8e2a2a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(142, 42, 42, 0.3);
+}
+
+.import-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--opus-spacing-sm);
+}
+
+.file-name {
+  color: var(--opus-text-secondary);
+  font-size: 0.9rem;
+  padding: var(--opus-spacing-sm) var(--opus-spacing-md);
+  background-color: var(--opus-bg-light);
+  border-radius: var(--opus-border-radius-sm);
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.danger-section {
+  border-color: var(--opus-danger);
+  background: rgba(142, 42, 42, 0.05);
+}
+
+.danger-box {
+  border-color: var(--opus-danger);
+  background: rgba(142, 42, 42, 0.08);
+}
+
+.info-section {
+  background: var(--opus-bg-white);
+  border: 1px solid var(--opus-border);
+  border-radius: var(--opus-border-radius-lg);
+  padding: var(--opus-spacing-xl);
+}
+
+.info-section h2 {
+  font-size: 1.4rem;
+  margin: 0 0 var(--opus-spacing-lg) 0;
+  color: var(--opus-text-primary);
+  font-weight: 600;
+}
+
+.info-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--opus-spacing-lg);
+}
+
+.info-item {
+  background: var(--opus-bg-light);
+  border: 1px solid var(--opus-border);
+  border-radius: var(--opus-border-radius-lg);
+  padding: var(--opus-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--opus-spacing-sm);
+}
+
+.info-label {
+  color: var(--opus-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  color: var(--opus-text-primary);
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.toast {
+  position: fixed;
+  bottom: var(--opus-spacing-lg);
+  right: var(--opus-spacing-lg);
+  padding: var(--opus-spacing-md) var(--opus-spacing-lg);
+  background-color: var(--opus-success);
+  color: white;
+  border-radius: var(--opus-border-radius-sm);
+  box-shadow: var(--opus-shadow-lg);
+  display: none;
+  z-index: 1000;
+  animation: slideInUp 0.3s ease;
+}
+
+.toast.show {
+  display: block;
+}
+
+.toast.error {
+  background-color: var(--opus-danger);
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .data-management-container {
+    padding: var(--opus-spacing-md);
+  }
+
+  .data-management-header {
+    padding: var(--opus-spacing-lg) var(--opus-spacing-md);
+    margin-bottom: var(--opus-spacing-lg);
+  }
+
+  .data-management-header h1 {
+    font-size: 2rem;
+  }
+
+  .data-management-header p {
+    font-size: 1rem;
+  }
+
+  .data-section {
+    padding: var(--opus-spacing-lg);
+    margin-bottom: var(--opus-spacing-md);
+  }
+
+  .data-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .action-box {
+    flex-direction: column;
+    gap: var(--opus-spacing-md);
+  }
+
+  .action-icon {
+    font-size: 2rem;
+  }
+
+  .action-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .action-content p {
+    font-size: 0.9rem;
+  }
+
+  .import-controls {
+    flex-wrap: wrap;
+  }
+
+  .btn-primary,
+  .btn-danger {
+    padding: var(--opus-spacing-sm) var(--opus-spacing-md);
+    font-size: 0.95rem;
+  }
+
+  .file-name {
+    max-width: 200px;
+  }
+
+  .info-box {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    padding: var(--opus-spacing-sm);
+  }
+
+  .toast {
+    left: var(--opus-spacing-md);
+    right: var(--opus-spacing-md);
+    bottom: var(--opus-spacing-md);
+  }
+}

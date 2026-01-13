@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Tasks</title>
+  <link rel="stylesheet" href="../css/opus-core.css?v=20260108">
+  <link rel="stylesheet" href="../css/home.css?v=20260108">
+  <style>
+    .tasks-layout {
+      display: grid;
+      gap: var(--opus-spacing-md);
+    }
+
+    .tasks-card {
+      background: var(--opus-bg-white);
+      border: 1px solid var(--opus-border);
+      border-radius: var(--opus-border-radius);
+      padding: var(--opus-spacing-lg);
+      box-shadow: var(--opus-shadow-sm);
+    }
+
+    .tasks-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--opus-spacing-md);
+      align-items: center;
+      margin-bottom: var(--opus-spacing-md);
+    }
+
+    .tasks-toolbar .planner-form-group {
+      margin: 0;
+    }
+
+    .tasks-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--opus-spacing-sm);
+      margin-bottom: var(--opus-spacing-md);
+    }
+
+    .tasks-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: var(--opus-spacing-sm);
+    }
+
+    .tasks-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: var(--opus-spacing-sm);
+      padding: 8px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .tasks-item.completed .tasks-text {
+      text-decoration: line-through;
+      color: #7a7f85;
+    }
+
+    .tasks-text {
+      font-weight: 600;
+      color: #2f3f55;
+      word-break: break-word;
+    }
+
+    .tasks-empty {
+      text-align: center;
+      padding: 18px;
+      color: #6b7280;
+      border: 1px dashed #d1d5db;
+      border-radius: 12px;
+    }
+
+    .habits-card {
+      display: grid;
+      gap: var(--opus-spacing-md);
+    }
+
+    .habits-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--opus-spacing-md);
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .habits-title {
+      margin: 0 0 4px;
+      font-size: 1.2rem;
+      color: var(--opus-primary);
+    }
+
+    .habits-subtitle {
+      margin: 0;
+      color: var(--opus-text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .habits-progress {
+      display: grid;
+      gap: 6px;
+      min-width: 180px;
+    }
+
+    .habits-progress-text {
+      font-weight: 600;
+      color: var(--opus-primary);
+      font-size: 0.9rem;
+    }
+
+    .habits-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--opus-spacing-sm);
+    }
+
+    .habits-grid {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--opus-spacing-sm);
+    }
+
+    .habits-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: var(--opus-spacing-sm);
+      align-items: center;
+      padding: 8px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fff;
+      min-height: 44px;
+    }
+
+    .habits-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid #cbd5f5;
+      background: #f8fafc;
+      color: #0f2f63;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .habits-item.completed .habits-check {
+      border-color: #0f2f63;
+      background: #dbeafe;
+    }
+
+    .habits-item.completed .habits-text {
+      text-decoration: line-through;
+      color: #7a7f85;
+    }
+
+    .habits-text {
+      font-weight: 600;
+      color: #2f3f55;
+      word-break: break-word;
+    }
+
+    .habits-empty {
+      text-align: center;
+      padding: 18px;
+      color: #6b7280;
+      border: 1px dashed #d1d5db;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .habits-header {
+        align-items: flex-start;
+      }
+
+      .habits-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="planner-container">
+    <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Daily Tasks</h1>
+          <p>Capture the tasks that matter today</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+
+      <main class="planner-main tasks-layout">
+        <section class="tasks-card">
+          <div class="tasks-toolbar">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="task-date">Date</label>
+              <input class="planner-form-input" type="date" id="task-date">
+            </div>
+          </div>
+
+          <form id="task-form" class="tasks-form">
+            <input class="planner-form-input" id="task-input" type="text" placeholder="Add a task..." required>
+            <select class="planner-form-select" id="task-category">
+              <option value="Career">Career</option>
+              <option value="CSEA">CSEA</option>
+              <option value="Financial">Financial</option>
+              <option value="Hobbies">Hobbies</option>
+              <option value="Home">Home</option>
+              <option value="Learn">Learn</option>
+              <option value="Mental">Mental</option>
+              <option value="Organizational">Organizational</option>
+              <option value="Physical">Physical</option>
+              <option value="Relational">Relational</option>
+              <option value="Screen Time">Screen Time</option>
+              <option value="Self-Care">Self-Care</option>
+            </select>
+            <button type="submit" class="planner-button planner-button-primary">Add</button>
+          </form>
+
+          <ul class="tasks-list" id="tasks-list"></ul>
+          <div class="tasks-empty" id="tasks-empty">No tasks for this day yet.</div>
+        </section>
+
+        <section class="tasks-card habits-card">
+          <div class="habits-header">
+            <div>
+              <h2 class="habits-title">Habit Grid</h2>
+              <p class="habits-subtitle">Check off daily habits and track your progress.</p>
+            </div>
+            <div class="habits-progress">
+              <div class="habits-progress-text" id="habits-progress-text">0/0 completed</div>
+              <div class="opus-progress-bar">
+                <div class="opus-progress-bar-fill" id="habits-progress-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <form id="habit-form" class="habits-form">
+            <input class="planner-form-input" id="habit-input" type="text" placeholder="Add a habit..." required>
+            <button type="submit" class="planner-button planner-button-secondary">Add Habit</button>
+          </form>
+
+          <ul class="habits-grid" id="habits-list"></ul>
+          <div class="habits-empty" id="habits-empty">No habits yet. Add one to start tracking.</div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        Daily Tasks • Saved locally in your browser
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js?v=20260108"></script>
+  <script src="../js/daily-tasks.js?v=20260108"></script>
+</body>
+</html>

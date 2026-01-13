@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paylog Submission - Opus One Planner</title>
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/forms.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/max-completion-time.css' %}?v=20260108">
+</head>
+<body>
+  <div class="planner-container">
+                                        <aside class="planner-sidebar">
+      <a href="/calendar" class="planner-sidebar-item">Home</a>
+      <a href="/csea" class="planner-sidebar-item">CSEA</a>
+      <a href="/finance" class="planner-sidebar-item">Finance</a>
+      <a href="/health" class="planner-sidebar-item">Health</a>
+      <a href="/hoa" class="planner-sidebar-item">HOA</a>
+      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
+      <a href="/planning" class="planner-sidebar-item">Planning</a>
+    </aside>
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Paylog Submission</h1>
+          <p>LAUSD Professional Expert</p>
+        </div>
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      
+
+      <main class="planner-main">
+        <table id="paylog-submission-table" aria-label="Paylog submission by month">
+          <thead>
+            <tr><th>Row Labels</th><th>Jul<br/>2025</th><th>Aug<br/>2025</th><th>Sep<br/>2025</th><th>Oct<br/>2025</th><th>Nov<br/>2025</th><th>Dec<br/>2025</th><th>Jan<br/>2026</th><th>Feb<br/>2026</th><th>Mar<br/>2026</th><th>Apr<br/>2026</th><th>May<br/>2026</th><th>Jun<br/>2026</th></tr>
+          </thead>
+          <tbody>
+            <!-- Data will be loaded dynamically from js/max-completion-time-data.js -->
+          </tbody>
+        </table>
+      </main>
+
+      <footer class="planner-footer">
+        <p>&copy; 2025 Opus One Planner. Paylog Submission.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="{% static 'js/max-completion-time-data.js' %}?v=20260108"></script>
+  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
+  <script src="{% static 'js/max-completion-time.js' %}?v=20260108"></script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+</body>
+</html>

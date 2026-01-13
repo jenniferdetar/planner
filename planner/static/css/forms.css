@@ -1,0 +1,747 @@
+/* Consolidated Forms CSS - Pay Logs, Transcript Request, Purchase Requisition, iCAAP */
+
+:root {
+  --form-bg: #ffffff;
+  --form-text: #222222;
+  --form-muted: #53575A;
+  --form-accent: #00326b;
+  --form-accent-alt: #004a9c;
+  --form-border: #222222;
+  --form-input-bg: #e6e6e6;
+  --form-header-bg: #e6e6e6;
+  --form-row-alt: #c8d6eb;
+}
+
+/* === TABLES === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 1px solid var(--form-border);
+}
+
+.page table,
+.page td {
+  background-color: #ffffff;
+}
+
+th,
+td {
+  border: 1px solid var(--form-border);
+  padding: 6px 8px;
+  text-align: left;
+  font-size: 0.85rem;
+  white-space: normal;
+  vertical-align: middle;
+  line-height: 1.25;
+}
+
+th {
+  background-color: var(--form-accent);
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* === INPUTS & FIELDS === */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--form-border);
+  border-radius: 6px;
+  background-color: var(--form-input-bg);
+  color: var(--form-text);
+  font-family: var(--form-font-family);
+  font-size: 0.85rem;
+  box-sizing: border-box;
+}
+
+input[readonly],
+.readonly {
+  background-color: #e6e6e6;
+  color: var(--form-muted);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+select {
+  height: auto;
+  min-height: 26px;
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.invalid {
+  outline: 2px solid #8E2A2A;
+}
+
+/* === PAYLOG TABLES === */
+.paylog-page table {
+  table-layout: fixed;
+}
+
+.paylog-page th:not(:first-child),
+.paylog-page td:not(:first-child) {
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
+.paylog-page tbody td {
+  height: 44px;
+  vertical-align: middle;
+}
+
+.paylog-page tbody td:nth-child(even) {
+  background-color: var(--form-row-alt) !important;
+}
+
+.paylog-page thead th:nth-child(even) {
+  background-color: var(--form-accent-alt) !important;
+}
+
+.paylog-page th:first-child,
+.paylog-page td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: var(--form-bg);
+}
+
+.paylog-page tbody td:first-child:nth-child(even) {
+  background-color: var(--form-bg) !important;
+}
+
+.paylog-page thead th:first-child {
+  background-color: var(--form-accent);
+  z-index: 3;
+}
+
+.paylog-page tbody tr:nth-child(even) {
+  background-color: var(--form-bg);
+}
+
+.paylog-page tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table-wrap {
+  background-color: var(--form-bg);
+  border: 1px solid var(--form-text);
+  border-radius: 8px;
+  overflow: auto;
+  max-height: calc(100vh - 220px);
+}
+
+/* === TRANSCRIPT REQUEST === */
+td input[type="text"],
+td input[type="date"],
+td select,
+td textarea {
+  width: 100%;
+  min-width: 0;
+  height: 22px;
+  display: block;
+}
+
+td textarea {
+  min-height: 22px;
+  max-height: 22px;
+  resize: none;
+}
+
+td select {
+  height: auto;
+  min-height: 5.2em;
+  max-height: 10em;
+}
+
+/* === PURCHASE REQUISITION === */
+.page {
+  width: 100%;
+  margin: 14px auto;
+  padding: 14px;
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.section {
+  margin-bottom: 14px;
+  page-break-inside: avoid;
+}
+
+.pr-header {
+  text-align: center;
+  margin: 0 0 10px 0;
+  background: #ffffff;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.pr-header h1,
+.pr-header h2,
+.pr-header h3 {
+  margin: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.pr-header h1 {
+  font-size: 36px;
+  color: var(--form-accent);
+}
+
+.pr-header h2 {
+  font-size: 20px;
+  color: var(--form-accent-alt);
+}
+
+.pr-header h3 {
+  font-size: 22px;
+  margin-top: 6px;
+  color: var(--form-accent);
+}
+
+.fill,
+.money,
+.fill-inline,
+.line[contenteditable],
+.desc-area[contenteditable] {
+  height: 26px;
+  min-height: 26px;
+  background-color: var(--form-input-bg);
+  border: 0 !important;
+  outline: 0;
+  color: var(--form-text);
+  line-height: 1.25;
+  font-family: var(--form-font-family);
+}
+
+.line[contenteditable],
+.desc-area[contenteditable] {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: visible;
+}
+
+input.qty {
+  text-align: right;
+}
+
+input.unit,
+input.pg {
+  text-align: center;
+}
+
+.amt {
+  text-align: right;
+  white-space: wrap;
+}
+
+table.items td {
+  vertical-align: top;
+}
+
+table.items th {
+  text-transform: uppercase;
+}
+
+td.col-desc {
+  padding: 4px 6px !important;
+}
+
+td.col-tot {
+  text-align: right;
+}
+
+.panel {
+  border: 1px solid var(--form-border);
+  padding: 8px 10px;
+  page-break-inside: avoid;
+}
+
+.panel h4 {
+  margin: 0 0 6px 0;
+  font-weight: 600;
+  color: var(--form-accent);
+}
+
+.choices {
+  width: 100%;
+  background: #ffffff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: 24px auto;
+  align-items: center;
+  column-gap: 10px;
+  margin: 0;
+  font-size: 18px;
+}
+
+.choice input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 2px solid var(--form-border);
+  background-color: var(--form-input-bg);
+  cursor: pointer;
+}
+
+.choice input[type="checkbox"]:checked {
+  background-color: var(--form-accent);
+  background-image:
+    linear-gradient(135deg, #ffffff 25%, transparent 25%),
+    linear-gradient(225deg, #ffffff 25%, transparent 25%),
+    linear-gradient(45deg, #ffffff 25%, transparent 25%),
+    linear-gradient(315deg, #ffffff 25%, var(--form-accent) 25%);
+  background-position: 7px 0, 7px 0, 0 0, 0 0;
+  background-size: 14px 14px;
+  background-repeat: no-repeat;
+}
+
+table.approval thead th {
+  background-color: var(--form-accent);
+  color: #ffffff;
+  text-align: left;
+  padding: 7px 8px !important;
+  letter-spacing: 0.25px;
+}
+
+table.approval {
+  table-layout: fixed;
+}
+
+table.approval col {
+  width: 25%;
+}
+
+.approval .sig {
+  height: 40px;
+}
+
+table.totals th {
+  text-align: left;
+}
+
+.totals .money {
+  text-align: right;
+}
+
+/* === ICAAP PAY LOG === */
+.masthead {
+  text-align: center;
+  margin: 0 0 12px 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.masthead .mh-inner {
+  max-width: 9.5in;
+  margin: 0 auto;
+}
+
+.mh-district {
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.mh-division {
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 1.2;
+  margin-top: 4px;
+  color: #ffffff;
+}
+
+.mh-line {
+  height: 1px;
+  background-color: #ffffff;
+  width: 92%;
+  margin: 8px auto 0;
+}
+
+.mh-title {
+  font-size: 28px;
+  margin: 14px 0 4px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mh-subtitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.mh-note {
+  font-size: 15px;
+  margin: 2px 0;
+  color: #ffffff;
+}
+
+.mh-note.red {
+  color: #8E2A2A;
+  font-weight: 800;
+}
+
+.emp-card {
+  border: 2px solid var(--form-border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  background-color: var(--form-bg);
+}
+
+.emp-card__head {
+  background-color: var(--form-accent);
+  color: #ffffff;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px 12px;
+  font-weight: bold;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.emp-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr 220px 1fr;
+  gap: 10px 14px;
+  padding: 14px;
+  background-color: var(--form-header-bg);
+}
+
+.emp-label {
+  align-self: center;
+  font-weight: bold;
+}
+
+.emp-field input,
+.emp-field select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--form-border);
+  border-radius: 8px;
+  background-color: var(--form-input-bg);
+  color: var(--form-text);
+}
+
+.emp-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.emp-note .capwarn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.capwarn {
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background-color: var(--form-bg);
+  border: 1px solid var(--form-border);
+  color: #8E2A2A;
+  display: none;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.capwarn.show {
+  display: block;
+}
+
+.sectionhead {
+  background-color: var(--form-header-bg);
+  color: var(--form-text);
+  font-weight: bold;
+  text-align: center;
+  padding: 8px 6px;
+  border: 1px solid var(--form-border);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+}
+
+table.grid {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--form-border);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+.grid th,
+.grid td {
+  border: 1px solid var(--form-border);
+  padding: 6px;
+  vertical-align: middle;
+}
+
+.grid th {
+  background-color: var(--form-accent);
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.grid input[type="text"],
+.grid select {
+  width: 98%;
+  padding: 4px 6px;
+  border: 1px solid var(--form-border);
+  border-radius: 6px;
+  background-color: var(--form-input-bg);
+  color: var(--form-text);
+}
+
+.ampm {
+  font-size: 11px;
+  color: var(--form-muted);
+  margin-top: 2px;
+}
+
+tr.holiday td {
+  background-color: var(--form-bg);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+tr.weekend:not(.holiday) td {
+  background-color: #d9edfa;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.holiday-tag {
+  color: #8E2A2A;
+  font-weight: bold;
+}
+
+.muted {
+  color: var(--form-muted);
+  font-style: italic;
+}
+
+/* === PIVOT TABLE === */
+#pivot-table th,
+#pivot-table td {
+  font-size: 0.5rem;
+  padding: 2px 3px;
+  line-height: 1.1;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  vertical-align: top;
+}
+
+#pivot-table th:first-child,
+#pivot-table td:first-child {
+  max-width: 50px;
+}
+
+/* === PRINT STYLES === */
+@media print {
+  @page {
+    size: Letter landscape;
+    margin: 0.4in;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: scale(0.86);
+    transform-origin: center;
+    width: auto;
+    height: auto;
+  }
+
+  .section {
+    margin-bottom: 4px !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .table-wrap {
+    max-height: none;
+  }
+
+  .pr-header h1 {
+    font-size: 24px;
+  }
+
+  .pr-header h2 {
+    font-size: 14px;
+  }
+
+  .pr-header h3 {
+    font-size: 16px;
+  }
+
+  .mh-district {
+    font-size: 32px;
+    color: #222222;
+  }
+
+  .mh-division {
+    font-size: 28px;
+    color: #222222;
+  }
+
+  .mh-title {
+    font-size: 26px;
+    color: #222222;
+  }
+
+  .mh-subtitle {
+    font-size: 18px;
+    color: #222222;
+  }
+
+  .mh-note {
+    font-size: 14px;
+  }
+
+  .fill,
+  .money,
+  .fill-inline,
+  .line[contenteditable],
+  .desc-area[contenteditable] {
+    height: 14px;
+    min-height: 14px;
+  }
+
+  .emp-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 10px;
+    border-width: 1px;
+  }
+
+  .emp-card__head {
+    padding: 6px 8px;
+    font-size: 14px;
+  }
+
+  .emp-grid {
+    gap: 6px 10px;
+    padding: 8px;
+    grid-template-columns: 170px 1fr 170px 1fr;
+    font-size: 11px;
+  }
+
+  .emp-field input,
+  .emp-field select {
+    padding: 4px 6px;
+    border-radius: 4px;
+  }
+
+  .capwarn {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+
+  .sectionhead {
+    padding: 6px;
+    font-size: 13px;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .grid th,
+  .grid td {
+    padding: 3px 4px;
+    font-size: 11px;
+  }
+
+  .grid input[type="text"],
+  .grid select {
+    padding: 2px 3px;
+    border-radius: 3px;
+    font-size: 11px;
+    width: 96%;
+  }
+
+  #tbl_time {
+    break-inside: avoid;
+    page-break-inside: auto;
+  }
+
+  #tbl_time tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .panel,
+  .box {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .choice {
+    margin: 4px 0;
+    font-size: 16px;
+  }
+
+  th,
+  td {
+    padding: 2px 2px !important;
+  }
+
+  body {
+    font-size: 9.8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .emp-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  table {
+    font-size: 0.8rem;
+  }
+
+  th,
+  td {
+    padding: 4px 6px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}

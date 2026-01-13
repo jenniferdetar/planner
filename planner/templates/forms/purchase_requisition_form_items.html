@@ -1,0 +1,271 @@
+{% load static %}
+<table class="items" aria-label="Line items">
+  <colgroup>
+    <col style="width: 4%" />
+    <col style="width: 6%" />
+    <col style="width: 6%" />
+    <col style="width: 6%" />
+    <col style="width: 18%" />
+    <col style="width: 38%" />
+    <col style="width: 8%" />
+    <col style="width: 10%" />
+    <col style="width: 4%" />
+  </colgroup>
+  <thead>
+    <tr>
+      <th>LN</th>
+      <th>QTY</th>
+      <th>UNIT</th>
+      <th>PG</th>
+      <th>COMMODITY CODE<br />STOCK NUMBER</th>
+      <th>DESCRIPTION</th>
+      <th>UNIT<br />COST</th>
+      <th>TOTAL<br />COST</th>
+      <th>ACCT<br />LN</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- 15 rows -->
+    <tr>
+      <td>1</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td><input class="qty money" type="number" min="0" step="any" /></td>
+      <td><input class="unit" type="text" /></td>
+      <td><input class="pg" type="text" /></td>
+      <td><input class="fill" type="text" /></td>
+      <td class="col-desc">
+        <div class="desc-area" contenteditable="true" role="textbox" aria-label="Description"></div>
+      </td>
+      <td><input class="unit-cost money" type="number" min="0" step="any" /></td>
+      <td class="col-tot amt">$ <span class="total">0.00</span></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<script>
+  (() => {
+    const items = document.querySelector("table.items");
+    if (!items) return;
+
+    const money = (n) =>
+      (isFinite(n) ? n : 0).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    const toNum = (v) => {
+      const x = parseFloat(String(v ?? "").replace(/,/g, ""));
+      return isFinite(x) ? x : 0;
+    };
+
+    function updateRow(tr) {
+      const q = toNum(tr.querySelector(".qty")?.value);
+      const u = toNum(tr.querySelector(".unit-cost")?.value);
+      const t = q * u;
+
+      const totSpan = tr.querySelector(".col-tot .total");
+      const totCell = tr.querySelector(".col-tot");
+
+      if (totSpan) {
+        totSpan.textContent = money(t);
+      } else if (totCell) {
+        totCell.textContent = "$ " + money(t);
+      }
+      tr.dataset.rowTotal = t;
+    }
+
+    function updateAll() {
+      items.querySelectorAll("tbody tr").forEach(updateRow);
+      document.dispatchEvent(new CustomEvent("pr:items-updated"));
+    }
+
+    items.addEventListener("input", (e) => {
+      if (e.target.matches(".qty, .unit-cost")) {
+        updateRow(e.target.closest("tr"));
+        document.dispatchEvent(new Event("pr:items-updated"));
+      }
+    });
+
+    updateAll();
+  })();
+</script>

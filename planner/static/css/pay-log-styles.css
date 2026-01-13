@@ -1,0 +1,121 @@
+.paylog-page {
+  max-width: none;
+}
+
+.paylog-page .page-header h1 {
+  font-size: 2rem;
+  margin: 4px 0 6px;
+}
+
+.paylog-page .page-header .eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+}
+
+.paylog-page .panel {
+  margin-top: 16px;
+  padding: 10px 12px;
+}
+
+.paylog-page .panel {
+  color: #ffffff;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.paylog-page .table-wrap {
+  background: #ffffff;
+  color: #222222;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.paylog-page th {
+  background: #00326b;
+  color: #ffffff !important;
+  text-align: center;
+}
+
+.paylog-page th,
+.paylog-page td {
+  border: 4px solid #000000 !important;
+  border-color: #000000 !important;
+  color: #222222;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+.paylog-page th:not(:first-child) {
+  white-space: normal;
+  font-size: 0.8rem;
+}
+
+.paylog-page td:not(:first-child) {
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
+.paylog-page tbody td {
+  height: 44px;
+  vertical-align: middle;
+}
+
+.paylog-page table {
+  table-layout: fixed;
+}
+
+.paylog-page th,
+.paylog-page td {
+  width: calc(100% / 13);
+}
+
+.paylog-page tbody td:nth-child(even) {
+  background: #c8d6eb !important;
+}
+
+.paylog-page thead th:nth-child(even) {
+  background: #004a9c !important;
+}
+
+.paylog-page th:first-child,
+.paylog-page td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #ffffff;
+}
+
+.paylog-page tbody td:first-child:nth-child(even) {
+  background: #ffffff !important;
+}
+
+.paylog-page thead th:first-child {
+  background: #00326b;
+  color: #ffffff !important;
+  z-index: 3;
+}
+
+.paylog-page table {
+  border-collapse: collapse;
+}
+
+.paylog-page thead th {
+  border-bottom: 3px solid #000000 !important;
+}
+
+.paylog-page tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.paylog-page tbody tr:nth-child(even) {
+  background: #ffffff;
+}
+
+.paylog-page .table-wrap {
+  max-height: calc(100vh - 220px);
+  overflow: auto;
+}
