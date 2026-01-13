@@ -9,14 +9,14 @@
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/index.html",
-      "dest": "vercel_app.py"
+      "source": "/index.html",
+      "destination": "/vercel_app.py"
     },
     {
-      "src": "/(.*)",
-      "dest": "vercel_app.py"
+      "source": "/(.*)",
+      "destination": "/vercel_app.py"
     }
   ]
 }
