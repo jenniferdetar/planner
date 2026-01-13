@@ -126,7 +126,7 @@ const opusStorage = (() => {
     if (!supabaseClient || !supabaseUser) return;
     
     // Pull Tasks
-    const { data: tasksData } = await supabaseClient.from('planner_tasks').select('*').eq('user_id', supabaseUser.id);
+    const { data: tasksData } = await supabaseClient.from('opus_tasks').select('*').eq('user_id', supabaseUser.id);
     if (tasksData) {
       data.tasks = tasksData.map(row => ({
         id: row.id,
@@ -145,7 +145,7 @@ const opusStorage = (() => {
     }
 
     // Pull Goals
-    const { data: goalsData } = await supabaseClient.from('planner_goals').select('*').eq('user_id', supabaseUser.id);
+    const { data: goalsData } = await supabaseClient.from('opus_goals').select('*').eq('user_id', supabaseUser.id);
     if (goalsData) {
       data.goals = goalsData.map(row => ({
         id: row.id,
@@ -163,7 +163,7 @@ const opusStorage = (() => {
     }
 
     // Pull Notes
-    const { data: notesData } = await supabaseClient.from('planner_notes').select('*').eq('user_id', supabaseUser.id);
+    const { data: notesData } = await supabaseClient.from('opus_notes').select('*').eq('user_id', supabaseUser.id);
     if (notesData) {
       data.notes = notesData.map(row => ({
         id: row.id,
@@ -176,7 +176,7 @@ const opusStorage = (() => {
     }
 
     // Pull Meetings
-    const { data: meetingsData } = await supabaseClient.from('planner_meetings').select('*').eq('user_id', supabaseUser.id);
+    const { data: meetingsData } = await supabaseClient.from('opus_meetings').select('*').eq('user_id', supabaseUser.id);
     if (meetingsData) {
       data.meetings = meetingsData.map(row => ({
         id: row.id,
@@ -195,7 +195,7 @@ const opusStorage = (() => {
     }
 
     // Pull Master Tasks
-    const { data: masterTasksData } = await supabaseClient.from('planner_master_tasks').select('*').eq('user_id', supabaseUser.id);
+    const { data: masterTasksData } = await supabaseClient.from('opus_master_tasks').select('*').eq('user_id', supabaseUser.id);
     if (masterTasksData) {
       data.masterTasks = masterTasksData.map(row => ({
         id: row.id,
@@ -210,35 +210,63 @@ const opusStorage = (() => {
       }));
     }
 
-    // Pull Habits
-    const { data: habitsData } = await supabaseClient.from('planner_habits').select('*').eq('user_id', supabaseUser.id);
-    if (habitsData) {
-      data.habits = habitsData.map(row => ({ id: row.id, name: row.name }));
+    // Pull Mission
+    const { data: missionData } = await supabaseClient.from('opus_mission').select('*').eq('user_id', supabaseUser.id).single();
+    if (missionData) {
+      data.mission = missionData.content || data.mission;
     }
 
-    // Pull Habit Status
-    const { data: habitStatusData } = await supabaseClient.from('planner_habit_status').select('*').eq('user_id', supabaseUser.id);
-    if (habitStatusData) {
-      data.habitStatus = {};
-      habitStatusData.forEach(row => {
-        if (!data.habitStatus[row.date]) data.habitStatus[row.date] = {};
-        data.habitStatus[row.date][row.habit_id] = row.completed;
-      });
+    // Pull Preferences
+    const { data: prefsData } = await supabaseClient.from('opus_preferences').select('*').eq('user_id', supabaseUser.id).single();
+    if (prefsData) {
+      data.preferences = prefsData.settings || data.preferences;
     }
 
-    // Pull Metadata (including mission and preferences)
+    // Pull Books
+    const { data: booksData } = await supabaseClient.from('books').select('*').eq('user_id', supabaseUser.id);
+    if (booksData) {
+      data.booksToRead = booksData.map(row => ({
+        id: row.id,
+        title: row.title,
+        author: row.author,
+        completed: row.completed
+      }));
+    }
+
+    // Pull Hours Worked
+    const { data: hoursData } = await supabaseClient.from('hours_worked').select('*').eq('user_id', supabaseUser.id);
+    if (hoursData) {
+      data.metadata.hoursWorked = hoursData;
+    }
+
+    // Pull Max Completion Times
+    const { data: maxTimesData } = await supabaseClient.from('max_completion_times').select('*').eq('user_id', supabaseUser.id);
+    if (maxTimesData) {
+      data.metadata.maxCompletionTimes = maxTimesData;
+    }
+
+    // Pull Approval Dates
+    const { data: approvalData } = await supabaseClient.from('approval_dates').select('*').eq('user_id', supabaseUser.id);
+    if (approvalData) {
+      data.metadata.approvalDates = approvalData;
+    }
+
+    // Pull Vision Board Photos
+    const { data: visionPhotosData } = await supabaseClient.from('vision_board_photos').select('*').eq('user_id', supabaseUser.id);
+    if (visionPhotosData) {
+      data.metadata.visionBoardPhotos = visionPhotosData;
+    }
+
+    // Pull Metadata (remaining generic keys)
     const { data: metadataData } = await supabaseClient.from('planner_metadata').select('*').eq('user_id', supabaseUser.id);
     if (metadataData) {
       metadataData.forEach(row => {
-        if (row.key === 'mission') data.mission = row.value;
-        else if (row.key === 'preferences') data.preferences = row.value;
-        else if (row.key === 'cseaIssues') data.cseaIssues = row.value;
+        if (row.key === 'cseaIssues') data.cseaIssues = row.value;
         else if (row.key === 'cseaMeetingNotes') data.cseaMeetingNotes = row.value;
         else if (row.key === 'cseaNotesTags') data.cseaNotesTags = row.value;
         else if (row.key === 'cseaNotesSaved') data.cseaNotesSaved = row.value;
         else if (row.key === 'budgetActuals') data.budgetActuals = row.value;
         else if (row.key === 'budgetInputs') data.budgetInputs = row.value;
-        else if (row.key === 'booksToRead') data.booksToRead = row.value;
         else if (row.key === 'intentionsDreams') data.intentionsDreams = row.value;
         else if (row.key === 'smartGoals') data.smartGoals = row.value;
         else if (row.key === 'weeklyTaskStatus') data.weeklyTaskStatus = row.value;
@@ -249,14 +277,12 @@ const opusStorage = (() => {
     // Pull CSEA Members and Issues (New specialized tables)
     const { data: membersData } = await supabaseClient.from('csea_members').select('*').eq('user_id', supabaseUser.id);
     if (membersData && membersData.length > 0) {
-      // Logic to merge or override if necessary, for now we just log availability
       console.log('CSEA Members loaded from Supabase');
     }
 
     const { data: specializedIssuesData } = await supabaseClient.from('csea_issues').select('*, csea_members(*)').eq('user_id', supabaseUser.id);
     if (specializedIssuesData && specializedIssuesData.length > 0) {
-      // If we have specialized data, it could potentially override the metadata version
-      // data.cseaIssues = specializedIssuesData.map(...);
+      // specializedIssuesData can be processed here
     }
   }
 
@@ -279,7 +305,7 @@ const opusStorage = (() => {
       updated_at: t.updatedAt || new Date().toISOString()
     }));
     if (taskRows.length) {
-      await supabaseClient.from('planner_tasks').upsert(taskRows, { onConflict: 'id' });
+      await supabaseClient.from('opus_tasks').upsert(taskRows, { onConflict: 'id' });
     }
 
     // Push Goals
@@ -297,7 +323,7 @@ const opusStorage = (() => {
       updated_at: g.updatedAt || new Date().toISOString()
     }));
     if (goalRows.length) {
-      await supabaseClient.from('planner_goals').upsert(goalRows, { onConflict: 'id' });
+      await supabaseClient.from('opus_goals').upsert(goalRows, { onConflict: 'id' });
     }
 
     // Push Notes
@@ -310,7 +336,7 @@ const opusStorage = (() => {
       updated_at: n.updatedAt || new Date().toISOString()
     }));
     if (noteRows.length) {
-      await supabaseClient.from('planner_notes').upsert(noteRows, { onConflict: 'id' });
+      await supabaseClient.from('opus_notes').upsert(noteRows, { onConflict: 'id' });
     }
 
     // Push Meetings
@@ -329,7 +355,7 @@ const opusStorage = (() => {
       updated_at: m.updatedAt || new Date().toISOString()
     }));
     if (meetingRows.length) {
-      await supabaseClient.from('planner_meetings').upsert(meetingRows, { onConflict: 'id' });
+      await supabaseClient.from('opus_meetings').upsert(meetingRows, { onConflict: 'id' });
     }
 
     // Push Master Tasks
@@ -345,52 +371,51 @@ const opusStorage = (() => {
       updated_at: mt.updatedAt || new Date().toISOString()
     }));
     if (masterTaskRows.length) {
-      await supabaseClient.from('planner_master_tasks').upsert(masterTaskRows, { onConflict: 'id' });
+      await supabaseClient.from('opus_master_tasks').upsert(masterTaskRows, { onConflict: 'id' });
     }
 
-    // Push Habits
-    const habitRows = data.habits.map(h => ({
-      id: h.id,
+    // Push Mission
+    await supabaseClient.from('opus_mission').upsert({
       user_id: supabaseUser.id,
-      name: h.name
+      content: data.mission,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id' });
+
+    // Push Preferences
+    await supabaseClient.from('opus_preferences').upsert({
+      user_id: supabaseUser.id,
+      settings: data.preferences,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id' });
+
+    // Push Books
+    const bookRows = data.booksToRead.map(b => ({
+      id: b.id,
+      user_id: supabaseUser.id,
+      title: b.title,
+      author: b.author,
+      completed: b.completed
     }));
-    if (habitRows.length) {
-      await supabaseClient.from('planner_habits').upsert(habitRows, { onConflict: 'id' });
+    if (bookRows.length) {
+      await supabaseClient.from('books').upsert(bookRows, { onConflict: 'id' });
     }
 
-    // Push Habit Status
-    const statusRows = [];
-    Object.entries(data.habitStatus).forEach(([date, habits]) => {
-      Object.entries(habits).forEach(([habitId, completed]) => {
-        statusRows.push({
-          user_id: supabaseUser.id,
-          date,
-          habit_id: habitId,
-          completed
-        });
-      });
-    });
-    if (statusRows.length) {
-      await supabaseClient.from('planner_habit_status').upsert(statusRows, { onConflict: 'user_id,date,habit_id' });
-    }
-
-    // Push Metadata (including mission and preferences)
+    // Push Metadata (remaining generic keys)
     const metadataRows = [
-      { user_id: supabaseUser.id, key: 'mission', value: data.mission, updated_at: new Date().toISOString() },
-      { user_id: supabaseUser.id, key: 'preferences', value: data.preferences, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaIssues', value: data.cseaIssues, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaMeetingNotes', value: data.cseaMeetingNotes, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaNotesTags', value: data.cseaNotesTags, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaNotesSaved', value: data.cseaNotesSaved, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'budgetActuals', value: data.budgetActuals, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'budgetInputs', value: data.budgetInputs, updated_at: new Date().toISOString() },
-      { user_id: supabaseUser.id, key: 'booksToRead', value: data.booksToRead, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'intentionsDreams', value: data.intentionsDreams, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'smartGoals', value: data.smartGoals, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'weeklyTaskStatus', value: data.weeklyTaskStatus, updated_at: new Date().toISOString() }
     ];
     Object.entries(data.metadata).forEach(([key, value]) => {
-      metadataRows.push({ user_id: supabaseUser.id, key, value, updated_at: new Date().toISOString() });
+      if (!['hoursWorked', 'maxCompletionTimes', 'approvalDates', 'visionBoardPhotos'].includes(key)) {
+        metadataRows.push({ user_id: supabaseUser.id, key, value, updated_at: new Date().toISOString() });
+      }
     });
     await supabaseClient.from('planner_metadata').upsert(metadataRows, { onConflict: 'user_id,key' });
   }
