@@ -38,18 +38,32 @@ const formatDateTwoLine = (val) => {
   return text;
 };
 
-function buildMaps() {
-  const hoursRows = (typeof hoursWorkedData === 'undefined' ? [] : hoursWorkedData)
-    .filter((row) => row.name !== 'Grand Total');
-  const paylogRows = typeof maxCompletionTimeData === 'undefined' ? [] : maxCompletionTimeData;
-  const approvalRows = typeof approvalDateData === 'undefined' ? [] : approvalDateData;
+async function buildMaps() {
+  if (!window.supabaseClient) {
+    console.error('Supabase client not initialized');
+    return { names: [], nameMap: new Map(), hoursMap: new Map(), paylogMap: new Map(), approvalMap: new Map() };
+  }
+
+  const [
+    { data: hoursRows },
+    { data: paylogRows },
+    { data: approvalRows }
+  ] = await Promise.all([
+    window.supabaseClient.from('Hours Worked').select('*'),
+    window.supabaseClient.from('Paylog Submission').select('*'),
+    window.supabaseClient.from('Hours Worked Approved').select('*')
+  ]);
+
+  const filteredHoursRows = (hoursRows || []).filter((row) => row.name !== 'Grand Total');
+  const filteredPaylogRows = paylogRows || [];
+  const filteredApprovalRows = approvalRows || [];
 
   const nameMap = new Map();
   const hoursMap = new Map();
   const paylogMap = new Map();
   const approvalMap = new Map();
 
-  hoursRows.forEach((row) => {
+  filteredHoursRows.forEach((row) => {
     const key = toKey(row.name);
     if (!nameMap.has(key)) {
       nameMap.set(key, row.name);
@@ -57,7 +71,7 @@ function buildMaps() {
     hoursMap.set(key, row);
   });
 
-  paylogRows.forEach((row) => {
+  filteredPaylogRows.forEach((row) => {
     const key = toKey(row.name);
     if (!nameMap.has(key)) {
       nameMap.set(key, row.name);
@@ -65,7 +79,7 @@ function buildMaps() {
     paylogMap.set(key, row);
   });
 
-  approvalRows.forEach((row) => {
+  filteredApprovalRows.forEach((row) => {
     const key = toKey(row.name);
     if (!nameMap.has(key)) {
       nameMap.set(key, row.name);
@@ -78,37 +92,55 @@ function buildMaps() {
   return { names, nameMap, hoursMap, paylogMap, approvalMap };
 }
 
-function renderMergedTable() {
+async function renderMergedTable() {
   const tbody = document.querySelector('#hours-worked-table tbody');
   if (!tbody) return;
 
-  const { names, hoursMap, paylogMap, approvalMap } = buildMaps();
+  tbody.innerHTML = '<tr><td colspan="37" style="text-align:center; padding: 20px;">Loading data from Supabase...</td></tr>';
 
-  tbody.innerHTML = names.map((name) => {
-    const key = toKey(name);
-    const hours = hoursMap.get(key) || {};
-    const paylog = paylogMap.get(key) || {};
-    const approval = approvalMap.get(key) || {};
+  try {
+    const { names, hoursMap, paylogMap, approvalMap } = await buildMaps();
 
-    const monthCells = months.map((month) => {
-    const hoursVal = hours[month.key] || '';
-    const paylogVal = formatDateTwoLine(paylog[month.key] || '');
-    const approvalVal = formatDateTwoLine(approval[month.key] || '');
+    if (names.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="37" style="text-align:center; padding: 20px;">No data found in Supabase.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = names.map((name) => {
+      const key = toKey(name);
+      const hours = hoursMap.get(key) || {};
+      const paylog = paylogMap.get(key) || {};
+      const approval = approvalMap.get(key) || {};
+
+      const monthCells = months.map((month) => {
+        const hoursVal = hours[month.key] || '';
+        const paylogVal = formatDateTwoLine(paylog[month.key] || '');
+        const approvalVal = formatDateTwoLine(approval[month.key] || '');
+
+        return `
+          <td>${hoursVal}</td>
+          <td>${paylogVal}</td>
+          <td>${approvalVal}</td>
+        `;
+      }).join('');
 
       return `
-        <td>${hoursVal}</td>
-        <td>${paylogVal}</td>
-        <td>${approvalVal}</td>
+        <tr>
+          <td>${name}</td>
+          ${monthCells}
+        </tr>
       `;
     }).join('');
 
-    return `
-      <tr>
-        <td>${name}</td>
-        ${monthCells}
-      </tr>
-    `;
-  }).join('');
+    // Re-apply filter if needed after rendering
+    const select = document.getElementById('month-filter');
+    if (select && select.value !== 'all') {
+      applyMonthFilter(select.value);
+    }
+  } catch (error) {
+    console.error('Error rendering table:', error);
+    tbody.innerHTML = `<tr><td colspan="37" style="text-align:center; padding: 20px; color: red;">Error loading data: ${error.message}</td></tr>`;
+  }
 }
 
 function applyMonthFilter(value) {
