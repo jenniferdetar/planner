@@ -36,8 +36,7 @@ const opusStorage = (() => {
     cseaMeetingNotes: [],
     cseaNotesTags: [],
     cseaNotesSaved: [],
-    budgetActuals: {},
-    budgetInputs: {},
+    transactions: [],
     booksToRead: [],
     intentionsDreams: {},
     smartGoals: {},
@@ -118,6 +117,7 @@ const opusStorage = (() => {
         supabaseUser = sessionData?.session?.user || null;
         if (supabaseUser) {
           await pullFromSupabase();
+          await checkAndMigrateData();
           subscribeToRealtime();
         }
       }
@@ -128,6 +128,47 @@ const opusStorage = (() => {
     }
   }
 
+  async function checkAndMigrateData() {
+    if (!supabaseClient || !supabaseUser) return;
+
+    const hasEvents = data.recurringEvents.length > 0 || Object.keys(data.byDateEvents).length > 0;
+    const hasHabits = data.habits.length > 0;
+
+    if (!hasEvents || !hasHabits) {
+      try {
+        console.log('Checking for migration from calendar-data.json...');
+        const res = await fetch('/static/data/calendar-data.json');
+        if (!res.ok) return;
+        const calendarData = await res.json();
+
+        if (!hasEvents) {
+          console.log('Migrating events from JSON...');
+          data.recurringEvents = calendarData.recurring || [];
+          data.byDateEvents = calendarData.byDate || {};
+          // pushToSupabase will handle the events table
+        }
+
+        if (!hasHabits && calendarData.habits) {
+          console.log('Migrating habits from JSON...');
+          const habits = [];
+          calendarData.habits.forEach(category => {
+            category.items.forEach(item => {
+              habits.push({
+                id: item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                name: `${category.title}: ${item.name}`
+              });
+            });
+          });
+          data.habits = habits;
+        }
+
+        await pushToSupabase();
+      } catch (err) {
+        console.warn('Migration failed (maybe JSON is already gone):', err);
+      }
+    }
+  }
+
   function subscribeToRealtime() {
     if (!supabaseClient || !supabaseUser) return;
 
@@ -135,6 +176,7 @@ const opusStorage = (() => {
       'opus_tasks', 'opus_goals', 'opus_notes', 'opus_meetings', 
       'opus_master_tasks', 'opus_mission', 'opus_preferences', 
       'books', 'planner_metadata', 'hours_worked', 
+      'events', 'transactions', 
       'max_completion_times', 'approval_dates', 'vision_board_photos',
       'csea_members', 'csea_issues'
     ];
@@ -301,6 +343,33 @@ const opusStorage = (() => {
       data.metadata.visionBoardPhotos = visionPhotosData;
     }
 
+    // Pull Events
+    const { data: eventsData } = await supabaseClient.from('events').select('*').eq('user_id', supabaseUser.id);
+    if (eventsData) {
+      data.recurringEvents = eventsData.filter(e => e.event_type === 'recurring').map(e => e.details);
+      data.byDateEvents = {};
+      eventsData.filter(e => e.event_type === 'fixed').forEach(e => {
+        const date = e.details.date;
+        if (date) {
+          if (!data.byDateEvents[date]) data.byDateEvents[date] = [];
+          data.byDateEvents[date].push(e.details);
+        }
+      });
+    }
+
+    // Pull Transactions
+    const { data: transactionsData } = await supabaseClient.from('transactions').select('*').eq('user_id', supabaseUser.id);
+    if (transactionsData) {
+      data.transactions = transactionsData.map(row => ({
+        id: row.id,
+        date: row.date,
+        account: row.account,
+        amount: row.amount,
+        category: row.category,
+        updatedAt: row.updated_at
+      }));
+    }
+
     // Pull Metadata (remaining generic keys)
     const { data: metadataData } = await supabaseClient.from('planner_metadata').select('*').eq('user_id', supabaseUser.id);
     if (metadataData) {
@@ -309,13 +378,9 @@ const opusStorage = (() => {
         else if (row.key === 'cseaMeetingNotes') data.cseaMeetingNotes = row.value;
         else if (row.key === 'cseaNotesTags') data.cseaNotesTags = row.value;
         else if (row.key === 'cseaNotesSaved') data.cseaNotesSaved = row.value;
-        else if (row.key === 'budgetActuals') data.budgetActuals = row.value;
-        else if (row.key === 'budgetInputs') data.budgetInputs = row.value;
         else if (row.key === 'intentionsDreams') data.intentionsDreams = row.value;
         else if (row.key === 'smartGoals') data.smartGoals = row.value;
         else if (row.key === 'weeklyTaskStatus') data.weeklyTaskStatus = row.value;
-        else if (row.key === 'calendarRecurring') data.recurringEvents = row.value;
-        else if (row.key === 'calendarByDate') data.byDateEvents = row.value;
         else data.metadata[row.key] = row.value;
       });
     }
@@ -446,19 +511,57 @@ const opusStorage = (() => {
       await supabaseClient.from('books').upsert(bookRows, { onConflict: 'id' });
     }
 
+    // Push Transactions
+    const transactionRows = data.transactions.map(t => ({
+      id: t.id,
+      user_id: supabaseUser.id,
+      date: t.date,
+      account: t.account,
+      amount: t.amount,
+      category: t.category,
+      updated_at: t.updatedAt || new Date().toISOString()
+    }));
+    if (transactionRows.length) {
+      await supabaseClient.from('transactions').upsert(transactionRows, { onConflict: 'id' });
+    }
+
+    // Push Events
+    // To keep it simple and handle the transition, we'll clear and re-push events
+    // In a production app with more data, we'd use a more granular approach
+    await supabaseClient.from('events').delete().eq('user_id', supabaseUser.id);
+    
+    const eventRows = [];
+    data.recurringEvents.forEach(e => {
+      eventRows.push({
+        user_id: supabaseUser.id,
+        event_type: 'recurring',
+        details: e,
+        updated_at: new Date().toISOString()
+      });
+    });
+    Object.entries(data.byDateEvents).forEach(([date, events]) => {
+      events.forEach(e => {
+        eventRows.push({
+          user_id: supabaseUser.id,
+          event_type: 'fixed',
+          details: { ...e, date },
+          updated_at: new Date().toISOString()
+        });
+      });
+    });
+    if (eventRows.length) {
+      await supabaseClient.from('events').insert(eventRows);
+    }
+
     // Push Metadata (remaining generic keys)
     const metadataRows = [
       { user_id: supabaseUser.id, key: 'cseaIssues', value: data.cseaIssues, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaMeetingNotes', value: data.cseaMeetingNotes, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaNotesTags', value: data.cseaNotesTags, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'cseaNotesSaved', value: data.cseaNotesSaved, updated_at: new Date().toISOString() },
-      { user_id: supabaseUser.id, key: 'budgetActuals', value: data.budgetActuals, updated_at: new Date().toISOString() },
-      { user_id: supabaseUser.id, key: 'budgetInputs', value: data.budgetInputs, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'intentionsDreams', value: data.intentionsDreams, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'smartGoals', value: data.smartGoals, updated_at: new Date().toISOString() },
-      { user_id: supabaseUser.id, key: 'weeklyTaskStatus', value: data.weeklyTaskStatus, updated_at: new Date().toISOString() },
-      { user_id: supabaseUser.id, key: 'calendarRecurring', value: data.recurringEvents, updated_at: new Date().toISOString() },
-      { user_id: supabaseUser.id, key: 'calendarByDate', value: data.byDateEvents, updated_at: new Date().toISOString() }
+      { user_id: supabaseUser.id, key: 'weeklyTaskStatus', value: data.weeklyTaskStatus, updated_at: new Date().toISOString() }
     ];
     Object.entries(data.metadata).forEach(([key, value]) => {
       if (!['hoursWorked', 'maxCompletionTimes', 'approvalDates', 'visionBoardPhotos'].includes(key)) {
@@ -783,24 +886,6 @@ const opusStorage = (() => {
     saveToLocalStorage();
   }
 
-  function getBudgetActuals() {
-    return { ...data.budgetActuals };
-  }
-
-  function setBudgetActuals(actuals) {
-    data.budgetActuals = actuals;
-    saveToLocalStorage();
-  }
-
-  function getBudgetInputs() {
-    return { ...data.budgetInputs };
-  }
-
-  function setBudgetInputs(inputs) {
-    data.budgetInputs = inputs;
-    saveToLocalStorage();
-  }
-
   function getBooksToRead() {
     return [...data.booksToRead];
   }
@@ -835,6 +920,24 @@ const opusStorage = (() => {
   function setWeeklyTaskStatus(status) {
     data.weeklyTaskStatus = status;
     saveToLocalStorage();
+  }
+
+  // Transactions
+  function getTransactions() {
+    return [...data.transactions];
+  }
+
+  function setTransactions(transactions) {
+    data.transactions = transactions;
+    saveToLocalStorage();
+  }
+
+  function updateTransaction(id, updates) {
+    return updateItem(data.transactions, id, updates, ['date', 'account', 'amount', 'category']);
+  }
+
+  function deleteTransaction(id) {
+    deleteItem(data.transactions, id);
   }
 
   function getCalendarRecurring() {
@@ -886,8 +989,6 @@ const opusStorage = (() => {
       cseaMeetingNotes: [],
       cseaNotesTags: [],
       cseaNotesSaved: [],
-      budgetActuals: {},
-      budgetInputs: {},
       booksToRead: [],
       intentionsDreams: {},
       smartGoals: {},
@@ -950,10 +1051,6 @@ const opusStorage = (() => {
     setCseaNotesTags,
     getCseaNotesSaved,
     setCseaNotesSaved,
-    getBudgetActuals,
-    setBudgetActuals,
-    getBudgetInputs,
-    setBudgetInputs,
     getBooksToRead,
     setBooksToRead,
     getIntentionsDreams,
@@ -962,6 +1059,10 @@ const opusStorage = (() => {
     setSmartGoals,
     getWeeklyTaskStatus,
     setWeeklyTaskStatus,
+    getTransactions,
+    setTransactions,
+    updateTransaction,
+    deleteTransaction,
     getCalendarRecurring,
     setCalendarRecurring,
     getCalendarByDate,
