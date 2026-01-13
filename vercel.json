@@ -1,6 +1,7 @@
 {
   "version": 2,
   "cleanUrls": false,
+  "trailingSlash": false,
   "builds": [
     {
       "src": "vercel_app.py",
@@ -9,6 +10,10 @@
     }
   ],
   "routes": [
+    {
+      "src": "/index.html",
+      "dest": "vercel_app.py"
+    },
     {
       "src": "/(.*)",
       "dest": "vercel_app.py"
