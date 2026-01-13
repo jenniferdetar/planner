@@ -1,7 +1,8 @@
 (() => {
   const renderCalendar = () => {
     const currentPage = window.location.pathname.split('/').pop() || 'calendar.html';
-    if (!['calendar.html', ''].includes(currentPage) && window.location.pathname !== '/') return;
+    const cleanPath = window.location.pathname.replace(/\/$/, '');
+    if (!['calendar.html', '', 'calendar'].includes(currentPage) && cleanPath !== '/calendar' && window.location.pathname !== '/') return;
 
     const containers = Array.from(document.querySelectorAll('[data-calendar-embed]'));
     if (containers.length === 0) return;

@@ -38,15 +38,7 @@
 </head>
 <body>
   <div class="planner-container">
-    <aside class="planner-sidebar">
-      <a href="/calendar" class="planner-sidebar-item">Home</a>
-      <a href="/csea" class="planner-sidebar-item active">CSEA</a>
-      <a href="/finance" class="planner-sidebar-item">Finance</a>
-      <a href="/health" class="planner-sidebar-item">Health</a>
-      <a href="/hoa" class="planner-sidebar-item">HOA</a>
-      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
-      <a href="/planning" class="planner-sidebar-item">Planning</a>
-    </aside>
+    <aside class="planner-sidebar"></aside>
 
     <div class="planner-content">
       <header class="planner-header">
@@ -60,13 +52,12 @@
               <i class="fa-solid fa-capsules text-base"></i>
               <span>Grievance Form</span>
             </button>
-            <a href="/csea/csea-meeting-notes.html" class="csea-cta-pill">Meeting Notes</a>
-            <a href="/csea/csea-notes.html" class="csea-cta-pill">Notes</a>
+            <a href="/csea-meeting-notes" class="csea-cta-pill">Meeting Notes</a>
+            <a href="/csea-notes" class="csea-cta-pill">Notes</a>
           </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
-
       <main class="planner-main">
         <section class="planner-section csea-summary-section">
           <div class="planner-section-header">
@@ -141,6 +132,7 @@
   <script src="{% static 'js/supabase-client.js' %}"></script>
   <script src="{% static 'js/opus-storage.js' %}"></script>
   <script src="{% static 'js/auth-check.js' %}"></script>
+  <script src="{% static 'js/sidebar.js' %}?v=20260108"></script>
   <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
   <script src="{% static 'js/csea.js' %}?v=20260108"></script>
   <script src="{% static 'js/csea-ui.js' %}?v=20260108"></script>
