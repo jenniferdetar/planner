@@ -2,6 +2,20 @@ const opusStorage = (() => {
   const STORAGE_KEY = 'opusData';
   const supabaseClient = window.supabaseClient;
   let supabaseUser = null;
+  const listeners = [];
+
+  function on(callback) {
+    listeners.push(callback);
+  }
+
+  function off(callback) {
+    const idx = listeners.indexOf(callback);
+    if (idx !== -1) listeners.splice(idx, 1);
+  }
+
+  function emit() {
+    listeners.forEach(callback => callback(data));
+  }
 
   function requireLogin() {
     if (!supabaseUser) {
@@ -28,6 +42,8 @@ const opusStorage = (() => {
     intentionsDreams: {},
     smartGoals: {},
     weeklyTaskStatus: {},
+    recurringEvents: [],
+    byDateEvents: {},
     mission: {
       statement: '',
       values: [],
@@ -102,6 +118,7 @@ const opusStorage = (() => {
         supabaseUser = sessionData?.session?.user || null;
         if (supabaseUser) {
           await pullFromSupabase();
+          subscribeToRealtime();
         }
       }
       return Promise.resolve();
@@ -111,10 +128,37 @@ const opusStorage = (() => {
     }
   }
 
+  function subscribeToRealtime() {
+    if (!supabaseClient || !supabaseUser) return;
+
+    const tables = [
+      'opus_tasks', 'opus_goals', 'opus_notes', 'opus_meetings', 
+      'opus_master_tasks', 'opus_mission', 'opus_preferences', 
+      'books', 'planner_metadata', 'hours_worked', 
+      'max_completion_times', 'approval_dates', 'vision_board_photos',
+      'csea_members', 'csea_issues'
+    ];
+
+    tables.forEach(table => {
+      supabaseClient
+        .channel(`public:${table}`)
+        .on('postgres_changes', { event: '*', schema: 'public', table: table, filter: `user_id=eq.${supabaseUser.id}` }, async (payload) => {
+          console.log(`Realtime change in ${table}:`, payload);
+          // Simple approach: re-pull all data for now to ensure consistency
+          // Improvements can be made to update only the specific item
+          await pullFromSupabase();
+          emit();
+        })
+        .subscribe();
+    });
+  }
+
   function saveToLocalStorage() {
     // Local persistence disabled; rely on Supabase
     if (supabaseUser) {
-      pushToSupabase().catch(err => console.error('Supabase sync error', err));
+      pushToSupabase()
+        .then(() => emit())
+        .catch(err => console.error('Supabase sync error', err));
     }
   }
 
@@ -270,6 +314,8 @@ const opusStorage = (() => {
         else if (row.key === 'intentionsDreams') data.intentionsDreams = row.value;
         else if (row.key === 'smartGoals') data.smartGoals = row.value;
         else if (row.key === 'weeklyTaskStatus') data.weeklyTaskStatus = row.value;
+        else if (row.key === 'calendarRecurring') data.recurringEvents = row.value;
+        else if (row.key === 'calendarByDate') data.byDateEvents = row.value;
         else data.metadata[row.key] = row.value;
       });
     }
@@ -410,7 +456,9 @@ const opusStorage = (() => {
       { user_id: supabaseUser.id, key: 'budgetInputs', value: data.budgetInputs, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'intentionsDreams', value: data.intentionsDreams, updated_at: new Date().toISOString() },
       { user_id: supabaseUser.id, key: 'smartGoals', value: data.smartGoals, updated_at: new Date().toISOString() },
-      { user_id: supabaseUser.id, key: 'weeklyTaskStatus', value: data.weeklyTaskStatus, updated_at: new Date().toISOString() }
+      { user_id: supabaseUser.id, key: 'weeklyTaskStatus', value: data.weeklyTaskStatus, updated_at: new Date().toISOString() },
+      { user_id: supabaseUser.id, key: 'calendarRecurring', value: data.recurringEvents, updated_at: new Date().toISOString() },
+      { user_id: supabaseUser.id, key: 'calendarByDate', value: data.byDateEvents, updated_at: new Date().toISOString() }
     ];
     Object.entries(data.metadata).forEach(([key, value]) => {
       if (!['hoursWorked', 'maxCompletionTimes', 'approvalDates', 'visionBoardPhotos'].includes(key)) {
@@ -418,6 +466,20 @@ const opusStorage = (() => {
       }
     });
     await supabaseClient.from('planner_metadata').upsert(metadataRows, { onConflict: 'user_id,key' });
+
+    // Push specialized tables
+    if (data.metadata.hoursWorked) {
+      await supabaseClient.from('hours_worked').upsert(data.metadata.hoursWorked.map(h => ({ ...h, user_id: supabaseUser.id })), { onConflict: 'id' });
+    }
+    if (data.metadata.maxCompletionTimes) {
+      await supabaseClient.from('max_completion_times').upsert(data.metadata.maxCompletionTimes.map(m => ({ ...m, user_id: supabaseUser.id })), { onConflict: 'id' });
+    }
+    if (data.metadata.approvalDates) {
+      await supabaseClient.from('approval_dates').upsert(data.metadata.approvalDates.map(a => ({ ...a, user_id: supabaseUser.id })), { onConflict: 'id' });
+    }
+    if (data.metadata.visionBoardPhotos) {
+      await supabaseClient.from('vision_board_photos').upsert(data.metadata.visionBoardPhotos.map(v => ({ ...v, user_id: supabaseUser.id })), { onConflict: 'id' });
+    }
   }
 
   function createTask(taskData) {
@@ -775,6 +837,24 @@ const opusStorage = (() => {
     saveToLocalStorage();
   }
 
+  function getCalendarRecurring() {
+    return [...data.recurringEvents];
+  }
+
+  function setCalendarRecurring(events) {
+    data.recurringEvents = events;
+    saveToLocalStorage();
+  }
+
+  function getCalendarByDate() {
+    return { ...data.byDateEvents };
+  }
+
+  function setCalendarByDate(events) {
+    data.byDateEvents = events;
+    saveToLocalStorage();
+  }
+
   function exportData() {
     return JSON.stringify(data, null, 2);
   }
@@ -819,6 +899,8 @@ const opusStorage = (() => {
   }
 
   return {
+    on,
+    off,
     initializeStorage,
     saveToLocalStorage,
     loadFromLocalStorage,
@@ -880,6 +962,10 @@ const opusStorage = (() => {
     setSmartGoals,
     getWeeklyTaskStatus,
     setWeeklyTaskStatus,
+    getCalendarRecurring,
+    setCalendarRecurring,
+    getCalendarByDate,
+    setCalendarByDate,
     exportData,
     importData,
     clearAllData

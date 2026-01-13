@@ -15,6 +15,7 @@
     if (window.opusStorage) {
       try {
         await window.opusStorage.initializeStorage();
+        window.dispatchEvent(new CustomEvent('opusStorageInitialized'));
         // Trigger initial render if initialize function exists
         const moduleName = document.body.dataset.module;
         if (moduleName && window[moduleName] && window[moduleName].initialize) {

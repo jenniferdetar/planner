@@ -62,6 +62,12 @@ const notesPage = (() => {
       allNotes = opusStorage.getNotes();
       renderNoteHistory();
     });
+    opusData.addEventListener('data-updated', () => {
+      allNotes = opusStorage.getNotes();
+      renderNoteHistory();
+      // Also reload current note if it might have changed
+      loadNotesForDate(currentDate);
+    });
   }
 
   function setDefaultDate() {

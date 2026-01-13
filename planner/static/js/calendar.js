@@ -11,15 +11,52 @@ let current = new Date();
 
 async function loadData() {
   try {
-    const calendarRes = await fetch('data/calendar-data.json');
-    const calendarData = await calendarRes.json();
-    planner = calendarData.recurring || [];
-    eventsByDate = calendarData.byDate || {};
+    const recurring = opusStorage.getCalendarRecurring();
+    const byDate = opusStorage.getCalendarByDate();
+    
+    if (recurring.length === 0 && Object.keys(byDate).length === 0) {
+      // One-time migration from static JSON if Supabase is empty
+      const calendarRes = await fetch('/static/data/calendar-data.json');
+      const calendarData = await calendarRes.json();
+      
+      opusStorage.setCalendarRecurring(calendarData.recurring || []);
+      opusStorage.setCalendarByDate(calendarData.byDate || {});
+      
+      // Also migrate habits if they are in the JSON but not in storage
+      if (opusStorage.getHabits().length === 0 && calendarData.habits) {
+        // Transform habits from JSON structure to OpusStorage structure
+        const habits = [];
+        calendarData.habits.forEach(category => {
+          category.items.forEach(item => {
+            habits.push({
+              id: item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+              name: `${category.title}: ${item.name}`
+            });
+          });
+        });
+        opusStorage.setHabits(habits);
+      }
+
+      planner = calendarData.recurring || [];
+      eventsByDate = calendarData.byDate || {};
+    } else {
+      planner = recurring;
+      eventsByDate = byDate;
+    }
 
     renderCalendar();
   } catch (err) {
     console.error('Error loading data:', err);
   }
+}
+
+// Add real-time update listener
+if (window.opusStorage) {
+  opusStorage.on(() => {
+    planner = opusStorage.getCalendarRecurring();
+    eventsByDate = opusStorage.getCalendarByDate();
+    renderCalendar();
+  });
 }
 
 const toKey = d => {
@@ -387,4 +424,9 @@ nextBtn.addEventListener('click', () => {
   renderCalendar();
 });
 
-loadData();
+// Load data after storage is ready
+if (window.opusStorage) {
+  loadData();
+} else {
+  window.addEventListener('opusStorageInitialized', loadData);
+}

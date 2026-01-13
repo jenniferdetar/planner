@@ -44,6 +44,7 @@ const plannerViews = (() => {
     opusData.addEventListener('meeting-created', renderSidebar);
     opusData.addEventListener('meeting-updated', renderSidebar);
     opusData.addEventListener('goal-updated', renderSidebar);
+    opusData.addEventListener('data-updated', renderSidebar);
   }
 
   function switchView(view) {

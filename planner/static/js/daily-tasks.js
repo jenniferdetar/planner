@@ -372,22 +372,29 @@ const dailyTasks = (() => {
     if (dateInput) {
       dateInput.value = new Date().toISOString().slice(0, 10);
     }
-    const tasksByDate = loadTasks();
-    const habits = loadHabits();
-    const statusByDate = loadHabitStatus();
+
+    const renderAll = async () => {
+      const tasksByDate = loadTasks();
+      const habits = loadHabits();
+      const statusByDate = loadHabitStatus();
+      renderTasks(tasksByDate, dateInput);
+      
+      const cleanedHabits = filterMedicationHabits(habits);
+      renderHabits(cleanedHabits, statusByDate, dateInput);
+    };
+
+    opusStorage.on(renderAll);
+
     setToday();
-    renderTasks(tasksByDate, dateInput);
+    const habits = loadHabits();
     await syncHabitsFromPlanner(habits);
-    const cleanedHabits = filterMedicationHabits(habits);
-    if (cleanedHabits.length !== habits.length) {
-      habits.length = 0;
-      cleanedHabits.forEach(h => habits.push(h));
-      saveHabits(habits);
+    await renderAll();
+
+    if (dateInput) {
+      handleDateChange(loadTasks(), loadHabits(), loadHabitStatus(), dateInput);
     }
-    renderHabits(habits, statusByDate, dateInput);
-    handleDateChange(tasksByDate, habits, statusByDate, dateInput);
-    handleForm(tasksByDate, dateInput);
-    handleHabitForm(habits, statusByDate, dateInput);
+    handleForm(loadTasks(), dateInput);
+    handleHabitForm(loadHabits(), loadHabitStatus(), dateInput);
   }
 
   return { initialize };

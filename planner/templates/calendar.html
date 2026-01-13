@@ -64,7 +64,7 @@
     }
   </style>
 </head>
-<body>
+<body data-module="calendarPage">
   <div class="planner-container">
                                         <aside class="planner-sidebar">
       <a href="/calendar" class="planner-sidebar-item">Home</a>
@@ -97,15 +97,24 @@
       </footer>
     </div>
   </div>
-
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="{% static 'js/supabase-client.js' %}?v=20260108"></script>
+  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
+  <script src="{% static 'js/auth-check.js' %}?v=20260108"></script>
   <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script>
-    function updateDate() {
-      const today = new Date();
-      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
-      document.getElementById('today-date').textContent = today.toLocaleDateString('en-US', options);
-    }
-    updateDate();
+    const calendarPage = {
+      initialize: () => {
+        function updateDate() {
+          const today = new Date();
+          const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+          const dateEl = document.getElementById('today-date');
+          if (dateEl) dateEl.textContent = today.toLocaleDateString('en-US', options);
+        }
+        updateDate();
+      }
+    };
   </script>
   <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>

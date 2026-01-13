@@ -41,22 +41,25 @@ const personalPlanner = (() => {
   };
 
   function initializePage() {
-    const calendarPath = document.body?.dataset.calendarSrc || './data/calendar-data.json';
-    Promise.all([
-      opusData.initialize(),
-      fetch(calendarPath).then(res => res.json())
-    ]).then(([_, calendarData]) => {
-      recurringEvents = calendarData.recurring || [];
-      eventsByDate = calendarData.byDate || {};
-      habits = calendarData.habits || [];
+    const renderAll = () => {
+      recurringEvents = opusStorage.getCalendarRecurring();
+      eventsByDate = opusStorage.getCalendarByDate();
+      habits = opusStorage.getHabits();
       
-      setupEventListeners();
       updateWeekDisplay();
-      setDefaultDate();
       renderTasks();
+    };
+
+    opusData.initialize().then(() => {
+      renderAll();
+      setupEventListeners();
+      setDefaultDate();
       setupDataListeners();
       dragDrop.enableTaskReordering('#tasks-list');
       
+      // Realtime listener
+      opusData.addEventListener('data-updated', renderAll);
+
       // Observe changes to format currency automatically
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {

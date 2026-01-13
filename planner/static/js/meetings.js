@@ -97,6 +97,7 @@ const meetingsPage = (() => {
     opusData.addEventListener('meeting-created', renderMeetings);
     opusData.addEventListener('meeting-updated', renderMeetings);
     opusData.addEventListener('meeting-deleted', renderMeetings);
+    opusData.addEventListener('data-updated', renderMeetings);
   }
 
   function setDefaultDate() {

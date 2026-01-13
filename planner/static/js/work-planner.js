@@ -113,23 +113,23 @@ const workPlanner = (() => {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
 
-    Promise.all([
-      opusData.initialize(),
-      fetch('data/calendar-data.json', { cache: 'no-store' }).then(r => r.json())
-    ]).then(([_, calendarData]) => {
-      eventsByDate = calendarData.byDate || {};
-      recurringEvents = calendarData.recurring || [];
-
-      bindControls();
+    const renderAll = () => {
+      loadStored();
+      eventsByDate = opusStorage.getCalendarByDate();
+      recurringEvents = opusStorage.getCalendarRecurring();
       hydratePriorities();
       renderWeek();
-    }).catch(err => console.error('Failed to load work planner', err));
+      const weeklyTasksRow = document.querySelector('.weekly-tasks-row');
+      if (weeklyTasksRow) renderMergedWeeklyTasks(weeklyTasksRow);
+    };
 
-    window.addEventListener('storage', (e) => {
-      if (e.key === WEEKLY_STATUS_KEY) {
-        renderMergedWeeklyTasks(document.querySelector('.weekly-tasks-row'));
-      }
-    });
+    opusData.initialize().then(() => {
+      renderAll();
+      bindControls();
+      
+      // Listen for updates from Supabase Realtime
+      opusStorage.on(renderAll);
+    }).catch(err => console.error('Failed to load work planner', err));
   }
 
   function bindControls() {

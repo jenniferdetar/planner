@@ -116,6 +116,7 @@ const goalsPage = (() => {
     opusData.addEventListener('goal-created', renderGoals);
     opusData.addEventListener('goal-updated', renderGoals);
     opusData.addEventListener('goal-deleted', renderGoals);
+    opusData.addEventListener('data-updated', renderGoals);
   }
 
   function handleCreateGoal(e) {

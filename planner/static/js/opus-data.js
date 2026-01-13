@@ -15,6 +15,13 @@ const opusData = (() => {
     try {
       await opusStorage.initializeStorage();
       syncFromStorage();
+      
+      // Listen for storage changes (Realtime or Local)
+      opusStorage.on(() => {
+        syncFromStorage();
+        notifyListeners('data-updated', state);
+      });
+
       return Promise.resolve();
     } catch (error) {
       console.error('Error initializing opusData:', error);
