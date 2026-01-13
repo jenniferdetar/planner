@@ -6,27 +6,27 @@ body {
 
 .planner-container {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 200px 1fr;
   gap: var(--opus-spacing-sm);
   padding: var(--opus-spacing-sm);
   min-height: 100vh;
   box-sizing: border-box;
-  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .planner-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
 }
 
 .planner-sidebar {
-  display: grid !important;
-  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-  gap: 8px !important;
-  justify-content: center;
-  align-items: center;
-  width: 100% !important;
-  font-family: "Avenir Next", "Avenir", "Gill Sans", "Trebuchet MS", sans-serif;
-  margin-bottom: var(--opus-spacing-xs);
-  position: relative !important;
-  top: auto !important;
-  height: auto !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--opus-spacing-xs);
+  padding: var(--opus-spacing-sm) 0;
+  border-right: 1px solid var(--opus-accent);
+  min-height: calc(100vh - 40px);
 }
 
 .planner-sidebar-item {
@@ -59,12 +59,6 @@ body {
   border-color: rgba(10, 47, 95, 0.5);
   text-decoration: none;
   transform: translateY(-1px);
-}
-
-.planner-sidebar a[href="calendar.html"],
-.planner-sidebar a[href="/calendar"],
-.planner-sidebar a[href="/calendar.html"] {
-  display: none !important;
 }
 
 .planner-content {
