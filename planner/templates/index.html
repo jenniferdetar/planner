@@ -46,10 +46,24 @@
       text-align: center;
     }
 
+    .planner-header-pill.pill-personal {
+      background: #B7C9E2; /* Matches the screenshot's soft blue/purple */
+    }
+
+    .planner-header-pill.pill-work {
+      background: #A9C2D4; /* Matches the screenshot's muted blue */
+    }
+
     .planner-header-pill:hover {
       background: #ffffff;
       border-color: rgba(10, 47, 95, 0.5);
       text-decoration: none;
+    }
+
+    .home-pills-container {
+      display: flex;
+      gap: 15px;
+      margin-left: 20px;
     }
 
     @media (max-width: 900px) {
@@ -70,20 +84,33 @@
 
     <div class="planner-content">
       <header class="planner-header">
-        <div class="planner-header-left">
-          <h1>Calendar</h1>
-          <p>Monthly View & Events</p>
+        <div class="planner-header-left" style="display: flex; align-items: center;">
+          <div>
+            <h1>Calendar</h1>
+            <p>Monthly View & Events</p>
+          </div>
+          <div class="home-pills-container">
+            <a href="/personal-planner/" class="planner-header-pill pill-personal">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill pill-work">Work Planner</a>
+          </div>
         </div>
-                        <div class="planner-header-right">
+        <div class="planner-header-right">
           <div class="planner-header-actions">
-            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
-            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
             <a href="/goals" class="planner-header-pill">Goals</a>
           </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
       <div class="planner-main planner-calendar-embed" data-calendar-embed></div>
+
+      <section class="planner-section" id="upcoming-events-section" style="margin-top: 30px;">
+        <div class="planner-card">
+          <h2 style="margin-top: 0; color: #0a2f5f; border-bottom: 2px solid #ffca38; padding-bottom: 10px;">Upcoming Events & Meetings</h2>
+          <div id="events-list" class="planner-list">
+            <!-- Events will be populated here -->
+          </div>
+        </div>
+      </section>
 
       <footer class="planner-footer">
         <p>&copy; 2025 Opus One Planner. Calendar.</p>
@@ -96,16 +123,58 @@
   <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
   <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
   <script src="{% static 'js/utils.js' %}?v=20260108"></script>
+  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
   <script src="{% static 'js/sidebar.js' %}?v=20260108"></script>
   <script>
     const homePage = {
-      initialize: () => {
+      initialize: async () => {
         function updateDate() {
           const today = new Date();
           const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
-          document.getElementById('today-date').textContent = today.toLocaleDateString('en-US', options);
+          const el = document.getElementById('today-date');
+          if (el) el.textContent = today.toLocaleDateString('en-US', options);
         }
         updateDate();
+
+        if (window.opusData) {
+          try {
+            await opusData.initialize();
+            renderEvents();
+            
+            // Re-render if data changes
+            opusData.addEventListener('data-updated', renderEvents);
+          } catch (e) {
+            console.error('Failed to init opusData:', e);
+          }
+        }
+
+        function renderEvents() {
+          const list = document.getElementById('events-list');
+          if (!list) return;
+
+          const meetings = opusData.getUpcomingMeetings(14); // Next 14 days
+          if (meetings.length === 0) {
+            list.innerHTML = '<div class="planner-list-item">No upcoming events scheduled.</div>';
+            return;
+          }
+
+          list.innerHTML = meetings.map(m => {
+            const d = new Date(m.date + 'T00:00:00');
+            const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            return `
+              <div class="planner-list-item">
+                <div style="display: flex; flex-direction: column;">
+                  <span style="font-weight: 700; color: #0a2f5f;">${m.title}</span>
+                  <span style="font-size: 0.85rem; color: #53575A;">${m.category || 'General'}</span>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-weight: 600;">${dateStr}</div>
+                  <div style="font-size: 0.85rem;">${m.time || ''}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
       }
     };
   </script>

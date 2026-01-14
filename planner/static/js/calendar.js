@@ -393,6 +393,14 @@ nextBtn.addEventListener('click', () => {
   renderCalendar();
 });
 
+const todayBtn = document.getElementById('todayBtn');
+if (todayBtn) {
+  todayBtn.addEventListener('click', () => {
+    current = new Date();
+    renderCalendar();
+  });
+}
+
 // Load data after storage is ready
 if (window.opusStorage) {
   loadData();

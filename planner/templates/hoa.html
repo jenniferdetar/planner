@@ -299,7 +299,6 @@
       });
     }
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha512-UaxU5iHoAKrjdWO9x4vFzUFnprQgGsjbqReb4zLGm03P9pn5SHmUfa/9ziXxFEqJhm8C+N1Am1+jNL56kfcZOQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     const fileInput = document.getElementById('hoa-pdf-input');
     const summaryBox = document.getElementById('hoa-summary-output');
@@ -307,6 +306,10 @@
     const STOPWORDS = new Set(['the','and','of','to','in','a','for','on','at','by','with','is','it','as','be','an','or','from','that','this','are','was','were','will','can','may','not','your','you']);
 
     fileInput?.addEventListener('change', async (evt) => {
+      if (!window.pdfjsLib) {
+        summaryBox.textContent = 'PDF reader is unavailable right now.';
+        return;
+      }
       const file = evt.target.files?.[0];
       if (!file) return;
       summaryBox.textContent = 'Processing PDF…';

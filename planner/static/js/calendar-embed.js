@@ -18,6 +18,9 @@
           <button id="prevMonth" class="calendar-btn">
             <span>&#9664; Previous</span>
           </button>
+          <button id="todayBtn" class="calendar-btn" style="margin: 0 10px;">
+            <span>Today</span>
+          </button>
           <h2 id="monthLabel" class="calendar-month-label"></h2>
           <button id="nextMonth" class="calendar-btn">
             <span>Next &#9654;</span>
