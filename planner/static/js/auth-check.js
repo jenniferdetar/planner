@@ -16,7 +16,7 @@
         // Trigger initial render if initialize function exists
         const moduleName = document.body.dataset.module;
         if (moduleName && window[moduleName] && window[moduleName].initialize) {
-          window[moduleName].initialize();
+          await window[moduleName].initialize();
         }
       } catch (err) {
         console.error('Failed to initialize storage:', err);
