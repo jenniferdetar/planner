@@ -1,0 +1,213 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSEA Meeting Notes</title>
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
+  <style>
+    .notes-layout {
+      display: grid;
+      gap: var(--opus-spacing-md);
+    }
+
+    .notes-form {
+      display: grid;
+      gap: var(--opus-spacing-md);
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--opus-spacing-md);
+    }
+
+    .notes-grid .planner-form-group {
+      margin: 0;
+    }
+
+    .notes-form textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .notes-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--opus-spacing-sm);
+    }
+
+    .notes-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--opus-border);
+      border-radius: var(--opus-border-radius);
+      background: var(--opus-bg-white);
+    }
+
+    .notes-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    .notes-table th,
+    .notes-table td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 8pt;
+    }
+
+    .notes-table th {
+      background: #f1f5f9;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      color: #475569;
+      font-weight: 700;
+    }
+
+    .notes-table tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .notes-table .notes-actions-cell {
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .notes-attachments {
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    @media (max-width: 900px) {
+      .notes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .notes-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="planner-container">
+            {% include 'header_include.html' %}
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>CSEA Meeting Notes</h1>
+          <p>Capture summaries and follow-ups for member meetings</p>
+        </div>
+                        <div class="planner-header-right">
+          <div class="planner-header-actions">
+            <a href="/csea" class="planner-header-pill">Back to CSEA</a>
+            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          </div>
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      
+
+      <main class="planner-main notes-layout">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📝</span>
+            <h2 class="planner-section-title">Add Meeting Notes</h2>
+          </div>
+          <form id="meeting-notes-form" class="notes-form">
+            <div class="notes-grid">
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="meeting-date">Date</label>
+                <input class="planner-form-input" type="date" id="meeting-date" required>
+              </div>
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="member-name">Member Name</label>
+                <input class="planner-form-input" type="text" id="member-name" list="member-list" placeholder="Select or type a member" required>
+                <datalist id="member-list"></datalist>
+              </div>
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="member-id">Member ID</label>
+                <input class="planner-form-input" type="text" id="member-id" placeholder="Member ID">
+              </div>
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="steward-name">Steward</label>
+                <select class="planner-form-select" id="steward-name"></select>
+              </div>
+            </div>
+
+            <div class="notes-grid">
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="meeting-summary">Summary</label>
+                <textarea class="planner-form-textarea" id="meeting-summary" required></textarea>
+              </div>
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="meeting-outcome">Outcome</label>
+                <textarea class="planner-form-textarea" id="meeting-outcome"></textarea>
+              </div>
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="meeting-next-steps">Next Steps</label>
+                <textarea class="planner-form-textarea" id="meeting-next-steps"></textarea>
+              </div>
+              <div class="planner-form-group">
+                <label class="planner-form-label" for="meeting-attachments">Attachments</label>
+                <input class="planner-form-input" type="file" id="meeting-attachments" multiple>
+              </div>
+            </div>
+
+            <div class="notes-actions">
+              <button type="reset" class="planner-button planner-button-secondary">Clear</button>
+              <button type="submit" class="planner-button planner-button-primary">Save Notes</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">📋</span>
+            <h2 class="planner-section-title">Saved Notes</h2>
+          </div>
+          <div class="notes-table-wrap">
+            <table class="notes-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Member</th>
+                  <th>Member ID</th>
+                  <th>Steward</th>
+                  <th>Summary</th>
+                  <th>Outcome</th>
+                  <th>Next Steps</th>
+                  <th>Attachments</th>
+                  <th class="notes-actions-cell">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="notes-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        &copy; 2025 Opus One Planner. All data is stored locally in your browser.
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="{% static 'js/supabase-client.js' %}"></script>
+  <script src="{% static 'js/opus-storage.js' %}"></script>
+  <script src="{% static 'js/auth-check.js?v=20260113' %}"></script>
+  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
+  <script src="{% static 'js/csea-meeting-notes.js' %}?v=20260108"></script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+</body>
+</html>

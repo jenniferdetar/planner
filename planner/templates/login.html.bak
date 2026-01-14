@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Opus One Planner</title>
+  <link rel="stylesheet" href="css/opus-core.css?v=20260108">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 100px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #message {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 6px;
+      display: none;
+    }
+    .success { background: #dcfce7; color: #166534; }
+    .error { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Opus One</h1>
+    <p>Sign in to sync your data</p>
+    <form id="login-form" class="login-form">
+      <input type="email" id="email" class="planner-form-input" placeholder="Enter your email" required>
+      <button type="submit" class="planner-button planner-button-primary">Send Magic Link</button>
+    </form>
+    <div id="message"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase-client.js?v=20260108"></script>
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const messageDiv = document.getElementById('message');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = emailInput.value;
+      
+      messageDiv.style.display = 'block';
+      messageDiv.textContent = 'Sending magic link...';
+      messageDiv.className = '';
+
+      const { error } = await window.supabaseClient.auth.signInWithOtp({ email });
+
+      if (error) {
+        messageDiv.textContent = 'Error: ' + error.message;
+        messageDiv.className = 'error';
+      } else {
+        messageDiv.textContent = 'Magic link sent! Check your email.';
+        messageDiv.className = 'success';
+      }
+    });
+  </script>
+</body>
+</html>

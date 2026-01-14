@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "builds": [
+    {
+      "src": "vercel_app.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/index.html",
+      "destination": "/vercel_app.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/vercel_app.py"
+    }
+  ]
+}

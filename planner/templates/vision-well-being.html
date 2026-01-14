@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision Board - Well-Being</title>
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/vision-board.css' %}?v=20260108">
+</head>
+<body>
+  <div class="planner-container">
+    {% include 'header_include.html' %}
+
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <h1>Vision Board: Well-Being</h1>
+          <p>Design routines that support your health, rest, and energy.</p>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      
+
+      <main class="planner-main">
+        <section class="planner-section">
+          <div class="planner-section-header">
+            <span class="planner-section-icon">🌿</span>
+            <h2 class="planner-section-title">Vision Focus</h2>
+          </div>
+          <div class="planner-section-content">
+            <div class="planner-form-group">
+              <label class="planner-form-label" for="vision-well-being-notes">Notes & ideas</label>
+              <textarea id="vision-well-being-notes" class="planner-form-textarea" placeholder="Add routines, habits, and milestones you want to feel..."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="planner-section">
+          <div class="planner-section-content">
+            <div class="vision-photo-board">
+              <div class="vision-photo-header">
+                <div>
+                  <h3 class="vision-photo-title">Well-Being Gallery</h3>
+                  <p class="vision-photo-sub">Gather images that show how you want to feel.</p>
+                </div>
+                <div class="vision-photo-actions">
+                  <button class="vision-photo-button" type="button" data-vision-upload="vision-well-being-photos">Add photos</button>
+                  <span class="vision-photo-hint">Synced via Supabase (login required)</span>
+                </div>
+              </div>
+              <input class="vision-photo-input" id="vision-well-being-photos" type="file" accept="image/*" multiple>
+              <div class="vision-photo-grid" id="vision-well-being-photo-grid"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="planner-footer">
+        Vision Board • Well-Being
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
+  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
+  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
+  <script src="{% static 'js/form-sync.js' %}?v=20260108"></script>
+  <script src="{% static 'js/vision-board-photos.js' %}?v=20260108"></script>
+  <script>
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    if (window.VisionPhotoBoard) {
+      window.VisionPhotoBoard.init({
+        inputId: 'vision-well-being-photos',
+        gridId: 'vision-well-being-photo-grid',
+        storageKey: 'vision-board:well-being',
+        emptyText: 'Add photos that represent your well-being.'
+      });
+    }
+
+    if (window.formSync) {
+      formSync.init({
+        storagePrefix: 'vision-well-being'
+      });
+    }
+  </script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+</body>
+</html>

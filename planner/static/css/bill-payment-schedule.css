@@ -1,0 +1,241 @@
+.bill-schedule {
+  padding: var(--opus-spacing-sm);
+}
+
+.bill-schedule-card {
+  background: #ffffff;
+  border: 1px solid #e4e4e4;
+  border-top: 3px solid #f1a3a3;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  padding: 18px 20px;
+}
+
+.bill-schedule-header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.bill-schedule-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid #f1a3a3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f08a8a;
+  font-weight: 600;
+  margin: 0 auto 6px;
+}
+
+.bill-schedule-title {
+  font-size: 1.2rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #444;
+  margin: 4px 0 4px;
+}
+
+.bill-schedule-subtitle {
+  max-width: 100%;
+  margin: 0;
+  font-size: 0.92rem;
+  color: #6a6a6a;
+  line-height: 1.5;
+}
+
+.bill-schedule-divider {
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 153, 153, 0.2), rgba(255, 153, 153, 0.8), rgba(255, 153, 153, 0.2));
+  margin: 10px 0 12px;
+}
+
+.bill-schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--form-font-family) !important;
+  color: #2f2f2f;
+}
+
+.bill-schedule-table th,
+.bill-schedule-table td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #e6e6e6;
+  text-align: center;
+}
+
+.bill-schedule-table thead th {
+  font-family: var(--form-font-family);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: #6e6e6e;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.bill-schedule-table tbody tr:last-child td {
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.bill-schedule-table .col-category {
+  width: 120px;
+}
+
+.bill-schedule-table .col-item {
+  width: 240px;
+}
+
+.bill-schedule-table .col-amount {
+  width: 90px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.bill-schedule-table .months-head,
+.bill-schedule-table .months-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 6px;
+  align-items: center;
+  justify-items: center;
+}
+
+.bill-schedule-table .months-head span {
+  text-align: center;
+  font-size: 0.7rem;
+  color: #7a7a7a;
+}
+
+.bill-schedule-table .month-box {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: #f4c3cf;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.bill-schedule-table .month-box:hover {
+  transform: scale(1.2);
+}
+
+.bill-schedule-table .month-box.checked {
+  background: #2f2f2f !important;
+  position: relative;
+}
+
+.bill-schedule-table .month-box.checked::after {
+  content: '✓';
+  color: white;
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.bill-schedule-table .months-grid .month-box:nth-child(3n + 1) {
+  background: #f7b6c8;
+}
+
+.bill-schedule-table .months-grid .month-box:nth-child(3n + 2) {
+  background: #c7e7f0;
+}
+
+.bill-schedule-table .months-grid .month-box:nth-child(3n) {
+  background: #f8d7b8;
+}
+
+.bill-schedule-table .months-cell {
+  min-width: 190px;
+}
+
+.category-auto td:not(.months-cell) {
+  color: #3c8b5f;
+}
+
+.category-bill-pay td:not(.months-cell) {
+  color: #3a6fb3;
+}
+
+.category-cash td:not(.months-cell) {
+  color: #c05cc5;
+}
+
+.category-credit-card td:not(.months-cell) {
+  color: #e28a2d;
+}
+
+.category-housing td:not(.months-cell) {
+  color: #d34b4b;
+}
+
+.category-savings td:not(.months-cell) {
+  color: #b84db3;
+}
+
+@media (max-width: 1100px) {
+  .bill-schedule-card {
+    padding: 20px;
+  }
+
+  .bill-schedule-table {
+    font-size: 0.95rem;
+  }
+
+  .bill-schedule-table .col-item {
+    width: 180px;
+  }
+}
+
+@media (max-width: 900px) {
+  .bill-schedule-table,
+  .bill-schedule-table thead,
+  .bill-schedule-table tbody,
+  .bill-schedule-table th,
+  .bill-schedule-table td,
+  .bill-schedule-table tr {
+    display: block;
+  }
+
+  .bill-schedule-table thead {
+    display: none;
+  }
+
+  .bill-schedule-table tr {
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #fff;
+  }
+
+  .bill-schedule-table td {
+    border-bottom: none;
+    padding: 6px 4px;
+  }
+
+  .bill-schedule-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-family: var(--form-font-family);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #8a8a8a;
+    margin-bottom: 4px;
+  }
+
+  .bill-schedule-table .months-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    justify-items: center;
+  }
+
+  .bill-schedule-table .month-box {
+    width: 18px;
+    height: 18px;
+  }
+}

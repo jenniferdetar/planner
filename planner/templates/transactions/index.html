@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Opus Planner</title>
+    <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+    <link rel="stylesheet" href="{% static 'css/transactions.css' %}?v=20260108">
+</head>
+<body>
+    <div class="planner-container">
+        {% include 'header_include.html' %}
+
+        <div class="planner-content">
+            <header class="planner-header">
+                <div class="planner-header-left">
+                    <h1>Transactions</h1>
+                    <p>Projected checkbook and account tracking</p>
+                </div>
+                <div class="planner-header-right">
+                    <div class="planner-header-actions">
+                        <a href="/finance" class="planner-header-pill">Back to Finance</a>
+                    </div>
+                    <div class="planner-header-date" id="today-date"></div>
+                </div>
+            </header>
+
+            <main class="planner-main">
+                <div class="transactions-table-wrapper">
+                    <table class="transactions-table">
+                        <thead id="transactions-header">
+                            <!-- Injected by JS -->
+                        </thead>
+                        <tbody id="transactions-body">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+
+            <footer class="planner-footer">
+                Opus Planner • Data synced with Supabase.
+            </footer>
+        </div>
+    </div>
+
+    <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
+    <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
+    <script src="{% static 'js/utils.js' %}?v=20260108"></script>
+    <script src="{% static 'js/transactions.js' %}?v=20260108"></script>
+</body>
+</html>
