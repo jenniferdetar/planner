@@ -1,5 +1,10 @@
 from django.shortcuts import render
 from django.template import TemplateDoesNotExist
+from .models import Goals
+
+def goals_view(request):
+    goals = Goals.objects.all()
+    return render(request, 'goals.html', {'goals': goals})
 
 def dynamic_template_view(request, template_path):
     if template_path in ("index", "index.html"):

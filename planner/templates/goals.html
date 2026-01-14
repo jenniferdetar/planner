@@ -46,7 +46,16 @@
               </div>
             </div>
             <div class="goals-sheet-divider"></div>
-            <div id="goals-sheet-grid" class="goals-sheet-grid"></div>
+            <div id="goals-sheet-grid" class="goals-sheet-grid">
+              {% for goal in goals %}
+              <div class="goal-item" data-id="{{ goal.id }}">
+                <div class="goal-item-title">{{ goal.title }}</div>
+                <div class="goal-item-category">{{ goal.category }}</div>
+              </div>
+              {% empty %}
+              <p>No goals found. Create one below!</p>
+              {% endfor %}
+            </div>
             <div class="goals-sheet-total">TOTAL: <span id="goals-sheet-total">0</span></div>
           </div>
         </section>

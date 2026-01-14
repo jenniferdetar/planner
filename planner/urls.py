@@ -6,6 +6,8 @@ urlpatterns = [
     path('index.html', views.calendar_view, name='index_html'),
     path('calendar', views.calendar_view, name='calendar'),
     path('finance', views.finance_view, name='finance'),
+    path('goals', views.goals_view, name='goals'),
+    path('goals.html', views.goals_view, name='goals_html'),
     path('login.html', views.login_view, name='login'),
     path('<path:template_path>', views.dynamic_template_view, name='dynamic_template'),
 ]
