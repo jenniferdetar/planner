@@ -7,6 +7,8 @@ const opusData = (() => {
     notes: [],
     meetings: [],
     masterTasks: [],
+    recurringEvents: [],
+    byDateEvents: {},
     mission: { statement: '', values: [], lastUpdated: null },
     preferences: {}
   };
@@ -35,6 +37,8 @@ const opusData = (() => {
     state.notes = opusStorage.getNotes();
     state.meetings = opusStorage.getMeetings();
     state.masterTasks = opusStorage.getMasterTasks();
+    state.recurringEvents = opusStorage.getCalendarRecurring();
+    state.byDateEvents = opusStorage.getCalendarByDate();
     state.mission = opusStorage.getMission();
     state.preferences = opusStorage.getPreferences();
   }
@@ -71,13 +75,116 @@ const opusData = (() => {
 
   function getUpcomingMeetings(daysAhead = 7) {
     const today = new Date();
-    const endDate = new Date(today.getTime() + daysAhead * 24 * 60 * 60 * 1000);
-    const todayISO = today.toISOString().split('T')[0];
-    const endDateISO = endDate.toISOString().split('T')[0];
-    
-    return state.meetings.filter(meeting => {
-      return meeting.date >= todayISO && meeting.date <= endDateISO;
-    }).sort((a, b) => a.date.localeCompare(b.date));
+    today.setHours(0, 0, 0, 0);
+    const endDate = new Date(today.getTime() + (daysAhead + 1) * 24 * 60 * 60 * 1000);
+    endDate.setHours(23, 59, 59, 999);
+
+    const out = [];
+
+    // 1. Regular Meetings
+    state.meetings.forEach(m => {
+      const d = new Date(m.date + 'T00:00:00');
+      if (d >= today && d <= endDate) {
+        out.push({
+          id: m.id,
+          title: m.title,
+          date: m.date,
+          startTime: m.startTime || m.time,
+          category: m.category || 'Meeting',
+          type: 'meeting'
+        });
+      }
+    });
+
+    // 2. Date-specific Events
+    Object.entries(state.byDateEvents).forEach(([date, events]) => {
+      const d = new Date(date + 'T00:00:00');
+      if (d >= today && d <= endDate) {
+        events.forEach(e => {
+          out.push({
+            title: typeof e === 'string' ? e : e.title,
+            date: date,
+            startTime: typeof e === 'string' ? '' : (e.time || ''),
+            category: typeof e === 'string' ? 'Event' : (e.category || 'Event'),
+            type: 'event'
+          });
+        });
+      }
+    });
+
+    // 3. Recurring Events
+    state.recurringEvents.forEach(item => {
+      expandRecurring(item, today, endDate, d => {
+        out.push({
+          title: item.title,
+          date: d.toISOString().split('T')[0],
+          startTime: item.time || '',
+          category: item.category || 'Recurring',
+          type: 'recurring'
+        });
+      });
+    });
+
+    return out.sort((a, b) => {
+      const cmp = a.date.localeCompare(b.date);
+      if (cmp !== 0) return cmp;
+      return (a.startTime || '').localeCompare(b.startTime || '');
+    });
+  }
+
+  function expandRecurring(item, start, end, onDate) {
+    if (item.frequency === 'monthly' && item.pattern) {
+      let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+      for (let i = 0; i < 3 && cursor <= end; i++) {
+        const d = getPatternDate(cursor.getFullYear(), cursor.getMonth(), item.pattern);
+        if (d && d >= start && d <= end) onDate(new Date(d));
+        cursor.setMonth(cursor.getMonth() + 1);
+      }
+    } else if (item.frequency === 'monthly' && item.dayOfMonth) {
+      let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+      for (let i = 0; i < 3 && cursor <= end; i++) {
+        const d = new Date(cursor.getFullYear(), cursor.getMonth(), item.dayOfMonth);
+        if (d >= start && d <= end) onDate(new Date(d));
+        cursor.setMonth(cursor.getMonth() + 1);
+      }
+    } else if (item.frequency === 'weekly' && Array.isArray(item.weekdays)) {
+      let cursor = new Date(start);
+      while (cursor <= end) {
+        if (item.weekdays.includes(cursor.getDay())) {
+          onDate(new Date(cursor));
+        }
+        cursor.setDate(cursor.getDate() + 1);
+      }
+    } else if (item.frequency === 'biweekly' && item.startDate) {
+      let cursor = new Date(item.startDate + 'T00:00:00');
+      while (cursor < start) cursor.setDate(cursor.getDate() + 14);
+      while (cursor <= end) {
+        if (cursor >= start) onDate(new Date(cursor));
+        cursor.setDate(cursor.getDate() + 14);
+      }
+    }
+  }
+
+  function getPatternDate(year, month, pattern) {
+    const match = pattern.match(/^(first|second|third|fourth|last)\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)$/i);
+    if (!match) return null;
+    const ordMap = { first: 0, second: 1, third: 2, fourth: 3, last: 4 };
+    const dayMap = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
+    const ordinal = ordMap[match[1].toLowerCase()];
+    const dayOfWeek = dayMap[match[2].toLowerCase()];
+
+    let count = 0;
+    let target = null;
+    for (let day = 1; day <= 31; day++) {
+      const d = new Date(year, month, day);
+      if (d.getMonth() !== month) break;
+      if (d.getDay() === dayOfWeek) {
+        if (ordinal === 4) target = new Date(d);
+        else if (count === ordinal) return d;
+        count++;
+      }
+    }
+    return target;
   }
 
   function getOverbookedDays() {

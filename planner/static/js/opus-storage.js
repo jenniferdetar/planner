@@ -121,6 +121,7 @@ const opusStorage = (() => {
           await pullFromSupabase();
           await checkAndMigrateData();
           subscribeToRealtime();
+          emit(); // Notify listeners after initial pull
         }
       }
       return Promise.resolve();
@@ -348,7 +349,30 @@ const opusStorage = (() => {
     // Pull Events
     const { data: recurringData } = await supabaseClient.from('calendar_recurring').select('*').eq('user_id', supabaseUser.id);
     if (recurringData) {
-      data.recurringEvents = recurringData.map(e => e.details || e);
+      data.recurringEvents = recurringData.map(row => {
+        if (row.details) return row.details;
+        const e = { ...row };
+        // Map snake_case to camelCase
+        if (row.start_date) e.startDate = row.start_date;
+        if (row.end_date) e.endDate = row.end_date;
+        if (row.end_time) e.endTime = row.end_time;
+        if (row.day_of_month) e.dayOfMonth = row.day_of_month;
+        if (row.skip_months) {
+          try { e.skipMonths = JSON.parse(row.skip_months); } 
+          catch(err) { e.skipMonths = row.skip_months; }
+        }
+        if (row.skip_holidays) e.skipHolidays = row.skip_holidays;
+        if (row.skip_dates) {
+          try { e.skipDates = JSON.parse(row.skip_dates); }
+          catch(err) { e.skipDates = row.skip_dates; }
+        }
+        if (row.holiday_rule) e.holidayRule = row.holiday_rule;
+        if (row.weekdays) {
+          try { e.weekdays = JSON.parse(row.weekdays); }
+          catch(err) { e.weekdays = row.weekdays; }
+        }
+        return e;
+      });
     }
     const { data: byDateData } = await supabaseClient.from('calendar_by_date').select('*').eq('user_id', supabaseUser.id);
     if (byDateData) {
@@ -564,7 +588,21 @@ const opusStorage = (() => {
     
     const recurringRows = data.recurringEvents.map(e => ({
       user_id: supabaseUser.id,
-      details: e,
+      id: e.id || generateId(),
+      title: e.title,
+      frequency: e.frequency,
+      start_date: e.startDate,
+      end_date: e.endDate,
+      time: e.time,
+      end_time: e.endTime,
+      pattern: e.pattern,
+      day_of_month: e.dayOfMonth,
+      weekdays: Array.isArray(e.weekdays) ? JSON.stringify(e.weekdays) : e.weekdays,
+      skip_months: Array.isArray(e.skipMonths) ? JSON.stringify(e.skipMonths) : e.skipMonths,
+      skip_holidays: e.skipHolidays,
+      skip_dates: Array.isArray(e.skipDates) ? JSON.stringify(e.skipDates) : e.skipDates,
+      holiday_rule: e.holidayRule,
+      category: e.category,
       updated_at: new Date().toISOString()
     }));
     if (recurringRows.length) {
@@ -574,12 +612,19 @@ const opusStorage = (() => {
     const byDateRows = [];
     Object.entries(data.byDateEvents).forEach(([date, events]) => {
       events.forEach(e => {
-        byDateRows.push({
+        const row = {
           user_id: supabaseUser.id,
           date: date,
-          details: e,
+          id: e.id || generateId(),
           updated_at: new Date().toISOString()
-        });
+        };
+        if (typeof e === 'string') {
+          row.title = e;
+        } else {
+          row.title = e.title;
+          row.category = e.category;
+        }
+        byDateRows.push(row);
       });
     });
     if (byDateRows.length) {
