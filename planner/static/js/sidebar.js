@@ -24,14 +24,20 @@ const SidebarModule = (() => {
 
     const normalizedPath = window.location.pathname.replace(/\/$/, '') || '/';
     
-    sidebar.innerHTML = sidebarItems.map(item => {
-      const targetPath = item.href.replace(/\/$/, '') || '/';
-      const isActive = normalizedPath === targetPath;
-      return `<a href="${item.href}" class="planner-sidebar-item ${isActive ? 'active' : ''}">${item.text}</a>`;
-    }).join('') + `
-      <div style="margin-top: auto; padding-top: 20px; text-align: center; color: rgba(10, 47, 95, 0.6); font-size: 0.8rem;">
-        ${userEmail ? `<div style="margin-bottom: 8px; word-break: break-all;">${userEmail}</div>` : ''}
-        <button id="logout-btn" class="planner-button" style="width: 100%; font-size: 0.85rem; padding: 4px 8px;">Logout</button>
+    sidebar.innerHTML = `
+      <div class="sidebar-brand" style="color: white; font-weight: 800; font-size: 1.2rem; margin-right: auto; padding: 0 10px;">
+        OPUS ONE
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+        ${sidebarItems.map(item => {
+          const targetPath = item.href.replace(/\/$/, '') || '/';
+          const isActive = normalizedPath === targetPath;
+          return `<a href="${item.href}" class="planner-sidebar-item ${isActive ? 'active' : ''}">${item.text}</a>`;
+        }).join('')}
+      </div>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 12px; padding: 0 10px;">
+        ${userEmail ? `<span style="color: rgba(255,255,255,0.7); font-size: 0.8rem; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${userEmail}</span>` : ''}
+        <button id="logout-btn" class="planner-button" style="font-size: 0.75rem; padding: 4px 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">Logout</button>
       </div>
     `;
 

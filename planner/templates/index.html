@@ -80,7 +80,7 @@
 </head>
 <body data-module="homePage">
   <div class="planner-container">
-            <aside class="planner-sidebar"></aside>
+    {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
@@ -107,7 +107,20 @@
         <div class="planner-card">
           <h2 style="margin-top: 0; color: #0a2f5f; border-bottom: 2px solid #ffca38; padding-bottom: 10px;">Upcoming Events & Meetings</h2>
           <div id="events-list" class="planner-list">
-            <!-- Events will be populated here -->
+            {% for meeting in upcoming_meetings %}
+            <div class="planner-list-item">
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-weight: 700; color: #0a2f5f;">{{ meeting.title }}</span>
+                <span style="font-size: 0.85rem; color: #53575A;">{{ meeting.category|default:"General" }}</span>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600;">{{ meeting.date|date:"D, M j" }}</div>
+                <div style="font-size: 0.85rem;">{{ meeting.start_time|default:"" }}</div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="planner-list-item">No upcoming events scheduled.</div>
+            {% endfor %}
           </div>
         </div>
       </section>
@@ -118,8 +131,6 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-  <script src="{% static 'js/supabase-client.js' %}?v=20260108"></script>
   <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
   <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
@@ -177,7 +188,6 @@
     };
   </script>
   <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
-  <script src="{% static 'js/sidebar.js' %}?v=20260108"></script>
   <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

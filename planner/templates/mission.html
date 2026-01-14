@@ -12,15 +12,7 @@
 </head>
 <body data-module="missionPage">
   <div class="planner-container">
-            <aside class="planner-sidebar">
-      <a href="/calendar" class="planner-sidebar-item">Home</a>
-      <a href="/csea" class="planner-sidebar-item">CSEA</a>
-      <a href="/finance" class="planner-sidebar-item">Finance</a>
-      <a href="/health" class="planner-sidebar-item">Health</a>
-      <a href="/hoa" class="planner-sidebar-item">HOA</a>
-      <a href="/icaap" class="planner-sidebar-item">iCAAP</a>
-      <a href="/planning" class="planner-sidebar-item active">Planning</a>
-    </aside>
+            {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
@@ -84,8 +76,6 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-  <script src="{% static 'js/supabase-client.js' %}?v=20260108"></script>
   <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
   <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
   <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>

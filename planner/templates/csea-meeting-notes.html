@@ -98,7 +98,7 @@
 </head>
 <body>
   <div class="planner-container">
-            <aside class="planner-sidebar"></aside>
+            {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
@@ -206,7 +206,6 @@
   <script src="{% static 'js/supabase-client.js' %}"></script>
   <script src="{% static 'js/opus-storage.js' %}"></script>
   <script src="{% static 'js/auth-check.js?v=20260113' %}"></script>
-  <script src="{% static 'js/sidebar.js' %}?v=20260108"></script>
   <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/csea-meeting-notes.js' %}?v=20260108"></script>
 <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>

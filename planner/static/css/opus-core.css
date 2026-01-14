@@ -784,69 +784,62 @@ body {
 }
 
 .planner-sidebar {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   background: var(--opus-primary);
-  padding: 8px 12px;
-  gap: 12px;
+  padding: 10px 20px;
+  gap: 10px;
   width: 100%;
   box-sizing: border-box;
-  border-bottom: 3px solid var(--opus-gold);
+  border-bottom: 2px solid var(--opus-gold);
 }
 
 .planner-sidebar-item {
-  width: 100%;
-  min-width: 0;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 16px;
-  border-radius: 8px;
-  background: #99B3C5;
-  color: #0a2f5f;
-  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
   text-decoration: none;
   transition: all 0.2s ease;
   white-space: nowrap;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .planner-sidebar-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  color: white;
   text-decoration: none;
 }
 
 .planner-sidebar-item.active {
-  background: #ffffff !important;
-  color: #00326b !important;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  background: var(--opus-gold) !important;
+  color: var(--opus-primary) !important;
+  border-color: var(--opus-gold);
 }
 
 @media (max-width: 1100px) {
   .planner-sidebar {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 8px 10px;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .planner-sidebar {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
   }
-}
-
-.planner-sidebar-item:nth-child(1) { background-color: #99B3C5; } /* Home */
-.planner-sidebar-item:nth-child(2) { background-color: #FFFFFF; } /* CSEA */
-.planner-sidebar-item:nth-child(3) { background-color: #FFC68D; } /* Finance */
-.planner-sidebar-item:nth-child(4) { background-color: #9ADBDE; } /* Health */
-.planner-sidebar-item:nth-child(5) { background-color: #99B3C5; } /* HOA */
-.planner-sidebar-item:nth-child(6) { background-color: #FFA1AB; } /* iCAAP */
-.planner-sidebar-item:nth-child(7) { background-color: #FFD699; } /* Planning */
-
-.planner-sidebar-item[href="calendar.html"],
-.planner-sidebar-item[href="/calendar.html"] {
-  display: none !important;
+  .sidebar-brand, .sidebar-user {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
 
 .planner-content {
@@ -863,12 +856,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--opus-spacing-md) var(--opus-spacing-lg);
+  padding: 12px 25px;
   background: var(--opus-bg-white);
-  border-radius: var(--opus-border-radius-lg);
-  box-shadow: var(--opus-shadow-sm);
-  border: none;
-  border-left: 4px solid var(--opus-accent);
+  border-bottom: 1px solid var(--opus-border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
 }
 
 .planner-header-left h1 {
