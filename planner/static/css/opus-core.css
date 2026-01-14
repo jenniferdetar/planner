@@ -785,7 +785,7 @@ body {
 
 .planner-sidebar {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   background: var(--opus-primary);
   padding: 8px 12px;
   gap: 12px;
