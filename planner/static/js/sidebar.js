@@ -1,15 +1,14 @@
 const SidebarModule = (() => {
   const sidebarItems = [
-    { href: '/calendar', text: 'Home' },
-    { href: '/personal-planner', text: 'Personal Planner' },
-    { href: '/work-planner', text: 'Work Planner' },
-    { href: '/goals', text: 'Goals' },
-    { href: '/planning', text: 'Planning' },
-    { href: '/csea', text: 'CSEA' },
-    { href: '/icaap', text: 'iCAAP' },
-    { href: '/health', text: 'Health' },
-    { href: '/finance', text: 'Finance' },
-    { href: '/hoa', text: 'HOA' }
+    { href: '/calendar/', text: 'Home' },
+    { href: '/personal-planner/', text: 'Personal Planner' },
+    { href: '/work-planner/', text: 'Work Planner' },
+    { href: '/planning/', text: 'Planning' },
+    { href: '/csea/', text: 'CSEA' },
+    { href: '/icaap/', text: 'iCAAP' },
+    { href: '/health/', text: 'Health' },
+    { href: '/finance/', text: 'Finance' },
+    { href: '/hoa/', text: 'HOA' }
   ];
 
   async function init() {

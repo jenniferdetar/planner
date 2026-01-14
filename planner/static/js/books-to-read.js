@@ -1,4 +1,4 @@
-(() => {
+const booksToRead = (() => {
   const STORAGE_KEY = 'booksToRead';
   const seedBooks = [
     { title: '12 Months to $1 Million', author: 'Ryan Daniel Moran' },
@@ -292,8 +292,12 @@
     }
     updateProgress(books);
   };
-  form.addEventListener('submit', (event) => {
+  function handleAddBook(event) {
     event.preventDefault();
+    const titleInput = document.getElementById('book-title');
+    const authorInput = document.getElementById('book-author');
+    if (!titleInput || !authorInput) return;
+
     const title = titleInput.value.trim();
     const author = authorInput.value.trim();
     if (!title) return;
@@ -319,9 +323,17 @@
     titleInput.value = '';
     authorInput.value = '';
     renderBooks();
-  });
+  }
 
-  renderBooks();
+  function initialize() {
+    const booksForm = document.getElementById('books-form');
+    if (booksForm) {
+      booksForm.addEventListener('submit', handleAddBook);
+    }
+    renderBooks();
+  }
+
+  return { initialize };
 })();
 
 

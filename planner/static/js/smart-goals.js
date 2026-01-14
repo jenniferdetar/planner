@@ -284,5 +284,3 @@ const smartGoals = (() => {
 
   return { initialize };
 })();
-
-document.addEventListener('DOMContentLoaded', smartGoals.initialize);

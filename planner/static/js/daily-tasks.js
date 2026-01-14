@@ -88,7 +88,7 @@ const dailyTasks = (() => {
 
   async function fetchPlannerHabits() {
     try {
-      const response = await fetch('/calendar.html', { cache: 'no-store' });
+      const response = await fetch('/personal-planner/', { cache: 'no-store' });
       if (!response.ok) return [];
       const html = await response.text();
       const doc = new DOMParser().parseFromString(html, 'text/html');

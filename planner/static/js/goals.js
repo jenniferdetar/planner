@@ -244,7 +244,7 @@ const goalsPage = (() => {
           if (normalizedTitle === 'read') {
             const link = document.createElement('a');
             link.className = 'goal-sheet-item';
-            link.href = 'books-to-read.html';
+            link.href = '/planning/books-to-read/';
             link.textContent = displayTitle;
             link.setAttribute('aria-label', 'Open Books to Read');
             line.appendChild(link);

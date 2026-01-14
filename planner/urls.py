@@ -4,9 +4,9 @@ from . import views
 urlpatterns = [
     path('', views.calendar_view, name='root'),
     path('index.html', views.calendar_view, name='index_html'),
-    path('calendar', views.calendar_view, name='calendar'),
-    path('finance', views.finance_view, name='finance'),
-    path('goals', views.goals_view, name='goals'),
+    path('calendar/', views.calendar_view, name='calendar'),
+    path('finance/', views.finance_view, name='finance'),
+    path('goals/', views.goals_view, name='goals'),
     path('goals.html', views.goals_view, name='goals_html'),
     path('personal-planner/', views.personal_planner_view, name='personal_planner'),
     path('personal-planner/index.html', views.personal_planner_view, name='personal_planner_html'),

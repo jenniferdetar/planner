@@ -1,6 +1,13 @@
 const planningHub = (() => {
+  const state = {
+    initializedModules: new Set(['dashboard'])
+  };
+
   async function initialize() {
     await opusData.initialize();
+    
+    setupTabs();
+    setupDashboardNav();
     
     const todayDateEl = document.getElementById('today-date');
     if (todayDateEl) {
@@ -18,6 +25,69 @@ const planningHub = (() => {
         renderProgress();
       }
     });
+  }
+
+  function setupTabs() {
+    const tabs = document.querySelectorAll('.planner-header-pill');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabId = tab.getAttribute('data-tab');
+        switchTab(tabId);
+      });
+    });
+  }
+
+  function setupDashboardNav() {
+    const navCards = document.querySelectorAll('[data-nav-tab]');
+    navCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tabId = card.getAttribute('data-nav-tab');
+        switchTab(tabId);
+      });
+    });
+  }
+
+  function switchTab(tabId) {
+    // Update tab buttons
+    document.querySelectorAll('.planner-header-pill').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+    });
+
+    // Update tab content
+    document.querySelectorAll('.planning-tab-content').forEach(content => {
+      content.classList.toggle('hidden', content.id !== `${tabId}-tab`);
+    });
+
+    // Initialize module if needed
+    initializeModule(tabId);
+  }
+
+  function initializeModule(tabId) {
+    if (state.initializedModules.has(tabId)) return;
+
+    console.log(`Initializing module: ${tabId}`);
+    
+    switch (tabId) {
+      case 'goals':
+        if (window.goalsPage) goalsPage.initialize();
+        if (window.smartGoals) smartGoals.initialize();
+        break;
+      case 'reflections':
+        if (window.monthlyReview) monthlyReview.initialize();
+        if (window.intentionsDreams) intentionsDreams.initialize();
+        break;
+      case 'meetings':
+        if (window.meetingsPage) meetingsPage.initialize();
+        if (window.notesPage) notesPage.initialize();
+        break;
+      case 'reference':
+        if (window.missionPage) missionPage.initialize();
+        if (window.booksToRead) booksToRead.initialize();
+        break;
+    }
+
+    state.initializedModules.add(tabId);
   }
 
   function renderProgress() {
@@ -83,3 +153,5 @@ const planningHub = (() => {
 
   return { initialize };
 })();
+
+document.addEventListener('DOMContentLoaded', planningHub.initialize);
