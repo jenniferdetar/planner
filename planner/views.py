@@ -1,10 +1,22 @@
 from django.shortcuts import render
 from django.template import TemplateDoesNotExist
-from .models import Goals
+from .models import Goals, OpusTasks, CalendarRecurring
 
 def goals_view(request):
     goals = Goals.objects.all()
     return render(request, 'goals.html', {'goals': goals})
+
+def calendar_view(request):
+    recurring_events = CalendarRecurring.objects.all()
+    return render(request, 'calendar.html', {'recurring_events': recurring_events})
+
+def personal_planner_view(request):
+    tasks = OpusTasks.objects.filter(category='Personal')
+    return render(request, 'personal-planner/index.html', {'tasks': tasks})
+
+def work_planner_view(request):
+    tasks = OpusTasks.objects.filter(category='Work')
+    return render(request, 'work-planner/index.html', {'tasks': tasks})
 
 def dynamic_template_view(request, template_path):
     if template_path in ("index", "index.html"):

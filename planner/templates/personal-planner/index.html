@@ -170,6 +170,9 @@
           <article class="day-block day-sunday">
 <div class="day-left">
               <ul class="left-list">
+                {% for task in tasks %}
+                <li>{{ task.title }}</li>
+                {% endfor %}
               </ul>
               <div class="left-icons">
                 <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>

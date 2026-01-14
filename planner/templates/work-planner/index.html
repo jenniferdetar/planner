@@ -63,6 +63,14 @@
             <div class="work-grid-subtitle">Times auto-filled from events; click any line to edit</div>
           </div>
           <div id="work-grid" class="work-grid"></div>
+          <div class="work-tasks-list" style="margin-top: 20px;">
+            <h3>Tasks from Supabase</h3>
+            <ul>
+              {% for task in tasks %}
+              <li>{{ task.title }}</li>
+              {% endfor %}
+            </ul>
+          </div>
         </section>
       </main>
 
