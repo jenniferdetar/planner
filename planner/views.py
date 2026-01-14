@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.template import TemplateDoesNotExist
 
 def dynamic_template_view(request, template_path):
+    if template_path in ("index", "index.html"):
+        return render(request, "calendar.html")
     # 1. Handle CSEA nesting cleanup
     if template_path.startswith('csea/') and template_path.count('/') == 1:
         inner_path = template_path.split('/', 1)[1]
