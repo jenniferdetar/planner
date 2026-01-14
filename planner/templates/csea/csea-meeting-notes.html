@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSEA Meeting Notes</title>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
   <style>
     .notes-layout {
       display: grid;
@@ -113,6 +115,7 @@
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
+      
 
       <main class="planner-main notes-layout">
         <section class="planner-section">
@@ -199,7 +202,12 @@
     </div>
   </div>
 
-  <script src="{% static 'js/base.js' %}?v=20260108"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="{% static 'js/supabase-client.js' %}"></script>
+  <script src="{% static 'js/opus-storage.js' %}"></script>
+  <script src="{% static 'js/auth-check.js?v=20260113' %}"></script>
+  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/csea-meeting-notes.js' %}?v=20260108"></script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

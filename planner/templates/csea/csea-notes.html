@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSEA Notes - Opus One Planner</title>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
   <link rel="stylesheet" href="{% static 'css/csea.css' %}?v=20260108">
   <style>
     .csea-notes-panel {
@@ -233,6 +235,7 @@
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
+      
 
       <main class="planner-main">
         <section class="planner-section">
@@ -269,6 +272,10 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="{% static 'js/supabase-client.js' %}"></script>
+  <script src="{% static 'js/opus-storage.js' %}"></script>
+  <script src="{% static 'js/auth-check.js?v=20260113' %}"></script>
   <script>
     const cseaTodayDate = document.getElementById('today-date');
     if (cseaTodayDate) {
@@ -290,8 +297,6 @@
     const cseaTagAdd = document.getElementById('csea-tag-add');
     const cseaTagsList = document.getElementById('csea-tags-list');
     const cseaSearchInput = document.getElementById('csea-search');
-    const TAGS_KEY = 'cseaNotesTags';
-    const SAVED_KEY = 'cseaNotesSaved';
 
     const formatSavedDate = (isoString) => {
       const date = new Date(isoString);
@@ -306,33 +311,19 @@
     };
 
     const loadSavedItems = () => {
-      const raw = localStorage.getItem(SAVED_KEY);
-      if (!raw) return [];
-      try {
-        const items = JSON.parse(raw);
-        return Array.isArray(items) ? items : [];
-      } catch (error) {
-        return [];
-      }
+      return opusStorage.getCseaNotesSaved();
     };
 
     const saveSavedItems = (items) => {
-      localStorage.setItem(SAVED_KEY, JSON.stringify(items.slice(0, 20)));
+      opusStorage.setCseaNotesSaved(items.slice(0, 50));
     };
 
     const loadCurrentTags = () => {
-      const raw = localStorage.getItem(TAGS_KEY);
-      if (!raw) return [];
-      try {
-        const tags = JSON.parse(raw);
-        return Array.isArray(tags) ? tags : [];
-      } catch (error) {
-        return [];
-      }
+      return opusStorage.getCseaNotesTags();
     };
 
     const saveCurrentTags = (tags) => {
-      localStorage.setItem(TAGS_KEY, JSON.stringify(tags));
+      opusStorage.setCseaNotesTags(tags);
     };
 
     const renderTags = () => {
@@ -375,7 +366,7 @@
       const query = (cseaSearchInput?.value || '').toLowerCase().trim();
       const filtered = query
         ? items.filter(({ text, tags = [] }) =>
-            text.toLowerCase().includes(query) || tags.some(tag => tag.toLowerCase().includes(query)))
+            text.toLowerCase().includes(query) || (tags && tags.some(tag => tag.toLowerCase().includes(query))))
         : items;
 
       if (filtered.length === 0) {
@@ -412,14 +403,15 @@
       });
     };
 
-    if (cseaNotesField) {
-      const storedNotes = localStorage.getItem('cseaNotes');
-      if (storedNotes !== null) {
-        cseaNotesField.value = storedNotes;
-        if (cseaNotesStatus) cseaNotesStatus.textContent = 'Saved';
+    async function initCSEA() {
+      if (window.opusStorage) {
+        await window.opusStorage.initializeStorage();
       }
       renderTags();
       renderSavedItems();
+    }
+
+    if (cseaNotesField) {
       cseaNotesField.addEventListener('input', () => {
         if (cseaNotesStatus) cseaNotesStatus.textContent = 'Not saved';
       });
@@ -438,13 +430,15 @@
         cseaNotesSave.addEventListener('click', () => {
           const text = cseaNotesField.value.trim();
           const tags = loadCurrentTags();
-          localStorage.setItem('cseaNotes', cseaNotesField.value);
           if (cseaNotesStatus) cseaNotesStatus.textContent = 'Saved';
           if (text) {
             const items = loadSavedItems();
             items.unshift({ text, tags, savedAt: new Date().toISOString() });
             saveSavedItems(items);
             renderSavedItems();
+            cseaNotesField.value = '';
+            saveCurrentTags([]);
+            renderTags();
           }
         });
       }
@@ -454,7 +448,6 @@
           cseaNotesField.value = '';
           saveCurrentTags([]);
           renderTags();
-          localStorage.removeItem('cseaNotes');
           if (cseaNotesStatus) cseaNotesStatus.textContent = 'Not saved';
         });
       }
@@ -462,15 +455,19 @@
 
     if (cseaSavedClear) {
       cseaSavedClear.addEventListener('click', () => {
-        localStorage.removeItem(SAVED_KEY);
-        renderSavedItems();
+        if (confirm('Are you sure you want to clear all saved items?')) {
+          saveSavedItems([]);
+          renderSavedItems();
+        }
       });
     }
 
     if (cseaSearchInput) {
       cseaSearchInput.addEventListener('input', renderSavedItems);
     }
+
+    document.addEventListener('DOMContentLoaded', initCSEA);
   </script>
-<script src="{% static 'js/base.js' %}?v=20260108"></script>
+<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>
