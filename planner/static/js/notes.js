@@ -1,4 +1,4 @@
-const notesPage = (() => {
+window.notesPage = (() => {
   let currentDate = utils.getCurrentDateISO();
   let currentTags = [];
   let allNotes = [];

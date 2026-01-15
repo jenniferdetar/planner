@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="{% static 'css/personal-planner.css' %}?v=20260108" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap">
 </head>
-<body data-calendar-src="/data/calendar-data.json">
+<body data-module="personalPlanner">
   <div class="planner-container">
     {% include 'header_include.html' %}
 
@@ -18,12 +18,12 @@
         <div class="planner-header-left">
           <h1>Personal Planner</h1>
           <p>Weekly Schedule & Habits</p>
-        </div>
-                        <div class="planner-header-right">
-          <div class="planner-header-actions">
-            <a href="/personal-planner/" class="planner-header-pill active">Personal Planner</a>
-            <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
+          <div class="header-pills-container" style="display: flex; gap: 10px; margin-left: 20px;">
+            <a href="/personal-planner/" class="planner-header-pill pill-personal active">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill pill-work">Work Planner</a>
           </div>
+        </div>
+        <div class="planner-header-right">
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
@@ -35,136 +35,17 @@
           <button class="week-nav-btn" id="next-week-btn">Next</button>
         </div>
         <div class="week-range-subtitle" id="current-date"></div>
-        <div class="planner-header-date" id="today-date"></div>
 
         <section class="habit-grid">
-          <div class="habit-card">
-            <h2 class="habit-title">Home Care</h2>
-            <div class="habit-content">
-              <div class="mini-week">
-                <div class="mini-week-labels">
-                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
-                </div>
-                <div class="mini-week-grid">
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                </div>
-              </div>
-              <ul class="habit-list">
-                <li>Make beds</li>
-                <li>Ana - Cleaning</li>
-                <li>Recycling</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="habit-card">
-            <h2 class="habit-title">Self Care</h2>
-            <div class="habit-content">
-              <div class="mini-week">
-                <div class="mini-week-labels">
-                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
-                </div>
-                <div class="mini-week-grid">
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                </div>
-              </div>
-              <ul class="habit-list">
-                <li>Take a shower</li>
-                <li>Read</li>
-                <li>Bring lunch to work</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="habit-card">
-            <h2 class="habit-title">Weekdays</h2>
-            <div class="habit-content">
-              <div class="mini-week">
-                <div class="mini-week-labels">
-                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
-                </div>
-                <div class="mini-week-grid">
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                </div>
-              </div>
-              <ul class="habit-list">
-                <li>Get up at 5:00 am</li>
-                <li>Leave work at 3:30 pm</li>
-                <li>Take train to work</li>
-                <li>Listen to Bible app</li>
-              </ul>
-            </div>
-          </div>
-
-
-          <div class="habit-card">
-            <h2 class="habit-title">Weekends</h2>
-            <div class="habit-content">
-              <div class="mini-week">
-                <div class="mini-week-labels">
-                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
-                </div>
-                <div class="mini-week-grid">
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                  <div class="mini-week-row">
-                    <span class="day-sun"></span><span class="day-mon"></span><span class="day-tue"></span><span class="day-wed"></span><span class="day-thu"></span><span class="day-fri"></span><span class="day-sat"></span>
-                  </div>
-                </div>
-              </div>
-              <ul class="habit-list">
-                <li>Get up at 7:00 am</li>
-                <li>Plan/prep meals for the week</li>
-                <li>Laundry</li>
-              </ul>
-            </div>
-          </div>
-
+          <!-- Populated by personal-planner.js -->
         </section>
 
         <div class="family-banner">ENJOY YOUR FAMILY ♥</div>
 
         <section class="day-blocks">
           <article class="day-block day-sunday">
-<div class="day-left">
+            <div class="day-left">
               <ul class="left-list">
-                {% for task in tasks %}
-                <li>{{ task.title }}</li>
-                {% endfor %}
               </ul>
               <div class="left-icons">
                 <div class="icon-row"><span class="icon">🍴</span><span class="icon-line"></span></div>
@@ -314,10 +195,8 @@
     </div>
   </div>
 
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
-  <script src="{% static 'js/base.js' %}?v=20260108"></script>
   <script src="{% static 'js/drag-drop.js' %}?v=20260108"></script>
-  <script type="module" src="{% static 'js/personal-planner.js' %}?v=20260108"></script>
+  <script src="{% static 'js/personal-planner.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
   <link rel="stylesheet" href="{% static 'css/savings-goals.css' %}?v=20260108">
 </head>
-<body>
+<body data-module="savingsGoalsPage">
   <div class="planner-container">
                                 {% include 'header_include.html' %}
 
@@ -293,14 +293,7 @@
   </div>
 
   <script src="{% static 'js/utils.js' %}?v=20260108"></script>
-  <script>
-    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  </script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'js/savings-goals.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const booksToRead = (() => {
+window.booksToRead = (() => {
   const STORAGE_KEY = 'booksToRead';
   const seedBooks = [
     { title: '12 Months to $1 Million', author: 'Ryan Daniel Moran' },

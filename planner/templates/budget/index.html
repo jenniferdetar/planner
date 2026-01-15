@@ -10,20 +10,27 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
     <link rel="stylesheet" href="{% static 'css/budget.css' %}?v=20260108">
 </head>
-<body>
+<body data-module="budgetPage">
   <div class="planner-container">
                                 {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
-          <h1>Spending Plan</h1>
-          <p>Allocated Spending by Pay Week</p>
+          <div>
+            <h1>Spending Plan</h1>
+            <p>Allocated Spending by Pay Week</p>
+          </div>
+          <div class="header-pills-container" style="display: flex; gap: 10px; margin-left: 20px;">
+            <a href="/finance/" class="planner-header-pill pill-finance">Back to Finance</a>
+            <a href="/personal-planner/" class="planner-header-pill pill-personal">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill pill-work">Work Planner</a>
+          </div>
         </div>
         <div class="planner-header-right">
           <div class="planner-header-date" id="today-date"></div>
         </div>
-    </header>      <main class="planner-main">
+      </header>      <main class="planner-main">
         <section class="planner-section">
           <div class="planner-section-header">
             <span class="planner-section-icon">📊</span>
@@ -524,20 +531,7 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="{% static 'js/supabase-client.js' %}"></script>
-  <script src="{% static 'js/opus-storage.js' %}"></script>
-  <script src="{% static 'js/auth-check.js?v=20260113' %}"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/budget.js' %}?v=20260108"></script>
-  <script>
-    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  </script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

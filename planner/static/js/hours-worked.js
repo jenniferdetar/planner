@@ -3,6 +3,12 @@
  * Fetches data from Supabase and renders the hours-only table.
  */
 
+window.hoursWorked = {
+    initialize: async function() {
+        await renderTable();
+    }
+};
+
 const months = ['jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'jan', 'feb', 'mar', 'apr', 'may', 'jun'];
 
 async function renderTable() {
@@ -79,6 +85,3 @@ async function renderTable() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    renderTable();
-});

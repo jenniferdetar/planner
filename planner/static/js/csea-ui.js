@@ -1,5 +1,62 @@
-(function() {
+window.cseaUI = (() => {
+  function initialize() {
+    setupTabSwitching();
+    setupGrievanceModal();
+    updateTodayDate();
+  }
+
+  function setupTabSwitching() {
+    const tabs = document.querySelectorAll('.csea-tab-btn');
+    const contents = document.querySelectorAll('.csea-tab-content');
+    const subtitle = document.getElementById('csea-subtitle');
+
+    const subtitleMap = {
+      'issues': 'Stewarded member issues at a glance',
+      'meetings': 'Capture summaries and follow-ups for member meetings',
+      'notes': 'Follow-ups, reminders, and outcomes'
+    };
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        contents.forEach(c => {
+          if (c.id === `${target}-tab`) {
+            c.classList.remove('hidden');
+          } else {
+            c.classList.add('hidden');
+          }
+        });
+
+        if (subtitle && subtitleMap[target]) {
+          subtitle.textContent = subtitleMap[target];
+        }
+      });
+    });
+  }
+
+  function updateTodayDate() {
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+  }
+
+  function setupGrievanceModal() {
     const pillButton = document.getElementById('grievance-pill-btn')
+    if (!pillButton) return;
+
+    // Check if modal already exists to avoid duplicates
+    if (document.getElementById('grievance-modal')) return;
+
     const modal = document.createElement('div')
     modal.id = 'grievance-modal'
     modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4 py-8 hidden z-50'
@@ -222,9 +279,9 @@
                     ].map(item => `
                       <div class="flex flex-col gap-1">
                         <span class="text-gray-700">${item}</span>
-                        <div class="flex items-center gap-2">
-                          <input type="checkbox" class="h-4 w-4 border-gray-300 rounded text-primary focus:ring-primary" />
-                          <input type="text" class="flex-1 border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:ring-1 focus:ring-primary focus:border-primary" placeholder="Details" />
+                        <div class="grid grid-cols-2 gap-2">
+                          <input type="text" class="border border-gray-300 rounded px-2 py-1" placeholder="Details" />
+                          <input type="date" class="border border-gray-300 rounded px-2 py-1" />
                         </div>
                       </div>
                     `).join('')}
@@ -235,19 +292,13 @@
 
             <section class="bg-white border border-gray-200 rounded-lg shadow-sm grievance-section">
               <div class="px-4 py-3 bg-primary text-white rounded-t-lg flex items-center gap-2">
-                <i class="fa-solid fa-timeline"></i>
-                <span class="font-semibold text-sm">Section 4 — Grievance Timeline Information</span>
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span class="font-semibold text-sm">Section 4 — Timeline Tracking</span>
               </div>
-              <div class="p-4 grid gap-3">
-                ${['Informal/Oral Level','First Formal Written Level','Second Formal Written Level','Third Formal Written Level','Final Administrative Level prior to Arbitration'].map((level, idx) => `
-                  <div class="border border-gray-200 rounded-md p-3 bg-gray-50">
-                    <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-                      <span class="font-semibold text-sm text-gray-800">Step # _____ (${level})</span>
-                      <div class="flex items-center gap-2 text-sm text-gray-700">
-                        <label>Step #</label>
-                        <input type="text" class="w-16 border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:ring-1 focus:ring-primary focus:border-primary" />
-                      </div>
-                    </div>
+              <div class="p-4 grid gap-4">
+                ${[1,2,3,4,5].map(idx => `
+                  <div class="grid gap-3 border-b border-gray-100 last:border-0 pb-3 last:pb-0">
+                    <p class="text-xs font-bold text-primary uppercase">Step ${idx}</p>
                     <div class="grid md:grid-cols-2 gap-2">
                       ${[
                         'Date filed / event occurred / discovered',
@@ -303,4 +354,7 @@
         day: 'numeric'
       })
     }
+  }
+
+  return { initialize };
 })();

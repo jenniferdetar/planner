@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108">
     <link rel="stylesheet" href="{% static 'css/transactions.css' %}?v=20260108">
 </head>
-<body>
+<body data-module="transactionsPage">
     <div class="planner-container">
         {% include 'header_include.html' %}
 
@@ -46,9 +46,6 @@
         </div>
     </div>
 
-    <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-    <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
-    <script src="{% static 'js/utils.js' %}?v=20260108"></script>
     <script src="{% static 'js/transactions.js' %}?v=20260108"></script>
 </body>
 </html>

@@ -1,8 +1,9 @@
-import { GOALS } from '../data/goals-data.js';
-
 const workPlanner = (() => {
   const STORAGE_KEY = 'workPlannerEdits';
   const PRIORITY_KEY = 'workPlannerPriorities';
+  
+  // Use global GOALS if available
+  const GOALS_REF = window.GOALS || {};
   const times = utils.getHourSlots(5, 20, 30); // 5am - 8pm in 30-minute increments
   const styleMap = {
     due:    { bg: '#ffd6e2', border: '#ff6b98', text: '#7a0f2b' },
@@ -312,7 +313,7 @@ const workPlanner = (() => {
         const tasks = stored.weeklyTasks.split('\n').map(t => t.trim()).filter(t => t);
         allWeeklyTasks = allWeeklyTasks.concat(tasks);
       } else {
-        const template = GOALS[goal.title];
+        const template = GOALS_REF[goal.title];
         if (template && template.weeklyTasks) {
           allWeeklyTasks = allWeeklyTasks.concat(template.weeklyTasks);
         }
@@ -751,3 +752,5 @@ const workPlanner = (() => {
 
   return { initialize };
 })();
+
+window.workPlanner = workPlanner;

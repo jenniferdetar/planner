@@ -1,4 +1,4 @@
-const meetingsPage = (() => {
+window.meetingsPage = (() => {
   let currentFilter = 'all';
   let editingMeetingId = null;
   let currentAttendees = [];

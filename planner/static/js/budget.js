@@ -1,5 +1,46 @@
-(function() {
-  function applyCheckbookActuals() {
+window.budgetPage = {
+  initialize: async function() {
+    const todayDate = document.getElementById('today-date');
+    if (todayDate) {
+      todayDate.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    const checkbookTable = document.getElementById("checkbook");
+    const budgetTable = document.getElementById("budget");
+    if (!checkbookTable && !budgetTable) return;
+
+    if (checkbookTable) {
+      loadBudgetInputs();
+      initInputFormatting();
+      normalizeBudgetDisplay();
+      recalcAll();
+
+      checkbookTable.addEventListener("input", event => {
+        const target = event.target;
+        if (!target.matches("input.money-input")) return;
+        if (!target.classList.contains("income-input")) {
+          target.dataset.auto = "false";
+          recalcAll();
+          return;
+        }
+        const colKey = target.dataset.col;
+        if (colKey) {
+          applyAutoAllocations(colKey, target.value !== "");
+        }
+        recalcAll();
+      });
+    } else if (budgetTable) {
+      applyCheckbookActuals();
+    }
+  }
+};
+
+function applyCheckbookActuals() {
     const budgetTable = document.querySelector("#budget");
     if (!budgetTable) return;
 
@@ -413,36 +454,4 @@
     });
   }
 
-  async function initCheckbook() {
-    const checkbookTable = document.getElementById("checkbook");
-    if (!checkbookTable) return;
 
-    if (window.opusStorage) {
-      await window.opusStorage.initializeStorage();
-    }
-
-    loadBudgetInputs();
-    initInputFormatting();
-    normalizeBudgetDisplay();
-    recalcAll();
-
-    checkbookTable.addEventListener("input", event => {
-      const target = event.target;
-      if (!target.matches("input.money-input")) return;
-      if (!target.classList.contains("income-input")) {
-        target.dataset.auto = "false";
-        recalcAll();
-        return;
-      }
-      const colKey = target.dataset.col;
-      if (colKey) {
-        applyAutoAllocations(colKey, target.value !== "");
-      }
-      recalcAll();
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    initCheckbook();
-  });
-})();

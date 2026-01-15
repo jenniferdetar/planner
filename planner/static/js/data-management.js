@@ -1,13 +1,23 @@
-const DataManagementModule = (() => {
+const dataManagementPage = (() => {
   let selectedFile = null;
 
-  function initializePage() {
+  function initialize() {
     opusData.initialize().then(() => {
       setupEventListeners();
       updateDataInfo();
+      
+      // Update today's date
+      const todayDateEl = document.getElementById('today-date');
+      if (todayDateEl) {
+          todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+      }
     }).catch(error => {
       console.error('Error initializing page:', error);
-      showToast('Error loading data', 'error');
     });
   }
 
@@ -262,13 +272,10 @@ const DataManagementModule = (() => {
     }, 4000);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializePage);
-  } else {
-    initializePage();
-  }
-
   return {
+    initialize,
     updateDataInfo
   };
 })();
+
+window.dataManagementPage = dataManagementPage;

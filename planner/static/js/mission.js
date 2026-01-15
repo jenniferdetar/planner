@@ -1,4 +1,4 @@
-const missionPage = (() => {
+window.missionPage = (() => {
   let currentValues = [];
 
   function initialize() {

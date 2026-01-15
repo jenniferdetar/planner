@@ -153,8 +153,4 @@ const icaapNotesModule = (() => {
   return { initialize };
 })();
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('icaap-notes-section')) {
-    icaapNotesModule.initialize();
-  }
-});
+window.icaapNotesModule = icaapNotesModule;

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
   <link rel="stylesheet" href="{% static 'css/vision-board.css' %}?v=20260108">
 </head>
-<body>
+<body data-module="visionPage" data-vision-id="living-space" data-vision-title="Living Space">
   <div class="planner-container">
     {% include 'header_include.html' %}
 
@@ -66,40 +66,9 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/form-sync.js' %}?v=20260108"></script>
   <script src="{% static 'js/vision-board-photos.js' %}?v=20260108"></script>
-  <script>
-    const todayDateEl = document.getElementById('today-date');
-    if (todayDateEl) {
-      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    }
-
-    // Initialize photo board
-    if (window.VisionPhotoBoard) {
-      window.VisionPhotoBoard.init({
-        inputId: 'vision-living-space-photos',
-        gridId: 'vision-living-space-photo-grid',
-        storageKey: 'vision-board:living-space',
-        emptyText: 'Add photos that define your ideal living space.'
-      });
-    }
-
-    // Initialize form sync for notes
-    if (window.formSync) {
-      formSync.init({
-        storagePrefix: 'vision-living-space'
-      });
-    }
-  </script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'js/vision.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

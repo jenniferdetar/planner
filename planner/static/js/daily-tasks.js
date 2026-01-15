@@ -399,3 +399,5 @@ const dailyTasks = (() => {
 
   return { initialize };
 })();
+
+window.dailyTasks = dailyTasks;

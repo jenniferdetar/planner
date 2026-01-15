@@ -1,4 +1,4 @@
-const goalsPage = (() => {
+window.goalsPage = (() => {
   let currentFilter = 'all';
   let editingGoalId = null;
   const AUTO_IMPORT_FLAG = 'opusGoalsAutoImported';

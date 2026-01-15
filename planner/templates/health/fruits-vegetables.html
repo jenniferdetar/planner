@@ -155,7 +155,7 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
 </head>
-<body>
+<body data-module="marketPage">
   <div class="planner-container">
                                         {% include 'header_include.html' %}
 
@@ -241,18 +241,7 @@
     </div>
   </div>
 
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/fruits-vegetables.js' %}?v=20260108"></script>
-  <script>
-    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  </script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

@@ -16,12 +16,6 @@
       display: none;
     }
 
-    .planner-header-pill.active {
-      background: #ffffff;
-      color: #00326b;
-      border-color: #00326b;
-    }
-
     .icaap-hero {
       background: linear-gradient(135deg, #00326b 0%, #5d84b2 55%, #9ad1d6 100%);
       color: #ffffff;
@@ -497,7 +491,7 @@
     }
   </style>
 </head>
-<body>
+<body data-module="icaapPage">
   <div class="planner-container">
                             {% include 'header_include.html' %}
 
@@ -509,11 +503,11 @@
         </div>
         <div class="planner-header-right">
           <div class="planner-header-actions">
-            <button type="button" class="planner-header-pill icaap-tab-btn active" data-tab="overview">Overview</button>
-            <button type="button" class="planner-header-pill icaap-tab-btn" data-tab="paylog">Hours + Paylog</button>
-            <button type="button" class="planner-header-pill icaap-tab-btn" data-tab="hours">Hours Worked</button>
-            <button type="button" class="planner-header-pill icaap-tab-btn" data-tab="additional">Additional Hours</button>
-            <button type="button" class="planner-header-pill icaap-tab-btn" data-tab="notes">Notes</button>
+            <button type="button" class="planner-header-pill pill-icaap icaap-tab-btn active" data-tab="overview">Overview</button>
+            <button type="button" class="planner-header-pill pill-icaap icaap-tab-btn" data-tab="paylog">Hours + Paylog</button>
+            <button type="button" class="planner-header-pill pill-icaap icaap-tab-btn" data-tab="hours">Hours Worked</button>
+            <button type="button" class="planner-header-pill pill-icaap icaap-tab-btn" data-tab="additional">Additional Hours</button>
+            <button type="button" class="planner-header-pill pill-icaap icaap-tab-btn" data-tab="notes">Notes</button>
           </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
@@ -841,59 +835,9 @@
     </div>
   </div>
 
-  <script src="{% static 'js/auth-check.js' %}?v=20260108"></script>
-  <script src="{% static 'js/supabase-client.js' %}?v=20260108"></script>
   <script src="{% static 'js/icaap-merged.js' %}?v=20260108"></script>
   <script src="{% static 'js/hours-worked.js' %}?v=20260108"></script>
   <script src="{% static 'js/icaap-notes-logic.js' %}?v=20260108"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Today's Date
-      const todayDate = document.getElementById('today-date');
-      if (todayDate) {
-        todayDate.textContent = new Date().toLocaleDateString('en-US', {
-          weekday: 'short',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        });
-      }
-
-      // Tab Switching Logic
-      const tabBtns = document.querySelectorAll('.icaap-tab-btn');
-      const tabContents = document.querySelectorAll('.icaap-tab-content');
-
-      function switchTab(tabId) {
-        tabContents.forEach(content => {
-          content.classList.toggle('hidden', content.id !== `${tabId}-tab`);
-        });
-
-        tabBtns.forEach(btn => {
-          if (btn.getAttribute('data-tab') === tabId) {
-            btn.classList.add('active');
-          } else {
-            btn.classList.remove('active');
-          }
-        });
-
-        // Store active tab
-        localStorage.setItem('icaapActiveTab', tabId);
-      }
-
-      tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tabId = btn.getAttribute('data-tab');
-          if (tabId) switchTab(tabId);
-        });
-      });
-
-      // Restore active tab
-      const savedTab = localStorage.getItem('icaapActiveTab');
-      if (savedTab) {
-        switchTab(savedTab);
-      }
-    });
-  </script>
   <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 

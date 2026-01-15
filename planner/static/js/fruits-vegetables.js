@@ -16,7 +16,16 @@ const marketPage = (() => {
   let marketData = JSON.parse(JSON.stringify(MASTER_LIST));
   let saveTimeout;
 
-  function initializePage() {
+  function initialize() {
+    const todayDate = document.getElementById('today-date');
+    if (todayDate) {
+      todayDate.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
     loadData();
     // If after loading data, lists are empty or very small, and we haven't seen the master list yet, force it
     const fruitsEmpty = !marketData.fruits || marketData.fruits.length === 0;
@@ -133,7 +142,7 @@ const marketPage = (() => {
   }
 
   return {
-    initializePage,
+    initialize,
     addItem,
     removeItem,
     clearList
@@ -143,5 +152,3 @@ const marketPage = (() => {
 // Global helpers for inline onclicks
 function addItem(type) { marketPage.addItem(type); }
 function clearList(type) { marketPage.clearList(type); }
-
-document.addEventListener('DOMContentLoaded', marketPage.initializePage);

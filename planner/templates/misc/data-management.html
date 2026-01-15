@@ -10,9 +10,9 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
     <link rel="stylesheet" href="{% static 'css/data-management.css' %}?v=20260108">
 </head>
-<body>
+<body data-module="dataManagementPage">
   <div class="planner-container">
-                                        {% include 'header_include.html' %}
+    {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
@@ -122,19 +122,8 @@
     </div>
   </div>
 
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/bulk-import-tasks.js' %}?v=20260108"></script>
   <script src="{% static 'js/data-management.js' %}?v=20260108"></script>
-  <script>
-    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  </script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

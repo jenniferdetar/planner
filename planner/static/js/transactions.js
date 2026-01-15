@@ -1,6 +1,9 @@
+/**
+ * Transactions Module
+ */
+
 const transactionsPage = (() => {
-    const tableBody = document.getElementById('transactions-body');
-    const tableHeader = document.getElementById('transactions-header');
+    let tableBody, tableHeader;
     
     let accounts = [
         "Currently in Checking",
@@ -34,17 +37,36 @@ const transactionsPage = (() => {
         "2026-01-08"
     ];
 
-    function init() {
+    function initialize() {
+        console.log('Initializing Transactions...');
+        tableBody = document.getElementById('transactions-body');
+        tableHeader = document.getElementById('transactions-header');
+        
+        this.setupDate();
+
         if (window.opusStorage) {
-            opusStorage.on(render);
-            render();
+            // Check if we already registered a listener to avoid duplicates
+            // opusStorage.on(render); // If opusStorage supports multiple listeners
+            this.render();
+        }
+    }
+
+    function setupDate() {
+        const todayDate = document.getElementById('today-date');
+        if (todayDate) {
+            todayDate.textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
         }
     }
 
     function render() {
         if (!tableHeader || !tableBody) return;
 
-        const transactions = opusStorage.getTransactions();
+        const transactions = opusStorage.getTransactions() || [];
 
         // Render Header
         let headerHtml = '<tr><th class="account-header">Account</th>';
@@ -93,7 +115,7 @@ const transactionsPage = (() => {
         const date = input.dataset.date;
         const txId = input.dataset.id;
 
-        const transactions = opusStorage.getTransactions();
+        const transactions = opusStorage.getTransactions() || [];
         const existing = transactions.find(t => t.date === date && t.account === account);
 
         if (existing) {
@@ -117,7 +139,7 @@ const transactionsPage = (() => {
         input.classList.toggle('negative-amount', newValue < 0);
     }
 
-    return { init, handleBlur, handleFocus };
+    return { initialize, setupDate, render, handleBlur, handleFocus };
 })();
 
-document.addEventListener('DOMContentLoaded', transactionsPage.init);
+window.transactionsPage = transactionsPage;

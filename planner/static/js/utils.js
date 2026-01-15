@@ -284,18 +284,6 @@ const utils = (() => {
     return div.innerHTML;
   }
 
-  function setActiveSidebarItem() {
-    const links = document.querySelectorAll('.planner-sidebar-item');
-    if (!links.length) return;
-
-    const currentPage = window.location.pathname.split('/').pop();
-    links.forEach((link) => {
-      const href = link.getAttribute('href') || '';
-      const targetPage = href.split('/').pop();
-      link.classList.toggle('active', targetPage === currentPage);
-    });
-  }
-
   function formatCurrency(value) {
     if (value === null || value === undefined || value === '') return '';
     const num = parseFloat(String(value).replace(/[$,]/g, ''));
@@ -304,14 +292,6 @@ const utils = (() => {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2
     });
-  }
-
-  if (typeof document !== 'undefined') {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setActiveSidebarItem);
-    } else {
-      setActiveSidebarItem();
-    }
   }
 
   return {
@@ -342,7 +322,6 @@ const utils = (() => {
     setupToggleButtons,
     setupModalClosers,
     showToast,
-    escapeHtml,
-    setActiveSidebarItem
+    escapeHtml
   };
 })();

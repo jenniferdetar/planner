@@ -1,4 +1,4 @@
-const cseaNotesModule = (() => {
+window.cseaNotesModule = (() => {
   const cseaNotesField = () => document.getElementById('csea-notes');
   const cseaNotesSave = () => document.getElementById('csea-notes-save');
   const cseaNotesStatus = () => document.getElementById('csea-notes-status');
@@ -108,6 +108,8 @@ const cseaNotesModule = (() => {
   };
 
   const initialize = () => {
+    if (!document.getElementById('csea-notes-section')) return;
+
     const saveBtn = cseaNotesSave();
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
@@ -174,9 +176,3 @@ const cseaNotesModule = (() => {
 
   return { initialize };
 })();
-
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('csea-notes-section')) {
-    cseaNotesModule.initialize();
-  }
-});

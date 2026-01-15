@@ -1,4 +1,4 @@
-const intentionsDreams = (() => {
+window.intentionsDreams = (() => {
   const STORAGE_KEY = 'opus-intentions-dreams';
 
   function initialize() {

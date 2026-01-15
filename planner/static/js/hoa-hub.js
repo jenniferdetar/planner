@@ -1,4 +1,15 @@
-document.addEventListener('DOMContentLoaded', () => {
+window.hoaPage = (() => {
+  function initialize() {
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
     // Tab switching logic
     const tabs = document.querySelectorAll('.planner-header-pill[data-tab]');
     const contents = document.querySelectorAll('.hoa-tab-content');
@@ -207,4 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ].filter(Boolean).join('');
         }
     }
-});
+  }
+
+  return { initialize };
+})();

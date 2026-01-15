@@ -13,12 +13,6 @@
       display: none;
     }
 
-    .planner-header-pill.active {
-      background: #ffffff;
-      color: #00326b;
-      border-color: #00326b;
-    }
-
     .hoa-grid {
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
@@ -158,10 +152,10 @@
         </div>
         <div class="planner-header-right">
           <div class="planner-header-actions">
-            <button class="planner-header-pill active" data-tab="overview">Overview</button>
-            <button class="planner-header-pill" data-tab="financials">Financials</button>
-            <button class="planner-header-pill" data-tab="maintenance">Maintenance</button>
-            <button class="planner-header-pill" data-tab="units">Units Directory</button>
+            <button class="planner-header-pill pill-hoa active" data-tab="overview">Overview</button>
+            <button class="planner-header-pill pill-hoa" data-tab="financials">Financials</button>
+            <button class="planner-header-pill pill-hoa" data-tab="maintenance">Maintenance</button>
+            <button class="planner-header-pill pill-hoa" data-tab="units">Units Directory</button>
           </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
@@ -433,20 +427,7 @@
     </div>
   </div>
 
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
-  <script src="{% static 'js/supabase-client.js' %}"></script>
   <script src="{% static 'js/hoa-hub.js' %}"></script>
-  <script>
-    const todayDateEl = document.getElementById('today-date');
-    if (todayDateEl) {
-      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    }
-  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     if (window.pdfjsLib) {

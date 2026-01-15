@@ -11,9 +11,9 @@
   <link rel="stylesheet" href="{% static 'css/forms.css' %}?v=20260108">
   <link rel="stylesheet" href="{% static 'css/max-completion-time.css' %}?v=20260108">
 </head>
-<body>
+<body data-module="maxCompletionTimePage">
   <div class="planner-container">
-                                        {% include 'header_include.html' %}
+    {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
@@ -21,7 +21,7 @@
           <h1>Paylog Submission</h1>
           <p>LAUSD Professional Expert</p>
         </div>
-                        <div class="planner-header-right">
+        <div class="planner-header-right">
           <div class="planner-header-actions">
             <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
             <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
@@ -49,8 +49,7 @@
   </div>
 
   <script src="{% static 'js/max-completion-time-data.js' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/max-completion-time.js' %}?v=20260108"></script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

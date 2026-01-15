@@ -13,6 +13,12 @@
       try {
         await window.opusStorage.initializeStorage();
         window.dispatchEvent(new CustomEvent('opusStorageInitialized'));
+
+        // Initialize Global Components
+        if (window.SidebarModule && window.SidebarModule.init) {
+          await window.SidebarModule.init();
+        }
+
         // Trigger initial render if initialize function exists
         const moduleName = document.body.dataset.module;
         if (moduleName && window[moduleName] && window[moduleName].initialize) {

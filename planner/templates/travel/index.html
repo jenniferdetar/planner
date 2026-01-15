@@ -10,9 +10,9 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
   <link rel="stylesheet" href="{% static 'css/travel-itinerary.css' %}?v=20260108">
 </head>
-<body>
+<body data-module="travelPage">
   <div class="planner-container">
-            {% include 'header_include.html' %}
+                                {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
@@ -100,18 +100,7 @@
     </div>
   </div>
 
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
-  <script>
-    const todayDateEl = document.getElementById('today-date');
-    if (todayDateEl) {
-      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    }
-  </script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'js/travel.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

@@ -65,9 +65,9 @@
     }
   </style>
 </head>
-<body>
+<body data-module="weeklyTasks">
   <div class="planner-container">
-            {% include 'header_include.html' %}
+    {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
@@ -75,7 +75,7 @@
           <h1>Weekly Action Plan</h1>
           <p>Consolidated weekly tasks from all your SMART goals</p>
         </div>
-                        <div class="planner-header-right">
+        <div class="planner-header-right">
           <div class="planner-header-actions">
             <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
             <a href="/work-planner/" class="planner-header-pill">Work Planner</a>
@@ -99,12 +99,8 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
-  <script type="module" src="{% static 'js/weekly-tasks.js' %}?v=20260108"></script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'data/goals-data.js' %}?v=20260108"></script>
+  <script src="{% static 'js/weekly-tasks.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

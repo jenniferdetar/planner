@@ -5,25 +5,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Work Planner</title>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}?v=20260108" />
+  <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108" />
   <link rel="stylesheet" href="{% static 'css/personal-planner.css' %}?v=20260108" />
   <link rel="stylesheet" href="{% static 'css/work-planner.css' %}?v=20260108" />
 </head>
-<body>
+<body data-module="workPlanner">
   <div class="planner-container work-planner-page">
-                                    {% include 'header_include.html' %}
+    {% include 'header_include.html' %}
 
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
           <h1>Work Planner</h1>
           <p>Weekly schedule with editable lines</p>
-        </div>
-                        <div class="planner-header-right">
-          <div class="planner-header-actions">
-            <a href="/personal-planner/" class="planner-header-pill">Personal Planner</a>
-            <a href="/work-planner/" class="planner-header-pill active">Work Planner</a>
+          <div class="header-pills-container" style="display: flex; gap: 10px; margin-left: 20px;">
+            <a href="/personal-planner/" class="planner-header-pill pill-personal">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill pill-work active">Work Planner</a>
           </div>
+        </div>
+        <div class="planner-header-right">
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
@@ -55,13 +55,9 @@
             <div class="work-grid-subtitle">Times auto-filled from events; click any line to edit</div>
           </div>
           <div id="work-grid" class="work-grid"></div>
-          <div class="work-tasks-list" style="margin-top: 20px;">
-            <h3>Tasks from Supabase</h3>
-            <ul>
-              {% for task in tasks %}
-              <li>{{ task.title }}</li>
-              {% endfor %}
-            </ul>
+          
+          <div class="weekly-tasks-row">
+            <!-- Populated by work-planner.js -->
           </div>
         </section>
       </main>
@@ -72,9 +68,8 @@
     </div>
   </div>
 
-  <script src="{% static 'js/base.js' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
-  <script type="module" src="{% static 'js/work-planner.js' %}?v=20260108"></script>
+  <script src="{% static 'data/goals-data.js' %}?v=20260108"></script>
+  <script src="{% static 'js/work-planner.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>

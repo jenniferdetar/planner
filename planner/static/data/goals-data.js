@@ -1,7 +1,7 @@
 // goals-data.js
 // Central data store for all SMART goals + weekly tasks + how they tie together.
 
-export const GOALS = {
+window.GOALS = {
   "Lose 50 lbs": {
     category: "Health",
     tiesTo: [

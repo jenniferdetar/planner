@@ -1,6 +1,5 @@
-import { GOALS } from '../data/goals-data.js';
-
-const smartGoals = (() => {
+window.smartGoals = (() => {
+  const GOALS = window.GOALS || {};
   const STORAGE_KEY = 'smartGoals';
   let goals = [];
   let smartData = {};

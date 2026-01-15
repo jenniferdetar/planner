@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{% static 'css/base.css' %}?v=20260108" />
   <link rel="stylesheet" href="{% static 'css/opus-core.css' %}?v=20260108" />
   <link rel="stylesheet" href="{% static 'css/home.css' %}?v=20260108" />
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
@@ -37,12 +36,6 @@
     
     .csea-tab-content.hidden {
       display: none;
-    }
-
-    .csea-cta-pill.active {
-      background: #ffffff;
-      color: #00326b;
-      border-color: #00326b;
     }
 
     /* Styles for Meeting Notes (from csea-meeting-notes.html) */
@@ -160,19 +153,22 @@
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
-          <h1>CSEA Tracker</h1>
-          <p id="csea-subtitle">Stewarded member issues at a glance</p>
+          <div>
+            <h1>CSEA Tracker</h1>
+            <p id="csea-subtitle">Stewarded member issues at a glance</p>
+          </div>
+          <div class="header-pills-container" style="display: flex; gap: 10px; margin-left: 20px;">
+            <a href="/personal-planner/" class="planner-header-pill pill-personal">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill pill-work">Work Planner</a>
+            <button type="button" id="grievance-pill-btn" class="planner-header-pill pill-csea">Grievance Form</button>
+          </div>
+          <div class="header-pills-container sub-navigation" style="display: flex; gap: 10px; margin-left: 20px;">
+            <button type="button" class="planner-subpage-pill csea-tab-btn active" data-tab="issues">Issue Log</button>
+            <button type="button" class="planner-subpage-pill csea-tab-btn" data-tab="meetings">Meeting Notes</button>
+            <button type="button" class="planner-subpage-pill csea-tab-btn" data-tab="notes">Notes</button>
+          </div>
         </div>
         <div class="planner-header-right">
-          <div class="csea-cta-row">
-            <button type="button" id="grievance-pill-btn" class="csea-cta-pill">
-              <i class="fa-solid fa-capsules text-base"></i>
-              <span>Grievance Form</span>
-            </button>
-            <button type="button" class="csea-cta-pill csea-tab-btn active" data-tab="issues">Issue Log</button>
-            <button type="button" class="csea-cta-pill csea-tab-btn" data-tab="meetings">Meeting Notes</button>
-            <button type="button" class="csea-cta-pill csea-tab-btn" data-tab="notes">Notes</button>
-          </div>
           <div class="planner-header-date" id="today-date"></div>
         </div>
       </header>
@@ -360,65 +356,10 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="{% static 'js/supabase-client.js' %}"></script>
-  <script src="{% static 'js/opus-storage.js' %}"></script>
-  <script src="{% static 'js/auth-check.js?v=20260113' %}"></script>
-  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/csea.js' %}?v=20260108"></script>
   <script src="{% static 'js/csea-ui.js' %}?v=20260108"></script>
   <script src="{% static 'js/csea-meeting-notes.js' %}?v=20260108"></script>
   <script src="{% static 'js/csea-notes-logic.js' %}?v=20260108"></script>
   <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Tab Switching Logic
-      const tabs = document.querySelectorAll('.csea-tab-btn');
-      const contents = document.querySelectorAll('.csea-tab-content');
-      const subtitle = document.getElementById('csea-subtitle');
-
-      const subtitleMap = {
-        'issues': 'Stewarded member issues at a glance',
-        'meetings': 'Capture summaries and follow-ups for member meetings',
-        'notes': 'Follow-ups, reminders, and outcomes'
-      };
-
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          const target = tab.dataset.tab;
-          
-          tabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-
-          contents.forEach(c => {
-            if (c.id === `${target}-tab`) {
-              c.classList.remove('hidden');
-            } else {
-              c.classList.add('hidden');
-            }
-          });
-
-          if (subtitle && subtitleMap[target]) {
-            subtitle.textContent = subtitleMap[target];
-          }
-        });
-      });
-
-      // Date update
-      const cseaTodayDate = document.getElementById('today-date');
-      if (cseaTodayDate) {
-        cseaTodayDate.textContent = new Date().toLocaleDateString('en-US', {
-          weekday: 'short',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        });
-      }
-
-      // Initialize sub-modules if needed (they might already init on DOMContentLoaded)
-      if (window.initCSEA) initCSEA();
-    });
-  </script>
 </body>
 </html>

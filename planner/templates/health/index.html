@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Health - Opus One Planner</title>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}?v=20260108">
   <link rel="stylesheet" href="{% static 'css/notes.css' %}?v=20260108">
   <style>
     .notes-page.market-page {
@@ -302,10 +301,6 @@
     </div>
   </div>
 
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-data.js' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
   <script src="{% static 'js/health.js' %}?v=20260108"></script>
   <script>
     const healthPage = {
@@ -326,5 +321,15 @@
     };
 
     function switchTab(tabId) {
+      document.querySelectorAll('.health-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      const activeTab = Array.from(document.querySelectorAll('.health-tab')).find(t => t.getAttribute('onclick').includes(tabId));
+      if (activeTab) activeTab.classList.add('active');
+      
+      const content = document.getElementById(`${tabId}-tab`);
+      if (content) content.classList.add('active');
+    }
+  </script>
 </body>
 </html>

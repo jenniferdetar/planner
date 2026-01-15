@@ -1,8 +1,9 @@
-import { GOALS } from '../data/goals-data.js';
-
 const weeklyTasks = (() => {
   const container = document.getElementById('weekly-tasks-container');
   const WEEKLY_STATUS_KEY = 'weeklyTaskStatus';
+  
+  // Use global GOALS if available
+  const GOALS_REF = window.GOALS || {};
 
   function getWeekKey() {
     const now = new Date();
@@ -45,7 +46,7 @@ const weeklyTasks = (() => {
 
     activeGoals.forEach(goal => {
       const stored = smartData[goal.id] || {};
-      const template = GOALS[goal.title] || {};
+      const template = GOALS_REF[goal.title] || {};
       
       let tasks = [];
       if (stored.weeklyTasks) {
@@ -130,14 +131,11 @@ const weeklyTasks = (() => {
       renderTasks();
     });
 
-    window.addEventListener('storage', (e) => {
-      if (e.key === WEEKLY_STATUS_KEY) {
-        renderTasks();
-      }
-    });
+    // Handle both local and Supabase updates
+    opusStorage.on(renderTasks);
   }
 
   return { initialize };
 })();
 
-document.addEventListener('DOMContentLoaded', weeklyTasks.initialize);
+window.weeklyTasks = weeklyTasks;

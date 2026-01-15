@@ -1,4 +1,4 @@
-const personalPlanner = (() => {
+window.personalPlanner = (() => {
   let currentView = 'list';
   let currentFilter = 'all';
   let editingTaskId = null;
@@ -40,7 +40,7 @@ const personalPlanner = (() => {
     'Taxes': 0
   };
 
-  function initializePage() {
+  function initialize() {
     const renderAll = () => {
       recurringEvents = opusStorage.getCalendarRecurring();
       eventsByDate = opusStorage.getCalendarByDate();
@@ -1083,8 +1083,7 @@ const personalPlanner = (() => {
   }
 
   return {
-    initializePage
+    initialize
   };
 })();
 
-document.addEventListener('DOMContentLoaded', personalPlanner.initializePage);

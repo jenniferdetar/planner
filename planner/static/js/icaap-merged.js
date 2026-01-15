@@ -1,4 +1,56 @@
-﻿const months = [
+﻿window.icaapPage = {
+  initialize: async function() {
+    updateDate();
+    await renderMergedTable();
+    setupMonthFilter();
+    setupTabSwitching();
+
+    if (window.hoursWorked && typeof window.hoursWorked.initialize === 'function') {
+      await window.hoursWorked.initialize();
+    }
+    if (window.icaapNotesModule && typeof window.icaapNotesModule.initialize === 'function') {
+      window.icaapNotesModule.initialize();
+    }
+    if (window.calendarEmbed && typeof window.calendarEmbed.initialize === 'function') {
+      window.calendarEmbed.initialize();
+    }
+  }
+};
+
+function setupTabSwitching() {
+  const tabBtns = document.querySelectorAll('.icaap-tab-btn');
+  const tabContents = document.querySelectorAll('.icaap-tab-content');
+
+  function switchTab(tabId) {
+    tabContents.forEach(content => {
+      content.classList.toggle('hidden', content.id !== `${tabId}-tab`);
+    });
+
+    tabBtns.forEach(btn => {
+      if (btn.getAttribute('data-tab') === tabId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    localStorage.setItem('icaapActiveTab', tabId);
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+      if (tabId) switchTab(tabId);
+    });
+  });
+
+  const savedTab = localStorage.getItem('icaapActiveTab');
+  if (savedTab) {
+    switchTab(savedTab);
+  }
+}
+
+const months = [
   { key: 'jul', label: 'Jul<br/>2025' },
   { key: 'aug', label: 'Aug<br/>2025' },
   { key: 'sep', label: 'Sep<br/>2025' },
@@ -202,8 +254,4 @@ function updateDate() {
   todayDateElement.textContent = today.toLocaleDateString('en-US', options);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  updateDate();
-  renderMergedTable();
-  setupMonthFilter();
-});
+

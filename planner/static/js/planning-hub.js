@@ -1,10 +1,13 @@
-const planningHub = (() => {
+window.planningHubPage = (() => {
   const state = {
     initializedModules: new Set(['dashboard'])
   };
 
   async function initialize() {
-    await opusData.initialize();
+    console.log('Initializing Planning Hub...');
+    if (window.opusData) {
+      await window.opusData.initialize();
+    }
     
     setupTabs();
     setupDashboardNav();
@@ -153,5 +156,3 @@ const planningHub = (() => {
 
   return { initialize };
 })();
-
-document.addEventListener('DOMContentLoaded', planningHub.initialize);

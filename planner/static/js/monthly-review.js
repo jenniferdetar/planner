@@ -1,4 +1,4 @@
-const monthlyReview = (() => {
+window.monthlyReview = (() => {
   function initialize() {
     // Load data
     const savedData = opusStorage.getMetadata('monthly-review') || {};

@@ -122,8 +122,14 @@
     <div class="planner-content">
       <header class="planner-header">
         <div class="planner-header-left">
-          <h1>Finance Hub</h1>
-          <p>Quick access to your money tools</p>
+          <div>
+            <h1>Finance Hub</h1>
+            <p>Quick access to your money tools</p>
+          </div>
+          <div class="header-pills-container" style="display: flex; gap: 10px; margin-left: 20px;">
+            <a href="/personal-planner/" class="planner-header-pill pill-personal">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill pill-work">Work Planner</a>
+          </div>
         </div>
         <div class="planner-header-right">
           <div class="planner-header-date" id="today-date"></div>
@@ -191,27 +197,6 @@
     </div>
   </div>
 
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
-  <script>
-    const financePage = {
-      initialize: () => {
-        const todayDate = document.getElementById('today-date');
-        if (todayDate) {
-          todayDate.textContent = new Date().toLocaleDateString('en-US', {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          });
-        }
-      }
-    };
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', () => {
-      financePage.initialize();
-    });
-  </script>
+  <script src="{% static 'js/finance.js' %}?v=20260108"></script>
 </body>
 </html>

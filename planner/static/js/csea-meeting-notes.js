@@ -1,4 +1,4 @@
-const cseaMeetingNotes = (() => {
+window.cseaMeetingNotes = (() => {
   const STORAGE_KEY = 'cseaMeetingNotes';
   const MEMBER_CSV_PATH = 'data/Membership File_092425_191812.csv';
   const STEWARDS_PATH = 'data/csea_stewards.json';
@@ -185,9 +185,6 @@ const cseaMeetingNotes = (() => {
   }
 
   async function initialize() {
-    if (window.opusStorage) {
-      await window.opusStorage.initializeStorage();
-    }
     const notes = loadNotes();
     setToday();
     loadMembers();
@@ -200,5 +197,3 @@ const cseaMeetingNotes = (() => {
 
   return { initialize };
 })();
-
-document.addEventListener('DOMContentLoaded', cseaMeetingNotes.initialize);

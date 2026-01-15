@@ -1,4 +1,4 @@
-const healthPage = (() => {
+window.healthPage = (() => {
   const MEDICATION_TITLE_CASE = new Map([
     ['OZEMPIC 4 MG/3ML INJ NOVO', 'Ozempic 4 mg/3ml Inj Novo'],
     ['GLIPIZIDE 5 MG TAB APOT', 'Glipizide 5 mg Tab Apot'],
@@ -32,7 +32,7 @@ const healthPage = (() => {
       'Rosuvastatin 20 mg Tab Torr',
       'Ozempic 2 mg/3ml Inj Novo',
       'Buspirone 10 mg Tab Unic',
-      'Jardiance 25 mg Tab Boeh',
+      'Jardiance 25 MG Tab Boeh',
       'Metformin 1,000 mg Tab Gran',
       'Estradiol 2 mg Tab Nort',
       'Bupropion XL 300 mg Tab Lupi',
@@ -43,7 +43,112 @@ const healthPage = (() => {
   let healthData = JSON.parse(JSON.stringify(MASTER_LIST));
   let saveTimeout;
 
-  function initialize() {
+  function loadData() {
+    healthData = opusStorage.getMetadata('opus-health-data') || JSON.parse(JSON.stringify(MASTER_LIST));
+  }
+
+  function saveData() {
+    opusStorage.updateMetadata('opus-health-data', healthData);
+  }
+
+  function scheduleSave() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveData, 1000);
+  }
+
+  function renderList(type) {
+    const container = document.getElementById(`${type}-list`);
+    if (!container) return;
+
+    container.innerHTML = '';
+    if (!Array.isArray(healthData[type])) {
+      healthData[type] = [];
+    }
+    healthData[type].forEach((item, index) => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'list-item';
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = item;
+      input.addEventListener('input', (e) => {
+        healthData[type][index] = e.target.value;
+        scheduleSave();
+      });
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.innerHTML = '✕';
+      deleteBtn.title = 'Delete item';
+      deleteBtn.onclick = () => removeItem(type, index);
+
+      itemEl.appendChild(input);
+      itemEl.appendChild(deleteBtn);
+      container.appendChild(itemEl);
+    });
+  }
+
+  function renderLists() {
+    renderList('fruits');
+    renderList('vegetables');
+    renderList('legumes');
+    renderList('medication');
+  }
+
+  function addItem(type) {
+    if (!healthData[type]) healthData[type] = [];
+    healthData[type].push('');
+    renderList(type);
+    
+    // Focus the new input
+    const container = document.getElementById(`${type}-list`);
+    const inputs = container.querySelectorAll('input');
+    if (inputs.length > 0) {
+      inputs[inputs.length - 1].focus();
+    }
+    saveData();
+  }
+
+  function removeItem(type, index) {
+    healthData[type].splice(index, 1);
+    renderList(type);
+    saveData();
+  }
+
+  function clearList(type) {
+    if (confirm(`Are you sure you want to clear all ${type}?`)) {
+      healthData[type] = [];
+      renderList(type);
+      saveData();
+    }
+  }
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.health-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    const activeTab = Array.from(document.querySelectorAll('.health-tab')).find(t => t.getAttribute('onclick')?.includes(tabId));
+    if (activeTab) activeTab.classList.add('active');
+    
+    const content = document.getElementById(`${tabId}-tab`);
+    if (content) content.classList.add('active');
+  }
+
+  async function initialize() {
+    const todayDateEl = document.getElementById('today-date');
+    if (todayDateEl) {
+      todayDateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    if (window.opusStorage) {
+      await window.opusStorage.initializeStorage();
+    }
+    
     loadData();
     
     // Migration from old market data if it exists and new data is empty
@@ -88,93 +193,16 @@ const healthPage = (() => {
     renderLists();
   }
 
-  function loadData() {
-    healthData = opusStorage.getMetadata('opus-health-data') || JSON.parse(JSON.stringify(MASTER_LIST));
-  }
-
-  function saveData() {
-    opusStorage.updateMetadata('opus-health-data', healthData);
-  }
-
-  function scheduleSave() {
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(saveData, 1000);
-  }
-
-  function renderLists() {
-    renderList('fruits');
-    renderList('vegetables');
-    renderList('legumes');
-    renderList('medication');
-  }
-
-  function renderList(type) {
-    const container = document.getElementById(`${type}-list`);
-    if (!container) return;
-
-    container.innerHTML = '';
-    if (!Array.isArray(healthData[type])) {
-      healthData[type] = [];
-    }
-    healthData[type].forEach((item, index) => {
-      const itemEl = document.createElement('div');
-      itemEl.className = 'list-item';
-      
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.value = item;
-      input.addEventListener('input', (e) => {
-        healthData[type][index] = e.target.value;
-        scheduleSave();
-      });
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'delete-btn';
-      deleteBtn.innerHTML = '✕';
-      deleteBtn.title = 'Delete item';
-      deleteBtn.onclick = () => removeItem(type, index);
-
-      itemEl.appendChild(input);
-      itemEl.appendChild(deleteBtn);
-      container.appendChild(itemEl);
-    });
-  }
-
-  function addItem(type) {
-    healthData[type].push('');
-    renderList(type);
-    
-    // Focus the new input
-    const container = document.getElementById(`${type}-list`);
-    const inputs = container.querySelectorAll('input');
-    if (inputs.length > 0) {
-      inputs[inputs.length - 1].focus();
-    }
-    saveData();
-  }
-
-  function removeItem(type, index) {
-    healthData[type].splice(index, 1);
-    renderList(type);
-    saveData();
-  }
-
-  function clearList(type) {
-    if (confirm(`Are you sure you want to clear all ${type}?`)) {
-      healthData[type] = [];
-      renderList(type);
-      saveData();
-    }
-  }
-
   return {
     initialize,
     addItem,
     removeItem,
-    clearList
+    clearList,
+    switchTab
   };
 })();
 
-// Global helpers for inline onclicks
+// Global helpers for inline onclicks in HTML
 function addItem(type) { healthPage.addItem(type); }
 function clearList(type) { healthPage.clearList(type); }
+function switchTab(tabId) { healthPage.switchTab(tabId); }

@@ -1,15 +1,67 @@
+window.calendarPage = {
+  initialize: async function() {
+    const todayDate = document.getElementById('today-date');
+    if (todayDate) {
+      todayDate.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+    
+    // The calendar elements are created by calendar-embed.js
+    // If they don't exist yet, we might need to wait or rely on its own init.
+    // However, if we are on the Calendar page, they should be there.
+    
+    await loadData();
+    
+    if (prevBtn) {
+      prevBtn.onclick = () => {
+        current.setMonth(current.getMonth() - 1);
+        renderCalendar();
+      };
+    }
+
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        current.setMonth(current.getMonth() + 1);
+        renderCalendar();
+      };
+    }
+
+    if (todayBtn) {
+      todayBtn.onclick = () => {
+        current = new Date();
+        renderCalendar();
+      };
+    }
+  }
+};
+
 let planner = []
 let eventsByDate = {}
 let birthdays = []
 
-const body = document.getElementById('calendarBody');
-const label = document.getElementById('monthLabel');
-const prevBtn = document.getElementById('prevMonth');
-const nextBtn = document.getElementById('nextMonth');
+// Get elements (might be null initially if embedded)
+let body = document.getElementById('calendarBody');
+let label = document.getElementById('monthLabel');
+let prevBtn = document.getElementById('prevMonth');
+let nextBtn = document.getElementById('nextMonth');
+let todayBtn = document.getElementById('todayBtn');
 
 let current = new Date();
 
 async function loadData() {
+  // Re-fetch elements in case they were just created by embed
+  body = document.getElementById('calendarBody');
+  label = document.getElementById('monthLabel');
+  prevBtn = document.getElementById('prevMonth');
+  nextBtn = document.getElementById('nextMonth');
+  todayBtn = document.getElementById('todayBtn');
+
+  if (!body || !label) return;
+
   try {
     planner = opusStorage.getCalendarRecurring();
     eventsByDate = opusStorage.getCalendarByDate();
@@ -383,27 +435,6 @@ function renderCalendar() {
   }
 }
 
-prevBtn.addEventListener('click', () => {
-  current.setMonth(current.getMonth() - 1);
-  renderCalendar();
-});
+// Export to window
+window.calendarPage = calendarPage;
 
-nextBtn.addEventListener('click', () => {
-  current.setMonth(current.getMonth() + 1);
-  renderCalendar();
-});
-
-const todayBtn = document.getElementById('todayBtn');
-if (todayBtn) {
-  todayBtn.addEventListener('click', () => {
-    current = new Date();
-    renderCalendar();
-  });
-}
-
-// Load data after storage is ready
-if (window.opusStorage) {
-  loadData();
-} else {
-  window.addEventListener('opusStorageInitialized', loadData);
-}

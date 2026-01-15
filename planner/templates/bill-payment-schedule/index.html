@@ -10,23 +10,35 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}?v=20260108">
   <link rel="stylesheet" href="{% static 'css/bill-payment-schedule.css' %}?v=20260108">
 </head>
-<body>
+<body data-module="billPaymentPage">
   <div class="planner-container">
                                 {% include 'header_include.html' %}
 
-    <div class="planner-content">      <main class="planner-main">
+    <div class="planner-content">
+      <header class="planner-header">
+        <div class="planner-header-left">
+          <div>
+            <h1>Bill Payment Schedule</h1>
+            <p>Track recurring expenses and payments</p>
+          </div>
+          <div class="header-pills-container" style="display: flex; gap: 10px; margin-left: 20px;">
+            <a href="/finance/" class="planner-header-pill pill-finance">Back to Finance</a>
+            <a href="/personal-planner/" class="planner-header-pill pill-personal">Personal Planner</a>
+            <a href="/work-planner/" class="planner-header-pill pill-work">Work Planner</a>
+          </div>
+        </div>
+        <div class="planner-header-right">
+          <div class="planner-header-date" id="today-date"></div>
+        </div>
+      </header>
+      <main class="planner-main">
         <section class="planner-section bill-schedule">
           <div class="bill-schedule-card">
-            <div class="bill-schedule-header">
-              <div class="bill-schedule-icon">$</div>
-              <h1 class="bill-schedule-title">Bill Payment Schedule</h1>
-              <p class="bill-schedule-subtitle">
-                Keep track of your bill payments by listing recurring expenses, including how
-                much they cost and what date they are typically paid. Check them off
-                the list below as you pay your bills each month.
-              </p>
+            <div class="bill-schedule-intro" style="margin-bottom: 20px; color: #6a6a6a; font-size: 0.95rem; line-height: 1.5; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+              Keep track of your bill payments by listing recurring expenses, including how
+              much they cost and what date they are typically paid. Check them off
+              the list below as you pay your bills each month.
             </div>
-            <div class="bill-schedule-divider"></div>
             <div class="bill-schedule-table-wrap">
               <table class="bill-schedule-table">
                 <thead>
@@ -341,35 +353,7 @@
       </footer>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="{% static 'js/auth-check.js?v=20260113' %}?v=20260108"></script>
-  <script src="{% static 'js/opus-storage.js' %}?v=20260108"></script>
-  <script src="{% static 'js/utils.js' %}?v=20260108"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const storageKey = 'bill-payment-schedule:checked';
-      const boxes = document.querySelectorAll('.month-box');
-      
-      // Load state
-      const checkedState = opusStorage.getMetadata(storageKey) || {};
-      
-      boxes.forEach((box, index) => {
-        const row = box.closest('tr');
-        const item = row.querySelector('[data-label="Item"]').textContent.trim();
-        const boxKey = `${item}:${index % 12}`;
-        
-        if (checkedState[boxKey]) {
-          box.classList.add('checked');
-        }
-        
-        box.addEventListener('click', () => {
-          box.classList.toggle('checked');
-          checkedState[boxKey] = box.classList.contains('checked');
-          opusStorage.updateMetadata(storageKey, checkedState);
-        });
-      });
-    });
-  </script>
-<script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
+  <script src="{% static 'js/bill-payment.js' %}?v=20260108"></script>
+  <script src="{% static 'js/calendar-embed.js' %}?v=20260108"></script>
 </body>
 </html>
