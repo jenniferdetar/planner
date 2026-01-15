@@ -41,9 +41,9 @@ __pycache__/
 next-env.d.ts
 
 # Data files
-*.csv
-*.xlsx
-*.pdf
+# *.csv
+# *.xlsx
+# *.pdf
 planner/local-storage.json
 planner/public/data/
 planner/public/js/approval-date-data.js

@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.template import TemplateDoesNotExist
-from .models import Goals, OpusTasks, CalendarRecurring, HoaExpenses, HoursWorked, OpusMeetings
+from .models import OpusGoals, OpusTasks, CalendarRecurring, HoaExpenses, HoursWorked, OpusMeetings
 
 def goals_view(request):
-    goals = Goals.objects.all()
+    goals = OpusGoals.objects.all()
     return render(request, 'planning/goals.html', {'goals': goals})
 
 def calendar_view(request):
