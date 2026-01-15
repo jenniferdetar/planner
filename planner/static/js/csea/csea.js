@@ -239,7 +239,7 @@ window.cseaPage = (() => {
 
   async function loadMemberIdsFromCsv() {
     try {
-      const res = await fetch('data/Ch. 500-RB 11-7-2024.xlsx - QueryBuilder.csv', { cache: 'no-store' })
+      const res = await fetch('data/csea/Ch. 500-RB 11-7-2024.xlsx - QueryBuilder.csv', { cache: 'no-store' })
       if (!res.ok) return
       const text = await res.text()
       const [headerLine, ...lines] = text.trim().split(/\r?\n/)
@@ -270,7 +270,7 @@ window.cseaPage = (() => {
 
   async function loadStewardsFromJson() {
     try {
-      const res = await fetch('data/csea_stewards.json?v=20260108', { cache: 'no-store' })
+      const res = await fetch('data/csea/csea_stewards.json?v=20260108', { cache: 'no-store' })
       if (!res.ok) throw new Error('Steward file unavailable')
       const data = await res.json()
       if (Array.isArray(data) && data.length) {

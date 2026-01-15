@@ -1,7 +1,7 @@
 window.cseaMeetingNotes = (() => {
   const STORAGE_KEY = 'cseaMeetingNotes';
-  const MEMBER_CSV_PATH = 'data/Membership File_092425_191812.csv';
-  const STEWARDS_PATH = 'data/csea_stewards.json';
+  const MEMBER_CSV_PATH = 'data/csea/Membership File_092425_191812.csv';
+  const STEWARDS_PATH = 'data/csea/csea_stewards.json';
   const memberMap = new Map();
 
   function parseCsv(text, maxRows) {

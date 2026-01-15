@@ -63,6 +63,9 @@ async function loadData() {
   if (!body || !label) return;
 
   try {
+    if (window.opusStorage && window.opusStorage.initializeStorage) {
+      await window.opusStorage.initializeStorage();
+    }
     planner = opusStorage.getCalendarRecurring();
     eventsByDate = opusStorage.getCalendarByDate();
     renderCalendar();
@@ -437,4 +440,3 @@ function renderCalendar() {
 
 // Export to window
 window.calendarPage = calendarPage;
-

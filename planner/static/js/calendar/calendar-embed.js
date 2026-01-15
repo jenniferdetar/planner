@@ -58,7 +58,7 @@ window.calendarEmbed = (() => {
       }
 
       const script = document.createElement('script');
-      script.src = '/static/js/calendar.js';
+      script.src = '/static/js/calendar/calendar.js';
       script.dataset.calendarEmbedScript = 'true';
       script.onload = () => {
         if (window.calendarPage && window.calendarPage.initialize) {

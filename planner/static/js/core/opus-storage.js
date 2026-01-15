@@ -140,7 +140,7 @@ const opusStorage = (() => {
     if (!hasEvents || !hasHabits) {
       try {
         console.log('Checking for migration from calendar-data.json...');
-        const res = await fetch('/static/data/calendar-data.json');
+        const res = await fetch('/static/data/calendar/calendar-data.json');
         if (!res.ok) return;
         const calendarData = await res.json();
 
@@ -180,8 +180,8 @@ const opusStorage = (() => {
       'opus_master_tasks', 'opus_mission', 'opus_preferences', 
       'books', 'hours_worked', 
       'calendar_recurring', 'calendar_by_date', 'Check Breakdown', 
-      'max_completion_times', 'approval_dates', 'vision_board_photos',
-      'csea_members', 'csea_issues', 'tasks', 'planner_habits', 'planner_habit_status', 'work_planner_edits'
+      'paylog submission', 'approval_dates', 'vision_board_photos',
+      'csea_members', 'csea_issues', 'planner_habits', 'planner_habit_status', 'work_planner_edits'
     ];
 
     tables.forEach(table => {
@@ -329,7 +329,7 @@ const opusStorage = (() => {
     }
 
     // Pull Max Completion Times
-    const { data: maxTimesData } = await supabaseClient.from('max_completion_times').select('*').eq('user_id', supabaseUser.id);
+    const { data: maxTimesData } = await supabaseClient.from('paylog submission').select('*').eq('user_id', supabaseUser.id);
     if (maxTimesData) {
       data.metadata.maxCompletionTimes = maxTimesData;
     }
@@ -655,7 +655,7 @@ const opusStorage = (() => {
       await supabaseClient.from('hours_worked').upsert(data.metadata.hoursWorked.map(h => ({ ...h, user_id: supabaseUser.id })), { onConflict: 'id' });
     }
     if (data.metadata.maxCompletionTimes) {
-      await supabaseClient.from('max_completion_times').upsert(data.metadata.maxCompletionTimes.map(m => ({ ...m, user_id: supabaseUser.id })), { onConflict: 'id' });
+      await supabaseClient.from('paylog submission').upsert(data.metadata.maxCompletionTimes.map(m => ({ ...m, user_id: supabaseUser.id })), { onConflict: 'id' });
     }
     if (data.metadata.approvalDates) {
       await supabaseClient.from('approval_dates').upsert(data.metadata.approvalDates.map(a => ({ ...a, user_id: supabaseUser.id })), { onConflict: 'id' });

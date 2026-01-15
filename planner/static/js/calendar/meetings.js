@@ -38,7 +38,7 @@ window.meetingsPage = (() => {
   }
 
   function loadStewards() {
-    return fetch('data/csea_stewards.json')
+    return fetch('data/csea/csea_stewards.json')
       .then(response => response.json())
       .then(data => {
         if (Array.isArray(data)) {

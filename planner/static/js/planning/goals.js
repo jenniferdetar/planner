@@ -4,7 +4,7 @@ window.goalsPage = (() => {
   const AUTO_IMPORT_FLAG = 'opusGoalsAutoImported';
   const AUTO_IMPORT_VERSION_KEY = 'opusGoalsImportVersion';
   const AUTO_IMPORT_HASH_KEY = 'opusGoalsImportHash';
-  const AUTO_IMPORT_PATH = 'data/goals-import.json';
+  const AUTO_IMPORT_PATH = 'data/planning/goals-import.json';
   const SHEET_MIN_LINES = 6;
   const SHEET_SECTIONS = [
     { label: 'Physical', tone: 'mint' },

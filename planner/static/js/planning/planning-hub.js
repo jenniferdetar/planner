@@ -113,7 +113,7 @@ window.planningHubPage = (() => {
     const activeGoals = opusData.goals || [];
     let allWeeklyTasks = [];
     
-    // This part might need data from /data/goals-data.js which is not easily available in this module
+    // This part might need data from /data/planning/goals-data.js which is not easily available in this module
     // unless we include it. For now, we'll try to get it from goals-data.js if it's loaded.
     const GOALS_TEMPLATE = window.GOALS || {};
 
