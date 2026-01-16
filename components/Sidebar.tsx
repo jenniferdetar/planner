@@ -8,14 +8,14 @@ import { User } from '@supabase/supabase-js';
 
 const sidebarItems = [
   { href: '/', text: 'Home', class: 'nav-home' },
-  { href: '/tasks', text: 'Tasks', class: 'nav-tasks' },
-  { href: '/goals', text: 'Goals', class: 'nav-goals' },
   { href: '/csea', text: 'CSEA', class: 'nav-csea' },
   { href: '/finance', text: 'Finance', class: 'nav-finance' },
   { href: '/health', text: 'Health', class: 'nav-health' },
   { href: '/hoa', text: 'HOA', class: 'nav-hoa' },
   { href: '/icaap', text: 'iCAAP', class: 'nav-icaap' },
-  { href: '/planning', text: 'Planning', class: 'nav-planning' }
+  { href: '/planning', text: 'Planning', class: 'nav-planning' },
+  { href: '/tasks', text: 'Tasks', class: 'nav-tasks' },
+  { href: '/goals', text: 'Goals', class: 'nav-goals' }
 ];
 
 export default function Sidebar() {
@@ -39,7 +39,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 bg-[#0a2f5f] text-white flex flex-col">
+    <aside className="fixed left-0 top-0 h-full w-56 bg-[#0a2f5f] text-white flex flex-col">
       <div className="p-6 text-xl font-bold border-b border-[#ffffff22]">
         OPUS ONE
       </div>
