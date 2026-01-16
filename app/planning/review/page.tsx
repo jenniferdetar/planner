@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { PieChart, Save, ChevronLeft, Award, Search, FileText, CheckCircle2, Target, Zap } from 'lucide-react';
+import { PieChart, Save, ChevronLeft, Award, Search, FileText, CheckCircle2, Target, Zap, Sparkles } from 'lucide-react';
 
 interface Review {
   month: string;
