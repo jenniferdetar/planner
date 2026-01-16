@@ -449,25 +449,6 @@ export default function WorkPlannerPage() {
       </footer>
     </div>
   );
-                                contentEditable
-                                suppressContentEditableWarning
-                                onBlur={(e) => handleEdit(dateKey, slot.time, e.target.innerText)}
-                                className="w-full h-full outline-none text-[10px] font-medium text-gray-700 leading-tight"
-                              >
-                                {edits[dateKey]?.[slot.time] || ''}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Weekly Tasks Section */}
       <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">

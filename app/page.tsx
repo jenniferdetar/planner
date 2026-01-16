@@ -197,7 +197,7 @@ export default function Home() {
             )}
             <Link href="/planning/meetings" className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border-2 border-[#00326b]/10 text-[#00326b] font-black uppercase tracking-widest text-[10px] hover:bg-[#00326b] hover:text-white transition-all">
               Launch Meeting Registry
-            </button>
+            </Link>
           </div>
         </div>
       </section>
