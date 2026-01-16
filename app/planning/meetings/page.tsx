@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { OpusMeeting } from '@/types/database.types';
 import Link from 'next/link';
-import { Users, Calendar, MapPin, Plus, Trash2, Save, ChevronLeft, FileText, Clock, Info } from 'lucide-react';
+import { Users, Calendar, MapPin, Plus, Trash2, Save, ChevronLeft, FileText, Clock, Info, Search } from 'lucide-react';
 
 export default function MeetingsPage() {
   const [meetings, setMeetings] = useState<OpusMeeting[]>([]);
