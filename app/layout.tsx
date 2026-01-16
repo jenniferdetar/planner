@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-import Sidebar from "@/components/Sidebar";
+import TopNav from "@/components/TopNav";
 
 export const metadata: Metadata = {
   title: "Opus One Planner",
@@ -27,8 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}>
-        <Sidebar />
-        <main className="pl-56 min-h-screen">
+        <TopNav />
+        <main className="min-h-screen">
           {children}
         </main>
       </body>
