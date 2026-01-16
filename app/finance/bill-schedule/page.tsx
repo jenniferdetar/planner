@@ -39,6 +39,19 @@ const BILL_ITEMS = [
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+const CATEGORY_COLORS: Record<string, string> = {
+  Auto: '#008F00',
+  'Bill Pay': '#0433FF',
+  Cash: '#FF40FF',
+  'Credit Card': '#FF9300',
+  Housing: '#941100',
+  Savings: '#942193'
+};
+
+function getCategoryColor(category: string) {
+  return CATEGORY_COLORS[category] || '#94a3b8';
+}
+
 export default function BillSchedulePage() {
   const [checkedState, setCheckedState] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
@@ -148,10 +161,19 @@ export default function BillSchedulePage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {BILL_ITEMS.map((row, i) => (
+              {BILL_ITEMS.map((row, i) => {
+                const categoryColor = getCategoryColor(row.category);
+                return (
                 <tr key={i} className="group hover:bg-slate-50/50 transition-colors">
                   <td className="py-5">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#FFA1AB] bg-[#FFA1AB]/5 px-3 py-1 rounded-full border border-[#FFA1AB]/10">
+                    <span
+                      className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
+                      style={{
+                        color: categoryColor,
+                        backgroundColor: `${categoryColor}14`,
+                        borderColor: `${categoryColor}33`
+                      }}
+                    >
                       {row.category}
                     </span>
                   </td>
@@ -172,9 +194,10 @@ export default function BillSchedulePage() {
                             onClick={() => toggleBox(row.item, mIdx)}
                             className={`h-8 w-full rounded-lg border-2 cursor-pointer transition-all flex items-center justify-center ${
                               isChecked 
-                                ? 'bg-[#FFA1AB] border-[#FFA1AB] shadow-lg shadow-[#FFA1AB]/20 text-white' 
-                                : 'bg-gray-50 border-gray-100 hover:border-[#FFA1AB]/30'
+                                ? 'shadow-lg text-white' 
+                                : 'bg-gray-50 border-gray-100'
                             }`}
+                            style={isChecked ? { backgroundColor: categoryColor, borderColor: categoryColor, boxShadow: `0 10px 20px ${categoryColor}33` } : { borderColor: `${categoryColor}33` }}
                           >
                             {isChecked && <Save size={12} className="animate-in fade-in zoom-in" />}
                           </div>
@@ -183,7 +206,8 @@ export default function BillSchedulePage() {
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>

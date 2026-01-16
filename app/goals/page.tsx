@@ -9,6 +9,69 @@ import {
   TrendingUp, Award, Flag, Flame
 } from 'lucide-react';
 
+const PERSONAL_GOAL_SECTIONS = [
+  {
+    title: 'Physical',
+    headerClass: 'bg-[#d7eef0]',
+    items: ['Lose 5 lbs', 'Exercise more (Start with walking)', '', '', '']
+  },
+  {
+    title: 'Mental',
+    headerClass: 'bg-[#d7eef0]',
+    items: ['Journal at least 3x a week', 'Attend church more often', '', '', '']
+  },
+  {
+    title: 'Relational',
+    headerClass: 'bg-[#d7eef0]',
+    items: ['Have one outing w/Jeff monthly', 'Attend church more often', '', '', '']
+  },
+  {
+    title: 'Self-Care',
+    headerClass: 'bg-[#ffd6d6]',
+    items: ['Get nails done', 'Make more home made meals', '', '', '']
+  },
+  {
+    title: 'Hobbies',
+    headerClass: 'bg-[#ffd6d6]',
+    items: ['', '', '', '', '']
+  },
+  {
+    title: 'Home',
+    headerClass: 'bg-[#ffd6d6]',
+    items: ['Can meals', 'Save up for a freeze dryer', '', '', '']
+  },
+  {
+    title: 'Career',
+    headerClass: 'bg-[#e3e8ef]',
+    items: ['Promote, if possible', 'Get side gigs to leave LAUSD', '', '', '']
+  },
+  {
+    title: 'Financial',
+    headerClass: 'bg-[#e3e8ef]',
+    items: ['Help Jeff with Disability', 'Fully Funded Emergency Fund', 'Make more home made meals', '', '']
+  },
+  {
+    title: 'Organizational',
+    headerClass: 'bg-[#e3e8ef]',
+    items: ['De-clutter the living room', 'Clean up the office', "Donate what's not being used", '', '']
+  },
+  {
+    title: 'Screen Time',
+    headerClass: 'bg-[#f7e2c8]',
+    items: ['Keep to commute/work only', '', '', '', '']
+  },
+  {
+    title: 'Learn',
+    headerClass: 'bg-[#f7e2c8]',
+    items: ['Complete coding course strong', 'Complete MBA', '', '', '']
+  },
+  {
+    title: 'CSEA',
+    headerClass: 'bg-[#f7e2c8]',
+    items: ['Build relationships/network', 'Talk to more members', 'Re-elected for MB Committee', 'Represent more members', 'Find ways to grow meetings']
+  }
+];
+
 export default function GoalsPage() {
   const [goals, setGoals] = useState<OpusGoal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,9 +80,23 @@ export default function GoalsPage() {
   useEffect(() => {
     async function fetchGoals() {
       setLoading(true);
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError) {
+        console.error('Error fetching user:', authError);
+        setError(authError.message);
+        setLoading(false);
+        return;
+      }
+      if (!user) {
+        setGoals([]);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('opus_goals')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -71,6 +148,37 @@ export default function GoalsPage() {
           </div>
         </div>
         <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">🎯</div>
+      </section>
+
+      <section className="bg-white rounded-[2rem] border border-slate-200 shadow-sm p-8 md:p-12 mb-12">
+        <div className="text-center mb-8">
+          <div className="text-xs font-black uppercase tracking-[0.3em] text-gray-400">My Personal Goals</div>
+          <p className="text-xs text-gray-500 mt-2">
+            What one thing do you want to be intentional about this year? Decide what you want to track and define one way to clearly measure success.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {PERSONAL_GOAL_SECTIONS.map((section) => (
+            <div key={section.title} className="border border-slate-200 rounded-xl overflow-hidden">
+              <div className={`${section.headerClass} text-center py-2 text-[11px] font-bold tracking-widest`}>
+                {section.title}
+              </div>
+              <div className="px-4 py-3 space-y-2">
+                {section.items.map((item, idx) => (
+                  <div key={`${section.title}-${idx}`} className="border-b border-slate-200 pb-1 text-[13px] font-[family:var(--font-coming-soon)]">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 border border-slate-200 rounded-xl overflow-hidden">
+          <div className="bg-[#d7eef0] px-4 py-2 text-[11px] font-bold tracking-widest">TOTAL:</div>
+          <div className="h-10 border-t border-slate-200"></div>
+        </div>
       </section>
 
       {loading ? (
