@@ -1,23 +1,4 @@
 {
   "version": 2,
-  "cleanUrls": false,
-  "trailingSlash": false,
-  "buildCommand": "python manage.py migrate && python manage.py collectstatic --noinput",
-  "builds": [
-    {
-      "src": "vercel_app.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "50mb", "runtime": "python3.12" }
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/index.html",
-      "destination": "/vercel_app.py"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/vercel_app.py"
-    }
-  ]
+  "framework": "nextjs"
 }

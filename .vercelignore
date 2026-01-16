@@ -12,3 +12,11 @@ staticfiles/
 __pycache__/
 *.pyc
 .DS_Store
+
+# Django files
+core/
+planner/
+manage.py
+vercel_app.py
+requirements.txt
+*.py
