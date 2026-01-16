@@ -1,0 +1,14 @@
+*.xlsx
+*.pdf
+*.csv
+.git
+.github
+.vscode
+.zencoder
+.zenflow
+supabase/
+db.sqlite3
+staticfiles/
+__pycache__/
+*.pyc
+.DS_Store

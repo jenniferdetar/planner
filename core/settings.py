@@ -85,10 +85,20 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+def normalize_database_url(url):
+    if not url:
+        return url
+    if url.startswith("ypostgresql://"):
+        return "postgresql://" + url[len("ypostgresql://"):]
+    if url.startswith("postgres://"):
+        return "postgresql://" + url[len("postgres://"):]
+    return url
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
 DATABASES = {
-    "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
-        conn_max_age=600,
+    "default": dj_database_url.parse(
+        normalize_database_url(DATABASE_URL) if DATABASE_URL else f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=0
     )
 }
 
@@ -140,11 +150,19 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+use_manifest_staticfiles = not DEBUG
+
+staticfiles_backend = (
+    "whitenoise.storage.CompressedStaticFilesStorage"
+    if use_manifest_staticfiles
+    else "django.contrib.staticfiles.storage.StaticFilesStorage"
+)
+
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": staticfiles_backend,
     },
 }
