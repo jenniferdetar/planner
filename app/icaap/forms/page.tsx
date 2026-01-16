@@ -37,7 +37,7 @@ const forms = [
 
 export default function IcaapFormsPage() {
   return (
-    <div className="p-4 md:p-12 max-w-6xl mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto bg-[#fdfdfd] min-h-screen">
       <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
           <div className="flex items-center gap-4 mb-2">

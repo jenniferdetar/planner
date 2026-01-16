@@ -112,7 +112,7 @@ export default function TransactionsPage() {
   }
 
   return (
-    <div className="p-4 md:p-12 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen font-sans">
+    <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen font-sans">
       <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-[#99B3C5] flex items-center justify-center shadow-xl shadow-[#99B3C5]/20">

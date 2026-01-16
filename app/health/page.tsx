@@ -111,7 +111,7 @@ export default function HealthPage() {
   };
 
   return (
-    <div className="p-4 md:p-12 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
       <header className="mb-12">
         <div className="flex items-center gap-4 mb-2">
           <div className="w-14 h-14 rounded-2xl bg-[#059669] flex items-center justify-center shadow-xl shadow-[#059669]/20">

@@ -31,6 +31,12 @@ body {
   color: var(--foreground);
 }
 
+table,
+th,
+td {
+  font-family: var(--font-coming-soon);
+}
+
 .planner-card {
   background: white;
   border: 1px solid var(--opus-border);

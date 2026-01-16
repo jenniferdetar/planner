@@ -53,7 +53,7 @@ export default function MantraPage() {
   }
 
   return (
-    <div className="p-4 md:p-12 max-w-4xl mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 max-w-4xl mx-auto bg-[#fdfdfd] min-h-screen">
       <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
           <div className="flex items-center gap-3 mb-2">

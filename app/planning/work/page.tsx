@@ -242,7 +242,7 @@ export default function WorkPlannerPage() {
   const weekKey = currentWeekStart.toISOString().split('T')[0];
 
   return (
-    <div className="p-4 md:p-12 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen">
       <header className="mb-12 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
         <div className="flex items-center gap-6">
           <div className="w-16 h-16 rounded-3xl bg-[#E0592A] flex items-center justify-center shadow-2xl shadow-[#E0592A]/20">

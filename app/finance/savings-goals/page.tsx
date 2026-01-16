@@ -141,7 +141,7 @@ export default function SavingsGoalsPage() {
   const grandTotalMonthly = SAVINGS_CATEGORIES.reduce((sum, cat) => sum + getSubtotal(cat.items), 0);
 
   return (
-    <div className="p-4 md:p-12 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
       <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-[#9ADBDE] flex items-center justify-center shadow-xl shadow-[#9ADBDE]/20">

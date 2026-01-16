@@ -40,11 +40,11 @@ export default function Sidebar() {
 
   return (
     <aside className="fixed left-0 top-0 h-full w-56 bg-[#0a2f5f] text-white flex flex-col">
-      <div className="p-6 text-xl font-bold border-b border-[#ffffff22]">
+      <div className="p-4 text-lg font-bold border-b border-[#ffffff22]">
         OPUS ONE
       </div>
       
-      <nav className="flex-1 overflow-y-auto py-4">
+      <nav className="flex-1 overflow-y-auto py-3">
         <div className="px-4 space-y-1">
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href;

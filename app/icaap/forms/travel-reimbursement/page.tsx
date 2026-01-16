@@ -187,7 +187,7 @@ export default function TravelReimbursementPage() {
   const grandTotal = mileageCost + otherCost;
 
   return (
-    <div className="p-4 md:p-12 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
       <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 print:hidden">
         <div>
           <div className="flex items-center gap-4 mb-2">
