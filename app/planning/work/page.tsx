@@ -226,7 +226,7 @@ export default function WorkPlannerPage() {
   const coversSlot = (event: PlannerEvent, slotMinutes: number) => {
     const start = timeToMinutes(event.time);
     if (start === null) return false;
-    const end = event.endTime ? timeToMinutes(event.endTime) : start + 30;
+    const end = event.endTime ? (timeToMinutes(event.endTime) ?? start + 30) : start + 30;
     return slotMinutes >= start && slotMinutes < end;
   };
 
