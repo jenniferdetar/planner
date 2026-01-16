@@ -85,11 +85,13 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "")
+DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 
 # Normalize Supabase/Vercel Postgres schemes
 if DATABASE_URL.startswith("ypostgresql://"):
     DATABASE_URL = DATABASE_URL.replace("ypostgresql://", "postgresql://", 1)
+elif DATABASE_URL.startswith("y\npostgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("y\npostgresql://", "postgresql://", 1)
 elif DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
