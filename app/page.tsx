@@ -18,16 +18,20 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchMeetings() {
-      const today = new Date().toISOString().split('T')[0];
-      const twoWeeksLater = new Date();
-      twoWeeksLater.setDate(twoWeeksLater.getDate() + 14);
-      const endDate = twoWeeksLater.toISOString().split('T')[0];
+      const startOfMonth = new Date();
+      startOfMonth.setDate(1);
+      const startStr = startOfMonth.toISOString().split('T')[0];
+      
+      const endOfMonth = new Date();
+      endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+      endOfMonth.setDate(0);
+      const endStr = endOfMonth.toISOString().split('T')[0];
 
       const { data, error } = await supabase
         .from('opus_meetings')
         .select('*')
-        .gte('date', today)
-        .lte('date', endDate)
+        .gte('date', startStr)
+        .lte('date', endStr)
         .order('date', { ascending: true });
 
       if (error) {
@@ -79,8 +83,41 @@ export default function Home() {
         </Link>
       </div>
 
-      <div className="planner-card mb-8 min-h-[400px] flex items-center justify-center text-gray-400">
-        <p>Calendar visualization will be integrated here</p>
+      <div className="planner-card mb-8">
+        <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden border border-gray-200">
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+            <div key={day} className="bg-gray-50 p-2 text-center text-xs font-bold text-gray-500 uppercase">
+              {day}
+            </div>
+          ))}
+          {Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDay() }).map((_, i) => (
+            <div key={`empty-${i}`} className="bg-white p-4 h-24"></div>
+          ))}
+          {Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() }).map((_, i) => {
+            const day = i + 1;
+            const dateStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dayMeetings = meetings.filter(m => m.date === dateStr);
+            const isToday = day === new Date().getDate() && new Date().getMonth() === new Date().getMonth();
+            
+            return (
+              <div key={day} className={`bg-white p-2 h-24 border-t border-gray-100 flex flex-col gap-1 transition-colors hover:bg-blue-50/30 ${isToday ? 'bg-blue-50' : ''}`}>
+                <span className={`text-sm font-bold ${isToday ? 'text-blue-600' : 'text-gray-700'}`}>{day}</span>
+                <div className="flex flex-col gap-1 overflow-y-auto">
+                  {dayMeetings.slice(0, 2).map(m => (
+                    <div key={m.id} className="text-[10px] p-1 bg-blue-100 text-blue-700 rounded truncate font-medium" title={m.title}>
+                      {m.title}
+                    </div>
+                  ))}
+                  {dayMeetings.length > 2 && (
+                    <div className="text-[10px] text-gray-400 font-medium pl-1">
+                      + {dayMeetings.length - 2} more
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <section id="upcoming-events-section">

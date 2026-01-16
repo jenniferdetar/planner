@@ -38,3 +38,52 @@ export interface OpusTask {
   created_at: string;
   updated_at: string;
 }
+
+export interface CseaMember {
+  id: string;
+  user_id: string;
+  member_id: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  full_name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CseaIssue {
+  id: string;
+  user_id: string;
+  member_id: string | null;
+  issue_type: 'Grievance' | 'Gripe' | 'Complaint' | null;
+  description: string | null;
+  steward: string | null;
+  priority: 'Low' | 'Medium' | 'High' | null;
+  status: 'Open' | 'In Progress' | 'Resolved' | 'Closed' | null;
+  issue_date: string | null;
+  created_at: string;
+  updated_at: string;
+  csea_members?: CseaMember;
+}
+
+export interface CheckBreakdown {
+  id: number;
+  account: string | null;
+  [key: string]: any; // Dates are columns in the legacy schema
+}
+
+export interface Transaction {
+  id: string;
+  user_id: string;
+  date: string;
+  account: string;
+  amount: number;
+  category: string;
+  updated_at: string;
+}
+
+export interface OpusMetadata {
+  user_id: string;
+  key: string;
+  value: any;
+  updated_at: string;
+}
