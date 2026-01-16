@@ -447,8 +447,6 @@ export default function WorkPlannerPage() {
         </div>
         <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em] relative z-10">Professional Operations Log © 2026</p>
       </footer>
-    </div>
-  );
 
       {/* Weekly Tasks Section */}
       <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">

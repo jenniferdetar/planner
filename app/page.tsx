@@ -6,9 +6,9 @@ import { supabase } from '@/lib/supabase';
 import { 
   Calendar as CalendarIcon, Clock, ChevronRight, 
   LayoutDashboard, Activity, ShieldCheck, 
-  ArrowUpRight, Landmark, Briefcase, 
+  ArrowUpRight, Landmark, Briefcase,
   HeartPulse, Target, ClipboardList,
-  Home, Scale, Compass, Sparkles
+  Home as HomeIcon, Scale, Compass, Sparkles
 } from 'lucide-react';
 
 interface Meeting {
@@ -109,7 +109,7 @@ export default function Home() {
           <HubLink href="/health" icon={<HeartPulse size={24} />} label="Health" color="bg-[#99B3C5]" />
           <HubLink href="/goals" icon={<Target size={24} />} label="Goals" color="bg-[#FFC68D]" />
           <HubLink href="/tasks" icon={<ClipboardList size={24} />} label="Tasks" color="bg-[#9ADBDE]" />
-          <HubLink href="/hoa" icon={<Home size={24} />} label="HOA" color="bg-[#99B3C5]" />
+          <HubLink href="/hoa" icon={<HomeIcon size={24} />} label="HOA" color="bg-[#99B3C5]" />
           <HubLink href="/csea" icon={<Scale size={24} />} label="CSEA" color="bg-[#FFA1AB]" />
         </div>
       </section>
