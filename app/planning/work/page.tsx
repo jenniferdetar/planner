@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Briefcase, Target, Layout, Zap, Award, Clock, User } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Briefcase, Target, Layout, Zap, Award, Clock, User, CheckCircle2 } from 'lucide-react';
 
 interface PlannerEvent {
   id: string;
