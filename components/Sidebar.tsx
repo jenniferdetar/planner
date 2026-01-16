@@ -7,7 +7,9 @@ import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
 
 const sidebarItems = [
-  { href: '/calendar', text: 'Home', class: 'nav-home' },
+  { href: '/', text: 'Home', class: 'nav-home' },
+  { href: '/tasks', text: 'Tasks', class: 'nav-tasks' },
+  { href: '/goals', text: 'Goals', class: 'nav-goals' },
   { href: '/csea', text: 'CSEA', class: 'nav-csea' },
   { href: '/finance', text: 'Finance', class: 'nav-finance' },
   { href: '/health', text: 'Health', class: 'nav-health' },
@@ -45,7 +47,7 @@ export default function Sidebar() {
       <nav className="flex-1 overflow-y-auto py-4">
         <div className="px-4 space-y-1">
           {sidebarItems.map((item) => {
-            const isActive = pathname === item.href || (item.href === '/calendar' && pathname === '/');
+            const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
