@@ -37,29 +37,25 @@ const MONTHS = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
 
 export default function BillSchedulePage() {
   const [checkedState, setCheckedState] = useState<Record<string, boolean>>({});
-  const [loading, setLoading] = useState(true);
 
   const storageKey = 'bill-payment-schedule:checked';
 
   useEffect(() => {
-    fetchCheckedState();
-  }, []);
-
-  async function fetchCheckedState() {
-    setLoading(true);
-    const { data: metadata, error } = await supabase
-      .from('opus_metadata')
-      .select('value')
-      .eq('key', storageKey)
-      .single();
-    
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching bill schedule state:', error);
-    } else if (metadata?.value) {
-      setCheckedState(metadata.value as Record<string, boolean>);
+    async function fetchCheckedState() {
+      const { data: metadata, error } = await supabase
+        .from('opus_metadata')
+        .select('value')
+        .eq('key', storageKey)
+        .single();
+      
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching bill schedule state:', error);
+      } else if (metadata?.value) {
+        setCheckedState(metadata.value as Record<string, boolean>);
+      }
     }
-    setLoading(false);
-  }
+    fetchCheckedState();
+  }, [storageKey]);
 
   async function toggleBox(item: string, monthIndex: number) {
     const boxKey = `${item}:${monthIndex}`;

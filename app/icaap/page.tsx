@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
+import Link from 'next/link';
+
 const icaapLinks = [
   {
     href: '/icaap/pay-log',
@@ -98,8 +100,9 @@ export default function IcaapPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {icaapLinks.map((link) => (
-          <div 
+          <Link 
             key={link.href}
+            href={link.href}
             className={`flex items-center gap-4 p-4 rounded-full border-2 border-blue-50 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer ${link.color} bg-opacity-90`}
           >
             <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-lg shadow-inner shrink-0">
@@ -109,7 +112,7 @@ export default function IcaapPage() {
               <span className="font-bold text-[#0a2f5f] text-sm">{link.label}</span>
               <span className="text-[10px] text-[#0a2f5f]/80 font-bold uppercase">{link.sub}</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

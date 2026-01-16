@@ -42,22 +42,21 @@ export default function TransactionsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    async function fetchTransactions() {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('Check Breakdown')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching transactions:', error);
+      } else {
+        setTransactions(data || []);
+      }
+      setLoading(false);
+    }
     fetchTransactions();
   }, []);
-
-  async function fetchTransactions() {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('Check Breakdown')
-      .select('*');
-    
-    if (error) {
-      console.error('Error fetching transactions:', error);
-    } else {
-      setTransactions(data || []);
-    }
-    setLoading(false);
-  }
 
   async function handleUpdate(account: string, date: string, amount: number) {
     const existing = transactions.find(t => t.account === account && t.date === date);
@@ -87,10 +86,6 @@ export default function TransactionsPage() {
     }
     fetchTransactions(); // Refresh
   }
-
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
-  };
 
   return (
     <div className="p-8">
