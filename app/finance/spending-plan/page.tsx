@@ -1,8 +1,11 @@
-'use client';
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
+import { 
+  Wallet, ChevronLeft, Save, Loader2, 
+  ArrowUpRight, Landmark, PieChart, Info,
+  TrendingUp, Activity, CheckCircle2
+} from 'lucide-react';
 
 const CATEGORIES = [
   {
@@ -65,9 +68,9 @@ const CATEGORIES = [
 ];
 
 const PAY_WEEKS = [
-  { id: 'jf1', label: 'Jeff Disability' },
-  { id: 'j1', label: 'Jennifer 1st' },
-  { id: 'j2', label: 'Jennifer 2nd' }
+  { id: 'jf1', label: 'Jeff Disability', color: 'bg-emerald-500' },
+  { id: 'j1', label: 'Jennifer 1st', color: 'bg-indigo-500' },
+  { id: 'j2', label: 'Jennifer 2nd', color: 'bg-amber-500' }
 ];
 
 interface SpendingState {
@@ -149,10 +152,14 @@ export default function SpendingPlanPage() {
   };
 
   const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+    return new Intl.NumberFormat('en-US', { 
+      style: 'currency', 
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(val);
   };
 
-  // Calculations
   const calculations = useMemo(() => {
     const payWeekRemaining: Record<string, number> = { ...state.income };
     const itemActuals: Record<string, number> = {};
@@ -183,140 +190,217 @@ export default function SpendingPlanPage() {
     return { payWeekRemaining, itemActuals, categoryTotals, totalIncome, totalSpent, totalBudget };
   }, [state]);
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading plan...</div>;
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#fdfdfd]">
+      <Loader2 className="animate-spin text-[#99B3C5] mb-4" size={48} />
+      <div className="text-xs font-black uppercase tracking-[0.3em] text-gray-400">Loading Allocation Ledger...</div>
+    </div>
+  );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <header className="mb-8 flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-bold text-[#0a2f5f]">Spending Plan</h1>
-          <p className="text-gray-600">Allocated Spending by Pay Week</p>
+    <div className="p-4 md:p-12 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen font-sans">
+      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#99B3C5] flex items-center justify-center shadow-xl shadow-[#99B3C5]/20">
+            <Wallet className="text-white" size={32} />
+          </div>
+          <div>
+            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Spending Plan</h1>
+            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Strategic Allocation Registry by Disbursement Cycle"</p>
+          </div>
         </div>
-        <Link href="/finance" className="px-4 py-2 bg-gray-100 rounded-full font-bold hover:bg-gray-200 transition-all">
-          Back to Finance
-        </Link>
+        <div className="flex gap-4">
+          <Link 
+            href="/finance" 
+            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all shadow-sm"
+          >
+            <ChevronLeft size={16} />
+            Back
+          </Link>
+        </div>
       </header>
 
-      <div className="bg-white rounded-xl border shadow-sm overflow-x-auto">
-        <table className="w-full text-left border-collapse min-w-[1000px]">
-          <thead>
-            <tr className="bg-[#f1f5f9] text-[#0a2f5f] text-xs font-bold uppercase">
-              <th className="p-4 border-b sticky left-0 bg-[#f1f5f9] z-10" rowSpan={2}>Item</th>
-              <th className="p-4 border-b text-center" rowSpan={2}>Budget</th>
-              {PAY_WEEKS.map(pw => (
-                <th key={pw.id} className="p-4 border-b text-center border-l" colSpan={2}>{pw.label}</th>
-              ))}
-              <th className="p-4 border-b text-center border-l" rowSpan={2}>Actual Spent</th>
-              <th className="p-4 border-b text-center border-l" rowSpan={2}>Remaining</th>
-            </tr>
-            <tr className="bg-[#f8fafc] text-[#0a2f5f] text-[10px] font-bold uppercase">
-              {PAY_WEEKS.map(pw => (
-                <React.Fragment key={pw.id}>
-                  <th className="p-2 border-b text-center border-l">Spent</th>
-                  <th className="p-2 border-b text-center">Rem. Income</th>
-                </React.Fragment>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="bg-blue-50 font-bold">
-              <td className="p-4 border-b sticky left-0 bg-blue-50 z-10 text-[#0a2f5f]">INCOME</td>
-              <td className="p-4 border-b text-center">{formatCurrency(calculations.totalBudget)}</td>
-              {PAY_WEEKS.map(pw => (
-                <React.Fragment key={pw.id}>
-                  <td className="p-2 border-b border-l">
-                    <input 
-                      type="number" 
-                      className="w-full p-1 border rounded text-right bg-white"
-                      value={state.income[pw.id] || ''}
-                      onChange={(e) => handleIncomeChange(pw.id, e.target.value)}
-                    />
-                  </td>
-                  <td className="p-2 border-b text-center text-blue-700">
-                    {formatCurrency(calculations.payWeekRemaining[pw.id])}
-                  </td>
-                </React.Fragment>
-              ))}
-              <td className="p-4 border-b text-center border-l">{formatCurrency(calculations.totalIncome)}</td>
-              <td className="p-4 border-b text-center border-l text-green-600">
-                {formatCurrency(calculations.totalIncome - calculations.totalSpent)}
-              </td>
-            </tr>
+      <section className="bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
+        <div className="absolute top-0 left-0 w-full h-2 bg-[#99B3C5]"></div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[1400px]">
+            <thead>
+              <tr className="bg-[#f8fafc] border-b border-gray-100">
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] sticky left-0 bg-[#f8fafc] z-20 border-r border-gray-50" rowSpan={2}>Operational Item</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] text-center border-r border-gray-50" rowSpan={2}>Budgeted</th>
+                {PAY_WEEKS.map(pw => (
+                  <th key={pw.id} className="p-6 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] text-center border-r border-gray-50" colSpan={2}>
+                    <div className="flex flex-col items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${pw.color} opacity-50 animate-pulse`}></div>
+                      {pw.label}
+                    </div>
+                  </th>
+                ))}
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] text-center border-l border-gray-50" rowSpan={2}>Total Spent</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] text-center border-l border-gray-50" rowSpan={2}>Registry Remainder</th>
+              </tr>
+              <tr className="bg-white border-b border-gray-100">
+                {PAY_WEEKS.map(pw => (
+                  <React.Fragment key={pw.id}>
+                    <th className="p-4 font-black text-gray-400 text-[9px] uppercase tracking-widest text-center border-r border-gray-50 bg-slate-50/50">Spent</th>
+                    <th className="p-4 font-black text-blue-400 text-[9px] uppercase tracking-widest text-center border-r border-gray-50">Cycle Rem.</th>
+                  </React.Fragment>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {/* Income Header Row */}
+              <tr className="bg-blue-50/50 group">
+                <td className="p-8 border-b border-blue-100 sticky left-0 bg-blue-50 group-hover:bg-blue-100/50 z-20 border-r border-blue-100 font-black text-[#00326b] uppercase tracking-widest text-xs">
+                  <div className="flex items-center gap-3">
+                    <Activity size={16} className="text-[#00326b]/40" />
+                    Income Baseline
+                  </div>
+                </td>
+                <td className="p-8 border-b border-blue-100 text-center font-black text-gray-400 text-sm border-r border-blue-100 italic">
+                  {formatCurrency(calculations.totalBudget)}
+                </td>
+                {PAY_WEEKS.map(pw => (
+                  <React.Fragment key={pw.id}>
+                    <td className="p-4 border-b border-blue-100 border-r border-blue-100">
+                      <input 
+                        type="number" 
+                        className="w-full p-4 bg-white border-2 border-transparent focus:border-[#00326b]/20 rounded-2xl text-right font-black text-[#00326b] outline-none transition-all shadow-inner"
+                        value={state.income[pw.id] || ''}
+                        onChange={(e) => handleIncomeChange(pw.id, e.target.value)}
+                        placeholder="0"
+                      />
+                    </td>
+                    <td className="p-4 border-b border-blue-100 text-center font-black text-blue-600 text-sm border-r border-blue-100 bg-blue-100/20">
+                      {formatCurrency(calculations.payWeekRemaining[pw.id])}
+                    </td>
+                  </React.Fragment>
+                ))}
+                <td className="p-8 border-b border-blue-100 text-center font-black text-[#00326b] text-sm border-l border-blue-100">
+                  {formatCurrency(calculations.totalIncome)}
+                </td>
+                <td className="p-8 border-b border-blue-100 text-center font-black text-emerald-600 text-sm border-l border-blue-100 bg-emerald-50/50">
+                  {formatCurrency(calculations.totalIncome - calculations.totalSpent)}
+                </td>
+              </tr>
 
-            {CATEGORIES.map(cat => (
-              <React.Fragment key={cat.name}>
-                <tr className="bg-gray-100 font-bold text-[#0a2f5f]">
-                  <td colSpan={10} className="p-2 border-b">{cat.name}</td>
-                </tr>
-                {cat.items.map(item => {
-                  const itemKey = `${cat.name}:${item.name}`;
-                  const actual = calculations.itemActuals[itemKey];
-                  const remaining = item.budget - actual;
-                  return (
-                    <tr key={item.name} className="hover:bg-gray-50 text-sm">
-                      <td className="p-3 border-b sticky left-0 bg-white hover:bg-gray-50 z-10 text-gray-700 font-medium">{item.name}</td>
-                      <td className="p-3 border-b text-center text-gray-500">{formatCurrency(item.budget)}</td>
-                      {PAY_WEEKS.map(pw => (
-                        <React.Fragment key={pw.id}>
-                          <td className="p-1 border-b border-l">
-                            <input 
-                              type="number"
-                              className="w-full p-1 border-transparent hover:border-gray-300 focus:border-blue-500 rounded text-right transition-all outline-none"
-                              value={state.spending[itemKey]?.[pw.id] || ''}
-                              onChange={(e) => handleSpendingChange(itemKey, pw.id, e.target.value)}
-                            />
-                          </td>
-                          <td className="p-1 border-b"></td>
-                        </React.Fragment>
-                      ))}
-                      <td className="p-3 border-b text-center border-l font-semibold text-gray-700">{formatCurrency(actual)}</td>
-                      <td className={`p-3 border-b text-center border-l font-bold ${remaining < 0 ? 'text-red-600' : 'text-gray-400'}`}>
-                        {formatCurrency(remaining)}
-                      </td>
-                    </tr>
-                  );
-                })}
-                <tr className="bg-gray-50 font-bold text-xs">
-                  <td className="p-3 border-b sticky left-0 bg-gray-50 z-10">{cat.name} Total</td>
-                  <td className="p-3 border-b text-center">{formatCurrency(calculations.categoryTotals[cat.name].budget)}</td>
-                  {PAY_WEEKS.map(pw => (
-                    <React.Fragment key={pw.id}>
-                      <td className="p-3 border-b border-l text-right">
-                        {formatCurrency(cat.items.reduce((acc, item) => acc + (state.spending[`${cat.name}:${item.name}`]?.[pw.id] || 0), 0))}
-                      </td>
-                      <td className="p-3 border-b"></td>
-                    </React.Fragment>
-                  ))}
-                  <td className="p-3 border-b text-center border-l">{formatCurrency(calculations.categoryTotals[cat.name].actual)}</td>
-                  <td className="p-3 border-b text-center border-l"></td>
-                </tr>
-              </React.Fragment>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr className="bg-[#0a2f5f] text-white font-bold">
-              <td className="p-4 sticky left-0 bg-[#0a2f5f] z-10">GRAND TOTAL</td>
-              <td className="p-4 text-center">{formatCurrency(calculations.totalBudget)}</td>
-              {PAY_WEEKS.map(pw => (
-                <React.Fragment key={pw.id}>
-                  <td className="p-4 border-l text-right">
-                    {formatCurrency(CATEGORIES.reduce((acc, cat) => acc + cat.items.reduce((a, b) => a + (state.spending[`${cat.name}:${b.name}`]?.[pw.id] || 0), 0), 0))}
-                  </td>
-                  <td className="p-4 text-center">
-                    {formatCurrency(calculations.payWeekRemaining[pw.id])}
-                  </td>
+              {/* Categories */}
+              {CATEGORIES.map(cat => (
+                <React.Fragment key={cat.name}>
+                  <tr className="bg-slate-100/50">
+                    <td colSpan={10} className="p-4 px-8 border-b border-slate-200 font-black text-[#00326b] uppercase tracking-[0.3em] text-[10px] italic">
+                      {cat.name} Portfolio
+                    </td>
+                  </tr>
+                  {cat.items.map(item => {
+                    const itemKey = `${cat.name}:${item.name}`;
+                    const actual = calculations.itemActuals[itemKey];
+                    const remaining = item.budget - actual;
+                    return (
+                      <tr key={item.name} className="group hover:bg-slate-50 transition-colors">
+                        <td className="p-8 border-b border-gray-50 sticky left-0 bg-white group-hover:bg-slate-50 z-20 border-r border-gray-50">
+                          <div className="flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#99B3C5]"></div>
+                            <span className="text-sm font-black text-gray-700">{item.name}</span>
+                          </div>
+                        </td>
+                        <td className="p-8 border-b border-gray-50 text-center text-sm font-black text-gray-300 border-r border-gray-50 italic">
+                          {formatCurrency(item.budget)}
+                        </td>
+                        {PAY_WEEKS.map(pw => (
+                          <React.Fragment key={pw.id}>
+                            <td className="p-2 border-b border-gray-50 border-r border-gray-50">
+                              <input 
+                                type="number"
+                                className="w-full p-4 bg-transparent border-2 border-transparent hover:border-slate-100 focus:border-[#99B3C5]/30 focus:bg-white rounded-2xl text-right font-black text-gray-700 outline-none transition-all"
+                                value={state.spending[itemKey]?.[pw.id] || ''}
+                                onChange={(e) => handleSpendingChange(itemKey, pw.id, e.target.value)}
+                                placeholder="..."
+                              />
+                            </td>
+                            <td className="p-2 border-b border-gray-50 border-r border-gray-50 bg-slate-50/20"></td>
+                          </React.Fragment>
+                        ))}
+                        <td className="p-8 border-b border-gray-50 text-center font-black text-[#0a2f5f] text-sm border-l border-gray-50">
+                          {formatCurrency(actual)}
+                        </td>
+                        <td className={`p-8 border-b border-gray-50 text-center font-black text-sm border-l border-gray-50 ${remaining < 0 ? 'text-rose-500 bg-rose-50/50' : 'text-gray-200'}`}>
+                          {formatCurrency(remaining)}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </React.Fragment>
               ))}
-              <td className="p-4 text-center border-l">{formatCurrency(calculations.totalSpent)}</td>
-              <td className="p-4 text-center border-l">{formatCurrency(calculations.totalBudget - calculations.totalSpent)}</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      
+            </tbody>
+            {/* Footer */}
+            <tfoot>
+              <tr className="bg-[#00326b] text-white">
+                <td className="p-10 sticky left-0 bg-[#00326b] z-20 font-black uppercase tracking-[0.3em] text-xs">Aggregate Totals</td>
+                <td className="p-10 text-center font-black opacity-60 text-sm border-r border-white/10">{formatCurrency(calculations.totalBudget)}</td>
+                {PAY_WEEKS.map(pw => (
+                  <React.Fragment key={pw.id}>
+                    <td className="p-10 text-right font-black text-sm border-r border-white/10 bg-white/5">
+                      {formatCurrency(CATEGORIES.reduce((acc, cat) => acc + cat.items.reduce((a, b) => a + (state.spending[`${cat.name}:${b.name}`]?.[pw.id] || 0), 0), 0))}
+                    </td>
+                    <td className="p-10 text-center font-black text-emerald-400 text-sm border-r border-white/10">
+                      {formatCurrency(calculations.payWeekRemaining[pw.id])}
+                    </td>
+                  </React.Fragment>
+                ))}
+                <td className="p-10 text-center font-black text-sm border-l border-white/10 bg-white/10">{formatCurrency(calculations.totalSpent)}</td>
+                <td className="p-10 text-center font-black text-sm border-l border-white/10">{formatCurrency(calculations.totalBudget - calculations.totalSpent)}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="bg-[#99B3C5]/10 p-10 rounded-[3rem] border-2 border-[#99B3C5]/20 relative overflow-hidden">
+          <Info className="text-[#0a2f5f]/20 absolute -right-4 -top-4" size={120} />
+          <div className="relative z-10">
+            <h4 className="text-[#0a2f5f] font-black uppercase tracking-[0.2em] text-[10px] mb-6 flex items-center gap-2">
+              <Landmark size={14} />
+              Fiscal Directive
+            </h4>
+            <p className="text-[#0a2f5f] font-serif italic text-lg leading-relaxed">
+              "Allocation by cycle ensures that disbursement does not exceed verified liquidity. Reconcile weekly to maintain 100% compliance."
+            </p>
+          </div>
+        </div>
+        
+        <div className="md:col-span-2 bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 rounded-3xl bg-white flex items-center justify-center shadow-xl border border-slate-200">
+              <PieChart className="text-[#00326b]" size={32} />
+            </div>
+            <div>
+              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Operational Integrity</div>
+              <div className="text-2xl font-black text-[#00326b]">Ledger Synchronized</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col items-end">
+              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Net Position</div>
+              <div className="text-xl font-black text-[#00326b]">{formatCurrency(calculations.totalIncome - calculations.totalSpent)}</div>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
+              <CheckCircle2 size={24} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="mt-20 py-12 border-t border-gray-100 text-center">
+        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Official Disbursement Allocation Registry © 2026</p>
+      </footer>
+
       {saving && (
-        <div className="fixed bottom-4 right-4 bg-[#0a2f5f] text-white px-4 py-2 rounded-lg shadow-lg text-sm animate-pulse">
-          Saving changes...
+        <div className="fixed bottom-8 right-8 bg-[#00326b] text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-4 duration-500">
+          <Loader2 className="animate-spin" size={20} />
+          <span className="font-black uppercase tracking-widest text-xs">Registry Auto-Save Active</span>
         </div>
       )}
     </div>

@@ -3,13 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
+import { PieChart, Save, ChevronLeft, Award, Search, FileText, CheckCircle2, Target, Zap } from 'lucide-react';
 
 interface Review {
   month: string;
-  wins: string;
-  challenges: string;
-  lessons: string;
-  focusNextMonth: string;
+  // Legacy fields (v1)
+  wins?: string;
+  challenges?: string;
+  lessons?: string;
+  focusNextMonth?: string;
+  // High-fidelity fields (v2)
+  biggestWin?: string;
+  doneDifferently?: string;
+  funActivities?: string;
+  changeToContinue?: string;
+  managedWell?: string;
+  nextMonthGoal?: string;
+  lookingForward?: string;
 }
 
 export default function ReviewPage() {
@@ -18,10 +28,13 @@ export default function ReviewPage() {
   const [saving, setSaving] = useState(false);
   const [activeReview, setActiveReview] = useState<Review>({
     month: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-    wins: '',
-    challenges: '',
-    lessons: '',
-    focusNextMonth: ''
+    biggestWin: '',
+    doneDifferently: '',
+    funActivities: '',
+    changeToContinue: '',
+    managedWell: '',
+    nextMonthGoal: '',
+    lookingForward: ''
   });
 
   const storageKey = 'planning-monthly-reviews';
@@ -41,7 +54,16 @@ export default function ReviewPage() {
     if (error && error.code !== 'PGRST116') {
       console.error('Error fetching reviews:', error);
     } else if (metadata?.value) {
-      const allReviews = metadata.value.reviews || [];
+      const allReviews = (metadata.value.reviews || []).map((r: any) => ({
+        ...r,
+        biggestWin: r.biggestWin || r.wins || '',
+        doneDifferently: r.doneDifferently || r.challenges || '',
+        nextMonthGoal: r.nextMonthGoal || r.focusNextMonth || '',
+        funActivities: r.funActivities || '',
+        changeToContinue: r.changeToContinue || '',
+        managedWell: r.managedWell || '',
+        lookingForward: r.lookingForward || ''
+      }));
       setReviews(allReviews);
       
       const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -78,96 +100,187 @@ export default function ReviewPage() {
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <header className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-[#0f3d91]">Monthly Review</h1>
-          <p className="text-gray-600">Reflect, recalibrate, and grow</p>
+    <div className="p-4 md:p-12 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#FFA1AB] flex items-center justify-center shadow-xl shadow-[#FFA1AB]/20">
+            <PieChart className="text-white" size={32} />
+          </div>
+          <div>
+            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Monthly Review</h1>
+            <p className="text-gray-400 font-bold tracking-widest text-xs italic">Reflect, recalibrate, and grow</p>
+          </div>
         </div>
-        <Link href="/planning" className="px-4 py-2 bg-gray-100 rounded-full font-bold hover:bg-gray-200 transition-all">
-          Back
-        </Link>
+        <div className="flex gap-4">
+          <button 
+            onClick={saveReview}
+            disabled={saving}
+            className="flex items-center gap-2 px-8 py-4 bg-[#00326b] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#00326b]/20"
+          >
+            <Save size={16} />
+            {saving ? 'Saving...' : 'Archive Report'}
+          </button>
+          <Link 
+            href="/planning" 
+            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
+          >
+            <ChevronLeft size={16} />
+            Back
+          </Link>
+        </div>
       </header>
 
-      <section className="bg-white rounded-xl border shadow-sm overflow-hidden mb-8">
-        <div className="bg-[#0f3d91] p-6 text-white">
-          <h2 className="text-xl font-bold">{activeReview.month} Reflection</h2>
+      <section className="relative bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12">
+        <div className="absolute top-0 left-0 w-full h-2 bg-[#FFA1AB]"></div>
+        
+        <div className="bg-[#FFA1AB]/5 p-8 border-b border-gray-100 flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">{activeReview.month} Reflection</h2>
+            <p className="text-[10px] font-black text-[#FFA1AB] uppercase tracking-[0.3em] mt-1">Official Performance Record</p>
+          </div>
+          <div className="px-4 py-2 bg-white rounded-xl border border-[#FFA1AB]/20 text-[10px] font-black text-[#00326b] uppercase tracking-widest shadow-sm">
+            Draft Mode
+          </div>
         </div>
         
         {loading ? (
-          <div className="p-12 text-center text-gray-500 italic">Loading review...</div>
+          <div className="p-20 text-center text-gray-400 italic font-serif text-xl">Loading archived reviews...</div>
         ) : (
-          <div className="p-8 space-y-6">
-            <div>
-              <label className="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Biggest Wins & Achievements</label>
-              <textarea 
-                value={activeReview.wins}
-                onChange={(e) => setActiveReview({...activeReview, wins: e.target.value})}
-                placeholder="What went well this month?"
-                className="w-full min-h-[100px] p-4 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#0f3d91] outline-none"
-              />
-            </div>
+          <div className="p-8 md:p-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Award className="text-[#FFA1AB]" size={20} />
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Biggest Win This Month</label>
+                </div>
+                <textarea 
+                  value={activeReview.biggestWin}
+                  onChange={(e) => setActiveReview({...activeReview, biggestWin: e.target.value})}
+                  placeholder="Analyze your successes..."
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFA1AB]/20 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Challenges & Obstacles</label>
-              <textarea 
-                value={activeReview.challenges}
-                onChange={(e) => setActiveReview({...activeReview, challenges: e.target.value})}
-                placeholder="What was difficult? How did you handle it?"
-                className="w-full min-h-[100px] p-4 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#0f3d91] outline-none"
-              />
-            </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Search className="text-[#99B3C5]" size={20} />
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Wish I'd Done Differently</label>
+                </div>
+                <textarea 
+                  value={activeReview.doneDifferently}
+                  onChange={(e) => setActiveReview({...activeReview, doneDifferently: e.target.value})}
+                  placeholder="Identify areas for adjustment..."
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#99B3C5]/20 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Key Lessons Learned</label>
-              <textarea 
-                value={activeReview.lessons}
-                onChange={(e) => setActiveReview({...activeReview, lessons: e.target.value})}
-                placeholder="What did this month teach you?"
-                className="w-full min-h-[100px] p-4 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#0f3d91] outline-none"
-              />
-            </div>
+              <div className="md:col-span-2 space-y-4">
+                <div className="flex items-center gap-2">
+                  <Zap className="text-[#FFC68D]" size={20} />
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Fun Personal or Professional Moments</label>
+                </div>
+                <textarea 
+                  value={activeReview.funActivities}
+                  onChange={(e) => setActiveReview({...activeReview, funActivities: e.target.value})}
+                  placeholder="Document high-joy activities..."
+                  className="w-full min-h-[120px] p-6 bg-[#fdfbf7] border-2 border-[#e6e2d3] rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                  style={{ backgroundImage: 'linear-gradient(#e6e2d3 1px, transparent 1px)', backgroundSize: '100% 2.5rem' }}
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Focus for Next Month</label>
-              <textarea 
-                value={activeReview.focusNextMonth}
-                onChange={(e) => setActiveReview({...activeReview, focusNextMonth: e.target.value})}
-                placeholder="What are your primary intentions for the coming month?"
-                className="w-full min-h-[100px] p-4 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#0f3d91] outline-none"
-              />
-            </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="text-[#9ADBDE]" size={20} />
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Change to Continue</label>
+                </div>
+                <textarea 
+                  value={activeReview.changeToContinue}
+                  onChange={(e) => setActiveReview({...activeReview, changeToContinue: e.target.value})}
+                  placeholder="Positive habits to maintain..."
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#9ADBDE]/20 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                />
+              </div>
 
-            <div className="flex justify-end border-t pt-6">
-              <button 
-                onClick={saveReview}
-                disabled={saving}
-                className={`px-8 py-3 rounded-lg font-bold text-white transition-all ${saving ? 'bg-gray-400' : 'bg-[#0f3d91] hover:bg-[#0a2f5f]'}`}
-              >
-                {saving ? 'Saving...' : 'Save Monthly Review'}
-              </button>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <FileText className="text-[#00326b]" size={20} />
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Managed Well</label>
+                </div>
+                <textarea 
+                  value={activeReview.managedWell}
+                  onChange={(e) => setActiveReview({...activeReview, managedWell: e.target.value})}
+                  placeholder="Operational successes..."
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/10 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Target className="text-[#FFA1AB]" size={20} />
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Next Month's Biggest Goal</label>
+                </div>
+                <textarea 
+                  value={activeReview.nextMonthGoal}
+                  onChange={(e) => setActiveReview({...activeReview, nextMonthGoal: e.target.value})}
+                  placeholder="Define primary objective..."
+                  className="w-full min-h-[150px] p-6 bg-[#00326b]/5 border-2 border-[#00326b]/10 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="text-[#FFC68D]" size={20} />
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Looking Forward To</label>
+                </div>
+                <textarea 
+                  value={activeReview.lookingForward}
+                  onChange={(e) => setActiveReview({...activeReview, lookingForward: e.target.value})}
+                  placeholder="Future aspirations..."
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-slate-100 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                />
+              </div>
             </div>
           </div>
         )}
       </section>
 
       {reviews.length > 0 && (
-        <section>
-          <h3 className="text-xl font-bold text-[#0f3d91] mb-4">Past Reviews</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <section className="pb-20">
+          <div className="flex items-center gap-3 mb-8">
+            <FileText className="text-[#00326b]" size={24} />
+            <h3 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Archives</h3>
+            <div className="h-px flex-grow bg-gradient-to-r from-[#00326b]/20 to-transparent"></div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {reviews.map((r, i) => (
               <button 
                 key={i}
                 onClick={() => setActiveReview(r)}
-                className={`p-4 rounded-xl border text-left transition-all ${activeReview.month === r.month ? 'bg-blue-50 border-blue-200' : 'bg-white hover:bg-gray-50'}`}
+                className={`group p-8 rounded-[2.5rem] text-left transition-all duration-500 border-2 ${
+                  activeReview.month === r.month 
+                  ? 'bg-[#00326b] border-[#00326b] text-white shadow-2xl shadow-[#00326b]/20 scale-105' 
+                  : 'bg-white border-gray-100 hover:border-[#FFA1AB]/30 text-[#00326b] hover:shadow-xl'
+                }`}
               >
-                <span className="block font-bold text-[#0f3d91]">{r.month}</span>
-                <span className="text-xs text-gray-500">{r.wins.length > 0 ? 'Completed' : 'Draft'}</span>
+                <span className={`block text-xs font-black uppercase tracking-[0.3em] mb-2 ${activeReview.month === r.month ? 'text-white/60' : 'text-[#FFA1AB]'}`}>
+                  {r.month.split(' ')[1]}
+                </span>
+                <span className="block text-xl font-black mb-4">{r.month.split(' ')[0]}</span>
+                <div className={`text-[10px] font-black uppercase tracking-widest ${activeReview.month === r.month ? 'text-white/40' : 'text-gray-300'}`}>
+                  {r.biggestWin && r.biggestWin.length > 0 ? 'Verified Archive' : 'Open Draft'}
+                </div>
               </button>
             ))}
           </div>
         </section>
       )}
+
+      <footer className="mt-12 py-12 border-t border-gray-100 text-center relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#00326b]">
+          REVIEW
+        </div>
+        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em] relative z-10">Monthly Performance Audit © 2026</p>
+      </footer>
     </div>
   );
 }

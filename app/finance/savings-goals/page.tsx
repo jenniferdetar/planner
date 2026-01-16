@@ -1,8 +1,11 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
+import { 
+  PiggyBank, ChevronLeft, Save, Plus, 
+  Target, ShieldCheck, ArrowUpRight, Landmark,
+  TrendingUp, Wallet, Trash2, Scroll
+} from 'lucide-react';
 
 const SAVINGS_CATEGORIES = [
   {
@@ -66,6 +69,8 @@ const SAVINGS_CATEGORIES = [
 export default function SavingsGoalsPage() {
   const [goals, setGoals] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [newGoal, setNewGoal] = useState('');
 
   useEffect(() => {
     fetchGoals();
@@ -87,6 +92,38 @@ export default function SavingsGoalsPage() {
     setLoading(false);
   }
 
+  async function saveGoals(updatedGoals: string[]) {
+    setSaving(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('opus_metadata')
+      .upsert({
+        user_id: user.id,
+        key: 'finance-savings-text-goals',
+        value: { items: updatedGoals },
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,key' });
+
+    if (error) console.error('Error saving goals:', error);
+    setSaving(false);
+  }
+
+  const addGoal = () => {
+    if (!newGoal.trim()) return;
+    const next = [...goals, newGoal.trim()];
+    setGoals(next);
+    saveGoals(next);
+    setNewGoal('');
+  };
+
+  const removeGoal = (idx: number) => {
+    const next = goals.filter((_, i) => i !== idx);
+    setGoals(next);
+    saveGoals(next);
+  };
+
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('en-US', { 
       style: 'currency', 
@@ -102,85 +139,177 @@ export default function SavingsGoalsPage() {
   const grandTotalMonthly = SAVINGS_CATEGORIES.reduce((sum, cat) => sum + getSubtotal(cat.items), 0);
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <header className="mb-8 flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-bold text-[#0a2f5f]">Savings Goal</h1>
-          <p className="text-gray-600">Build reserves and financial stability</p>
+    <div className="p-4 md:p-12 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#9ADBDE] flex items-center justify-center shadow-xl shadow-[#9ADBDE]/20">
+            <PiggyBank className="text-white" size={32} />
+          </div>
+          <div>
+            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Capital Reserves</h1>
+            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Strategic Accumulation & Financial Fortification"</p>
+          </div>
         </div>
-        <Link href="/finance" className="px-4 py-2 bg-gray-100 rounded-full font-bold hover:bg-gray-200 transition-all">
-          Back to Finance
-        </Link>
+        <div className="flex gap-4">
+          <Link 
+            href="/finance" 
+            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
+          >
+            <ChevronLeft size={16} />
+            Back
+          </Link>
+        </div>
       </header>
 
-      <section className="bg-white p-8 rounded-2xl border shadow-sm mb-8 border-t-8 border-t-[#9ADBDE]">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 rounded-full bg-[#9ADBDE] flex items-center justify-center text-white text-2xl font-bold">$</div>
-          <h2 className="text-2xl font-bold text-[#0a2f5f]">2026 Financial Goals</h2>
-        </div>
-        <p className="text-gray-500 mb-6 italic">
-          What is the biggest financial goal that you would like to accomplish in 2026? 
-          Create a list of any additional financial goals you have and refer to them throughout the year.
-        </p>
-        <div className="space-y-2 border-l-4 border-blue-50 pl-4">
-          {goals.length > 0 ? goals.map((g, i) => (
-            <div key={i} className="text-[#0a2f5f] font-medium py-1 border-b border-dashed border-gray-100 last:border-0">{g}</div>
-          )) : (
-            <div className="text-gray-400 italic">No specific goals added yet.</div>
-          )}
-        </div>
-      </section>
+      <section className="relative bg-white p-8 md:p-16 rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-16">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#9ADBDE] via-[#99B3C5] to-[#FFC68D]"></div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <Scroll className="text-[#9ADBDE]" size={24} />
+              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Financial Vision 2026</h2>
+            </div>
+            <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
+              Define the primary objectives for your capital growth this year. These goals serve as the benchmark for all fiscal decisions.
+            </p>
+            
+            <div className="relative mb-8">
+              <input 
+                type="text"
+                value={newGoal}
+                onChange={(e) => setNewGoal(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && addGoal()}
+                placeholder="Declare a new capital goal..."
+                className="w-full p-6 bg-[#f8fafc] border-2 border-gray-50 rounded-2xl font-serif text-lg outline-none focus:bg-white focus:border-[#9ADBDE] transition-all shadow-inner"
+              />
+              <button 
+                onClick={addGoal}
+                className="absolute right-3 top-3 w-12 h-12 bg-[#00326b] text-white rounded-xl flex items-center justify-center hover:bg-[#0a2f5f] transition-all"
+              >
+                <Plus size={20} />
+              </button>
+            </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {Array.from({ length: Math.ceil(SAVINGS_CATEGORIES.length / 2) }).map((_, idx) => (
-          <div key={idx} className="space-y-8">
-            {[SAVINGS_CATEGORIES[idx * 2], SAVINGS_CATEGORIES[idx * 2 + 1]].filter(Boolean).map(cat => (
-              <div key={cat!.name} className="bg-white rounded-xl border shadow-sm overflow-hidden">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="bg-gray-50">
-                      <th className="p-4 font-bold text-[#0a2f5f]">{cat!.name}</th>
-                      <th className="p-4 text-center text-[10px] font-black uppercase text-gray-400">3 Months</th>
-                      <th className="p-4 text-center text-[10px] font-black uppercase text-gray-400">6 Months</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y">
-                    {cat!.items.map(item => (
-                      <tr key={item.item}>
-                        <td className="p-4 text-sm text-gray-700">{item.item}</td>
-                        <td className="p-4 text-center text-sm text-gray-500">{formatCurrency(item.monthly * 3)}</td>
-                        <td className="p-4 text-center text-sm text-gray-500">{formatCurrency(item.monthly * 6)}</td>
-                      </tr>
-                    ))}
-                    <tr className="bg-blue-50/30 font-bold">
-                      <td className="p-4 text-sm text-[#0a2f5f]">{cat!.name} Total</td>
-                      <td className="p-4 text-center text-sm text-[#0a2f5f]">{formatCurrency(getSubtotal(cat!.items) * 3)}</td>
-                      <td className="p-4 text-center text-sm text-[#0a2f5f]">{formatCurrency(getSubtotal(cat!.items) * 6)}</td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div className="space-y-4">
+              {goals.map((goal, idx) => (
+                <div key={idx} className="group flex items-center justify-between p-6 bg-white border-2 border-gray-50 rounded-[1.5rem] hover:border-[#9ADBDE]/30 transition-all shadow-sm">
+                  <div className="flex items-center gap-4">
+                    <div className="w-8 h-8 rounded-lg bg-[#9ADBDE]/10 flex items-center justify-center text-[#9ADBDE]">
+                      <Target size={16} />
+                    </div>
+                    <span className="text-lg font-serif text-[#00326b] italic">{goal}</span>
+                  </div>
+                  <button 
+                    onClick={() => removeGoal(idx)}
+                    className="opacity-0 group-hover:opacity-100 p-2 text-gray-300 hover:text-rose-500 transition-all"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+              {goals.length === 0 && (
+                <div className="text-center py-12 border-4 border-dashed border-gray-50 rounded-[2.5rem]">
+                  <p className="text-gray-300 font-black uppercase tracking-widest text-[10px]">No Registered Objectives</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            <div className="p-8 bg-slate-50 rounded-[2.5rem] border-2 border-slate-100 flex flex-col justify-between h-full">
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <ShieldCheck className="text-[#00326b]" size={24} />
+                  <h3 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Security Protocol</h3>
+                </div>
+                <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
+                  "Reserves are not merely savings; they are the architectural foundation of freedom. Aim for a minimum of 6 months for total system stability."
+                </p>
               </div>
-            ))}
-          </div>
-        ))}
-      </div>
-
-      <section className="mt-12 bg-[#0a2f5f] text-white p-8 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-8">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Total Reserve Goals</h2>
-          <p className="opacity-80">Accumulated target for all categories</p>
-        </div>
-        <div className="flex gap-12">
-          <div className="text-center">
-            <p className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">3 Month Reserve</p>
-            <p className="text-3xl font-bold">{formatCurrency(grandTotalMonthly * 3)}</p>
-          </div>
-          <div className="text-center">
-            <p className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">6 Month Reserve</p>
-            <p className="text-3xl font-bold">{formatCurrency(grandTotalMonthly * 6)}</p>
+              <div className="bg-white p-6 rounded-2xl border border-slate-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Reserve Status</span>
+                  <span className="text-[10px] font-black text-[#9ADBDE] uppercase tracking-widest">Active Monitoring</span>
+                </div>
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="w-2/3 h-full bg-gradient-to-r from-[#9ADBDE] to-[#99B3C5]"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
+      <section className="mb-16">
+        <div className="flex items-center gap-3 mb-8">
+          <Landmark className="text-[#00326b]" size={24} />
+          <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight text-center lg:text-left">Strategic Reserve Matrix</h2>
+          <div className="h-px flex-grow bg-gradient-to-r from-[#00326b]/20 to-transparent"></div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {SAVINGS_CATEGORIES.map(cat => (
+            <div key={cat.name} className="bg-white rounded-[2.5rem] border border-gray-100 shadow-xl overflow-hidden group hover:-translate-y-2 transition-all duration-500">
+              <div className="p-8 bg-slate-50 border-b border-gray-100 flex justify-between items-center">
+                <h3 className="text-lg font-black text-[#00326b] uppercase tracking-tight">{cat.name}</h3>
+                <Wallet className="text-gray-300" size={18} />
+              </div>
+              <div className="p-8 space-y-6">
+                <div className="space-y-4">
+                  {cat.items.map(item => (
+                    <div key={item.item} className="flex justify-between items-center border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+                      <span className="text-sm font-bold text-gray-500">{item.item}</span>
+                      <div className="text-right">
+                        <div className="text-xs font-black text-[#00326b]">{formatCurrency(item.monthly * 3)} <span className="text-gray-300 ml-1 font-bold">3M</span></div>
+                        <div className="text-[10px] font-bold text-gray-300">{formatCurrency(item.monthly * 6)} 6M</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-6 border-t-2 border-dashed border-gray-100 flex justify-between items-end">
+                  <div>
+                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Target</div>
+                    <div className="text-2xl font-black text-[#00326b]">{formatCurrency(getSubtotal(cat.items) * 6)}</div>
+                  </div>
+                  <div className="text-[10px] font-black text-[#9ADBDE] uppercase tracking-widest bg-[#9ADBDE]/5 px-3 py-1 rounded-full border border-[#9ADBDE]/10">
+                    6 Months
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#00326b] via-[#2d5a8e] to-[#6a93cb] rounded-[4rem] p-12 md:p-20 text-white shadow-2xl">
+        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-12">
+          <div className="max-w-xl text-center lg:text-left">
+            <h2 className="text-4xl font-black mb-6 tracking-tight uppercase">Consolidated Reserve Targets</h2>
+            <p className="text-white/60 font-bold leading-relaxed">
+              Aggregate valuation of all operational reserves required to maintain total system integrity across all registered categories.
+            </p>
+          </div>
+          <div className="flex flex-col md:flex-row gap-8 w-full lg:w-auto">
+            <div className="bg-white/10 backdrop-blur-xl p-10 rounded-[3rem] border border-white/20 flex-1 lg:w-72 text-center group hover:bg-white/20 transition-all">
+              <TrendingUp className="text-[#9ADBDE] mx-auto mb-6" size={32} />
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60 mb-2 text-white">3 Month Liquidity</p>
+              <p className="text-4xl font-black text-white tracking-tighter">{formatCurrency(grandTotalMonthly * 3)}</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-xl p-10 rounded-[3rem] border border-white/20 flex-1 lg:w-72 text-center group hover:bg-white/20 transition-all">
+              <Landmark className="text-[#FFC68D] mx-auto mb-6" size={32} />
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60 mb-2 text-white">6 Month Fortress</p>
+              <p className="text-4xl font-black text-white tracking-tighter">{formatCurrency(grandTotalMonthly * 6)}</p>
+            </div>
+          </div>
+        </div>
+        <div className="absolute top-0 right-0 w-full h-full bg-grid-white/[0.02] [mask-image:radial-gradient(white,transparent_70%)]"></div>
+        <div className="absolute -bottom-24 -right-24 text-[20rem] opacity-5 pointer-events-none font-black text-white">SAFE</div>
+      </section>
+
+      <footer className="mt-20 py-12 border-t border-gray-100 text-center">
+        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Official Capital Reserves Registry © 2026</p>
+      </footer>
     </div>
   );
 }

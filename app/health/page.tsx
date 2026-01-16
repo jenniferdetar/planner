@@ -2,6 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { 
+  HeartPulse, Activity, Apple, Beaker, 
+  ChevronRight, Plus, Trash2, ShieldCheck,
+  Stethoscope, Pill, Leaf, TrendingUp
+} from 'lucide-react';
 
 const MASTER_LIST = {
   fruits: [
@@ -106,79 +111,182 @@ export default function HealthPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <header className="mb-8 flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-bold text-[#0ea5e9]">Health Hub</h1>
-          <p className="text-gray-600">Wellness & Medication Tracking</p>
-        </div>
-        <div className="flex gap-2">
-          <button 
-            onClick={() => setActiveTab('produce')}
-            className={`px-4 py-2 rounded-full font-bold transition-all ${activeTab === 'produce' ? 'bg-[#0ea5e9] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-          >
-            Produce Inventory
-          </button>
-          <button 
-            onClick={() => setActiveTab('medication')}
-            className={`px-4 py-2 rounded-full font-bold transition-all ${activeTab === 'medication' ? 'bg-[#0ea5e9] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-          >
-            Medication Tracker
-          </button>
+    <div className="p-4 md:p-12 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+      <header className="mb-12">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="w-14 h-14 rounded-2xl bg-[#059669] flex items-center justify-center shadow-xl shadow-[#059669]/20">
+            <HeartPulse className="text-white" size={32} />
+          </div>
+          <div>
+            <h1 className="text-4xl font-black text-[#064e3b] tracking-tight uppercase">Health Hub</h1>
+            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Vitality is the foundation of all achievement"</p>
+          </div>
         </div>
       </header>
 
-      <div className="bg-white p-8 rounded-xl border shadow-sm">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#064e3b] via-[#059669] to-[#34d399] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#064e3b]/30">
+        <div className="relative z-10 max-w-2xl">
+          <h2 className="text-4xl font-black mb-4 leading-tight">Medical Inventory & Wellness Registry</h2>
+          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
+            Manage your nutritional inventory, track essential medications, and monitor wellness protocols with precision.
+          </p>
+          <div className="flex gap-4">
+            <div className="flex flex-col">
+              <span className="text-3xl font-black text-white">2026</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Wellness Year</span>
+            </div>
+            <div className="w-px h-12 bg-white/20 mx-4"></div>
+            <div className="flex flex-col">
+              <span className="text-3xl font-black text-white">Active</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Health Status</span>
+            </div>
+          </div>
+        </div>
+        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">🥗</div>
+      </section>
+
+      <div className="flex flex-wrap gap-4 mb-12">
+        <button 
+          onClick={() => setActiveTab('produce')}
+          className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+            activeTab === 'produce' 
+              ? 'bg-[#064e3b] text-white shadow-lg' 
+              : 'bg-white text-[#064e3b] border-2 border-[#064e3b]/10 hover:bg-[#064e3b]/5'
+          }`}
+        >
+          <Leaf size={16} />
+          Produce Inventory
+        </button>
+        <button 
+          onClick={() => setActiveTab('medication')}
+          className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+            activeTab === 'medication' 
+              ? 'bg-[#064e3b] text-white shadow-lg' 
+              : 'bg-white text-[#064e3b] border-2 border-[#064e3b]/10 hover:bg-[#064e3b]/5'
+          }`}
+        >
+          <Pill size={16} />
+          Medication Tracker
+        </button>
+      </div>
+
+      <div className="min-h-[400px]">
         {loading ? (
-          <div className="text-center text-gray-500 py-12">Loading health data...</div>
+          <div className="flex flex-col items-center justify-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
+            <Activity className="text-slate-300 animate-pulse mb-4" size={48} />
+            <div className="text-slate-400 font-black uppercase tracking-widest text-xs">Accessing Medical Records...</div>
+          </div>
         ) : activeTab === 'produce' ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <ListSection title="🍎 Fruits" type="fruits" items={data.fruits} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} />
-            <ListSection title="🥦 Vegetables" type="vegetables" items={data.vegetables} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} />
-            <ListSection title="🥜 Legumes & Nuts" type="legumes" items={data.legumes} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <ListSection title="Fruits" type="fruits" icon={<Apple size={20} className="text-[#064e3b]" />} items={data.fruits} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#9ADBDE]" />
+            <ListSection title="Vegetables" type="vegetables" icon={<Leaf size={20} className="text-[#064e3b]" />} items={data.vegetables} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#FFC68D]" />
+            <ListSection title="Legumes & Nuts" type="legumes" icon={<Activity size={20} className="text-[#064e3b]" />} items={data.legumes} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#99B3C5]" />
           </div>
         ) : (
-          <div className="max-w-2xl mx-auto">
-            <ListSection title="💊 Medication" type="medication" items={data.medication} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} />
+          <div className="max-w-4xl mx-auto">
+            <ListSection 
+              title="Medication Registry" 
+              type="medication" 
+              icon={<Beaker size={20} className="text-[#064e3b]" />} 
+              items={data.medication} 
+              onUpdate={updateItem} 
+              onAdd={addItem} 
+              onRemove={removeItem} 
+              color="bg-[#FFA1AB]"
+              isLarge
+            />
           </div>
         )}
       </div>
 
-      <footer className="mt-12 text-center text-sm text-gray-400 italic">
-        "Your peace is protected on purpose."
+      <section className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <ShieldCheck className="text-[#064e3b]" size={24} />
+              <h2 className="text-2xl font-black text-[#064e3b] uppercase tracking-tight">Data Integrity</h2>
+            </div>
+            <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
+              Wellness records are synchronized with the secure administrative ledger to ensure continuity of care.
+            </p>
+          </div>
+          <div className="flex items-center gap-4 text-[#064e3b] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+            <Stethoscope size={16} />
+            Medical Records Verified
+          </div>
+        </div>
+
+        <div className="bg-[#059669]/10 p-10 rounded-[3rem] border-2 border-[#059669]/20 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <TrendingUp className="text-[#064e3b]" size={24} />
+              <h2 className="text-2xl font-black text-[#064e3b] uppercase tracking-tight">Vitality Metrics</h2>
+            </div>
+            <p className="text-[#064e3b]/70 font-medium leading-relaxed italic mb-8">
+              Current nutritional intake and medication adherence are within optimal parameters. Maintain consistency.
+            </p>
+          </div>
+          <div className="text-4xl font-black text-[#064e3b] opacity-20 italic">"Your peace is protected on purpose."</div>
+        </div>
+      </section>
+
+      <footer className="mt-20 py-12 border-t border-gray-100 text-center">
+        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Health & Wellness Registry © 2026</p>
       </footer>
     </div>
   );
 }
 
-function ListSection({ title, type, items, onUpdate, onAdd, onRemove }: any) {
+function ListSection({ title, type, icon, items, onUpdate, onAdd, onRemove, color, isLarge }: any) {
   return (
-    <section>
-      <h2 className="text-2xl font-handwriting mb-4 text-[#0ea5e9] border-b pb-2">{title}</h2>
-      <div className="space-y-2">
+    <section className={`flex flex-col h-full bg-white rounded-[2.5rem] border-2 border-slate-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500`}>
+      <div className="p-8 border-b-2 border-slate-50">
+        <div className="flex items-center gap-3 mb-1">
+          <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center shadow-inner`}>
+            {icon}
+          </div>
+          <h2 className="text-xl font-black text-[#064e3b] uppercase tracking-tight">{title}</h2>
+        </div>
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+          {items.length} Registered Items
+        </p>
+      </div>
+
+      <div className={`flex-grow p-6 ${isLarge ? 'grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2' : 'space-y-2'}`}>
         {items.map((item: string, index: number) => (
-          <div key={index} className="flex items-center gap-2 group">
+          <div key={index} className="group flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 transition-colors">
+            <div className="w-2 h-2 rounded-full bg-[#059669] opacity-20 group-hover:opacity-100 transition-opacity"></div>
             <input 
               type="text" 
               value={item} 
               onChange={(e) => onUpdate(type, index, e.target.value)}
-              className="flex-1 bg-transparent border-none focus:ring-0 text-lg text-gray-700 font-medium"
+              className="flex-1 bg-transparent border-none focus:ring-0 p-0 text-gray-700 font-bold placeholder:text-gray-300"
+              placeholder="Enter record..."
             />
             <button 
               onClick={() => onRemove(type, index)}
-              className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 transition-opacity"
+              className="opacity-0 group-hover:opacity-100 p-2 text-slate-300 hover:text-red-500 transition-all"
             >
-              ✕
+              <Trash2 size={16} />
             </button>
           </div>
         ))}
+        {items.length === 0 && (
+          <div className="py-8 text-center">
+            <p className="text-sm text-gray-400 italic">No records found</p>
+          </div>
+        )}
       </div>
-      <button 
-        onClick={() => onAdd(type)}
-        className="mt-4 text-sm text-green-600 font-bold hover:underline"
-      >
-        + Add Item
-      </button>
+
+      <div className="p-6 bg-slate-50/50 mt-auto">
+        <button 
+          onClick={() => onAdd(type)}
+          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border-2 border-[#059669]/20 text-[#059669] font-black uppercase tracking-widest text-[10px] hover:bg-[#059669] hover:text-white hover:border-[#059669] transition-all shadow-sm"
+        >
+          <Plus size={14} />
+          Append Record
+        </button>
+      </div>
     </section>
   );
 }

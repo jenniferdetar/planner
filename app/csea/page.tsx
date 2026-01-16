@@ -3,6 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { CseaIssue, CseaMember } from '@/types/database.types';
+import { 
+  Users, Shield, FileText, Search, 
+  ChevronRight, Plus, Trash2, ShieldCheck,
+  Briefcase, MessageSquare, Clock, CheckCircle2,
+  AlertCircle, Activity, Scale, Landmark
+} from 'lucide-react';
 
 export default function CseaPage() {
   const [activeTab, setActiveTab] = useState('issues');
@@ -86,200 +92,324 @@ export default function CseaPage() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <header className="mb-8 flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-bold text-[#00326b]">CSEA Tracker</h1>
-          <p className="text-gray-600">Stewarded member issues at a glance</p>
-        </div>
-        <div className="flex gap-2">
-          <button 
-            onClick={() => setActiveTab('issues')}
-            className={`px-4 py-2 rounded-full font-bold transition-all ${activeTab === 'issues' ? 'bg-[#00326b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-          >
-            Issue Log
-          </button>
-          <button 
-            onClick={() => setActiveTab('meetings')}
-            className={`px-4 py-2 rounded-full font-bold transition-all ${activeTab === 'meetings' ? 'bg-[#00326b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-          >
-            Meeting Notes
-          </button>
-          <button 
-            onClick={() => setActiveTab('notes')}
-            className={`px-4 py-2 rounded-full font-bold transition-all ${activeTab === 'notes' ? 'bg-[#00326b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-          >
-            General Notes
-          </button>
+    <div className="p-4 md:p-12 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+      <header className="mb-12">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
+            <Scale className="text-white" size={32} />
+          </div>
+          <div>
+            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">CSEA Hub</h1>
+            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Protecting member rights with administrative precision"</p>
+          </div>
         </div>
       </header>
 
-      {activeTab === 'issues' && (
-        <div className="space-y-6">
-          <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <StatCard title="Total Issues" value={stats.total} color="text-[#00326b]" />
-            <StatCard title="Open" value={stats.open} color="text-blue-600" />
-            <StatCard title="In Progress" value={stats.inProgress} color="text-yellow-600" />
-            <StatCard title="Resolved/Closed" value={stats.resolved} color="text-green-600" />
-          </section>
-
-          <section className="bg-white p-6 rounded-xl border shadow-sm">
-            <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-              <span>🔍</span> Search Issues
-            </h2>
-            <input 
-              type="text" 
-              placeholder="Search by name, description, or steward..."
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#00326b] outline-none"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </section>
-
-          <section className="bg-white rounded-xl border shadow-sm overflow-hidden">
-            {loading ? (
-              <div className="p-8 text-center text-gray-500">Loading issues...</div>
-            ) : (
-              <table className="w-full text-left border-collapse">
-                <thead className="bg-[#00326b] text-white">
-                  <tr>
-                    <th className="p-4 text-sm font-semibold uppercase tracking-wider">Member ID</th>
-                    <th className="p-4 text-sm font-semibold uppercase tracking-wider">Member</th>
-                    <th className="p-4 text-sm font-semibold uppercase tracking-wider">Type</th>
-                    <th className="p-4 text-sm font-semibold uppercase tracking-wider">Description</th>
-                    <th className="p-4 text-sm font-semibold uppercase tracking-wider">Steward</th>
-                    <th className="p-4 text-sm font-semibold uppercase tracking-wider">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {filteredIssues.map((issue) => (
-                    <tr key={issue.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="p-4 text-sm text-gray-700">{issue.csea_members?.member_id || '-'}</td>
-                      <td className="p-4 text-sm font-semibold text-gray-900">{issue.csea_members?.full_name || 'Unknown'}</td>
-                      <td className="p-4 text-sm text-gray-600">{issue.issue_type}</td>
-                      <td className="p-4 text-sm text-gray-600 max-w-md">{issue.description}</td>
-                      <td className="p-4 text-sm text-gray-600">{issue.steward}</td>
-                      <td className="p-4 text-sm">
-                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                          issue.status === 'Closed' || issue.status === 'Resolved' ? 'bg-gray-100 text-gray-600' : 
-                          issue.status === 'In Progress' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-green-100 text-green-700'
-                        }`}>
-                          {issue.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                  {filteredIssues.length === 0 && (
-                    <tr>
-                      <td colSpan={6} className="p-8 text-center text-gray-500">No issues found.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            )}
-          </section>
-        </div>
-      )}
-
-      {activeTab === 'meetings' && (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center bg-white p-6 rounded-xl border shadow-sm">
-            <h2 className="text-xl font-bold text-[#00326b]">Meeting Notes</h2>
-            <button 
-              onClick={addMeetingNote}
-              className="px-6 py-2 bg-[#00326b] text-white rounded-full font-bold hover:bg-[#00254d] transition-all"
-            >
-              + Add New Meeting
-            </button>
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#00326b] via-[#0a2f5f] to-[#1e40af] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#00326b]/30">
+        <div className="relative z-10 max-w-2xl">
+          <h2 className="text-4xl font-black mb-4 leading-tight">Labor Relations Registry</h2>
+          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
+            Track stewarded member issues, manage meeting minutes, and maintain official labor relations records.
+          </p>
+          <div className="flex gap-4">
+            <div className="flex flex-col">
+              <span className="text-3xl font-black text-white">2026</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Fiscal Year</span>
+            </div>
+            <div className="w-px h-12 bg-white/20 mx-4"></div>
+            <div className="flex flex-col">
+              <span className="text-3xl font-black text-white">Active</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Registry Status</span>
+            </div>
           </div>
-          
-          <div className="space-y-4">
-            {meetingNotes.map((meeting, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl border shadow-sm space-y-4">
-                <div className="flex gap-4">
-                  <input 
-                    type="date"
-                    value={meeting.date}
-                    onChange={(e) => {
-                      const next = [...meetingNotes]; next[i].date = e.target.value; setMeetingNotes(next);
-                    }}
-                    className="p-2 border rounded font-semibold text-gray-700"
-                  />
-                  <input 
-                    type="text"
-                    placeholder="Meeting Title (e.g. Executive Board)"
-                    value={meeting.title}
-                    onChange={(e) => {
-                      const next = [...meetingNotes]; next[i].title = e.target.value; setMeetingNotes(next);
-                    }}
-                    className="flex-1 p-2 border rounded font-bold text-[#00326b]"
-                  />
-                  <button 
-                    onClick={() => {
-                      const next = meetingNotes.filter((_, idx) => idx !== i);
-                      setMeetingNotes(next);
-                      saveMetadata('csea-meeting-notes', next);
-                    }}
-                    className="text-red-400 hover:text-red-600"
-                  >
-                    ✕
-                  </button>
+        </div>
+        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">⚖️</div>
+      </section>
+
+      <div className="flex flex-wrap gap-4 mb-12">
+        <button 
+          onClick={() => setActiveTab('issues')}
+          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+            activeTab === 'issues' 
+              ? 'bg-[#00326b] text-white shadow-lg' 
+              : 'bg-white text-[#00326b] border-2 border-[#00326b]/10 hover:bg-[#00326b]/5'
+          }`}
+        >
+          Issue Log
+        </button>
+        <button 
+          onClick={() => setActiveTab('meetings')}
+          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+            activeTab === 'meetings' 
+              ? 'bg-[#00326b] text-white shadow-lg' 
+              : 'bg-white text-[#00326b] border-2 border-[#00326b]/10 hover:bg-[#00326b]/5'
+          }`}
+        >
+          Meeting Minutes
+        </button>
+        <button 
+          onClick={() => setActiveTab('notes')}
+          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+            activeTab === 'notes' 
+              ? 'bg-[#00326b] text-white shadow-lg' 
+              : 'bg-white text-[#00326b] border-2 border-[#00326b]/10 hover:bg-[#00326b]/5'
+          }`}
+        >
+          General Archive
+        </button>
+      </div>
+
+      <div className="min-h-[600px]">
+        {activeTab === 'issues' && (
+          <div className="space-y-12">
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <StatCard title="Total Registry" value={stats.total} icon={<Users size={20} />} color="bg-[#99B3C5]" />
+              <StatCard title="Open Inquiries" value={stats.open} icon={<AlertCircle size={20} />} color="bg-[#FFA1AB]" />
+              <StatCard title="In Progress" value={stats.inProgress} icon={<Clock size={20} />} color="bg-[#FFC68D]" />
+              <StatCard title="Resolved Case" value={stats.resolved} icon={<CheckCircle2 size={20} />} color="bg-[#9ADBDE]" />
+            </section>
+
+            <section className="bg-white p-10 rounded-[3rem] border-2 border-slate-100 shadow-sm relative overflow-hidden">
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+                    <Search size={20} className="text-[#00326b]" />
+                  </div>
+                  <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Search Registry</h2>
                 </div>
-                <textarea 
-                  placeholder="What was discussed?"
-                  value={meeting.notes}
-                  onChange={(e) => {
-                    const next = [...meetingNotes]; next[i].notes = e.target.value; setMeetingNotes(next);
-                  }}
-                  className="w-full min-h-[150px] p-4 border rounded bg-gray-50 focus:ring-2 focus:ring-[#00326b] outline-none"
-                />
-                <div className="flex justify-end">
-                  <button 
-                    onClick={() => saveMetadata('csea-meeting-notes', meetingNotes)}
-                    className="px-4 py-1 text-sm bg-blue-50 text-[#00326b] font-bold rounded hover:bg-blue-100"
-                  >
-                    Save Changes
-                  </button>
+                <div className="relative">
+                  <input 
+                    type="text" 
+                    placeholder="Search by name, description, or steward..."
+                    className="w-full p-6 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/20 focus:bg-white rounded-2xl outline-none font-bold text-gray-700 transition-all pl-16"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400" size={24} />
                 </div>
               </div>
-            ))}
-            {meetingNotes.length === 0 && (
-              <p className="text-center text-gray-400 italic py-12">No meeting notes recorded yet.</p>
-            )}
-          </div>
-        </div>
-      )}
+            </section>
 
-      {activeTab === 'notes' && (
-        <div className="bg-white p-8 rounded-xl border shadow-sm space-y-6">
-          <div className="flex justify-between items-center border-b pb-4">
-            <h2 className="text-xl font-bold text-[#00326b]">General Notes</h2>
-            <button 
-              onClick={() => saveMetadata('csea-general-notes', { content: generalNotes })}
-              disabled={saving}
-              className="px-8 py-2 bg-[#00326b] text-white rounded-full font-bold hover:bg-[#00254d] transition-all disabled:opacity-50"
-            >
-              {saving ? 'Saving...' : 'Save General Notes'}
-            </button>
+            <section className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden">
+              <div className="p-10 border-b-2 border-slate-50 bg-slate-50/30">
+                <h2 className="text-3xl font-black text-[#00326b] uppercase tracking-tight">Issue Log</h2>
+                <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Official registry of labor relations cases</p>
+              </div>
+              <div className="overflow-x-auto">
+                {loading ? (
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <Activity className="text-slate-300 animate-pulse mb-4" size={48} />
+                    <div className="text-slate-400 font-black uppercase tracking-widest text-xs">Accessing Case Files...</div>
+                  </div>
+                ) : (
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50/50">
+                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Member ID</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Full Name</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Type</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Description</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b text-center">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {filteredIssues.map((issue) => (
+                        <tr key={issue.id} className="group hover:bg-slate-50/50 transition-colors">
+                          <td className="p-6 font-black text-[#00326b] uppercase tracking-tighter">{issue.csea_members?.member_id || '-'}</td>
+                          <td className="p-6">
+                            <div className="font-black text-gray-900">{issue.csea_members?.full_name || 'Unknown'}</div>
+                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Steward: {issue.steward}</div>
+                          </td>
+                          <td className="p-6 text-sm font-bold text-gray-600">{issue.issue_type}</td>
+                          <td className="p-6 text-sm text-gray-600 max-w-md leading-relaxed">{issue.description}</td>
+                          <td className="p-6">
+                            <div className={`mx-auto w-fit px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${
+                              issue.status === 'Closed' || issue.status === 'Resolved' ? 'bg-slate-100 text-slate-500' : 
+                              issue.status === 'In Progress' ? 'bg-amber-100 text-amber-700 shadow-sm shadow-amber-100/50' :
+                              'bg-emerald-100 text-emerald-700 shadow-sm shadow-emerald-100/50'
+                            }`}>
+                              {issue.status}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                      {filteredIssues.length === 0 && (
+                        <tr>
+                          <td colSpan={5} className="p-20 text-center">
+                            <p className="text-gray-400 font-black uppercase tracking-widest text-xs">No case records found matching search parameters</p>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </section>
           </div>
-          <textarea 
-            placeholder="Capture random thoughts, reminders, or miscellaneous info here..."
-            value={generalNotes}
-            onChange={(e) => setGeneralNotes(e.target.value)}
-            className="w-full min-h-[400px] p-6 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#00326b] outline-none text-lg leading-relaxed"
-          />
+        )}
+
+        {activeTab === 'meetings' && (
+          <div className="space-y-8">
+            <div className="flex justify-between items-center bg-white p-10 rounded-[3rem] border-2 border-slate-100 shadow-sm">
+              <div>
+                <h2 className="text-3xl font-black text-[#00326b] uppercase tracking-tight">Meeting Minutes</h2>
+                <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Archive of official board proceedings</p>
+              </div>
+              <button 
+                onClick={addMeetingNote}
+                className="flex items-center gap-2 px-8 py-4 bg-[#00326b] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all shadow-xl shadow-[#00326b]/20"
+              >
+                <Plus size={18} /> Record Session
+              </button>
+            </div>
+            
+            <div className="space-y-6">
+              {meetingNotes.map((meeting, i) => (
+                <div key={i} className="bg-white p-10 rounded-[3rem] border-2 border-slate-100 shadow-sm space-y-8 relative overflow-hidden group">
+                  <div className="flex flex-wrap gap-6 relative z-10">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Session Date</span>
+                      <input 
+                        type="date"
+                        value={meeting.date}
+                        onChange={(e) => {
+                          const next = [...meetingNotes]; next[i].date = e.target.value; setMeetingNotes(next);
+                        }}
+                        className="p-4 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/10 rounded-xl font-black text-[#00326b] outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1 flex-grow">
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Proceedings Title</span>
+                      <input 
+                        type="text"
+                        placeholder="Meeting Title (e.g. Executive Board)"
+                        value={meeting.title}
+                        onChange={(e) => {
+                          const next = [...meetingNotes]; next[i].title = e.target.value; setMeetingNotes(next);
+                        }}
+                        className="p-4 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/10 rounded-xl font-black text-[#00326b] outline-none text-xl"
+                      />
+                    </div>
+                    <button 
+                      onClick={() => {
+                        const next = meetingNotes.filter((_, idx) => idx !== i);
+                        setMeetingNotes(next);
+                        saveMetadata('csea-meeting-notes', next);
+                      }}
+                      className="self-end p-4 text-slate-300 hover:text-red-500 transition-all bg-slate-50 rounded-xl hover:bg-red-50"
+                    >
+                      <Trash2 size={24} />
+                    </button>
+                  </div>
+                  <div className="relative z-10">
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block">Official Notes</span>
+                    <textarea 
+                      placeholder="What was discussed?"
+                      value={meeting.notes}
+                      onChange={(e) => {
+                        const next = [...meetingNotes]; next[i].notes = e.target.value; setMeetingNotes(next);
+                      }}
+                      className="w-full min-h-[200px] p-8 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/10 rounded-[2rem] outline-none font-medium text-gray-700 leading-relaxed text-lg"
+                    />
+                  </div>
+                  <div className="flex justify-end relative z-10">
+                    <button 
+                      onClick={() => saveMetadata('csea-meeting-notes', meetingNotes)}
+                      className="flex items-center gap-2 px-6 py-3 bg-blue-50 text-[#00326b] font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-blue-100 transition-all"
+                    >
+                      <Shield size={14} /> Certify Minutes
+                    </button>
+                  </div>
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-slate-100 opacity-20 rounded-full translate-x-1/2 -translate-y-1/2 group-hover:scale-110 transition-transform duration-700"></div>
+                </div>
+              ))}
+              {meetingNotes.length === 0 && (
+                <div className="py-20 text-center bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
+                  <MessageSquare className="text-slate-200 mx-auto mb-4" size={48} />
+                  <p className="text-slate-400 font-black uppercase tracking-widest text-xs">No administrative sessions recorded</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'notes' && (
+          <div className="bg-white p-12 rounded-[4rem] border-2 border-slate-100 shadow-sm space-y-8 relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="flex justify-between items-center border-b border-slate-50 pb-8 mb-8">
+                <div>
+                  <h2 className="text-3xl font-black text-[#00326b] uppercase tracking-tight">General Archive</h2>
+                  <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Central repository for miscellaneous labor records</p>
+                </div>
+                <button 
+                  onClick={() => saveMetadata('csea-general-notes', { content: generalNotes })}
+                  disabled={saving}
+                  className="px-10 py-4 bg-[#00326b] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all disabled:opacity-50 shadow-xl shadow-[#00326b]/20"
+                >
+                  {saving ? 'Synchronizing...' : 'Save Registry'}
+                </button>
+              </div>
+              <textarea 
+                placeholder="Capture random thoughts, reminders, or miscellaneous info here..."
+                value={generalNotes}
+                onChange={(e) => setGeneralNotes(e.target.value)}
+                className="w-full min-h-[500px] p-10 bg-slate-50/50 border-2 border-transparent focus:border-[#00326b]/10 rounded-[3rem] outline-none text-xl leading-relaxed font-medium text-gray-700"
+              />
+            </div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#00326b] opacity-[0.02] rounded-full translate-x-1/3 translate-y-1/3"></div>
+          </div>
+        )}
+      </div>
+
+      <section className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <ShieldCheck className="text-[#00326b]" size={24} />
+              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Data Integrity</h2>
+            </div>
+            <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
+              Labor relations records are encrypted and synchronized across the secure administrative network.
+            </p>
+          </div>
+          <div className="flex items-center gap-4 text-[#00326b] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+            <Landmark size={16} />
+            Registry Authenticity Verified
+          </div>
         </div>
-      )}
+
+        <div className="bg-[#00326b]/5 p-10 rounded-[3rem] border-2 border-[#00326b]/10 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <Activity className="text-[#00326b]" size={24} />
+              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Case Velocity</h2>
+            </div>
+            <p className="text-[#00326b]/70 font-medium leading-relaxed italic mb-8">
+              Current inquiry resolution rates are within expected parameters. Continue monitoring open files for priority.
+            </p>
+          </div>
+          <div className="text-4xl font-black text-[#00326b] opacity-10">2026 Labor Outlook</div>
+        </div>
+      </section>
+
+      <footer className="mt-20 py-12 border-t border-gray-100 text-center">
+        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Labor Operations Registry © 2026</p>
+      </footer>
     </div>
   );
 }
 
-function StatCard({ title, value, color }: { title: string; value: number; color: string }) {
+function StatCard({ title, value, icon, color }: { title: string; value: number; icon: React.ReactNode; color: string }) {
   return (
-    <div className="bg-white p-4 rounded-xl border shadow-sm">
-      <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider">{title}</p>
-      <p className={`text-2xl font-bold mt-1 ${color}`}>{value}</p>
+    <div className={`relative overflow-hidden p-8 rounded-[2.5rem] bg-white border-2 border-slate-100 shadow-sm group hover:shadow-xl transition-all duration-500`}>
+      <div className={`absolute -right-4 -top-4 w-24 h-24 ${color} opacity-10 rounded-full group-hover:scale-150 transition-transform duration-700`}></div>
+      <div className="relative z-10">
+        <div className={`w-12 h-12 rounded-2xl ${color} flex items-center justify-center mb-4 shadow-inner text-[#00326b]`}>
+          {icon}
+        </div>
+        <div className="text-4xl font-black text-[#00326b] mb-1">{value}</div>
+        <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{title}</div>
+      </div>
     </div>
   );
 }
