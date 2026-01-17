@@ -30,6 +30,8 @@ function buildMonthGrid(year: number, month: number) {
   return cells;
 }
 
+import SubHeader from '@/components/SubHeader';
+
 export default function PersonalPlannerPage() {
   const year = 2026;
   const month = 0;
@@ -40,8 +42,11 @@ export default function PersonalPlannerPage() {
   const cells = buildMonthGrid(year, month);
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-8 items-start">
+    <div className="bg-[#fdfdfd] min-h-screen">
+      <SubHeader title="Personal Planner" subtitle="Weekly Schedule & Habits" />
+      
+      <div className="p-4 md:p-8 max-w-full mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-4 items-start">
         <aside className="border border-slate-200 rounded-xl p-5">
           <div className="text-center text-[11px] font-black uppercase tracking-[0.3em] text-[#4a7f8f] mb-4">
             Notes

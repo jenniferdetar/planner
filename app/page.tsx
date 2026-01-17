@@ -19,6 +19,8 @@ interface Meeting {
   start_time: string;
 }
 
+import SubHeader from '@/components/SubHeader';
+
 export default function Home() {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,48 +64,18 @@ export default function Home() {
   };
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-            <LayoutDashboard className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Strategic Command</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Central intelligence & operations registry"</p>
-          </div>
-        </div>
-      </header>
-
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#0a2f5f] via-[#1e40af] to-[#3b82f6] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#0a2f5f]/30">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-black mb-4 leading-tight">Life Architecture Intelligence</h2>
-          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
-            Access your unified administrative network. Monitor financial assets, strategic objectives, and operational directives from a single command interface.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">2026</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Active Cycle</span>
-            </div>
-            <div className="w-px h-12 bg-white/20 mx-4"></div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">Online</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Registry Status</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">🏢</div>
-      </section>
-
-      <section className="mb-16">
+    <div className="bg-[#fdfdfd] min-h-screen">
+      <SubHeader title="Calendar" subtitle="Monthly View & Events" />
+      
+      <div className="p-4 md:p-8 max-w-7xl mx-auto">
+        <section className="mb-16">
         <div className="flex items-center gap-3 mb-8">
           <Sparkles className="text-[#00326b]" size={24} />
           <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Administrative Hubs</h2>
           <div className="h-px flex-grow bg-gradient-to-r from-[#00326b]/20 to-transparent"></div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
-          <HubLink href="/planning" icon={<Compass size={24} />} label="Planning" color="bg-[#9ADBDE]" />
+          <HubLink href="/planning" icon={<Compass size={24} />} label="Dream Big Home" color="bg-[#9ADBDE]" />
           <HubLink href="/finance" icon={<Landmark size={24} />} label="Finance" color="bg-[#FFC68D]" />
           <HubLink href="/icaap" icon={<ShieldCheck size={24} />} label="iCAAP" color="bg-[#FFA1AB]" />
           <HubLink href="/health" icon={<HeartPulse size={24} />} label="Health" color="bg-[#99B3C5]" />
