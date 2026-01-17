@@ -16,7 +16,7 @@ const corePlanningCards = [
   { icon: <Scroll className="text-[#0a2f5f]" size={24} />, title: 'Mission', sub: 'Your purpose & values', href: '/planning/mission', color: 'bg-[#FFA1AB]', borderColor: 'border-[#FFA1AB]' },
   { icon: <Zap className="text-[#0a2f5f]" size={24} />, title: 'Mantra', sub: 'Daily focus & intent', href: '/planning/mantra', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
   { icon: <BookOpen className="text-[#0a2f5f]" size={24} />, title: 'Books to Read', sub: 'Reading wishlist', href: '/planning/books', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
-  { icon: <Sparkles className="text-[#0a2f5f]" size={24} />, title: 'Intentions', sub: 'Dreams & big ideas', href: '/planning/intentions', color: 'bg-[#99B3C5]', borderColor: 'border-[#99B3C5]' },
+  { icon: <Sparkles className="text-[#0a2f5f]" size={24} />, title: 'Intentions & Dreams', sub: 'Dreams & big ideas', href: '/planning/intentions', color: 'bg-[#99B3C5]', borderColor: 'border-[#99B3C5]' },
   { icon: <PieChart className="text-[#0a2f5f]" size={24} />, title: 'Monthly Review', sub: 'Reflect & recalibrate', href: '/planning/review', color: 'bg-[#FFA1AB]', borderColor: 'border-[#FFA1AB]' },
   { icon: <Users className="text-[#0a2f5f]" size={24} />, title: 'Meetings', sub: 'Schedule & Records', href: '/planning/meetings', color: 'bg-[#FFC68D]', borderColor: 'border-[#FFC68D]' }
 ];

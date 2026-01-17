@@ -52,6 +52,8 @@ function getCategoryColor(category: string) {
   return CATEGORY_COLORS[category] || '#94a3b8';
 }
 
+import SubHeader from '@/components/SubHeader';
+
 export default function BillSchedulePage() {
   const [checkedState, setCheckedState] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
@@ -101,29 +103,11 @@ export default function BillSchedulePage() {
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFA1AB] flex items-center justify-center shadow-xl shadow-[#FFA1AB]/20">
-            <Calendar className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Bill Schedule</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Official Registry of Recurring Liabilities"</p>
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <Link 
-            href="/finance" 
-            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-          >
-            <ChevronLeft size={16} />
-            Back
-          </Link>
-        </div>
-      </header>
-
-      <section className="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
+    <div className="bg-[#fdfdfd] min-h-screen">
+      <SubHeader title="Bill Payment Schedule" subtitle="Official Registry of Recurring Liabilities" />
+      
+      <div className="p-4 md:p-8 max-w-full mx-auto">
+        <section className="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
         <div className="absolute top-0 left-0 w-full h-2 bg-[#FFA1AB]"></div>
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">

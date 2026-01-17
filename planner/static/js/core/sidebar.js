@@ -1,6 +1,6 @@
 const SidebarModule = (() => {
   const sidebarItems = [
-    { href: '/calendar/', text: 'Home', class: 'nav-home' },
+    { href: '/', text: 'Home', class: 'nav-home' },
     { href: '/csea/', text: 'CSEA', class: 'nav-csea' },
     { href: '/finance/', text: 'Finance', class: 'nav-finance' },
     { href: '/health/', text: 'Health', class: 'nav-health' },

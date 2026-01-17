@@ -18,7 +18,7 @@ const financeLinks = [
   {
     href: '/finance/bill-schedule',
     icon: <Calendar className="text-[#0a2f5f]" size={24} />,
-    label: 'Bill Schedule',
+    label: 'Bill Payment Schedule',
     sub: 'Payment calendar',
     color: 'bg-[#FFA1AB]',
     borderColor: 'border-[#FFA1AB]'
@@ -26,7 +26,7 @@ const financeLinks = [
   {
     href: '/finance/budget-overview',
     icon: <BarChart3 className="text-[#0a2f5f]" size={24} />,
-    label: 'Budget',
+    label: 'Budget Overview',
     sub: 'Financial health',
     color: 'bg-[#FFC68D]',
     borderColor: 'border-[#FFC68D]'
