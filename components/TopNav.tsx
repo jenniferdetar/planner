@@ -34,20 +34,23 @@ export default function TopNav() {
   const pathname = usePathname();
 
   return (
-    <header className="bg-[#0a2f5f] shadow-md border-b border-[#0a2f5f]">
-      <div className="max-w-full mx-auto px-2 py-2">
-        <div className="flex flex-col gap-1.5">
+    <header className="bg-[#0a2f5f] border-b-4 border-[#f2b671]">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="text-white text-xl font-black tracking-tight uppercase mb-4">
+          Strategic Command
+        </div>
+        <div className="flex flex-col gap-2">
           {NAV_ROWS.map((row, rowIdx) => (
-            <div key={`row-${rowIdx}`} className="flex gap-1.5 w-full">
+            <div key={`row-${rowIdx}`} className="flex gap-2 w-full">
               {row.map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex-1 text-center text-[13px] font-bold py-1.5 rounded-[4px] border border-black/10 ${item.color} ${
-                      isActive ? 'ring-2 ring-white/50 z-10' : ''
-                    } transition-all hover:brightness-110 active:scale-[0.98] truncate`}
+                    className={`flex-1 text-center text-[11px] font-black uppercase py-2.5 rounded-xl border-2 border-[#0a2f5f] shadow-sm ${item.color} ${
+                      isActive ? 'ring-2 ring-white ring-inset' : ''
+                    } transition-all hover:brightness-105 active:scale-[0.98] flex items-center justify-center min-h-[44px] leading-tight px-1`}
                   >
                     {item.label}
                   </Link>
