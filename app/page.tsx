@@ -163,6 +163,7 @@ export default function Home() {
                       {dayEvents.slice(0, 2).map(e => (
                         <div key={e.id} className={`text-[8px] p-1 rounded font-black uppercase tracking-tighter truncate ${
                           isToday ? 'bg-white/20 text-white' : 
+                          e.category?.toUpperCase().includes('CSEA') ? 'bg-[#ffca38] text-[#00326b]' :
                           e.type === 'meeting' ? 'bg-blue-100 text-blue-700' :
                           e.type === 'task' ? 'bg-amber-100 text-amber-700' :
                           e.type === 'expense' ? 'bg-rose-100 text-rose-700' :

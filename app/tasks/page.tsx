@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { OpusTask } from '@/types/database.types';
 import { 
-  CheckCircle2, Circle, Clock, Calendar, 
-  Tag, AlertCircle, ChevronRight, Plus,
-  Trash2, Search, ArrowUpRight, Activity,
-  Briefcase, ClipboardList, ShieldCheck, Landmark
+  CheckCircle2, Circle, Calendar, 
+  Tag, AlertCircle,
+  Trash2, Search, Activity,
+  Briefcase, ClipboardList
 } from 'lucide-react';
 
 import HubHeader from '@/components/HubHeader';
@@ -46,7 +46,7 @@ export default function TasksPage() {
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
       <HubHeader 
         title="Operations" 
-        subtitle='"Precision in execution, excellence in output"' 
+        subtitle="&quot;Precision in execution, excellence in output&quot;" 
         icon={ClipboardList}
         iconBgColor="bg-[#99B3C5]"
       />
@@ -115,7 +115,11 @@ export default function TasksPage() {
                         </div>
                       )}
                       {task.category && (
-                        <div className="flex items-center gap-1.5 text-[10px] font-black text-[#0a2f5f] uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded-md">
+                        <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                          task.category.toUpperCase().includes('CSEA')
+                            ? 'bg-[#ffca38] text-[#00326b]'
+                            : 'bg-blue-50 text-[#0a2f5f]'
+                        }`}>
                           <Tag size={12} />
                           {task.category}
                         </div>
@@ -151,37 +155,6 @@ export default function TasksPage() {
           </div>
         )}
       </div>
-
-      <section className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-        <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Operation Security</h2>
-            </div>
-            <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
-              All task directives are synchronized with the secure administrative ledger for real-time operational continuity.
-            </p>
-          </div>
-          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
-            <ArrowUpRight size={16} />
-            Operational Integrity Verified
-          </div>
-        </div>
-
-        <div className="bg-[#99B3C5]/10 p-10 rounded-[3rem] border-2 border-[#99B3C5]/20 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <Landmark className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Execution Metrics</h2>
-            </div>
-            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
-              Task resolution velocity is currently optimized. High-priority items are being addressed with maximum efficiency.
-            </p>
-          </div>
-          <div className="text-4xl font-black text-[#0a2f5f] opacity-10">2026 Productivity Data</div>
-        </div>
-      </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
         <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Professional Operations Ledger © 2026</p>

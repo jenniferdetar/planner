@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { CseaIssue, CseaMember } from '@/types/database.types';
+import { CseaIssue } from '@/types/database.types';
 import { 
-  Users, Shield, FileText, Search, 
-  ChevronRight, Plus, Trash2, ShieldCheck,
-  Briefcase, MessageSquare, Clock, CheckCircle2,
-  AlertCircle, Activity, Scale, Landmark
+  Users, Shield, Search, 
+  Plus, Trash2, 
+  MessageSquare, Clock, CheckCircle2,
+  AlertCircle, Activity, Scale
 } from 'lucide-react';
 import HubHeader from '@/components/HubHeader';
 import StatCard from '@/components/StatCard';
@@ -57,7 +57,7 @@ export default function CseaPage() {
     fetchCseaMetadata();
   }, []);
 
-  async function saveMetadata(key: string, value: any) {
+  async function saveMetadata(key: string, value: unknown) {
     setSaving(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
@@ -97,10 +97,10 @@ export default function CseaPage() {
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
       <HubHeader 
         title="CSEA" 
-        subtitle='"Protecting member rights with administrative precision"' 
+        subtitle="&quot;Protecting member rights with administrative precision&quot;" 
         icon={Scale} 
-        iconBgColor="bg-[#FFA1AB]"
-        textColor="text-[#0a2f5f]"
+        iconBgColor="bg-[#ffca38]"
+        textColor="text-[#00326b]"
       />
 
       <div className="flex flex-wrap gap-4 mb-12">
@@ -108,8 +108,8 @@ export default function CseaPage() {
           onClick={() => setActiveTab('issues')}
           className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
             activeTab === 'issues' 
-              ? 'bg-[#FFA1AB] text-[#0a2f5f] shadow-lg' 
-              : 'bg-white text-[#0a2f5f] border-2 border-[#FFA1AB]/10 hover:bg-[#FFA1AB]/5'
+              ? 'bg-[#ffca38] text-[#00326b] shadow-lg' 
+              : 'bg-white text-[#00326b] border-2 border-[#ffca38]/10 hover:bg-[#ffca38]/5'
           }`}
         >
           Issue Log
@@ -118,8 +118,8 @@ export default function CseaPage() {
           onClick={() => setActiveTab('meetings')}
           className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
             activeTab === 'meetings' 
-              ? 'bg-[#FFA1AB] text-[#0a2f5f] shadow-lg' 
-              : 'bg-white text-[#0a2f5f] border-2 border-[#FFA1AB]/10 hover:bg-[#FFA1AB]/5'
+              ? 'bg-[#ffca38] text-[#00326b] shadow-lg' 
+              : 'bg-white text-[#00326b] border-2 border-[#ffca38]/10 hover:bg-[#ffca38]/5'
           }`}
         >
           Meeting Minutes
@@ -128,8 +128,8 @@ export default function CseaPage() {
           onClick={() => setActiveTab('notes')}
           className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
             activeTab === 'notes' 
-              ? 'bg-[#FFA1AB] text-[#0a2f5f] shadow-lg' 
-              : 'bg-white text-[#0a2f5f] border-2 border-[#FFA1AB]/10 hover:bg-[#FFA1AB]/5'
+              ? 'bg-[#ffca38] text-[#00326b] shadow-lg' 
+              : 'bg-white text-[#00326b] border-2 border-[#ffca38]/10 hover:bg-[#ffca38]/5'
           }`}
         >
           General Archive
@@ -141,7 +141,7 @@ export default function CseaPage() {
           <div className="space-y-12">
             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatCard title="Total Registry" value={stats.total} icon={<Users size={20} />} color="bg-[#99B3C5]" />
-              <StatCard title="Open Inquiries" value={stats.open} icon={<AlertCircle size={20} />} color="bg-[#FFA1AB]" />
+              <StatCard title="Open Inquiries" value={stats.open} icon={<AlertCircle size={20} />} color="bg-[#ffca38]" />
               <StatCard title="In Progress" value={stats.inProgress} icon={<Clock size={20} />} color="bg-[#FFC68D]" />
               <StatCard title="Resolved Case" value={stats.resolved} icon={<CheckCircle2 size={20} />} color="bg-[#9ADBDE]" />
             </section>
@@ -337,37 +337,6 @@ export default function CseaPage() {
           </div>
         )}
       </div>
-
-      <section className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-        <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Data Integrity</h2>
-            </div>
-            <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
-              Labor relations records are encrypted and synchronized across the secure administrative network.
-            </p>
-          </div>
-          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
-            <Landmark size={16} />
-            Registry Authenticity Verified
-          </div>
-        </div>
-
-        <div className="bg-[#0a2f5f]/5 p-10 rounded-[3rem] border-2 border-[#0a2f5f]/10 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <Activity className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Case Velocity</h2>
-            </div>
-            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
-              Current inquiry resolution rates are within expected parameters. Continue monitoring open files for priority.
-            </p>
-          </div>
-          <div className="text-4xl font-black text-[#0a2f5f] opacity-10">2026 Labor Outlook</div>
-        </div>
-      </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
         <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Labor Operations Registry © 2026</p>
