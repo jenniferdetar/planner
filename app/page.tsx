@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { 
-  Calendar as CalendarIcon, Clock, ChevronRight, 
+  Calendar as CalendarIcon, ChevronRight, 
   Activity
 } from 'lucide-react';
 
@@ -128,8 +128,8 @@ export default function Home() {
         />
 
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
-        <div className="lg:col-span-2">
+      <section className="mb-16">
+        <div>
           <div className="flex items-center gap-3 mb-8">
             <CalendarIcon className="text-[#0a2f5f]" size={24} />
             <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Operational Calendar</h2>
@@ -184,40 +184,6 @@ export default function Home() {
           </div>
         </div>
 
-        <div>
-          <div className="flex items-center gap-3 mb-8">
-            <Clock className="text-[#0a2f5f]" size={24} />
-            <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Directives</h2>
-            <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
-          </div>
-
-          <div className="bg-slate-50 p-8 rounded-[3rem] border-2 border-slate-100 shadow-sm space-y-4">
-            {loading ? (
-              <div className="py-20 text-center">
-                <Activity className="text-slate-300 animate-pulse mx-auto mb-4" size={32} />
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Synchronizing...</div>
-              </div>
-            ) : events.length > 0 ? (
-              events.slice(0, 6).map((event) => (
-                <div key={event.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:shadow-md transition-all">
-                  <div>
-                    <div className="text-sm font-black text-[#0a2f5f] uppercase tracking-tight truncate max-w-[150px]">{event.title}</div>
-                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{formatDate(event.date)} • {event.type}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[10px] font-black text-[#0a2f5f] opacity-40">{event.time}</div>
-                    <ChevronRight size={16} className="text-slate-200 group-hover:translate-x-1 group-hover:text-[#0a2f5f] transition-all ml-auto mt-1" />
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="py-20 text-center italic text-gray-400 text-sm">No scheduled events</div>
-            )}
-            <Link href="/planning/meetings" className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border-2 border-[#0a2f5f]/10 text-[#0a2f5f] font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f] hover:text-white transition-all">
-              Launch Meeting Registry
-            </Link>
-          </div>
-        </div>
       </section>
 
 
