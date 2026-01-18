@@ -78,37 +78,6 @@ export default function FinancePage() {
         ))}
       </div>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-        <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Financial Security</h2>
-            </div>
-            <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
-              Your financial records are encrypted and synchronized across the administrative network for real-time reporting.
-            </p>
-          </div>
-          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
-            <ArrowUpRight size={16} />
-            Data Integrity Verified
-          </div>
-        </div>
-
-        <div className="bg-[#99B3C5]/10 p-10 rounded-[3rem] border-2 border-[#99B3C5]/20 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <TrendingUp className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Growth Projection</h2>
-            </div>
-            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
-              Current trajectory indicates a stable expansion of reserves. Continue monitoring savings goals to maintain momentum.
-            </p>
-          </div>
-          <div className="text-4xl font-black text-[#0a2f5f] opacity-20">2026 Projections</div>
-        </div>
-      </section>
-
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
         <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Fiscal Operations Registry © 2026</p>
       </footer>
