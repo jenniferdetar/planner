@@ -5,6 +5,7 @@ import {
   BarChart3, PiggyBank, ArrowUpRight, ShieldCheck,
   TrendingUp, Landmark
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 const financeLinks = [
   {
@@ -52,17 +53,13 @@ const financeLinks = [
 export default function FinancePage() {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-            <Landmark className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Finance Hub</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Master your resources with precision and foresight"</p>
-          </div>
-        </div>
-      </header>
+      <HubHeader 
+        title="Finance" 
+        subtitle='"Master your resources with precision and foresight"' 
+        icon={Landmark} 
+        iconBgColor="bg-[#FFC68D]"
+        textColor="text-[#0a2f5f]"
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
         {financeLinks.map((link) => (
@@ -92,14 +89,14 @@ export default function FinancePage() {
         <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#00326b]" size={24} />
-              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Financial Security</h2>
+              <ShieldCheck className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Financial Security</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Your financial records are encrypted and synchronized across the administrative network for real-time reporting.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#00326b] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <ArrowUpRight size={16} />
             Data Integrity Verified
           </div>

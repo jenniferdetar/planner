@@ -8,6 +8,7 @@ import {
   Building2, ChevronRight, Upload, Plus,
   Trash2, Search, ArrowUpRight, Activity
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 const hoaCategories = [
   { icon: <Megaphone size={20} />, title: 'Announcements', note: 'Community updates', color: 'bg-[#9ADBDE]' },
@@ -21,16 +22,33 @@ const hoaCategories = [
   { icon: <Building2 size={20} />, title: 'Units', note: 'Owner roster', color: 'bg-[#9ADBDE]' }
 ];
 
+interface HoaFinancial {
+  date: string;
+  description: string;
+  amount: number;
+  type: string;
+}
+
+interface HoaMaintenance {
+  date: string;
+  task: string;
+  status: string;
+  vendor: string;
+}
+
+interface HoaUnit {
+  unit: string;
+  owner: string;
+  contact: string;
+  status: string;
+}
+
 export default function HoaPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(true);
-  const [financials, setFinancials] = useState<any[]>([]);
-  const [maintenance, setMaintenance] = useState<any[]>([]);
-  const [units, setUnits] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetchHoaData();
-  }, []);
+  const [financials, setFinancials] = useState<HoaFinancial[]>([]);
+  const [maintenance, setMaintenance] = useState<HoaMaintenance[]>([]);
+  const [units, setUnits] = useState<HoaUnit[]>([]);
 
   async function fetchHoaData() {
     setLoading(true);
@@ -43,15 +61,19 @@ export default function HoaPage() {
       console.error('Error fetching HOA data:', error);
     } else if (metadata) {
       metadata.forEach(item => {
-        if (item.key === 'hoa-financials') setFinancials(item.value || []);
-        if (item.key === 'hoa-maintenance') setMaintenance(item.value || []);
-        if (item.key === 'hoa-units') setUnits(item.value || []);
+        if (item.key === 'hoa-financials') setFinancials(item.value as HoaFinancial[] || []);
+        if (item.key === 'hoa-maintenance') setMaintenance(item.value as HoaMaintenance[] || []);
+        if (item.key === 'hoa-units') setUnits(item.value as HoaUnit[] || []);
       });
     }
     setLoading(false);
   }
 
-  async function saveData(key: string, value: any) {
+  useEffect(() => {
+    fetchHoaData();
+  }, []);
+
+  async function saveData(key: string, value: unknown) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -90,17 +112,13 @@ export default function HoaPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#1e3a8a] flex items-center justify-center shadow-xl shadow-[#1e3a8a]/20">
-            <Home className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#1e3a8a] tracking-tight uppercase">HOA Hub</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Protecting community value through diligent administration"</p>
-          </div>
-        </div>
-      </header>
+      <HubHeader 
+        title="HOA" 
+        subtitle='"Protecting community value through diligent administration"' 
+        icon={Home} 
+        iconBgColor="bg-[#99B3C5]"
+        textColor="text-[#0a2f5f]"
+      />
 
       <div className="flex flex-wrap gap-4 mb-12">
         {['overview', 'financials', 'maintenance', 'units'].map((tab) => (
@@ -109,8 +127,8 @@ export default function HoaPage() {
             onClick={() => setActiveTab(tab)}
             className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
               activeTab === tab 
-                ? 'bg-[#1e3a8a] text-white shadow-lg' 
-                : 'bg-white text-[#1e3a8a] border-2 border-[#1e3a8a]/10 hover:bg-[#1e3a8a]/5'
+                ? 'bg-[#99B3C5] text-[#0a2f5f] shadow-lg' 
+                : 'bg-white text-[#0a2f5f] border-2 border-[#99B3C5]/10 hover:bg-[#99B3C5]/5'
             }`}
           >
             {tab}
@@ -132,9 +150,9 @@ export default function HoaPage() {
                   <div className="relative z-10">
                     <div className="flex items-center gap-3 mb-8">
                       <div className="w-10 h-10 rounded-xl bg-[#9ADBDE] flex items-center justify-center shadow-inner">
-                        <Upload size={20} className="text-[#1e3a8a]" />
+                        <Upload size={20} className="text-[#0a2f5f]" />
                       </div>
-                      <h2 className="text-2xl font-black text-[#1e3a8a] uppercase tracking-tight">Document Submission</h2>
+                      <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Document Submission</h2>
                     </div>
                     
                     <div className="border-4 border-dashed border-slate-100 rounded-[2rem] p-12 text-center bg-slate-50/50 hover:bg-slate-50 hover:border-[#3b82f6]/30 transition-all group cursor-pointer">
@@ -143,7 +161,7 @@ export default function HoaPage() {
                         <div className="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                           <Upload size={32} className="text-[#3b82f6]" />
                         </div>
-                        <p className="text-xl font-black text-[#1e3a8a] mb-2">Ingest Administrative PDF</p>
+                        <p className="text-xl font-black text-[#0a2f5f] mb-2">Ingest Administrative PDF</p>
                         <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Supports Bylaws, Minutes, and Notices</p>
                       </label>
                     </div>
@@ -153,9 +171,9 @@ export default function HoaPage() {
 
                 <section>
                   <div className="flex items-center gap-3 mb-8">
-                    <Search className="text-[#1e3a8a]" size={24} />
-                    <h2 className="text-2xl font-black text-[#1e3a8a] uppercase tracking-tight">Administrative Library</h2>
-                    <div className="h-px flex-grow bg-gradient-to-r from-[#1e3a8a]/20 to-transparent"></div>
+                    <Search className="text-[#0a2f5f]" size={24} />
+                    <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Administrative Library</h2>
+                    <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -166,12 +184,12 @@ export default function HoaPage() {
                           <div className={`w-14 h-14 rounded-2xl ${cat.color} flex items-center justify-center mb-6 shadow-inner`}>
                             {cat.icon}
                           </div>
-                          <h3 className="text-2xl font-black text-[#1e3a8a] mb-2">{cat.title}</h3>
+                          <h3 className="text-2xl font-black text-[#0a2f5f] mb-2">{cat.title}</h3>
                           <p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-relaxed">
                             {cat.note}
                           </p>
                         </div>
-                        <div className="mt-8 flex items-center text-[#1e3a8a] font-black text-sm uppercase tracking-widest gap-2">
+                        <div className="mt-8 flex items-center text-[#0a2f5f] font-black text-sm uppercase tracking-widest gap-2">
                           Access Archive <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
@@ -185,10 +203,10 @@ export default function HoaPage() {
               <section className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-10 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
                   <div>
-                    <h2 className="text-3xl font-black text-[#1e3a8a] uppercase tracking-tight">Financial Ledger</h2>
+                    <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Financial Ledger</h2>
                     <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Audit of community expenditures and income</p>
                   </div>
-                  <button onClick={addFinancial} className="flex items-center gap-2 px-6 py-3 bg-[#1e3a8a] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#1e3a8a]/90 transition-all shadow-lg shadow-[#1e3a8a]/20">
+                  <button onClick={addFinancial} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
                     <Plus size={16} /> Add Record
                   </button>
                 </div>
@@ -209,7 +227,7 @@ export default function HoaPage() {
                           <td className="p-6">
                             <input type="date" value={row.date} onChange={(e) => {
                               const next = [...financials]; next[i].date = e.target.value; setFinancials(next); saveData('hoa-financials', next);
-                            }} className="bg-transparent border-none p-0 focus:ring-0 font-bold text-[#1e3a8a]" />
+                            }} className="bg-transparent border-none p-0 focus:ring-0 font-bold text-[#0a2f5f]" />
                           </td>
                           <td className="p-6">
                             <input type="text" value={row.description} onChange={(e) => {
@@ -226,7 +244,7 @@ export default function HoaPage() {
                           <td className="p-6 text-right">
                             <input type="number" value={row.amount} onChange={(e) => {
                               const next = [...financials]; next[i].amount = parseFloat(e.target.value); setFinancials(next); saveData('hoa-financials', next);
-                            }} className="bg-transparent border-none p-0 focus:ring-0 font-black text-lg text-[#1e3a8a] text-right w-32" />
+                            }} className="bg-transparent border-none p-0 focus:ring-0 font-black text-lg text-[#0a2f5f] text-right w-32" />
                           </td>
                           <td className="p-6 text-center">
                             <button className="opacity-0 group-hover:opacity-100 p-2 text-slate-300 hover:text-red-500 transition-all">
@@ -245,10 +263,10 @@ export default function HoaPage() {
               <section className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-10 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
                   <div>
-                    <h2 className="text-3xl font-black text-[#1e3a8a] uppercase tracking-tight">Maintenance Ops</h2>
+                    <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Maintenance Ops</h2>
                     <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Operational tracking of community repairs</p>
                   </div>
-                  <button onClick={addMaintenance} className="flex items-center gap-2 px-6 py-3 bg-[#1e3a8a] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#1e3a8a]/90 transition-all shadow-lg shadow-[#1e3a8a]/20">
+                  <button onClick={addMaintenance} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
                     <Plus size={16} /> Add Task
                   </button>
                 </div>
@@ -269,7 +287,7 @@ export default function HoaPage() {
                           <td className="p-6">
                             <input type="date" value={row.date} onChange={(e) => {
                               const next = [...maintenance]; next[i].date = e.target.value; setMaintenance(next); saveData('hoa-maintenance', next);
-                            }} className="bg-transparent border-none p-0 focus:ring-0 font-bold text-[#1e3a8a]" />
+                            }} className="bg-transparent border-none p-0 focus:ring-0 font-bold text-[#0a2f5f]" />
                           </td>
                           <td className="p-6">
                             <input type="text" value={row.task} onChange={(e) => {
@@ -307,10 +325,10 @@ export default function HoaPage() {
               <section className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-10 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
                   <div>
-                    <h2 className="text-3xl font-black text-[#1e3a8a] uppercase tracking-tight">Unit Roster</h2>
+                    <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Unit Roster</h2>
                     <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Comprehensive directory of community residents</p>
                   </div>
-                  <button onClick={addUnit} className="flex items-center gap-2 px-6 py-3 bg-[#1e3a8a] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#1e3a8a]/90 transition-all shadow-lg shadow-[#1e3a8a]/20">
+                  <button onClick={addUnit} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
                     <Plus size={16} /> Add Unit
                   </button>
                 </div>
@@ -328,10 +346,10 @@ export default function HoaPage() {
                     <tbody className="divide-y divide-slate-50">
                       {units.map((row, i) => (
                         <tr key={i} className="group hover:bg-slate-50/50 transition-colors">
-                          <td className="p-6 font-black text-[#1e3a8a]">
+                          <td className="p-6 font-black text-[#0a2f5f]">
                             <input type="text" value={row.unit} onChange={(e) => {
                               const next = [...units]; next[i].unit = e.target.value; setUnits(next); saveData('hoa-units', next);
-                            }} className="bg-transparent border-none p-0 focus:ring-0 font-black text-[#1e3a8a] w-20" placeholder="Unit #" />
+                            }} className="bg-transparent border-none p-0 focus:ring-0 font-black text-[#0a2f5f] w-20" placeholder="Unit #" />
                           </td>
                           <td className="p-6">
                             <input type="text" value={row.owner} onChange={(e) => {
@@ -370,30 +388,30 @@ export default function HoaPage() {
         <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#1e3a8a]" size={24} />
-              <h2 className="text-2xl font-black text-[#1e3a8a] uppercase tracking-tight">Compliance Status</h2>
+              <ShieldCheck className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Compliance Status</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Community records are audited for regulatory compliance and archived in the official administrative ledger.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#1e3a8a] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <ArrowUpRight size={16} />
             Administrative Integrity Verified
           </div>
         </div>
 
-        <div className="bg-[#1e3a8a]/5 p-10 rounded-[3rem] border-2 border-[#1e3a8a]/10 flex flex-col justify-between">
+        <div className="bg-[#0a2f5f]/5 p-10 rounded-[3rem] border-2 border-[#0a2f5f]/10 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <Landmark className="text-[#1e3a8a]" size={24} />
-              <h2 className="text-2xl font-black text-[#1e3a8a] uppercase tracking-tight">Reserve Analysis</h2>
+              <Landmark className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Reserve Analysis</h2>
             </div>
-            <p className="text-[#1e3a8a]/70 font-medium leading-relaxed italic mb-8">
+            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
               Current reserve funding levels are optimized for long-term structural maintenance and community growth.
             </p>
           </div>
-          <div className="text-4xl font-black text-[#1e3a8a] opacity-10">2026 Fiscal Outlook</div>
+          <div className="text-4xl font-black text-[#0a2f5f] opacity-10">2026 Fiscal Outlook</div>
         </div>
       </section>
 

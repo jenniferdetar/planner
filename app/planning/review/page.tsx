@@ -22,6 +22,8 @@ interface Review {
   lookingForward?: string;
 }
 
+import HubHeader from '@/components/HubHeader';
+
 export default function ReviewPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -101,44 +103,39 @@ export default function ReviewPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFA1AB] flex items-center justify-center shadow-xl shadow-[#FFA1AB]/20">
-            <PieChart className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Monthly Review</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">Reflect, recalibrate, and grow</p>
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <button 
-            onClick={saveReview}
-            disabled={saving}
-            className="flex items-center gap-2 px-8 py-4 bg-[#00326b] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#00326b]/20"
-          >
-            <Save size={16} />
-            {saving ? 'Saving...' : 'Archive Report'}
-          </button>
-          <Link 
-            href="/planning" 
-            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-          >
-            <ChevronLeft size={16} />
-            Back
-          </Link>
-        </div>
-      </header>
+      <HubHeader 
+        title="Monthly Review" 
+        subtitle="Reflect, recalibrate, and grow" 
+        icon={PieChart} 
+        iconBgColor="bg-[#FFA1AB]"
+        hideHubSuffix={true}
+      >
+        <button 
+          onClick={saveReview}
+          disabled={saving}
+          className="flex items-center gap-2 px-8 py-4 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#0a2f5f]/20"
+        >
+          <Save size={16} />
+          {saving ? 'Saving...' : 'Archive Report'}
+        </button>
+        <Link 
+          href="/planning" 
+          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
+        >
+          <ChevronLeft size={16} />
+          Back
+        </Link>
+      </HubHeader>
 
       <section className="relative bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12">
         <div className="absolute top-0 left-0 w-full h-2 bg-[#FFA1AB]"></div>
         
         <div className="bg-[#FFA1AB]/5 p-8 border-b border-gray-100 flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">{activeReview.month} Reflection</h2>
+            <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">{activeReview.month} Reflection</h2>
             <p className="text-[10px] font-black text-[#FFA1AB] uppercase tracking-[0.3em] mt-1">Official Performance Record</p>
           </div>
-          <div className="px-4 py-2 bg-white rounded-xl border border-[#FFA1AB]/20 text-[10px] font-black text-[#00326b] uppercase tracking-widest shadow-sm">
+          <div className="px-4 py-2 bg-white rounded-xl border border-[#FFA1AB]/20 text-[10px] font-black text-[#0a2f5f] uppercase tracking-widest shadow-sm">
             Draft Mode
           </div>
         </div>
@@ -157,7 +154,7 @@ export default function ReviewPage() {
                   value={activeReview.biggestWin}
                   onChange={(e) => setActiveReview({...activeReview, biggestWin: e.target.value})}
                   placeholder="Analyze your successes..."
-                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFA1AB]/20 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFA1AB]/20 rounded-3xl outline-none font-serif text-lg text-[#0a2f5f] transition-all"
                 />
               </div>
 
@@ -170,7 +167,7 @@ export default function ReviewPage() {
                   value={activeReview.doneDifferently}
                   onChange={(e) => setActiveReview({...activeReview, doneDifferently: e.target.value})}
                   placeholder="Identify areas for adjustment..."
-                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#99B3C5]/20 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#99B3C5]/20 rounded-3xl outline-none font-serif text-lg text-[#0a2f5f] transition-all"
                 />
               </div>
 
@@ -183,7 +180,7 @@ export default function ReviewPage() {
                   value={activeReview.funActivities}
                   onChange={(e) => setActiveReview({...activeReview, funActivities: e.target.value})}
                   placeholder="Document high-joy activities..."
-                  className="w-full min-h-[120px] p-6 bg-[#fdfbf7] border-2 border-[#e6e2d3] rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                  className="w-full min-h-[120px] p-6 bg-[#fdfbf7] border-2 border-[#e6e2d3] rounded-3xl outline-none font-serif text-lg text-[#0a2f5f] transition-all"
                   style={{ backgroundImage: 'linear-gradient(#e6e2d3 1px, transparent 1px)', backgroundSize: '100% 2.5rem' }}
                 />
               </div>
@@ -197,20 +194,20 @@ export default function ReviewPage() {
                   value={activeReview.changeToContinue}
                   onChange={(e) => setActiveReview({...activeReview, changeToContinue: e.target.value})}
                   placeholder="Positive habits to maintain..."
-                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#9ADBDE]/20 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#9ADBDE]/20 rounded-3xl outline-none font-serif text-lg text-[#0a2f5f] transition-all"
                 />
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <FileText className="text-[#00326b]" size={20} />
+                  <FileText className="text-[#0a2f5f]" size={20} />
                   <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Managed Well</label>
                 </div>
                 <textarea 
                   value={activeReview.managedWell}
                   onChange={(e) => setActiveReview({...activeReview, managedWell: e.target.value})}
                   placeholder="Operational successes..."
-                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/10 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-3xl outline-none font-serif text-lg text-[#0a2f5f] transition-all"
                 />
               </div>
 
@@ -223,7 +220,7 @@ export default function ReviewPage() {
                   value={activeReview.nextMonthGoal}
                   onChange={(e) => setActiveReview({...activeReview, nextMonthGoal: e.target.value})}
                   placeholder="Define primary objective..."
-                  className="w-full min-h-[150px] p-6 bg-[#00326b]/5 border-2 border-[#00326b]/10 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                  className="w-full min-h-[150px] p-6 bg-[#0a2f5f]/5 border-2 border-[#0a2f5f]/10 rounded-3xl outline-none font-serif text-lg text-[#0a2f5f] transition-all"
                 />
               </div>
 
@@ -236,7 +233,7 @@ export default function ReviewPage() {
                   value={activeReview.lookingForward}
                   onChange={(e) => setActiveReview({...activeReview, lookingForward: e.target.value})}
                   placeholder="Future aspirations..."
-                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-slate-100 rounded-3xl outline-none font-serif text-lg text-[#00326b] transition-all"
+                  className="w-full min-h-[150px] p-6 bg-slate-50 border-2 border-transparent focus:border-slate-100 rounded-3xl outline-none font-serif text-lg text-[#0a2f5f] transition-all"
                 />
               </div>
             </div>
@@ -247,9 +244,9 @@ export default function ReviewPage() {
       {reviews.length > 0 && (
         <section className="pb-20">
           <div className="flex items-center gap-3 mb-8">
-            <FileText className="text-[#00326b]" size={24} />
-            <h3 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Archives</h3>
-            <div className="h-px flex-grow bg-gradient-to-r from-[#00326b]/20 to-transparent"></div>
+            <FileText className="text-[#0a2f5f]" size={24} />
+            <h3 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Archives</h3>
+            <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {reviews.map((r, i) => (
@@ -258,8 +255,8 @@ export default function ReviewPage() {
                 onClick={() => setActiveReview(r)}
                 className={`group p-8 rounded-[2.5rem] text-left transition-all duration-500 border-2 ${
                   activeReview.month === r.month 
-                  ? 'bg-[#00326b] border-[#00326b] text-white shadow-2xl shadow-[#00326b]/20 scale-105' 
-                  : 'bg-white border-gray-100 hover:border-[#FFA1AB]/30 text-[#00326b] hover:shadow-xl'
+                  ? 'bg-[#0a2f5f] border-[#0a2f5f] text-white shadow-2xl shadow-[#0a2f5f]/20 scale-105' 
+                  : 'bg-white border-gray-100 hover:border-[#FFA1AB]/30 text-[#0a2f5f] hover:shadow-xl'
                 }`}
               >
                 <span className={`block text-xs font-black uppercase tracking-[0.3em] mb-2 ${activeReview.month === r.month ? 'text-white/60' : 'text-[#FFA1AB]'}`}>
@@ -276,7 +273,7 @@ export default function ReviewPage() {
       )}
 
       <footer className="mt-12 py-12 border-t border-gray-100 text-center relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#00326b]">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#0a2f5f]">
           REVIEW
         </div>
         <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em] relative z-10">Monthly Performance Audit © 2026</p>

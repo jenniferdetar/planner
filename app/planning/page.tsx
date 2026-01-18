@@ -8,10 +8,11 @@ import {
   Plane, Activity, PieChart, Users, Zap,
   Compass
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 const corePlanningCards = [
   { icon: <Calendar className="text-[#0a2f5f]" size={24} />, title: 'Personal Planner', sub: 'Weekly Schedule & Habits', href: '/planning/personal', color: 'bg-[#99B3C5]', borderColor: 'border-[#99B3C5]' },
-  { icon: <Briefcase className="text-[#0a2f5f]" size={24} />, title: 'Work Planner', sub: 'Weekly Grid & Priorities', href: '/planning/work', color: 'bg-[#E0592A]', borderColor: 'border-[#E0592A]' },
+  { icon: <Briefcase className="text-[#0a2f5f]" size={24} />, title: 'Work Planner', sub: 'Weekly Grid & Priorities', href: '/planning/work', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
   { icon: <Target className="text-[#0a2f5f]" size={24} />, title: 'Goals', sub: 'SMART goal tracker', href: '/goals', color: 'bg-[#FFC68D]', borderColor: 'border-[#FFC68D]' },
   { icon: <Scroll className="text-[#0a2f5f]" size={24} />, title: 'Mission', sub: 'Your purpose & values', href: '/planning/mission', color: 'bg-[#FFA1AB]', borderColor: 'border-[#FFA1AB]' },
   { icon: <Zap className="text-[#0a2f5f]" size={24} />, title: 'Mantra', sub: 'Daily focus & intent', href: '/planning/mantra', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
@@ -33,23 +34,19 @@ const visionBoardCards = [
 export default function PlanningPage() {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-            <Compass className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Planning Hub</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs">Design your life with purpose and intention</p>
-          </div>
-        </div>
-      </header>
+      <HubHeader 
+        title="Planning" 
+        subtitle="Design your life with purpose and intention" 
+        icon={Compass} 
+        iconBgColor="bg-[#9ADBDE]"
+        textColor="text-[#0a2f5f]"
+      />
 
       <section className="mb-20">
         <div className="flex items-center gap-3 mb-8">
-          <Target className="text-[#00326b]" size={24} />
-          <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Core Planning</h2>
-          <div className="h-px flex-grow bg-gradient-to-r from-[#00326b]/20 to-transparent"></div>
+          <Target className="text-[#0a2f5f]" size={24} />
+          <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Core Planning</h2>
+          <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {corePlanningCards.map((card) => (
@@ -80,7 +77,7 @@ export default function PlanningPage() {
         <div className="bg-slate-50 p-12 rounded-[4rem] border-2 border-slate-100 shadow-xl relative overflow-hidden">
           <div className="relative z-10">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-black text-[#00326b] uppercase tracking-tight mb-2">Vision Board</h2>
+              <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight mb-2">Vision Board</h2>
               <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Visualize your dreams across all areas of life</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -88,7 +85,7 @@ export default function PlanningPage() {
                 <Link 
                   key={card.title}
                   href={card.href}
-                  className={`group p-8 rounded-[2.5rem] flex flex-col items-center gap-4 bg-white border-2 border-transparent hover:border-[#00326b]/10 shadow-sm hover:shadow-xl transition-all duration-500`}
+                  className={`group p-8 rounded-[2.5rem] flex flex-col items-center gap-4 bg-white border-2 border-transparent hover:border-[#0a2f5f]/10 shadow-sm hover:shadow-xl transition-all duration-500`}
                 >
                   <div className={`w-16 h-16 rounded-full ${card.color} flex items-center justify-center text-[#0a2f5f] shadow-inner group-hover:scale-110 transition-transform`}>
                     {card.icon}

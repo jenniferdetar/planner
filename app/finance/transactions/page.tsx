@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Transaction } from '@/types/database.types';
+import HubHeader from '@/components/HubHeader';
 import Link from 'next/link';
 import { 
   Receipt, ChevronLeft, Save, Loader2, 
@@ -113,36 +114,31 @@ export default function TransactionsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen font-sans">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#99B3C5] flex items-center justify-center shadow-xl shadow-[#99B3C5]/20">
-            <Receipt className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Transactions Ledger</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Official Checkbook Projection & Liquidity Registry"</p>
-          </div>
-        </div>
-        <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-100 text-gray-500 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-gray-50 transition-all">
-            <Download size={16} />
-            Export
-          </button>
-          <Link 
-            href="/finance" 
-            className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-100 text-gray-400 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-gray-50 transition-all"
-          >
-            <ChevronLeft size={16} />
-            Back
-          </Link>
-        </div>
-      </header>
+      <HubHeader 
+        title="Transactions Ledger" 
+        subtitle='"Official Checkbook Projection & Liquidity Registry"' 
+        icon={Receipt}
+        iconBgColor="bg-[#99B3C5]"
+        hideHubSuffix
+      >
+        <button className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-100 text-gray-500 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-gray-50 transition-all">
+          <Download size={16} />
+          Export
+        </button>
+        <Link 
+          href="/finance" 
+          className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-100 text-gray-400 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-gray-50 transition-all"
+        >
+          <ChevronLeft size={16} />
+          Back
+        </Link>
+      </HubHeader>
 
       <section className="bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl overflow-hidden mb-12">
         <div className="p-8 border-b border-gray-50 bg-[#f8fafc] flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <Landmark className="text-[#00326b]" size={20} />
-            <h2 className="text-lg font-black text-[#00326b] uppercase tracking-tight">Financial Matrix</h2>
+            <Landmark className="text-[#0a2f5f]" size={20} />
+            <h2 className="text-lg font-black text-[#0a2f5f] uppercase tracking-tight">Financial Matrix</h2>
           </div>
           <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] bg-white px-4 py-2 rounded-full border">
             <Filter size={12} />
@@ -169,7 +165,7 @@ export default function TransactionsPage() {
                         <span className="text-[10px] uppercase tracking-widest text-gray-400">
                           {new Date(date).toLocaleDateString('en-US', { weekday: 'short' })}
                         </span>
-                        <span className="text-sm font-black text-[#00326b] whitespace-nowrap">
+                        <span className="text-sm font-black text-[#0a2f5f] whitespace-nowrap">
                           {new Date(date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
                         </span>
                       </div>
@@ -218,14 +214,14 @@ export default function TransactionsPage() {
         <div className="md:col-span-2 bg-slate-50 p-8 rounded-[2rem] border-2 border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm border border-slate-200">
-              <ArrowUpRight className="text-[#00326b]" size={24} />
+              <ArrowUpRight className="text-[#0a2f5f]" size={24} />
             </div>
             <div>
               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Last Reconciled</div>
-              <div className="text-lg font-black text-[#00326b]">{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
+              <div className="text-lg font-black text-[#0a2f5f]">{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
             </div>
           </div>
-          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#00326b]/30">Verified Record</div>
+          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#0a2f5f]/30">Verified Record</div>
         </div>
       </div>
     </div>
@@ -275,7 +271,7 @@ function TransactionInput({ initialValue, onUpdate, isSaving }: { initialValue: 
         onChange={(e) => setValue(e.target.value)}
         onBlur={handleBlur}
         onKeyDown={(e) => e.key === 'Enter' && handleBlur()}
-        className="w-24 p-1 bg-white border-2 border-[#99B3C5] rounded-lg text-right outline-none font-black text-[#00326b] shadow-inner"
+        className="w-24 p-1 bg-white border-2 border-[#99B3C5] rounded-lg text-right outline-none font-black text-[#0a2f5f] shadow-inner"
       />
     );
   }

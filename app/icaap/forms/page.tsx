@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ChevronLeft, FileText, ClipboardCheck, Scroll, FileEdit, Truck, ArrowRight } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 const forms = [
   {
@@ -38,27 +39,21 @@ const forms = [
 export default function IcaapFormsPage() {
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-              <FileText className="text-white" size={32} />
-            </div>
-            <div>
-              <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">iCAAP Forms</h1>
-              <p className="text-gray-400 font-bold tracking-widest text-xs">Official Professional Documentation Repository</p>
-            </div>
-          </div>
-        </div>
-        <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#00326b]/10 rounded-full font-bold text-[#00326b] hover:bg-[#00326b]/5 transition-all shadow-sm">
+      <HubHeader
+        title="iCAAP Forms"
+        subtitle="Official Professional Documentation Repository"
+        icon={FileText}
+        hideHubSuffix
+      >
+        <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
           <ChevronLeft size={20} />
           Back to Hub
         </Link>
-      </header>
+      </HubHeader>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
         {forms.map((form) => (
-          <div key={form.title} className="group relative flex flex-col p-8 rounded-[3rem] border-2 border-gray-100 bg-white hover:border-[#00326b]/10 hover:shadow-2xl transition-all duration-500 overflow-hidden">
+          <div key={form.title} className="group relative flex flex-col p-8 rounded-[3rem] border-2 border-gray-100 bg-white hover:border-[#0a2f5f]/10 hover:shadow-2xl transition-all duration-500 overflow-hidden">
             <div className={`absolute -right-10 -top-10 w-40 h-40 ${form.color} opacity-5 rounded-full group-hover:scale-150 transition-transform duration-1000`}></div>
             
             <div className="relative z-10 flex gap-6 items-start">
@@ -67,7 +62,7 @@ export default function IcaapFormsPage() {
               </div>
               <div className="flex-grow">
                 <div className="flex justify-between items-start mb-2">
-                  <h2 className="text-2xl font-black text-[#00326b]">{form.title}</h2>
+                  <h2 className="text-2xl font-black text-[#0a2f5f]">{form.title}</h2>
                   {form.href === '#' && (
                     <span className="text-[10px] font-black uppercase tracking-widest text-gray-300 bg-gray-50 px-3 py-1 rounded-full border">In Queue</span>
                   )}
@@ -83,9 +78,9 @@ export default function IcaapFormsPage() {
                 ) : (
                   <Link 
                     href={form.href} 
-                    className="inline-flex items-center gap-2 text-[#00326b] font-black text-xs uppercase tracking-widest group-hover:gap-4 transition-all"
+                    className="inline-flex items-center gap-2 text-[#0a2f5f] font-black text-xs uppercase tracking-widest group-hover:gap-4 transition-all"
                   >
-                    Initiate Document <ArrowRight size={14} className="text-[#00326b]" />
+                    Initiate Document <ArrowRight size={14} className="text-[#0a2f5f]" />
                   </Link>
                 )}
               </div>
@@ -94,7 +89,7 @@ export default function IcaapFormsPage() {
         ))}
       </section>
 
-      <div className="bg-[#00326b] rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden">
+      <div className="bg-[#0a2f5f] rounded-[3rem] p-12 text-white shadow-2xl relative overflow-hidden">
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <h3 className="text-3xl font-black mb-4">Submission Guidelines</h3>

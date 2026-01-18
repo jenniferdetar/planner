@@ -3,155 +3,108 @@ description: Repository Information Overview
 alwaysApply: true
 ---
 
-# Opus One Planner - Repository Information
+# Strategic Command Information
 
 ## Summary
-
-**Opus One** is a comprehensive personal planning web application built with vanilla HTML5, CSS3, and JavaScript. It's a client-side only application that stores all data locally in the browser using localStorage. The planner provides 17+ modules for task management, goal tracking, calendar views, financial planning, and work-related features including iCAAP integrations.
+Strategic Command is a comprehensive administrative dashboard designed for life and work management. It centralizes various domains including finance tracking, health monitoring, task management, HOA administration, and professional iCAAP program records. The repository appears to be in a transition state, featuring both a modern Next.js frontend and a legacy Django backend, both sharing the same database via Supabase.
 
 ## Structure
+- **app/**: Modern Next.js frontend using the App Router.
+- **components/**: Standardized UI components (HubHeader, StatCard, TopNav).
+- **planner/**: Django application containing models, views, and legacy HTML templates.
+- **core/**: Django project configuration.
+- **supabase/**: Database migrations and synchronization scripts.
+- **lib/**: Shared utilities, including Supabase client initialization.
+- **public/**: Static assets for the frontend.
+- **types/**: TypeScript type definitions (e.g., Database types).
 
-```
-project-root/
-├── html/                    # 25 HTML page templates (one per module)
-├── css/                     # 18 CSS files (module-specific + core styling)
-├── js/                      # 17 JavaScript modules (business logic)
-├── data/                    # Sample data and import templates (JSON)
-└── .vscode/                 # VS Code configuration
-```
+## Projects
 
-### Main Components
+### Next.js Frontend
+**Configuration File**: `package.json`, `next.config.ts`, `tsconfig.json`
 
-- **Pages**: Daily Tasks, Goals, Notes, Meetings, Calendar, Master Tasks, Mission, Budget, CSEA, iCAAP (Pay Log, Purchase Requisition, Transcript Request, Hours Worked), Settings, Data Management, Planner Views
-- **Core Modules**: `opus-storage.js` (localStorage management), `utils.js` (utilities), `opus-data.js` (data operations)
-- **Feature Modules**: 17 JavaScript modules implementing individual features (one per page)
-- **Styling**: `opus-core.css` (design system), module-specific CSS files, custom color scheme with Opus blue/gold theme
+#### Language & Runtime
+**Language**: TypeScript  
+**Version**: Next.js 16.1.2, React 19.2.3  
+**Build System**: Next Build  
+**Package Manager**: npm
 
-## Language & Runtime
+#### Dependencies
+**Main Dependencies**:
+- `@supabase/supabase-js`: Database & Auth integration.
+- `lucide-react`: Iconography.
+- `tailwindcss`: Utility-first styling (v4).
 
-**Language**: JavaScript (ES6+), HTML5, CSS3  
-**Runtime**: Browser-based (requires modern web browser with localStorage support)  
-**Build System**: None (static web application)  
-**Package Manager**: None (no external dependencies)
+**Development Dependencies**:
+- `eslint`: Linting.
+- `typescript`: Type safety.
 
-## Dependencies
-
-**No external dependencies**. Application uses only vanilla JavaScript and browser APIs.
-
-**Browser APIs Used**:
-- localStorage (data persistence)
-- Fetch API (data import/export)
-- Date/Time APIs (scheduling, formatting)
-- DOM APIs (dynamic rendering)
-- Drag & Drop API (task reordering)
-
-## Build & Installation
-
-No build process required. Application runs directly in browser.
-
-**Development Setup**:
+#### Build & Installation
 ```bash
-# Using VS Code Live Server extension (configured for port 5501)
-# Simply open html/home.html in a browser or use Live Server
-# Open: http://localhost:5501/html/home.html
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
 ```
 
-**Alternative**: Open any HTML file directly in a web browser (e.g., file:///path/to/html/home.html)
-
-## Main Files & Resources
-
-**Entry Points**:
-- `html/home.html` - Main dashboard/home page
-- All other HTML files in `html/` directory are standalone pages
-
-**Core JavaScript Modules**:
-- `js/opus-storage.js` - localStorage API wrapper, data validation, CRUD operations
-- `js/utils.js` - Date/time utilities, DOM helpers, event management helpers
-- `js/opus-data.js` - High-level data operations, initialization
-- `js/drag-drop.js` - Drag and drop functionality for task reordering
-
-**Feature Modules**: 
-- `js/daily-tasks.js`, `js/goals.js`, `js/notes.js`, `js/meetings.js`, `js/calendar.js`, `js/master-tasks.js`, `js/mission.js`, `js/budget.js`, `js/settings.js`, `js/planner-views.js`, `js/data-management.js`, `js/csea.js`, plus 4 iCAAP modules
-
-**Configuration**:
-- `.vscode/settings.json` - VS Code settings (LiveServer port: 5501)
-
-**Sample Data**:
-- `data/tasks-import-example.json` - Example format for bulk importing tasks
-- `data/calendar-data.json` - Sample calendar events
-
-## Storage & Data
-
-**Data Persistence**: Browser localStorage under key `'opusData'`
-
-**Stored Data Structure**:
-```javascript
-{
-  tasks: [],
-  goals: [],
-  notes: [],
-  meetings: [],
-  masterTasks: [],
-  mission: { statement, values, lastUpdated },
-  preferences: { theme, defaultView, workStartHour, workEndHour, weekStartDay, notifications, timeFormat }
-}
+#### Testing
+**Framework**: ESLint (for linting)
+**Run Command**:
+```bash
+npm run lint
 ```
 
-**Data Operations**:
-- Export: Download all data as JSON file
-- Import: Bulk import tasks from JSON
-- Manual backup via Data Management module
-- Full data reset capability
+### Django Backend
+**Configuration File**: `manage.py`, `requirements.txt`
 
-## Architecture
+#### Language & Runtime
+**Language**: Python  
+**Version**: Django 4.2.27  
+**Build System**: Django Management Commands  
+**Package Manager**: pip
 
-**Pattern**: Modular IIFE (Immediately Invoked Function Expression)  
-**Module Pattern**: Each feature is self-contained with public API exposed via IIFE return  
-**Communication**: Via localStorage and DOM events  
-**No Framework**: Pure vanilla JavaScript with no dependencies
+#### Dependencies
+**Main Dependencies**:
+- `django`: Core framework.
+- `psycopg2-binary`: PostgreSQL adapter.
+- `dj-database-url`: Database configuration utility.
+- `whitenoise`: Static file serving.
 
-**Key Design Principles**:
-- Client-side only (no server required)
-- localStorage for persistence
-- Modular organization (one module per feature)
-- Utility-first approach (utils.js provides helpers)
-- Event-driven architecture for data updates
+#### Build & Installation
+```bash
+# Install dependencies
+pip install -r requirements.txt
 
-## Styling System
+# Run migrations
+python manage.py migrate
 
-**Core Design System**: `css/opus-core.css`
-- Custom properties for colors, spacing, shadows, border-radius
-- Opus color scheme: Primary blue (#00326b), Gold accent (#ffca38)
-- Responsive grid-based layout
-- Font: Inter (Google Fonts)
+# Run development server
+python manage.py runserver
+```
 
-**Module-Specific Styles**: Each module has dedicated CSS file matching HTML file name
-- Modular and independently updatable
-- Consistent use of CSS custom properties for theming
+#### Main Files & Resources
+- **planner/models.py**: Core data definitions.
+- **planner/views.py**: Backend logic and template rendering.
+- **planner/templates/**: Legacy HTML templates mirroring the Next.js routes.
 
-## Development Workflow
+### Supabase Integration
+**Type**: Database & Backend-as-a-Service
 
-**Local Development**:
-1. Open project in VS Code
-2. Use Live Server extension (configured to port 5501)
-3. Navigate to http://localhost:5501/html/home.html
-4. Changes to HTML/CSS/JS reload automatically
+#### Key Resources
+- **lib/supabase.ts**: Unified client for frontend/backend.
+- **supabase/migrations/**: SQL migrations defining the schema (e.g., `opus_tasks`, `opus_goals`).
+- **types/database.types.ts**: Auto-generated or manual TypeScript interfaces for the database schema.
 
-**Data Persistence**: All changes automatically saved to localStorage
+#### Usage & Operations
+**Verification Scripts**:
+```bash
+# Verify Supabase data integrity
+python verify_supabase_data.py
 
-**Recommended Setup**: VS Code with Live Server extension for hot-reload development
-
-## Testing & Validation
-
-**Testing Framework**: None  
-**Browser Compatibility**: Modern browsers with localStorage support (Chrome, Firefox, Safari, Edge)
-
-**Manual Testing**: Features can be tested directly in browser
-- LocalStorage may need to be cleared between test sessions
-- Export/import can be used to test data persistence and format
-
-**Data Validation**: Input validation present in `opus-storage.js`
-- Task title validation
-- Date format validation (YYYY-MM-DD)
-- Time format validation (HH:MM)
-- Priority enum validation (High/Medium/Low)
+# Run migration scripts
+python run_migration.py
+```

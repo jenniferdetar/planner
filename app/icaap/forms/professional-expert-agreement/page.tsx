@@ -8,6 +8,7 @@ import {
   Landmark, ShieldCheck, Calendar, Clock, DollarSign,
   UserCheck, AlertCircle, FileSignature
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 interface PEAData {
   expert: {
@@ -140,45 +141,37 @@ export default function ProfessionalExpertAgreementPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 print:hidden">
-        <div>
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-              <FileSignature className="text-white" size={32} />
-            </div>
-            <div>
-              <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase leading-none mb-1">Professional Expert Agreement</h1>
-              <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase">Service Contract • LAUSD Human Resources</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#00326b]/10 rounded-full font-bold text-[#00326b] hover:bg-[#00326b]/5 transition-all shadow-sm">
-            <ChevronLeft size={20} />
-            Back
-          </Link>
-          <button 
-            onClick={handleSave} 
-            disabled={saving}
-            className="group flex items-center gap-3 px-8 py-2 bg-[#00326b] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#00326b]/20"
-          >
-            <Save size={18} className="group-hover:scale-110 transition-transform" />
-            {saving ? 'Syncing...' : 'Save Agreement'}
-          </button>
-          <button 
-            onClick={handlePrint}
-            className="flex items-center gap-3 px-8 py-2 bg-[#FFC68D] text-[#00326b] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#ffb466] transition-all shadow-lg shadow-[#FFC68D]/20"
-          >
-            <Printer size={18} />
-            Print Form
-          </button>
-        </div>
-      </header>
+      <HubHeader
+        title="Professional Expert Agreement"
+        subtitle="Service Contract • LAUSD Human Resources"
+        icon={FileSignature}
+        hideHubSuffix
+      >
+        <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
+          <ChevronLeft size={20} />
+          Back
+        </Link>
+        <button 
+          onClick={handleSave} 
+          disabled={saving}
+          className="group flex items-center gap-3 px-8 py-2 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#0a2f5f]/20"
+        >
+          <Save size={18} className="group-hover:scale-110 transition-transform" />
+          {saving ? 'Syncing...' : 'Save Agreement'}
+        </button>
+        <button 
+          onClick={handlePrint}
+          className="flex items-center gap-3 px-8 py-2 bg-[#FFC68D] text-[#0a2f5f] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#ffb466] transition-all shadow-lg shadow-[#FFC68D]/20"
+        >
+          <Printer size={18} />
+          Print Form
+        </button>
+      </HubHeader>
 
       {/* Form Container */}
       <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
         {/* Official Header Section */}
-        <div className="bg-[#00326b] p-10 text-white text-center relative overflow-hidden">
+        <div className="bg-[#0a2f5f] p-10 text-white text-center relative overflow-hidden">
           <div className="relative z-10">
             <h2 className="text-2xl font-black tracking-[0.2em] uppercase mb-1">Los Angeles Unified School District</h2>
             <h3 className="text-lg font-bold opacity-80 uppercase tracking-widest mb-4">Professional Expert Assignment Agreement</h3>
@@ -195,10 +188,10 @@ export default function ProfessionalExpertAgreementPage() {
             <div className="group relative bg-white p-10 rounded-[3rem] border-2 border-gray-100 hover:border-[#FFC68D]/20 hover:shadow-2xl transition-all duration-500">
               <div className="flex items-center gap-4 mb-8 border-b border-gray-50 pb-6">
                 <div className="w-12 h-12 rounded-2xl bg-[#FFC68D]/20 flex items-center justify-center shadow-inner group-hover:rotate-6 transition-transform">
-                  <UserCircle className="text-[#00326b]" size={24} />
+                  <UserCircle className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Expert / Consultant</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Expert / Consultant</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personal Information</p>
                 </div>
               </div>
@@ -294,10 +287,10 @@ export default function ProfessionalExpertAgreementPage() {
             <div className="group relative bg-white p-10 rounded-[3rem] border-2 border-gray-100 hover:border-[#FFC68D]/20 hover:shadow-2xl transition-all duration-500">
               <div className="flex items-center gap-4 mb-8 border-b border-gray-50 pb-6">
                 <div className="w-12 h-12 rounded-2xl bg-[#9ADBDE]/20 flex items-center justify-center shadow-inner group-hover:-rotate-6 transition-transform">
-                  <Briefcase className="text-[#00326b]" size={24} />
+                  <Briefcase className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Assignment Details</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Assignment Details</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Scope of Services</p>
                 </div>
               </div>
@@ -332,7 +325,7 @@ export default function ProfessionalExpertAgreementPage() {
                         onChange={e => setData({...data, agreement: {...data.agreement, startDate: e.target.value}})}
                         className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                       />
-                      <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 text-[#00326b]/30" size={20} />
+                      <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 text-[#0a2f5f]/30" size={20} />
                     </div>
                   </div>
                   <div className="space-y-1">
@@ -344,7 +337,7 @@ export default function ProfessionalExpertAgreementPage() {
                         onChange={e => setData({...data, agreement: {...data.agreement, endDate: e.target.value}})}
                         className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                       />
-                      <Clock className="absolute left-6 top-1/2 -translate-y-1/2 text-[#00326b]/30" size={20} />
+                      <Clock className="absolute left-6 top-1/2 -translate-y-1/2 text-[#0a2f5f]/30" size={20} />
                     </div>
                   </div>
                 </div>
@@ -371,7 +364,7 @@ export default function ProfessionalExpertAgreementPage() {
                         onChange={e => setData({...data, agreement: {...data.agreement, rate: parseFloat(e.target.value) || 0}})}
                         className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                       />
-                      <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00326b]/30" size={18} />
+                      <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0a2f5f]/30" size={18} />
                     </div>
                   </div>
                   <div className="space-y-1">
@@ -395,10 +388,10 @@ export default function ProfessionalExpertAgreementPage() {
             <div className="lg:col-span-8 bg-gray-50 rounded-[3rem] p-10 border-2 border-gray-100">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm">
-                  <Landmark className="text-[#00326b]" size={24} />
+                  <Landmark className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Accounting Codes</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Accounting Codes</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Funding Allocation</p>
                 </div>
               </div>
@@ -449,7 +442,7 @@ export default function ProfessionalExpertAgreementPage() {
 
             {/* Financial Summary */}
             <div className="lg:col-span-4">
-              <div className="bg-[#00326b] rounded-[3rem] p-10 text-white shadow-2xl shadow-[#00326b]/30 relative overflow-hidden h-full">
+              <div className="bg-[#0a2f5f] rounded-[3rem] p-10 text-white shadow-2xl shadow-[#0a2f5f]/30 relative overflow-hidden h-full">
                 <div className="relative z-10 h-full flex flex-col justify-between">
                   <div>
                     <h4 className="text-white/60 font-black uppercase tracking-widest text-[10px] mb-6 flex items-center gap-2">
@@ -480,7 +473,7 @@ export default function ProfessionalExpertAgreementPage() {
 
           {/* Authorization Section */}
           <div className="mt-12 p-10 bg-white border-2 border-gray-100 rounded-[3rem] group hover:border-[#FFC68D]/20 transition-all duration-500">
-            <h4 className="text-[#00326b] font-black uppercase tracking-widest text-xs mb-8 flex items-center gap-2">
+            <h4 className="text-[#0a2f5f] font-black uppercase tracking-widest text-xs mb-8 flex items-center gap-2">
               <UserCheck size={18} />
               Administrative Authorization
             </h4>
@@ -490,11 +483,11 @@ export default function ProfessionalExpertAgreementPage() {
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Expert / Consultant Signature</div>
               </div>
               <div className="space-y-4">
-                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#00326b] uppercase tracking-tight">Patricia Pernin, Ed.D.</div>
+                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f] uppercase tracking-tight">Patricia Pernin, Ed.D.</div>
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Department Head / Designee</div>
               </div>
               <div className="space-y-4">
-                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#00326b]">{data.office.date}</div>
+                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f]">{data.office.date}</div>
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Date of Execution</div>
               </div>
             </div>

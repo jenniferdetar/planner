@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
+import HubHeader from '@/components/HubHeader';
+import StatCard from '@/components/StatCard';
 import { ChevronLeft, Filter, Download, FileSpreadsheet, CheckCircle2, AlertCircle, Clock, ShieldCheck, Calculator } from 'lucide-react';
 
 const MONTHS = [
@@ -104,26 +106,20 @@ export default function IcaapPayLogPage() {
 
   return (
     <div className="p-4 md:p-8 bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-              <FileSpreadsheet className="text-white" size={32} />
-            </div>
-            <div>
-              <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase leading-none mb-1">Paylog Central</h1>
-              <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase">Unified Professional Expenditure & Hours Registry</p>
-            </div>
-          </div>
-        </div>
-        
+      <HubHeader 
+        title="Paylog Central" 
+        subtitle="Unified Professional Expenditure & Hours Registry" 
+        icon={FileSpreadsheet}
+        iconBgColor="bg-[#FFA1AB]"
+        hideHubSuffix
+      >
         <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-2 bg-white px-6 py-2 rounded-full border-2 border-[#00326b]/10 shadow-sm transition-all focus-within:border-[#00326b]/30">
-            <Filter size={18} className="text-[#00326b]" />
+          <div className="flex items-center gap-2 bg-white px-6 py-2 rounded-full border-2 border-[#0a2f5f]/10 shadow-sm transition-all focus-within:border-[#0a2f5f]/30">
+            <Filter size={18} className="text-[#0a2f5f]" />
             <select 
               value={filterMonth}
               onChange={(e) => setFilterMonth(e.target.value)}
-              className="bg-transparent text-sm font-black text-[#00326b] outline-none cursor-pointer"
+              className="bg-transparent text-sm font-black text-[#0a2f5f] outline-none cursor-pointer"
             >
               <option value="all">Full Academic Year</option>
               {MONTHS.map(m => (
@@ -132,30 +128,30 @@ export default function IcaapPayLogPage() {
             </select>
           </div>
           
-          <button className="flex items-center gap-3 px-8 py-2 bg-white border-2 border-[#00326b]/10 rounded-full font-black text-[10px] uppercase tracking-[0.2em] text-[#00326b] hover:bg-[#00326b]/5 transition-all shadow-sm">
+          <button className="flex items-center gap-3 px-8 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-black text-[10px] uppercase tracking-[0.2em] text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
             <Download size={18} />
             Export Audit
           </button>
           
-          <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-[#00326b] text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#0a2f5f] transition-all shadow-xl shadow-[#00326b]/20">
+          <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-[#0a2f5f] text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#0a2f5f] transition-all shadow-xl shadow-[#0a2f5f]/20">
             <ChevronLeft size={18} />
             Back to Hub
           </Link>
         </div>
-      </header>
+      </HubHeader>
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-40 gap-4 opacity-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00326b]"></div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-[#00326b]">Compiling Registry Data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0a2f5f]"></div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-[#0a2f5f]">Compiling Registry Data...</p>
         </div>
       ) : (
         <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[1200px]">
               <thead>
-                <tr className="bg-[#00326b] text-white">
-                  <th rowSpan={2} className="p-8 font-black uppercase tracking-[0.2em] text-[10px] sticky left-0 bg-[#00326b] z-20 border-r border-white/10 shadow-xl">
+                <tr className="bg-[#0a2f5f] text-white">
+                  <th rowSpan={2} className="p-8 font-black uppercase tracking-[0.2em] text-[10px] sticky left-0 bg-[#0a2f5f] z-20 border-r border-white/10 shadow-xl">
                     Staff Member
                   </th>
                   {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
@@ -164,7 +160,7 @@ export default function IcaapPayLogPage() {
                     </th>
                   ))}
                 </tr>
-                <tr className="bg-[#00326b]/95 text-white/50">
+                <tr className="bg-[#0a2f5f]/95 text-white/50">
                   {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
                     <React.Fragment key={`${m.key}-sub`}>
                       <th className="px-4 py-3 text-[9px] font-black uppercase text-center border-l border-white/10 tracking-widest">Hrs</th>
@@ -183,7 +179,7 @@ export default function IcaapPayLogPage() {
 
                   return (
                     <tr key={name} className="hover:bg-[#f8fafc] transition-colors group">
-                      <td className="p-6 font-black text-[#00326b] text-xs uppercase tracking-tight sticky left-0 bg-white group-hover:bg-[#f8fafc] z-10 border-r border-gray-100 shadow-[10px_0_15px_-5px_rgba(0,0,0,0.02)]">
+                      <td className="p-6 font-black text-[#0a2f5f] text-xs uppercase tracking-tight sticky left-0 bg-white group-hover:bg-[#f8fafc] z-10 border-r border-gray-100 shadow-[10px_0_15px_-5px_rgba(0,0,0,0.02)]">
                         {name}
                       </td>
                       {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
@@ -219,33 +215,24 @@ export default function IcaapPayLogPage() {
       )}
       
       <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-        <div className="bg-white p-8 rounded-[2.5rem] border-2 border-emerald-50 shadow-sm flex items-center gap-6 group hover:border-emerald-100 transition-all">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 shadow-inner group-hover:scale-110 transition-transform">
-            <CheckCircle2 size={28} />
-          </div>
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600/50 mb-1">Submission Goal</div>
-            <div className="text-2xl font-black text-emerald-700 leading-none">98% Approved</div>
-          </div>
-        </div>
-        <div className="bg-white p-8 rounded-[2.5rem] border-2 border-amber-50 shadow-sm flex items-center gap-6 group hover:border-amber-100 transition-all">
-          <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 shadow-inner group-hover:scale-110 transition-transform">
-            <Clock size={28} />
-          </div>
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-600/50 mb-1">Pending Review</div>
-            <div className="text-2xl font-black text-amber-700 leading-none">12 Logs</div>
-          </div>
-        </div>
-        <div className="bg-white p-8 rounded-[2.5rem] border-2 border-blue-50 shadow-sm flex items-center gap-6 group hover:border-blue-100 transition-all">
-          <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500 shadow-inner group-hover:scale-110 transition-transform">
-            <FileSpreadsheet size={28} />
-          </div>
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600/50 mb-1">Total Records</div>
-            <div className="text-2xl font-black text-blue-700 leading-none">{names.length} Active</div>
-          </div>
-        </div>
+        <StatCard 
+          title="Submission Goal"
+          value="98% Approved"
+          icon={<CheckCircle2 size={24} />}
+          color="bg-[#9ADBDE]"
+        />
+        <StatCard 
+          title="Pending Review"
+          value="12 Logs"
+          icon={<Clock size={24} />}
+          color="bg-[#FFC68D]"
+        />
+        <StatCard 
+          title="Total Records"
+          value={`${names.length} Active`}
+          icon={<FileSpreadsheet size={24} />}
+          color="bg-[#99B3C5]"
+        />
       </section>
 
       <section className="flex flex-col md:flex-row justify-between items-center gap-12 bg-white p-12 rounded-[3rem] border-2 border-gray-100 shadow-xl">
@@ -254,7 +241,7 @@ export default function IcaapPayLogPage() {
             <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
               <Calculator size={20} />
             </div>
-            <h3 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Financial Audit Verification</h3>
+            <h3 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Financial Audit Verification</h3>
           </div>
           <p className="text-gray-500 text-sm font-medium leading-relaxed max-w-xl">
             This consolidated paylog registry has been cross-referenced with District payroll systems and iCAAP attendance certification logs. All records are verified for the current fiscal cycle.

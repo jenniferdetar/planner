@@ -6,68 +6,71 @@ import { OpusGoal } from '@/types/database.types';
 import { 
   Target, Trophy, Rocket, Star, 
   ChevronRight, Activity, ShieldCheck, 
-  TrendingUp, Award, Flag, Flame
+  TrendingUp, Award, Flag, Flame, Calendar
 } from 'lucide-react';
+
+import HubHeader from '@/components/HubHeader';
+import StatCard from '@/components/StatCard';
 
 const PERSONAL_GOAL_SECTIONS = [
   {
     title: 'Physical',
-    headerClass: 'bg-[#d7eef0]',
+    headerClass: 'bg-[#9ADBDE]/30',
     items: ['Lose 5 lbs', 'Exercise more (Start with walking)', '', '', '']
   },
   {
     title: 'Mental',
-    headerClass: 'bg-[#d7eef0]',
+    headerClass: 'bg-[#9ADBDE]/30',
     items: ['Journal at least 3x a week', 'Attend church more often', '', '', '']
   },
   {
     title: 'Relational',
-    headerClass: 'bg-[#d7eef0]',
+    headerClass: 'bg-[#9ADBDE]/30',
     items: ['Have one outing w/Jeff monthly', 'Attend church more often', '', '', '']
   },
   {
     title: 'Self-Care',
-    headerClass: 'bg-[#ffd6d6]',
+    headerClass: 'bg-[#FFA1AB]/30',
     items: ['Get nails done', 'Make more home made meals', '', '', '']
   },
   {
     title: 'Hobbies',
-    headerClass: 'bg-[#ffd6d6]',
+    headerClass: 'bg-[#FFA1AB]/30',
     items: ['', '', '', '', '']
   },
   {
     title: 'Home',
-    headerClass: 'bg-[#ffd6d6]',
+    headerClass: 'bg-[#FFA1AB]/30',
     items: ['Can meals', 'Save up for a freeze dryer', '', '', '']
   },
   {
     title: 'Career',
-    headerClass: 'bg-[#e3e8ef]',
+    headerClass: 'bg-[#99B3C5]/30',
     items: ['Promote, if possible', 'Get side gigs to leave LAUSD', '', '', '']
   },
   {
     title: 'Financial',
-    headerClass: 'bg-[#e3e8ef]',
+    headerClass: 'bg-[#99B3C5]/30',
     items: ['Help Jeff with Disability', 'Fully Funded Emergency Fund', 'Make more home made meals', '', '']
   },
   {
     title: 'Organizational',
-    headerClass: 'bg-[#e3e8ef]',
+    headerClass: 'bg-[#99B3C5]/30',
     items: ['De-clutter the living room', 'Clean up the office', "Donate what's not being used", '', '']
   },
   {
     title: 'Screen Time',
-    headerClass: 'bg-[#f7e2c8]',
+    headerClass: 'bg-[#FFC68D]/30',
     items: ['Keep to commute/work only', '', '', '', '']
   },
   {
     title: 'Learn',
-    headerClass: 'bg-[#f7e2c8]',
+    headerClass: 'bg-[#FFC68D]/30',
     items: ['Complete coding course strong', 'Complete MBA', '', '', '']
   },
   {
     title: 'CSEA',
-    headerClass: 'bg-[#f7e2c8]',
+    headerClass: 'bg-[#FFC68D]/30',
     items: ['Build relationships/network', 'Talk to more members', 'Re-elected for MB Committee', 'Represent more members', 'Find ways to grow meetings']
   }
 ];
@@ -117,37 +120,32 @@ export default function GoalsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#ea580c] flex items-center justify-center shadow-xl shadow-[#ea580c]/20">
-            <Target className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#7c2d12] tracking-tight uppercase">Achievement Registry</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Strategic alignment of ambition and execution"</p>
-          </div>
-        </div>
-      </header>
+      <HubHeader 
+        title="Achievement" 
+        subtitle='"Strategic alignment of ambition and execution"' 
+        icon={Target}
+        iconBgColor="bg-[#FFC68D]"
+      />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#7c2d12] via-[#ea580c] to-[#fb923c] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#7c2d12]/30">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-black mb-4 leading-tight">SMART Objective Architecture</h2>
-          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
-            Define high-impact objectives, track execution velocity, and certify your progress toward long-term strategic milestones.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">2026</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Execution Year</span>
-            </div>
-            <div className="w-px h-12 bg-white/20 mx-4"></div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">{goals.filter(g => g.status === 'completed').length}</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Completed Goals</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">🎯</div>
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <StatCard 
+          title="Execution Year" 
+          value={2026} 
+          icon={<Calendar size={20} />} 
+          color="bg-[#9ADBDE]" 
+        />
+        <StatCard 
+          title="Total Objectives" 
+          value={goals.length} 
+          icon={<Target size={20} />} 
+          color="bg-[#FFC68D]" 
+        />
+        <StatCard 
+          title="Completed Goals" 
+          value={goals.filter(g => g.status === 'completed').length} 
+          icon={<Trophy size={20} />} 
+          color="bg-[#FFA1AB]" 
+        />
       </section>
 
       <section className="bg-white rounded-[2rem] border border-slate-200 shadow-sm p-8 md:p-12 mb-12">
@@ -196,10 +194,10 @@ export default function GoalsPage() {
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shadow-inner">
-                      {goal.status === 'completed' ? <Trophy size={20} className="text-[#ea580c]" /> : <Flame size={20} className="text-[#ea580c]" />}
+                      {goal.status === 'completed' ? <Trophy size={20} className="text-[#FFC68D]" /> : <Flame size={20} className="text-[#FFC68D]" />}
                     </div>
                     <div>
-                      <h2 className="text-2xl font-black text-[#7c2d12] leading-tight uppercase tracking-tighter">{goal.title}</h2>
+                      <h2 className="text-2xl font-black text-[#0a2f5f] leading-tight uppercase tracking-tighter">{goal.title}</h2>
                       <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{goal.category}</div>
                     </div>
                   </div>
@@ -219,12 +217,12 @@ export default function GoalsPage() {
                 <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
                   <div className="flex justify-between items-end mb-3">
                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Execution Progress</span>
-                    <span className="text-2xl font-black text-[#ea580c]">{goal.progress_percent}%</span>
+                    <span className="text-2xl font-black text-[#FFC68D]">{goal.progress_percent}%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden shadow-inner">
                     <div 
                       className={`h-full rounded-full transition-all duration-1000 ease-out relative ${
-                        goal.progress_percent === 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-[#ea580c] to-[#fb923c]'
+                        goal.progress_percent === 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-[#FFC68D] to-[#FFA1AB]'
                       }`}
                       style={{ width: `${goal.progress_percent}%` }}
                     >
@@ -235,10 +233,10 @@ export default function GoalsPage() {
 
                 <div className="mt-8 flex items-center justify-between border-t border-slate-50 pt-6">
                   <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                    <Award size={14} className="text-[#ea580c]" />
+                    <Award size={14} className="text-[#FFC68D]" />
                     SMART Certified
                   </div>
-                  <button className="flex items-center gap-2 text-[#ea580c] font-black text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform">
+                  <button className="flex items-center gap-2 text-[#FFC68D] font-black text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform">
                     View Details <ChevronRight size={16} />
                   </button>
                 </div>
@@ -259,30 +257,30 @@ export default function GoalsPage() {
         <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#7c2d12]" size={24} />
-              <h2 className="text-2xl font-black text-[#7c2d12] uppercase tracking-tight">Strategy Verification</h2>
+              <ShieldCheck className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Strategy Verification</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Achievement records are audited against strategic criteria to ensure alignment with your long-term vision board.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#7c2d12] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <Award size={16} />
             Achievement Data Integrity Verified
           </div>
         </div>
 
-        <div className="bg-[#ea580c]/5 p-10 rounded-[3rem] border-2 border-[#ea580c]/10 flex flex-col justify-between">
+        <div className="bg-[#FFC68D]/10 p-10 rounded-[3rem] border-2 border-[#FFC68D]/20 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <TrendingUp className="text-[#ea580c]" size={24} />
-              <h2 className="text-2xl font-black text-[#ea580c] uppercase tracking-tight">Achievement Momentum</h2>
+              <TrendingUp className="text-[#FFC68D]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Achievement Momentum</h2>
             </div>
-            <p className="text-[#ea580c]/70 font-medium leading-relaxed italic mb-8">
+            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
               Current progress indicates high execution velocity. Maintain focus on quarterly milestones to maximize output.
             </p>
           </div>
-          <div className="text-4xl font-black text-[#ea580c] opacity-10 uppercase italic tracking-tighter">Velocity Projections</div>
+          <div className="text-4xl font-black text-[#0a2f5f] opacity-10 uppercase italic tracking-tighter">Velocity Projections</div>
         </div>
       </section>
 

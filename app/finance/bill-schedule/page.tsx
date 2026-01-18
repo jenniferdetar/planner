@@ -40,19 +40,19 @@ const BILL_ITEMS = [
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Auto: '#008F00',
-  'Bill Pay': '#0433FF',
-  Cash: '#FF40FF',
-  'Credit Card': '#FF9300',
-  Housing: '#941100',
-  Savings: '#942193'
+  Auto: '#99B3C5',
+  'Bill Pay': '#FFA1AB',
+  Cash: '#9ADBDE',
+  'Credit Card': '#FFC68D',
+  Housing: '#99B3C5',
+  Savings: '#FFA1AB'
 };
 
 function getCategoryColor(category: string) {
   return CATEGORY_COLORS[category] || '#94a3b8';
 }
 
-import SubHeader from '@/components/SubHeader';
+import HubHeader from '@/components/HubHeader';
 
 export default function BillSchedulePage() {
   const [checkedState, setCheckedState] = useState<Record<string, boolean>>({});
@@ -104,15 +104,28 @@ export default function BillSchedulePage() {
 
   return (
     <div className="bg-[#fdfdfd] min-h-screen">
-      <SubHeader title="Bill Payment Schedule" subtitle="Official Registry of Recurring Liabilities" />
-      
-      <div className="p-4 md:p-8 max-w-full mx-auto">
+      <div className="p-4 md:p-8 max-w-7xl mx-auto">
+        <HubHeader 
+          title="Bill Payment Schedule" 
+          subtitle="Official Registry of Recurring Liabilities" 
+          icon={Calendar} 
+          iconBgColor="bg-[#FFC68D]"
+          hideHubSuffix={true}
+        >
+          <Link 
+            href="/finance" 
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border-2 border-[#0a2f5f]/10 text-[#0a2f5f] font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f] hover:text-white transition-all shadow-sm"
+          >
+            <ChevronLeft size={16} />
+            Back to Finance
+          </Link>
+        </HubHeader>
         <section className="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
         <div className="absolute top-0 left-0 w-full h-2 bg-[#FFA1AB]"></div>
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
           <div className="max-w-xl">
-            <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight mb-4 flex items-center gap-3">
+            <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight mb-4 flex items-center gap-3">
               <CheckCircle2 className="text-[#FFA1AB]" size={24} />
               Annual Payment Registry
             </h2>
@@ -161,7 +174,7 @@ export default function BillSchedulePage() {
                       {row.category}
                     </span>
                   </td>
-                  <td className="py-5 pr-4 text-sm font-bold text-[#00326b]">{row.item}</td>
+                  <td className="py-5 pr-4 text-sm font-bold text-[#0a2f5f]">{row.item}</td>
                   <td className="py-5 pr-4">
                     <div className="flex items-center gap-1 text-sm font-black text-gray-400">
                       <DollarSign size={14} className="opacity-30" />
@@ -204,26 +217,27 @@ export default function BillSchedulePage() {
             Compliance Note
           </h4>
           <p className="text-[#0a2f5f] font-serif italic text-lg leading-relaxed">
-            "Ensure all digital transactions are cross-referenced with bank statements before final monthly certification."
+            &quot;Ensure all digital transactions are cross-referenced with bank statements before final monthly certification.&quot;
           </p>
         </div>
         <div className="md:col-span-2 bg-slate-50 p-8 rounded-[2rem] border-2 border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm border border-slate-200">
-              <ArrowUpRight className="text-[#00326b]" size={24} />
+              <ArrowUpRight className="text-[#0a2f5f]" size={24} />
             </div>
             <div>
               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Liability Status</div>
-              <div className="text-lg font-black text-[#00326b]">All Systems Operational</div>
+              <div className="text-lg font-black text-[#0a2f5f]">All Systems Operational</div>
             </div>
           </div>
-          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#00326b]/30 italic">Registry Secure</div>
+          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#0a2f5f]/30 italic">Registry Secure</div>
         </div>
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
         <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Official Liability Registry © 2026</p>
       </footer>
+      </div>
     </div>
   );
 }

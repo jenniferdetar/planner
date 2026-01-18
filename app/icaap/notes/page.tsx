@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { ChevronLeft, Plus, Trash2, Calendar, Clock, BookOpen } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 interface SavedNote {
   text: string;
@@ -103,36 +104,30 @@ export default function IcaapNotesPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto bg-[#fdfbf7] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-lg transform -rotate-3">
-              <BookOpen className="text-white" size={24} />
-            </div>
-            <h1 className="text-4xl font-bold text-[#00326b] font-handwriting">iCAAP Records</h1>
-          </div>
-          <p className="text-gray-500 italic font-serif">"Official records, reminders, and professional follow-ups"</p>
-        </div>
-        <div className="flex gap-4">
-          <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#00326b]/10 rounded-full font-bold text-[#00326b] hover:bg-[#00326b]/5 transition-all shadow-sm">
-            <ChevronLeft size={20} />
-            Back to iCAAP
-          </Link>
-        </div>
-      </header>
+      <HubHeader
+        title="iCAAP Records"
+        subtitle='"Official records, reminders, and professional follow-ups"'
+        icon={BookOpen}
+        hideHubSuffix
+      >
+        <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
+          <ChevronLeft size={20} />
+          Back to iCAAP
+        </Link>
+      </HubHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* New Note Area */}
         <div className="lg:col-span-7">
           <section className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#00326b] to-[#5d84b2] rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-            <div className="relative bg-white p-8 rounded-3xl border-2 border-[#00326b]/5 shadow-xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#0a2f5f] to-[#5d84b2] rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+            <div className="relative bg-white p-8 rounded-3xl border-2 border-[#0a2f5f]/5 shadow-xl">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-[#00326b] flex items-center gap-2">
+                <h2 className="text-xl font-bold text-[#0a2f5f] flex items-center gap-2">
                   <Plus className="text-[#5d84b2]" size={24} />
                   New Record Entry
                 </h2>
-                <div className="text-[10px] font-black uppercase tracking-widest text-[#00326b]/30 px-3 py-1 bg-[#00326b]/5 rounded-full">
+                <div className="text-[10px] font-black uppercase tracking-widest text-[#0a2f5f]/30 px-3 py-1 bg-[#0a2f5f]/5 rounded-full">
                   Lined Paper Mode
                 </div>
               </div>
@@ -140,7 +135,7 @@ export default function IcaapNotesPage() {
               <div className="relative">
                 <textarea 
                   placeholder="Record your iCAAP follow-ups or meeting notes here..."
-                  className="w-full min-h-[400px] p-8 bg-[#fdfbf7] border-2 border-[#e6e2d3] rounded-2xl text-xl font-serif leading-loose focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all shadow-inner"
+                  className="w-full min-h-[400px] p-8 bg-[#fdfbf7] border-2 border-[#e6e2d3] rounded-2xl text-xl font-serif leading-loose focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all shadow-inner"
                   style={{ 
                     backgroundImage: 'linear-gradient(#e6e2d3 1px, transparent 1px)', 
                     backgroundSize: '100% 3rem',
@@ -157,7 +152,7 @@ export default function IcaapNotesPage() {
                 <button 
                   onClick={saveNote}
                   disabled={saving || !currentNote.trim()}
-                  className="group relative flex items-center gap-2 px-10 py-4 bg-[#00326b] text-white font-bold rounded-2xl hover:bg-[#00254d] transition-all disabled:opacity-50 shadow-lg hover:shadow-[#00326b]/20"
+                  className="group relative flex items-center gap-2 px-10 py-4 bg-[#0a2f5f] text-white font-bold rounded-2xl hover:bg-[#00254d] transition-all disabled:opacity-50 shadow-lg hover:shadow-[#0a2f5f]/20"
                 >
                   <Plus size={24} className="group-hover:rotate-90 transition-transform" />
                   {saving ? 'Recording Entry...' : 'Finalize Record'}
@@ -171,14 +166,14 @@ export default function IcaapNotesPage() {
         <div className="lg:col-span-5 space-y-8">
           <section>
             <div className="flex items-center gap-2 mb-6">
-              <h2 className="text-2xl font-bold text-[#00326b]">Recent History</h2>
-              <div className="h-px flex-grow bg-gradient-to-r from-[#00326b]/20 to-transparent"></div>
+              <h2 className="text-2xl font-bold text-[#0a2f5f]">Recent History</h2>
+              <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
             </div>
             
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-40">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00326b]"></div>
-                <div className="text-sm font-bold uppercase tracking-widest text-[#00326b]">Archiving...</div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0a2f5f]"></div>
+                <div className="text-sm font-bold uppercase tracking-widest text-[#0a2f5f]">Archiving...</div>
               </div>
             ) : savedNotes.length > 0 ? (
               <div className="space-y-6">
@@ -188,11 +183,11 @@ export default function IcaapNotesPage() {
                     <div className="relative p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2 text-xs font-black text-[#00326b]/40 uppercase tracking-tighter">
+                          <div className="flex items-center gap-2 text-xs font-black text-[#0a2f5f]/40 uppercase tracking-tighter">
                             <Calendar size={12} />
                             {formatDate(note.savedAt)}
                           </div>
-                          <div className="flex items-center gap-2 text-xs font-black text-[#00326b]/40 uppercase tracking-tighter">
+                          <div className="flex items-center gap-2 text-xs font-black text-[#0a2f5f]/40 uppercase tracking-tighter">
                             <Clock size={12} />
                             {formatTime(note.savedAt)}
                           </div>
@@ -221,8 +216,8 @@ export default function IcaapNotesPage() {
         </div>
       </div>
 
-      <footer className="mt-20 pt-12 border-t border-[#00326b]/5 text-center">
-        <p className="text-[#00326b]/30 text-sm font-bold uppercase tracking-[0.2em]">iCAAP Administrative Archive © 2026</p>
+      <footer className="mt-20 pt-12 border-t border-[#0a2f5f]/5 text-center">
+        <p className="text-[#0a2f5f]/30 text-sm font-bold uppercase tracking-[0.2em]">iCAAP Administrative Archive © 2026</p>
       </footer>
     </div>
   );

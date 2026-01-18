@@ -9,6 +9,7 @@ import {
   Filter, FileText, History, ArrowRight,
   ClipboardList, CheckCircle2
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 import { INITIAL_TRANSCRIPT_LOG, TranscriptRequest } from './data';
 
 const ADVISER_MAP: Record<string, string> = {
@@ -130,32 +131,24 @@ export default function TranscriptRequestPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-[1800px] mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 print:hidden">
-        <div>
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-              <Scroll className="text-white" size={32} />
-            </div>
-            <div>
-              <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase leading-none mb-1">Transcript Records</h1>
-              <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase">Official Education Records Form & Request Log</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#00326b]/10 rounded-full font-bold text-[#00326b] hover:bg-[#00326b]/5 transition-all shadow-sm">
-            <ChevronLeft size={20} />
-            Back
-          </Link>
-          <button 
-            onClick={() => window.print()}
-            className="flex items-center gap-3 px-8 py-2 bg-[#ffca38] text-[#00326b] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#eeb125] transition-all shadow-lg shadow-[#ffca38]/20"
-          >
-            <Printer size={18} />
-            Export Log
-          </button>
-        </div>
-      </header>
+      <HubHeader
+        title="Transcript Records"
+        subtitle="Official Education Records Form & Request Log"
+        icon={Scroll}
+        hideHubSuffix
+      >
+        <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
+          <ChevronLeft size={20} />
+          Back
+        </Link>
+        <button 
+          onClick={() => window.print()}
+          className="flex items-center gap-3 px-8 py-2 bg-[#ffca38] text-[#0a2f5f] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#eeb125] transition-all shadow-lg shadow-[#ffca38]/20"
+        >
+          <Printer size={18} />
+          Export Log
+        </button>
+      </HubHeader>
 
       {/* Entry Section */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16 print:hidden">
@@ -163,11 +156,11 @@ export default function TranscriptRequestPage() {
         <div className="lg:col-span-8 bg-white p-10 rounded-[3rem] border-2 border-gray-100 shadow-2xl relative overflow-hidden">
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-10 border-b border-gray-50 pb-6">
-              <div className="w-12 h-12 rounded-2xl bg-[#00326b]/5 flex items-center justify-center shadow-inner">
-                <Plus className="text-[#00326b]" size={24} />
+              <div className="w-12 h-12 rounded-2xl bg-[#0a2f5f]/5 flex items-center justify-center shadow-inner">
+                <Plus className="text-[#0a2f5f]" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">New Request Intake</h2>
+                <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">New Request Intake</h2>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Register incoming academic records</p>
               </div>
             </div>
@@ -179,7 +172,7 @@ export default function TranscriptRequestPage() {
                   type="text" 
                   value={newRequest.en} 
                   onChange={e => setNewRequest({...newRequest, en: e.target.value})}
-                  className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-bold text-gray-700 placeholder:text-gray-200 shadow-inner"
+                  className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 placeholder:text-gray-200 shadow-inner"
                   placeholder="00000000"
                 />
               </div>
@@ -190,10 +183,10 @@ export default function TranscriptRequestPage() {
                     type="text" 
                     value={newRequest.name} 
                     onChange={e => setNewRequest({...newRequest, name: e.target.value})}
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 shadow-inner"
                     placeholder="Last, First..."
                   />
-                  <UserCircle className="absolute left-5 top-1/2 -translate-y-1/2 text-[#00326b]/20" size={24} />
+                  <UserCircle className="absolute left-5 top-1/2 -translate-y-1/2 text-[#0a2f5f]/20" size={24} />
                 </div>
               </div>
               <div className="space-y-1">
@@ -202,14 +195,14 @@ export default function TranscriptRequestPage() {
                   <select 
                     value={newRequest.requestFrom} 
                     onChange={e => setNewRequest({...newRequest, requestFrom: e.target.value})}
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-bold text-gray-700 shadow-inner appearance-none"
+                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 shadow-inner appearance-none"
                   >
                     <option value="">Select...</option>
                     <option>Teacher</option>
                     <option>Salary Credit Assistants</option>
                     <option>Staff</option>
                   </select>
-                  <Briefcase className="absolute left-5 top-1/2 -translate-y-1/2 text-[#00326b]/20 pointer-events-none" size={24} />
+                  <Briefcase className="absolute left-5 top-1/2 -translate-y-1/2 text-[#0a2f5f]/20 pointer-events-none" size={24} />
                 </div>
               </div>
               <div className="space-y-1">
@@ -219,9 +212,9 @@ export default function TranscriptRequestPage() {
                     type="date" 
                     value={newRequest.dateReceived} 
                     onChange={e => setNewRequest({...newRequest, dateReceived: e.target.value})}
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 shadow-inner"
                   />
-                  <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-[#00326b]/20" size={24} />
+                  <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-[#0a2f5f]/20" size={24} />
                 </div>
               </div>
 
@@ -230,7 +223,7 @@ export default function TranscriptRequestPage() {
                 <select 
                   value={newRequest.program} 
                   onChange={e => handleProgramChange(e.target.value)}
-                  className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-black text-[#00326b] shadow-inner text-sm"
+                  className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-black text-[#0a2f5f] shadow-inner text-sm"
                 >
                   <option value="">Select Program Path...</option>
                   {PROGRAMS.map(p => <option key={p} value={p}>{p}</option>)}
@@ -242,7 +235,7 @@ export default function TranscriptRequestPage() {
                   type="text" 
                   value={newRequest.adviser} 
                   readOnly
-                  className="w-full px-6 py-4 bg-[#00326b]/5 border-2 border-transparent rounded-2xl text-[#00326b] font-black shadow-inner"
+                  className="w-full px-6 py-4 bg-[#0a2f5f]/5 border-2 border-transparent rounded-2xl text-[#0a2f5f] font-black shadow-inner"
                 />
               </div>
 
@@ -251,7 +244,7 @@ export default function TranscriptRequestPage() {
                 <textarea 
                   value={newRequest.nature} 
                   onChange={e => setNewRequest({...newRequest, nature: e.target.value})}
-                  className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-bold text-gray-700 shadow-inner min-h-[100px] resize-none leading-relaxed"
+                  className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 shadow-inner min-h-[100px] resize-none leading-relaxed"
                   placeholder="Describe the request..."
                 />
               </div>
@@ -260,7 +253,7 @@ export default function TranscriptRequestPage() {
                 <textarea 
                   value={newRequest.notes} 
                   onChange={e => setNewRequest({...newRequest, notes: e.target.value})}
-                  className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-bold text-gray-700 shadow-inner min-h-[100px] resize-none leading-relaxed"
+                  className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 shadow-inner min-h-[100px] resize-none leading-relaxed"
                   placeholder="Internal tracking notes..."
                 />
               </div>
@@ -270,7 +263,7 @@ export default function TranscriptRequestPage() {
               <button 
                 onClick={addRequest}
                 disabled={!newRequest.name}
-                className="group flex items-center gap-3 px-12 py-4 bg-[#00326b] text-white font-black text-sm uppercase tracking-[0.2em] rounded-[2rem] hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#00326b]/20"
+                className="group flex items-center gap-3 px-12 py-4 bg-[#0a2f5f] text-white font-black text-sm uppercase tracking-[0.2em] rounded-[2rem] hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
               >
                 Initiate Log Entry
                 <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
@@ -322,7 +315,7 @@ export default function TranscriptRequestPage() {
 
       {/* Log View Section */}
       <section className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-20">
-        <div className="bg-[#00326b] p-8 text-white flex flex-col lg:row-reverse lg:flex-row justify-between items-center gap-6">
+        <div className="bg-[#0a2f5f] p-8 text-white flex flex-col lg:row-reverse lg:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10">
               <Filter className="text-white/60" size={24} />
@@ -349,25 +342,25 @@ export default function TranscriptRequestPage() {
           <table className="w-full border-collapse text-xs">
             <thead>
               <tr className="bg-gray-50/80 border-b-2 border-gray-100">
-                <th className="p-6 text-center font-black text-[#00326b] uppercase tracking-widest w-[120px]">Employee #</th>
-                <th className="p-6 text-left font-black text-[#00326b] uppercase tracking-widest w-[250px]">Teacher Name</th>
-                <th className="p-6 text-center font-black text-[#00326b] uppercase tracking-widest w-[140px]">Date Rec.</th>
-                <th className="p-6 text-left font-black text-[#00326b] uppercase tracking-widest w-[250px]">Program Track</th>
-                <th className="p-6 text-left font-black text-[#00326b] uppercase tracking-widest">Nature of Inquiry</th>
-                <th className="p-6 text-left font-black text-[#00326b] uppercase tracking-widest w-[180px]">Adviser</th>
-                <th className="p-6 text-center font-black text-[#00326b] uppercase tracking-widest w-[80px]">By</th>
-                <th className="p-6 text-left font-black text-[#00326b] uppercase tracking-widest w-[250px]">Notes</th>
+                <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">Employee #</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[250px]">Teacher Name</th>
+                <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[140px]">Date Rec.</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[250px]">Program Track</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest">Nature of Inquiry</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[180px]">Adviser</th>
+                <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[80px]">By</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[250px]">Notes</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {filteredLog.map((entry, idx) => (
-                <tr key={`${entry.en}-${entry.name}-${idx}`} className="group hover:bg-[#00326b]/5 transition-colors">
-                  <td className="p-6 font-black text-[#00326b] bg-gray-50/30 group-hover:bg-[#00326b]/10 transition-colors text-center text-sm tabular-nums tracking-tighter">
+                <tr key={`${entry.en}-${entry.name}-${idx}`} className="group hover:bg-[#0a2f5f]/5 transition-colors">
+                  <td className="p-6 font-black text-[#0a2f5f] bg-gray-50/30 group-hover:bg-[#0a2f5f]/10 transition-colors text-center text-sm tabular-nums tracking-tighter">
                     {entry.en}
                   </td>
                   <td className="p-6">
                     <div className="flex flex-col">
-                      <span className="text-sm font-black text-[#00326b] group-hover:translate-x-1 transition-transform">{entry.name}</span>
+                      <span className="text-sm font-black text-[#0a2f5f] group-hover:translate-x-1 transition-transform">{entry.name}</span>
                       <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">From: {entry.requestFrom}</span>
                     </div>
                   </td>
@@ -375,7 +368,7 @@ export default function TranscriptRequestPage() {
                     {entry.dateReceived}
                   </td>
                   <td className="p-6">
-                    <span className="px-4 py-1.5 bg-[#9ADBDE]/20 text-[#00326b] rounded-full text-[10px] font-black uppercase tracking-wider border border-[#9ADBDE]/30">
+                    <span className="px-4 py-1.5 bg-[#9ADBDE]/20 text-[#0a2f5f] rounded-full text-[10px] font-black uppercase tracking-wider border border-[#9ADBDE]/30">
                       {entry.program}
                     </span>
                   </td>
@@ -386,14 +379,14 @@ export default function TranscriptRequestPage() {
                   </td>
                   <td className="p-6">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center font-black text-[10px] text-[#00326b]">
+                      <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center font-black text-[10px] text-[#0a2f5f]">
                         {entry.adviser.split(' ').map(n => n[0]).join('')}
                       </div>
-                      <span className="font-bold text-[#00326b]">{entry.adviser}</span>
+                      <span className="font-bold text-[#0a2f5f]">{entry.adviser}</span>
                     </div>
                   </td>
                   <td className="p-6 text-center">
-                    <span className="font-black text-xs text-[#00326b]/40">{entry.by}</span>
+                    <span className="font-black text-xs text-[#0a2f5f]/40">{entry.by}</span>
                   </td>
                   <td className="p-6">
                     <p className="text-gray-400 font-bold leading-relaxed text-[10px] uppercase tracking-tight">
@@ -406,8 +399,8 @@ export default function TranscriptRequestPage() {
                 <tr>
                   <td colSpan={8} className="p-24 text-center">
                     <div className="flex flex-col items-center gap-4 opacity-20">
-                      <Search size={64} className="text-[#00326b]" />
-                      <div className="text-xs font-black uppercase tracking-[0.5em] text-[#00326b]">No Matching Records Found</div>
+                      <Search size={64} className="text-[#0a2f5f]" />
+                      <div className="text-xs font-black uppercase tracking-[0.5em] text-[#0a2f5f]">No Matching Records Found</div>
                     </div>
                   </td>
                 </tr>
@@ -419,13 +412,13 @@ export default function TranscriptRequestPage() {
 
       {loading && (
         <div className="fixed inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center z-50">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#00326b] mb-6 shadow-2xl"></div>
-          <div className="text-xs font-black uppercase tracking-[0.5em] text-[#00326b] animate-pulse">Accessing Archive...</div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#0a2f5f] mb-6 shadow-2xl"></div>
+          <div className="text-xs font-black uppercase tracking-[0.5em] text-[#0a2f5f] animate-pulse">Accessing Archive...</div>
         </div>
       )}
 
       {saving && (
-        <div className="fixed bottom-12 right-12 bg-[#00326b] text-white px-10 py-4 rounded-2xl shadow-2xl flex items-center gap-4 animate-bounce z-50 border-2 border-white/20">
+        <div className="fixed bottom-12 right-12 bg-[#0a2f5f] text-white px-10 py-4 rounded-2xl shadow-2xl flex items-center gap-4 animate-bounce z-50 border-2 border-white/20">
           <Save size={20} />
           <span className="text-xs font-black uppercase tracking-widest">Synchronizing Log...</span>
         </div>
@@ -454,7 +447,7 @@ export default function TranscriptRequestPage() {
             border: none !important;
             box-shadow: none !important;
           }
-          .bg-[#00326b] {
+          .bg-[#0a2f5f] {
             background-color: white !important;
             color: black !important;
             border-bottom: 2px solid black !important;

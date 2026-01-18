@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { ChevronLeft, BookOpen, Save, Plus, Trash2, Library, BookText, Bookmark } from 'lucide-react';
 
+import HubHeader from '@/components/HubHeader';
+
 interface Book {
   title: string;
   author: string;
@@ -85,36 +87,31 @@ export default function BooksPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-              <Library className="text-white" size={32} />
-            </div>
-            <div>
-              <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase leading-none mb-1">Library Registry</h1>
-              <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase">Official Literary Pursuit & Reading Log</p>
-            </div>
-          </div>
-        </div>
+      <HubHeader 
+        title="Library Registry" 
+        subtitle="Official Literary Pursuit & Reading Log" 
+        icon={Library} 
+        iconBgColor="bg-[#9ADBDE]"
+        hideHubSuffix={true}
+      >
         <div className="flex flex-wrap gap-3">
-          <Link href="/planning" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#00326b]/10 rounded-full font-bold text-[#00326b] hover:bg-[#00326b]/5 transition-all shadow-sm">
+          <Link href="/planning" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
             <ChevronLeft size={20} />
             Back
           </Link>
           <button 
             onClick={() => saveBooks(books)}
             disabled={saving}
-            className="group flex items-center gap-3 px-8 py-2 bg-[#00326b] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#00326b]/20"
+            className="group flex items-center gap-3 px-8 py-2 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#0a2f5f]/20"
           >
             <Save size={18} className="group-hover:scale-110 transition-transform" />
             {saving ? 'Syncing...' : 'Save Registry'}
           </button>
         </div>
-      </header>
+      </HubHeader>
 
       <section className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
-        <div className="bg-[#00326b] p-8 text-white relative overflow-hidden">
+        <div className="bg-[#0a2f5f] p-8 text-white relative overflow-hidden">
           <div className="relative z-10 flex justify-between items-center">
             <div>
               <h2 className="text-xl font-black tracking-widest uppercase mb-1">Book Wishlist & Progress</h2>
@@ -127,7 +124,7 @@ export default function BooksPage() {
 
         {loading ? (
           <div className="p-20 text-center opacity-20 flex flex-col items-center gap-4">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#00326b]"></div>
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#0a2f5f]"></div>
             <div className="text-[10px] font-black uppercase tracking-[0.3em]">Opening Archive...</div>
           </div>
         ) : (
@@ -146,7 +143,7 @@ export default function BooksPage() {
                   <tr key={index} className="group hover:bg-[#f8fafc] transition-colors">
                     <td className="p-4 pl-10">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-300 group-hover:bg-white group-hover:text-[#00326b] transition-all shadow-inner border border-transparent group-hover:border-gray-100">
+                        <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-300 group-hover:bg-white group-hover:text-[#0a2f5f] transition-all shadow-inner border border-transparent group-hover:border-gray-100">
                           <BookText size={20} />
                         </div>
                         <input 
@@ -195,7 +192,7 @@ export default function BooksPage() {
                   <td colSpan={4} className="p-8">
                     <button 
                       onClick={addBook}
-                      className="group w-full py-6 border-4 border-dashed border-gray-50 rounded-[2rem] text-gray-200 font-black uppercase tracking-[0.3em] text-xs hover:border-[#00326b]/10 hover:text-[#00326b]/30 hover:bg-[#00326b]/5 transition-all flex items-center justify-center gap-4"
+                      className="group w-full py-6 border-4 border-dashed border-gray-50 rounded-[2rem] text-gray-200 font-black uppercase tracking-[0.3em] text-xs hover:border-[#0a2f5f]/10 hover:text-[#0a2f5f]/30 hover:bg-[#0a2f5f]/5 transition-all flex items-center justify-center gap-4"
                     >
                       <Plus size={24} className="group-hover:rotate-90 transition-transform" />
                       Add New Literary Record
@@ -211,19 +208,19 @@ export default function BooksPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-[#FFC68D]/10 p-10 rounded-[3rem] border-2 border-[#FFC68D]/20 group">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 rounded-2xl bg-[#FFC68D]/20 flex items-center justify-center text-[#00326b] group-hover:-rotate-6 transition-transform">
+            <div className="w-10 h-10 rounded-2xl bg-[#FFC68D]/20 flex items-center justify-center text-[#0a2f5f] group-hover:-rotate-6 transition-transform">
               <Bookmark size={20} />
             </div>
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#00326b]/60">Currently Reading</h4>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0a2f5f]/60">Currently Reading</h4>
           </div>
-          <p className="text-[#00326b] font-serif italic text-xl leading-relaxed">
+          <p className="text-[#0a2f5f] font-serif italic text-xl leading-relaxed">
             {books.find(b => b.status === 'Reading')?.title || 'No active book selected.'}
           </p>
         </div>
         <div className="bg-[#FFA1AB]/10 p-10 rounded-[3rem] border-2 border-[#FFA1AB]/20 flex items-center justify-center text-center">
           <div>
-            <div className="text-4xl font-black text-[#00326b] mb-1">{books.filter(b => b.status === 'Finished').length}</div>
-            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-[#00326b]/40">Books Completed</div>
+            <div className="text-4xl font-black text-[#0a2f5f] mb-1">{books.filter(b => b.status === 'Finished').length}</div>
+            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0a2f5f]/40">Books Completed</div>
           </div>
         </div>
       </div>

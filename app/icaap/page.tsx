@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { ChevronRight, FileText, Clock, FileSpreadsheet, ClipboardList, GraduationCap, Save, History } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 const icaapLinks = [
   {
@@ -47,10 +48,6 @@ export default function IcaapPage() {
 
   const storageKey = 'icaap-general-notes';
 
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
   async function fetchNotes() {
     setLoading(true);
     const { data: metadata, error } = await supabase
@@ -62,10 +59,14 @@ export default function IcaapPage() {
     if (error && error.code !== 'PGRST116') {
       console.error('Error fetching ICAAP notes:', error);
     } else if (metadata?.value) {
-      setNotes(metadata.value.content || '');
+      setNotes((metadata.value as { content: string }).content || '');
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
 
   async function saveNotes() {
     setSaving(true);
@@ -89,17 +90,13 @@ export default function IcaapPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-            <GraduationCap className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">iCAAP Hub</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs">Internship & Career Advancement Program Tracking</p>
-          </div>
-        </div>
-      </header>
+      <HubHeader 
+        title="iCAAP" 
+        subtitle="Internship & Career Advancement Program Tracking" 
+        icon={GraduationCap} 
+        iconBgColor="bg-[#FFA1AB]"
+        textColor="text-[#0a2f5f]"
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
         {icaapLinks.map((link) => (
@@ -129,8 +126,8 @@ export default function IcaapPage() {
         <div className="lg:col-span-8 bg-white p-10 rounded-[3rem] border-2 border-gray-100 shadow-xl">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-3">
-              <History className="text-[#00326b]" size={24} />
-              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Administrative Briefing</h2>
+              <History className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Administrative Briefing</h2>
             </div>
             <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 bg-gray-50 px-4 py-2 rounded-full border">
               Auto-Saving Draft
@@ -139,14 +136,14 @@ export default function IcaapPage() {
           
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 opacity-20">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00326b] mb-4"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0a2f5f] mb-4"></div>
               <div className="text-xs font-black uppercase tracking-widest">Loading Records...</div>
             </div>
           ) : (
             <>
               <textarea 
                 placeholder="Compose your general iCAAP notes, follow-ups, or meeting reminders here..."
-                className="w-full min-h-[300px] p-8 border-2 border-gray-50 bg-[#f8fafc] rounded-3xl text-lg font-medium text-gray-700 focus:ring-4 focus:ring-[#00326b]/5 focus:bg-white outline-none transition-all shadow-inner leading-relaxed"
+                className="w-full min-h-[300px] p-8 border-2 border-gray-50 bg-[#f8fafc] rounded-3xl text-lg font-medium text-gray-700 focus:ring-4 focus:ring-[#0a2f5f]/5 focus:bg-white outline-none transition-all shadow-inner leading-relaxed"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
               ></textarea>
@@ -154,7 +151,7 @@ export default function IcaapPage() {
                 <button 
                   onClick={saveNotes}
                   disabled={saving}
-                  className="group flex items-center gap-3 px-10 py-4 bg-[#00326b] text-white font-black text-sm uppercase tracking-[0.2em] rounded-2xl hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#00326b]/20"
+                  className="group flex items-center gap-3 px-10 py-4 bg-[#0a2f5f] text-white font-black text-sm uppercase tracking-[0.2em] rounded-2xl hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#0a2f5f]/20"
                 >
                   {saving ? 'Processing...' : 'Save Notes'}
                   <Save size={20} className="group-hover:scale-110 transition-transform" />

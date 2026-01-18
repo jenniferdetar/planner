@@ -7,6 +7,7 @@ import {
   ChevronRight, Plus, Trash2, ShieldCheck,
   Stethoscope, Pill, Leaf, TrendingUp
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 const MASTER_LIST = {
   fruits: [
@@ -40,10 +41,6 @@ export default function HealthPage() {
   const [data, setData] = useState(MASTER_LIST);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchHealthData();
-  }, []);
-
   async function fetchHealthData() {
     setLoading(true);
     const { data: metadata, error } = await supabase
@@ -59,6 +56,10 @@ export default function HealthPage() {
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    fetchHealthData();
+  }, []);
 
   async function saveHealthData(newData: typeof MASTER_LIST) {
     const { data: { user } } = await supabase.auth.getUser();
@@ -112,25 +113,21 @@ export default function HealthPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#059669] flex items-center justify-center shadow-xl shadow-[#059669]/20">
-            <HeartPulse className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#064e3b] tracking-tight uppercase">Health Hub</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Vitality is the foundation of all achievement"</p>
-          </div>
-        </div>
-      </header>
+      <HubHeader 
+        title="Health" 
+        subtitle='"Vitality is the foundation of all achievement"' 
+        icon={HeartPulse} 
+        iconBgColor="bg-[#9ADBDE]"
+        textColor="text-[#0a2f5f]"
+      />
 
       <div className="flex flex-wrap gap-4 mb-12">
         <button 
           onClick={() => setActiveTab('produce')}
           className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
             activeTab === 'produce' 
-              ? 'bg-[#064e3b] text-white shadow-lg' 
-              : 'bg-white text-[#064e3b] border-2 border-[#064e3b]/10 hover:bg-[#064e3b]/5'
+              ? 'bg-[#9ADBDE] text-[#0a2f5f] shadow-lg' 
+              : 'bg-white text-[#0a2f5f] border-2 border-[#9ADBDE]/20 hover:bg-[#9ADBDE]/5'
           }`}
         >
           <Leaf size={16} />
@@ -140,8 +137,8 @@ export default function HealthPage() {
           onClick={() => setActiveTab('medication')}
           className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
             activeTab === 'medication' 
-              ? 'bg-[#064e3b] text-white shadow-lg' 
-              : 'bg-white text-[#064e3b] border-2 border-[#064e3b]/10 hover:bg-[#064e3b]/5'
+              ? 'bg-[#9ADBDE] text-[#0a2f5f] shadow-lg' 
+              : 'bg-white text-[#0a2f5f] border-2 border-[#9ADBDE]/20 hover:bg-[#9ADBDE]/5'
           }`}
         >
           <Pill size={16} />
@@ -157,16 +154,16 @@ export default function HealthPage() {
           </div>
         ) : activeTab === 'produce' ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <ListSection title="Fruits" type="fruits" icon={<Apple size={20} className="text-[#064e3b]" />} items={data.fruits} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#9ADBDE]" />
-            <ListSection title="Vegetables" type="vegetables" icon={<Leaf size={20} className="text-[#064e3b]" />} items={data.vegetables} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#FFC68D]" />
-            <ListSection title="Legumes & Nuts" type="legumes" icon={<Activity size={20} className="text-[#064e3b]" />} items={data.legumes} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#99B3C5]" />
+            <ListSection title="Fruits" type="fruits" icon={<Apple size={20} className="text-[#0a2f5f]" />} items={data.fruits} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#9ADBDE]" />
+            <ListSection title="Vegetables" type="vegetables" icon={<Leaf size={20} className="text-[#0a2f5f]" />} items={data.vegetables} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#FFC68D]" />
+            <ListSection title="Legumes & Nuts" type="legumes" icon={<Activity size={20} className="text-[#0a2f5f]" />} items={data.legumes} onUpdate={updateItem} onAdd={addItem} onRemove={removeItem} color="bg-[#99B3C5]" />
           </div>
         ) : (
           <div className="max-w-4xl mx-auto">
             <ListSection 
               title="Medication Registry" 
               type="medication" 
-              icon={<Beaker size={20} className="text-[#064e3b]" />} 
+              icon={<Beaker size={20} className="text-[#0a2f5f]" />} 
               items={data.medication} 
               onUpdate={updateItem} 
               onAdd={addItem} 
@@ -182,30 +179,30 @@ export default function HealthPage() {
         <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#064e3b]" size={24} />
-              <h2 className="text-2xl font-black text-[#064e3b] uppercase tracking-tight">Data Integrity</h2>
+              <ShieldCheck className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Data Integrity</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Wellness records are synchronized with the secure administrative ledger to ensure continuity of care.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#064e3b] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <Stethoscope size={16} />
             Medical Records Verified
           </div>
         </div>
 
-        <div className="bg-[#059669]/10 p-10 rounded-[3rem] border-2 border-[#059669]/20 flex flex-col justify-between">
+        <div className="bg-[#9ADBDE]/10 p-10 rounded-[3rem] border-2 border-[#9ADBDE]/20 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <TrendingUp className="text-[#064e3b]" size={24} />
-              <h2 className="text-2xl font-black text-[#064e3b] uppercase tracking-tight">Vitality Metrics</h2>
+              <TrendingUp className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Vitality Metrics</h2>
             </div>
-            <p className="text-[#064e3b]/70 font-medium leading-relaxed italic mb-8">
+            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
               Current nutritional intake and medication adherence are within optimal parameters. Maintain consistency.
             </p>
           </div>
-          <div className="text-4xl font-black text-[#064e3b] opacity-20 italic">"Your peace is protected on purpose."</div>
+          <div className="text-4xl font-black text-[#0a2f5f] opacity-20 italic">"Your peace is protected on purpose."</div>
         </div>
       </section>
 
@@ -216,7 +213,19 @@ export default function HealthPage() {
   );
 }
 
-function ListSection({ title, type, icon, items, onUpdate, onAdd, onRemove, color, isLarge }: any) {
+interface ListSectionProps {
+  title: string;
+  type: keyof typeof MASTER_LIST;
+  icon: React.ReactNode;
+  items: string[];
+  onUpdate: (type: keyof typeof MASTER_LIST, index: number, value: string) => void;
+  onAdd: (type: keyof typeof MASTER_LIST) => void;
+  onRemove: (type: keyof typeof MASTER_LIST, index: number) => void;
+  color: string;
+  isLarge?: boolean;
+}
+
+function ListSection({ title, type, icon, items, onUpdate, onAdd, onRemove, color, isLarge }: ListSectionProps) {
   return (
     <section className={`flex flex-col h-full bg-white rounded-[2.5rem] border-2 border-slate-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500`}>
       <div className="p-8 border-b-2 border-slate-50">
@@ -224,7 +233,7 @@ function ListSection({ title, type, icon, items, onUpdate, onAdd, onRemove, colo
           <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center shadow-inner`}>
             {icon}
           </div>
-          <h2 className="text-xl font-black text-[#064e3b] uppercase tracking-tight">{title}</h2>
+          <h2 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">{title}</h2>
         </div>
         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
           {items.length} Registered Items
@@ -234,7 +243,7 @@ function ListSection({ title, type, icon, items, onUpdate, onAdd, onRemove, colo
       <div className={`flex-grow p-6 ${isLarge ? 'grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2' : 'space-y-2'}`}>
         {items.map((item: string, index: number) => (
           <div key={index} className="group flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 transition-colors">
-            <div className="w-2 h-2 rounded-full bg-[#059669] opacity-20 group-hover:opacity-100 transition-opacity"></div>
+            <div className={`w-2 h-2 rounded-full ${color} opacity-20 group-hover:opacity-100 transition-opacity`}></div>
             <input 
               type="text" 
               value={item} 
@@ -260,7 +269,7 @@ function ListSection({ title, type, icon, items, onUpdate, onAdd, onRemove, colo
       <div className="p-6 bg-slate-50/50 mt-auto">
         <button 
           onClick={() => onAdd(type)}
-          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border-2 border-[#059669]/20 text-[#059669] font-black uppercase tracking-widest text-[10px] hover:bg-[#059669] hover:text-white hover:border-[#059669] transition-all shadow-sm"
+          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border-2 border-[#0a2f5f]/10 text-[#0a2f5f] font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f] hover:text-white hover:border-[#0a2f5f] transition-all shadow-sm"
         >
           <Plus size={14} />
           Append Record

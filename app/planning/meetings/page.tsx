@@ -6,6 +6,8 @@ import { OpusMeeting } from '@/types/database.types';
 import Link from 'next/link';
 import { Users, Calendar, MapPin, Plus, Trash2, Save, ChevronLeft, FileText, Clock, Info, Search } from 'lucide-react';
 
+import HubHeader from '@/components/HubHeader';
+
 export default function MeetingsPage() {
   const [meetings, setMeetings] = useState<OpusMeeting[]>([]);
   const [loading, setLoading] = useState(true);
@@ -128,16 +130,13 @@ export default function MeetingsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFC68D] flex items-center justify-center shadow-xl shadow-[#FFC68D]/20">
-            <Users className="text-[#00326b]" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Meetings & Records</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">Schedule, track, and document your collaborations</p>
-          </div>
-        </div>
+      <HubHeader 
+        title="Meetings & Records" 
+        subtitle="Schedule, track, and document your collaborations" 
+        icon={Users} 
+        iconBgColor="bg-[#FFC68D]"
+        hideHubSuffix={true}
+      >
         <Link 
           href="/planning" 
           className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
@@ -145,7 +144,7 @@ export default function MeetingsPage() {
           <ChevronLeft size={16} />
           Back to Hub
         </Link>
-      </header>
+      </HubHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Meeting Form */}
@@ -154,7 +153,7 @@ export default function MeetingsPage() {
             <div className="absolute top-0 left-0 w-full h-2 bg-[#FFC68D]"></div>
             
             <div className="flex justify-between items-center mb-10">
-              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight flex items-center gap-3">
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight flex items-center gap-3">
                 {editingMeeting ? <Plus className="rotate-45" size={24} /> : <Plus size={24} />}
                 {editingMeeting ? 'Edit Registry Entry' : 'New Meeting Record'}
               </h2>
@@ -181,7 +180,7 @@ export default function MeetingsPage() {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    className="w-full p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#00326b] transition-all"
+                    className="w-full p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all"
                     placeholder="Enter official meeting title..."
                   />
                 </div>
@@ -195,7 +194,7 @@ export default function MeetingsPage() {
                       required
                       value={formData.date}
                       onChange={(e) => setFormData({...formData, date: e.target.value})}
-                      className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#00326b] transition-all"
+                      className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all"
                     />
                   </div>
                 </div>
@@ -208,7 +207,7 @@ export default function MeetingsPage() {
                       type="text"
                       value={formData.location || ''}
                       onChange={(e) => setFormData({...formData, location: e.target.value})}
-                      className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#00326b] transition-all"
+                      className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all"
                       placeholder="Zoom, Office, HQ..."
                     />
                   </div>
@@ -222,7 +221,7 @@ export default function MeetingsPage() {
                       type="time"
                       value={formData.start_time || ''}
                       onChange={(e) => setFormData({...formData, start_time: e.target.value})}
-                      className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#00326b] transition-all"
+                      className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all"
                     />
                   </div>
                 </div>
@@ -235,7 +234,7 @@ export default function MeetingsPage() {
                       type="time"
                       value={formData.end_time || ''}
                       onChange={(e) => setFormData({...formData, end_time: e.target.value})}
-                      className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#00326b] transition-all"
+                      className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all"
                     />
                   </div>
                 </div>
@@ -249,20 +248,20 @@ export default function MeetingsPage() {
                     value={attendeeInput}
                     onChange={(e) => setAttendeeInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addAttendee())}
-                    className="flex-1 p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#00326b] transition-all"
+                    className="flex-1 p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all"
                     placeholder="Register attendee name..."
                   />
                   <button 
                     type="button"
                     onClick={addAttendee}
-                    className="px-8 bg-[#FFC68D] text-[#00326b] font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-[#ffb05c] transition-all shadow-lg shadow-[#FFC68D]/20"
+                    className="px-8 bg-[#FFC68D] text-[#0a2f5f] font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-[#ffb05c] transition-all shadow-lg shadow-[#FFC68D]/20"
                   >
                     Register
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   {(formData.attendees || []).map((name, i) => (
-                    <span key={i} className="px-6 py-2 bg-slate-100 text-[#00326b] text-[10px] font-black uppercase tracking-widest rounded-full flex items-center gap-3 border border-slate-200">
+                    <span key={i} className="px-6 py-2 bg-slate-100 text-[#0a2f5f] text-[10px] font-black uppercase tracking-widest rounded-full flex items-center gap-3 border border-slate-200">
                       {name}
                       <button type="button" onClick={() => removeAttendee(i)} className="hover:text-red-500 transition-colors">
                         <Trash2 size={12} />
@@ -277,7 +276,7 @@ export default function MeetingsPage() {
                 <textarea 
                   value={formData.agenda || ''}
                   onChange={(e) => setFormData({...formData, agenda: e.target.value})}
-                  className="w-full min-h-[150px] p-8 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-[2rem] outline-none font-serif text-lg text-[#00326b] transition-all resize-none"
+                  className="w-full min-h-[150px] p-8 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-[2rem] outline-none font-serif text-lg text-[#0a2f5f] transition-all resize-none"
                   placeholder="Official objectives and talking points..."
                 />
               </div>
@@ -296,7 +295,7 @@ export default function MeetingsPage() {
                 <button 
                   type="submit"
                   disabled={saving}
-                  className="ml-auto flex items-center gap-3 px-12 py-5 bg-[#00326b] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#00326b]/20"
+                  className="ml-auto flex items-center gap-3 px-12 py-5 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
                 >
                   <Save size={18} />
                   {saving ? 'Processing...' : editingMeeting ? 'Update Record' : 'Certify Meeting'}
@@ -309,11 +308,11 @@ export default function MeetingsPage() {
           <div className="bg-[#fdfbf7] p-12 rounded-[4rem] border-2 border-[#e6e2d3] shadow-inner relative overflow-hidden group">
             <div className="absolute top-0 left-20 w-0.5 h-full bg-red-100 opacity-50"></div>
             <div className="flex items-center gap-4 mb-10 relative z-10">
-              <div className="w-12 h-12 rounded-full bg-white border-2 border-[#e6e2d3] flex items-center justify-center text-[#00326b]">
+              <div className="w-12 h-12 rounded-full bg-white border-2 border-[#e6e2d3] flex items-center justify-center text-[#0a2f5f]">
                 <FileText size={20} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Executive Minutes</h2>
+                <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Executive Minutes</h2>
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Formal discussion log and action items</p>
               </div>
             </div>
@@ -321,10 +320,10 @@ export default function MeetingsPage() {
               value={formData.notes || ''}
               onChange={(e) => setFormData({...formData, notes: e.target.value})}
               placeholder="Record formal minutes and definitive outcomes..."
-              className="w-full min-h-[500px] p-8 bg-transparent border-none focus:ring-0 text-2xl font-serif leading-[2.5rem] outline-none relative z-10 text-[#00326b]/80"
+              className="w-full min-h-[500px] p-8 bg-transparent border-none focus:ring-0 text-2xl font-serif leading-[2.5rem] outline-none relative z-10 text-[#0a2f5f]/80"
               style={{ backgroundImage: 'linear-gradient(#e6e2d3 1px, transparent 1px)', backgroundSize: '100% 2.5rem' }}
             />
-            <div className="absolute -bottom-10 -right-10 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#00326b]">
+            <div className="absolute -bottom-10 -right-10 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#0a2f5f]">
               LOG
             </div>
           </div>
@@ -335,7 +334,7 @@ export default function MeetingsPage() {
           <div className="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-xl relative overflow-hidden">
             <div className="flex items-center gap-3 mb-8">
               <Calendar className="text-[#FFC68D]" size={20} />
-              <h2 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Archive Registry</h2>
+              <h2 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Archive Registry</h2>
             </div>
             
             {loading ? (
@@ -360,7 +359,7 @@ export default function MeetingsPage() {
                       onClick={() => startEdit(m)}
                       className={`group p-6 rounded-3xl border-2 transition-all cursor-pointer ${
                         editingMeeting?.id === m.id
-                        ? 'bg-[#00326b] border-[#00326b] text-white shadow-2xl scale-[1.02]'
+                        ? 'bg-[#0a2f5f] border-[#0a2f5f] text-white shadow-2xl scale-[1.02]'
                         : isPast 
                           ? 'bg-slate-50 border-slate-100 opacity-60 grayscale hover:grayscale-0 hover:bg-white hover:border-[#FFC68D]/30' 
                           : 'bg-white border-gray-50 hover:border-[#FFC68D]/50 hover:shadow-xl'
@@ -377,7 +376,7 @@ export default function MeetingsPage() {
                           {m.start_time}
                         </span>
                       </div>
-                      <h3 className={`font-black text-sm leading-tight group-hover:translate-x-1 transition-transform ${editingMeeting?.id === m.id ? 'text-white' : 'text-[#00326b]'}`}>
+                      <h3 className={`font-black text-sm leading-tight group-hover:translate-x-1 transition-transform ${editingMeeting?.id === m.id ? 'text-white' : 'text-[#0a2f5f]'}`}>
                         {m.title}
                       </h3>
                       {m.location && (
@@ -394,7 +393,7 @@ export default function MeetingsPage() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-grid-slate-100/[0.5] [mask-image:radial-gradient(white,transparent_70%)]"></div>
           </div>
 
-          <div className="bg-[#00326b] text-white p-10 rounded-[3.5rem] shadow-2xl relative overflow-hidden">
+          <div className="bg-[#0a2f5f] text-white p-10 rounded-[3.5rem] shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-6">
                 <Info className="text-[#FFC68D]" size={20} />

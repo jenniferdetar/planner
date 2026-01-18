@@ -10,6 +10,9 @@ import {
   Briefcase, ClipboardList, ShieldCheck, Landmark
 } from 'lucide-react';
 
+import HubHeader from '@/components/HubHeader';
+import StatCard from '@/components/StatCard';
+
 export default function TasksPage() {
   const [tasks, setTasks] = useState<OpusTask[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,37 +44,32 @@ export default function TasksPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#1e40af] flex items-center justify-center shadow-xl shadow-[#1e40af]/20">
-            <ClipboardList className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#1e3a8a] tracking-tight uppercase">Operations Hub</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Precision in execution, excellence in output"</p>
-          </div>
-        </div>
-      </header>
+      <HubHeader 
+        title="Operations" 
+        subtitle='"Precision in execution, excellence in output"' 
+        icon={ClipboardList}
+        iconBgColor="bg-[#99B3C5]"
+      />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#1e3a8a] via-[#3b82f6] to-[#93c5fd] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#1e3a8a]/30">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-black mb-4 leading-tight">Professional Operations Matrix</h2>
-          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
-            Manage your daily directives, track operational milestones, and maintain a high-fidelity registry of project achievements.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">{tasks.filter(t => !t.completed).length}</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Active Directives</span>
-            </div>
-            <div className="w-px h-12 bg-white/20 mx-4"></div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">{tasks.filter(t => t.completed).length}</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Resolved Tasks</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">📋</div>
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <StatCard 
+          title="Total Registry" 
+          value={tasks.length} 
+          icon={<ClipboardList size={20} />} 
+          color="bg-[#99B3C5]" 
+        />
+        <StatCard 
+          title="Active Directives" 
+          value={tasks.filter(t => !t.completed).length} 
+          icon={<AlertCircle size={20} />} 
+          color="bg-[#FFA1AB]" 
+        />
+        <StatCard 
+          title="Resolved Tasks" 
+          value={tasks.filter(t => t.completed).length} 
+          icon={<CheckCircle2 size={20} />} 
+          color="bg-[#9ADBDE]" 
+        />
       </section>
 
       <div className="grid gap-6">
@@ -86,7 +84,7 @@ export default function TasksPage() {
               <div key={task.id} className="group bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 overflow-hidden flex items-center justify-between gap-6">
                 <div className="flex items-center gap-6 flex-1">
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner transition-colors ${
-                    task.completed ? 'bg-emerald-50 text-emerald-500' : 'bg-slate-50 text-[#1e3a8a]'
+                    task.completed ? 'bg-emerald-50 text-emerald-500' : 'bg-slate-50 text-[#0a2f5f]'
                   }`}>
                     {task.completed ? <CheckCircle2 size={24} /> : <Circle size={24} className="opacity-20 group-hover:opacity-100 transition-opacity" />}
                   </div>
@@ -94,7 +92,7 @@ export default function TasksPage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
                       <h2 className={`text-xl font-black tracking-tight uppercase ${
-                        task.completed ? 'text-slate-400 line-through' : 'text-[#1e3a8a]'
+                        task.completed ? 'text-slate-400 line-through' : 'text-[#0a2f5f]'
                       }`}>
                         {task.title}
                       </h2>
@@ -117,7 +115,7 @@ export default function TasksPage() {
                         </div>
                       )}
                       {task.category && (
-                        <div className="flex items-center gap-1.5 text-[10px] font-black text-[#1e3a8a] uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded-md">
+                        <div className="flex items-center gap-1.5 text-[10px] font-black text-[#0a2f5f] uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded-md">
                           <Tag size={12} />
                           {task.category}
                         </div>
@@ -133,7 +131,7 @@ export default function TasksPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button className="p-3 text-slate-200 hover:text-[#1e3a8a] transition-colors bg-slate-50 rounded-xl hover:bg-white border border-transparent hover:border-slate-100">
+                  <button className="p-3 text-slate-200 hover:text-[#0a2f5f] transition-colors bg-slate-50 rounded-xl hover:bg-white border border-transparent hover:border-slate-100">
                     <Search size={18} />
                   </button>
                   <button className="p-3 text-slate-200 hover:text-red-500 transition-colors bg-slate-50 rounded-xl hover:bg-white border border-transparent hover:border-slate-100">
@@ -146,7 +144,7 @@ export default function TasksPage() {
             {tasks.length === 0 && (
               <div className="py-32 text-center bg-slate-50 rounded-[4rem] border-4 border-dashed border-slate-100">
                 <Briefcase className="text-slate-200 mx-auto mb-6" size={64} />
-                <p className="text-xl font-black text-[#1e3a8a] uppercase tracking-tight">Zero Active Directives</p>
+                <p className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Zero Active Directives</p>
                 <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mt-2">Operational capacity at 100%. Awaiting further instructions.</p>
               </div>
             )}
@@ -158,30 +156,30 @@ export default function TasksPage() {
         <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#1e3a8a]" size={24} />
-              <h2 className="text-2xl font-black text-[#1e3a8a] uppercase tracking-tight">Operation Security</h2>
+              <ShieldCheck className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Operation Security</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               All task directives are synchronized with the secure administrative ledger for real-time operational continuity.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#1e3a8a] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <ArrowUpRight size={16} />
             Operational Integrity Verified
           </div>
         </div>
 
-        <div className="bg-[#1e3a8a]/5 p-10 rounded-[3rem] border-2 border-[#1e3a8a]/10 flex flex-col justify-between">
+        <div className="bg-[#99B3C5]/10 p-10 rounded-[3rem] border-2 border-[#99B3C5]/20 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <Landmark className="text-[#1e3a8a]" size={24} />
-              <h2 className="text-2xl font-black text-[#1e3a8a] uppercase tracking-tight">Execution Metrics</h2>
+              <Landmark className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Execution Metrics</h2>
             </div>
-            <p className="text-[#1e3a8a]/70 font-medium leading-relaxed italic mb-8">
+            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
               Task resolution velocity is currently optimized. High-priority items are being addressed with maximum efficiency.
             </p>
           </div>
-          <div className="text-4xl font-black text-[#1e3a8a] opacity-10">2026 Productivity Data</div>
+          <div className="text-4xl font-black text-[#0a2f5f] opacity-10">2026 Productivity Data</div>
         </div>
       </section>
 

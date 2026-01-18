@@ -30,7 +30,9 @@ function buildMonthGrid(year: number, month: number) {
   return cells;
 }
 
-import SubHeader from '@/components/SubHeader';
+import HubHeader from '@/components/HubHeader';
+import { Calendar as CalendarIcon, User, Layout, ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function PersonalPlannerPage() {
   const year = 2026;
@@ -42,10 +44,31 @@ export default function PersonalPlannerPage() {
   const cells = buildMonthGrid(year, month);
 
   return (
-    <div className="bg-[#fdfdfd] min-h-screen">
-      <SubHeader title="Personal Planner" subtitle="Weekly Schedule & Habits" />
-      
-      <div className="p-4 md:p-8 max-w-full mx-auto">
+    <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen">
+      <HubHeader 
+        title="Personal Planner" 
+        subtitle="Weekly Schedule & Habits" 
+        icon={CalendarIcon}
+        iconBgColor="bg-[#9ADBDE]"
+        hideHubSuffix
+      >
+        <div className="flex gap-3">
+          <Link 
+            href="/planning/personal" 
+            className="flex items-center justify-center gap-2 px-6 py-4 bg-[#9ADBDE] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-[#9ADBDE]/30 transition-all"
+          >
+            <User size={14} />
+            Personal
+          </Link>
+          <Link 
+            href="/planning/work" 
+            className="flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-gray-50 transition-all"
+          >
+            <Layout size={14} />
+            Work Grid
+          </Link>
+        </div>
+      </HubHeader>
         <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-4 items-start">
         <aside className="border border-slate-200 rounded-xl p-5">
           <div className="text-center text-[11px] font-black uppercase tracking-[0.3em] text-[#4a7f8f] mb-4">

@@ -5,13 +5,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const NAV_ITEMS = [
-  { label: 'Home', href: '/', color: 'bg-[#f8a1b2]' },
-  { label: 'CSEA', href: '/csea', color: 'bg-[#3d6f8d] text-white' },
-  { label: 'Finance', href: '/finance', color: 'bg-[#f2b671]' },
-  { label: 'Health', href: '/health', color: 'bg-[#f8a1b2]' },
-  { label: 'HOA', href: '/hoa', color: 'bg-[#a7d9df]' },
-  { label: 'iCAAP', href: '/icaap', color: 'bg-[#f2b671]' },
-  { label: 'Planning', href: '/planning', color: 'bg-[#a7d9df]' }
+  { label: 'Home', href: '/', color: 'bg-[#99B3C5]' },
+  { label: 'CSEA', href: '/csea', color: 'bg-[#FFA1AB]' },
+  { label: 'Finance', href: '/finance', color: 'bg-[#FFC68D]' },
+  { label: 'Health', href: '/health', color: 'bg-[#9ADBDE]' },
+  { label: 'HOA', href: '/hoa', color: 'bg-[#99B3C5]' },
+  { label: 'iCAAP', href: '/icaap', color: 'bg-[#FFA1AB]' },
+  { label: 'Planning', href: '/planning', color: 'bg-[#9ADBDE]' }
 ];
 
 export default function TopNav() {

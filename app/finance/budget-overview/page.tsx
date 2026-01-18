@@ -9,6 +9,8 @@ import {
   History, PieChart
 } from 'lucide-react';
 
+import HubHeader from '@/components/HubHeader';
+
 const BUDGET_ITEMS = [
   { category: 'Auto', item: 'Auto Maintenance', budget: 100, type: 'Variable' },
   { category: 'Auto', item: 'Mercury Auto Insurance', budget: 388, type: 'Fixed' },
@@ -105,26 +107,21 @@ export default function BudgetOverviewPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFC68D] flex items-center justify-center shadow-xl shadow-[#FFC68D]/20">
-            <BarChart3 className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Budget Audit</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Official Monthly Resource Calibration & Variance Report"</p>
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <Link 
-            href="/finance" 
-            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-          >
-            <ChevronLeft size={16} />
-            Back
-          </Link>
-        </div>
-      </header>
+      <HubHeader 
+        title="Budget Audit" 
+        subtitle='"Official Monthly Resource Calibration & Variance Report"' 
+        icon={BarChart3} 
+        iconBgColor="bg-[#FFC68D]"
+        hideHubSuffix={true}
+      >
+        <Link 
+          href="/finance" 
+          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
+        >
+          <ChevronLeft size={16} />
+          Back
+        </Link>
+      </HubHeader>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         <SummaryCard 
@@ -153,8 +150,8 @@ export default function BudgetOverviewPage() {
         
         <div className="p-10 border-b border-gray-50 bg-[#f8fafc] flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <PieChart className="text-[#00326b]" size={24} />
-            <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Ledger Allocation Breakdown</h2>
+            <PieChart className="text-[#0a2f5f]" size={24} />
+            <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Ledger Allocation Breakdown</h2>
           </div>
           {saving && (
             <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-full border border-blue-100 animate-pulse">
@@ -182,7 +179,7 @@ export default function BudgetOverviewPage() {
                 return (
                   <tr key={item.item} className="group hover:bg-slate-50 transition-colors">
                     <td className="p-8">
-                      <div className="text-sm font-black text-[#00326b] mb-1">{item.item}</div>
+                      <div className="text-sm font-black text-[#0a2f5f] mb-1">{item.item}</div>
                       <div className="text-[10px] font-black text-[#FFC68D] uppercase tracking-widest">{item.category}</div>
                     </td>
                     <td className="p-8">
@@ -198,7 +195,7 @@ export default function BudgetOverviewPage() {
                           value={actuals[item.item] || ''} 
                           onChange={(e) => handleUpdateActual(item.item, e.target.value)}
                           placeholder="0"
-                          className="w-32 p-3 bg-gray-50 border-2 border-transparent focus:border-[#FFC68D] rounded-xl text-right text-sm font-black text-[#00326b] outline-none transition-all"
+                          className="w-32 p-3 bg-gray-50 border-2 border-transparent focus:border-[#FFC68D] rounded-xl text-right text-sm font-black text-[#0a2f5f] outline-none transition-all"
                         />
                       </div>
                     </td>
@@ -213,9 +210,9 @@ export default function BudgetOverviewPage() {
             </tbody>
             <tfoot className="bg-slate-50 border-t-4 border-white">
               <tr className="font-black">
-                <td colSpan={2} className="p-10 text-[#00326b] uppercase tracking-widest text-xs">Consolidated Registry Totals</td>
+                <td colSpan={2} className="p-10 text-[#0a2f5f] uppercase tracking-widest text-xs">Consolidated Registry Totals</td>
                 <td className="p-10 text-right text-gray-400 text-sm">{formatCurrency(totals.budget)}</td>
-                <td className="p-10 text-right text-[#00326b] text-sm">{formatCurrency(totals.actual)}</td>
+                <td className="p-10 text-right text-[#0a2f5f] text-sm">{formatCurrency(totals.actual)}</td>
                 <td className="p-10 text-right">
                   <span className={`text-sm px-6 py-3 rounded-2xl shadow-inner ${totals.variance < 0 ? 'bg-rose-500 text-white' : 'bg-emerald-500 text-white'}`}>
                     {formatCurrency(totals.variance)}
@@ -238,14 +235,14 @@ export default function BudgetOverviewPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-xl border border-slate-200">
-                <ShieldCheck className="text-[#00326b]" size={28} />
+                <ShieldCheck className="text-[#0a2f5f]" size={28} />
               </div>
               <div>
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Audit Status</div>
-                <div className="text-xl font-black text-[#00326b]">Records Verified</div>
+                <div className="text-xl font-black text-[#0a2f5f]">Records Verified</div>
               </div>
             </div>
-            <ArrowUpRight className="text-[#00326b] opacity-20" size={32} />
+            <ArrowUpRight className="text-[#0a2f5f] opacity-20" size={32} />
           </div>
           <div className="mt-8 text-[10px] font-black uppercase tracking-[0.4em] text-gray-400">Ledger Compliance Registry v4.0</div>
         </div>
@@ -275,7 +272,7 @@ function SummaryCard({ title, value, icon, sub, isVariance }: { title: string; v
           )}
         </div>
         <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">{title}</p>
-        <p className={`text-4xl font-black tracking-tighter ${isVariance ? (isNegative ? 'text-rose-500' : 'text-emerald-600') : 'text-[#00326b]'}`}>
+        <p className={`text-4xl font-black tracking-tighter ${isVariance ? (isNegative ? 'text-rose-500' : 'text-emerald-600') : 'text-[#0a2f5f]'}`}>
           {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value)}
         </p>
         <p className="mt-4 text-[10px] font-bold text-gray-300 uppercase tracking-widest">{sub}</p>

@@ -9,6 +9,8 @@ import {
   Briefcase, MessageSquare, Clock, CheckCircle2,
   AlertCircle, Activity, Scale, Landmark
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
+import StatCard from '@/components/StatCard';
 
 export default function CseaPage() {
   const [activeTab, setActiveTab] = useState('issues');
@@ -16,14 +18,9 @@ export default function CseaPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const [meetingNotes, setMeetingNotes] = useState<any[]>([]);
+  const [meetingNotes, setMeetingNotes] = useState<{ date: string; title: string; notes: string }[]>([]);
   const [generalNotes, setGeneralNotes] = useState('');
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    fetchIssues();
-    fetchCseaMetadata();
-  }, []);
 
   async function fetchIssues() {
     setLoading(true);
@@ -49,11 +46,16 @@ export default function CseaPage() {
       console.error('Error fetching CSEA metadata:', error);
     } else if (data) {
       data.forEach(item => {
-        if (item.key === 'csea-meeting-notes') setMeetingNotes(item.value || []);
-        if (item.key === 'csea-general-notes') setGeneralNotes(item.value?.content || '');
+        if (item.key === 'csea-meeting-notes') setMeetingNotes(item.value as { date: string; title: string; notes: string }[] || []);
+        if (item.key === 'csea-general-notes') setGeneralNotes((item.value as { content: string })?.content || '');
       });
     }
   }
+
+  useEffect(() => {
+    fetchIssues();
+    fetchCseaMetadata();
+  }, []);
 
   async function saveMetadata(key: string, value: any) {
     setSaving(true);
@@ -93,25 +95,21 @@ export default function CseaPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-            <Scale className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">CSEA Hub</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Protecting member rights with administrative precision"</p>
-          </div>
-        </div>
-      </header>
+      <HubHeader 
+        title="CSEA" 
+        subtitle='"Protecting member rights with administrative precision"' 
+        icon={Scale} 
+        iconBgColor="bg-[#FFA1AB]"
+        textColor="text-[#0a2f5f]"
+      />
 
       <div className="flex flex-wrap gap-4 mb-12">
         <button 
           onClick={() => setActiveTab('issues')}
           className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
             activeTab === 'issues' 
-              ? 'bg-[#00326b] text-white shadow-lg' 
-              : 'bg-white text-[#00326b] border-2 border-[#00326b]/10 hover:bg-[#00326b]/5'
+              ? 'bg-[#FFA1AB] text-[#0a2f5f] shadow-lg' 
+              : 'bg-white text-[#0a2f5f] border-2 border-[#FFA1AB]/10 hover:bg-[#FFA1AB]/5'
           }`}
         >
           Issue Log
@@ -120,8 +118,8 @@ export default function CseaPage() {
           onClick={() => setActiveTab('meetings')}
           className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
             activeTab === 'meetings' 
-              ? 'bg-[#00326b] text-white shadow-lg' 
-              : 'bg-white text-[#00326b] border-2 border-[#00326b]/10 hover:bg-[#00326b]/5'
+              ? 'bg-[#FFA1AB] text-[#0a2f5f] shadow-lg' 
+              : 'bg-white text-[#0a2f5f] border-2 border-[#FFA1AB]/10 hover:bg-[#FFA1AB]/5'
           }`}
         >
           Meeting Minutes
@@ -130,8 +128,8 @@ export default function CseaPage() {
           onClick={() => setActiveTab('notes')}
           className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
             activeTab === 'notes' 
-              ? 'bg-[#00326b] text-white shadow-lg' 
-              : 'bg-white text-[#00326b] border-2 border-[#00326b]/10 hover:bg-[#00326b]/5'
+              ? 'bg-[#FFA1AB] text-[#0a2f5f] shadow-lg' 
+              : 'bg-white text-[#0a2f5f] border-2 border-[#FFA1AB]/10 hover:bg-[#FFA1AB]/5'
           }`}
         >
           General Archive
@@ -152,15 +150,15 @@ export default function CseaPage() {
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
-                    <Search size={20} className="text-[#00326b]" />
+                    <Search size={20} className="text-[#0a2f5f]" />
                   </div>
-                  <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Search Registry</h2>
+                  <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Search Registry</h2>
                 </div>
                 <div className="relative">
                   <input 
                     type="text" 
                     placeholder="Search by name, description, or steward..."
-                    className="w-full p-6 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/20 focus:bg-white rounded-2xl outline-none font-bold text-gray-700 transition-all pl-16"
+                    className="w-full p-6 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/20 focus:bg-white rounded-2xl outline-none font-bold text-gray-700 transition-all pl-16"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -171,7 +169,7 @@ export default function CseaPage() {
 
             <section className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden">
               <div className="p-10 border-b-2 border-slate-50 bg-slate-50/30">
-                <h2 className="text-3xl font-black text-[#00326b] uppercase tracking-tight">Issue Log</h2>
+                <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Issue Log</h2>
                 <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Official registry of labor relations cases</p>
               </div>
               <div className="overflow-x-auto">
@@ -194,7 +192,7 @@ export default function CseaPage() {
                     <tbody className="divide-y divide-slate-50">
                       {filteredIssues.map((issue) => (
                         <tr key={issue.id} className="group hover:bg-slate-50/50 transition-colors">
-                          <td className="p-6 font-black text-[#00326b] uppercase tracking-tighter">{issue.csea_members?.member_id || '-'}</td>
+                          <td className="p-6 font-black text-[#0a2f5f] uppercase tracking-tighter">{issue.csea_members?.member_id || '-'}</td>
                           <td className="p-6">
                             <div className="font-black text-gray-900">{issue.csea_members?.full_name || 'Unknown'}</div>
                             <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Steward: {issue.steward}</div>
@@ -231,12 +229,12 @@ export default function CseaPage() {
           <div className="space-y-8">
             <div className="flex justify-between items-center bg-white p-10 rounded-[3rem] border-2 border-slate-100 shadow-sm">
               <div>
-                <h2 className="text-3xl font-black text-[#00326b] uppercase tracking-tight">Meeting Minutes</h2>
+                <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Meeting Minutes</h2>
                 <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Archive of official board proceedings</p>
               </div>
               <button 
                 onClick={addMeetingNote}
-                className="flex items-center gap-2 px-8 py-4 bg-[#00326b] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all shadow-xl shadow-[#00326b]/20"
+                className="flex items-center gap-2 px-8 py-4 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all shadow-xl shadow-[#0a2f5f]/20"
               >
                 <Plus size={18} /> Record Session
               </button>
@@ -254,7 +252,7 @@ export default function CseaPage() {
                         onChange={(e) => {
                           const next = [...meetingNotes]; next[i].date = e.target.value; setMeetingNotes(next);
                         }}
-                        className="p-4 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/10 rounded-xl font-black text-[#00326b] outline-none"
+                        className="p-4 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-black text-[#0a2f5f] outline-none"
                       />
                     </div>
                     <div className="flex flex-col gap-1 flex-grow">
@@ -266,7 +264,7 @@ export default function CseaPage() {
                         onChange={(e) => {
                           const next = [...meetingNotes]; next[i].title = e.target.value; setMeetingNotes(next);
                         }}
-                        className="p-4 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/10 rounded-xl font-black text-[#00326b] outline-none text-xl"
+                        className="p-4 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-black text-[#0a2f5f] outline-none text-xl"
                       />
                     </div>
                     <button 
@@ -288,13 +286,13 @@ export default function CseaPage() {
                       onChange={(e) => {
                         const next = [...meetingNotes]; next[i].notes = e.target.value; setMeetingNotes(next);
                       }}
-                      className="w-full min-h-[200px] p-8 bg-slate-50 border-2 border-transparent focus:border-[#00326b]/10 rounded-[2rem] outline-none font-medium text-gray-700 leading-relaxed text-lg"
+                      className="w-full min-h-[200px] p-8 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-[2rem] outline-none font-medium text-gray-700 leading-relaxed text-lg"
                     />
                   </div>
                   <div className="flex justify-end relative z-10">
                     <button 
                       onClick={() => saveMetadata('csea-meeting-notes', meetingNotes)}
-                      className="flex items-center gap-2 px-6 py-3 bg-blue-50 text-[#00326b] font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-blue-100 transition-all"
+                      className="flex items-center gap-2 px-6 py-3 bg-blue-50 text-[#0a2f5f] font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-blue-100 transition-all"
                     >
                       <Shield size={14} /> Certify Minutes
                     </button>
@@ -317,13 +315,13 @@ export default function CseaPage() {
             <div className="relative z-10">
               <div className="flex justify-between items-center border-b border-slate-50 pb-8 mb-8">
                 <div>
-                  <h2 className="text-3xl font-black text-[#00326b] uppercase tracking-tight">General Archive</h2>
+                  <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">General Archive</h2>
                   <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Central repository for miscellaneous labor records</p>
                 </div>
                 <button 
                   onClick={() => saveMetadata('csea-general-notes', { content: generalNotes })}
                   disabled={saving}
-                  className="px-10 py-4 bg-[#00326b] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all disabled:opacity-50 shadow-xl shadow-[#00326b]/20"
+                  className="px-10 py-4 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all disabled:opacity-50 shadow-xl shadow-[#0a2f5f]/20"
                 >
                   {saving ? 'Synchronizing...' : 'Save Registry'}
                 </button>
@@ -332,10 +330,10 @@ export default function CseaPage() {
                 placeholder="Capture random thoughts, reminders, or miscellaneous info here..."
                 value={generalNotes}
                 onChange={(e) => setGeneralNotes(e.target.value)}
-                className="w-full min-h-[500px] p-10 bg-slate-50/50 border-2 border-transparent focus:border-[#00326b]/10 rounded-[3rem] outline-none text-xl leading-relaxed font-medium text-gray-700"
+                className="w-full min-h-[500px] p-10 bg-slate-50/50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-[3rem] outline-none text-xl leading-relaxed font-medium text-gray-700"
               />
             </div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#00326b] opacity-[0.02] rounded-full translate-x-1/3 translate-y-1/3"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#0a2f5f] opacity-[0.02] rounded-full translate-x-1/3 translate-y-1/3"></div>
           </div>
         )}
       </div>
@@ -344,51 +342,36 @@ export default function CseaPage() {
         <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#00326b]" size={24} />
-              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Data Integrity</h2>
+              <ShieldCheck className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Data Integrity</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Labor relations records are encrypted and synchronized across the secure administrative network.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#00326b] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <Landmark size={16} />
             Registry Authenticity Verified
           </div>
         </div>
 
-        <div className="bg-[#00326b]/5 p-10 rounded-[3rem] border-2 border-[#00326b]/10 flex flex-col justify-between">
+        <div className="bg-[#0a2f5f]/5 p-10 rounded-[3rem] border-2 border-[#0a2f5f]/10 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <Activity className="text-[#00326b]" size={24} />
-              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Case Velocity</h2>
+              <Activity className="text-[#0a2f5f]" size={24} />
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Case Velocity</h2>
             </div>
-            <p className="text-[#00326b]/70 font-medium leading-relaxed italic mb-8">
+            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
               Current inquiry resolution rates are within expected parameters. Continue monitoring open files for priority.
             </p>
           </div>
-          <div className="text-4xl font-black text-[#00326b] opacity-10">2026 Labor Outlook</div>
+          <div className="text-4xl font-black text-[#0a2f5f] opacity-10">2026 Labor Outlook</div>
         </div>
       </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
         <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Labor Operations Registry © 2026</p>
       </footer>
-    </div>
-  );
-}
-
-function StatCard({ title, value, icon, color }: { title: string; value: number; icon: React.ReactNode; color: string }) {
-  return (
-    <div className={`relative overflow-hidden p-8 rounded-[2.5rem] bg-white border-2 border-slate-100 shadow-sm group hover:shadow-xl transition-all duration-500`}>
-      <div className={`absolute -right-4 -top-4 w-24 h-24 ${color} opacity-10 rounded-full group-hover:scale-150 transition-transform duration-700`}></div>
-      <div className="relative z-10">
-        <div className={`w-12 h-12 rounded-2xl ${color} flex items-center justify-center mb-4 shadow-inner text-[#00326b]`}>
-          {icon}
-        </div>
-        <div className="text-4xl font-black text-[#00326b] mb-1">{value}</div>
-        <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{title}</div>
-      </div>
     </div>
   );
 }

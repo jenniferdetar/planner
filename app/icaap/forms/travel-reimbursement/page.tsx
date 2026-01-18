@@ -9,6 +9,7 @@ import {
   Calendar, UserCircle, ShieldCheck, ArrowRight,
   Plane, Hotel, Coffee
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 interface MileageEntry {
   id: string;
@@ -188,45 +189,37 @@ export default function TravelReimbursementPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 print:hidden">
-        <div>
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-              <Plane className="text-white" size={32} />
-            </div>
-            <div>
-              <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase leading-none mb-1">Travel Reimbursement</h1>
-              <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase">Official Expense Claim • iCAAP Administration</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#00326b]/10 rounded-full font-bold text-[#00326b] hover:bg-[#00326b]/5 transition-all shadow-sm">
-            <ChevronLeft size={20} />
-            Back
-          </Link>
-          <button 
-            onClick={handleSave} 
-            disabled={saving}
-            className="group flex items-center gap-3 px-8 py-2 bg-[#00326b] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#00326b]/20"
-          >
-            <Save size={18} className="group-hover:scale-110 transition-transform" />
-            {saving ? 'Syncing...' : 'Save Claim'}
-          </button>
-          <button 
-            onClick={handlePrint}
-            className="flex items-center gap-3 px-8 py-2 bg-[#9ADBDE] text-[#00326b] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#7cc8cc] transition-all shadow-lg shadow-[#9ADBDE]/20"
-          >
-            <Printer size={18} />
-            Print Form
-          </button>
-        </div>
-      </header>
+      <HubHeader
+        title="Travel Reimbursement"
+        subtitle="Official Expense Claim • iCAAP Administration"
+        icon={Plane}
+        hideHubSuffix
+      >
+        <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
+          <ChevronLeft size={20} />
+          Back
+        </Link>
+        <button 
+          onClick={handleSave} 
+          disabled={saving}
+          className="group flex items-center gap-3 px-8 py-2 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#0a2f5f]/20"
+        >
+          <Save size={18} className="group-hover:scale-110 transition-transform" />
+          {saving ? 'Syncing...' : 'Save Claim'}
+        </button>
+        <button 
+          onClick={handlePrint}
+          className="flex items-center gap-3 px-8 py-2 bg-[#9ADBDE] text-[#0a2f5f] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#7cc8cc] transition-all shadow-lg shadow-[#9ADBDE]/20"
+        >
+          <Printer size={18} />
+          Print Form
+        </button>
+      </HubHeader>
 
       {/* Form Container */}
       <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
         {/* Official Header */}
-        <div className="bg-[#00326b] p-10 text-white text-center relative overflow-hidden">
+        <div className="bg-[#0a2f5f] p-10 text-white text-center relative overflow-hidden">
           <div className="relative z-10">
             <h2 className="text-2xl font-black tracking-[0.2em] uppercase mb-1">Los Angeles Unified School District</h2>
             <h3 className="text-lg font-bold opacity-80 uppercase tracking-widest mb-4">Travel & Professional Expense Reimbursement</h3>
@@ -243,10 +236,10 @@ export default function TravelReimbursementPage() {
             <div className="group relative bg-white p-10 rounded-[3rem] border-2 border-gray-100 hover:border-[#9ADBDE]/20 hover:shadow-2xl transition-all duration-500">
               <div className="flex items-center gap-4 mb-8 border-b border-gray-50 pb-6">
                 <div className="w-12 h-12 rounded-2xl bg-[#9ADBDE]/20 flex items-center justify-center shadow-inner group-hover:rotate-6 transition-transform">
-                  <UserCircle className="text-[#00326b]" size={24} />
+                  <UserCircle className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Claimant Information</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Claimant Information</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personnel Details</p>
                 </div>
               </div>
@@ -310,10 +303,10 @@ export default function TravelReimbursementPage() {
             <div className="group relative bg-white p-10 rounded-[3rem] border-2 border-gray-100 hover:border-[#9ADBDE]/20 hover:shadow-2xl transition-all duration-500">
               <div className="flex items-center gap-4 mb-8 border-b border-gray-50 pb-6">
                 <div className="w-12 h-12 rounded-2xl bg-[#9ADBDE]/20 flex items-center justify-center shadow-inner group-hover:-rotate-6 transition-transform">
-                  <MapPin className="text-[#00326b]" size={24} />
+                  <MapPin className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Trip Details</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Trip Details</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Purpose & Destination</p>
                 </div>
               </div>
@@ -377,16 +370,16 @@ export default function TravelReimbursementPage() {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center border-2 border-gray-100">
-                  <Car className="text-[#00326b]" size={24} />
+                  <Car className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Mileage Log</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Mileage Log</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Official Mileage Claim</p>
                 </div>
               </div>
               <button 
                 onClick={addMileage}
-                className="flex items-center gap-2 px-6 py-2 bg-[#00326b] text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#0a2f5f] transition-all shadow-lg shadow-[#00326b]/20"
+                className="flex items-center gap-2 px-6 py-2 bg-[#0a2f5f] text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#0a2f5f] transition-all shadow-lg shadow-[#0a2f5f]/20"
               >
                 <Plus size={16} />
                 Add Entry
@@ -412,7 +405,7 @@ export default function TravelReimbursementPage() {
                           type="date" 
                           value={entry.date}
                           onChange={e => updateMileage(entry.id, 'date', e.target.value)}
-                          className="w-full bg-transparent border-0 font-bold text-[#00326b] focus:ring-0"
+                          className="w-full bg-transparent border-0 font-bold text-[#0a2f5f] focus:ring-0"
                         />
                       </td>
                       <td className="p-4">
@@ -438,7 +431,7 @@ export default function TravelReimbursementPage() {
                           type="number" 
                           value={entry.miles}
                           onChange={e => updateMileage(entry.id, 'miles', parseFloat(e.target.value) || 0)}
-                          className="w-20 mx-auto text-center bg-white border-2 border-gray-100 rounded-xl py-2 font-black text-[#00326b] focus:border-[#9ADBDE]/40 outline-none"
+                          className="w-20 mx-auto text-center bg-white border-2 border-gray-100 rounded-xl py-2 font-black text-[#0a2f5f] focus:border-[#9ADBDE]/40 outline-none"
                         />
                       </td>
                       <td className="p-4 text-center">
@@ -461,16 +454,16 @@ export default function TravelReimbursementPage() {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center border-2 border-gray-100">
-                  <Receipt className="text-[#00326b]" size={24} />
+                  <Receipt className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Incidental Expenses</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Incidental Expenses</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tolls, Parking, Registration, etc.</p>
                 </div>
               </div>
               <button 
                 onClick={addExpense}
-                className="flex items-center gap-2 px-6 py-2 bg-[#00326b] text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#0a2f5f] transition-all shadow-lg shadow-[#00326b]/20"
+                className="flex items-center gap-2 px-6 py-2 bg-[#0a2f5f] text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#0a2f5f] transition-all shadow-lg shadow-[#0a2f5f]/20"
               >
                 <Plus size={16} />
                 Add Expense
@@ -500,7 +493,7 @@ export default function TravelReimbursementPage() {
                           type="number" 
                           value={expense.amount}
                           onChange={e => updateExpense(expense.id, 'amount', parseFloat(e.target.value) || 0)}
-                          className="w-24 bg-gray-50 border-0 rounded-xl px-3 py-1 font-black text-right text-[#00326b] focus:ring-2 focus:ring-[#9ADBDE]/20"
+                          className="w-24 bg-gray-50 border-0 rounded-xl px-3 py-1 font-black text-right text-[#0a2f5f] focus:ring-2 focus:ring-[#9ADBDE]/20"
                         />
                       </div>
                     </div>
@@ -523,10 +516,10 @@ export default function TravelReimbursementPage() {
             <div className="lg:col-span-8 bg-gray-50 rounded-[3rem] p-10 border-2 border-gray-100">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm">
-                  <Landmark className="text-[#00326b]" size={24} />
+                  <Landmark className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Administrative Allocation</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Administrative Allocation</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Account Structure</p>
                 </div>
               </div>
@@ -550,7 +543,7 @@ export default function TravelReimbursementPage() {
 
             {/* Final Total */}
             <div className="lg:col-span-4">
-              <div className="bg-[#00326b] rounded-[3rem] p-10 text-white shadow-2xl shadow-[#00326b]/30 relative overflow-hidden h-full">
+              <div className="bg-[#0a2f5f] rounded-[3rem] p-10 text-white shadow-2xl shadow-[#0a2f5f]/30 relative overflow-hidden h-full">
                 <div className="relative z-10 h-full flex flex-col justify-between">
                   <div>
                     <h4 className="text-white/60 font-black uppercase tracking-widest text-[10px] mb-6 flex items-center gap-2">
@@ -585,18 +578,18 @@ export default function TravelReimbursementPage() {
 
           {/* Authorization */}
           <div className="mt-12 p-10 bg-white border-2 border-gray-100 rounded-[3rem] group hover:border-[#9ADBDE]/20 transition-all duration-500">
-            <h4 className="text-[#00326b] font-black uppercase tracking-widest text-xs mb-8">Official Authorizations</h4>
+            <h4 className="text-[#0a2f5f] font-black uppercase tracking-widest text-xs mb-8">Official Authorizations</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               <div className="space-y-4">
                 <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 italic text-gray-300 font-serif">Claimant Signature</div>
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Employee / Claimant</div>
               </div>
               <div className="space-y-4">
-                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#00326b] uppercase tracking-tight italic text-gray-200 font-handwriting">P. Pernin</div>
+                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f] uppercase tracking-tight italic text-gray-200 font-handwriting">P. Pernin</div>
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Administrative Approval</div>
               </div>
               <div className="space-y-4">
-                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#00326b]">{new Date().toLocaleDateString()}</div>
+                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f]">{new Date().toLocaleDateString()}</div>
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Date of Filing</div>
               </div>
             </div>

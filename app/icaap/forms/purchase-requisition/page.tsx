@@ -9,6 +9,7 @@ import {
   Landmark, Receipt, ShieldCheck, Calculator,
   History, ArrowRight
 } from 'lucide-react';
+import HubHeader from '@/components/HubHeader';
 
 interface PRItem {
   id: string;
@@ -172,45 +173,37 @@ export default function PurchaseRequisitionPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 print:hidden">
-        <div>
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-14 h-14 rounded-2xl bg-[#00326b] flex items-center justify-center shadow-xl shadow-[#00326b]/20">
-              <Landmark className="text-white" size={32} />
-            </div>
-            <div>
-              <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase leading-none mb-1">Purchase Requisition</h1>
-              <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase">Official Procurement Document • LAUSD Human Resources</p>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#00326b]/10 rounded-full font-bold text-[#00326b] hover:bg-[#00326b]/5 transition-all shadow-sm" title="Back">
-            <ChevronLeft size={20} />
-            Back
-          </Link>
-          <button 
-            onClick={handleSave} 
-            disabled={saving}
-            className="group flex items-center gap-3 px-8 py-2 bg-[#00326b] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#00326b]/20"
-          >
-            <Save size={18} className="group-hover:scale-110 transition-transform" />
-            {saving ? 'Syncing...' : 'Save Document'}
-          </button>
-          <button 
-            onClick={handlePrint}
-            className="flex items-center gap-3 px-8 py-2 bg-[#ffca38] text-[#00326b] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#eeb125] transition-all shadow-lg shadow-[#ffca38]/20"
-          >
-            <Printer size={18} />
-            Print Form
-          </button>
-        </div>
-      </header>
+      <HubHeader
+        title="Purchase Requisition"
+        subtitle="Official Procurement Document • LAUSD Human Resources"
+        icon={Landmark}
+        hideHubSuffix
+      >
+        <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm" title="Back">
+          <ChevronLeft size={20} />
+          Back
+        </Link>
+        <button 
+          onClick={handleSave} 
+          disabled={saving}
+          className="group flex items-center gap-3 px-8 py-2 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#0a2f5f]/20"
+        >
+          <Save size={18} className="group-hover:scale-110 transition-transform" />
+          {saving ? 'Syncing...' : 'Save Document'}
+        </button>
+        <button 
+          onClick={handlePrint}
+          className="flex items-center gap-3 px-8 py-2 bg-[#ffca38] text-[#0a2f5f] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#eeb125] transition-all shadow-lg shadow-[#ffca38]/20"
+        >
+          <Printer size={18} />
+          Print Form
+        </button>
+      </HubHeader>
 
       {/* Form Container */}
       <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
         {/* Official Header Section */}
-        <div className="bg-[#00326b] p-10 text-white text-center relative overflow-hidden">
+        <div className="bg-[#0a2f5f] p-10 text-white text-center relative overflow-hidden">
           <div className="relative z-10">
             <h2 className="text-2xl font-black tracking-[0.2em] uppercase mb-1">Los Angeles Unified School District</h2>
             <h3 className="text-lg font-bold opacity-80 uppercase tracking-widest mb-4">Human Resources Division • Management Services</h3>
@@ -230,12 +223,12 @@ export default function PurchaseRequisitionPage() {
                   type="checkbox" 
                   checked={data.isWarehouseOrder} 
                   onChange={e => setData({...data, isWarehouseOrder: e.target.checked})}
-                  className="peer appearance-none w-10 h-10 rounded-2xl border-2 border-gray-300 checked:border-[#00326b] checked:bg-[#00326b] transition-all cursor-pointer shadow-sm"
+                  className="peer appearance-none w-10 h-10 rounded-2xl border-2 border-gray-300 checked:border-[#0a2f5f] checked:bg-[#0a2f5f] transition-all cursor-pointer shadow-sm"
                 />
                 <Plus className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" size={24} />
               </div>
               <div className="flex flex-col">
-                <span className="text-base font-black text-[#00326b] uppercase tracking-wider group-hover:translate-x-1 transition-transform">District Warehouse Order</span>
+                <span className="text-base font-black text-[#0a2f5f] uppercase tracking-wider group-hover:translate-x-1 transition-transform">District Warehouse Order</span>
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Standard Inventory fulfillment</span>
               </div>
             </label>
@@ -246,12 +239,12 @@ export default function PurchaseRequisitionPage() {
                   type="checkbox" 
                   checked={data.isOutsideVendor} 
                   onChange={e => setData({...data, isOutsideVendor: e.target.checked})}
-                  className="peer appearance-none w-10 h-10 rounded-2xl border-2 border-gray-300 checked:border-[#00326b] checked:bg-[#00326b] transition-all cursor-pointer shadow-sm"
+                  className="peer appearance-none w-10 h-10 rounded-2xl border-2 border-gray-300 checked:border-[#0a2f5f] checked:bg-[#0a2f5f] transition-all cursor-pointer shadow-sm"
                 />
                 <Plus className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" size={24} />
               </div>
               <div className="flex flex-col">
-                <span className="text-base font-black text-[#00326b] uppercase tracking-wider group-hover:translate-x-1 transition-transform">Outside Vendor</span>
+                <span className="text-base font-black text-[#0a2f5f] uppercase tracking-wider group-hover:translate-x-1 transition-transform">Outside Vendor</span>
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Quote document must be attached</span>
               </div>
             </label>
@@ -260,13 +253,13 @@ export default function PurchaseRequisitionPage() {
           {/* Vendor & Office Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
             {/* Vendor Box */}
-            <div className="group relative bg-white p-10 rounded-[3rem] border-2 border-gray-100 hover:border-[#00326b]/20 hover:shadow-2xl transition-all duration-500">
+            <div className="group relative bg-white p-10 rounded-[3rem] border-2 border-gray-100 hover:border-[#0a2f5f]/20 hover:shadow-2xl transition-all duration-500">
               <div className="flex items-center gap-4 mb-8 border-b border-gray-50 pb-6">
                 <div className="w-12 h-12 rounded-2xl bg-[#99B3C5]/20 flex items-center justify-center shadow-inner group-hover:rotate-6 transition-transform">
-                  <Building2 className="text-[#00326b]" size={24} />
+                  <Building2 className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Vendor Details</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Vendor Details</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Payee Information</p>
                 </div>
               </div>
@@ -279,7 +272,7 @@ export default function PurchaseRequisitionPage() {
                     value={data.vendor.name} 
                     onChange={e => setData({...data, vendor: {...data.vendor, name: e.target.value}})}
                     placeholder="Enter vendor name..."
-                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-bold text-gray-700 placeholder:text-gray-200"
+                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 placeholder:text-gray-200"
                   />
                 </div>
                 
@@ -289,7 +282,7 @@ export default function PurchaseRequisitionPage() {
                     value={data.vendor.address} 
                     onChange={e => setData({...data, vendor: {...data.vendor, address: e.target.value}})}
                     placeholder="Street address or PO Box..."
-                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 focus:ring-4 focus:ring-[#00326b]/5 outline-none transition-all font-bold text-gray-700 placeholder:text-gray-200 min-h-[120px] resize-none leading-relaxed"
+                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 placeholder:text-gray-200 min-h-[120px] resize-none leading-relaxed"
                   />
                 </div>
 
@@ -300,7 +293,7 @@ export default function PurchaseRequisitionPage() {
                       type="text" 
                       value={data.vendor.city} 
                       onChange={e => setData({...data, vendor: {...data.vendor, city: e.target.value}})}
-                      className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                      className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                     />
                   </div>
                   <div className="space-y-1">
@@ -310,13 +303,13 @@ export default function PurchaseRequisitionPage() {
                         type="text" 
                         value={data.vendor.state} 
                         onChange={e => setData({...data, vendor: {...data.vendor, state: e.target.value}})}
-                        className="w-1/3 px-2 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 text-center shadow-inner uppercase"
+                        className="w-1/3 px-2 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 text-center shadow-inner uppercase"
                       />
                       <input 
                         type="text" 
                         value={data.vendor.zip} 
                         onChange={e => setData({...data, vendor: {...data.vendor, zip: e.target.value}})}
-                        className="flex-1 px-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                        className="flex-1 px-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                       />
                     </div>
                   </div>
@@ -325,13 +318,13 @@ export default function PurchaseRequisitionPage() {
             </div>
 
             {/* Requesting Office Box */}
-            <div className="group relative bg-white p-10 rounded-[3rem] border-2 border-gray-100 hover:border-[#00326b]/20 hover:shadow-2xl transition-all duration-500">
+            <div className="group relative bg-white p-10 rounded-[3rem] border-2 border-gray-100 hover:border-[#0a2f5f]/20 hover:shadow-2xl transition-all duration-500">
               <div className="flex items-center gap-4 mb-8 border-b border-gray-50 pb-6">
                 <div className="w-12 h-12 rounded-2xl bg-[#FFA1AB]/20 flex items-center justify-center shadow-inner group-hover:-rotate-6 transition-transform">
-                  <Briefcase className="text-[#00326b]" size={24} />
+                  <Briefcase className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Requesting Office</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Requesting Office</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Department Source</p>
                 </div>
               </div>
@@ -343,7 +336,7 @@ export default function PurchaseRequisitionPage() {
                     type="text" 
                     value={data.office.name} 
                     onChange={e => setData({...data, office: {...data.office, name: e.target.value}})}
-                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                   />
                 </div>
 
@@ -354,9 +347,9 @@ export default function PurchaseRequisitionPage() {
                       type="text" 
                       value={data.office.requestor} 
                       onChange={e => setData({...data, office: {...data.office, requestor: e.target.value}})}
-                      className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                      className="w-full pl-14 pr-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                     />
-                    <UserCircle className="absolute left-5 top-1/2 -translate-y-1/2 text-[#00326b]/40" size={24} />
+                    <UserCircle className="absolute left-5 top-1/2 -translate-y-1/2 text-[#0a2f5f]/40" size={24} />
                   </div>
                 </div>
 
@@ -367,7 +360,7 @@ export default function PurchaseRequisitionPage() {
                       type="text" 
                       value={data.office.phone} 
                       onChange={e => setData({...data, office: {...data.office, phone: e.target.value}})}
-                      className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                      className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                     />
                   </div>
                   <div className="space-y-1">
@@ -376,7 +369,7 @@ export default function PurchaseRequisitionPage() {
                       type="text" 
                       value={data.office.cubicle} 
                       onChange={e => setData({...data, office: {...data.office, cubicle: e.target.value}})}
-                      className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                      className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                     />
                   </div>
                 </div>
@@ -387,7 +380,7 @@ export default function PurchaseRequisitionPage() {
                     type="date" 
                     value={data.office.date} 
                     onChange={e => setData({...data, office: {...data.office, date: e.target.value}})}
-                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
+                    className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                   />
                 </div>
               </div>
@@ -399,16 +392,16 @@ export default function PurchaseRequisitionPage() {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-[#9ADBDE]/20 flex items-center justify-center shadow-inner">
-                  <Receipt className="text-[#00326b]" size={24} />
+                  <Receipt className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Line Item Details</h4>
+                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Line Item Details</h4>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Inventory & Service breakdown</p>
                 </div>
               </div>
               <button 
                 onClick={addItem}
-                className="group flex items-center gap-2 px-8 py-3 bg-[#00326b] text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-[#0a2f5f] transition-all shadow-xl shadow-[#00326b]/20"
+                className="group flex items-center gap-2 px-8 py-3 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-[#0a2f5f] transition-all shadow-xl shadow-[#0a2f5f]/20"
               >
                 <Plus size={18} className="group-hover:rotate-90 transition-transform" /> Add New Row
               </button>
@@ -419,21 +412,21 @@ export default function PurchaseRequisitionPage() {
                 <table className="w-full border-collapse text-xs">
                   <thead>
                     <tr className="bg-gray-50/80 border-b-2 border-gray-100">
-                      <th className="p-6 text-center font-black text-[#00326b] uppercase tracking-widest w-[80px]">LN</th>
-                      <th className="p-6 text-center font-black text-[#00326b] uppercase tracking-widest w-[100px]">QTY</th>
-                      <th className="p-6 text-center font-black text-[#00326b] uppercase tracking-widest w-[100px]">UNIT</th>
-                      <th className="p-6 text-center font-black text-[#00326b] uppercase tracking-widest w-[100px]">PG</th>
-                      <th className="p-6 text-left font-black text-[#00326b] uppercase tracking-widest w-[220px]">STOCK # / CODE</th>
-                      <th className="p-6 text-left font-black text-[#00326b] uppercase tracking-widest">DESCRIPTION</th>
-                      <th className="p-6 text-right font-black text-[#00326b] uppercase tracking-widest w-[140px]">UNIT COST</th>
-                      <th className="p-6 text-right font-black text-[#00326b] uppercase tracking-widest w-[160px]">TOTAL</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[80px]">LN</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">QTY</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">UNIT</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">PG</th>
+                      <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[220px]">STOCK # / CODE</th>
+                      <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest">DESCRIPTION</th>
+                      <th className="p-6 text-right font-black text-[#0a2f5f] uppercase tracking-widest w-[140px]">UNIT COST</th>
+                      <th className="p-6 text-right font-black text-[#0a2f5f] uppercase tracking-widest w-[160px]">TOTAL</th>
                       <th className="p-6 text-center w-[80px] print:hidden"></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
                     {data.items.map((item, idx) => (
-                      <tr key={item.id} className="group hover:bg-[#00326b]/5 transition-colors">
-                        <td className="p-6 font-black text-[#00326b] bg-gray-50/30 group-hover:bg-[#00326b]/10 transition-colors text-center text-sm">{idx + 1}</td>
+                      <tr key={item.id} className="group hover:bg-[#0a2f5f]/5 transition-colors">
+                        <td className="p-6 font-black text-[#0a2f5f] bg-gray-50/30 group-hover:bg-[#0a2f5f]/10 transition-colors text-center text-sm">{idx + 1}</td>
                         <td className="p-2">
                           <input 
                             type="number" 
@@ -484,7 +477,7 @@ export default function PurchaseRequisitionPage() {
                             />
                           </div>
                         </td>
-                        <td className="p-6 text-right font-black text-[#00326b] text-base">
+                        <td className="p-6 text-right font-black text-[#0a2f5f] text-base">
                           ${(item.qty * item.unitCost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </td>
                         <td className="p-2 text-center print:hidden">
@@ -509,10 +502,10 @@ export default function PurchaseRequisitionPage() {
               <div className="bg-gray-50 p-10 rounded-[3rem] border-2 border-gray-100 shadow-inner">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm">
-                    <FileText className="text-[#00326b]" size={24} />
+                    <FileText className="text-[#0a2f5f]" size={24} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Justification</h4>
+                    <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Justification</h4>
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Reasoning for procurement</p>
                   </div>
                 </div>
@@ -524,7 +517,7 @@ export default function PurchaseRequisitionPage() {
                       type="text" 
                       value={data.justification.usedBy} 
                       onChange={e => setData({...data, justification: {...data.justification, usedBy: e.target.value}})}
-                      className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-sm"
+                      className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-sm"
                       placeholder="Name of individual or unit..."
                     />
                   </div>
@@ -533,13 +526,13 @@ export default function PurchaseRequisitionPage() {
                     <textarea 
                       value={data.justification.reason1} 
                       onChange={e => setData({...data, justification: {...data.justification, reason1: e.target.value}})}
-                      className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-sm min-h-[100px] resize-none leading-relaxed"
+                      className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-sm min-h-[100px] resize-none leading-relaxed"
                       placeholder="Primary justification line..."
                     />
                     <textarea 
                       value={data.justification.reason2} 
                       onChange={e => setData({...data, justification: {...data.justification, reason2: e.target.value}})}
-                      className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#00326b]/20 outline-none transition-all font-bold text-gray-700 shadow-sm min-h-[100px] resize-none leading-relaxed"
+                      className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 shadow-sm min-h-[100px] resize-none leading-relaxed"
                       placeholder="Supplemental justification line..."
                     />
                   </div>
@@ -550,10 +543,10 @@ export default function PurchaseRequisitionPage() {
               <div className="bg-white p-10 rounded-[3rem] border-2 border-gray-100">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="w-12 h-12 rounded-2xl bg-[#FFC68D]/20 flex items-center justify-center shadow-inner">
-                    <Calculator className="text-[#00326b]" size={24} />
+                    <Calculator className="text-[#0a2f5f]" size={24} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Accounting Process</h4>
+                    <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Accounting Process</h4>
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Funding allocation strings</p>
                   </div>
                 </div>
@@ -562,17 +555,17 @@ export default function PurchaseRequisitionPage() {
                   <table className="w-full border-collapse text-[10px]">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-100">
-                        <th className="p-4 text-center font-black text-[#00326b] uppercase tracking-widest w-[60px]">ACCT</th>
-                        <th className="p-4 text-left font-black text-[#00326b] uppercase tracking-widest">Cost Center</th>
-                        <th className="p-4 text-left font-black text-[#00326b] uppercase tracking-widest w-[100px]">Fund</th>
-                        <th className="p-4 text-left font-black text-[#00326b] uppercase tracking-widest w-[120px]">Functional Area</th>
-                        <th className="p-4 text-left font-black text-[#00326b] uppercase tracking-widest w-[120px]">GL / ACCT</th>
+                        <th className="p-4 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[60px]">ACCT</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest">Cost Center</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Fund</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">Functional Area</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">GL / ACCT</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                       {[1, 2, 3].map(num => (
                         <tr key={num} className="hover:bg-gray-50/50 transition-colors">
-                          <td className="p-4 text-center font-black text-[#00326b] bg-gray-50/20">0{num}</td>
+                          <td className="p-4 text-center font-black text-[#0a2f5f] bg-gray-50/20">0{num}</td>
                           <td className="p-1">
                             <input 
                               type="text" 
@@ -614,7 +607,7 @@ export default function PurchaseRequisitionPage() {
             </div>
 
             <div className="lg:col-span-5">
-              <div className="bg-[#00326b] p-12 rounded-[4rem] text-white shadow-2xl shadow-[#00326b]/30 sticky top-12 overflow-hidden">
+              <div className="bg-[#0a2f5f] p-12 rounded-[4rem] text-white shadow-2xl shadow-[#0a2f5f]/30 sticky top-12 overflow-hidden">
                 <div className="relative z-10">
                   <h4 className="text-sm font-black uppercase tracking-[0.3em] mb-10 text-white/50 border-b border-white/10 pb-4">Financial Summary</h4>
                   <div className="space-y-6">
@@ -678,13 +671,13 @@ export default function PurchaseRequisitionPage() {
           {/* Approval Process Section */}
           <div className="mt-20 pt-16 border-t-2 border-gray-100">
             <div className="flex items-center gap-4 mb-12 justify-center">
-              <History className="text-[#00326b]" size={24} />
-              <h4 className="text-2xl font-black text-[#00326b] uppercase tracking-[0.2em]">Official Approval Workflow</h4>
+              <History className="text-[#0a2f5f]" size={24} />
+              <h4 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-[0.2em]">Official Approval Workflow</h4>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               <div className="relative group">
-                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#00326b] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">01</div>
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#0a2f5f] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">01</div>
                 <div className="bg-white p-8 rounded-[2.5rem] border-2 border-gray-100 shadow-sm group-hover:shadow-xl transition-all h-full">
                   <h5 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-6">Unit Administrator</h5>
                   <div className="space-y-4">
@@ -698,7 +691,7 @@ export default function PurchaseRequisitionPage() {
               </div>
 
               <div className="relative group">
-                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#00326b] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">02</div>
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#0a2f5f] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">02</div>
                 <div className="bg-white p-8 rounded-[2.5rem] border-2 border-gray-100 shadow-sm group-hover:shadow-xl transition-all h-full">
                   <h5 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-6">Budget Approval</h5>
                   <div className="space-y-4">
@@ -712,7 +705,7 @@ export default function PurchaseRequisitionPage() {
               </div>
 
               <div className="relative group">
-                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#00326b] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">03</div>
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#0a2f5f] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">03</div>
                 <div className="bg-white p-8 rounded-[2.5rem] border-2 border-gray-100 shadow-sm group-hover:shadow-xl transition-all h-full">
                   <h5 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1 leading-tight">Branch Administrator</h5>
                   <p className="text-[9px] font-bold text-gray-300 uppercase tracking-tighter mb-4">(Orders $500.00+)</p>
@@ -736,8 +729,8 @@ export default function PurchaseRequisitionPage() {
 
       {loading && (
         <div className="fixed inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center z-50">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#00326b] mb-6 shadow-2xl"></div>
-          <div className="text-xs font-black uppercase tracking-[0.5em] text-[#00326b] animate-pulse">Initializing Document...</div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#0a2f5f] mb-6 shadow-2xl"></div>
+          <div className="text-xs font-black uppercase tracking-[0.5em] text-[#0a2f5f] animate-pulse">Initializing Document...</div>
         </div>
       )}
 
@@ -758,8 +751,8 @@ export default function PurchaseRequisitionPage() {
             border: none !important;
             box-shadow: none !important;
           }
-          .bg-[#00326b] {
-            background-color: #00326b !important;
+          .bg-[#0a2f5f] {
+            background-color: #0a2f5f !important;
             color: white !important;
             -webkit-print-color-adjust: exact;
           }

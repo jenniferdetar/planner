@@ -9,6 +9,8 @@ import {
   TrendingUp, Activity, CheckCircle2
 } from 'lucide-react';
 
+import HubHeader from '@/components/HubHeader';
+
 const CATEGORIES = [
   {
     name: 'Auto',
@@ -201,26 +203,21 @@ export default function SpendingPlanPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen font-sans">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#99B3C5] flex items-center justify-center shadow-xl shadow-[#99B3C5]/20">
-            <Wallet className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Spending Plan</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Strategic Allocation Registry by Disbursement Cycle"</p>
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <Link 
-            href="/finance" 
-            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all shadow-sm"
-          >
-            <ChevronLeft size={16} />
-            Back
-          </Link>
-        </div>
-      </header>
+      <HubHeader 
+        title="Spending Plan" 
+        subtitle='"Strategic Allocation Registry by Disbursement Cycle"' 
+        icon={Wallet} 
+        iconBgColor="bg-[#99B3C5]"
+        hideHubSuffix={true}
+      >
+        <Link 
+          href="/finance" 
+          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all shadow-sm"
+        >
+          <ChevronLeft size={16} />
+          Back
+        </Link>
+      </HubHeader>
 
       <section className="bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
         <div className="absolute top-0 left-0 w-full h-2 bg-[#99B3C5]"></div>
@@ -254,9 +251,9 @@ export default function SpendingPlanPage() {
             <tbody>
               {/* Income Header Row */}
               <tr className="bg-blue-50/50 group">
-                <td className="p-8 border-b border-blue-100 sticky left-0 bg-blue-50 group-hover:bg-blue-100/50 z-20 border-r border-blue-100 font-black text-[#00326b] uppercase tracking-widest text-xs">
+                <td className="p-8 border-b border-blue-100 sticky left-0 bg-blue-50 group-hover:bg-blue-100/50 z-20 border-r border-blue-100 font-black text-[#0a2f5f] uppercase tracking-widest text-xs">
                   <div className="flex items-center gap-3">
-                    <Activity size={16} className="text-[#00326b]/40" />
+                    <Activity size={16} className="text-[#0a2f5f]/40" />
                     Income Baseline
                   </div>
                 </td>
@@ -268,7 +265,7 @@ export default function SpendingPlanPage() {
                     <td className="p-4 border-b border-blue-100 border-r border-blue-100">
                       <input 
                         type="number" 
-                        className="w-full p-4 bg-white border-2 border-transparent focus:border-[#00326b]/20 rounded-2xl text-right font-black text-[#00326b] outline-none transition-all shadow-inner"
+                        className="w-full p-4 bg-white border-2 border-transparent focus:border-[#0a2f5f]/20 rounded-2xl text-right font-black text-[#0a2f5f] outline-none transition-all shadow-inner"
                         value={state.income[pw.id] || ''}
                         onChange={(e) => handleIncomeChange(pw.id, e.target.value)}
                         placeholder="0"
@@ -279,7 +276,7 @@ export default function SpendingPlanPage() {
                     </td>
                   </React.Fragment>
                 ))}
-                <td className="p-8 border-b border-blue-100 text-center font-black text-[#00326b] text-sm border-l border-blue-100">
+                <td className="p-8 border-b border-blue-100 text-center font-black text-[#0a2f5f] text-sm border-l border-blue-100">
                   {formatCurrency(calculations.totalIncome)}
                 </td>
                 <td className="p-8 border-b border-blue-100 text-center font-black text-emerald-600 text-sm border-l border-blue-100 bg-emerald-50/50">
@@ -291,7 +288,7 @@ export default function SpendingPlanPage() {
               {CATEGORIES.map(cat => (
                 <React.Fragment key={cat.name}>
                   <tr className="bg-slate-100/50">
-                    <td colSpan={10} className="p-4 px-8 border-b border-slate-200 font-black text-[#00326b] uppercase tracking-[0.3em] text-[10px] italic">
+                    <td colSpan={10} className="p-4 px-8 border-b border-slate-200 font-black text-[#0a2f5f] uppercase tracking-[0.3em] text-[10px] italic">
                       {cat.name} Portfolio
                     </td>
                   </tr>
@@ -338,8 +335,8 @@ export default function SpendingPlanPage() {
             </tbody>
             {/* Footer */}
             <tfoot>
-              <tr className="bg-[#00326b] text-white">
-                <td className="p-10 sticky left-0 bg-[#00326b] z-20 font-black uppercase tracking-[0.3em] text-xs">Aggregate Totals</td>
+              <tr className="bg-[#0a2f5f] text-white">
+                <td className="p-10 sticky left-0 bg-[#0a2f5f] z-20 font-black uppercase tracking-[0.3em] text-xs">Aggregate Totals</td>
                 <td className="p-10 text-center font-black opacity-60 text-sm border-r border-white/10">{formatCurrency(calculations.totalBudget)}</td>
                 {PAY_WEEKS.map(pw => (
                   <React.Fragment key={pw.id}>
@@ -376,17 +373,17 @@ export default function SpendingPlanPage() {
         <div className="md:col-span-2 bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-6">
             <div className="w-16 h-16 rounded-3xl bg-white flex items-center justify-center shadow-xl border border-slate-200">
-              <PieChart className="text-[#00326b]" size={32} />
+              <PieChart className="text-[#0a2f5f]" size={32} />
             </div>
             <div>
               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Operational Integrity</div>
-              <div className="text-2xl font-black text-[#00326b]">Ledger Synchronized</div>
+              <div className="text-2xl font-black text-[#0a2f5f]">Ledger Synchronized</div>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex flex-col items-end">
               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Net Position</div>
-              <div className="text-xl font-black text-[#00326b]">{formatCurrency(calculations.totalIncome - calculations.totalSpent)}</div>
+              <div className="text-xl font-black text-[#0a2f5f]">{formatCurrency(calculations.totalIncome - calculations.totalSpent)}</div>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
               <CheckCircle2 size={24} />
@@ -400,7 +397,7 @@ export default function SpendingPlanPage() {
       </footer>
 
       {saving && (
-        <div className="fixed bottom-8 right-8 bg-[#00326b] text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-4 duration-500">
+        <div className="fixed bottom-8 right-8 bg-[#0a2f5f] text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-4 duration-500">
           <Loader2 className="animate-spin" size={20} />
           <span className="font-black uppercase tracking-widest text-xs">Registry Auto-Save Active</span>
         </div>

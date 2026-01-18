@@ -68,6 +68,8 @@ const SAVINGS_CATEGORIES = [
   }
 ];
 
+import HubHeader from '@/components/HubHeader';
+
 export default function SavingsGoalsPage() {
   const [goals, setGoals] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -142,26 +144,21 @@ export default function SavingsGoalsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#9ADBDE] flex items-center justify-center shadow-xl shadow-[#9ADBDE]/20">
-            <PiggyBank className="text-white" size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#00326b] tracking-tight uppercase">Capital Reserves</h1>
-            <p className="text-gray-400 font-bold tracking-widest text-xs italic">"Strategic Accumulation & Financial Fortification"</p>
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <Link 
-            href="/finance" 
-            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-          >
-            <ChevronLeft size={16} />
-            Back
-          </Link>
-        </div>
-      </header>
+      <HubHeader 
+        title="Capital Reserves" 
+        subtitle='"Strategic Accumulation & Financial Fortification"' 
+        icon={PiggyBank} 
+        iconBgColor="bg-[#9ADBDE]"
+        hideHubSuffix={true}
+      >
+        <Link 
+          href="/finance" 
+          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
+        >
+          <ChevronLeft size={16} />
+          Back
+        </Link>
+      </HubHeader>
 
       <section className="relative bg-white p-8 md:p-16 rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-16">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#9ADBDE] via-[#99B3C5] to-[#FFC68D]"></div>
@@ -170,7 +167,7 @@ export default function SavingsGoalsPage() {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <Scroll className="text-[#9ADBDE]" size={24} />
-              <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight">Financial Vision 2026</h2>
+              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Financial Vision 2026</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Define the primary objectives for your capital growth this year. These goals serve as the benchmark for all fiscal decisions.
@@ -187,7 +184,7 @@ export default function SavingsGoalsPage() {
               />
               <button 
                 onClick={addGoal}
-                className="absolute right-3 top-3 w-12 h-12 bg-[#00326b] text-white rounded-xl flex items-center justify-center hover:bg-[#0a2f5f] transition-all"
+                className="absolute right-3 top-3 w-12 h-12 bg-[#0a2f5f] text-white rounded-xl flex items-center justify-center hover:bg-[#0a2f5f] transition-all"
               >
                 <Plus size={20} />
               </button>
@@ -200,7 +197,7 @@ export default function SavingsGoalsPage() {
                     <div className="w-8 h-8 rounded-lg bg-[#9ADBDE]/10 flex items-center justify-center text-[#9ADBDE]">
                       <Target size={16} />
                     </div>
-                    <span className="text-lg font-serif text-[#00326b] italic">{goal}</span>
+                    <span className="text-lg font-serif text-[#0a2f5f] italic">{goal}</span>
                   </div>
                   <button 
                     onClick={() => removeGoal(idx)}
@@ -222,8 +219,8 @@ export default function SavingsGoalsPage() {
             <div className="p-8 bg-slate-50 rounded-[2.5rem] border-2 border-slate-100 flex flex-col justify-between h-full">
               <div>
                 <div className="flex items-center gap-3 mb-6">
-                  <ShieldCheck className="text-[#00326b]" size={24} />
-                  <h3 className="text-xl font-black text-[#00326b] uppercase tracking-tight">Security Protocol</h3>
+                  <ShieldCheck className="text-[#0a2f5f]" size={24} />
+                  <h3 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Security Protocol</h3>
                 </div>
                 <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
                   "Reserves are not merely savings; they are the architectural foundation of freedom. Aim for a minimum of 6 months for total system stability."
@@ -245,16 +242,16 @@ export default function SavingsGoalsPage() {
 
       <section className="mb-16">
         <div className="flex items-center gap-3 mb-8">
-          <Landmark className="text-[#00326b]" size={24} />
-          <h2 className="text-2xl font-black text-[#00326b] uppercase tracking-tight text-center lg:text-left">Strategic Reserve Matrix</h2>
-          <div className="h-px flex-grow bg-gradient-to-r from-[#00326b]/20 to-transparent"></div>
+          <Landmark className="text-[#0a2f5f]" size={24} />
+          <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight text-center lg:text-left">Strategic Reserve Matrix</h2>
+          <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {SAVINGS_CATEGORIES.map(cat => (
             <div key={cat.name} className="bg-white rounded-[2.5rem] border border-gray-100 shadow-xl overflow-hidden group hover:-translate-y-2 transition-all duration-500">
               <div className="p-8 bg-slate-50 border-b border-gray-100 flex justify-between items-center">
-                <h3 className="text-lg font-black text-[#00326b] uppercase tracking-tight">{cat.name}</h3>
+                <h3 className="text-lg font-black text-[#0a2f5f] uppercase tracking-tight">{cat.name}</h3>
                 <Wallet className="text-gray-300" size={18} />
               </div>
               <div className="p-8 space-y-6">
@@ -263,7 +260,7 @@ export default function SavingsGoalsPage() {
                     <div key={item.item} className="flex justify-between items-center border-b border-gray-50 pb-4 last:border-0 last:pb-0">
                       <span className="text-sm font-bold text-gray-500">{item.item}</span>
                       <div className="text-right">
-                        <div className="text-xs font-black text-[#00326b]">{formatCurrency(item.monthly * 3)} <span className="text-gray-300 ml-1 font-bold">3M</span></div>
+                        <div className="text-xs font-black text-[#0a2f5f]">{formatCurrency(item.monthly * 3)} <span className="text-gray-300 ml-1 font-bold">3M</span></div>
                         <div className="text-[10px] font-bold text-gray-300">{formatCurrency(item.monthly * 6)} 6M</div>
                       </div>
                     </div>
@@ -272,7 +269,7 @@ export default function SavingsGoalsPage() {
                 <div className="pt-6 border-t-2 border-dashed border-gray-100 flex justify-between items-end">
                   <div>
                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Target</div>
-                    <div className="text-2xl font-black text-[#00326b]">{formatCurrency(getSubtotal(cat.items) * 6)}</div>
+                    <div className="text-2xl font-black text-[#0a2f5f]">{formatCurrency(getSubtotal(cat.items) * 6)}</div>
                   </div>
                   <div className="text-[10px] font-black text-[#9ADBDE] uppercase tracking-widest bg-[#9ADBDE]/5 px-3 py-1 rounded-full border border-[#9ADBDE]/10">
                     6 Months
@@ -284,7 +281,7 @@ export default function SavingsGoalsPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#00326b] via-[#2d5a8e] to-[#6a93cb] rounded-[4rem] p-12 md:p-20 text-white shadow-2xl">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#0a2f5f] via-[#2d5a8e] to-[#6a93cb] rounded-[4rem] p-12 md:p-20 text-white shadow-2xl">
         <div className="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-12">
           <div className="max-w-xl text-center lg:text-left">
             <h2 className="text-4xl font-black mb-6 tracking-tight uppercase">Consolidated Reserve Targets</h2>
