@@ -195,8 +195,8 @@ export default function Home() {
                 const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
                 
                 return (
-                  <div key={day} className={`min-h-[5rem] h-auto rounded-2xl border-2 transition-all p-2 flex flex-col gap-1 overflow-hidden ${
-                    isToday ? 'bg-[#0a2f5f] border-[#0a2f5f] shadow-lg shadow-[#0a2f5f]/20 scale-105 relative z-10' : 'bg-slate-50 border-transparent hover:border-[#0a2f5f]/10 hover:bg-white'
+                  <div key={day} className={`min-h-[5rem] h-auto rounded-2xl border-2 transition-all p-2 flex flex-col gap-1 overflow-hidden text-center ${
+                    isToday ? 'bg-[#0a2f5f] border-[#0a2f5f] shadow-lg shadow-[#0a2f5f]/20 scale-105 relative z-10' : 'bg-slate-50 border-slate-200 hover:border-[#0a2f5f]/20 hover:bg-white'
                   }`}>
                     <span className={`text-sm font-black ${isToday ? 'text-white' : 'text-gray-700'}`}>{day}</span>
                     <div className="flex flex-col gap-1">
