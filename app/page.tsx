@@ -146,7 +146,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-7 gap-4">
               {Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDay() }).map((_, i) => (
-                <div key={`empty-${i}`} className="h-24"></div>
+                <div key={`empty-${i}`} className="min-h-[7rem]"></div>
               ))}
               {Array.from({ length: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() }).map((_, i) => {
                 const day = i + 1;
@@ -155,13 +155,13 @@ export default function Home() {
                 const isToday = day === new Date().getDate() && new Date().getMonth() === new Date().getMonth();
                 
                 return (
-                  <div key={day} className={`h-24 rounded-2xl border-2 transition-all p-3 flex flex-col gap-1 overflow-hidden ${
+                  <div key={day} className={`min-h-[7rem] h-auto rounded-2xl border-2 transition-all p-3 flex flex-col gap-1 overflow-hidden ${
                     isToday ? 'bg-[#0a2f5f] border-[#0a2f5f] shadow-lg shadow-[#0a2f5f]/20 scale-105 relative z-10' : 'bg-slate-50 border-transparent hover:border-[#0a2f5f]/10 hover:bg-white'
                   }`}>
                     <span className={`text-sm font-black ${isToday ? 'text-white' : 'text-gray-700'}`}>{day}</span>
                     <div className="flex flex-col gap-1">
-                      {dayEvents.slice(0, 2).map(e => (
-                        <div key={e.id} className={`text-[8px] p-1 rounded font-black uppercase tracking-tighter truncate ${
+                      {dayEvents.slice(0, 4).map(e => (
+                        <div key={e.id} className={`text-[8px] p-1 rounded font-black uppercase tracking-tighter ${
                           isToday ? 'bg-white/20 text-white' : 
                           e.category?.toUpperCase().includes('CSEA') ? 'bg-[#ffca38] text-[#00326b]' :
                           e.type === 'meeting' ? 'bg-blue-100 text-blue-700' :
@@ -172,9 +172,9 @@ export default function Home() {
                           {e.title}
                         </div>
                       ))}
-                      {dayEvents.length > 2 && (
+                      {dayEvents.length > 4 && (
                         <div className={`text-[8px] font-black uppercase ${isToday ? 'text-white/60' : 'text-gray-400'}`}>
-                          + {dayEvents.length - 2} More
+                          + {dayEvents.length - 4} More
                         </div>
                       )}
                     </div>
