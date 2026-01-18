@@ -145,10 +145,10 @@ export default function Home() {
 
   return (
     <div className="bg-[#fdfdfd] min-h-screen">
-      <div className="p-4 md:p-8 max-w-7xl mx-auto">
-      <section className="mb-16">
+      <div className="p-3 md:p-6 max-w-7xl mx-auto">
+      <section className="mb-10">
         <div>
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
               <CalendarIcon className="text-[#0a2f5f]" size={24} />
               <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Operational Calendar</h2>
@@ -176,17 +176,17 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden p-8">
-            <div className="grid grid-cols-7 gap-4 mb-4">
+          <div className="bg-white rounded-[2.5rem] border-2 border-slate-100 shadow-sm overflow-hidden p-6">
+            <div className="grid grid-cols-7 gap-2 mb-3">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
                 <div key={day} className="text-center text-[10px] font-black text-gray-400">
                   {day}
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-7 gap-4">
+            <div className="grid grid-cols-7 gap-2">
               {Array.from({ length: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay() }).map((_, i) => (
-                <div key={`empty-${i}`} className="min-h-[7rem]"></div>
+                <div key={`empty-${i}`} className="min-h-[5rem]"></div>
               ))}
               {Array.from({ length: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate() }).map((_, i) => {
                 const day = i + 1;
@@ -195,7 +195,7 @@ export default function Home() {
                 const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
                 
                 return (
-                  <div key={day} className={`min-h-[7rem] h-auto rounded-2xl border-2 transition-all p-3 flex flex-col gap-1 overflow-hidden ${
+                  <div key={day} className={`min-h-[5rem] h-auto rounded-2xl border-2 transition-all p-2 flex flex-col gap-1 overflow-hidden ${
                     isToday ? 'bg-[#0a2f5f] border-[#0a2f5f] shadow-lg shadow-[#0a2f5f]/20 scale-105 relative z-10' : 'bg-slate-50 border-transparent hover:border-[#0a2f5f]/10 hover:bg-white'
                   }`}>
                     <span className={`text-sm font-black ${isToday ? 'text-white' : 'text-gray-700'}`}>{day}</span>
