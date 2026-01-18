@@ -115,10 +115,10 @@ export default function TasksPage() {
                         </div>
                       )}
                       {task.category && (
-                        <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                        <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md border ${
                           task.category.toUpperCase().includes('CSEA')
-                            ? 'bg-[#ffca38] text-[#00326b]'
-                            : 'bg-blue-50 text-[#0a2f5f]'
+                            ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38]'
+                            : 'bg-blue-50 text-[#0a2f5f] border-transparent'
                         }`}>
                           <Tag size={12} />
                           {task.category}
