@@ -48,13 +48,6 @@ export default function Home() {
         .gte('due_date', startStr)
         .lte('due_date', endStr);
 
-      // Fetch Tasks from tasks table
-      const { data: otherTasks, error: otherTasksError } = await supabase
-        .from('tasks')
-        .select('*')
-        .gte('due_date', startStr)
-        .lte('due_date', endStr);
-
       // Fetch Events from calendar_by_date
       const { data: calendarEvents, error: calendarError } = await supabase
         .from('calendar_by_date')
@@ -71,7 +64,6 @@ export default function Home() {
 
       if (meetingsError) console.error('Error fetching meetings:', meetingsError);
       if (tasksError) console.error('Error fetching opus tasks:', tasksError);
-      if (otherTasksError) console.error('Error fetching other tasks:', otherTasksError);
       if (calendarError) console.error('Error fetching calendar events:', calendarError);
       if (expensesError) console.error('Error fetching expenses:', expensesError);
 
@@ -91,13 +83,6 @@ export default function Home() {
           date: t.due_date,
           type: 'task' as const,
           time: t.due_time
-        })),
-        ...(otherTasks || []).map(t => ({
-          id: t.id,
-          title: t.title,
-          category: 'Task',
-          date: t.due_date,
-          type: 'task' as const
         })),
         ...(calendarEvents || []).map(e => ({
           id: e.id,
