@@ -7,7 +7,7 @@ import {
   Calendar as CalendarIcon, Clock, ChevronRight, 
   LayoutDashboard, Activity, ShieldCheck, 
   ArrowUpRight, Landmark, Briefcase,
-  HeartPulse, Target, ClipboardList,
+  HeartPulse,
   Home as HomeIcon, Scale, Compass, Sparkles
 } from 'lucide-react';
 
@@ -75,14 +75,13 @@ export default function Home() {
           <div className="h-px flex-grow bg-gradient-to-r from-[#00326b]/20 to-transparent"></div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
-          <HubLink href="/planning" icon={<Compass size={24} />} label="Dream Big Home" color="bg-[#9ADBDE]" />
-          <HubLink href="/finance" icon={<Landmark size={24} />} label="Finance" color="bg-[#FFC68D]" />
-          <HubLink href="/icaap" icon={<ShieldCheck size={24} />} label="iCAAP" color="bg-[#FFA1AB]" />
-          <HubLink href="/health" icon={<HeartPulse size={24} />} label="Health" color="bg-[#99B3C5]" />
-          <HubLink href="/goals" icon={<Target size={24} />} label="Goals" color="bg-[#FFC68D]" />
-          <HubLink href="/tasks" icon={<ClipboardList size={24} />} label="Tasks" color="bg-[#9ADBDE]" />
-          <HubLink href="/hoa" icon={<HomeIcon size={24} />} label="HOA" color="bg-[#99B3C5]" />
+          <HubLink href="/" icon={<HomeIcon size={24} />} label="Home" color="bg-[#99B3C5]" />
           <HubLink href="/csea" icon={<Scale size={24} />} label="CSEA" color="bg-[#FFA1AB]" />
+          <HubLink href="/finance" icon={<Landmark size={24} />} label="Finance" color="bg-[#FFC68D]" />
+          <HubLink href="/health" icon={<HeartPulse size={24} />} label="Health" color="bg-[#99B3C5]" />
+          <HubLink href="/hoa" icon={<HomeIcon size={24} />} label="HOA" color="bg-[#99B3C5]" />
+          <HubLink href="/icaap" icon={<ShieldCheck size={24} />} label="iCAAP" color="bg-[#FFA1AB]" />
+          <HubLink href="/planning" icon={<Compass size={24} />} label="Planning" color="bg-[#9ADBDE]" />
         </div>
       </section>
 
