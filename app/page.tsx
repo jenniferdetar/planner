@@ -100,7 +100,17 @@ export default function Home() {
         }))
       ];
 
-      setEvents(combinedEvents.sort((a, b) => a.date.localeCompare(b.date)));
+      // Deduplicate events by title and date
+      const uniqueEvents = combinedEvents.reduce((acc: CalendarEvent[], current) => {
+        const x = acc.find(item => item.title === current.title && item.date === current.date);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          return acc;
+        }
+      }, []);
+
+      setEvents(uniqueEvents.sort((a, b) => a.date.localeCompare(b.date)));
       setLoading(false);
     }
 
