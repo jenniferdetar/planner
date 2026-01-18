@@ -43,6 +43,16 @@ h6 { font-size: 17px !important; }
 
 table th { font-size: 18pt !important; }
 table td { font-size: 14pt !important; }
+table {
+  border-collapse: collapse;
+}
+table th,
+table td {
+  border: 1px solid #e5e7eb;
+}
+table .rounded-full {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
 
 table,
 th,
