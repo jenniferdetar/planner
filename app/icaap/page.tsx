@@ -101,27 +101,6 @@ export default function IcaapPage() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#00326b] via-[#5d84b2] to-[#9ad1d6] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#00326b]/30">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-black mb-4 leading-tight">Professional Advancement & Records Management</h2>
-          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
-            Access your unified payroll logs, track professional hours, and manage official documents with high-fidelity administrative tools.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black">2025/26</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Academic Cycle</span>
-            </div>
-            <div className="w-px h-12 bg-white/20 mx-4"></div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-black">Active</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Program Status</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none">🎓</div>
-      </section>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
         {icaapLinks.map((link) => (
           <Link 

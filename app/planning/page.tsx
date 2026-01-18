@@ -45,27 +45,6 @@ export default function PlanningPage() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#0f3d91] via-[#3a7bd5] to-[#9ad4f2] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#0f3d91]/30">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-black mb-4 leading-tight text-white">Manifest Your Future</h2>
-          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
-            Visualize your dreams, set SMART goals, and align your daily actions with your core mission statement.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">2026</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Vision Year</span>
-            </div>
-            <div className="w-px h-12 bg-white/20 mx-4"></div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">Active</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Planning Mode</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white">✨</div>
-      </section>
-
       <section className="mb-20">
         <div className="flex items-center gap-3 mb-8">
           <Target className="text-[#00326b]" size={24} />

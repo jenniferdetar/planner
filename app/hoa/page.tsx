@@ -102,27 +102,6 @@ export default function HoaPage() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#1e3a8a] via-[#3b82f6] to-[#93c5fd] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#1e3a8a]/30">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-black mb-4 leading-tight">Community Administrative Registry</h2>
-          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
-            Access board records, monitor financial health, and track maintenance operations for the homeowners association.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">2026</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Fiscal Year</span>
-            </div>
-            <div className="w-px h-12 bg-white/20 mx-4"></div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">Active</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Registry Status</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">🏢</div>
-      </section>
-
       <div className="flex flex-wrap gap-4 mb-12">
         {['overview', 'financials', 'maintenance', 'units'].map((tab) => (
           <button 

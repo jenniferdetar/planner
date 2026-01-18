@@ -64,27 +64,6 @@ export default function FinancePage() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#0a2f5f] via-[#2d5a8e] to-[#6a93cb] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#0a2f5f]/30">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-black mb-4 leading-tight">Financial Architecture & Asset Management</h2>
-          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
-            Track your projected checkbook, manage upcoming liabilities, and monitor your progress toward long-term capital goals.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">2026</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Fiscal Year</span>
-            </div>
-            <div className="w-px h-12 bg-white/20 mx-4"></div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">Active</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Ledger Status</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">💰</div>
-      </section>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
         {financeLinks.map((link) => (
           <Link 

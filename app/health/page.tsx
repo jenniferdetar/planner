@@ -124,27 +124,6 @@ export default function HealthPage() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#064e3b] via-[#059669] to-[#34d399] rounded-[3rem] p-10 mb-12 text-white shadow-2xl shadow-[#064e3b]/30">
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-black mb-4 leading-tight">Medical Inventory & Wellness Registry</h2>
-          <p className="text-xl text-white/80 font-medium leading-relaxed mb-8">
-            Manage your nutritional inventory, track essential medications, and monitor wellness protocols with precision.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">2026</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Wellness Year</span>
-            </div>
-            <div className="w-px h-12 bg-white/20 mx-4"></div>
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-white">Active</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 text-white">Health Status</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute top-1/2 -right-20 -translate-y-1/2 text-[20rem] opacity-10 pointer-events-none text-white font-black">🥗</div>
-      </section>
-
       <div className="flex flex-wrap gap-4 mb-12">
         <button 
           onClick={() => setActiveTab('produce')}
