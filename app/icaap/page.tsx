@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { ChevronRight, FileText, Clock, FileSpreadsheet, ClipboardList, GraduationCap, Save, History } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 const icaapLinks = [
   {
@@ -48,7 +47,7 @@ export default function IcaapPage() {
 
   const storageKey = 'icaap-general-notes';
 
-  async function fetchNotes() {
+  const fetchNotes = React.useCallback(async (ignore = false) => {
     setLoading(true);
     const { data: metadata, error } = await supabase
       .from('opus_metadata')
@@ -56,17 +55,26 @@ export default function IcaapPage() {
       .eq('key', storageKey)
       .single();
     
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching ICAAP notes:', error);
-    } else if (metadata?.value) {
-      setNotes((metadata.value as { content: string }).content || '');
+    if (!ignore) {
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching Icaap notes:', error);
+      } else if (metadata?.value) {
+        setNotes((metadata.value as { content: string }).content || '');
+      }
+      setLoading(false);
     }
-    setLoading(false);
-  }
+  }, [storageKey]);
 
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    let ignore = false;
+    const timeoutId = setTimeout(() => {
+      fetchNotes(ignore);
+    }, 0);
+    return () => {
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
+  }, [fetchNotes]);
 
   async function saveNotes() {
     setSaving(true);
@@ -83,22 +91,14 @@ export default function IcaapPage() {
       }, { onConflict: 'user_id,key' });
 
     if (error) {
-      console.error('Error saving ICAAP notes:', error);
+      console.error('Error saving Icaap notes:', error);
     }
     setSaving(false);
   }
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="iCAAP" 
-        subtitle="Internship & Career Advancement Program Tracking" 
-        icon={GraduationCap} 
-        iconBgColor="bg-[#FFA1AB]"
-        textColor="text-[#0a2f5f]"
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
         {icaapLinks.map((link) => (
           <Link 
             key={link.href}
@@ -165,7 +165,7 @@ export default function IcaapPage() {
           <div className="bg-[#99B3C5]/10 p-8 rounded-[2.5rem] border-2 border-[#99B3C5]/20">
             <h4 className="text-[#0a2f5f] font-black uppercase tracking-widest text-xs mb-4">Quick Tip</h4>
             <p className="text-[#0a2f5f] font-medium leading-relaxed italic">
-              "Always cross-reference your Pay Log with the Hours Worked Registry to ensure 100% accuracy before the monthly deadline."
+              &quot;Always cross-reference your Pay Log with the Hours Worked Registry to ensure 100% accuracy before the monthly deadline.&quot;
             </p>
           </div>
           <div className="bg-[#FFA1AB]/10 p-8 rounded-[2.5rem] border-2 border-[#FFA1AB]/20">

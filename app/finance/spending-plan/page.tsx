@@ -4,12 +4,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { 
-  Wallet, ChevronLeft, Save, Loader2, 
-  ArrowUpRight, Landmark, PieChart, Info,
-  TrendingUp, Activity, CheckCircle2
+  Wallet, ChevronLeft, Loader2, 
+  Landmark, Info, Activity, PieChart, CheckCircle2
 } from 'lucide-react';
-
-import HubHeader from '@/components/HubHeader';
 
 const CATEGORIES = [
   {
@@ -24,7 +21,7 @@ const CATEGORIES = [
   {
     name: 'Bill Pay',
     items: [
-      { name: 'DWP', budget: 100 },
+      { name: 'Dwp', budget: 100 },
       { name: "Jeff's Credit Cards", budget: 500 },
       { name: "Jennifer's Student Loans", budget: 150 },
       { name: 'Schools First Loan', budget: 142 },
@@ -42,7 +39,7 @@ const CATEGORIES = [
   {
     name: 'Credit Card',
     items: [
-      { name: 'ADT', budget: 53 },
+      { name: 'Adt', budget: 53 },
       { name: 'Amazon', budget: 100 },
       { name: 'Groceries', budget: 600 },
       { name: 'Hair', budget: 110 },
@@ -52,7 +49,7 @@ const CATEGORIES = [
   {
     name: 'Housing',
     items: [
-      { name: 'HELOC', budget: 357 },
+      { name: 'Heloc', budget: 357 },
       { name: 'HOA', budget: 520 },
       { name: 'Mortgage', budget: 2250 },
       { name: 'Spectrum', budget: 197 },
@@ -63,7 +60,7 @@ const CATEGORIES = [
     name: 'Savings',
     items: [
       { name: 'Blow', budget: 200 },
-      { name: 'HSA', budget: 200 },
+      { name: 'Hsa', budget: 200 },
       { name: 'Summer Saver', budget: 400 },
       { name: "Tahoe's Major Repairs", budget: 200 },
       { name: 'Vacation', budget: 125 }
@@ -93,6 +90,7 @@ export default function SpendingPlanPage() {
   const storageKey = 'finance-spending-plan';
 
   useEffect(() => {
+    let ignore = false;
     async function fetchState() {
       setLoading(true);
       const { data: metadata, error } = await supabase
@@ -101,14 +99,22 @@ export default function SpendingPlanPage() {
         .eq('key', storageKey)
         .single();
       
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching spending plan:', error);
-      } else if (metadata?.value) {
-        setState(metadata.value as SpendingState);
+      if (!ignore) {
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching spending plan:', error);
+        } else if (metadata?.value) {
+          setState(metadata.value as SpendingState);
+        }
+        setLoading(false);
       }
-      setLoading(false);
     }
-    fetchState();
+    const timeoutId = setTimeout(() => {
+      fetchState();
+    }, 0);
+    return () => {
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
   }, [storageKey]);
 
   async function saveState(newState: SpendingState) {
@@ -203,21 +209,6 @@ export default function SpendingPlanPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen font-sans">
-      <HubHeader 
-        title="Spending Plan" 
-        subtitle='"Strategic Allocation Registry by Disbursement Cycle"' 
-        icon={Wallet} 
-        iconBgColor="bg-[#99B3C5]"
-        hideHubSuffix={true}
-      >
-        <Link 
-          href="/finance" 
-          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all shadow-sm"
-        >
-          <ChevronLeft size={16} />
-          Back
-        </Link>
-      </HubHeader>
 
       <section className="bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
         <div className="absolute top-0 left-0 w-full h-2 bg-[#99B3C5]"></div>
@@ -341,7 +332,7 @@ export default function SpendingPlanPage() {
                 {PAY_WEEKS.map(pw => (
                   <React.Fragment key={pw.id}>
                     <td className="p-10 text-right font-black text-sm border-r border-white/10 bg-white/5">
-                      {formatCurrency(CATEGORIES.reduce((acc, cat) => acc + cat.items.reduce((a, b) => a + (state.spending[`${cat.name}:${b.name}`]?.[pw.id] || 0), 0), 0))}
+                      {formatCurrency(CATEGORIES.reduce((acc: number, cat) => acc + cat.items.reduce((a: number, b) => a + (state.spending[`${cat.name}:${b.name}`]?.[pw.id] || 0), 0), 0))}
                     </td>
                     <td className="p-10 text-center font-black text-emerald-400 text-sm border-r border-white/10">
                       {formatCurrency(calculations.payWeekRemaining[pw.id])}
@@ -365,7 +356,7 @@ export default function SpendingPlanPage() {
               Fiscal Directive
             </h4>
             <p className="text-[#0a2f5f] font-serif italic text-lg leading-relaxed">
-              "Allocation by cycle ensures that disbursement does not exceed verified liquidity. Reconcile weekly to maintain 100% compliance."
+              &quot;Allocation by cycle ensures that disbursement does not exceed verified liquidity. Reconcile weekly to maintain 100% compliance.&quot;
             </p>
           </div>
         </div>

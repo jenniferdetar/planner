@@ -7,9 +7,8 @@ import {
   ChevronLeft, Printer, Save, Trash2, Plus, 
   Building2, UserCircle, Briefcase, FileText, 
   Landmark, Receipt, ShieldCheck, Calculator,
-  History, ArrowRight
+  History
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 interface PRItem {
   id: string;
@@ -106,22 +105,31 @@ export default function PurchaseRequisitionPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (ignore = false) => {
     const { data: metadata } = await supabase
       .from('opus_metadata')
       .select('value')
       .eq('key', 'purchaseRequisitionData')
       .single();
 
-    if (metadata?.value) {
-      setData(metadata.value as PRData);
+    if (!ignore) {
+      if (metadata?.value) {
+        setData(metadata.value as PRData);
+      }
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchData();
+    let ignore = false;
+    // Use setTimeout to move the call to the next tick, avoiding synchronous setState in effect
+    const timeoutId = setTimeout(() => {
+      void fetchData(ignore);
+    }, 0);
+    return () => { 
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
   }, [fetchData]);
 
   const handleSave = async () => {
@@ -149,9 +157,9 @@ export default function PurchaseRequisitionPage() {
     window.print();
   };
 
-  const updateItem = (index: number, field: keyof PRItem, value: any) => {
+  const updateItem = (index: number, field: keyof PRItem, value: string | number) => {
     const newItems = [...data.items];
-    newItems[index] = { ...newItems[index], [field]: value };
+    newItems[index] = { ...newItems[index], [field]: value } as PRItem;
     setData({ ...data, items: newItems });
   };
 
@@ -173,32 +181,6 @@ export default function PurchaseRequisitionPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader
-        title="Purchase Requisition"
-        subtitle="Official Procurement Document • LAUSD Human Resources"
-        icon={Landmark}
-        hideHubSuffix
-      >
-        <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm" title="Back">
-          <ChevronLeft size={20} />
-          Back
-        </Link>
-        <button 
-          onClick={handleSave} 
-          disabled={saving}
-          className="group flex items-center gap-3 px-8 py-2 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#0a2f5f]/20"
-        >
-          <Save size={18} className="group-hover:scale-110 transition-transform" />
-          {saving ? 'Syncing...' : 'Save Document'}
-        </button>
-        <button 
-          onClick={handlePrint}
-          className="flex items-center gap-3 px-8 py-2 bg-[#ffca38] text-[#0a2f5f] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#eeb125] transition-all shadow-lg shadow-[#ffca38]/20"
-        >
-          <Printer size={18} />
-          Print Form
-        </button>
-      </HubHeader>
 
       {/* Form Container */}
       <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
@@ -211,7 +193,7 @@ export default function PurchaseRequisitionPage() {
               <span className="text-xs font-black uppercase tracking-[0.3em]">Purchase Requisition Form</span>
             </div>
           </div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">LAUSD</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">Lausd</div>
         </div>
 
         <div className="p-10">
@@ -281,7 +263,7 @@ export default function PurchaseRequisitionPage() {
                   <textarea 
                     value={data.vendor.address} 
                     onChange={e => setData({...data, vendor: {...data.vendor, address: e.target.value}})}
-                    placeholder="Street address or PO Box..."
+                    placeholder="Street address or Po Box..."
                     className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-bold text-gray-700 placeholder:text-gray-200 min-h-[120px] resize-none leading-relaxed"
                   />
                 </div>
@@ -412,14 +394,14 @@ export default function PurchaseRequisitionPage() {
                 <table className="w-full border-collapse text-xs">
                   <thead>
                     <tr className="bg-gray-50/80 border-b-2 border-gray-100">
-                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[80px]">LN</th>
-                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">QTY</th>
-                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">UNIT</th>
-                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">PG</th>
-                      <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[220px]">STOCK # / CODE</th>
-                      <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest">DESCRIPTION</th>
-                      <th className="p-6 text-right font-black text-[#0a2f5f] uppercase tracking-widest w-[140px]">UNIT COST</th>
-                      <th className="p-6 text-right font-black text-[#0a2f5f] uppercase tracking-widest w-[160px]">TOTAL</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[80px]">Ln</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Qty</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Unit</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Pg</th>
+                      <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[220px]">Stock # / Code</th>
+                      <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest">Description</th>
+                      <th className="p-6 text-right font-black text-[#0a2f5f] uppercase tracking-widest w-[140px]">Unit Cost</th>
+                      <th className="p-6 text-right font-black text-[#0a2f5f] uppercase tracking-widest w-[160px]">Total</th>
                       <th className="p-6 text-center w-[80px] print:hidden"></th>
                     </tr>
                   </thead>
@@ -555,11 +537,11 @@ export default function PurchaseRequisitionPage() {
                   <table className="w-full border-collapse text-[10px]">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-100">
-                        <th className="p-4 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[60px]">ACCT</th>
+                        <th className="p-4 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[60px]">Acct</th>
                         <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest">Cost Center</th>
                         <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Fund</th>
                         <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">Functional Area</th>
-                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">GL / ACCT</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">Gl / Acct</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -569,7 +551,7 @@ export default function PurchaseRequisitionPage() {
                           <td className="p-1">
                             <input 
                               type="text" 
-                              value={(data.accounting as any)[`cc${num}`]} 
+                              value={(data.accounting as Record<string, string>)[`cc${num}`]} 
                               onChange={e => setData({...data, accounting: {...data.accounting, [`cc${num}`]: e.target.value}})}
                               className="w-full p-3 bg-transparent focus:bg-white rounded-lg outline-none font-bold transition-all text-gray-600"
                             />
@@ -577,7 +559,7 @@ export default function PurchaseRequisitionPage() {
                           <td className="p-1">
                             <input 
                               type="text" 
-                              value={(data.accounting as any)[`fund${num}`]} 
+                              value={(data.accounting as Record<string, string>)[`fund${num}`]} 
                               onChange={e => setData({...data, accounting: {...data.accounting, [`fund${num}`]: e.target.value}})}
                               className="w-full p-3 bg-transparent focus:bg-white rounded-lg outline-none font-bold transition-all text-gray-600"
                             />
@@ -585,7 +567,7 @@ export default function PurchaseRequisitionPage() {
                           <td className="p-1">
                             <input 
                               type="text" 
-                              value={(data.accounting as any)[`func${num}`]} 
+                              value={(data.accounting as Record<string, string>)[`func${num}`]} 
                               onChange={e => setData({...data, accounting: {...data.accounting, [`func${num}`]: e.target.value}})}
                               className="w-full p-3 bg-transparent focus:bg-white rounded-lg outline-none font-bold transition-all text-gray-600"
                             />
@@ -593,7 +575,7 @@ export default function PurchaseRequisitionPage() {
                           <td className="p-1">
                             <input 
                               type="text" 
-                              value={(data.accounting as any)[`gl${num}`]} 
+                              value={(data.accounting as Record<string, string>)[`gl${num}`]} 
                               onChange={e => setData({...data, accounting: {...data.accounting, [`gl${num}`]: e.target.value}})}
                               className="w-full p-3 bg-transparent focus:bg-white rounded-lg outline-none font-bold transition-all text-gray-600"
                             />
@@ -657,7 +639,7 @@ export default function PurchaseRequisitionPage() {
                           <span className="text-[10px] font-black uppercase tracking-widest">Encumbrance Verification</span>
                         </div>
                         <p className="text-[10px] text-white/50 leading-relaxed font-bold italic">
-                          "I hereby certify that the items listed are necessary for the conduct of official business of the Los Angeles Unified School District."
+                          &quot;I hereby certify that the items listed are necessary for the conduct of official business of the Los Angeles Unified School District.&quot;
                         </p>
                       </div>
                     </div>
@@ -724,7 +706,7 @@ export default function PurchaseRequisitionPage() {
       </div>
 
       <footer className="py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">LAUSD Management Services Document Repository © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Lausd Management Services Document Repository © 2026</p>
       </footer>
 
       {loading && (

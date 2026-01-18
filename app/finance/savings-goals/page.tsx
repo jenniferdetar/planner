@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { 
-  PiggyBank, ChevronLeft, Save, Plus, 
-  Target, ShieldCheck, ArrowUpRight, Landmark,
+  PiggyBank, ChevronLeft, Plus, 
+  Target, ShieldCheck, Landmark,
   TrendingUp, Wallet, Trash2, Scroll
 } from 'lucide-react';
 
@@ -31,7 +31,7 @@ const SAVINGS_CATEGORIES = [
   {
     name: 'Bill Pay',
     items: [
-      { item: 'DWP', monthly: 100 },
+      { item: 'Dwp', monthly: 100 },
       { item: "Jeff's Credit Cards", monthly: 500 },
       { item: "Jennifer's Student Loans", monthly: 150 },
       { item: 'Schools First Loan', monthly: 142 }
@@ -40,7 +40,7 @@ const SAVINGS_CATEGORIES = [
   {
     name: 'Credit Card',
     items: [
-      { item: 'ADT', monthly: 53 },
+      { item: 'Adt', monthly: 53 },
       { item: 'Amazon', monthly: 100 },
       { item: 'Groceries', monthly: 600 },
       { item: 'Hair', monthly: 110 },
@@ -50,7 +50,7 @@ const SAVINGS_CATEGORIES = [
   {
     name: 'Housing',
     items: [
-      { item: 'HELOC', monthly: 357 },
+      { item: 'Heloc', monthly: 357 },
       { item: 'HOA', monthly: 520 },
       { item: 'Mortgage', monthly: 2250 },
       { item: 'Spectrum', monthly: 197 },
@@ -60,7 +60,7 @@ const SAVINGS_CATEGORIES = [
   {
     name: 'Savings',
     items: [
-      { item: 'HSA', monthly: 200 },
+      { item: 'Hsa', monthly: 200 },
       { item: 'Summer Saver', monthly: 400 },
       { item: "Tahoe's Major Repairs", monthly: 200 },
       { item: 'Vacation', monthly: 125 }
@@ -68,36 +68,11 @@ const SAVINGS_CATEGORIES = [
   }
 ];
 
-import HubHeader from '@/components/HubHeader';
-
 export default function SavingsGoalsPage() {
   const [goals, setGoals] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [newGoal, setNewGoal] = useState('');
 
-  useEffect(() => {
-    fetchGoals();
-  }, []);
-
-  async function fetchGoals() {
-    setLoading(true);
-    const { data: metadata, error } = await supabase
-      .from('opus_metadata')
-      .select('value')
-      .eq('key', 'finance-savings-text-goals')
-      .single();
-    
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching savings goals:', error);
-    } else if (metadata?.value) {
-      setGoals(metadata.value.items || []);
-    }
-    setLoading(false);
-  }
-
-  async function saveGoals(updatedGoals: string[]) {
-    setSaving(true);
+  const saveGoals = async (updatedGoals: string[]) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -111,8 +86,27 @@ export default function SavingsGoalsPage() {
       }, { onConflict: 'user_id,key' });
 
     if (error) console.error('Error saving goals:', error);
-    setSaving(false);
-  }
+  };
+
+  useEffect(() => {
+    let ignore = false;
+    async function load() {
+      const { data: metadata, error } = await supabase
+        .from('opus_metadata')
+        .select('value')
+        .eq('key', 'finance-savings-text-goals')
+        .single();
+      
+      if (ignore) return;
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching savings goals:', error);
+      } else if (metadata?.value) {
+        setGoals(metadata.value.items || []);
+      }
+    }
+    load();
+    return () => { ignore = true; };
+  }, []);
 
   const addGoal = () => {
     if (!newGoal.trim()) return;
@@ -129,9 +123,9 @@ export default function SavingsGoalsPage() {
   };
 
   const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-US', { 
+    return new Intl.NumberFormat('en-Us', { 
       style: 'currency', 
-      currency: 'USD',
+      currency: 'Usd',
       maximumFractionDigits: 0
     }).format(val);
   };
@@ -144,21 +138,6 @@ export default function SavingsGoalsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Capital Reserves" 
-        subtitle='"Strategic Accumulation & Financial Fortification"' 
-        icon={PiggyBank} 
-        iconBgColor="bg-[#9ADBDE]"
-        hideHubSuffix={true}
-      >
-        <Link 
-          href="/finance" 
-          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-        >
-          <ChevronLeft size={16} />
-          Back
-        </Link>
-      </HubHeader>
 
       <section className="relative bg-white p-8 md:p-16 rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-16">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#9ADBDE] via-[#99B3C5] to-[#FFC68D]"></div>
@@ -223,7 +202,7 @@ export default function SavingsGoalsPage() {
                   <h3 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Security Protocol</h3>
                 </div>
                 <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
-                  "Reserves are not merely savings; they are the architectural foundation of freedom. Aim for a minimum of 6 months for total system stability."
+                  &quot;Reserves are not merely savings; they are the architectural foundation of freedom. Aim for a minimum of 6 months for total system stability.&quot;
                 </p>
               </div>
               <div className="bg-white p-6 rounded-2xl border border-slate-200">
@@ -303,7 +282,7 @@ export default function SavingsGoalsPage() {
           </div>
         </div>
         <div className="absolute top-0 right-0 w-full h-full bg-grid-white/[0.02] [mask-image:radial-gradient(white,transparent_70%)]"></div>
-        <div className="absolute -bottom-24 -right-24 text-[20rem] opacity-5 pointer-events-none font-black text-white">SAFE</div>
+        <div className="absolute -bottom-24 -right-24 text-[20rem] opacity-5 pointer-events-none font-black text-white">Safe</div>
       </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">

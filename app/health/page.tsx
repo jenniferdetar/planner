@@ -4,10 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { 
   HeartPulse, Activity, Apple, Beaker, 
-  ChevronRight, Plus, Trash2, ShieldCheck,
+  Plus, Trash2, ShieldCheck,
   Stethoscope, Pill, Leaf, TrendingUp
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 const MASTER_LIST = {
   fruits: [
@@ -41,24 +40,29 @@ export default function HealthPage() {
   const [data, setData] = useState(MASTER_LIST);
   const [loading, setLoading] = useState(true);
 
-  async function fetchHealthData() {
-    setLoading(true);
-    const { data: metadata, error } = await supabase
-      .from('opus_metadata')
-      .select('value')
-      .eq('key', 'opus-health-data')
-      .single();
-    
-    if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows found"
-      console.error('Error fetching health data:', error);
-    } else if (metadata?.value) {
-      setData(metadata.value as typeof MASTER_LIST);
-    }
-    setLoading(false);
-  }
-
   useEffect(() => {
+    let ignore = false;
+
+    async function fetchHealthData() {
+      setLoading(true);
+      const { data: metadata, error } = await supabase
+        .from('opus_metadata')
+        .select('value')
+        .eq('key', 'opus-health-data')
+        .single();
+      
+      if (!ignore) {
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching health data:', error);
+        } else if (metadata?.value) {
+          setData(metadata.value as typeof MASTER_LIST);
+        }
+        setLoading(false);
+      }
+    }
+
     fetchHealthData();
+    return () => { ignore = true; };
   }, []);
 
   async function saveHealthData(newData: typeof MASTER_LIST) {
@@ -113,15 +117,7 @@ export default function HealthPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Health" 
-        subtitle='"Vitality is the foundation of all achievement"' 
-        icon={HeartPulse} 
-        iconBgColor="bg-[#9ADBDE]"
-        textColor="text-[#0a2f5f]"
-      />
-
-      <div className="flex flex-wrap gap-4 mb-12">
+<div className="flex flex-wrap gap-4 mb-12">
         <button 
           onClick={() => setActiveTab('produce')}
           className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
@@ -202,7 +198,7 @@ export default function HealthPage() {
               Current nutritional intake and medication adherence are within optimal parameters. Maintain consistency.
             </p>
           </div>
-          <div className="text-4xl font-black text-[#0a2f5f] opacity-20 italic">"Your peace is protected on purpose."</div>
+          <div className="text-4xl font-black text-[#0a2f5f] opacity-20 italic">&quot;Your peace is protected on purpose.&quot;</div>
         </div>
       </section>
 

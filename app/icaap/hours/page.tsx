@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import HubHeader from '@/components/HubHeader';
+
 import StatCard from '@/components/StatCard';
 import { ChevronLeft, Clock, Calendar, Users, Calculator, History, ShieldCheck } from 'lucide-react';
 
@@ -15,91 +15,92 @@ const MONTH_LABELS: Record<string, string> = {
 
 const ADDITIONAL_HOURS = [
   { name: 'Aaron, Robin', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Aguirre, Genesis', program: 'RLAA IFs/Mentors', hours: '40' },
-  { name: 'Aki, Ma Teresa', program: 'CATPA', hours: '40' },
-  { name: 'Alcorn, Eileen', program: 'CATPA', hours: '39' },
+  { name: 'Aguirre, Genesis', program: 'Rlaa IFs/Mentors', hours: '40' },
+  { name: 'Aki, Ma Teresa', program: 'Catpa', hours: '40' },
+  { name: 'Alcorn, Eileen', program: 'Catpa', hours: '39' },
   { name: 'Anthony Zarate', program: 'Lead Induction Mentors', hours: '40 hours' },
-  { name: 'Bacon, Dulce', program: 'IF', hours: '60' },
-  { name: 'Bagadiong Trice, Tarah', program: 'CATPA', hours: '34' },
-  { name: 'Bennett, Marie', program: 'IF', hours: '40' },
+  { name: 'Bacon, Dulce', program: 'If', hours: '60' },
+  { name: 'Bagadiong Trice, Tarah', program: 'Catpa', hours: '34' },
+  { name: 'Bennett, Marie', program: 'If', hours: '40' },
   { name: 'Black, Leslie', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Booker, Chevon', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Bouillot, Jittima', program: 'RLAA IFs/Mentors', hours: '40' },
-  { name: 'Bravo, Ralph', program: 'IF', hours: '' },
-  { name: 'Castillo, Patricia', program: 'CATPA', hours: '34' },
-  { name: 'Cohen, Crystal', program: 'CATPA', hours: '34' },
+  { name: 'Bouillot, Jittima', program: 'Rlaa IFs/Mentors', hours: '40' },
+  { name: 'Bravo, Ralph', program: 'If', hours: '' },
+  { name: 'Castillo, Patricia', program: 'Catpa', hours: '34' },
+  { name: 'Cohen, Crystal', program: 'Catpa', hours: '34' },
   { name: 'Cruz, Jacqueline', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'De Guzman, Jhun', program: 'Induction', hours: '5' },
   { name: 'Dean, Gene', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Deloach, Susan', program: 'CATPA', hours: '34' },
-  { name: 'Edith Janec', program: 'RLAA IFs/Mentors', hours: '40' },
-  { name: 'Elizalde, Elizabeth', program: 'RLAA IFs/Mentors', hours: '40' },
-  { name: 'Fuentes, Carmen', program: 'CATPA', hours: '34' },
-  { name: 'Garcia Armstrong, Jeanne', program: 'RLAA IFs/Mentors', hours: '40' },
-  { name: 'Gonzalez, Emir', program: 'IF', hours: '40' },
+  { name: 'Deloach, Susan', program: 'Catpa', hours: '34' },
+  { name: 'Edith Janec', program: 'Rlaa IFs/Mentors', hours: '40' },
+  { name: 'Elizalde, Elizabeth', program: 'Rlaa IFs/Mentors', hours: '40' },
+  { name: 'Fuentes, Carmen', program: 'Catpa', hours: '34' },
+  { name: 'Garcia Armstrong, Jeanne', program: 'Rlaa IFs/Mentors', hours: '40' },
+  { name: 'Gonzalez, Emir', program: 'If', hours: '40' },
   { name: 'Grant, D.M.', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Grewell-Goodinez, Bernice', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Griffiths, Irma', program: 'CATPA', hours: '34' },
-  { name: 'Griffiths, Joshua', program: 'CATPA', hours: '40' },
-  { name: 'Gutierrez, Rodolfo', program: 'CATPA', hours: '34' },
-  { name: 'Han, Alyson', program: 'CATPA', hours: '40' },
-  { name: 'Hashimoto, Yolanda', program: 'IF', hours: '40' },
+  { name: 'Griffiths, Irma', program: 'Catpa', hours: '34' },
+  { name: 'Griffiths, Joshua', program: 'Catpa', hours: '40' },
+  { name: 'Gutierrez, Rodolfo', program: 'Catpa', hours: '34' },
+  { name: 'Han, Alyson', program: 'Catpa', hours: '40' },
+  { name: 'Hashimoto, Yolanda', program: 'If', hours: '40' },
   { name: 'Hawkins, Kionna', program: 'Induction', hours: '5' },
-  { name: 'Holmes, Staci', program: 'CATPA', hours: '32' },
+  { name: 'Holmes, Staci', program: 'Catpa', hours: '32' },
   { name: 'Irvine, Adrian', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Izuakor, Charles', program: 'CATPA', hours: '34' },
-  { name: 'Jakeisha Gibson-Sanders', program: 'RLAA IFs/Mentors', hours: '40' },
+  { name: 'Izuakor, Charles', program: 'Catpa', hours: '34' },
+  { name: 'Jakeisha Gibson-Sanders', program: 'Rlaa IFs/Mentors', hours: '40' },
   { name: 'Jasso, Wendy', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Jones, Robert', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Kasper, Joy', program: 'CATPA', hours: '39' },
+  { name: 'Kasper, Joy', program: 'Catpa', hours: '39' },
   { name: 'Lewis, Agnes', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Lilly (Yasmin Willis), Aimee', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Linda Nguyen', program: 'RLAA IFs/Mentors', hours: '40' },
-  { name: 'Makar, Enas', program: 'IF', hours: '60' },
+  { name: 'Linda Nguyen', program: 'Rlaa IFs/Mentors', hours: '40' },
+  { name: 'Makar, Enas', program: 'If', hours: '60' },
   { name: 'Malika Ferrell', program: 'Lead Induction Mentors', hours: '40 hours' },
-  { name: 'Manzo Reyes, Sofia', program: 'RLAA IFs/Mentors', hours: '40' },
+  { name: 'Manzo Reyes, Sofia', program: 'Rlaa IFs/Mentors', hours: '40' },
   { name: 'Maria Aldave Cabrera', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Marks, Lisa', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Marlene Yu', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'McFarlane, Evelyn', program: 'RLAA IFs/Mentors', hours: '40' },
-  { name: 'Morales, Andreina', program: 'IF', hours: '40' },
-  { name: 'Morales, Andreina', program: 'CATPA', hours: '34' },
+  { name: 'McFarlane, Evelyn', program: 'Rlaa IFs/Mentors', hours: '40' },
+  { name: 'Morales, Andreina', program: 'If', hours: '40' },
+  { name: 'Morales, Andreina', program: 'Catpa', hours: '34' },
   { name: 'Morales, Anthony', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Nolan, Susan', program: 'CATPA', hours: '34' },
+  { name: 'Nolan, Susan', program: 'Catpa', hours: '34' },
   { name: 'Pena, Brigette', program: 'Induction', hours: '5' },
   { name: 'Pinto, Maria', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Pizzuto, Marla', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Quijada, Ida', program: 'IF', hours: '40' },
-  { name: 'Rabas, Kimberly', program: 'CATPA', hours: '35' },
+  { name: 'Quijada, Ida', program: 'If', hours: '40' },
+  { name: 'Rabas, Kimberly', program: 'Catpa', hours: '35' },
   { name: 'Ramos, Lawrence', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Ray, Praveen', program: 'CATPA', hours: '34' },
+  { name: 'Ray, Praveen', program: 'Catpa', hours: '34' },
   { name: 'Rios, Malina', program: 'Induction', hours: '5' },
-  { name: 'Rodriguez Sifontes, Veronica', program: 'RLAA IFs/Mentors', hours: '40' },
-  { name: 'Rogers, Sherita', program: 'CATPA', hours: '34' },
-  { name: 'Romero, Jose', program: 'CATPA', hours: '34' },
-  { name: 'Ronning, Melanie', program: 'RLAA IFs/Mentors', hours: '40' },
+  { name: 'Rodriguez Sifontes, Veronica', program: 'Rlaa IFs/Mentors', hours: '40' },
+  { name: 'Rogers, Sherita', program: 'Catpa', hours: '34' },
+  { name: 'Romero, Jose', program: 'Catpa', hours: '34' },
+  { name: 'Ronning, Melanie', program: 'Rlaa IFs/Mentors', hours: '40' },
   { name: 'Rosa-Madrigal, Lila', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Saidi, Mandana', program: 'Instructional Faculty', hours: '40' },
   { name: 'Sanchez-Rodriguez, Adalid', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Sayer, Shannon', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Schull, Tacy', program: 'CATPA', hours: '39' },
-  { name: 'Segovia, Jasmin', program: 'CATPA', hours: '34' },
+  { name: 'Schull, Tacy', program: 'Catpa', hours: '39' },
+  { name: 'Segovia, Jasmin', program: 'Catpa', hours: '34' },
   { name: 'Shelley, Paulette', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Shigenaga, Aya', program: 'Lead Induction Mentors', hours: '30 hours' },
-  { name: 'Vojkovich, Tiffany', program: 'IF', hours: '40' },
+  { name: 'Vojkovich, Tiffany', program: 'If', hours: '40' },
   { name: 'Watanabe, Nora', program: 'Lead Induction Mentors', hours: '30 hours' },
   { name: 'Winter, Bennett', program: 'Induction', hours: '5' }
 ];
 
+interface HoursRow {
+  name: string;
+  [key: string]: string | number | undefined;
+}
+
 export default function IcaapHoursPage() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<HoursRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchHours();
-  }, []);
-
-  async function fetchHours() {
+  const fetchHours = React.useCallback(async () => {
     setLoading(true);
     const { data: hoursRows, error } = await supabase
       .from('Hours Worked')
@@ -112,9 +113,20 @@ export default function IcaapHoursPage() {
       setData((hoursRows || []).filter(row => row.name !== 'Grand Total'));
     }
     setLoading(false);
-  }
+  }, []);
 
-  const parseVal = (val: any) => {
+  useEffect(() => {
+    let ignore = false;
+    const timer = setTimeout(() => {
+      if (!ignore) fetchHours();
+    }, 0);
+    return () => {
+      ignore = true;
+      clearTimeout(timer);
+    };
+  }, [fetchHours]);
+
+  const parseVal = (val: string | number | undefined | null) => {
     if (!val) return 0;
     return parseFloat(String(val).replace(/,/g, '')) || 0;
   };
@@ -143,18 +155,6 @@ export default function IcaapHoursPage() {
 
   return (
     <div className="p-4 md:p-8 bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Hours Registry" 
-        subtitle='"Detailed monthly breakdown of all professional iCAAP hours"' 
-        icon={Clock}
-        iconBgColor="bg-[#FFA1AB]"
-        hideHubSuffix
-      >
-        <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-          <ChevronLeft size={20} />
-          Back to iCAAP
-        </Link>
-      </HubHeader>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
@@ -187,7 +187,7 @@ export default function IcaapHoursPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-40 gap-4 opacity-40">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0a2f5f]"></div>
-          <div className="text-sm font-black uppercase tracking-widest text-[#0a2f5f]">Syncing Registry...</div>
+          <div className="text-sm font-black text-[#0a2f5f]">Syncing registry...</div>
         </div>
       ) : (
         <div className="bg-white rounded-[2.5rem] border-2 border-[#0a2f5f]/5 shadow-2xl overflow-hidden mb-16">
@@ -201,7 +201,7 @@ export default function IcaapHoursPage() {
                       {MONTH_LABELS[m]}
                     </th>
                   ))}
-                  <th className="p-4 font-black uppercase tracking-widest text-[10px] text-center bg-[#0a2f5f] text-white">YTD Total</th>
+                  <th className="p-4 font-black uppercase tracking-widest text-[10px] text-center bg-[#0a2f5f] text-white">Ytd Total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -287,7 +287,7 @@ export default function IcaapHoursPage() {
             <h3 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Audit Verification</h3>
           </div>
           <p className="text-gray-500 text-sm leading-relaxed max-w-xl">
-            These records have been cross-referenced with SAP payroll data and iCAAP attendance logs. All hours listed are approved for the 2025/26 Academic Cycle.
+            These records have been cross-referenced with Sap payroll data and iCAAP attendance logs. All hours listed are approved for the 2025/26 Academic Cycle.
           </p>
         </div>
         

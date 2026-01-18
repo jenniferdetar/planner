@@ -1,12 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { OpusMeeting } from '@/types/database.types';
 import Link from 'next/link';
 import { Users, Calendar, MapPin, Plus, Trash2, Save, ChevronLeft, FileText, Clock, Info, Search } from 'lucide-react';
-
-import HubHeader from '@/components/HubHeader';
 
 export default function MeetingsPage() {
   const [meetings, setMeetings] = useState<OpusMeeting[]>([]);
@@ -28,24 +26,32 @@ export default function MeetingsPage() {
 
   const [attendeeInput, setAttendeeInput] = useState('');
 
-  useEffect(() => {
-    fetchMeetings();
-  }, []);
-
-  async function fetchMeetings() {
-    setLoading(true);
+  const fetchMeetings = useCallback(async (ignore = false) => {
     const { data, error } = await supabase
       .from('opus_meetings')
       .select('*')
       .order('date', { ascending: true });
     
-    if (error) {
-      console.error('Error fetching meetings:', error);
-    } else {
-      setMeetings(data || []);
+    if (!ignore) {
+      if (error) {
+        console.error('Error fetching meetings:', error);
+      } else {
+        setMeetings(data || []);
+      }
+      setLoading(false);
     }
-    setLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    const timeoutId = setTimeout(() => {
+      fetchMeetings(ignore);
+    }, 0);
+    return () => { 
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
+  }, [fetchMeetings]);
 
   async function handleSaveMeeting(e: React.FormEvent) {
     e.preventDefault();
@@ -130,21 +136,6 @@ export default function MeetingsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Meetings & Records" 
-        subtitle="Schedule, track, and document your collaborations" 
-        icon={Users} 
-        iconBgColor="bg-[#FFC68D]"
-        hideHubSuffix={true}
-      >
-        <Link 
-          href="/planning" 
-          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-        >
-          <ChevronLeft size={16} />
-          Back to Hub
-        </Link>
-      </HubHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Meeting Form */}
@@ -153,7 +144,7 @@ export default function MeetingsPage() {
             <div className="absolute top-0 left-0 w-full h-2 bg-[#FFC68D]"></div>
             
             <div className="flex justify-between items-center mb-10">
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight flex items-center gap-3">
+              <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight flex items-center gap-3">
                 {editingMeeting ? <Plus className="rotate-45" size={24} /> : <Plus size={24} />}
                 {editingMeeting ? 'Edit Registry Entry' : 'New Meeting Record'}
               </h2>
@@ -164,7 +155,7 @@ export default function MeetingsPage() {
                     setEditingMeeting(null);
                     setFormData({ title: '', date: new Date().toISOString().split('T')[0], attendees: [] });
                   }}
-                  className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors"
+                  className="text-[10px] font-black tracking-wider text-gray-400 hover:text-red-500 transition-colors"
                 >
                   Cancel Edit
                 </button>
@@ -174,7 +165,7 @@ export default function MeetingsPage() {
             <form onSubmit={handleSaveMeeting} className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2 md:col-span-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-4">Meeting Title *</label>
+                  <label className="text-[10px] font-black text-gray-400 tracking-wider ml-4">Meeting Title *</label>
                   <input 
                     type="text"
                     required
@@ -186,7 +177,7 @@ export default function MeetingsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-4">Registry Date *</label>
+                  <label className="text-[10px] font-black text-gray-400 tracking-wider ml-4">Registry Date *</label>
                   <div className="relative">
                     <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FFC68D]" size={18} />
                     <input 
@@ -200,7 +191,7 @@ export default function MeetingsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-4">Location / Venue</label>
+                  <label className="text-[10px] font-black text-gray-400 tracking-wider ml-4">Location / Venue</label>
                   <div className="relative">
                     <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FFC68D]" size={18} />
                     <input 
@@ -208,13 +199,13 @@ export default function MeetingsPage() {
                       value={formData.location || ''}
                       onChange={(e) => setFormData({...formData, location: e.target.value})}
                       className="w-full p-6 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all"
-                      placeholder="Zoom, Office, HQ..."
+                      placeholder="Zoom, Office, Hq..."
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-4">Start Time</label>
+                  <label className="text-[10px] font-black text-gray-400 tracking-wider ml-4">Start Time</label>
                   <div className="relative">
                     <Clock className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FFC68D]" size={18} />
                     <input 
@@ -227,7 +218,7 @@ export default function MeetingsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-4">End Time</label>
+                  <label className="text-[10px] font-black text-gray-400 tracking-wider ml-4">End Time</label>
                   <div className="relative">
                     <Clock className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FFC68D]" size={18} />
                     <input 
@@ -241,7 +232,7 @@ export default function MeetingsPage() {
               </div>
 
               <div className="space-y-4">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-4">Attendees Registry</label>
+                <label className="text-[10px] font-black text-gray-400 tracking-wider ml-4">Attendees Registry</label>
                 <div className="flex gap-4">
                   <input 
                     type="text"
@@ -254,14 +245,14 @@ export default function MeetingsPage() {
                   <button 
                     type="button"
                     onClick={addAttendee}
-                    className="px-8 bg-[#FFC68D] text-[#0a2f5f] font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-[#ffb05c] transition-all shadow-lg shadow-[#FFC68D]/20"
+                    className="px-8 bg-[#FFC68D] text-[#0a2f5f] font-black tracking-wider text-xs rounded-2xl hover:bg-[#ffb05c] transition-all shadow-lg shadow-[#FFC68D]/20"
                   >
                     Register
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   {(formData.attendees || []).map((name, i) => (
-                    <span key={i} className="px-6 py-2 bg-slate-100 text-[#0a2f5f] text-[10px] font-black uppercase tracking-widest rounded-full flex items-center gap-3 border border-slate-200">
+                    <span key={i} className="px-6 py-2 bg-slate-100 text-[#0a2f5f] text-[10px] font-black tracking-wider rounded-full flex items-center gap-3 border border-slate-200">
                       {name}
                       <button type="button" onClick={() => removeAttendee(i)} className="hover:text-red-500 transition-colors">
                         <Trash2 size={12} />
@@ -272,7 +263,7 @@ export default function MeetingsPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-4">Meeting Agenda</label>
+                <label className="text-[10px] font-black text-gray-400 tracking-wider ml-4">Meeting Agenda</label>
                 <textarea 
                   value={formData.agenda || ''}
                   onChange={(e) => setFormData({...formData, agenda: e.target.value})}
@@ -286,7 +277,7 @@ export default function MeetingsPage() {
                   <button 
                     type="button"
                     onClick={() => handleDeleteMeeting(editingMeeting.id!)}
-                    className="flex items-center gap-2 px-6 py-4 bg-red-50 text-red-600 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-red-100 transition-all"
+                    className="flex items-center gap-2 px-6 py-4 bg-red-50 text-red-600 rounded-2xl font-black tracking-wider text-xs hover:bg-red-100 transition-all"
                   >
                     <Trash2 size={16} />
                     Expunge Record
@@ -295,7 +286,7 @@ export default function MeetingsPage() {
                 <button 
                   type="submit"
                   disabled={saving}
-                  className="ml-auto flex items-center gap-3 px-12 py-5 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
+                  className="ml-auto flex items-center gap-3 px-12 py-5 bg-[#0a2f5f] text-white rounded-2xl font-black tracking-wider text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
                 >
                   <Save size={18} />
                   {saving ? 'Processing...' : editingMeeting ? 'Update Record' : 'Certify Meeting'}
@@ -312,8 +303,8 @@ export default function MeetingsPage() {
                 <FileText size={20} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Executive Minutes</h2>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Formal discussion log and action items</p>
+                <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Executive Minutes</h2>
+                <p className="text-[10px] font-black text-gray-400 tracking-wider">Formal discussion log and action items</p>
               </div>
             </div>
             <textarea 
@@ -324,7 +315,7 @@ export default function MeetingsPage() {
               style={{ backgroundImage: 'linear-gradient(#e6e2d3 1px, transparent 1px)', backgroundSize: '100% 2.5rem' }}
             />
             <div className="absolute -bottom-10 -right-10 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#0a2f5f]">
-              LOG
+              Log
             </div>
           </div>
         </section>
@@ -334,13 +325,13 @@ export default function MeetingsPage() {
           <div className="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-xl relative overflow-hidden">
             <div className="flex items-center gap-3 mb-8">
               <Calendar className="text-[#FFC68D]" size={20} />
-              <h2 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Archive Registry</h2>
+              <h2 className="text-xl font-black text-[#0a2f5f] tracking-tight">Archive Registry</h2>
             </div>
             
             {loading ? (
               <div className="flex flex-col items-center py-20 gap-4">
                 <div className="w-8 h-8 border-4 border-[#FFC68D]/20 border-t-[#FFC68D] rounded-full animate-spin"></div>
-                <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Querying Records...</p>
+                <p className="text-[10px] font-black text-gray-300 tracking-wider">Querying Records...</p>
               </div>
             ) : meetings.length === 0 ? (
               <div className="text-center py-20 px-8">
@@ -369,7 +360,7 @@ export default function MeetingsPage() {
                         <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
                           editingMeeting?.id === m.id ? 'bg-white/10 text-white' : 'bg-[#FFC68D]/10 text-[#FFC68D]'
                         }`}>
-                          {new Date(m.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          {new Date(m.date).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
                         </div>
                         <span className={`text-[10px] font-bold flex items-center gap-1 ${editingMeeting?.id === m.id ? 'text-white/60' : 'text-gray-400'}`}>
                           <Clock size={10} />
@@ -400,14 +391,14 @@ export default function MeetingsPage() {
                 <h3 className="text-lg font-black uppercase tracking-tight">System Notice</h3>
               </div>
               <p className="text-xs font-medium opacity-70 leading-relaxed italic mb-8">
-                "Registry records are immutable once certified. Ensure all attendees and outcomes are accurately captured before archiving."
+                &quot;Registry records are immutable once certified. Ensure all attendees and outcomes are accurately captured before archiving.&quot;
               </p>
               <div className="w-full h-px bg-white/10 mb-8"></div>
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full border-2 border-white/20 flex items-center justify-center font-black text-xs">A</div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-widest">Auth Level</p>
-                  <p className="text-[10px] font-bold text-[#FFC68D]">ADMINISTRATOR</p>
+                  <p className="text-[10px] font-bold text-[#FFC68D]">Administrator</p>
                 </div>
               </div>
             </div>

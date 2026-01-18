@@ -8,12 +8,11 @@ import {
   Plane, Activity, PieChart, Users, Zap,
   Compass
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 const corePlanningCards = [
   { icon: <Calendar className="text-[#0a2f5f]" size={24} />, title: 'Personal Planner', sub: 'Weekly Schedule & Habits', href: '/planning/personal', color: 'bg-[#99B3C5]', borderColor: 'border-[#99B3C5]' },
   { icon: <Briefcase className="text-[#0a2f5f]" size={24} />, title: 'Work Planner', sub: 'Weekly Grid & Priorities', href: '/planning/work', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
-  { icon: <Target className="text-[#0a2f5f]" size={24} />, title: 'Goals', sub: 'SMART goal tracker', href: '/goals', color: 'bg-[#FFC68D]', borderColor: 'border-[#FFC68D]' },
+  { icon: <Target className="text-[#0a2f5f]" size={24} />, title: 'Goals', sub: 'Smart goal tracker', href: '/goals', color: 'bg-[#FFC68D]', borderColor: 'border-[#FFC68D]' },
   { icon: <Scroll className="text-[#0a2f5f]" size={24} />, title: 'Mission', sub: 'Your purpose & values', href: '/planning/mission', color: 'bg-[#FFA1AB]', borderColor: 'border-[#FFA1AB]' },
   { icon: <Zap className="text-[#0a2f5f]" size={24} />, title: 'Mantra', sub: 'Daily focus & intent', href: '/planning/mantra', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
   { icon: <BookOpen className="text-[#0a2f5f]" size={24} />, title: 'Books to Read', sub: 'Reading wishlist', href: '/planning/books', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
@@ -34,18 +33,10 @@ const visionBoardCards = [
 export default function PlanningPage() {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Planning" 
-        subtitle="Design your life with purpose and intention" 
-        icon={Compass} 
-        iconBgColor="bg-[#9ADBDE]"
-        textColor="text-[#0a2f5f]"
-      />
-
-      <section className="mb-20">
+<section className="mb-20">
         <div className="flex items-center gap-3 mb-8">
           <Target className="text-[#0a2f5f]" size={24} />
-          <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Core Planning</h2>
+          <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Core Planning</h2>
           <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -61,11 +52,11 @@ export default function PlanningPage() {
                   {card.icon}
                 </div>
                 <h3 className="text-2xl font-black text-[#0a2f5f] mb-2">{card.title}</h3>
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-relaxed">
+                <p className="text-xs font-bold text-gray-400 tracking-wider leading-relaxed">
                   {card.sub}
                 </p>
               </div>
-              <div className="mt-8 flex items-center text-[#0a2f5f] font-black text-sm uppercase tracking-widest gap-2">
+              <div className="mt-8 flex items-center text-[#0a2f5f] font-black text-sm tracking-wide gap-2">
                 Explore <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -77,8 +68,8 @@ export default function PlanningPage() {
         <div className="bg-slate-50 p-12 rounded-[4rem] border-2 border-slate-100 shadow-xl relative overflow-hidden">
           <div className="relative z-10">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight mb-2">Vision Board</h2>
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Visualize your dreams across all areas of life</p>
+              <h2 className="text-3xl font-black text-[#0a2f5f] tracking-tight mb-2">Vision Board</h2>
+              <p className="text-gray-400 font-bold tracking-wider text-xs">Visualize your dreams across all areas of life</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {visionBoardCards.map((card) => (
@@ -92,7 +83,7 @@ export default function PlanningPage() {
                   </div>
                   <div className="text-center">
                     <span className="block text-xl font-black text-[#0a2f5f] mb-1">{card.title}</span>
-                    <span className="text-[10px] uppercase font-black text-gray-400 tracking-[0.2em]">{card.sub}</span>
+                    <span className="text-[10px] font-black text-gray-400 tracking-wider">{card.sub}</span>
                   </div>
                 </Link>
               ))}
@@ -103,7 +94,7 @@ export default function PlanningPage() {
       </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Life Architecture Portal © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black tracking-widest">Life Architecture Portal © 2026</p>
       </footer>
     </div>
   );

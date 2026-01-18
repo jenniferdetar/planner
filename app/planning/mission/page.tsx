@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import HubHeader from '@/components/HubHeader';
+
 import { ChevronLeft, Scroll, Save, ShieldCheck, Target, Quote } from 'lucide-react';
 
 export default function MissionPage() {
@@ -13,25 +13,33 @@ export default function MissionPage() {
 
   const storageKey = 'planning-mission';
 
-  useEffect(() => {
-    fetchMission();
-  }, []);
-
-  async function fetchMission() {
-    setLoading(true);
+  const fetchMission = useCallback(async (ignore = false) => {
     const { data: metadata, error } = await supabase
       .from('opus_metadata')
       .select('value')
       .eq('key', storageKey)
       .single();
     
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching mission:', error);
-    } else if (metadata?.value) {
-      setMission(metadata.value.content || '');
+    if (!ignore) {
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching mission:', error);
+      } else if (metadata?.value) {
+        setMission(metadata.value.content || '');
+      }
+      setLoading(false);
     }
-    setLoading(false);
-  }
+  }, [storageKey]);
+
+  useEffect(() => {
+    let ignore = false;
+    const timeoutId = setTimeout(() => {
+      fetchMission(ignore);
+    }, 0);
+    return () => { 
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
+  }, [fetchMission]);
 
   async function saveMission() {
     setSaving(true);
@@ -55,18 +63,6 @@ export default function MissionPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto bg-[#fdfbf7] min-h-screen">
-      <HubHeader 
-        title="Mission Statement" 
-        subtitle='"Defining purpose, values, and the architecture of life"' 
-        icon={Scroll}
-        iconBgColor="bg-[#9ADBDE]"
-        hideHubSuffix
-      >
-        <Link href="/planning" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-          <ChevronLeft size={20} />
-          Back to Hub
-        </Link>
-      </HubHeader>
 
       <section className="relative group mb-16">
         <div className="absolute -inset-1 bg-gradient-to-r from-[#0a2f5f] to-[#5d84b2] rounded-[3rem] blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
@@ -82,11 +78,11 @@ export default function MissionPage() {
                 <Target size={20} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Core Directive</h2>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personal Values & Purpose Archive</p>
+                <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Core Directive</h2>
+                <p className="text-[10px] font-bold text-gray-400 tracking-wider">Personal Values & Purpose Archive</p>
               </div>
             </div>
-            <div className="hidden md:block text-[10px] font-black uppercase tracking-[0.2em] text-[#0a2f5f]/20 bg-gray-50 px-4 py-2 rounded-full border">
+            <div className="hidden md:block text-[10px] font-black tracking-wider text-[#0a2f5f]/20 bg-gray-50 px-4 py-2 rounded-full border">
               Official Record • 2026
             </div>
           </div>
@@ -94,7 +90,7 @@ export default function MissionPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-40">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0a2f5f]"></div>
-              <div className="text-xs font-black uppercase tracking-widest text-[#0a2f5f]">Retrieving Purpose...</div>
+              <div className="text-xs font-black tracking-wider text-[#0a2f5f]">Retrieving Purpose...</div>
             </div>
           ) : (
             <div className="relative">
@@ -116,7 +112,7 @@ export default function MissionPage() {
                 <button 
                   onClick={saveMission}
                   disabled={saving}
-                  className="group flex items-center gap-3 px-12 py-5 bg-[#0a2f5f] text-white font-black text-sm uppercase tracking-[0.2em] rounded-2xl hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
+                  className="group flex items-center gap-3 px-12 py-5 bg-[#0a2f5f] text-white font-black text-sm tracking-wider rounded-2xl hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
                 >
                   {saving ? 'Archiving...' : 'Finalize Statement'}
                   <Save size={20} className="group-hover:scale-110 transition-transform" />
@@ -134,18 +130,18 @@ export default function MissionPage() {
           </div>
           <div>
             <p className="text-gray-600 font-serif italic text-lg leading-relaxed mb-4">
-              "The key is not to prioritize what's on your schedule, but to schedule your priorities."
+              &quot;The key is not to prioritize what&apos;s on your schedule, but to schedule your priorities.&quot;
             </p>
-            <div className="text-[10px] font-black uppercase tracking-widest text-gray-400">— Stephen Covey</div>
+            <div className="text-[10px] font-black tracking-wider text-gray-400">— Stephen Covey</div>
           </div>
         </div>
 
         <div className="relative group flex justify-center md:justify-end">
           <div className="absolute inset-0 bg-[#0a2f5f] rounded-full blur-3xl opacity-5 group-hover:opacity-10 transition-opacity"></div>
           <div className="relative w-44 h-44 rounded-full border-4 border-[#0a2f5f]/10 flex flex-col items-center justify-center p-6 text-center transform rotate-6 group-hover:rotate-0 transition-transform duration-1000">
-            <div className="text-[10px] font-black text-[#0a2f5f]/60 uppercase tracking-[0.2em] mb-1">Certified</div>
+            <div className="text-[10px] font-black text-[#0a2f5f]/60 tracking-wider mb-1">Certified</div>
             <div className="w-12 h-px bg-[#0a2f5f]/20 mb-2"></div>
-            <div className="text-[8px] font-bold text-[#0a2f5f]/40 uppercase tracking-widest leading-tight">Personal Vision<br/>Records Office</div>
+            <div className="text-[8px] font-bold text-[#0a2f5f]/40 tracking-wider leading-tight">Personal Vision<br/>Records Office</div>
             <div className="mt-2 text-[#0a2f5f]">
               <ShieldCheck size={28} />
             </div>
@@ -154,7 +150,7 @@ export default function MissionPage() {
       </section>
 
       <footer className="mt-20 py-12 border-t border-[#0a2f5f]/5 text-center">
-        <p className="text-[#0a2f5f]/20 text-[10px] font-black uppercase tracking-[0.5em]">Life Architecture Archive © 2026</p>
+        <p className="text-[#0a2f5f]/20 text-[10px] font-black tracking-widest">Life Architecture Archive © 2026</p>
       </footer>
     </div>
   );

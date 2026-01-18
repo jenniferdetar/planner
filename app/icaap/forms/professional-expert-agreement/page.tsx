@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { 
@@ -8,7 +8,6 @@ import {
   Landmark, ShieldCheck, Calendar, Clock, DollarSign,
   UserCheck, AlertCircle, FileSignature
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 interface PEAData {
   expert: {
@@ -83,23 +82,28 @@ export default function ProfessionalExpertAgreementPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    const { data: metadata } = await supabase
-      .from('opus_metadata')
-      .select('value')
-      .eq('key', 'professionalExpertAgreementData')
-      .single();
-
-    if (metadata?.value) {
-      setData(metadata.value as PEAData);
-    }
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
+    let ignore = false;
+
+    const fetchData = async () => {
+      setLoading(true);
+      const { data: metadata } = await supabase
+        .from('opus_metadata')
+        .select('value')
+        .eq('key', 'professionalExpertAgreementData')
+        .single();
+
+      if (!ignore) {
+        if (metadata?.value) {
+          setData(metadata.value as PEAData);
+        }
+        setLoading(false);
+      }
+    };
+
     fetchData();
-  }, [fetchData]);
+    return () => { ignore = true; };
+  }, []);
 
   const handlePrint = () => {
     window.print();
@@ -141,37 +145,17 @@ export default function ProfessionalExpertAgreementPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader
-        title="Professional Expert Agreement"
-        subtitle="Service Contract • LAUSD Human Resources"
-        icon={FileSignature}
-        hideHubSuffix
-      >
-        <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-          <ChevronLeft size={20} />
-          Back
-        </Link>
-        <button 
-          onClick={handleSave} 
-          disabled={saving}
-          className="group flex items-center gap-3 px-8 py-2 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#0a2f5f]/20"
-        >
-          <Save size={18} className="group-hover:scale-110 transition-transform" />
-          {saving ? 'Syncing...' : 'Save Agreement'}
-        </button>
-        <button 
-          onClick={handlePrint}
-          className="flex items-center gap-3 px-8 py-2 bg-[#FFC68D] text-[#0a2f5f] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#ffb466] transition-all shadow-lg shadow-[#FFC68D]/20"
-        >
-          <Printer size={18} />
-          Print Form
-        </button>
-      </HubHeader>
 
       {/* Form Container */}
-      <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
-        {/* Official Header Section */}
-        <div className="bg-[#0a2f5f] p-10 text-white text-center relative overflow-hidden">
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-40 bg-white rounded-[3rem] border-2 border-gray-100 shadow-xl">
+          <Clock className="animate-spin text-[#0a2f5f] mb-4" size={48} />
+          <div className="text-xs font-black uppercase tracking-widest text-gray-400">Loading Agreement Details...</div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
+          {/* Official Header Section */}
+          <div className="bg-[#0a2f5f] p-10 text-white text-center relative overflow-hidden">
           <div className="relative z-10">
             <h2 className="text-2xl font-black tracking-[0.2em] uppercase mb-1">Los Angeles Unified School District</h2>
             <h3 className="text-lg font-bold opacity-80 uppercase tracking-widest mb-4">Professional Expert Assignment Agreement</h3>
@@ -179,7 +163,7 @@ export default function ProfessionalExpertAgreementPage() {
               <span className="text-xs font-black uppercase tracking-[0.3em]">Contractual Service Authorization</span>
             </div>
           </div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">EXPERT</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">Expert</div>
         </div>
 
         <div className="p-10">
@@ -208,7 +192,7 @@ export default function ProfessionalExpertAgreementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee ID (if applicable)</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee Id (if applicable)</label>
                     <input 
                       type="text" 
                       value={data.expert.employeeId} 
@@ -347,7 +331,7 @@ export default function ProfessionalExpertAgreementPage() {
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Rate Type</label>
                     <select 
                       value={data.agreement.rateType}
-                      onChange={e => setData({...data, agreement: {...data.agreement, rateType: e.target.value as any}})}
+                      onChange={e => setData({...data, agreement: {...data.agreement, rateType: e.target.value as PEAData['agreement']['rateType']}})}
                       className="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 shadow-inner"
                     >
                       <option value="hourly">Hourly</option>
@@ -414,7 +398,7 @@ export default function ProfessionalExpertAgreementPage() {
                     value={data.accounting.fund} 
                     onChange={e => setData({...data, accounting: {...data.accounting, fund: e.target.value}})}
                     className="w-full px-4 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 shadow-sm text-center"
-                    placeholder="010-XXXX"
+                    placeholder="010-Xxxx"
                   />
                 </div>
                 <div className="space-y-1">
@@ -424,17 +408,17 @@ export default function ProfessionalExpertAgreementPage() {
                     value={data.accounting.functionalArea} 
                     onChange={e => setData({...data, accounting: {...data.accounting, functionalArea: e.target.value}})}
                     className="w-full px-4 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 shadow-sm text-center"
-                    placeholder="XXXX-XXXX-XXXXX"
+                    placeholder="Xxxx-Xxxx-Xxxxx"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">GL Account</label>
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Gl Account</label>
                   <input 
                     type="text" 
                     value={data.accounting.glAccount} 
                     onChange={e => setData({...data, accounting: {...data.accounting, glAccount: e.target.value}})}
                     className="w-full px-4 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 shadow-sm text-center"
-                    placeholder="XXXXXX"
+                    placeholder="Xxxxxx"
                   />
                 </div>
               </div>
@@ -497,10 +481,11 @@ export default function ProfessionalExpertAgreementPage() {
         {/* Footnote */}
         <div className="bg-gray-50 p-6 border-t border-gray-100 text-center">
           <p className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.3em]">
-            Form HR-PEA-2026 • Electronic Processing via iCAAP Administrative Suite
+            Form Hr-Pea-2026 • Electronic Processing via iCAAP Administrative Suite
           </p>
         </div>
       </div>
+      )}
 
       {/* Compliance Note */}
       <div className="flex items-center gap-4 p-8 bg-amber-50 rounded-[2.5rem] border-2 border-amber-100 mb-12 print:hidden">

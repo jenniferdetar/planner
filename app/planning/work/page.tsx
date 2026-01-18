@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import HubHeader from '@/components/HubHeader';
+
 import { ChevronLeft, ChevronRight, Briefcase, Target, Layout, Zap, Award, Clock, User, CheckCircle2 } from 'lucide-react';
+import { OpusGoal } from '@/types/database.types';
 
 interface PlannerEvent {
   id: string;
@@ -18,7 +19,6 @@ interface PlannerEvent {
 }
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const DAY_CLASSES = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
 const STYLE_MAP: Record<string, { bg: string; border: string; text: string }> = {
   due:    { bg: '#ffd6e2', border: '#ff6b98', text: '#7a0f2b' },
@@ -69,7 +69,7 @@ export default function WorkPlannerPage() {
   const [weeklyTaskStatus, setWeeklyTaskStatus] = useState<Record<string, Record<string, boolean>>>({});
   const [eventsByDate, setEventsByDate] = useState<Record<string, PlannerEvent[]>>({});
   const [loading, setLoading] = useState(true);
-  const [goals, setGoals] = useState<any[]>([]);
+  const [goals, setGoals] = useState<OpusGoal[]>([]);
 
   const fetchWorkData = useCallback(async () => {
     setLoading(true);
@@ -244,44 +244,12 @@ export default function WorkPlannerPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Work Planner" 
-        subtitle="Professional Grid: Weekly schedule with editable lines" 
-        icon={Briefcase}
-        iconBgColor="bg-[#9ADBDE]"
-        hideHubSuffix
-      >
-        <div className="flex flex-col sm:flex-row items-center gap-6 w-full xl:w-auto">
-          <div className="flex items-center gap-4 bg-white p-2 rounded-2xl border-2 border-gray-100 shadow-xl shadow-gray-200/40 w-full sm:w-auto justify-between sm:justify-start">
-            <button onClick={() => navigateWeek(-1)} className="p-3 hover:bg-[#9ADBDE]/10 text-[#0a2f5f] rounded-xl transition-all"><ChevronLeft size={20} /></button>
-            <div className="font-black text-[#0a2f5f] uppercase tracking-widest text-xs min-w-[280px] text-center">{formatDateRange()}</div>
-            <button onClick={() => navigateWeek(1)} className="p-3 hover:bg-[#9ADBDE]/10 text-[#0a2f5f] rounded-xl transition-all"><ChevronRight size={20} /></button>
-          </div>
-          
-          <div className="flex gap-3 w-full sm:w-auto">
-            <Link 
-              href="/planning/personal" 
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-gray-50 transition-all"
-            >
-              <User size={14} />
-              Personal
-            </Link>
-            <Link 
-              href="/planning/work" 
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-[#9ADBDE] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-[#9ADBDE]/30 transition-all"
-            >
-              <Layout size={14} />
-              Work Grid
-            </Link>
-          </div>
-        </div>
-      </HubHeader>
 
       {/* Priorities Section */}
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-8">
           <Target className="text-[#9ADBDE]" size={24} />
-          <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Strategic Priorities</h2>
+          <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Strategic Priorities</h2>
           <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
         </div>
         
@@ -290,14 +258,14 @@ export default function WorkPlannerPage() {
             { key: 'p1', label: 'Primary Directive', icon: <Award className="text-amber-500" size={18} />, placeholder: 'Priority #1' },
             { key: 'p2', label: 'Secondary Goal', icon: <Target className="text-emerald-500" size={18} />, placeholder: 'Priority #2' },
             { key: 'p3', label: 'Tactical Objective', icon: <Zap className="text-indigo-500" size={18} />, placeholder: 'Priority #3' },
-            { key: 'look-forward', label: 'Future Milestone', icon: <Clock className="text-rose-500" size={18} />, placeholder: 'One thing I\'m looking forward to' },
+            { key: 'look-forward', label: 'Future Milestone', icon: <Clock className="text-rose-500" size={18} />, placeholder: 'One thing I&apos;m looking forward to' },
             { key: 'encourage', label: 'Team Engagement', icon: <User className="text-sky-500" size={18} />, placeholder: 'Someone I can encourage' },
-            { key: 'learn', label: 'Skill Acquisition', icon: <Briefcase className="text-purple-500" size={18} />, placeholder: 'Something I\'d like to read or listen to' },
+            { key: 'learn', label: 'Skill Acquisition', icon: <Briefcase className="text-purple-500" size={18} />, placeholder: 'Something I&apos;d like to read or listen to' },
           ].map((item) => (
             <div key={item.key} className="bg-white p-8 rounded-[2.5rem] border-2 border-gray-50 shadow-xl shadow-gray-200/40 group hover:border-[#9ADBDE]/30 transition-all">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-slate-50 rounded-xl group-hover:scale-110 transition-transform">{item.icon}</div>
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{item.label}</label>
+                <label className="text-[10px] font-black text-gray-400 tracking-wider">{item.label}</label>
               </div>
               <div
                 contentEditable
@@ -323,19 +291,19 @@ export default function WorkPlannerPage() {
         
         <div className="bg-[#0a2f5f] p-10 text-white flex justify-between items-center relative overflow-hidden">
           <div className="relative z-10">
-            <h2 className="text-3xl font-black uppercase tracking-tight">Weekly Operations Matrix</h2>
-            <p className="text-xs opacity-60 font-bold uppercase tracking-widest mt-2">Real-time scheduling and registry log</p>
+            <h2 className="text-3xl font-black tracking-tight">Weekly Operations Matrix</h2>
+            <p className="text-xs opacity-60 font-bold tracking-wider mt-2">Real-time scheduling and registry log</p>
           </div>
           <div className="relative z-10 flex flex-col items-end">
-            <div className="text-[10px] font-black uppercase tracking-[0.3em] bg-[#9ADBDE] px-6 py-2 rounded-full shadow-xl">High Fidelity Record</div>
-            <div className="text-[9px] font-bold opacity-40 mt-3 uppercase tracking-widest italic">Archival System v2.0</div>
+            <div className="text-[10px] font-black tracking-widest bg-[#9ADBDE] px-6 py-2 rounded-full shadow-xl">High Fidelity Record</div>
+            <div className="text-[9px] font-bold opacity-40 mt-3 tracking-wider italic">Archival System v2.0</div>
           </div>
           <div className="absolute top-0 right-0 w-64 h-full bg-grid-white/[0.05] [mask-image:linear-gradient(to_left,white,transparent)]"></div>
         </div>
         
         <div className="overflow-x-auto">
           <div className="flex min-w-[1400px]">
-            {DAYS.map((day, dIdx) => {
+            {DAYS.map((day: string, dIdx: number) => {
               const date = new Date(currentWeekStart);
               date.setDate(date.getDate() + dIdx);
               const dateKey = date.toISOString().split('T')[0];
@@ -351,17 +319,17 @@ export default function WorkPlannerPage() {
                     dIdx === 6 ? 'border-blue-100 text-[#0a2f5f]' :
                     'border-gray-50 text-[#0a2f5f]'
                   }`}>
-                    <div className="text-[10px] uppercase tracking-[0.3em] opacity-40 mb-1">{day}</div>
+                    <div className="text-[10px] tracking-wider opacity-40 mb-1">{day}</div>
                     <div className="text-xl tracking-tight">{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
                   </div>
 
                   {/* All Day Slot */}
                   <div className="p-4 min-h-[80px] border-b border-gray-50 bg-amber-50/20 relative group">
-                    <div className="absolute top-2 left-4 text-[8px] font-black text-amber-600/40 uppercase tracking-widest">Global Events</div>
+                    <div className="absolute top-2 left-4 text-[8px] font-black text-amber-600/40 tracking-wider">Global Events</div>
                     {allDayEvents.length > 0 ? (
                       <div className="space-y-1.5 pt-4">
                         {allDayEvents.map((e, i) => (
-                          <div key={i} className="text-[9px] p-2 bg-amber-100 text-amber-800 rounded-xl font-black uppercase tracking-widest border border-amber-200 shadow-sm">
+                          <div key={i} className="text-[9px] p-2 bg-amber-100 text-amber-800 rounded-xl font-black tracking-wider border border-amber-200 shadow-sm">
                             {e.title}
                           </div>
                         ))}
@@ -371,7 +339,7 @@ export default function WorkPlannerPage() {
                         contentEditable
                         suppressContentEditableWarning
                         onBlur={(e) => handleEdit(dateKey, 'all-day', e.target.innerText)}
-                        className="w-full h-full text-[9px] pt-4 outline-none font-black uppercase tracking-widest text-gray-300 italic"
+                        className="w-full h-full text-[9px] pt-4 outline-none font-black tracking-wider text-gray-300 italic"
                       >
                         {edits[dateKey]?.['all-day'] || 'Log Entry...'}
                       </div>
@@ -398,7 +366,7 @@ export default function WorkPlannerPage() {
                                   return (
                                     <div 
                                       key={i} 
-                                      className="text-[9px] p-1.5 rounded-lg border leading-tight truncate font-black uppercase tracking-widest shadow-sm hover:scale-[1.02] transition-transform"
+                                      className="text-[9px] p-1.5 rounded-lg border leading-tight truncate font-black tracking-wider shadow-sm hover:scale-[1.02] transition-transform"
                                       style={{ backgroundColor: style.bg, borderColor: style.border, color: style.text }}
                                     >
                                       {e.title}
@@ -431,15 +399,15 @@ export default function WorkPlannerPage() {
       {loading && (
         <div className="fixed inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center z-50">
           <div className="w-16 h-16 border-4 border-[#9ADBDE]/20 border-t-[#9ADBDE] rounded-full animate-spin mb-4 shadow-2xl"></div>
-          <p className="text-[10px] font-black text-[#0a2f5f] uppercase tracking-[0.4em]">Synchronizing Registry...</p>
+          <p className="text-[10px] font-black text-[#0a2f5f] tracking-widest">Synchronizing Registry...</p>
         </div>
       )}
       
       <footer className="mt-24 py-16 border-t border-gray-100 text-center relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#0a2f5f]">
-          OPERATIONS
+          Operations
         </div>
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em] relative z-10">Professional Operations Log © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black tracking-widest relative z-10">Professional Operations Log © 2026</p>
       </footer>
 
       {/* Weekly Tasks Section */}

@@ -10,7 +10,6 @@ import {
   Briefcase, ClipboardList
 } from 'lucide-react';
 
-import HubHeader from '@/components/HubHeader';
 import StatCard from '@/components/StatCard';
 
 export default function TasksPage() {
@@ -44,14 +43,7 @@ export default function TasksPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Operations" 
-        subtitle="&quot;Precision in execution, excellence in output&quot;" 
-        icon={ClipboardList}
-        iconBgColor="bg-[#99B3C5]"
-      />
-
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <StatCard 
           title="Total Registry" 
           value={tasks.length} 

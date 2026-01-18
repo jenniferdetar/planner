@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import HubHeader from '@/components/HubHeader';
+
 import StatCard from '@/components/StatCard';
 import { ChevronLeft, Filter, Download, FileSpreadsheet, CheckCircle2, AlertCircle, Clock, ShieldCheck, Calculator } from 'lucide-react';
 
@@ -24,17 +24,13 @@ const MONTHS = [
 
 export default function IcaapPayLogPage() {
   const [names, setNames] = useState<string[]>([]);
-  const [hoursMap, setHoursMap] = useState<Map<string, any>>(new Map());
-  const [paylogMap, setPaylogMap] = useState<Map<string, any>>(new Map());
-  const [approvalMap, setApprovalMap] = useState<Map<string, any>>(new Map());
+  const [hoursMap, setHoursMap] = useState<Map<string, Record<string, string | number | null | undefined>>>(new Map());
+  const [paylogMap, setPaylogMap] = useState<Map<string, Record<string, string | number | null | undefined>>>(new Map());
+  const [approvalMap, setApprovalMap] = useState<Map<string, Record<string, string | number | null | undefined>>>(new Map());
   const [loading, setLoading] = useState(true);
   const [filterMonth, setFilterMonth] = useState('all');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
+  const fetchData = React.useCallback(async (ignore = false) => {
     setLoading(true);
     try {
       const [
@@ -47,14 +43,16 @@ export default function IcaapPayLogPage() {
         supabase.from('Hours Worked Approved').select('*')
       ]);
 
+      if (ignore) return;
+
       const filteredHoursRows = (hoursRows || []).filter((row) => row.name !== 'Grand Total');
       const filteredPaylogRows = paylogRows || [];
       const filteredApprovalRows = approvalRows || [];
 
       const nameMap = new Map<string, string>();
-      const hMap = new Map<string, any>();
-      const pMap = new Map<string, any>();
-      const aMap = new Map<string, any>();
+      const hMap = new Map<string, Record<string, string | number | null | undefined>>();
+      const pMap = new Map<string, Record<string, string | number | null | undefined>>();
+      const aMap = new Map<string, Record<string, string | number | null | undefined>>();
 
       const toKey = (name: string) => (name || '').toLowerCase();
 
@@ -86,9 +84,20 @@ export default function IcaapPayLogPage() {
       console.error('Error fetching iCAAP data:', error);
     }
     setLoading(false);
-  }
+  }, []);
 
-  const getStatusIcon = (val: any) => {
+  useEffect(() => {
+    let ignore = false;
+    const timeoutId = setTimeout(() => {
+      fetchData(ignore);
+    }, 0);
+    return () => {
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
+  }, [fetchData]);
+
+  const getStatusIcon = (val: string | number | null | undefined) => {
     if (!val || val === '-') return null;
     const lower = String(val).toLowerCase();
     if (lower.includes('yes') || lower.includes('approved')) return <CheckCircle2 size={12} className="text-emerald-500" />;
@@ -96,7 +105,7 @@ export default function IcaapPayLogPage() {
     return <AlertCircle size={12} className="text-blue-500" />;
   };
 
-  const getCellBg = (val: any, type: 'hours' | 'paylog' | 'approval') => {
+  const getCellBg = (val: string | number | null | undefined, type: 'hours' | 'paylog' | 'approval') => {
     if (!val || val === '-') return 'bg-transparent';
     if (type === 'hours') return 'bg-blue-50/50';
     if (type === 'paylog') return 'bg-purple-50/50';
@@ -106,39 +115,6 @@ export default function IcaapPayLogPage() {
 
   return (
     <div className="p-4 md:p-8 bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Paylog Central" 
-        subtitle="Unified Professional Expenditure & Hours Registry" 
-        icon={FileSpreadsheet}
-        iconBgColor="bg-[#FFA1AB]"
-        hideHubSuffix
-      >
-        <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-2 bg-white px-6 py-2 rounded-full border-2 border-[#0a2f5f]/10 shadow-sm transition-all focus-within:border-[#0a2f5f]/30">
-            <Filter size={18} className="text-[#0a2f5f]" />
-            <select 
-              value={filterMonth}
-              onChange={(e) => setFilterMonth(e.target.value)}
-              className="bg-transparent text-sm font-black text-[#0a2f5f] outline-none cursor-pointer"
-            >
-              <option value="all">Full Academic Year</option>
-              {MONTHS.map(m => (
-                <option key={m.key} value={m.key}>{m.label}</option>
-              ))}
-            </select>
-          </div>
-          
-          <button className="flex items-center gap-3 px-8 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-black text-[10px] uppercase tracking-[0.2em] text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-            <Download size={18} />
-            Export Audit
-          </button>
-          
-          <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-[#0a2f5f] text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#0a2f5f] transition-all shadow-xl shadow-[#0a2f5f]/20">
-            <ChevronLeft size={18} />
-            Back to Hub
-          </Link>
-        </div>
-      </HubHeader>
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-40 gap-4 opacity-20">

@@ -8,11 +8,10 @@ import {
   Building2, ChevronRight, Upload, Plus,
   Trash2, Search, ArrowUpRight, Activity
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 const hoaCategories = [
   { icon: <Megaphone size={20} />, title: 'Announcements', note: 'Community updates', color: 'bg-[#9ADBDE]' },
-  { icon: <Users size={20} />, title: 'BOD', note: 'Board of Directors', color: 'bg-[#FFA1AB]' },
+  { icon: <Users size={20} />, title: 'Bod', note: 'Board of Directors', color: 'bg-[#FFA1AB]' },
   { icon: <Landmark size={20} />, title: 'Financials', note: 'Budgets & dues', color: 'bg-[#FFC68D]' },
   { icon: <FileText size={20} />, title: 'Documents', note: 'Policies & bylaws', color: 'bg-[#99B3C5]' },
   { icon: <ShieldCheck size={20} />, title: 'Insurance', note: 'Coverage details', color: 'bg-[#9ADBDE]' },
@@ -50,27 +49,32 @@ export default function HoaPage() {
   const [maintenance, setMaintenance] = useState<HoaMaintenance[]>([]);
   const [units, setUnits] = useState<HoaUnit[]>([]);
 
-  async function fetchHoaData() {
-    setLoading(true);
-    const { data: metadata, error } = await supabase
-      .from('opus_metadata')
-      .select('*')
-      .ilike('key', 'hoa-%');
-    
-    if (error) {
-      console.error('Error fetching HOA data:', error);
-    } else if (metadata) {
-      metadata.forEach(item => {
-        if (item.key === 'hoa-financials') setFinancials(item.value as HoaFinancial[] || []);
-        if (item.key === 'hoa-maintenance') setMaintenance(item.value as HoaMaintenance[] || []);
-        if (item.key === 'hoa-units') setUnits(item.value as HoaUnit[] || []);
-      });
-    }
-    setLoading(false);
-  }
-
   useEffect(() => {
+    let ignore = false;
+
+    async function fetchHoaData() {
+      setLoading(true);
+      const { data: metadata, error } = await supabase
+        .from('opus_metadata')
+        .select('*')
+        .ilike('key', 'hoa-%');
+      
+      if (!ignore) {
+        if (error) {
+          console.error('Error fetching HOA data:', error);
+        } else if (metadata) {
+          metadata.forEach(item => {
+            if (item.key === 'hoa-financials') setFinancials(item.value as HoaFinancial[] || []);
+            if (item.key === 'hoa-maintenance') setMaintenance(item.value as HoaMaintenance[] || []);
+            if (item.key === 'hoa-units') setUnits(item.value as HoaUnit[] || []);
+          });
+        }
+        setLoading(false);
+      }
+    }
+
     fetchHoaData();
+    return () => { ignore = true; };
   }, []);
 
   async function saveData(key: string, value: unknown) {
@@ -112,15 +116,7 @@ export default function HoaPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="HOA" 
-        subtitle='"Protecting community value through diligent administration"' 
-        icon={Home} 
-        iconBgColor="bg-[#99B3C5]"
-        textColor="text-[#0a2f5f]"
-      />
-
-      <div className="flex flex-wrap gap-4 mb-12">
+<div className="flex flex-wrap gap-4 mb-12">
         {['overview', 'financials', 'maintenance', 'units'].map((tab) => (
           <button 
             key={tab}
@@ -161,7 +157,7 @@ export default function HoaPage() {
                         <div className="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                           <Upload size={32} className="text-[#3b82f6]" />
                         </div>
-                        <p className="text-xl font-black text-[#0a2f5f] mb-2">Ingest Administrative PDF</p>
+                        <p className="text-xl font-black text-[#0a2f5f] mb-2">Ingest Administrative Pdf</p>
                         <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Supports Bylaws, Minutes, and Notices</p>
                       </label>
                     </div>

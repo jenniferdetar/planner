@@ -9,32 +9,30 @@ import {
   History, PieChart
 } from 'lucide-react';
 
-import HubHeader from '@/components/HubHeader';
-
 const BUDGET_ITEMS = [
   { category: 'Auto', item: 'Auto Maintenance', budget: 100, type: 'Variable' },
   { category: 'Auto', item: 'Mercury Auto Insurance', budget: 388, type: 'Fixed' },
   { category: 'Auto', item: 'Tahoe Registration', budget: 15, type: 'Variable' },
   { category: 'Auto', item: 'Trailblazer Registration', budget: 28, type: 'Variable' },
-  { category: 'Bill Pay', item: 'DWP', budget: 100, type: 'Variable' },
+  { category: 'Bill Pay', item: 'Dwp', budget: 100, type: 'Variable' },
   { category: 'Bill Pay', item: "Jeff's Credit Cards", budget: 500, type: 'Variable' },
   { category: 'Bill Pay', item: "Jennifer's Student Loans", budget: 150, type: 'Variable' },
   { category: 'Bill Pay', item: 'Schools First Loan', budget: 142, type: 'Fixed' },
   { category: 'Cash', item: 'Cleaning Lady', budget: 320, type: 'Fixed' },
   { category: 'Cash', item: 'Gas', budget: 600, type: 'Variable' },
   { category: 'Cash', item: 'Laundry', budget: 80, type: 'Variable' },
-  { category: 'Credit Card', item: 'ADT', budget: 53, type: 'Fixed' },
+  { category: 'Credit Card', item: 'Adt', budget: 53, type: 'Fixed' },
   { category: 'Credit Card', item: 'Amazon', budget: 100, type: 'Variable' },
   { category: 'Credit Card', item: 'Groceries', budget: 600, type: 'Variable' },
   { category: 'Credit Card', item: 'Hair', budget: 110, type: 'Fixed' },
   { category: 'Credit Card', item: 'Orkin', budget: 50, type: 'Fixed' },
-  { category: 'Housing', item: 'HELOC', budget: 357, type: 'Fixed' },
+  { category: 'Housing', item: 'Heloc', budget: 357, type: 'Fixed' },
   { category: 'Housing', item: 'HOA', budget: 520, type: 'Fixed' },
   { category: 'Housing', item: 'Mortgage', budget: 2250, type: 'Fixed' },
   { category: 'Housing', item: 'Spectrum', budget: 197, type: 'Fixed' },
   { category: 'Housing', item: 'Verizon', budget: 283, type: 'Fixed' },
   { category: 'Savings', item: 'Blow', budget: 200, type: 'Variable' },
-  { category: 'Savings', item: 'HSA', budget: 200, type: 'Variable' },
+  { category: 'Savings', item: 'Hsa', budget: 200, type: 'Variable' },
   { category: 'Savings', item: 'Summer Saver', budget: 400, type: 'Variable' },
   { category: 'Savings', item: "Tahoe's Major Repairs", budget: 200, type: 'Variable' },
   { category: 'Savings', item: 'Vacation', budget: 125, type: 'Variable' }
@@ -42,14 +40,12 @@ const BUDGET_ITEMS = [
 
 export default function BudgetOverviewPage() {
   const [actuals, setActuals] = useState<Record<string, number>>({});
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const storageKey = 'finance-budget-actuals';
 
   useEffect(() => {
     async function fetchActuals() {
-      setLoading(true);
       const { data: metadata, error } = await supabase
         .from('opus_metadata')
         .select('value')
@@ -61,7 +57,6 @@ export default function BudgetOverviewPage() {
       } else if (metadata?.value) {
         setActuals(metadata.value || {});
       }
-      setLoading(false);
     }
     fetchActuals();
   }, [storageKey]);
@@ -89,9 +84,9 @@ export default function BudgetOverviewPage() {
   }
 
   const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-US', { 
+    return new Intl.NumberFormat('en-Us', { 
       style: 'currency', 
-      currency: 'USD',
+      currency: 'Usd',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(val);
@@ -107,21 +102,6 @@ export default function BudgetOverviewPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Budget Audit" 
-        subtitle='"Official Monthly Resource Calibration & Variance Report"' 
-        icon={BarChart3} 
-        iconBgColor="bg-[#FFC68D]"
-        hideHubSuffix={true}
-      >
-        <Link 
-          href="/finance" 
-          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-        >
-          <ChevronLeft size={16} />
-          Back
-        </Link>
-      </HubHeader>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         <SummaryCard 
@@ -226,9 +206,9 @@ export default function BudgetOverviewPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-[#FFC68D]/10 p-10 rounded-[3rem] border-2 border-[#FFC68D]/20">
-          <h4 className="text-[#0a2f5f] font-black uppercase tracking-[0.2em] text-[10px] mb-6">Auditor's Certification</h4>
+          <h4 className="text-[#0a2f5f] font-black uppercase tracking-[0.2em] text-[10px] mb-6">Auditor&apos;s Certification</h4>
           <p className="text-[#0a2f5f] font-serif italic text-lg leading-relaxed">
-            "Variance analysis is critical for maintaining long-term solvency. Negative variances should be investigated and rectified in the subsequent fiscal period."
+            &quot;Variance analysis is critical for maintaining long-term solvency. Negative variances should be investigated and rectified in the subsequent fiscal period.&quot;
           </p>
         </div>
         <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 flex flex-col justify-between">
@@ -273,7 +253,7 @@ function SummaryCard({ title, value, icon, sub, isVariance }: { title: string; v
         </div>
         <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">{title}</p>
         <p className={`text-4xl font-black tracking-tighter ${isVariance ? (isNegative ? 'text-rose-500' : 'text-emerald-600') : 'text-[#0a2f5f]'}`}>
-          {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value)}
+          {new Intl.NumberFormat('en-Us', { style: 'currency', currency: 'Usd', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value)}
         </p>
         <p className="mt-4 text-[10px] font-bold text-gray-300 uppercase tracking-widest">{sub}</p>
       </div>

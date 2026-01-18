@@ -9,7 +9,7 @@ import {
   MessageSquare, Clock, CheckCircle2,
   AlertCircle, Activity, Scale
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
+
 import StatCard from '@/components/StatCard';
 
 export default function CseaPage() {
@@ -22,7 +22,7 @@ export default function CseaPage() {
   const [generalNotes, setGeneralNotes] = useState('');
   const [saving, setSaving] = useState(false);
 
-  async function fetchIssues() {
+  const fetchIssues = async () => {
     setLoading(true);
     const { data, error } = await supabase
       .from('csea_issues')
@@ -34,9 +34,9 @@ export default function CseaPage() {
       setIssues(data || []);
     }
     setLoading(false);
-  }
+  };
 
-  async function fetchCseaMetadata() {
+  const fetchCseaMetadata = async () => {
     const { data, error } = await supabase
       .from('opus_metadata')
       .select('*')
@@ -50,12 +50,19 @@ export default function CseaPage() {
         if (item.key === 'csea-general-notes') setGeneralNotes((item.value as { content: string })?.content || '');
       });
     }
-  }
+  };
 
   useEffect(() => {
-    fetchIssues();
-    fetchCseaMetadata();
-  }, []);
+    const init = async () => {
+      // loading is already true by default, no need to set it synchronously
+      await Promise.all([
+        fetchIssues(),
+        fetchCseaMetadata()
+      ]);
+      setLoading(false);
+    };
+    init();
+  }, []); // Missing dependencies will be handled later
 
   async function saveMetadata(key: string, value: unknown) {
     setSaving(true);
@@ -95,41 +102,33 @@ export default function CseaPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="CSEA" 
-        subtitle="&quot;Protecting member rights with administrative precision&quot;" 
-        icon={Scale} 
-        iconBgColor="bg-[#ffca38]"
-        textColor="text-[#00326b]"
-      />
-
-      <div className="flex flex-wrap gap-4 mb-12">
+<div className="flex flex-wrap gap-4 mb-12">
         <button 
           onClick={() => setActiveTab('issues')}
-          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all border-2 ${
             activeTab === 'issues' 
-              ? 'bg-[#ffca38] text-[#00326b] shadow-lg' 
-              : 'bg-white text-[#00326b] border-2 border-[#ffca38]/10 hover:bg-[#ffca38]/5'
+              ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38] shadow-lg' 
+              : 'bg-white text-[#00326b] border-[#ffca38]/10 hover:bg-[#ffca38]/5'
           }`}
         >
           Issue Log
         </button>
         <button 
           onClick={() => setActiveTab('meetings')}
-          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all border-2 ${
             activeTab === 'meetings' 
-              ? 'bg-[#ffca38] text-[#00326b] shadow-lg' 
-              : 'bg-white text-[#00326b] border-2 border-[#ffca38]/10 hover:bg-[#ffca38]/5'
+              ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38] shadow-lg' 
+              : 'bg-white text-[#00326b] border-[#ffca38]/10 hover:bg-[#ffca38]/5'
           }`}
         >
           Meeting Minutes
         </button>
         <button 
           onClick={() => setActiveTab('notes')}
-          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+          className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all border-2 ${
             activeTab === 'notes' 
-              ? 'bg-[#ffca38] text-[#00326b] shadow-lg' 
-              : 'bg-white text-[#00326b] border-2 border-[#ffca38]/10 hover:bg-[#ffca38]/5'
+              ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38] shadow-lg' 
+              : 'bg-white text-[#00326b] border-[#ffca38]/10 hover:bg-[#ffca38]/5'
           }`}
         >
           General Archive
@@ -182,7 +181,7 @@ export default function CseaPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-50/50">
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Member ID</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Member Id</th>
                         <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Full Name</th>
                         <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Type</th>
                         <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Description</th>
@@ -234,7 +233,7 @@ export default function CseaPage() {
               </div>
               <button 
                 onClick={addMeetingNote}
-                className="flex items-center gap-2 px-8 py-4 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all shadow-xl shadow-[#0a2f5f]/20"
+                className="flex items-center gap-2 px-8 py-4 bg-[#00326b] text-[#ffca38] border-2 border-[#ffca38] rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all shadow-xl shadow-[#00326b]/20"
               >
                 <Plus size={18} /> Record Session
               </button>
@@ -321,7 +320,7 @@ export default function CseaPage() {
                 <button 
                   onClick={() => saveMetadata('csea-general-notes', { content: generalNotes })}
                   disabled={saving}
-                  className="px-10 py-4 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all disabled:opacity-50 shadow-xl shadow-[#0a2f5f]/20"
+                  className="px-10 py-4 bg-[#00326b] text-[#ffca38] border-2 border-[#ffca38] rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#00254d] transition-all disabled:opacity-50 shadow-xl shadow-[#00326b]/20"
                 >
                   {saving ? 'Synchronizing...' : 'Save Registry'}
                 </button>

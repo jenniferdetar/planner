@@ -6,26 +6,26 @@ import Link from 'next/link';
 import { 
   ChevronLeft, Save, Plus, Printer, Search, 
   Scroll, UserCircle, Briefcase, Calendar, 
-  Filter, FileText, History, ArrowRight,
+  Filter, ArrowRight,
   ClipboardList, CheckCircle2
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
+
 import { INITIAL_TRANSCRIPT_LOG, TranscriptRequest } from './data';
 
 const ADVISER_MAP: Record<string, string> = {
   "Preliminary Multiple Subject": "Rene Gaudet",
   "Preliminary Single Subject": "Zina Dixon",
-  "Preliminary Special Education Programs (Includes: MMSN/MMD, MOD/ESN, ECSE) CENTSE Programs and Preliminary Added Specialty Programs": "Eberardo Rodriguez",
+  "Preliminary Special Education Programs (Includes: Mmsn/Mmd, Mod/Esn, Ecse) Centse Programs and Preliminary Added Specialty Programs": "Eberardo Rodriguez",
   "Portfolio (Preliminary Clinical Practice)": "Stephen Maccarone",
-  "AA/ASD": "Eberardo Rodriguez",
-  "AA/ECSE (Year 2 only)": "Eberardo Rodriguez",
-  "AA/BiLAA": "Zina Dixon",
-  "AA/RLAA": "Wendy Marrero & Rene Gaudet",
+  "Aa/Asd": "Eberardo Rodriguez",
+  "Aa/Ecse (Year 2 only)": "Eberardo Rodriguez",
+  "Aa/BiLAA": "Zina Dixon",
+  "Aa/Rlaa": "Wendy Marrero & Rene Gaudet",
   "Induction Program": "Maikai Finnell & Wendy Marrero",
-  "TPSL": "Eberardo Rodriguez"
+  "Tpsl": "Eberardo Rodriguez"
 };
 
-const PROGRAMS = Object.keys(ADVISER_MAP);
+const Programs = Object.keys(ADVISER_MAP);
 
 export default function TranscriptRequestPage() {
   const [log, setLog] = useState<TranscriptRequest[]>(INITIAL_TRANSCRIPT_LOG);
@@ -42,38 +42,46 @@ export default function TranscriptRequestPage() {
     nature: '',
     adviser: '',
     dateSent: '',
-    by: 'JD',
+    by: 'Jd',
     notes: '',
     dateReturnAdviser: '',
     dateReturnSalary: '',
     sentTo: ''
   });
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (ignore = false) => {
     const { data: metadata } = await supabase
       .from('opus_metadata')
       .select('value')
       .eq('key', 'transcriptRequestLog')
       .single();
 
-    if (metadata?.value) {
-      const savedLog = metadata.value as TranscriptRequest[];
-      const merged = [...savedLog];
-      
-      INITIAL_TRANSCRIPT_LOG.forEach(initial => {
-        const exists = savedLog.some(s => s.en === initial.en && s.name === initial.name && s.dateReceived === initial.dateReceived);
-        if (!exists) merged.push(initial);
-      });
+    if (!ignore) {
+      if (metadata?.value) {
+        const savedLog = metadata.value as TranscriptRequest[];
+        const merged = [...savedLog];
+        
+        INITIAL_TRANSCRIPT_LOG.forEach(initial => {
+          const exists = savedLog.some(s => s.en === initial.en && s.name === initial.name && s.dateReceived === initial.dateReceived);
+          if (!exists) merged.push(initial);
+        });
 
-      merged.sort((a, b) => new Date(b.dateReceived).getTime() - new Date(a.dateReceived).getTime());
-      setLog(merged);
+        merged.sort((a, b) => new Date(b.dateReceived).getTime() - new Date(a.dateReceived).getTime());
+        setLog(merged);
+      }
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchData();
+    let ignore = false;
+    const timeoutId = setTimeout(() => {
+      fetchData(ignore);
+    }, 0);
+    return () => { 
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
   }, [fetchData]);
 
   const handleSave = async (updatedLog: TranscriptRequest[]) => {
@@ -107,7 +115,7 @@ export default function TranscriptRequestPage() {
       nature: '',
       adviser: '',
       dateSent: '',
-      by: 'JD',
+      by: 'Jd',
       notes: '',
       dateReturnAdviser: '',
       dateReturnSalary: '',
@@ -131,24 +139,6 @@ export default function TranscriptRequestPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-[1800px] mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader
-        title="Transcript Records"
-        subtitle="Official Education Records Form & Request Log"
-        icon={Scroll}
-        hideHubSuffix
-      >
-        <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-          <ChevronLeft size={20} />
-          Back
-        </Link>
-        <button 
-          onClick={() => window.print()}
-          className="flex items-center gap-3 px-8 py-2 bg-[#ffca38] text-[#0a2f5f] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#eeb125] transition-all shadow-lg shadow-[#ffca38]/20"
-        >
-          <Printer size={18} />
-          Export Log
-        </button>
-      </HubHeader>
 
       {/* Entry Section */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16 print:hidden">
@@ -167,7 +157,7 @@ export default function TranscriptRequestPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
               <div className="space-y-1">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee Number (EN)</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee Number (En)</label>
                 <input 
                   type="text" 
                   value={newRequest.en} 
@@ -226,7 +216,7 @@ export default function TranscriptRequestPage() {
                   className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 focus:ring-4 focus:ring-[#0a2f5f]/5 outline-none transition-all font-black text-[#0a2f5f] shadow-inner text-sm"
                 >
                   <option value="">Select Program Path...</option>
-                  {PROGRAMS.map(p => <option key={p} value={p}>{p}</option>)}
+                  {Programs.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
               <div className="space-y-1">
@@ -270,7 +260,7 @@ export default function TranscriptRequestPage() {
               </button>
             </div>
           </div>
-          <div className="absolute top-1/2 right-0 -translate-y-1/2 text-[25rem] opacity-5 pointer-events-none font-black select-none">RECORD</div>
+          <div className="absolute top-1/2 right-0 -translate-y-1/2 text-[25rem] opacity-5 pointer-events-none font-black select-none">Record</div>
         </div>
 
         {/* Stats Column */}
@@ -299,13 +289,13 @@ export default function TranscriptRequestPage() {
               <div className="flex gap-4">
                 <div className="w-2 h-2 rounded-full bg-[#ffca38] mt-1 shrink-0 shadow-[0_0_8px_rgba(255,202,56,0.6)]"></div>
                 <p className="text-[11px] text-[#0a2f5f] font-bold leading-relaxed uppercase tracking-wider">
-                  Ensure all Employee Numbers are verified against SAP before entry.
+                  Ensure all Employee Numbers are verified against Sap before entry.
                 </p>
               </div>
               <div className="flex gap-4">
                 <div className="w-2 h-2 rounded-full bg-[#FFA1AB] mt-1 shrink-0 shadow-[0_0_8px_rgba(255,161,171,0.6)]"></div>
                 <p className="text-[11px] text-[#0a2f5f] font-bold leading-relaxed uppercase tracking-wider">
-                  Flag requests from "Salary Credit Assistants" for priority processing.
+                  Flag requests from &quot;Salary Credit Assistants&quot; for priority processing.
                 </p>
               </div>
             </div>
@@ -332,7 +322,7 @@ export default function TranscriptRequestPage() {
               type="text" 
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Filter by EN, Name, or Program Track..."
+              placeholder="Filter by En, Name, or Program Track..."
               className="w-full pl-16 pr-6 py-4 bg-white/10 border-2 border-white/10 rounded-2xl text-sm outline-none focus:bg-white/20 focus:border-white/30 transition-all placeholder:text-white/30 font-bold"
             />
           </div>
@@ -374,7 +364,7 @@ export default function TranscriptRequestPage() {
                   </td>
                   <td className="p-6">
                     <p className="text-gray-600 font-medium leading-relaxed italic text-[11px] line-clamp-2 hover:line-clamp-none transition-all">
-                      "{entry.nature}"
+                      &quot;{entry.nature}&quot;
                     </p>
                   </td>
                   <td className="p-6">
@@ -425,7 +415,7 @@ export default function TranscriptRequestPage() {
       )}
 
       <footer className="py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">LAUSD Management Services Document Repository © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Lausd Management Services Document Repository © 2026</p>
       </footer>
 
       <style jsx global>{`

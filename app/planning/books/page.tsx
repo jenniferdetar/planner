@@ -5,31 +5,25 @@ import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { ChevronLeft, BookOpen, Save, Plus, Trash2, Library, BookText, Bookmark } from 'lucide-react';
 
-import HubHeader from '@/components/HubHeader';
-
 interface Book {
   title: string;
   author: string;
   status: 'Want to Read' | 'Reading' | 'Finished';
 }
 
+const STORAGE_KEY = 'planning-books';
+
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const storageKey = 'planning-books';
-
-  useEffect(() => {
-    fetchBooks();
-  }, []);
-
-  async function fetchBooks() {
+  const fetchBooks = React.useCallback(async () => {
     setLoading(true);
     const { data: metadata, error } = await supabase
       .from('opus_metadata')
       .select('value')
-      .eq('key', storageKey)
+      .eq('key', STORAGE_KEY)
       .single();
     
     if (error && error.code !== 'PGRST116') {
@@ -38,7 +32,18 @@ export default function BooksPage() {
       setBooks(metadata.value.books || []);
     }
     setLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    const timer = setTimeout(() => {
+      if (!ignore) fetchBooks();
+    }, 0);
+    return () => {
+      ignore = true;
+      clearTimeout(timer);
+    };
+  }, [fetchBooks]);
 
   async function saveBooks(newBooks: Book[]) {
     setSaving(true);
@@ -49,7 +54,7 @@ export default function BooksPage() {
       .from('opus_metadata')
       .upsert({
         user_id: user.id,
-        key: storageKey,
+        key: STORAGE_KEY,
         value: { books: newBooks },
         updated_at: new Date().toISOString()
       }, { onConflict: 'user_id,key' });
@@ -87,28 +92,6 @@ export default function BooksPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Library Registry" 
-        subtitle="Official Literary Pursuit & Reading Log" 
-        icon={Library} 
-        iconBgColor="bg-[#9ADBDE]"
-        hideHubSuffix={true}
-      >
-        <div className="flex flex-wrap gap-3">
-          <Link href="/planning" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-            <ChevronLeft size={20} />
-            Back
-          </Link>
-          <button 
-            onClick={() => saveBooks(books)}
-            disabled={saving}
-            className="group flex items-center gap-3 px-8 py-2 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#0a2f5f]/20"
-          >
-            <Save size={18} className="group-hover:scale-110 transition-transform" />
-            {saving ? 'Syncing...' : 'Save Registry'}
-          </button>
-        </div>
-      </HubHeader>
 
       <section className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
         <div className="bg-[#0a2f5f] p-8 text-white relative overflow-hidden">
@@ -119,7 +102,7 @@ export default function BooksPage() {
             </div>
             <BookOpen className="opacity-20" size={40} />
           </div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black select-none">BOOKS</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black select-none">Books</div>
         </div>
 
         {loading ? (

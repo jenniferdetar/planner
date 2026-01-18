@@ -4,12 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { OpusGoal } from '@/types/database.types';
 import { 
-  Target, Trophy, Rocket, Star, 
+  Target, Trophy, Rocket, 
   ChevronRight, Activity, ShieldCheck, 
-  TrendingUp, Award, Flag, Flame, Calendar
+  TrendingUp, Award, Flame, Calendar
 } from 'lucide-react';
 
-import HubHeader from '@/components/HubHeader';
 import StatCard from '@/components/StatCard';
 
 const PERSONAL_GOAL_SECTIONS = [
@@ -46,7 +45,7 @@ const PERSONAL_GOAL_SECTIONS = [
   {
     title: 'Career',
     headerClass: 'bg-[#99B3C5]/30',
-    items: ['Promote, if possible', 'Get side gigs to leave LAUSD', '', '', '']
+    items: ['Promote, if possible', 'Get side gigs to leave Lausd', '', '', '']
   },
   {
     title: 'Financial',
@@ -66,12 +65,12 @@ const PERSONAL_GOAL_SECTIONS = [
   {
     title: 'Learn',
     headerClass: 'bg-[#FFC68D]/30',
-    items: ['Complete coding course strong', 'Complete MBA', '', '', '']
+    items: ['Complete coding course strong', 'Complete Mba', '', '', '']
   },
   {
     title: 'CSEA',
     headerClass: 'bg-[#FFC68D]/30',
-    items: ['Build relationships/network', 'Talk to more members', 'Re-elected for MB Committee', 'Represent more members', 'Find ways to grow meetings']
+    items: ['Build relationships/network', 'Talk to more members', 'Re-elected for Mb Committee', 'Represent more members', 'Find ways to grow meetings']
   }
 ];
 
@@ -120,14 +119,7 @@ export default function GoalsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Achievement" 
-        subtitle='"Strategic alignment of ambition and execution"' 
-        icon={Target}
-        iconBgColor="bg-[#FFC68D]"
-      />
-
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <StatCard 
           title="Execution Year" 
           value={2026} 
@@ -174,7 +166,7 @@ export default function GoalsPage() {
         </div>
 
         <div className="mt-8 border border-slate-200 rounded-xl overflow-hidden">
-          <div className="bg-[#d7eef0] px-4 py-2 text-[11px] font-bold tracking-widest">TOTAL:</div>
+          <div className="bg-[#d7eef0] px-4 py-2 text-[11px] font-bold tracking-widest">Total:</div>
           <div className="h-10 border-t border-slate-200"></div>
         </div>
       </section>
@@ -234,7 +226,7 @@ export default function GoalsPage() {
                 <div className="mt-8 flex items-center justify-between border-t border-slate-50 pt-6">
                   <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                     <Award size={14} className="text-[#FFC68D]" />
-                    SMART Certified
+                    Smart Certified
                   </div>
                   <button className="flex items-center gap-2 text-[#FFC68D] font-black text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform">
                     View Details <ChevronRight size={16} />

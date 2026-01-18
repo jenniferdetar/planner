@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Transaction } from '@/types/database.types';
-import HubHeader from '@/components/HubHeader';
+
 import Link from 'next/link';
 import { 
-  Receipt, ChevronLeft, Save, Loader2, 
+  Receipt, ChevronLeft, Loader2, 
   ArrowUpRight, Landmark, Filter, Download
 } from 'lucide-react';
 
@@ -14,16 +14,16 @@ const ACCOUNTS = [
   "Currently in Checking",
   "Jennifer's Check",
   "Tithe",
-  "ADT",
+  "Adt",
   "Amazon",
   "Auto Maintenance",
   "Blow",
   "Cleaning Lady",
-  "DWP",
+  "Dwp",
   "Gas",
   "Groceries",
   "Hair",
-  "HSA",
+  "Hsa",
   "Laundry",
   "Mercury Auto Insurance",
   "Orkin",
@@ -47,22 +47,27 @@ export default function TransactionsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
 
-  const fetchTransactions = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('Check Breakdown')
-      .select('*');
-    
-    if (error) {
-      console.error('Error fetching transactions:', error);
-    } else {
-      setTransactions(data || []);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
+    let ignore = false;
+
+    const fetchTransactions = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('Check Breakdown')
+        .select('*');
+      
+      if (!ignore) {
+        if (error) {
+          console.error('Error fetching transactions:', error);
+        } else {
+          setTransactions(data || []);
+        }
+        setLoading(false);
+      }
+    };
+
     fetchTransactions();
+    return () => { ignore = true; };
   }, []);
 
   async function handleUpdate(account: string, date: string, amount: number) {
@@ -103,7 +108,7 @@ export default function TransactionsPage() {
       account, 
       date, 
       amount, 
-      id: existing?.id || Math.random().toString(), 
+      id: existing?.id || crypto.randomUUID(), 
       user_id: user.id,
       category: 'General',
       updated_at: new Date().toISOString() 
@@ -114,25 +119,6 @@ export default function TransactionsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen font-sans">
-      <HubHeader 
-        title="Transactions Ledger" 
-        subtitle='"Official Checkbook Projection & Liquidity Registry"' 
-        icon={Receipt}
-        iconBgColor="bg-[#99B3C5]"
-        hideHubSuffix
-      >
-        <button className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-100 text-gray-500 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-gray-50 transition-all">
-          <Download size={16} />
-          Export
-        </button>
-        <Link 
-          href="/finance" 
-          className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-100 text-gray-400 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-gray-50 transition-all"
-        >
-          <ChevronLeft size={16} />
-          Back
-        </Link>
-      </HubHeader>
 
       <section className="bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl overflow-hidden mb-12">
         <div className="p-8 border-b border-gray-50 bg-[#f8fafc] flex justify-between items-center">
@@ -159,7 +145,7 @@ export default function TransactionsPage() {
                   <th className="p-6 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] sticky left-0 bg-white z-20 border-r border-gray-50">
                     Account Detail
                   </th>
-                  {DATES.map(date => (
+                  {DATES.map((date: string) => (
                     <th key={date} className="p-6 font-black text-[#0a2f5f] text-center border-r border-gray-50 last:border-r-0">
                       <div className="flex flex-col items-center gap-1">
                         <span className="text-[10px] uppercase tracking-widest text-gray-400">
@@ -174,7 +160,7 @@ export default function TransactionsPage() {
                 </tr>
               </thead>
               <tbody>
-                {ACCOUNTS.map((account, idx) => (
+                {ACCOUNTS.map((account: string, idx: number) => (
                   <tr key={account} className={`group ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'} hover:bg-blue-50/50 transition-colors`}>
                     <td className="p-6 border-b border-gray-50 font-bold text-[#0a2f5f] sticky left-0 bg-inherit group-hover:bg-inherit z-20 border-r border-gray-50 text-sm whitespace-nowrap">
                       <div className="flex items-center gap-3">
@@ -182,7 +168,7 @@ export default function TransactionsPage() {
                         {account}
                       </div>
                     </td>
-                    {DATES.map(date => {
+                    {DATES.map((date: string) => {
                       const tx = transactions.find(t => t.account === account && t.date === date);
                       const amount = tx ? tx.amount : 0;
                       const isSaving = saving === `${account}-${date}`;
@@ -208,7 +194,7 @@ export default function TransactionsPage() {
         <div className="bg-[#99B3C5]/10 p-8 rounded-[2rem] border-2 border-[#99B3C5]/20">
           <h4 className="text-[#0a2f5f] font-black uppercase tracking-[0.2em] text-[10px] mb-4">Ledger Insight</h4>
           <p className="text-[#0a2f5f] font-serif italic text-lg leading-relaxed">
-            "Projected balances assist in identifying potential liquidity gaps before they materialize."
+            &quot;Projected balances assist in identifying potential liquidity gaps before they materialize.&quot;
           </p>
         </div>
         <div className="md:col-span-2 bg-slate-50 p-8 rounded-[2rem] border-2 border-slate-100 flex items-center justify-between">

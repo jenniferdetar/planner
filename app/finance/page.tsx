@@ -7,7 +7,6 @@ import {
   BarChart3, PiggyBank, ArrowUpRight, ShieldCheck,
   TrendingUp, Landmark
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 const financeLinks = [
   {
@@ -55,20 +54,12 @@ const financeLinks = [
 export default function FinancePage() {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Finance" 
-        subtitle='"Master your resources with precision and foresight"' 
-        icon={Landmark} 
-        iconBgColor="bg-[#FFC68D]"
-        textColor="text-[#0a2f5f]"
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
         {financeLinks.map((link) => (
           <Link 
             key={link.href} 
             href={link.href}
-            className={`group relative flex flex-col justify-between p-8 rounded-[2.5rem] border-2 ${link.borderColor} bg-white shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 overflow-hidden`}
+            className={`group relative flex flex-col justify-between p-6 rounded-[2rem] border-2 ${link.borderColor} bg-white shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 overflow-hidden`}
           >
             <div className={`absolute -right-4 -top-4 w-24 h-24 ${link.color} opacity-10 rounded-full group-hover:scale-150 transition-transform duration-700`}></div>
             <div className="relative z-10">

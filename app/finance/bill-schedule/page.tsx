@@ -13,25 +13,25 @@ const BILL_ITEMS = [
   { category: 'Auto', item: 'Mercury Auto Insurance', amount: 388 },
   { category: 'Auto', item: 'Tahoe Registration', amount: 15 },
   { category: 'Auto', item: 'Trailblazer Registration', amount: 28 },
-  { category: 'Bill Pay', item: 'DWP', amount: 100 },
+  { category: 'Bill Pay', item: 'Dwp', amount: 100 },
   { category: 'Bill Pay', item: 'Jeff\'s Credit Cards', amount: 500 },
   { category: 'Bill Pay', item: 'Jennifer\'s Student Loans', amount: 150 },
   { category: 'Bill Pay', item: 'Schools First Loan', amount: 142 },
   { category: 'Cash', item: 'Cleaning Lady', amount: 200 },
   { category: 'Cash', item: 'Gas', amount: 600 },
   { category: 'Cash', item: 'Laundry', amount: 80 },
-  { category: 'Credit Card', item: 'ADT', amount: 53 },
+  { category: 'Credit Card', item: 'Adt', amount: 53 },
   { category: 'Credit Card', item: 'Amazon', amount: 100 },
   { category: 'Credit Card', item: 'Groceries', amount: 600 },
   { category: 'Credit Card', item: 'Hair', amount: 110 },
   { category: 'Credit Card', item: 'Orkin', amount: 50 },
-  { category: 'Housing', item: 'HELOC', amount: 357 },
+  { category: 'Housing', item: 'Heloc', amount: 357 },
   { category: 'Housing', item: 'HOA', amount: 520 },
   { category: 'Housing', item: 'Mortgage', amount: 2250 },
   { category: 'Housing', item: 'Spectrum', amount: 197 },
   { category: 'Housing', item: 'Verizon', amount: 283 },
   { category: 'Savings', item: 'Blow', amount: 200 },
-  { category: 'Savings', item: 'HSA', amount: 200 },
+  { category: 'Savings', item: 'Hsa', amount: 200 },
   { category: 'Savings', item: 'Summer Saver', amount: 400 },
   { category: 'Savings', item: 'Tahoe\'s Major Repairs', amount: 200 },
   { category: 'Savings', item: 'Vacation', amount: 125 }
@@ -52,31 +52,35 @@ function getCategoryColor(category: string) {
   return CATEGORY_COLORS[category] || '#94a3b8';
 }
 
-import HubHeader from '@/components/HubHeader';
-
 export default function BillSchedulePage() {
   const [checkedState, setCheckedState] = useState<Record<string, boolean>>({});
-  const [loading, setLoading] = useState(true);
 
   const storageKey = 'bill-payment-schedule:checked';
 
   useEffect(() => {
+    let ignore = false;
     async function fetchCheckedState() {
-      setLoading(true);
       const { data: metadata, error } = await supabase
         .from('opus_metadata')
         .select('value')
         .eq('key', storageKey)
         .single();
       
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching bill schedule state:', error);
-      } else if (metadata?.value) {
-        setCheckedState(metadata.value as Record<string, boolean>);
+      if (!ignore) {
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching bill schedule state:', error);
+        } else if (metadata?.value) {
+          setCheckedState(metadata.value as Record<string, boolean>);
+        }
       }
-      setLoading(false);
     }
-    fetchCheckedState();
+    const timeoutId = setTimeout(() => {
+      fetchCheckedState();
+    }, 0);
+    return () => {
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
   }, [storageKey]);
 
   async function toggleBox(item: string, monthIndex: number) {
@@ -104,22 +108,6 @@ export default function BillSchedulePage() {
 
   return (
     <div className="bg-[#fdfdfd] min-h-screen">
-      <div className="p-4 md:p-8 max-w-7xl mx-auto">
-        <HubHeader 
-          title="Bill Payment Schedule" 
-          subtitle="Official Registry of Recurring Liabilities" 
-          icon={Calendar} 
-          iconBgColor="bg-[#FFC68D]"
-          hideHubSuffix={true}
-        >
-          <Link 
-            href="/finance" 
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border-2 border-[#0a2f5f]/10 text-[#0a2f5f] font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f] hover:text-white transition-all shadow-sm"
-          >
-            <ChevronLeft size={16} />
-            Back to Finance
-          </Link>
-        </HubHeader>
         <section className="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
         <div className="absolute top-0 left-0 w-full h-2 bg-[#FFA1AB]"></div>
         

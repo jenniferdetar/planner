@@ -33,7 +33,8 @@ const LOVE_OPTIONS = [
   'Valuable', 'A leader', 'Servant-hearted'
 ];
 
-import HubHeader from '@/components/HubHeader';
+const STORAGE_KEY = 'planning-intentions-v2';
+const LEGACY_STORAGE_KEY = 'planning-intentions';
 
 export default function IntentionsPage() {
   const [intentions, setIntentions] = useState<Intention[]>([]);
@@ -56,20 +57,13 @@ export default function IntentionsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const storageKey = 'planning-intentions-v2';
-  const legacyStorageKey = 'planning-intentions';
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
+  const fetchData = React.useCallback(async () => {
     setLoading(true);
     // Fetch new v2 data
     const { data: metadata, error } = await supabase
       .from('opus_metadata')
       .select('value')
-      .eq('key', storageKey)
+      .eq('key', STORAGE_KEY)
       .single();
     
     if (error && error.code !== 'PGRST116') {
@@ -82,7 +76,7 @@ export default function IntentionsPage() {
       const { data: legacyMetadata } = await supabase
         .from('opus_metadata')
         .select('value')
-        .eq('key', legacyStorageKey)
+        .eq('key', LEGACY_STORAGE_KEY)
         .single();
       
       if (legacyMetadata?.value) {
@@ -90,7 +84,18 @@ export default function IntentionsPage() {
       }
     }
     setLoading(false);
-  }
+  }, [vision]);
+
+  useEffect(() => {
+    let ignore = false;
+    const timer = setTimeout(() => {
+      if (!ignore) fetchData();
+    }, 0);
+    return () => {
+      ignore = true;
+      clearTimeout(timer);
+    };
+  }, [fetchData]);
 
   async function saveData() {
     setSaving(true);
@@ -101,7 +106,7 @@ export default function IntentionsPage() {
       .from('opus_metadata')
       .upsert({
         user_id: user.id,
-        key: storageKey,
+        key: STORAGE_KEY,
         value: { vision, intentions },
         updated_at: new Date().toISOString()
       }, { onConflict: 'user_id,key' });
@@ -140,29 +145,6 @@ export default function IntentionsPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Intentions & Dreams" 
-        subtitle='"Be thoughtful about where you are going"' 
-        icon={Sparkles} 
-        iconBgColor="bg-[#99B3C5]"
-        hideHubSuffix={true}
-      >
-        <button 
-          onClick={saveData}
-          disabled={saving}
-          className="flex items-center gap-2 px-8 py-4 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#0a2f5f]/20"
-        >
-          <Save size={16} />
-          {saving ? 'Saving...' : 'Save Record'}
-        </button>
-        <Link 
-          href="/planning" 
-          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-        >
-          <ChevronLeft size={16} />
-          Back
-        </Link>
-      </HubHeader>
 
       <div className="space-y-12">
         {/* Main Vision Paper */}
@@ -184,7 +166,7 @@ export default function IntentionsPage() {
                 <textarea 
                   value={vision.workVision}
                   onChange={(e) => setVision({...vision, workVision: e.target.value})}
-                  placeholder="I'd love for my work to feel..."
+                  placeholder="I&apos;d love for my work to feel..."
                   className="w-full min-h-[350px] p-12 bg-[#fdfbf7] border-2 border-[#e6e2d3] rounded-3xl text-xl font-serif leading-[2.5rem] focus:ring-0 outline-none shadow-inner"
                   style={{ backgroundImage: 'linear-gradient(#e6e2d3 1px, transparent 1px)', backgroundSize: '100% 2.5rem' }}
                 />
@@ -220,14 +202,14 @@ export default function IntentionsPage() {
               <div className="p-8 bg-amber-50/50 rounded-[2rem] border border-amber-100/50">
                 <p className="text-xs font-bold text-amber-800/60 uppercase tracking-[0.2em] mb-4">Official Affirmation</p>
                 <p className="font-serif italic text-lg text-amber-900/80 leading-relaxed">
-                  "These values represent the foundation of my professional and personal growth for the year 2026."
+                  &quot;These values represent the foundation of my professional and personal growth for the year 2026.&quot;
                 </p>
               </div>
             </div>
           </div>
           
           <div className="absolute -bottom-20 -right-20 text-[20rem] opacity-[0.03] pointer-events-none font-black text-[#0a2f5f]">
-            VISION
+            Vision
           </div>
         </section>
 
@@ -235,7 +217,7 @@ export default function IntentionsPage() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             { label: 'Primary Delight', key: 'favoriteThing', color: 'bg-[#99B3C5]', icon: <Sparkles size={20} />, sub: 'Favorite thing at work each day' },
-            { label: 'Growth Area', key: 'didntEnjoy', color: 'bg-[#FFA1AB]', icon: <Target size={20} />, sub: 'What didn\'t you enjoy last year' },
+            { label: 'Growth Area', key: 'didntEnjoy', color: 'bg-[#FFA1AB]', icon: <Target size={20} />, sub: 'What didn&apos;t you enjoy last year' },
             { label: 'Pure Joy', key: 'simplyFun', color: 'bg-[#FFC68D]', icon: <Zap size={20} />, sub: 'What was simply fun for you' }
           ].map(field => (
             <div key={field.key} className="bg-white p-8 rounded-[2.5rem] border-2 border-gray-100 shadow-xl shadow-gray-200/50 group hover:-translate-y-2 transition-all duration-500">
@@ -246,7 +228,7 @@ export default function IntentionsPage() {
               <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mb-6">{field.sub}</p>
               <input 
                 type="text"
-                value={(vision as any)[field.key]}
+                value={vision[field.key as keyof VisionData]}
                 onChange={(e) => setVision({...vision, [field.key]: e.target.value})}
                 className="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-slate-100 rounded-2xl outline-none font-serif text-xl text-[#0a2f5f] transition-all"
                 placeholder="..."
@@ -274,7 +256,7 @@ export default function IntentionsPage() {
                 <div key={field.key} className={`bg-white/5 backdrop-blur-md p-8 rounded-[2.5rem] border ${field.color} ${field.glow} shadow-2xl focus-within:bg-white/10 transition-all`}>
                   <label className="block font-black uppercase tracking-[0.2em] text-[10px] mb-6 opacity-60">{field.label}</label>
                   <textarea 
-                    value={(vision as any)[field.key]}
+                    value={vision[field.key as keyof VisionData]}
                     onChange={(e) => setVision({...vision, [field.key]: e.target.value})}
                     className="w-full bg-transparent border-none p-0 focus:ring-0 text-xl font-serif placeholder:text-white/10 min-h-[150px] resize-none leading-relaxed"
                     placeholder="Visualize..."
@@ -300,7 +282,7 @@ export default function IntentionsPage() {
               placeholder="Primary Focus"
             />.
             <br />
-            To make that happen, I'm going to spend my time and energy on {' '}
+            To make that happen, I&apos;m going to spend my time and energy on {' '}
             <input 
               type="text" 
               value={vision.energyOn}
@@ -317,7 +299,7 @@ export default function IntentionsPage() {
               className="bg-transparent border-b-2 border-gray-200 focus:border-gray-400 outline-none px-4 w-full md:w-64 transition-all placeholder:text-gray-200"
               placeholder="Distractions"
             />,
-            I'm going to dream big about {' '}
+            I&apos;m going to dream big about {' '}
             <input 
               type="text" 
               value={vision.dreamBigAbout}
@@ -368,7 +350,7 @@ export default function IntentionsPage() {
                     value={intention.category}
                     onChange={(e) => updateIntention(index, 'category', e.target.value)}
                     className="text-[10px] font-black uppercase tracking-[0.3em] text-[#99B3C5] bg-transparent border-none p-0 focus:ring-0 w-full"
-                    placeholder="CATEGORY"
+                    placeholder="Category"
                   />
                   <textarea 
                     value={intention.text}
@@ -396,12 +378,12 @@ export default function IntentionsPage() {
           </div>
           <p className="text-[#0a2f5f]/40 text-xs font-black uppercase tracking-[0.4em] mb-4">Official Vision Document</p>
           <p className="text-gray-300 font-serif italic text-lg max-w-lg mx-auto leading-relaxed">
-            "Dream big, plan with intention, and live with purpose."
+            &quot;Dream big, plan with intention, and live with purpose.&quot;
           </p>
           <div className="mt-12 flex justify-center gap-8">
             <div className="text-center">
               <span className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Status</span>
-              <span className="text-xs font-bold text-[#0a2f5f]">AUTHENTICATED</span>
+              <span className="text-xs font-bold text-[#0a2f5f]">Authenticated</span>
             </div>
             <div className="text-center">
               <span className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Cycle</span>

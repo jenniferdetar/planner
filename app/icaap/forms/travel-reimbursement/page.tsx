@@ -5,11 +5,10 @@ import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { 
   ChevronLeft, Printer, Save, Plus, Trash2,
-  MapPin, Car, Receipt, CreditCard, Landmark,
-  Calendar, UserCircle, ShieldCheck, ArrowRight,
-  Plane, Hotel, Coffee
+  MapPin, Car, Receipt, Landmark,
+  UserCircle, ShieldCheck,
+  Plane
 } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 interface MileageEntry {
   id: string;
@@ -84,7 +83,7 @@ const INITIAL_DATA: TRData = {
   },
   mileage: {
     entries: [EMPTY_MILEAGE()],
-    rate: 0.67, // Standard 2024 IRS rate
+    rate: 0.67, // Standard 2024 Irs rate
   },
   expenses: [EMPTY_EXPENSE()],
   accounting: {
@@ -97,25 +96,31 @@ const INITIAL_DATA: TRData = {
 
 export default function TravelReimbursementPage() {
   const [data, setData] = useState<TRData>(INITIAL_DATA);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (ignore = false) => {
     const { data: metadata } = await supabase
       .from('opus_metadata')
       .select('value')
       .eq('key', 'travelReimbursementData')
       .single();
 
-    if (metadata?.value) {
-      setData(metadata.value as TRData);
+    if (!ignore) {
+      if (metadata?.value) {
+        setData(metadata.value as TRData);
+      }
     }
-    setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchData();
+    let ignore = false;
+    const timeoutId = setTimeout(() => {
+      void fetchData(ignore);
+    }, 0);
+    return () => { 
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
   }, [fetchData]);
 
   const handleSave = async () => {
@@ -157,7 +162,7 @@ export default function TravelReimbursementPage() {
     });
   };
 
-  const updateMileage = (id: string, field: keyof MileageEntry, value: any) => {
+  const updateMileage = (id: string, field: keyof MileageEntry, value: string | number) => {
     setData({
       ...data,
       mileage: {
@@ -175,7 +180,7 @@ export default function TravelReimbursementPage() {
     setData({ ...data, expenses: data.expenses.filter(e => e.id !== id) });
   };
 
-  const updateExpense = (id: string, field: keyof OtherExpense, value: any) => {
+  const updateExpense = (id: string, field: keyof OtherExpense, value: string | number) => {
     setData({
       ...data,
       expenses: data.expenses.map(e => e.id === id ? { ...e, [field]: value } : e)
@@ -189,32 +194,6 @@ export default function TravelReimbursementPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader
-        title="Travel Reimbursement"
-        subtitle="Official Expense Claim • iCAAP Administration"
-        icon={Plane}
-        hideHubSuffix
-      >
-        <Link href="/icaap/forms" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-          <ChevronLeft size={20} />
-          Back
-        </Link>
-        <button 
-          onClick={handleSave} 
-          disabled={saving}
-          className="group flex items-center gap-3 px-8 py-2 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-lg shadow-[#0a2f5f]/20"
-        >
-          <Save size={18} className="group-hover:scale-110 transition-transform" />
-          {saving ? 'Syncing...' : 'Save Claim'}
-        </button>
-        <button 
-          onClick={handlePrint}
-          className="flex items-center gap-3 px-8 py-2 bg-[#9ADBDE] text-[#0a2f5f] font-black text-[10px] uppercase tracking-[0.2em] rounded-full hover:bg-[#7cc8cc] transition-all shadow-lg shadow-[#9ADBDE]/20"
-        >
-          <Printer size={18} />
-          Print Form
-        </button>
-      </HubHeader>
 
       {/* Form Container */}
       <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
@@ -227,7 +206,7 @@ export default function TravelReimbursementPage() {
               <span className="text-xs font-black uppercase tracking-[0.3em]">Official Expenditure Claim</span>
             </div>
           </div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">TRAVEL</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">Travel</div>
         </div>
 
         <div className="p-10">
@@ -256,7 +235,7 @@ export default function TravelReimbursementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee ID</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee Id</label>
                     <input 
                       type="text" 
                       value={data.claimant.employeeId} 
@@ -525,19 +504,22 @@ export default function TravelReimbursementPage() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {Object.keys(data.accounting).map((key) => (
-                  <div key={key} className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
-                      {key === 'cc' ? 'Cost Center' : key === 'functionalArea' ? 'Func Area' : key.toUpperCase()}
-                    </label>
-                    <input 
-                      type="text" 
-                      value={(data.accounting as any)[key]} 
-                      onChange={e => setData({...data, accounting: {...data.accounting, [key]: e.target.value}})}
-                      className="w-full px-4 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#9ADBDE]/20 outline-none transition-all font-bold text-gray-700 shadow-sm text-center"
-                    />
-                  </div>
-                ))}
+                {Object.keys(data.accounting).map((k) => {
+                  const key = k as keyof TRData['accounting'];
+                  return (
+                    <div key={key} className="space-y-1">
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
+                        {key === 'cc' ? 'Cost Center' : key === 'functionalArea' ? 'Func Area' : key.toUpperCase()}
+                      </label>
+                      <input 
+                        type="text" 
+                        value={data.accounting[key]} 
+                        onChange={e => setData({...data, accounting: {...data.accounting, [key]: e.target.value}})}
+                        className="w-full px-4 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-[#9ADBDE]/20 outline-none transition-all font-bold text-gray-700 shadow-sm text-center"
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
 

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { ChevronLeft, Plus, Trash2, Calendar, Clock, BookOpen } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 interface SavedNote {
   text: string;
@@ -19,11 +18,7 @@ export default function IcaapNotesPage() {
 
   const storageKey = 'icaap-notes-collection';
 
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
-  async function fetchNotes() {
+  const fetchNotes = React.useCallback(async (ignore = false) => {
     setLoading(true);
     const { data: metadata, error } = await supabase
       .from('opus_metadata')
@@ -31,14 +26,27 @@ export default function IcaapNotesPage() {
       .eq('key', storageKey)
       .single();
     
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching ICAAP notes:', error);
-    } else if (metadata?.value) {
-      setSavedNotes(metadata.value.items || []);
-      setCurrentNote(metadata.value.current || '');
+    if (!ignore) {
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching Icaap notes:', error);
+      } else if (metadata?.value) {
+        setSavedNotes(metadata.value.items || []);
+        setCurrentNote(metadata.value.current || '');
+      }
+      setLoading(false);
     }
-    setLoading(false);
-  }
+  }, [storageKey]);
+
+  useEffect(() => {
+    let ignore = false;
+    const timeoutId = setTimeout(() => {
+      fetchNotes(ignore);
+    }, 0);
+    return () => {
+      ignore = true;
+      clearTimeout(timeoutId);
+    };
+  }, [fetchNotes]);
 
   async function saveNote() {
     if (!currentNote.trim()) return;
@@ -62,7 +70,7 @@ export default function IcaapNotesPage() {
       }, { onConflict: 'user_id,key' });
 
     if (error) {
-      console.error('Error saving ICAAP notes:', error);
+      console.error('Error saving Icaap notes:', error);
     } else {
       setSavedNotes(newSavedNotes);
       setCurrentNote('');
@@ -104,17 +112,6 @@ export default function IcaapNotesPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto bg-[#fdfbf7] min-h-screen">
-      <HubHeader
-        title="iCAAP Records"
-        subtitle='"Official records, reminders, and professional follow-ups"'
-        icon={BookOpen}
-        hideHubSuffix
-      >
-        <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-          <ChevronLeft size={20} />
-          Back to iCAAP
-        </Link>
-      </HubHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* New Note Area */}

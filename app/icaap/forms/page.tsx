@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { ChevronLeft, FileText, ClipboardCheck, Scroll, FileEdit, Truck, ArrowRight } from 'lucide-react';
-import HubHeader from '@/components/HubHeader';
 
 const forms = [
   {
@@ -39,17 +38,6 @@ const forms = [
 export default function IcaapFormsPage() {
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader
-        title="iCAAP Forms"
-        subtitle="Official Professional Documentation Repository"
-        icon={FileText}
-        hideHubSuffix
-      >
-        <Link href="/icaap" className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-[#0a2f5f]/10 rounded-full font-bold text-[#0a2f5f] hover:bg-[#0a2f5f]/5 transition-all shadow-sm">
-          <ChevronLeft size={20} />
-          Back to Hub
-        </Link>
-      </HubHeader>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
         {forms.map((form) => (

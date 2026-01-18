@@ -22,14 +22,12 @@ interface Review {
   lookingForward?: string;
 }
 
-import HubHeader from '@/components/HubHeader';
-
 export default function ReviewPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeReview, setActiveReview] = useState<Review>({
-    month: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+    month: new Date().toLocaleDateString('en-Us', { month: 'long', year: 'numeric' }),
     biggestWin: '',
     doneDifferently: '',
     funActivities: '',
@@ -40,42 +38,47 @@ export default function ReviewPage() {
   });
 
   const storageKey = 'planning-monthly-reviews';
-
+  
   useEffect(() => {
-    fetchReviews();
-  }, []);
-
-  async function fetchReviews() {
-    setLoading(true);
-    const { data: metadata, error } = await supabase
-      .from('opus_metadata')
-      .select('value')
-      .eq('key', storageKey)
-      .single();
+    let ignore = false;
     
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching reviews:', error);
-    } else if (metadata?.value) {
-      const allReviews = (metadata.value.reviews || []).map((r: any) => ({
-        ...r,
-        biggestWin: r.biggestWin || r.wins || '',
-        doneDifferently: r.doneDifferently || r.challenges || '',
-        nextMonthGoal: r.nextMonthGoal || r.focusNextMonth || '',
-        funActivities: r.funActivities || '',
-        changeToContinue: r.changeToContinue || '',
-        managedWell: r.managedWell || '',
-        lookingForward: r.lookingForward || ''
-      }));
-      setReviews(allReviews);
+    async function load() {
+      // loading is true by default
+      const { data: metadata, error } = await supabase
+        .from('opus_metadata')
+        .select('value')
+        .eq('key', storageKey)
+        .single();
       
-      const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-      const existing = allReviews.find((r: Review) => r.month === currentMonth);
-      if (existing) {
-        setActiveReview(existing);
+      if (ignore) return;
+      
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching reviews:', error);
+      } else if (metadata?.value) {
+        const allReviews = (metadata.value.reviews as Review[] || []).map((r: Review) => ({
+          ...r,
+          biggestWin: r.biggestWin || r.wins || '',
+          doneDifferently: r.doneDifferently || r.challenges || '',
+          nextMonthGoal: r.nextMonthGoal || r.focusNextMonth || '',
+          funActivities: r.funActivities || '',
+          changeToContinue: r.changeToContinue || '',
+          managedWell: r.managedWell || '',
+          lookingForward: r.lookingForward || ''
+        }));
+        setReviews(allReviews);
+        
+        const currentMonth = new Date().toLocaleDateString('en-Us', { month: 'long', year: 'numeric' });
+        const existing = allReviews.find((r: Review) => r.month === currentMonth);
+        if (existing) {
+          setActiveReview(existing);
+        }
       }
+      setLoading(false);
     }
-    setLoading(false);
-  }
+
+    load();
+    return () => { ignore = true; };
+  }, [storageKey]);
 
   async function saveReview() {
     setSaving(true);
@@ -103,39 +106,16 @@ export default function ReviewPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-      <HubHeader 
-        title="Monthly Review" 
-        subtitle="Reflect, recalibrate, and grow" 
-        icon={PieChart} 
-        iconBgColor="bg-[#FFA1AB]"
-        hideHubSuffix={true}
-      >
-        <button 
-          onClick={saveReview}
-          disabled={saving}
-          className="flex items-center gap-2 px-8 py-4 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-xl shadow-[#0a2f5f]/20"
-        >
-          <Save size={16} />
-          {saving ? 'Saving...' : 'Archive Report'}
-        </button>
-        <Link 
-          href="/planning" 
-          className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-gray-100 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-50 transition-all"
-        >
-          <ChevronLeft size={16} />
-          Back
-        </Link>
-      </HubHeader>
 
       <section className="relative bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12">
         <div className="absolute top-0 left-0 w-full h-2 bg-[#FFA1AB]"></div>
         
         <div className="bg-[#FFA1AB]/5 p-8 border-b border-gray-100 flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">{activeReview.month} Reflection</h2>
-            <p className="text-[10px] font-black text-[#FFA1AB] uppercase tracking-[0.3em] mt-1">Official Performance Record</p>
+            <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">{activeReview.month} Reflection</h2>
+            <p className="text-[10px] font-black text-[#FFA1AB] tracking-wider mt-1">Official Performance Record</p>
           </div>
-          <div className="px-4 py-2 bg-white rounded-xl border border-[#FFA1AB]/20 text-[10px] font-black text-[#0a2f5f] uppercase tracking-widest shadow-sm">
+          <div className="px-4 py-2 bg-white rounded-xl border border-[#FFA1AB]/20 text-[10px] font-black text-[#0a2f5f] tracking-wider shadow-sm">
             Draft Mode
           </div>
         </div>
@@ -148,7 +128,7 @@ export default function ReviewPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Award className="text-[#FFA1AB]" size={20} />
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Biggest Win This Month</label>
+                  <label className="text-xs font-black text-gray-400 tracking-wider">Biggest Win This Month</label>
                 </div>
                 <textarea 
                   value={activeReview.biggestWin}
@@ -161,7 +141,7 @@ export default function ReviewPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Search className="text-[#99B3C5]" size={20} />
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Wish I'd Done Differently</label>
+                  <label className="text-xs font-black text-gray-400 tracking-wider">Wish I&apos;d Done Differently</label>
                 </div>
                 <textarea 
                   value={activeReview.doneDifferently}
@@ -174,7 +154,7 @@ export default function ReviewPage() {
               <div className="md:col-span-2 space-y-4">
                 <div className="flex items-center gap-2">
                   <Zap className="text-[#FFC68D]" size={20} />
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Fun Personal or Professional Moments</label>
+                  <label className="text-xs font-black text-gray-400 tracking-wider">Fun Personal or Professional Moments</label>
                 </div>
                 <textarea 
                   value={activeReview.funActivities}
@@ -188,7 +168,7 @@ export default function ReviewPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="text-[#9ADBDE]" size={20} />
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Change to Continue</label>
+                  <label className="text-xs font-black text-gray-400 tracking-wider">Change to Continue</label>
                 </div>
                 <textarea 
                   value={activeReview.changeToContinue}
@@ -201,7 +181,7 @@ export default function ReviewPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <FileText className="text-[#0a2f5f]" size={20} />
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Managed Well</label>
+                  <label className="text-xs font-black text-gray-400 tracking-wider">Managed Well</label>
                 </div>
                 <textarea 
                   value={activeReview.managedWell}
@@ -214,7 +194,7 @@ export default function ReviewPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Target className="text-[#FFA1AB]" size={20} />
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Next Month's Biggest Goal</label>
+                  <label className="text-xs font-black text-gray-400 tracking-wider">Next Month&apos;s Biggest Goal</label>
                 </div>
                 <textarea 
                   value={activeReview.nextMonthGoal}
@@ -227,7 +207,7 @@ export default function ReviewPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Sparkles className="text-[#FFC68D]" size={20} />
-                  <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Looking Forward To</label>
+                  <label className="text-xs font-black text-gray-400 tracking-wider">Looking Forward To</label>
                 </div>
                 <textarea 
                   value={activeReview.lookingForward}
@@ -245,7 +225,7 @@ export default function ReviewPage() {
         <section className="pb-20">
           <div className="flex items-center gap-3 mb-8">
             <FileText className="text-[#0a2f5f]" size={24} />
-            <h3 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Archives</h3>
+            <h3 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Archives</h3>
             <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -259,11 +239,11 @@ export default function ReviewPage() {
                   : 'bg-white border-gray-100 hover:border-[#FFA1AB]/30 text-[#0a2f5f] hover:shadow-xl'
                 }`}
               >
-                <span className={`block text-xs font-black uppercase tracking-[0.3em] mb-2 ${activeReview.month === r.month ? 'text-white/60' : 'text-[#FFA1AB]'}`}>
+                <span className={`block text-xs font-black tracking-wider mb-2 ${activeReview.month === r.month ? 'text-white/60' : 'text-[#FFA1AB]'}`}>
                   {r.month.split(' ')[1]}
                 </span>
                 <span className="block text-xl font-black mb-4">{r.month.split(' ')[0]}</span>
-                <div className={`text-[10px] font-black uppercase tracking-widest ${activeReview.month === r.month ? 'text-white/40' : 'text-gray-300'}`}>
+                <div className={`text-[10px] font-black tracking-wider ${activeReview.month === r.month ? 'text-white/40' : 'text-gray-300'}`}>
                   {r.biggestWin && r.biggestWin.length > 0 ? 'Verified Archive' : 'Open Draft'}
                 </div>
               </button>
@@ -274,9 +254,9 @@ export default function ReviewPage() {
 
       <footer className="mt-12 py-12 border-t border-gray-100 text-center relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#0a2f5f]">
-          REVIEW
+          Review
         </div>
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em] relative z-10">Monthly Performance Audit © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black tracking-widest relative z-10">Monthly Performance Audit © 2026</p>
       </footer>
     </div>
   );
