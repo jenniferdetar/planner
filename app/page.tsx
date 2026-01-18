@@ -146,6 +146,10 @@ export default function Home() {
   return (
     <div className="bg-[#fdfdfd] min-h-screen">
       <div className="p-3 md:p-6 max-w-7xl mx-auto">
+        <div className="flex flex-wrap gap-3 mb-6">
+          <Link href="/planning/personal" className="planner-header-pill pill-personal">Personal Planner</Link>
+          <Link href="/planning/work" className="planner-header-pill pill-work">Work Planner</Link>
+        </div>
       <section className="mb-10">
         <div>
           <div className="flex items-center justify-between mb-5">

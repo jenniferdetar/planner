@@ -10,8 +10,6 @@ import {
 } from 'lucide-react';
 
 const corePlanningCards = [
-  { icon: <Calendar className="text-[#0a2f5f]" size={24} />, title: 'Personal Planner', sub: 'Weekly Schedule & Habits', href: '/planning/personal', color: 'bg-[#99B3C5]', borderColor: 'border-[#99B3C5]' },
-  { icon: <Briefcase className="text-[#0a2f5f]" size={24} />, title: 'Work Planner', sub: 'Weekly Grid & Priorities', href: '/planning/work', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
   { icon: <Target className="text-[#0a2f5f]" size={24} />, title: 'Goals', sub: 'Smart goal tracker', href: '/goals', color: 'bg-[#FFC68D]', borderColor: 'border-[#FFC68D]' },
   { icon: <Scroll className="text-[#0a2f5f]" size={24} />, title: 'Mission', sub: 'Your purpose & values', href: '/planning/mission', color: 'bg-[#FFA1AB]', borderColor: 'border-[#FFA1AB]' },
   { icon: <Zap className="text-[#0a2f5f]" size={24} />, title: 'Mantra', sub: 'Daily focus & intent', href: '/planning/mantra', color: 'bg-[#9ADBDE]', borderColor: 'border-[#9ADBDE]' },
