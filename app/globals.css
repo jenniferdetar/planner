@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
   --background: #f9fafb;
@@ -31,7 +31,18 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: "Inter", sans-serif;
 }
+
+h1 { font-size: 56px !important; }
+h2 { font-size: 40px !important; }
+h3 { font-size: 30px !important; }
+h4 { font-size: 24px !important; }
+h5 { font-size: 19px !important; }
+h6 { font-size: 17px !important; }
+
+table th { font-size: 18pt !important; }
+table td { font-size: 14pt !important; }
 
 table,
 th,
