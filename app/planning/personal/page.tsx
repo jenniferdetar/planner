@@ -170,6 +170,7 @@ export default function PersonalPlannerPage() {
   const dayHeaderColors = ['#f38aa3', '#f3a25a', '#7fc9d6', '#3c6f8f', '#f28b85', '#f1c07a', '#7fc9d6'];
   const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
+  // Force redeploy trigger
   const renderRoutines = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mb-8">
       {ROUTINES.map((routine) => {
