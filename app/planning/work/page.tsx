@@ -150,7 +150,11 @@ export default function WorkPlannerPage() {
 
         // Deduplicate events by title and time
         eventMap[date] = rawEvents.reduce((acc: PlannerEvent[], current) => {
-          const x = acc.find(item => item.title === current.title && item.time === current.time);
+          const currentTitle = (current.title || '').trim().toLowerCase();
+          const x = acc.find(item => 
+            (item.title || '').trim().toLowerCase() === currentTitle && 
+            (item.time || null) === (current.time || null)
+          );
           if (!x) {
             return acc.concat([current]);
           } else {
