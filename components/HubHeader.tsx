@@ -29,7 +29,7 @@ export default function HubHeader({
           <Icon className="text-white" size={32} />
         </div>
         <div>
-          <h1 className={`text-4xl font-black ${textColor} tracking-tight uppercase`}>
+          <h1 className={`text-4xl font-black ${textColor} tracking-tight`}>
             {title}{!hideHubSuffix && ' Hub'}
           </h1>
           <p className="text-gray-400 font-bold tracking-widest text-xs italic">{subtitle}</p>

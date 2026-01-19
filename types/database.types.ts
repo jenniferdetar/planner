@@ -50,6 +50,20 @@ export interface CseaMember {
   updated_at: string;
 }
 
+export interface CseaSteward {
+  id: string;
+  name: string;
+  role: string | null;
+  title: string | null;
+  district: string | null;
+  office: string | null;
+  email: string | null;
+  phone: string | null;
+  focus_areas: string[] | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface CseaIssue {
   id: string;
   user_id: string;
@@ -68,7 +82,7 @@ export interface CseaIssue {
 export interface CheckBreakdown {
   id: number;
   account: string | null;
-  [key: string]: any; // Dates are columns in the legacy schema
+  [key: string]: string | number | boolean | null | undefined | { [key: string]: unknown } | unknown[];
 }
 
 export interface Transaction {
@@ -84,6 +98,6 @@ export interface Transaction {
 export interface OpusMetadata {
   user_id: string;
   key: string;
-  value: any;
+  value: string | number | boolean | null | { [key: string]: unknown } | unknown[];
   updated_at: string;
 }

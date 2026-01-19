@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
-import { CseaIssue } from '@/types/database.types';
+import { CseaIssue, CseaSteward } from '@/types/database.types';
 import { 
   Users, Shield, Search, 
   Plus, Trash2, 
@@ -15,6 +15,7 @@ import StatCard from '@/components/StatCard';
 export default function CseaPage() {
   const [activeTab, setActiveTab] = useState('issues');
   const [issues, setIssues] = useState<CseaIssue[]>([]);
+  const [stewards, setStewards] = useState<CseaSteward[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   
@@ -52,12 +53,25 @@ export default function CseaPage() {
     }
   };
 
+  const fetchStewards = async () => {
+    const { data, error } = await supabase
+      .from('csea_stewards')
+      .select('*');
+
+    if (error) {
+      console.error('Error fetching CSEA stewards:', error);
+    } else {
+      setStewards(data || []);
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
       // loading is already true by default, no need to set it synchronously
       await Promise.all([
         fetchIssues(),
-        fetchCseaMetadata()
+        fetchCseaMetadata(),
+        fetchStewards()
       ]);
       setLoading(false);
     };
@@ -87,11 +101,30 @@ export default function CseaPage() {
     setMeetingNotes(next);
   };
 
-  const filteredIssues = issues.filter(issue => 
-    (issue.csea_members?.full_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (issue.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (issue.steward || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const stewardById = useMemo(() => {
+    return new Map(stewards.map(steward => [steward.id, steward.name]));
+  }, [stewards]);
+
+  const stewardByName = useMemo(() => {
+    return new Map(stewards.map(steward => [steward.name.toLowerCase(), steward.name]));
+  }, [stewards]);
+
+  const resolveStewardName = (stewardValue: string | null) => {
+    if (!stewardValue) return '-';
+    const byId = stewardById.get(stewardValue);
+    if (byId) return byId;
+    const byName = stewardByName.get(stewardValue.toLowerCase());
+    return byName || stewardValue;
+  };
+
+  const filteredIssues = issues.filter(issue => {
+    const stewardName = resolveStewardName(issue.steward);
+    return (
+      (issue.csea_members?.full_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (issue.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stewardName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
   const stats = {
     total: issues.length,
@@ -185,6 +218,7 @@ export default function CseaPage() {
                         <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Full Name</th>
                         <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Type</th>
                         <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Description</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">CSEA Steward</th>
                         <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b text-center">Status</th>
                       </tr>
                     </thead>
@@ -198,6 +232,7 @@ export default function CseaPage() {
                           </td>
                           <td className="p-6 text-sm font-bold text-gray-600">{issue.issue_type}</td>
                           <td className="p-6 text-sm text-gray-600 max-w-md leading-relaxed">{issue.description}</td>
+                          <td className="p-6 text-sm text-gray-600">{resolveStewardName(issue.steward)}</td>
                           <td className="p-6">
                             <div className={`mx-auto w-fit px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${
                               issue.status === 'Closed' || issue.status === 'Resolved' ? 'bg-slate-100 text-slate-500' : 
@@ -211,7 +246,7 @@ export default function CseaPage() {
                       ))}
                       {filteredIssues.length === 0 && (
                         <tr>
-                          <td colSpan={5} className="p-20 text-center">
+                          <td colSpan={6} className="p-20 text-center">
                             <p className="text-gray-400 font-black uppercase tracking-widest text-xs">No case records found matching search parameters</p>
                           </td>
                         </tr>
