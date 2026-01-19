@@ -271,7 +271,7 @@ export default function PersonalPlannerPage() {
 
           return (
             <div key={dateStr} className="border-t-2 pt-6 pb-6 bg-white rounded-2xl px-6 shadow-sm border-slate-100" style={{ borderTopColor: dayColor }}>
-              <h2 className="text-lg font-black tracking-[0.2em] mb-8" style={{ color: dayColor }}>
+              <h2 className="text-sm font-black tracking-[0.2em] mb-8" style={{ color: dayColor }}>
                 {dayLabel}
               </h2>
               
