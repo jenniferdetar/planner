@@ -361,17 +361,17 @@ export default function WorkPlannerPage() {
                     dIdx === 6 ? 'border-blue-100 text-[#0a2f5f]' :
                     'border-gray-50 text-[#0a2f5f]'
                   }`}>
-                    <div className="text-sm tracking-wider opacity-40 mb-0.5">{day}</div>
-                    <div className="text-lg tracking-tight">{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+                    <div className="text-[14pt] tracking-wider opacity-40 mb-0.5">{day}</div>
+                    <div className="text-[14pt] tracking-tight">{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
                   </div>
 
                   {/* All Day Slot */}
                   <div className="p-2 min-h-[60px] border-b border-gray-50 bg-amber-50/20 relative group">
-                    <div className="absolute top-1 left-2 text-sm font-black text-amber-600/40 tracking-wider uppercase">Events</div>
+                    <div className="absolute top-1 left-2 text-[14pt] font-black text-amber-600/40 tracking-wider uppercase">Events</div>
                     {allDayEvents.length > 0 ? (
                       <div className="space-y-1 pt-3">
                         {allDayEvents.map((e, i) => (
-                          <div key={i} className="text-sm p-1 bg-amber-100 text-amber-800 rounded-lg font-black tracking-wider border border-amber-200 shadow-sm">
+                          <div key={i} className="text-[14pt] p-1 bg-amber-100 text-amber-800 rounded-lg font-black tracking-wider border border-amber-200 shadow-sm">
                             {e.title}
                           </div>
                         ))}
@@ -381,7 +381,7 @@ export default function WorkPlannerPage() {
                         contentEditable
                         suppressContentEditableWarning
                         onBlur={(e) => handleEdit(dateKey, 'all-day', e.target.innerText)}
-                        className="w-full h-full text-sm pt-3 outline-none font-black tracking-wider text-gray-300 italic"
+                        className="w-full h-full text-[14pt] pt-3 outline-none font-black tracking-wider text-gray-300 italic"
                       >
                         {edits[dateKey]?.['all-day'] || 'Log Entry...'}
                       </div>
@@ -397,7 +397,7 @@ export default function WorkPlannerPage() {
 
                       return (
                         <div key={slot.time} className={`flex h-10 group transition-all hover:bg-[#9ADBDE]/5 ${!isEven ? 'bg-slate-50/10' : ''}`}>
-                          <div className="w-12 text-sm font-black text-gray-300 flex items-center justify-center border-r border-gray-50 bg-white/50">
+                          <div className="w-12 text-[14pt] font-black text-gray-300 flex items-center justify-center border-r border-gray-50 bg-white/50">
                             {isEven ? slot.display.toLowerCase() : ''}
                           </div>
                           <div className="flex-grow p-1 overflow-hidden relative">
@@ -408,7 +408,7 @@ export default function WorkPlannerPage() {
                                   return (
                                     <div 
                                       key={i} 
-                                      className="text-sm p-1 rounded border leading-tight truncate font-black tracking-wider shadow-sm"
+                                      className="text-[14pt] p-1 rounded border leading-tight truncate font-black tracking-wider shadow-sm"
                                       style={{ backgroundColor: style.bg, borderColor: style.border, color: style.text }}
                                     >
                                       {e.title}
@@ -421,7 +421,7 @@ export default function WorkPlannerPage() {
                                 contentEditable
                                 suppressContentEditableWarning
                                 onBlur={(e) => handleEdit(dateKey, slot.time, e.target.innerText)}
-                                className="w-full h-full text-sm p-1 outline-none font-bold text-gray-400 group-hover:text-[#0a2f5f] opacity-0 group-hover:opacity-100 transition-all"
+                                className="w-full h-full text-[14pt] p-1 outline-none font-bold text-gray-400 group-hover:text-[#0a2f5f] opacity-0 group-hover:opacity-100 transition-all"
                               >
                                 {edits[dateKey]?.[slot.time] || ''}
                               </div>

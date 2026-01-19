@@ -271,7 +271,7 @@ export default function PersonalPlannerPage() {
 
           return (
             <div key={dateStr} className="border-t-2 pt-6 pb-6 bg-white rounded-2xl px-6 shadow-sm border-slate-100" style={{ borderTopColor: dayColor }}>
-              <h2 className="text-sm font-black tracking-[0.2em] mb-8" style={{ color: dayColor }}>
+              <h2 className="text-[14pt] font-black tracking-[0.2em] mb-8" style={{ color: dayColor }}>
                 {dayLabel}
               </h2>
               
@@ -286,7 +286,7 @@ export default function PersonalPlannerPage() {
                           contentEditable
                           suppressContentEditableWarning
                           onBlur={(e) => updateNote(dateStr, `chore-${i}`, e.target.innerText)}
-                          className="flex-grow text-sm text-slate-500 font-medium outline-none min-h-[14px]"
+                          className="flex-grow text-[14pt] text-slate-500 font-medium outline-none min-h-[14px]"
                         >
                           {dailyNotes[dateStr]?.[`chore-${i}`] || ''}
                         </div>
@@ -301,7 +301,7 @@ export default function PersonalPlannerPage() {
                         contentEditable
                         suppressContentEditableWarning
                         onBlur={(e) => updateNote(dateStr, 'meals', e.target.innerText)}
-                        className="w-full border-b border-slate-100 text-sm text-slate-500 font-medium outline-none min-h-[16px]"
+                        className="w-full border-b border-slate-100 text-[14pt] text-slate-500 font-medium outline-none min-h-[16px]"
                       >
                         {dailyNotes[dateStr]?.['meals'] || ''}
                       </div>
@@ -312,7 +312,7 @@ export default function PersonalPlannerPage() {
                         contentEditable
                         suppressContentEditableWarning
                         onBlur={(e) => updateNote(dateStr, 'growth', e.target.innerText)}
-                        className="w-full border-b border-slate-100 text-sm text-slate-500 font-medium outline-none min-h-[16px]"
+                        className="w-full border-b border-slate-100 text-[14pt] text-slate-500 font-medium outline-none min-h-[16px]"
                       >
                         {dailyNotes[dateStr]?.['growth'] || ''}
                       </div>
@@ -323,7 +323,7 @@ export default function PersonalPlannerPage() {
                         contentEditable
                         suppressContentEditableWarning
                         onBlur={(e) => updateNote(dateStr, 'finance', e.target.innerText)}
-                        className="w-full border-b border-slate-100 text-sm text-slate-500 font-medium outline-none min-h-[16px]"
+                        className="w-full border-b border-slate-100 text-[14pt] text-slate-500 font-medium outline-none min-h-[16px]"
                       >
                         {dailyNotes[dateStr]?.['finance'] || ''}
                       </div>
@@ -344,11 +344,11 @@ export default function PersonalPlannerPage() {
                           )}
                         </div>
                         <div>
-                          <p className={`text-sm font-bold ${task.completed ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
+                          <p className={`text-[14pt] font-bold ${task.completed ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
                             {task.title}
                           </p>
                           {task.due_time && (
-                            <span className="text-sm text-slate-400 font-medium">@ {task.due_time}</span>
+                            <span className="text-[14pt] text-slate-400 font-medium">@ {task.due_time}</span>
                           )}
                         </div>
                       </div>
