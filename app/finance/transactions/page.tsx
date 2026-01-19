@@ -4,10 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Transaction } from '@/types/database.types';
 
-import Link from 'next/link';
 import { 
-  Receipt, ChevronLeft, Loader2, 
-  ArrowUpRight, Landmark, Filter, Download
+  Loader2, 
+  ArrowUpRight, Landmark, Filter
 } from 'lucide-react';
 
 const ACCOUNTS = [

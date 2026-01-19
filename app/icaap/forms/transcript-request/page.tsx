@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 import { 
-  ChevronLeft, Save, Plus, Printer, Search, 
-  Scroll, UserCircle, Briefcase, Calendar, 
+  Save, Plus, Search, 
+  UserCircle, Briefcase, Calendar, 
   Filter, ArrowRight,
   ClipboardList, CheckCircle2
 } from 'lucide-react';

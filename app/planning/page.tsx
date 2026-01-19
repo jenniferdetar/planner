@@ -4,9 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import { 
   ChevronRight, Target, Scroll, Sparkles, 
-  BookOpen, Calendar, Briefcase, Heart, 
-  Plane, Activity, PieChart, Users, Zap,
-  Compass
+  BookOpen, Heart, 
+  Plane, Activity, PieChart, Users, Zap
 } from 'lucide-react';
 
 const corePlanningCards = [

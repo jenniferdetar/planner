@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
-import { ChevronLeft, BookOpen, Save, Plus, Trash2, Library, BookText, Bookmark } from 'lucide-react';
+import { BookOpen, Plus, Trash2, BookText, Bookmark } from 'lucide-react';
 
 interface Book {
   title: string;
@@ -16,7 +15,6 @@ const STORAGE_KEY = 'planning-books';
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   const fetchBooks = React.useCallback(async () => {
     setLoading(true);
@@ -46,7 +44,6 @@ export default function BooksPage() {
   }, [fetchBooks]);
 
   async function saveBooks(newBooks: Book[]) {
-    setSaving(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -62,7 +59,6 @@ export default function BooksPage() {
     if (error) {
       console.error('Error saving books:', error);
     }
-    setSaving(false);
   }
 
   const addBook = () => {

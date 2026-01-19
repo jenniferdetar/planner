@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { ChevronRight, FileText, Clock, FileSpreadsheet, ClipboardList, GraduationCap, Save, History } from 'lucide-react';
+import { ChevronRight, FileText, Clock, FileSpreadsheet, ClipboardList, Save, History } from 'lucide-react';
 
 const icaapLinks = [
   {

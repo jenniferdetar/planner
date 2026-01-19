@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 import { 
-  BarChart3, ChevronLeft, Save, TrendingUp, 
+  Save, TrendingUp, 
   TrendingDown, DollarSign, ArrowUpRight, ShieldCheck,
   History, PieChart
 } from 'lucide-react';

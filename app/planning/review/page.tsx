@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
-import { PieChart, Save, ChevronLeft, Award, Search, FileText, CheckCircle2, Target, Zap, Sparkles } from 'lucide-react';
+import { Award, Search, FileText, CheckCircle2, Target, Zap, Sparkles } from 'lucide-react';
 
 interface Review {
   month: string;
@@ -25,7 +24,6 @@ interface Review {
 export default function ReviewPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [activeReview, setActiveReview] = useState<Review>({
     month: new Date().toLocaleDateString('en-Us', { month: 'long', year: 'numeric' }),
     biggestWin: '',
@@ -79,30 +77,6 @@ export default function ReviewPage() {
     load();
     return () => { ignore = true; };
   }, [storageKey]);
-
-  async function saveReview() {
-    setSaving(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const updatedReviews = [...reviews.filter(r => r.month !== activeReview.month), activeReview];
-    
-    const { error } = await supabase
-      .from('opus_metadata')
-      .upsert({
-        user_id: user.id,
-        key: storageKey,
-        value: { reviews: updatedReviews },
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id,key' });
-
-    if (error) {
-      console.error('Error saving review:', error);
-    } else {
-      setReviews(updatedReviews);
-    }
-    setSaving(false);
-  }
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">

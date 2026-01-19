@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
-import { ChevronLeft, Plus, Trash2, Calendar, Clock, BookOpen } from 'lucide-react';
+import { Plus, Trash2, Calendar, Clock } from 'lucide-react';
 
 interface SavedNote {
   text: string;

@@ -4,8 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { 
   ChevronRight, Wallet, Receipt, Calendar, 
-  BarChart3, PiggyBank, ArrowUpRight, ShieldCheck,
-  TrendingUp, Landmark
+  BarChart3, PiggyBank
 } from 'lucide-react';
 
 const financeLinks = [

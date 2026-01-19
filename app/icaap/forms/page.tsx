@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ChevronLeft, FileText, ClipboardCheck, Scroll, FileEdit, Truck, ArrowRight } from 'lucide-react';
+import { ClipboardCheck, Scroll, FileEdit, Truck, ArrowRight } from 'lucide-react';
 
 const forms = [
   {

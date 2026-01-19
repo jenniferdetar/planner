@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
-import { ChevronLeft, Zap, Save, Sun, Moon, Quote, Sparkles } from 'lucide-react';
+import { Save, Sun, Moon, Quote, Sparkles } from 'lucide-react';
 
 export default function MantraPage() {
   const [mantra, setMantra] = useState('');

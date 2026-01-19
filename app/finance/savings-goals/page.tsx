@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 import { 
-  PiggyBank, ChevronLeft, Plus, 
+  Plus, 
   Target, ShieldCheck, Landmark,
   TrendingUp, Wallet, Trash2, Scroll
 } from 'lucide-react';

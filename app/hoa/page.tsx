@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { 
-  Home, Megaphone, Users, Landmark, FileText, 
+  Megaphone, Users, Landmark, FileText, 
   ShieldCheck, Gavel, Wrench, Receipt, 
   Building2, ChevronRight, Upload, Plus,
   Trash2, Search, ArrowUpRight, Activity

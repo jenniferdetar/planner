@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 import { 
-  ChevronLeft, Printer, Save, UserCircle, Briefcase, 
+  UserCircle, Briefcase, 
   Landmark, ShieldCheck, Calendar, Clock, DollarSign,
-  UserCheck, AlertCircle, FileSignature
+  UserCheck, AlertCircle
 } from 'lucide-react';
 
 interface PEAData {
@@ -80,7 +79,6 @@ const INITIAL_DATA: PEAData = {
 export default function ProfessionalExpertAgreementPage() {
   const [data, setData] = useState<PEAData>(INITIAL_DATA);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -105,43 +103,10 @@ export default function ProfessionalExpertAgreementPage() {
     return () => { ignore = true; };
   }, []);
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   const totalAmount = useMemo(() => {
     if (data.agreement.rateType === 'flat') return data.agreement.rate;
     return data.agreement.rate * data.agreement.maxHours;
   }, [data.agreement.rate, data.agreement.maxHours, data.agreement.rateType]);
-
-  const handleSave = async () => {
-    setSaving(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      alert('You must be logged in to save.');
-      setSaving(false);
-      return;
-    }
-
-    const dataToSave = {
-      ...data,
-      agreement: {
-        ...data.agreement,
-        totalAmount
-      }
-    };
-
-    await supabase
-      .from('opus_metadata')
-      .upsert({
-        user_id: user.id,
-        key: 'professionalExpertAgreementData',
-        value: dataToSave,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id,key' });
-    
-    setSaving(false);
-  };
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">

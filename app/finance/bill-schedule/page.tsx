@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 import { 
-  Calendar, ChevronLeft, Save, CheckCircle2, 
+  Save, CheckCircle2, 
   AlertCircle, DollarSign, ArrowUpRight, Search
 } from 'lucide-react';
 

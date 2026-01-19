@@ -7,7 +7,7 @@ import {
   Users, Shield, Search, 
   Plus, Trash2, 
   MessageSquare, Clock, CheckCircle2,
-  AlertCircle, Activity, Scale
+  AlertCircle, Activity
 } from 'lucide-react';
 
 import StatCard from '@/components/StatCard';

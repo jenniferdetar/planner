@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 
-import { ChevronLeft, Scroll, Save, ShieldCheck, Target, Quote } from 'lucide-react';
+import { Save, ShieldCheck, Target, Quote } from 'lucide-react';
 
 export default function MissionPage() {
   const [mission, setMission] = useState('');

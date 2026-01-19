@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { BookOpen, Heart, Activity, Users, Plane, ChevronLeft, Compass, Save, LucideIcon } from 'lucide-react';
+import { BookOpen, Heart, Activity, Users, Plane, Compass, Save, LucideIcon } from 'lucide-react';
 
 export default function VisionCategoryPage() {
   const params = useParams();

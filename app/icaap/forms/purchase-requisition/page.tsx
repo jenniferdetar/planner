@@ -2,12 +2,11 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 import { 
-  ChevronLeft, Printer, Save, Trash2, Plus, 
+  Trash2, Plus, 
   Building2, UserCircle, Briefcase, FileText, 
-  Landmark, Receipt, ShieldCheck, Calculator,
-  History
+  Landmark, ShieldCheck, Calculator,
+  History, Receipt
 } from 'lucide-react';
 
 interface PRItem {
@@ -103,7 +102,6 @@ const INITIAL_DATA: PRData = {
 export default function PurchaseRequisitionPage() {
   const [data, setData] = useState<PRData>(INITIAL_DATA);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   const fetchData = useCallback(async (ignore = false) => {
     const { data: metadata } = await supabase
@@ -131,31 +129,6 @@ export default function PurchaseRequisitionPage() {
       clearTimeout(timeoutId);
     };
   }, [fetchData]);
-
-  const handleSave = async () => {
-    setSaving(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      alert('You must be logged in to save.');
-      setSaving(false);
-      return;
-    }
-
-    await supabase
-      .from('opus_metadata')
-      .upsert({
-        user_id: user.id,
-        key: 'purchaseRequisitionData',
-        value: data,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id,key' });
-    
-    setSaving(false);
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   const updateItem = (index: number, field: keyof PRItem, value: string | number) => {
     const newItems = [...data.items];

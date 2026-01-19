@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 
 import StatCard from '@/components/StatCard';
-import { ChevronLeft, Clock, Calendar, Users, Calculator, History, ShieldCheck } from 'lucide-react';
+import { Calendar, Users, Calculator, History, ShieldCheck } from 'lucide-react';
 
 const MONTHS = ['jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'jan', 'feb', 'mar', 'apr', 'may', 'jun'];
 const MONTH_LABELS: Record<string, string> = {

@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 
-import { ChevronLeft, ChevronRight, Briefcase, Target, Layout, Zap, Award, Clock, User, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Target, Zap, Award, Clock, User, CheckCircle2 } from 'lucide-react';
 import { OpusGoal } from '@/types/database.types';
 
 interface PlannerEvent {
@@ -56,7 +55,7 @@ const getHourSlots = (start: number, end: number, step: number = 30) => {
 const TIME_SLOTS = getHourSlots(5, 20); // 5am to 8pm
 
 export default function WorkPlannerPage() {
-  const [currentWeekStart, setCurrentWeekStart] = useState(() => {
+  const [currentWeekStart] = useState(() => {
     const d = new Date();
     const day = d.getDay();
     d.setHours(0, 0, 0, 0);
@@ -145,12 +144,6 @@ export default function WorkPlannerPage() {
     fetchWorkData();
   }, [fetchWorkData]);
 
-  const navigateWeek = (direction: number) => {
-    const newStart = new Date(currentWeekStart);
-    newStart.setDate(newStart.getDate() + (direction * 7));
-    setCurrentWeekStart(newStart);
-  };
-
   const handleEdit = async (dateKey: string, slotKey: string, text: string) => {
     const newEdits = { ...edits };
     if (!newEdits[dateKey]) newEdits[dateKey] = {};
@@ -209,13 +202,6 @@ export default function WorkPlannerPage() {
         value: newStatus,
         updated_at: new Date().toISOString()
       }, { onConflict: 'user_id,key' });
-  };
-
-  const formatDateRange = () => {
-    const end = new Date(currentWeekStart);
-    end.setDate(end.getDate() + 6);
-    const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
-    return `${currentWeekStart.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}`;
   };
 
   const timeToMinutes = (hhmm: string | null) => {

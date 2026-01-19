@@ -30,9 +30,6 @@ function buildMonthGrid(year: number, month: number) {
   return cells;
 }
 
-import { Calendar as CalendarIcon, User, Layout } from 'lucide-react';
-import Link from 'next/link';
-
 export default function PersonalPlannerPage() {
   const year = 2026;
   const month = 0;

@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 
 import StatCard from '@/components/StatCard';
-import { ChevronLeft, Filter, Download, FileSpreadsheet, CheckCircle2, AlertCircle, Clock, ShieldCheck, Calculator } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Clock, ShieldCheck, Calculator, FileSpreadsheet } from 'lucide-react';
 
 const MONTHS = [
   { key: 'jul', label: 'Jul 2025' },
@@ -28,7 +27,6 @@ export default function IcaapPayLogPage() {
   const [paylogMap, setPaylogMap] = useState<Map<string, Record<string, string | number | null | undefined>>>(new Map());
   const [approvalMap, setApprovalMap] = useState<Map<string, Record<string, string | number | null | undefined>>>(new Map());
   const [loading, setLoading] = useState(true);
-  const [filterMonth, setFilterMonth] = useState('all');
 
   const fetchData = React.useCallback(async (ignore = false) => {
     setLoading(true);
@@ -130,14 +128,14 @@ export default function IcaapPayLogPage() {
                   <th rowSpan={2} className="p-8 font-black  tracking-[0.2em] text-[10px] sticky left-0 bg-[#0a2f5f] z-20 border-r border-white/10 shadow-xl">
                     Staff Member
                   </th>
-                  {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
+                  {MONTHS.map(m => (
                     <th key={m.key} colSpan={3} className="p-4 font-black  tracking-[0.2em] text-[10px] text-center border-l border-white/10 bg-white/5">
                       {m.label}
                     </th>
                   ))}
                 </tr>
                 <tr className="bg-[#0a2f5f]/95 text-white/50">
-                  {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
+                  {MONTHS.map(m => (
                     <React.Fragment key={`${m.key}-sub`}>
                       <th className="px-4 py-3 text-[9px] font-black  text-center border-l border-white/10 tracking-widest">Hrs</th>
                       <th className="px-4 py-3 text-[9px] font-black  text-center tracking-widest">Log</th>
@@ -158,7 +156,7 @@ export default function IcaapPayLogPage() {
                       <td className="p-6 font-black text-[#0a2f5f] text-xs  tracking-tight sticky left-0 bg-white group-hover:bg-[#f8fafc] z-10 border-r border-gray-100 shadow-[10px_0_15px_-5px_rgba(0,0,0,0.02)]">
                         {name}
                       </td>
-                      {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
+                      {MONTHS.map(m => (
                         <React.Fragment key={`${name}-${m.key}`}>
                           <td className={`p-4 text-center text-xs font-bold text-gray-700 border-l border-gray-50/50 ${getCellBg(hours[m.key], 'hours')}`}>
                             {hours[m.key] || '-'}

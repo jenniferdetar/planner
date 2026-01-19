@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
-import { Sparkles, ChevronLeft, Save, Trash2, Plus, Target, Heart, Zap, Scroll } from 'lucide-react';
+import { Sparkles, Trash2, Plus, Target, Heart, Zap, Scroll } from 'lucide-react';
 
 interface Intention {
   text: string;
@@ -55,7 +54,6 @@ export default function IntentionsPage() {
     worthItBecause: ''
   });
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   const fetchData = React.useCallback(async () => {
     setLoading(true);
@@ -96,26 +94,6 @@ export default function IntentionsPage() {
       clearTimeout(timer);
     };
   }, [fetchData]);
-
-  async function saveData() {
-    setSaving(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const { error } = await supabase
-      .from('opus_metadata')
-      .upsert({
-        user_id: user.id,
-        key: STORAGE_KEY,
-        value: { vision, intentions },
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id,key' });
-
-    if (error) {
-      console.error('Error saving data:', error);
-    }
-    setSaving(false);
-  }
 
   const toggleLove = (love: string) => {
     const nextLoves = vision.loves.includes(love)

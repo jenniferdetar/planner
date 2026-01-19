@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { 
-  HeartPulse, Activity, Apple, Beaker, 
+  Activity, Apple, Beaker, 
   Plus, Trash2, ShieldCheck,
   Stethoscope, Pill, Leaf, TrendingUp
 } from 'lucide-react';

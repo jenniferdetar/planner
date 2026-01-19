@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 import { 
-  Wallet, ChevronLeft, Loader2, 
+  Loader2, 
   Landmark, Info, Activity, PieChart, CheckCircle2
 } from 'lucide-react';
 
