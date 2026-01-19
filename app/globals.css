@@ -41,6 +41,23 @@ h4 { font-size: 20px !important; }
 h5 { font-size: 16px !important; }
 h6 { font-size: 14px !important; }
 
+/* Force Tailwind text utilities to the global 14pt size. */
+.text-xs,
+.text-sm,
+.text-base,
+.text-lg,
+.text-xl,
+.text-2xl,
+.text-3xl,
+.text-4xl,
+.text-5xl,
+.text-6xl,
+.text-7xl,
+.text-8xl,
+.text-9xl {
+  font-size: 14pt !important;
+}
+
 table th { font-size: 14pt !important; }
 table td { font-size: 14pt !important; }
 table {
