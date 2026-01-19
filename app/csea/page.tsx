@@ -22,6 +22,17 @@ export default function CseaPage() {
   const [meetingNotes, setMeetingNotes] = useState<{ date: string; title: string; notes: string }[]>([]);
   const [generalNotes, setGeneralNotes] = useState('');
   const [saving, setSaving] = useState(false);
+  
+  const [newIssue, setNewIssue] = useState<Partial<CseaIssue>>({
+    issue_date: new Date().toISOString().split('T')[0],
+    member_name: '',
+    work_location: '',
+    description: '',
+    involved_parties: '',
+    steward: '',
+    status: 'Open',
+    issue_type: 'Grievance'
+  });
 
   const fetchIssues = async () => {
     setLoading(true);
@@ -109,6 +120,31 @@ export default function CseaPage() {
     return new Map(stewards.map(steward => [steward.name.toLowerCase(), steward.name]));
   }, [stewards]);
 
+  const handleAddIssue = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('csea_issues')
+      .insert([{ ...newIssue, user_id: user.id }]);
+
+    if (error) {
+      console.error('Error adding issue:', error);
+    } else {
+      fetchIssues();
+      setNewIssue({
+        issue_date: new Date().toISOString().split('T')[0],
+        member_name: '',
+        work_location: '',
+        description: '',
+        involved_parties: '',
+        steward: '',
+        status: 'Open',
+        issue_type: 'Grievance'
+      });
+    }
+  };
+
   const resolveStewardName = (stewardValue: string | null) => {
     if (!stewardValue) return '-';
     const byId = stewardById.get(stewardValue);
@@ -119,10 +155,14 @@ export default function CseaPage() {
 
   const filteredIssues = issues.filter(issue => {
     const stewardName = resolveStewardName(issue.steward);
+    const searchLower = searchTerm.toLowerCase();
     return (
-      (issue.csea_members?.full_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (issue.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      stewardName.toLowerCase().includes(searchTerm.toLowerCase())
+      (issue.csea_members?.full_name || '').toLowerCase().includes(searchLower) ||
+      (issue.member_name || '').toLowerCase().includes(searchLower) ||
+      (issue.work_location || '').toLowerCase().includes(searchLower) ||
+      (issue.description || '').toLowerCase().includes(searchLower) ||
+      (issue.involved_parties || '').toLowerCase().includes(searchLower) ||
+      stewardName.toLowerCase().includes(searchLower)
     );
   });
 
@@ -134,7 +174,7 @@ export default function CseaPage() {
   };
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 w-full bg-[#fdfdfd] min-h-screen">
 <div className="flex flex-wrap gap-4 mb-12">
         <button 
           onClick={() => setActiveTab('issues')}
@@ -182,6 +222,88 @@ export default function CseaPage() {
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+                    <Plus size={20} className="text-[#0a2f5f]" />
+                  </div>
+                  <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Add New Issue</h2>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Date</label>
+                    <input 
+                      type="date"
+                      value={newIssue.issue_date}
+                      onChange={(e) => setNewIssue({...newIssue, issue_date: e.target.value})}
+                      className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Member Name</label>
+                    <input 
+                      type="text"
+                      placeholder="Full Name"
+                      value={newIssue.member_name}
+                      onChange={(e) => setNewIssue({...newIssue, member_name: e.target.value})}
+                      className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Work Location</label>
+                    <input 
+                      type="text"
+                      placeholder="School/Office"
+                      value={newIssue.work_location}
+                      onChange={(e) => setNewIssue({...newIssue, work_location: e.target.value})}
+                      className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Discussed</label>
+                    <input 
+                      type="text"
+                      placeholder="Description"
+                      value={newIssue.description}
+                      onChange={(e) => setNewIssue({...newIssue, description: e.target.value})}
+                      className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Involved</label>
+                    <input 
+                      type="text"
+                      placeholder="Parties involved"
+                      value={newIssue.involved_parties}
+                      onChange={(e) => setNewIssue({...newIssue, involved_parties: e.target.value})}
+                      className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Steward</label>
+                    <select 
+                      value={newIssue.steward || ''}
+                      onChange={(e) => setNewIssue({...newIssue, steward: e.target.value})}
+                      className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs appearance-none"
+                    >
+                      <option value="">Select Steward</option>
+                      {stewards.map(s => (
+                        <option key={s.id} value={s.id}>{s.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <button 
+                  onClick={handleAddIssue}
+                  className="mt-6 w-full py-4 bg-[#00326b] text-[#ffca38] border-2 border-[#ffca38] rounded-2xl font-black tracking-widest text-xs hover:bg-[#00254d] transition-all shadow-xl shadow-[#00326b]/20"
+                >
+                  Append Record
+                </button>
+              </div>
+            </section>
+
+            <section className="bg-white p-10 rounded-[3rem] border-2 border-slate-100 shadow-sm relative overflow-hidden">
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
                     <Search size={20} className="text-[#0a2f5f]" />
                   </div>
                   <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Search Registry</h2>
@@ -214,25 +336,26 @@ export default function CseaPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-50/50">
-                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Member Id</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Full Name</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Type</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Description</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">CSEA Steward</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Date Spoke with Member</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Member Name</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Member Work Location</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">What was discussed</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Who was involved</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">CSEA Contact Person</th>
                         <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b text-center">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-50">
                       {filteredIssues.map((issue) => (
                         <tr key={issue.id} className="group hover:bg-slate-50/50 transition-colors">
-                          <td className="p-6 font-black text-[#0a2f5f]  tracking-tighter">{issue.csea_members?.member_id || '-'}</td>
+                          <td className="p-6 text-sm font-bold text-[#0a2f5f]">{issue.issue_date}</td>
                           <td className="p-6">
-                            <div className="font-black text-gray-900">{issue.csea_members?.full_name || 'Unknown'}</div>
-                            <div className="text-[10px] font-bold text-gray-400  tracking-widest">Steward: {issue.steward}</div>
+                            <div className="font-black text-gray-900">{issue.member_name || issue.csea_members?.full_name || 'Unknown'}</div>
                           </td>
-                          <td className="p-6 text-sm font-bold text-gray-600">{issue.issue_type}</td>
+                          <td className="p-6 text-sm font-bold text-gray-600">{issue.work_location}</td>
                           <td className="p-6 text-sm text-gray-600 max-w-md leading-relaxed">{issue.description}</td>
-                          <td className="p-6 text-sm text-gray-600">{resolveStewardName(issue.steward)}</td>
+                          <td className="p-6 text-sm text-gray-600">{issue.involved_parties}</td>
+                          <td className="p-6 text-sm text-gray-600 font-bold">{resolveStewardName(issue.steward)}</td>
                           <td className="p-6">
                             <div className={`mx-auto w-fit px-4 py-2 rounded-xl text-[10px] font-black  tracking-widest ${
                               issue.status === 'Closed' || issue.status === 'Resolved' ? 'bg-slate-100 text-slate-500' : 

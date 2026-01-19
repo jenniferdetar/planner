@@ -159,7 +159,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen">
+      <div className="p-4 md:p-8 w-full bg-[#fdfdfd] min-h-screen">
       <div className="flex flex-wrap gap-3 mb-6">
         <Link href="/planning/personal" className="planner-header-pill pill-personal">Personal Planner</Link>
         <Link href="/planning/work" className="planner-header-pill pill-work">Work Planner</Link>
@@ -258,6 +258,7 @@ export default function Home() {
                         className={`text-[8px] px-2 py-1 rounded-full font-black cursor-pointer hover:brightness-95 transition-all truncate ${
                           (e.title?.toLowerCase().includes('paydy') || e.title?.toLowerCase().includes('payday')) ? 'bg-[#22c55e] text-white border border-[#facc15]' :
                           (e.title?.toLowerCase().includes('due') || e.category?.toLowerCase().includes('due')) ? 'bg-[#dc2626] text-white border border-[#facc15]' :
+                          (e.title?.toLowerCase().includes('la fed') || e.title?.toLowerCase().includes('lafed')) ? 'bg-[#00493a] text-white border border-[#ffca38]' :
                           e.category?.toUpperCase().includes('CSEA') ? 'bg-[#00326b] text-[#ffca38] border border-[#ffca38]' :
                           e.type === 'meeting' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
                           e.type === 'task' ? 'bg-amber-100 text-amber-700 border border-amber-200' :

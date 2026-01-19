@@ -6,7 +6,8 @@ import { OpusTask } from '@/types/database.types';
 import { 
   CheckCircle2, Circle, 
   Utensils, Flower2, DollarSign,
-  Heart, Home, Calendar, Clock
+  Heart, Home, Calendar, Clock,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 const DAYS = [
@@ -48,6 +49,8 @@ const ROUTINES = [
 
 export default function PersonalPlannerPage() {
   const [tasks, setTasks] = useState<OpusTask[]>([]);
+  const [habitStatus, setHabitStatus] = useState<Record<string, boolean[]>>({});
+  const [dailyNotes, setDailyNotes] = useState<Record<string, Record<string, string>>>({});
   const [currentWeekStart, setCurrentWeekStart] = useState(() => {
     const d = new Date();
     const day = d.getDay();
@@ -56,25 +59,104 @@ export default function PersonalPlannerPage() {
   });
 
   useEffect(() => {
-    async function fetchTasks() {
+    async function fetchData() {
+      // Fetch Tasks
       const start = new Date(currentWeekStart);
       start.setHours(0, 0, 0, 0);
       const end = new Date(currentWeekStart);
-      end.setDate(end.getDate() + 7);
+      end.setDate(end.getDate() + 6);
       end.setHours(23, 59, 59, 999);
 
-      const { data, error } = await supabase
+      const { data: tasksData } = await supabase
         .from('opus_tasks')
         .select('*')
         .gte('due_date', start.toISOString().split('T')[0])
         .lte('due_date', end.toISOString().split('T')[0]);
 
-      if (!error && data) {
-        setTasks(data);
+      if (tasksData) {
+        // Deduplicate tasks by title and date
+        const uniqueTasks = tasksData.reduce((acc: OpusTask[], current) => {
+          const x = acc.find(item => item.title === current.title && item.due_date === current.due_date);
+          if (!x) {
+            return acc.concat([current]);
+          } else {
+            return acc;
+          }
+        }, []);
+        setTasks(uniqueTasks);
       }
+
+      // Fetch Metadata
+      const { data: metadata } = await supabase
+        .from('opus_metadata')
+        .select('key, value')
+        .in('key', ['personalHabits', 'personalNotes']);
+
+      const habits = metadata?.find(m => m.key === 'personalHabits')?.value as Record<string, boolean[]> || {};
+      const notes = metadata?.find(m => m.key === 'personalNotes')?.value as Record<string, Record<string, string>> || {};
+      
+      setHabitStatus(habits);
+      setDailyNotes(notes);
     }
-    fetchTasks();
+    fetchData();
   }, [currentWeekStart]);
+
+  const saveMetadata = async (key: string, value: Record<string, unknown> | boolean[]) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    await supabase
+      .from('opus_metadata')
+      .upsert({
+        user_id: user.id,
+        key,
+        value,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,key' });
+  };
+
+  const toggleHabit = (routineTitle: string, index: number) => {
+    const current = habitStatus[routineTitle] || Array(28).fill(false);
+    const updated = [...current];
+    updated[index] = !updated[index];
+    
+    const newHabits = { ...habitStatus, [routineTitle]: updated };
+    setHabitStatus(newHabits);
+    saveMetadata('personalHabits', newHabits);
+  };
+
+  const updateNote = (dateStr: string, key: string, text: string) => {
+    const newNotes = { ...dailyNotes };
+    if (!newNotes[dateStr]) newNotes[dateStr] = {};
+    newNotes[dateStr][key] = text;
+    
+    setDailyNotes(newNotes);
+    saveMetadata('personalNotes', newNotes);
+  };
+
+  const toggleTask = async (taskId: string, currentStatus: boolean) => {
+    const updatedTasks = tasks.map(t => 
+      t.id === taskId ? { ...t, completed: !currentStatus } : t
+    );
+    setTasks(updatedTasks);
+
+    await supabase
+      .from('opus_tasks')
+      .update({ completed: !currentStatus })
+      .eq('id', taskId);
+  };
+
+  const nextWeek = () => {
+    const d = new Date(currentWeekStart);
+    d.setDate(d.getDate() + 7);
+    setCurrentWeekStart(d);
+  };
+
+  const prevWeek = () => {
+    const d = new Date(currentWeekStart);
+    d.setDate(d.getDate() - 7);
+    setCurrentWeekStart(d);
+  };
 
   const weekDays = Array.from({ length: 7 }).map((_, i) => {
     const d = new Date(currentWeekStart);
@@ -86,39 +168,59 @@ export default function PersonalPlannerPage() {
 
   const renderRoutines = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {ROUTINES.map((routine) => (
-        <div key={routine.title} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-          <div className="flex items-center gap-2 mb-3">
-            {routine.icon}
-            <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700">{routine.title}</h3>
-          </div>
-          <div className="flex gap-4">
-            <div className="grid grid-cols-7 gap-1">
-              {Array.from({ length: 28 }).map((_, i) => (
-                <div 
-                  key={i} 
-                  className="w-3 h-3 rounded-sm border border-slate-100" 
-                  style={{ backgroundColor: `${routine.color}${i % 7 === 0 ? '44' : '11'}` }}
-                />
-              ))}
+      {ROUTINES.map((routine) => {
+        const habits = habitStatus[routine.title] || Array(28).fill(false);
+        return (
+          <div key={routine.title} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              {routine.icon}
+              <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700">{routine.title}</h3>
             </div>
-            <ul className="space-y-1">
-              {routine.items.map((item) => (
-                <li key={item} className="text-[9px] text-slate-500 font-medium leading-tight">• {item}</li>
-              ))}
-            </ul>
+            <div className="flex gap-4">
+              <div className="grid grid-cols-7 gap-1">
+                {habits.map((completed, i) => (
+                  <div 
+                    key={i} 
+                    onClick={() => toggleHabit(routine.title, i)}
+                    className="w-3 h-3 rounded-sm border border-slate-100 cursor-pointer transition-all hover:scale-110" 
+                    style={{ 
+                      backgroundColor: completed ? routine.color : `${routine.color}${i % 7 === 0 ? '44' : '11'}` 
+                    }}
+                  />
+                ))}
+              </div>
+              <ul className="space-y-1">
+                {routine.items.map((item) => (
+                  <li key={item} className="text-[9px] text-slate-500 font-medium leading-tight">• {item}</li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 
   return (
-    <div className="p-4 md:p-8 max-w-[1400px] mx-auto bg-[#fdfdfd] min-h-screen font-sans">
+    <div className="p-4 md:p-8 w-full bg-[#fdfdfd] min-h-screen font-sans">
       {/* Header */}
       <header className="mb-8">
-        <div className="bg-[#3c6f8f] text-white py-2 px-6 text-center text-[11px] font-black tracking-[0.4em] rounded-sm mb-4">
-          {weekRangeLabel}
+        <div className="flex items-center gap-4 mb-4">
+          <button 
+            onClick={prevWeek}
+            className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <div className="flex-grow bg-[#3c6f8f] text-white py-2 px-6 text-center text-[11px] font-black tracking-[0.4em] rounded-sm">
+            {weekRangeLabel}
+          </div>
+          <button 
+            onClick={nextWeek}
+            className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
         {renderRoutines()}
         <div className="bg-[#f38aa3]/10 border-l-4 border-[#f38aa3] py-2 px-4 mb-8">
@@ -149,7 +251,14 @@ export default function PersonalPlannerPage() {
                     {[1, 2, 3].map(i => (
                       <div key={i} className="flex items-center gap-2">
                         <div className="w-3 h-3 border border-slate-300 rounded-sm" />
-                        <div className="h-px flex-grow bg-slate-100" />
+                        <div 
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={(e) => updateNote(dateStr, `chore-${i}`, e.target.innerText)}
+                          className="flex-grow text-[9px] text-slate-500 font-medium outline-none min-h-[14px]"
+                        >
+                          {dailyNotes[dateStr]?.[`chore-${i}`] || ''}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -157,15 +266,36 @@ export default function PersonalPlannerPage() {
                   <div className="space-y-4">
                     <div className="flex gap-3">
                       <Utensils size={14} className="text-slate-300 shrink-0" />
-                      <div className="w-full border-b border-slate-100 h-4" />
+                      <div 
+                        contentEditable
+                        suppressContentEditableWarning
+                        onBlur={(e) => updateNote(dateStr, 'meals', e.target.innerText)}
+                        className="w-full border-b border-slate-100 text-[9px] text-slate-500 font-medium outline-none min-h-[16px]"
+                      >
+                        {dailyNotes[dateStr]?.['meals'] || ''}
+                      </div>
                     </div>
                     <div className="flex gap-3">
                       <Flower2 size={14} className="text-slate-300 shrink-0" />
-                      <div className="w-full border-b border-slate-100 h-4" />
+                      <div 
+                        contentEditable
+                        suppressContentEditableWarning
+                        onBlur={(e) => updateNote(dateStr, 'growth', e.target.innerText)}
+                        className="w-full border-b border-slate-100 text-[9px] text-slate-500 font-medium outline-none min-h-[16px]"
+                      >
+                        {dailyNotes[dateStr]?.['growth'] || ''}
+                      </div>
                     </div>
                     <div className="flex gap-3">
                       <DollarSign size={14} className="text-slate-300 shrink-0" />
-                      <div className="w-full border-b border-slate-100 h-4" />
+                      <div 
+                        contentEditable
+                        suppressContentEditableWarning
+                        onBlur={(e) => updateNote(dateStr, 'finance', e.target.innerText)}
+                        className="w-full border-b border-slate-100 text-[9px] text-slate-500 font-medium outline-none min-h-[16px]"
+                      >
+                        {dailyNotes[dateStr]?.['finance'] || ''}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -175,7 +305,7 @@ export default function PersonalPlannerPage() {
                   {dayTasks.length > 0 ? (
                     dayTasks.map(task => (
                       <div key={task.id} className="flex items-start gap-3 py-1 group">
-                        <div className="mt-1">
+                        <div className="mt-1 cursor-pointer" onClick={() => toggleTask(task.id, task.completed)}>
                           {task.completed ? (
                             <CheckCircle2 size={14} className="text-emerald-500" />
                           ) : (

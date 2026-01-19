@@ -68,6 +68,9 @@ export interface CseaIssue {
   id: string;
   user_id: string;
   member_id: string | null;
+  member_name: string | null;
+  work_location: string | null;
+  involved_parties: string | null;
   issue_type: 'Grievance' | 'Gripe' | 'Complaint' | null;
   description: string | null;
   steward: string | null;

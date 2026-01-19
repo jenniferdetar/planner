@@ -22,7 +22,8 @@ const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 const STYLE_MAP: Record<string, { bg: string; border: string; text: string }> = {
   due:    { bg: '#dc2626', border: '#facc15', text: '#ffffff' },
   holiday:{ bg: '#ffe1b0', border: '#f59e0b', text: '#9a4d00' },
-  csea:   { bg: '#b7dbff', border: '#3b82f6', text: '#0b3b70' },
+  csea:   { bg: '#00326b', border: '#ffca38', text: '#ffca38' },
+  lafed:  { bg: '#00493a', border: '#ffca38', text: '#ffffff' },
   payday: { bg: '#22c55e', border: '#facc15', text: '#ffffff' },
   budget: { bg: '#ffd4a8', border: '#f97316', text: '#9a3412' },
   budgetpay: { bg: '#bff0d4', border: '#10b981', text: '#0b4a3a' },
@@ -110,7 +111,7 @@ export default function WorkPlannerPage() {
 
       const eventMap: Record<string, PlannerEvent[]> = {};
       weekDates.forEach(date => {
-        eventMap[date] = [];
+        const rawEvents: PlannerEvent[] = [];
         tasks?.filter(t => t.due_date === date).forEach(t => {
           let dueTime = t.due_time;
           if (t.title?.toUpperCase().includes('NEO')) {
@@ -119,7 +120,7 @@ export default function WorkPlannerPage() {
             dueTime = '17:30';
           }
           
-          eventMap[date].push({
+          rawEvents.push({
             id: t.id,
             title: t.title,
             time: dueTime,
@@ -137,7 +138,7 @@ export default function WorkPlannerPage() {
             startTime = '17:30';
           }
 
-          eventMap[date].push({
+          rawEvents.push({
             id: m.id,
             title: m.title,
             time: startTime,
@@ -146,6 +147,16 @@ export default function WorkPlannerPage() {
             type: 'meeting'
           });
         });
+
+        // Deduplicate events by title and time
+        eventMap[date] = rawEvents.reduce((acc: PlannerEvent[], current) => {
+          const x = acc.find(item => item.title === current.title && item.time === current.time);
+          if (!x) {
+            return acc.concat([current]);
+          } else {
+            return acc;
+          }
+        }, []);
       });
       setEventsByDate(eventMap);
     } catch (error) {
@@ -248,7 +259,11 @@ export default function WorkPlannerPage() {
     const text = (event.title || '').toLowerCase();
     const category = (event.category || '').toLowerCase();
     if (/due/i.test(text) || /due/i.test(category)) return 'due';
-    if (category === 'meeting' || /meeting/i.test(text)) return 'csea';
+    if (category === 'meeting' || /meeting/i.test(text)) {
+      if (/la fed/i.test(text) || /lafed/i.test(text)) return 'lafed';
+      return 'csea';
+    }
+    if (/la fed/i.test(text) || /lafed/i.test(text)) return 'lafed';
     if (/lunch/i.test(text)) return 'lunch';
     if (/paydy/i.test(text) || /payday/i.test(text)) return 'payday';
     return 'default';
@@ -257,7 +272,7 @@ export default function WorkPlannerPage() {
   const weekKey = currentWeekStart.toISOString().split('T')[0];
 
   return (
-    <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 w-full bg-[#fdfdfd] min-h-screen">
 
       {/* Priorities Section */}
       <section className="mb-12">
