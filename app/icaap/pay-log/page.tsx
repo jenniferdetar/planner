@@ -188,52 +188,7 @@ export default function IcaapPayLogPage() {
         </div>
       )}
       
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-        <StatCard 
-          title="Submission Goal"
-          value="98% Approved"
-          icon={<CheckCircle2 size={24} />}
-          color="bg-[#9ADBDE]"
-        />
-        <StatCard 
-          title="Pending Review"
-          value="12 Logs"
-          icon={<Clock size={24} />}
-          color="bg-[#FFC68D]"
-        />
-        <StatCard 
-          title="Total Records"
-          value={`${names.length} Active`}
-          icon={<FileSpreadsheet size={24} />}
-          color="bg-[#99B3C5]"
-        />
-      </section>
-
-      <section className="flex flex-col md:flex-row justify-between items-center gap-12 bg-white p-12 rounded-[3rem] border-2 border-gray-100 shadow-xl">
-        <div className="flex-grow">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-              <Calculator size={20} />
-            </div>
-            <h3 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Financial Audit Verification</h3>
-          </div>
-          <p className="text-gray-500 text-sm font-medium leading-relaxed max-w-xl">
-            This consolidated paylog registry has been cross-referenced with District payroll systems and iCAAP attendance certification logs. All records are verified for the current fiscal cycle.
-          </p>
-        </div>
-        
-        <div className="relative group">
-          <div className="absolute inset-0 bg-emerald-500 rounded-full blur-3xl opacity-5 group-hover:opacity-10 transition-opacity"></div>
-          <div className="relative w-40 h-40 rounded-full border-4 border-emerald-500/10 flex flex-col items-center justify-center p-4 text-center transform -rotate-12 group-hover:rotate-0 transition-transform duration-1000">
-            <div className="text-[10px] font-black text-emerald-600  tracking-[0.2em] mb-1">Certified</div>
-            <div className="w-12 h-px bg-emerald-200 mb-2"></div>
-            <div className="text-[8px] font-bold text-emerald-500/40  tracking-widest leading-tight italic">iCAAP Expenditure<br/>Verification Office</div>
-            <div className="mt-2 text-emerald-600">
-              <ShieldCheck size={28} />
-            </div>
-          </div>
-        </div>
-      </section>
+      <div className="mb-20"></div>
       
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
         <p className="text-gray-400 text-[10px] font-black  tracking-[0.5em]">iCAAP Financial Support Division © 2026</p>
