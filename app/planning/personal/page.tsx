@@ -167,7 +167,7 @@ export default function PersonalPlannerPage() {
   const weekRangeLabel = `${weekDays[0].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()} - ${weekDays[6].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()}`;
 
   const renderRoutines = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
       {ROUTINES.map((routine) => {
         const habits = habitStatus[routine.title] || Array(28).fill(false);
         return (
@@ -176,22 +176,22 @@ export default function PersonalPlannerPage() {
               {routine.icon}
               <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700">{routine.title}</h3>
             </div>
-            <div className="flex gap-4">
-              <div className="grid grid-cols-7 gap-1">
+            <div className="flex gap-4 items-start">
+              <div className="grid grid-cols-7 gap-1 shrink-0">
                 {habits.map((completed, i) => (
                   <div 
                     key={i} 
                     onClick={() => toggleHabit(routine.title, i)}
-                    className="w-3 h-3 rounded-sm border border-slate-100 cursor-pointer transition-all hover:scale-110" 
+                    className="w-4 h-4 rounded-sm border border-slate-100 cursor-pointer transition-all hover:scale-110" 
                     style={{ 
-                      backgroundColor: completed ? routine.color : `${routine.color}${i % 7 === 0 ? '44' : '11'}` 
+                      backgroundColor: completed ? routine.color : `${routine.color}11` 
                     }}
                   />
                 ))}
               </div>
               <ul className="space-y-1">
                 {routine.items.map((item) => (
-                  <li key={item} className="text-[9px] text-slate-500 font-medium leading-tight">• {item}</li>
+                  <li key={item} className="text-[12pt] text-slate-500 font-medium leading-tight whitespace-nowrap">• {item}</li>
                 ))}
               </ul>
             </div>

@@ -232,7 +232,7 @@ export default function CseaPage() {
                     <label className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Date</label>
                     <input 
                       type="date"
-                      value={newIssue.issue_date}
+                      value={newIssue.issue_date || ''}
                       onChange={(e) => setNewIssue({...newIssue, issue_date: e.target.value})}
                       className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
                     />
@@ -242,7 +242,7 @@ export default function CseaPage() {
                     <input 
                       type="text"
                       placeholder="Full Name"
-                      value={newIssue.member_name}
+                      value={newIssue.member_name || ''}
                       onChange={(e) => setNewIssue({...newIssue, member_name: e.target.value})}
                       className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
                     />
@@ -252,7 +252,7 @@ export default function CseaPage() {
                     <input 
                       type="text"
                       placeholder="School/Office"
-                      value={newIssue.work_location}
+                      value={newIssue.work_location || ''}
                       onChange={(e) => setNewIssue({...newIssue, work_location: e.target.value})}
                       className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
                     />
@@ -262,7 +262,7 @@ export default function CseaPage() {
                     <input 
                       type="text"
                       placeholder="Description"
-                      value={newIssue.description}
+                      value={newIssue.description || ''}
                       onChange={(e) => setNewIssue({...newIssue, description: e.target.value})}
                       className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
                     />
@@ -272,7 +272,7 @@ export default function CseaPage() {
                     <input 
                       type="text"
                       placeholder="Parties involved"
-                      value={newIssue.involved_parties}
+                      value={newIssue.involved_parties || ''}
                       onChange={(e) => setNewIssue({...newIssue, involved_parties: e.target.value})}
                       className="p-3 bg-slate-50 border-2 border-transparent focus:border-[#0a2f5f]/10 rounded-xl font-bold text-gray-700 outline-none text-xs"
                     />
