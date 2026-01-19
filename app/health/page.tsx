@@ -4,8 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { 
   Activity, Apple, Beaker, 
-  Plus, Trash2, ShieldCheck,
-  Stethoscope, Pill, Leaf, TrendingUp
+  Plus, Trash2, Pill, Leaf
 } from 'lucide-react';
 
 const MASTER_LIST = {
@@ -170,37 +169,6 @@ export default function HealthPage() {
           </div>
         )}
       </div>
-
-      <section className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-        <div className="bg-slate-50 p-10 rounded-[3rem] border-2 border-slate-100 relative overflow-hidden flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <ShieldCheck className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Data Integrity</h2>
-            </div>
-            <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
-              Wellness records are synchronized with the secure administrative ledger to ensure continuity of care.
-            </p>
-          </div>
-          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs  tracking-[0.2em] bg-white p-4 rounded-2xl border">
-            <Stethoscope size={16} />
-            Medical Records Verified
-          </div>
-        </div>
-
-        <div className="bg-[#9ADBDE]/10 p-10 rounded-[3rem] border-2 border-[#9ADBDE]/20 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <TrendingUp className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Vitality Metrics</h2>
-            </div>
-            <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
-              Current nutritional intake and medication adherence are within optimal parameters. Maintain consistency.
-            </p>
-          </div>
-          <div className="text-4xl font-black text-[#0a2f5f] opacity-20 italic">&quot;Your peace is protected on purpose.&quot;</div>
-        </div>
-      </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
         <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Health & Wellness Registry © 2026</p>

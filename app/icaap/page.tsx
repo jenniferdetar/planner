@@ -122,8 +122,8 @@ export default function IcaapPage() {
         ))}
       </div>
 
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        <div className="lg:col-span-8 bg-white p-10 rounded-[3rem] border-2 border-gray-100 shadow-xl">
+      <section className="grid grid-cols-1 gap-12 items-start">
+        <div className="bg-white p-10 rounded-[3rem] border-2 border-gray-100 shadow-xl">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-3">
               <History className="text-[#0a2f5f]" size={24} />
@@ -159,20 +159,6 @@ export default function IcaapPage() {
               </div>
             </>
           )}
-        </div>
-
-        <div className="lg:col-span-4 space-y-8">
-          <div className="bg-[#99B3C5]/10 p-8 rounded-[2.5rem] border-2 border-[#99B3C5]/20">
-            <h4 className="text-[#0a2f5f] font-black  tracking-widest text-xs mb-4">Quick Tip</h4>
-            <p className="text-[#0a2f5f] font-medium leading-relaxed italic">
-              &quot;Always cross-reference your Pay Log with the Hours Worked Registry to ensure 100% accuracy before the monthly deadline.&quot;
-            </p>
-          </div>
-          <div className="bg-[#FFA1AB]/10 p-8 rounded-[2.5rem] border-2 border-[#FFA1AB]/20">
-            <h4 className="text-[#0a2f5f] font-black  tracking-widest text-xs mb-4">Upcoming Deadline</h4>
-            <div className="text-3xl font-black text-[#0a2f5f] mb-1">Jan 31</div>
-            <p className="text-[#0a2f5f]/60 text-xs font-bold  tracking-widest">January Paylog Submission</p>
-          </div>
         </div>
       </section>
 
