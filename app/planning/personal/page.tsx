@@ -231,7 +231,7 @@ export default function PersonalPlannerPage() {
       </header>
 
       {/* Weekly Columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-12">
         {weekDays.map((day, idx) => {
           const dateStr = day.toISOString().split('T')[0];
           const dayTasks = tasks.filter(t => t.due_date === dateStr);
@@ -239,12 +239,12 @@ export default function PersonalPlannerPage() {
           const dayColor = DAYS[idx].color;
 
           return (
-            <div key={dateStr} className="border-t-2 pt-4" style={{ borderColor: dayColor }}>
-              <h2 className="text-[12px] font-black tracking-widest mb-6" style={{ color: dayColor }}>
+            <div key={dateStr} className="border-t-2 pt-6 pb-6 bg-white rounded-xl px-6 shadow-sm border-slate-100" style={{ borderTopColor: dayColor }}>
+              <h2 className="text-[16px] font-black tracking-[0.2em] mb-8" style={{ color: dayColor }}>
                 {dayLabel}
               </h2>
               
-              <div className="grid grid-cols-[1fr_2fr] gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12">
                 {/* Left Side: Daily Chores/Notes */}
                 <div className="space-y-6">
                   <div className="space-y-2">
