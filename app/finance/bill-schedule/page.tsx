@@ -225,7 +225,6 @@ export default function BillSchedulePage() {
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
         <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Official Liability Registry © 2026</p>
       </footer>
-      </div>
     </div>
   );
 }
