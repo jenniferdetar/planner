@@ -80,9 +80,9 @@ export default function VisionCategoryPage() {
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-6 max-w-5xl mx-auto bg-[#fdfdfd] min-h-screen">
 
-      <section className="relative bg-white p-12 md:p-20 rounded-[4rem] shadow-2xl border border-gray-100 overflow-hidden">
+      <section className="relative bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
         <div className={`absolute top-0 left-0 w-full h-2 ${color}`}></div>
         <div className="absolute top-10 left-10 opacity-5">
           {React.createElement(icon, { size: 120, className: "text-[#0a2f5f]" })}
@@ -91,7 +91,7 @@ export default function VisionCategoryPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-40">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0a2f5f]"></div>
-            <div className="text-[10px] font-black tracking-wider text-[#0a2f5f]">Accessing Vision Board...</div>
+            <div className="text-sm font-black tracking-wider text-[#0a2f5f]">Accessing Vision Board...</div>
           </div>
         ) : (
           <div className="relative z-10">
@@ -99,14 +99,14 @@ export default function VisionCategoryPage() {
               <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-red-100 opacity-50"></div>
               <textarea 
                 placeholder={`Describe your ideal ${title.toLowerCase()}... What does it look like? How does it feel?`}
-                className="w-full min-h-[500px] p-12 bg-[#fdfbf7] border-2 border-[#e6e2d3] rounded-[3rem] text-2xl font-serif leading-[3rem] focus:ring-0 outline-none shadow-inner resize-none text-[#0a2f5f]/80"
+                className="w-full min-h-[500px] p-8 bg-[#fdfbf7] border-2 border-[#e6e2d3] rounded-2xl text-2xl font-serif leading-[3rem] focus:ring-0 outline-none shadow-inner resize-none text-[#0a2f5f]/80"
                 style={{ backgroundImage: 'linear-gradient(#e6e2d3 1px, transparent 1px)', backgroundSize: '100% 3rem' }}
                 value={vision}
                 onChange={(e) => setVision(e.target.value)}
               ></textarea>
             </div>
             
-            <div className="mt-12 flex justify-center">
+            <div className="mt-8 flex justify-center">
               <button 
                 onClick={saveVision}
                 disabled={saving}
@@ -124,8 +124,8 @@ export default function VisionCategoryPage() {
         </div>
       </section>
 
-      <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black tracking-widest">Strategic Vision Registry © 2026</p>
+      <footer className="mt-12 py-8 border-t border-gray-100 text-center">
+        <p className="text-gray-400 text-sm font-black tracking-widest">Strategic Vision Registry © 2026</p>
       </footer>
     </div>
   );

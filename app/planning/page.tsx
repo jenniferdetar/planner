@@ -29,8 +29,8 @@ const visionBoardCards = [
 
 export default function PlanningPage() {
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
-<section className="mb-20">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+      <section className="mb-12">
         <div className="flex items-center gap-3 mb-8">
           <Target className="text-[#0a2f5f]" size={24} />
           <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Core Planning</h2>
@@ -41,7 +41,7 @@ export default function PlanningPage() {
             <Link 
               key={card.title}
               href={card.href}
-              className={`group relative flex flex-col justify-between p-8 rounded-[2.5rem] border-2 ${card.borderColor} bg-white shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 overflow-hidden`}
+              className={`group relative flex flex-col justify-between p-8 rounded-2xl border-2 ${card.borderColor} bg-white shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 overflow-hidden`}
             >
               <div className={`absolute -right-4 -top-4 w-24 h-24 ${card.color} opacity-10 rounded-full group-hover:scale-150 transition-transform duration-700`}></div>
               <div className="relative z-10">
@@ -49,7 +49,7 @@ export default function PlanningPage() {
                   {card.icon}
                 </div>
                 <h3 className="text-2xl font-black text-[#0a2f5f] mb-2">{card.title}</h3>
-                <p className="text-xs font-bold text-gray-400 tracking-wider leading-relaxed">
+                <p className="text-sm font-bold text-gray-400 tracking-wider leading-relaxed">
                   {card.sub}
                 </p>
               </div>
@@ -62,25 +62,25 @@ export default function PlanningPage() {
       </section>
 
       <section>
-        <div className="bg-slate-50 p-12 rounded-[4rem] border-2 border-slate-100 shadow-xl relative overflow-hidden">
+        <div className="bg-slate-50 p-8 md:p-12 rounded-3xl border-2 border-slate-100 shadow-xl relative overflow-hidden">
           <div className="relative z-10">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-black text-[#0a2f5f] tracking-tight mb-2">Vision Board</h2>
-              <p className="text-gray-400 font-bold tracking-wider text-xs">Visualize your dreams across all areas of life</p>
+              <p className="text-gray-400 font-bold tracking-wider text-sm">Visualize your dreams across all areas of life</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {visionBoardCards.map((card) => (
                 <Link 
                   key={card.title}
                   href={card.href}
-                  className={`group p-8 rounded-[2.5rem] flex flex-col items-center gap-4 bg-white border-2 border-transparent hover:border-[#0a2f5f]/10 shadow-sm hover:shadow-xl transition-all duration-500`}
+                  className={`group p-8 rounded-2xl flex flex-col items-center gap-4 bg-white border-2 border-transparent hover:border-[#0a2f5f]/10 shadow-sm hover:shadow-xl transition-all duration-500`}
                 >
                   <div className={`w-16 h-16 rounded-full ${card.color} flex items-center justify-center text-[#0a2f5f] shadow-inner group-hover:scale-110 transition-transform`}>
                     {card.icon}
                   </div>
                   <div className="text-center">
                     <span className="block text-xl font-black text-[#0a2f5f] mb-1">{card.title}</span>
-                    <span className="text-[10px] font-black text-gray-400 tracking-wider">{card.sub}</span>
+                    <span className="text-sm font-black text-gray-400 tracking-wider">{card.sub}</span>
                   </div>
                 </Link>
               ))}
@@ -90,8 +90,8 @@ export default function PlanningPage() {
         </div>
       </section>
 
-      <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black tracking-widest">Life Architecture Portal © 2026</p>
+      <footer className="mt-12 py-8 border-t border-gray-100 text-center">
+        <p className="text-gray-400 text-sm font-black tracking-widest">Life Architecture Portal © 2026</p>
       </footer>
     </div>
   );

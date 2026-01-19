@@ -115,12 +115,13 @@ export default function PersonalPlannerPage() {
       }, { onConflict: 'user_id,key' });
   };
 
-  const toggleHabit = (routineTitle: string, index: number) => {
-    const current = habitStatus[routineTitle] || Array(28).fill(false);
+  const toggleHabit = (routineTitle: string, itemIndex: number, dayIndex: number) => {
+    const key = `${routineTitle}-${itemIndex}`;
+    const current = habitStatus[key] || Array(7).fill(false);
     const updated = [...current];
-    updated[index] = !updated[index];
+    updated[dayIndex] = !updated[dayIndex];
     
-    const newHabits = { ...habitStatus, [routineTitle]: updated };
+    const newHabits = { ...habitStatus, [key]: updated };
     setHabitStatus(newHabits);
     saveMetadata('personalHabits', newHabits);
   };
@@ -166,34 +167,46 @@ export default function PersonalPlannerPage() {
 
   const weekRangeLabel = `${weekDays[0].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()} - ${weekDays[6].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()}`;
 
+  const dayHeaderColors = ['#f38aa3', '#f3a25a', '#7fc9d6', '#3c6f8f', '#f28b85', '#f1c07a', '#7fc9d6'];
+  const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
   const renderRoutines = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mb-8">
       {ROUTINES.map((routine) => {
-        const habits = habitStatus[routine.title] || Array(28).fill(false);
         return (
-          <div key={routine.title} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              {routine.icon}
-              <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-700">{routine.title}</h3>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="grid grid-cols-7 gap-1 shrink-0">
-                {habits.map((completed, i) => (
-                  <div 
-                    key={i} 
-                    onClick={() => toggleHabit(routine.title, i)}
-                    className="w-4 h-4 rounded-sm border border-slate-100 cursor-pointer transition-all hover:scale-110" 
-                    style={{ 
-                      backgroundColor: completed ? routine.color : `${routine.color}11` 
-                    }}
-                  />
+          <div key={routine.title} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+            <div className="flex justify-between items-start mb-4">
+              <div className="w-[140px] flex justify-between px-1">
+                {dayLabels.map((label, i) => (
+                  <span key={i} className="text-[12px] font-black" style={{ color: dayHeaderColors[i] }}>{label}</span>
                 ))}
               </div>
-              <ul className="space-y-1">
-                {routine.items.map((item) => (
-                  <li key={item} className="text-[12pt] text-slate-500 font-medium leading-tight whitespace-nowrap">• {item}</li>
-                ))}
-              </ul>
+              <div className="flex-grow text-center pr-12">
+                <h3 className="text-sm font-black uppercase tracking-widest text-slate-700">{routine.title}</h3>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              {routine.items.map((item, itemIdx) => {
+                const habits = habitStatus[`${routine.title}-${itemIdx}`] || Array(7).fill(false);
+                return (
+                  <div key={item} className="flex items-center gap-4">
+                    <div className="grid grid-cols-7 gap-1 w-[140px] shrink-0">
+                      {habits.map((completed, dayIdx) => (
+                        <div 
+                          key={dayIdx} 
+                          onClick={() => toggleHabit(routine.title, itemIdx, dayIdx)}
+                          className="w-[18px] h-[18px] rounded-sm border border-slate-100 cursor-pointer transition-all hover:scale-110" 
+                          style={{ 
+                            backgroundColor: completed ? routine.color : `${routine.color}22` 
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[14pt] text-slate-500 font-medium leading-tight truncate">{item}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         );
@@ -202,7 +215,7 @@ export default function PersonalPlannerPage() {
   );
 
   return (
-    <div className="p-4 md:p-8 w-full bg-[#fdfdfd] min-h-screen font-sans">
+    <div className="p-4 md:p-6 w-full bg-[#fdfdfd] min-h-screen font-sans">
       {/* Header */}
       <header className="mb-8">
         <div className="flex items-center gap-4 mb-4">
@@ -212,7 +225,7 @@ export default function PersonalPlannerPage() {
           >
             <ChevronLeft size={20} />
           </button>
-          <div className="flex-grow bg-[#3c6f8f] text-white py-2 px-6 text-center text-[11px] font-black tracking-[0.4em] rounded-sm">
+          <div className="flex-grow bg-[#3c6f8f] text-white py-2 px-6 text-center text-sm font-black tracking-[0.4em] rounded-sm">
             {weekRangeLabel}
           </div>
           <button 
@@ -224,7 +237,7 @@ export default function PersonalPlannerPage() {
         </div>
         {renderRoutines()}
         <div className="bg-[#f38aa3]/10 border-l-4 border-[#f38aa3] py-2 px-4 mb-8">
-          <p className="text-[#f38aa3] text-[10px] font-black tracking-widest uppercase">
+          <p className="text-[#f38aa3] text-sm font-black tracking-widest uppercase">
             ❤️ ENJOY YOUR FAMILY ❤️
           </p>
         </div>
@@ -239,7 +252,7 @@ export default function PersonalPlannerPage() {
           const dayColor = DAYS[idx].color;
 
           return (
-            <div key={dateStr} className="border-t-2 pt-6 pb-6 bg-white rounded-xl px-6 shadow-sm border-slate-100" style={{ borderTopColor: dayColor }}>
+            <div key={dateStr} className="border-t-2 pt-6 pb-6 bg-white rounded-2xl px-6 shadow-sm border-slate-100" style={{ borderTopColor: dayColor }}>
               <h2 className="text-[16px] font-black tracking-[0.2em] mb-8" style={{ color: dayColor }}>
                 {dayLabel}
               </h2>
@@ -255,7 +268,7 @@ export default function PersonalPlannerPage() {
                           contentEditable
                           suppressContentEditableWarning
                           onBlur={(e) => updateNote(dateStr, `chore-${i}`, e.target.innerText)}
-                          className="flex-grow text-[9px] text-slate-500 font-medium outline-none min-h-[14px]"
+                          className="flex-grow text-sm text-slate-500 font-medium outline-none min-h-[14px]"
                         >
                           {dailyNotes[dateStr]?.[`chore-${i}`] || ''}
                         </div>
@@ -270,7 +283,7 @@ export default function PersonalPlannerPage() {
                         contentEditable
                         suppressContentEditableWarning
                         onBlur={(e) => updateNote(dateStr, 'meals', e.target.innerText)}
-                        className="w-full border-b border-slate-100 text-[9px] text-slate-500 font-medium outline-none min-h-[16px]"
+                        className="w-full border-b border-slate-100 text-sm text-slate-500 font-medium outline-none min-h-[16px]"
                       >
                         {dailyNotes[dateStr]?.['meals'] || ''}
                       </div>
@@ -281,7 +294,7 @@ export default function PersonalPlannerPage() {
                         contentEditable
                         suppressContentEditableWarning
                         onBlur={(e) => updateNote(dateStr, 'growth', e.target.innerText)}
-                        className="w-full border-b border-slate-100 text-[9px] text-slate-500 font-medium outline-none min-h-[16px]"
+                        className="w-full border-b border-slate-100 text-sm text-slate-500 font-medium outline-none min-h-[16px]"
                       >
                         {dailyNotes[dateStr]?.['growth'] || ''}
                       </div>
@@ -292,7 +305,7 @@ export default function PersonalPlannerPage() {
                         contentEditable
                         suppressContentEditableWarning
                         onBlur={(e) => updateNote(dateStr, 'finance', e.target.innerText)}
-                        className="w-full border-b border-slate-100 text-[9px] text-slate-500 font-medium outline-none min-h-[16px]"
+                        className="w-full border-b border-slate-100 text-sm text-slate-500 font-medium outline-none min-h-[16px]"
                       >
                         {dailyNotes[dateStr]?.['finance'] || ''}
                       </div>
@@ -313,11 +326,11 @@ export default function PersonalPlannerPage() {
                           )}
                         </div>
                         <div>
-                          <p className={`text-[11px] font-bold ${task.completed ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
+                          <p className={`text-sm font-bold ${task.completed ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
                             {task.title}
                           </p>
                           {task.due_time && (
-                            <span className="text-[9px] text-slate-400 font-medium">@ {task.due_time}</span>
+                            <span className="text-sm text-slate-400 font-medium">@ {task.due_time}</span>
                           )}
                         </div>
                       </div>
@@ -338,7 +351,7 @@ export default function PersonalPlannerPage() {
       </div>
 
       <footer className="mt-20 py-12 text-center">
-        <p className="text-slate-300 text-[10px] font-black tracking-widest uppercase">
+        <p className="text-slate-300 text-sm font-black tracking-widest uppercase">
           Opus Personal Planner • Professional Life Architecture
         </p>
       </footer>
