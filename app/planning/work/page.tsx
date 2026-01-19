@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 
-import { Briefcase, Target, Zap, Award, Clock, User, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Target, Zap, Award, Clock, User, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { OpusGoal } from '@/types/database.types';
 
 interface PlannerEvent {
@@ -55,12 +55,13 @@ const getHourSlots = (start: number, end: number, step: number = 30) => {
 const TIME_SLOTS = getHourSlots(5, 20); // 5am to 8pm
 
 export default function WorkPlannerPage() {
-  const [currentWeekStart] = useState(() => {
+  const [currentWeekStart, setCurrentWeekStart] = useState(() => {
     const d = new Date();
     const day = d.getDay();
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() - day);
-    return d;
+    const date = new Date(d);
+    date.setHours(0, 0, 0, 0);
+    date.setDate(d.getDate() - day);
+    return date;
   });
 
   const [edits, setEdits] = useState<Record<string, Record<string, string>>>({});
@@ -111,10 +112,17 @@ export default function WorkPlannerPage() {
       weekDates.forEach(date => {
         eventMap[date] = [];
         tasks?.filter(t => t.due_date === date).forEach(t => {
+          let dueTime = t.due_time;
+          if (t.title?.toUpperCase().includes('NEO')) {
+            dueTime = '12:00';
+          } else if (t.title?.toUpperCase().includes('RPM')) {
+            dueTime = '17:30';
+          }
+          
           eventMap[date].push({
             id: t.id,
             title: t.title,
-            time: t.due_time,
+            time: dueTime,
             category: t.category,
             type: 'task',
             priority: t.priority,
@@ -122,10 +130,17 @@ export default function WorkPlannerPage() {
           });
         });
         meetings?.filter(m => m.date === date).forEach(m => {
+          let startTime = m.start_time;
+          if (m.title?.toUpperCase().includes('NEO')) {
+            startTime = '12:00';
+          } else if (m.title?.toUpperCase().includes('RPM')) {
+            startTime = '17:30';
+          }
+
           eventMap[date].push({
             id: m.id,
             title: m.title,
-            time: m.start_time,
+            time: startTime,
             endTime: m.end_time,
             category: 'meeting',
             type: 'meeting'
@@ -204,6 +219,18 @@ export default function WorkPlannerPage() {
       }, { onConflict: 'user_id,key' });
   };
 
+  const nextWeek = () => {
+    const d = new Date(currentWeekStart);
+    d.setDate(d.getDate() + 7);
+    setCurrentWeekStart(d);
+  };
+
+  const prevWeek = () => {
+    const d = new Date(currentWeekStart);
+    d.setDate(d.getDate() - 7);
+    setCurrentWeekStart(d);
+  };
+
   const timeToMinutes = (hhmm: string | null) => {
     if (!hhmm) return null;
     const [h, m] = hhmm.split(':').map(Number);
@@ -280,10 +307,27 @@ export default function WorkPlannerPage() {
           <div className="relative z-10">
             <h2 className="text-3xl font-black tracking-tight">Weekly Operations Matrix</h2>
             <p className="text-xs opacity-60 font-bold tracking-wider mt-2">Real-time scheduling and registry log</p>
+            <div className="flex items-center gap-4 mt-6">
+              <button 
+                onClick={prevWeek}
+                className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <div className="text-sm font-black tracking-widest uppercase">
+                Week of {currentWeekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </div>
+              <button 
+                onClick={nextWeek}
+                className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
           </div>
           <div className="relative z-10 flex flex-col items-end">
-            <div className="text-[10px] font-black tracking-widest bg-[#9ADBDE] px-6 py-2 rounded-full shadow-xl">High Fidelity Record</div>
-            <div className="text-[9px] font-bold opacity-40 mt-3 tracking-wider italic">Archival System v2.0</div>
+            <div className="text-[10px] font-black tracking-widest bg-[#9ADBDE] px-6 py-2 rounded-full shadow-xl text-[#0a2f5f]">High Fidelity Record</div>
+            <div className="text-[9px] font-bold opacity-40 mt-3 tracking-wider italic text-white">Archival System v2.0</div>
           </div>
           <div className="absolute top-0 right-0 w-64 h-full bg-grid-white/[0.05] [mask-image:linear-gradient(to_left,white,transparent)]"></div>
         </div>
