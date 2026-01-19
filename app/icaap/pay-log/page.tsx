@@ -120,7 +120,7 @@ export default function IcaapPayLogPage() {
           <p className="text-[10px] font-black  tracking-widest text-[#0a2f5f]">Compiling Registry Data...</p>
         </div>
       ) : (
-        <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
+        <div className="bg-white border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[1200px]">
               <thead>
