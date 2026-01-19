@@ -97,8 +97,8 @@ export default function BooksPage() {
         <div className="bg-[#0a2f5f] p-8 text-white relative overflow-hidden">
           <div className="relative z-10 flex justify-between items-center">
             <div>
-              <h2 className="text-xl font-black tracking-widest uppercase mb-1">Book Wishlist & Progress</h2>
-              <p className="text-xs text-white/50 font-bold uppercase">Tracking {books.filter(b => b.status === 'Finished').length} Completed Works</p>
+              <h2 className="text-xl font-black tracking-widest  mb-1">Book Wishlist & Progress</h2>
+              <p className="text-xs text-white/50 font-bold ">Tracking {books.filter(b => b.status === 'Finished').length} Completed Works</p>
             </div>
             <BookOpen className="opacity-20" size={40} />
           </div>
@@ -108,16 +108,16 @@ export default function BooksPage() {
         {loading ? (
           <div className="p-20 text-center opacity-20 flex flex-col items-center gap-4">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#0a2f5f]"></div>
-            <div className="text-[10px] font-black uppercase tracking-[0.3em]">Opening Archive...</div>
+            <div className="text-[10px] font-black  tracking-[0.3em]">Opening Archive...</div>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-gray-50">
-                  <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] pl-10">Literary Title</th>
-                  <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Author / Creator</th>
-                  <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center">Reading Status</th>
+                  <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] pl-10">Literary Title</th>
+                  <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em]">Author / Creator</th>
+                  <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] text-center">Reading Status</th>
                   <th className="p-6 w-20"></th>
                 </tr>
               </thead>
@@ -152,7 +152,7 @@ export default function BooksPage() {
                         <select 
                           value={book.status} 
                           onChange={(e) => updateBook(index, 'status', e.target.value as Book['status'])}
-                          className={`px-4 py-2 rounded-full border-2 text-[10px] font-black uppercase tracking-widest outline-none transition-all cursor-pointer ${getStatusStyle(book.status)}`}
+                          className={`px-4 py-2 rounded-full border-2 text-[10px] font-black  tracking-widest outline-none transition-all cursor-pointer ${getStatusStyle(book.status)}`}
                         >
                           <option>Want to Read</option>
                           <option>Reading</option>
@@ -175,7 +175,7 @@ export default function BooksPage() {
                   <td colSpan={4} className="p-8">
                     <button 
                       onClick={addBook}
-                      className="group w-full py-6 border-4 border-dashed border-gray-50 rounded-[2rem] text-gray-200 font-black uppercase tracking-[0.3em] text-xs hover:border-[#0a2f5f]/10 hover:text-[#0a2f5f]/30 hover:bg-[#0a2f5f]/5 transition-all flex items-center justify-center gap-4"
+                      className="group w-full py-6 border-4 border-dashed border-gray-50 rounded-[2rem] text-gray-200 font-black  tracking-[0.3em] text-xs hover:border-[#0a2f5f]/10 hover:text-[#0a2f5f]/30 hover:bg-[#0a2f5f]/5 transition-all flex items-center justify-center gap-4"
                     >
                       <Plus size={24} className="group-hover:rotate-90 transition-transform" />
                       Add New Literary Record
@@ -194,7 +194,7 @@ export default function BooksPage() {
             <div className="w-10 h-10 rounded-2xl bg-[#FFC68D]/20 flex items-center justify-center text-[#0a2f5f] group-hover:-rotate-6 transition-transform">
               <Bookmark size={20} />
             </div>
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0a2f5f]/60">Currently Reading</h4>
+            <h4 className="text-[10px] font-black  tracking-[0.2em] text-[#0a2f5f]/60">Currently Reading</h4>
           </div>
           <p className="text-[#0a2f5f] font-serif italic text-xl leading-relaxed">
             {books.find(b => b.status === 'Reading')?.title || 'No active book selected.'}
@@ -203,13 +203,13 @@ export default function BooksPage() {
         <div className="bg-[#FFA1AB]/10 p-10 rounded-[3rem] border-2 border-[#FFA1AB]/20 flex items-center justify-center text-center">
           <div>
             <div className="text-4xl font-black text-[#0a2f5f] mb-1">{books.filter(b => b.status === 'Finished').length}</div>
-            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0a2f5f]/40">Books Completed</div>
+            <div className="text-[10px] font-black  tracking-[0.2em] text-[#0a2f5f]/40">Books Completed</div>
           </div>
         </div>
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Literary Pursuit Registry © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Literary Pursuit Registry © 2026</p>
       </footer>
     </div>
   );

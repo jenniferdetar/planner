@@ -121,7 +121,7 @@ export default function HoaPage() {
           <button 
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+            className={`px-8 py-4 rounded-2xl font-black  tracking-widest text-xs transition-all ${
               activeTab === tab 
                 ? 'bg-[#99B3C5] text-[#0a2f5f] shadow-lg' 
                 : 'bg-white text-[#0a2f5f] border-2 border-[#99B3C5]/10 hover:bg-[#99B3C5]/5'
@@ -136,7 +136,7 @@ export default function HoaPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
             <Activity className="text-slate-300 animate-pulse mb-4" size={48} />
-            <div className="text-slate-400 font-black uppercase tracking-widest text-xs">Accessing Administrative Records...</div>
+            <div className="text-slate-400 font-black  tracking-widest text-xs">Accessing Administrative Records...</div>
           </div>
         ) : (
           <>
@@ -148,7 +148,7 @@ export default function HoaPage() {
                       <div className="w-10 h-10 rounded-xl bg-[#9ADBDE] flex items-center justify-center shadow-inner">
                         <Upload size={20} className="text-[#0a2f5f]" />
                       </div>
-                      <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Document Submission</h2>
+                      <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Document Submission</h2>
                     </div>
                     
                     <div className="border-4 border-dashed border-slate-100 rounded-[2rem] p-12 text-center bg-slate-50/50 hover:bg-slate-50 hover:border-[#3b82f6]/30 transition-all group cursor-pointer">
@@ -158,7 +158,7 @@ export default function HoaPage() {
                           <Upload size={32} className="text-[#3b82f6]" />
                         </div>
                         <p className="text-xl font-black text-[#0a2f5f] mb-2">Ingest Administrative Pdf</p>
-                        <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Supports Bylaws, Minutes, and Notices</p>
+                        <p className="text-sm text-gray-400 font-bold  tracking-widest">Supports Bylaws, Minutes, and Notices</p>
                       </label>
                     </div>
                   </div>
@@ -168,7 +168,7 @@ export default function HoaPage() {
                 <section>
                   <div className="flex items-center gap-3 mb-8">
                     <Search className="text-[#0a2f5f]" size={24} />
-                    <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Administrative Library</h2>
+                    <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Administrative Library</h2>
                     <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
                   </div>
                   
@@ -181,11 +181,11 @@ export default function HoaPage() {
                             {cat.icon}
                           </div>
                           <h3 className="text-2xl font-black text-[#0a2f5f] mb-2">{cat.title}</h3>
-                          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-relaxed">
+                          <p className="text-xs font-bold text-gray-400  tracking-widest leading-relaxed">
                             {cat.note}
                           </p>
                         </div>
-                        <div className="mt-8 flex items-center text-[#0a2f5f] font-black text-sm uppercase tracking-widest gap-2">
+                        <div className="mt-8 flex items-center text-[#0a2f5f] font-black text-sm  tracking-widest gap-2">
                           Access Archive <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
@@ -199,10 +199,10 @@ export default function HoaPage() {
               <section className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-10 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
                   <div>
-                    <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Financial Ledger</h2>
-                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Audit of community expenditures and income</p>
+                    <h2 className="text-3xl font-black text-[#0a2f5f]  tracking-tight">Financial Ledger</h2>
+                    <p className="text-xs font-black text-gray-400  tracking-widest mt-1">Audit of community expenditures and income</p>
                   </div>
-                  <button onClick={addFinancial} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
+                  <button onClick={addFinancial} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black  tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
                     <Plus size={16} /> Add Record
                   </button>
                 </div>
@@ -210,10 +210,10 @@ export default function HoaPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-50/50">
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Date</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Description</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Type</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b text-right">Amount</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Date</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Description</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Type</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b text-right">Amount</th>
                         <th className="p-6 text-center border-b"></th>
                       </tr>
                     </thead>
@@ -233,7 +233,7 @@ export default function HoaPage() {
                           <td className="p-6">
                             <select value={row.type} onChange={(e) => {
                               const next = [...financials]; next[i].type = e.target.value; setFinancials(next); saveData('hoa-financials', next);
-                            }} className="bg-transparent border-none p-0 focus:ring-0 font-black uppercase tracking-widest text-[10px] text-[#3b82f6]">
+                            }} className="bg-transparent border-none p-0 focus:ring-0 font-black  tracking-widest text-[10px] text-[#3b82f6]">
                               <option>Expense</option><option>Income</option><option>Reserve</option>
                             </select>
                           </td>
@@ -259,10 +259,10 @@ export default function HoaPage() {
               <section className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-10 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
                   <div>
-                    <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Maintenance Ops</h2>
-                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Operational tracking of community repairs</p>
+                    <h2 className="text-3xl font-black text-[#0a2f5f]  tracking-tight">Maintenance Ops</h2>
+                    <p className="text-xs font-black text-gray-400  tracking-widest mt-1">Operational tracking of community repairs</p>
                   </div>
-                  <button onClick={addMaintenance} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
+                  <button onClick={addMaintenance} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black  tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
                     <Plus size={16} /> Add Task
                   </button>
                 </div>
@@ -270,10 +270,10 @@ export default function HoaPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-50/50">
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Date</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Task</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Vendor</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Status</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Date</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Task</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Vendor</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Status</th>
                         <th className="p-6 text-center border-b"></th>
                       </tr>
                     </thead>
@@ -298,7 +298,7 @@ export default function HoaPage() {
                           <td className="p-6">
                             <select value={row.status} onChange={(e) => {
                               const next = [...maintenance]; next[i].status = e.target.value; setMaintenance(next); saveData('hoa-maintenance', next);
-                            }} className={`bg-transparent border-none p-0 focus:ring-0 font-black uppercase tracking-widest text-[10px] ${
+                            }} className={`bg-transparent border-none p-0 focus:ring-0 font-black  tracking-widest text-[10px] ${
                               row.status === 'Completed' ? 'text-green-500' : row.status === 'Pending' ? 'text-amber-500' : 'text-blue-500'
                             }`}>
                               <option>Pending</option><option>In Progress</option><option>Completed</option><option>Cancelled</option>
@@ -321,10 +321,10 @@ export default function HoaPage() {
               <section className="bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-10 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
                   <div>
-                    <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Unit Roster</h2>
-                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Comprehensive directory of community residents</p>
+                    <h2 className="text-3xl font-black text-[#0a2f5f]  tracking-tight">Unit Roster</h2>
+                    <p className="text-xs font-black text-gray-400  tracking-widest mt-1">Comprehensive directory of community residents</p>
                   </div>
-                  <button onClick={addUnit} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
+                  <button onClick={addUnit} className="flex items-center gap-2 px-6 py-3 bg-[#0a2f5f] text-white rounded-2xl font-black  tracking-widest text-[10px] hover:bg-[#0a2f5f]/90 transition-all shadow-lg shadow-[#0a2f5f]/20">
                     <Plus size={16} /> Add Unit
                   </button>
                 </div>
@@ -332,10 +332,10 @@ export default function HoaPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-50/50">
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Unit</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Owner</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Contact</th>
-                        <th className="p-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b">Status</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Unit</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Owner</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Contact</th>
+                        <th className="p-6 text-[10px] font-black text-gray-400  tracking-[0.2em] border-b">Status</th>
                         <th className="p-6 text-center border-b"></th>
                       </tr>
                     </thead>
@@ -360,7 +360,7 @@ export default function HoaPage() {
                           <td className="p-6">
                             <select value={row.status} onChange={(e) => {
                               const next = [...units]; next[i].status = e.target.value; setUnits(next); saveData('hoa-units', next);
-                            }} className="bg-transparent border-none p-0 focus:ring-0 font-black uppercase tracking-widest text-[10px] text-[#3b82f6]">
+                            }} className="bg-transparent border-none p-0 focus:ring-0 font-black  tracking-widest text-[10px] text-[#3b82f6]">
                               <option>Owner Occupied</option><option>Rented</option><option>Vacant</option>
                             </select>
                           </td>
@@ -385,13 +385,13 @@ export default function HoaPage() {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <ShieldCheck className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Compliance Status</h2>
+              <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Compliance Status</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Community records are audited for regulatory compliance and archived in the official administrative ledger.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs  tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <ArrowUpRight size={16} />
             Administrative Integrity Verified
           </div>
@@ -401,7 +401,7 @@ export default function HoaPage() {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <Landmark className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Reserve Analysis</h2>
+              <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Reserve Analysis</h2>
             </div>
             <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
               Current reserve funding levels are optimized for long-term structural maintenance and community growth.
@@ -412,7 +412,7 @@ export default function HoaPage() {
       </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Community Operations Registry © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Community Operations Registry © 2026</p>
       </footer>
     </div>
   );

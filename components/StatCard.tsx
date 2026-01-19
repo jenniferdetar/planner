@@ -16,7 +16,7 @@ export default function StatCard({ title, value, icon, color }: StatCardProps) {
           {icon}
         </div>
         <div className="text-4xl font-black text-[#0a2f5f] mb-1">{value}</div>
-        <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{title}</div>
+        <div className="text-[10px] font-black text-gray-400 tracking-[0.2em]">{title}</div>
       </div>
     </div>
   );

@@ -357,7 +357,7 @@ export default function MeetingsPage() {
                       }`}
                     >
                       <div className="flex justify-between items-start mb-3">
-                        <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
+                        <div className={`px-3 py-1 rounded-full text-[9px] font-black  tracking-widest ${
                           editingMeeting?.id === m.id ? 'bg-white/10 text-white' : 'bg-[#FFC68D]/10 text-[#FFC68D]'
                         }`}>
                           {new Date(m.date).toLocaleDateString('en-Us', { month: 'short', day: 'numeric' })}
@@ -388,7 +388,7 @@ export default function MeetingsPage() {
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-6">
                 <Info className="text-[#FFC68D]" size={20} />
-                <h3 className="text-lg font-black uppercase tracking-tight">System Notice</h3>
+                <h3 className="text-lg font-black  tracking-tight">System Notice</h3>
               </div>
               <p className="text-xs font-medium opacity-70 leading-relaxed italic mb-8">
                 &quot;Registry records are immutable once certified. Ensure all attendees and outcomes are accurately captured before archiving.&quot;
@@ -397,7 +397,7 @@ export default function MeetingsPage() {
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full border-2 border-white/20 flex items-center justify-center font-black text-xs">A</div>
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest">Auth Level</p>
+                  <p className="text-[10px] font-black  tracking-widest">Auth Level</p>
                   <p className="text-[10px] font-bold text-[#FFC68D]">Administrator</p>
                 </div>
               </div>
@@ -408,7 +408,7 @@ export default function MeetingsPage() {
       </div>
       
       <footer className="mt-20 py-16 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Official Communication Log © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Official Communication Log © 2026</p>
       </footer>
     </div>
   );

@@ -68,7 +68,7 @@ export default function TasksPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
             <Activity className="text-slate-300 animate-pulse mb-4" size={48} />
-            <div className="text-slate-400 font-black uppercase tracking-widest text-xs">Accessing Operations Ledger...</div>
+            <div className="text-slate-400 font-black  tracking-widest text-xs">Accessing Operations Ledger...</div>
           </div>
         ) : (
           <div className="space-y-4">
@@ -83,13 +83,13 @@ export default function TasksPage() {
                   
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
-                      <h2 className={`text-xl font-black tracking-tight uppercase ${
+                      <h2 className={`text-xl font-black tracking-tight  ${
                         task.completed ? 'text-slate-400 line-through' : 'text-[#0a2f5f]'
                       }`}>
                         {task.title}
                       </h2>
                       {task.priority && (
-                        <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
+                        <span className={`px-3 py-1 rounded-lg text-[10px] font-black  tracking-widest ${
                           task.priority === 'high' ? 'bg-red-100 text-red-700' : 
                           task.priority === 'medium' ? 'bg-amber-100 text-amber-700' : 
                           'bg-blue-100 text-blue-700'
@@ -101,13 +101,13 @@ export default function TasksPage() {
                     
                     <div className="flex items-center gap-4">
                       {task.due_date && (
-                        <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400  tracking-widest">
                           <Calendar size={12} className="text-slate-300" />
                           Due: {new Date(task.due_date).toLocaleDateString()}
                         </div>
                       )}
                       {task.category && (
-                        <div className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md border ${
+                        <div className={`flex items-center gap-1.5 text-[10px] font-black  tracking-widest px-2 py-0.5 rounded-md border ${
                           task.category.toUpperCase().includes('CSEA')
                             ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38]'
                             : 'bg-blue-50 text-[#0a2f5f] border-transparent'
@@ -140,8 +140,8 @@ export default function TasksPage() {
             {tasks.length === 0 && (
               <div className="py-32 text-center bg-slate-50 rounded-[4rem] border-4 border-dashed border-slate-100">
                 <Briefcase className="text-slate-200 mx-auto mb-6" size={64} />
-                <p className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Zero Active Directives</p>
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mt-2">Operational capacity at 100%. Awaiting further instructions.</p>
+                <p className="text-xl font-black text-[#0a2f5f]  tracking-tight">Zero Active Directives</p>
+                <p className="text-gray-400 font-bold  tracking-widest text-xs mt-2">Operational capacity at 100%. Awaiting further instructions.</p>
               </div>
             )}
           </div>
@@ -149,7 +149,7 @@ export default function TasksPage() {
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Professional Operations Ledger © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Professional Operations Ledger © 2026</p>
       </footer>
     </div>
   );

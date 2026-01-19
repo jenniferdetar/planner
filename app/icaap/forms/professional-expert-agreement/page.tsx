@@ -150,17 +150,17 @@ export default function ProfessionalExpertAgreementPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-40 bg-white rounded-[3rem] border-2 border-gray-100 shadow-xl">
           <Clock className="animate-spin text-[#0a2f5f] mb-4" size={48} />
-          <div className="text-xs font-black uppercase tracking-widest text-gray-400">Loading Agreement Details...</div>
+          <div className="text-xs font-black  tracking-widest text-gray-400">Loading Agreement Details...</div>
         </div>
       ) : (
         <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
           {/* Official Header Section */}
           <div className="bg-[#0a2f5f] p-10 text-white text-center relative overflow-hidden">
           <div className="relative z-10">
-            <h2 className="text-2xl font-black tracking-[0.2em] uppercase mb-1">Los Angeles Unified School District</h2>
-            <h3 className="text-lg font-bold opacity-80 uppercase tracking-widest mb-4">Professional Expert Assignment Agreement</h3>
+            <h2 className="text-2xl font-black tracking-[0.2em]  mb-1">Los Angeles Unified School District</h2>
+            <h3 className="text-lg font-bold opacity-80  tracking-widest mb-4">Professional Expert Assignment Agreement</h3>
             <div className="inline-block px-8 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-              <span className="text-xs font-black uppercase tracking-[0.3em]">Contractual Service Authorization</span>
+              <span className="text-xs font-black  tracking-[0.3em]">Contractual Service Authorization</span>
             </div>
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">Expert</div>
@@ -175,15 +175,15 @@ export default function ProfessionalExpertAgreementPage() {
                   <UserCircle className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Expert / Consultant</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personal Information</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Expert / Consultant</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Personal Information</p>
                 </div>
               </div>
               
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Full Legal Name</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Full Legal Name</label>
                     <input 
                       type="text" 
                       value={data.expert.name} 
@@ -192,7 +192,7 @@ export default function ProfessionalExpertAgreementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee Id (if applicable)</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Employee Id (if applicable)</label>
                     <input 
                       type="text" 
                       value={data.expert.employeeId} 
@@ -203,7 +203,7 @@ export default function ProfessionalExpertAgreementPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Mailing Address</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Mailing Address</label>
                   <input 
                     type="text" 
                     value={data.expert.address} 
@@ -214,7 +214,7 @@ export default function ProfessionalExpertAgreementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">City</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">City</label>
                     <input 
                       type="text" 
                       value={data.expert.city} 
@@ -224,16 +224,16 @@ export default function ProfessionalExpertAgreementPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="space-y-1">
-                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">State</label>
+                      <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">State</label>
                       <input 
                         type="text" 
                         value={data.expert.state} 
                         onChange={e => setData({...data, expert: {...data.expert, state: e.target.value}})}
-                        className="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 text-center shadow-inner uppercase"
+                        className="w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#FFC68D]/20 outline-none transition-all font-bold text-gray-700 text-center shadow-inner "
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Zip</label>
+                      <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Zip</label>
                       <input 
                         type="text" 
                         value={data.expert.zip} 
@@ -246,7 +246,7 @@ export default function ProfessionalExpertAgreementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Phone Number</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Phone Number</label>
                     <input 
                       type="tel" 
                       value={data.expert.phone} 
@@ -255,7 +255,7 @@ export default function ProfessionalExpertAgreementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Email Address</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Email Address</label>
                     <input 
                       type="email" 
                       value={data.expert.email} 
@@ -274,14 +274,14 @@ export default function ProfessionalExpertAgreementPage() {
                   <Briefcase className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Assignment Details</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Scope of Services</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Assignment Details</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Scope of Services</p>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Description of Services</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Description of Services</label>
                   <div className="relative">
                     <textarea 
                       value={data.agreement.serviceDescription} 
@@ -301,7 +301,7 @@ export default function ProfessionalExpertAgreementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Service Start Date</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Service Start Date</label>
                     <div className="relative">
                       <input 
                         type="date" 
@@ -313,7 +313,7 @@ export default function ProfessionalExpertAgreementPage() {
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Service End Date</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Service End Date</label>
                     <div className="relative">
                       <input 
                         type="date" 
@@ -328,7 +328,7 @@ export default function ProfessionalExpertAgreementPage() {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Rate Type</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Rate Type</label>
                     <select 
                       value={data.agreement.rateType}
                       onChange={e => setData({...data, agreement: {...data.agreement, rateType: e.target.value as PEAData['agreement']['rateType']}})}
@@ -340,7 +340,7 @@ export default function ProfessionalExpertAgreementPage() {
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Rate ($)</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Rate ($)</label>
                     <div className="relative">
                       <input 
                         type="number" 
@@ -352,7 +352,7 @@ export default function ProfessionalExpertAgreementPage() {
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Max Hours/Days</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Max Hours/Days</label>
                     <input 
                       type="number" 
                       value={data.agreement.maxHours} 
@@ -375,14 +375,14 @@ export default function ProfessionalExpertAgreementPage() {
                   <Landmark className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Accounting Codes</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Funding Allocation</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Accounting Codes</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Funding Allocation</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Cost Center</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Cost Center</label>
                   <input 
                     type="text" 
                     value={data.accounting.cc} 
@@ -392,7 +392,7 @@ export default function ProfessionalExpertAgreementPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Fund</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Fund</label>
                   <input 
                     type="text" 
                     value={data.accounting.fund} 
@@ -402,7 +402,7 @@ export default function ProfessionalExpertAgreementPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Func. Area</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Func. Area</label>
                   <input 
                     type="text" 
                     value={data.accounting.functionalArea} 
@@ -412,7 +412,7 @@ export default function ProfessionalExpertAgreementPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Gl Account</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Gl Account</label>
                   <input 
                     type="text" 
                     value={data.accounting.glAccount} 
@@ -429,23 +429,23 @@ export default function ProfessionalExpertAgreementPage() {
               <div className="bg-[#0a2f5f] rounded-[3rem] p-10 text-white shadow-2xl shadow-[#0a2f5f]/30 relative overflow-hidden h-full">
                 <div className="relative z-10 h-full flex flex-col justify-between">
                   <div>
-                    <h4 className="text-white/60 font-black uppercase tracking-widest text-[10px] mb-6 flex items-center gap-2">
+                    <h4 className="text-white/60 font-black  tracking-widest text-[10px] mb-6 flex items-center gap-2">
                       <ShieldCheck size={14} />
                       Agreement Value
                     </h4>
                     <div className="text-6xl font-black mb-2 tracking-tighter">
                       ${totalAmount.toLocaleString()}
                     </div>
-                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Estimated Total Contract Amount</p>
+                    <p className="text-white/40 text-[10px] font-bold  tracking-widest">Estimated Total Contract Amount</p>
                   </div>
                   
                   <div className="mt-12 pt-8 border-t border-white/10 space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">Rate</span>
+                      <span className="text-white/40 text-[10px] font-black  tracking-widest">Rate</span>
                       <span className="font-bold">${data.agreement.rate} / {data.agreement.rateType}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">Duration</span>
+                      <span className="text-white/40 text-[10px] font-black  tracking-widest">Duration</span>
                       <span className="font-bold">{data.agreement.maxHours} {data.agreement.rateType === 'hourly' ? 'Hours' : 'Days'}</span>
                     </div>
                   </div>
@@ -457,22 +457,22 @@ export default function ProfessionalExpertAgreementPage() {
 
           {/* Authorization Section */}
           <div className="mt-12 p-10 bg-white border-2 border-gray-100 rounded-[3rem] group hover:border-[#FFC68D]/20 transition-all duration-500">
-            <h4 className="text-[#0a2f5f] font-black uppercase tracking-widest text-xs mb-8 flex items-center gap-2">
+            <h4 className="text-[#0a2f5f] font-black  tracking-widest text-xs mb-8 flex items-center gap-2">
               <UserCheck size={18} />
               Administrative Authorization
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               <div className="space-y-4">
                 <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 italic text-gray-300 font-serif">Signature of Expert</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Expert / Consultant Signature</div>
+                <div className="text-[10px] font-black text-gray-400  tracking-widest">Expert / Consultant Signature</div>
               </div>
               <div className="space-y-4">
-                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f] uppercase tracking-tight">Patricia Pernin, Ed.D.</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Department Head / Designee</div>
+                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f]  tracking-tight">Patricia Pernin, Ed.D.</div>
+                <div className="text-[10px] font-black text-gray-400  tracking-widest">Department Head / Designee</div>
               </div>
               <div className="space-y-4">
                 <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f]">{data.office.date}</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Date of Execution</div>
+                <div className="text-[10px] font-black text-gray-400  tracking-widest">Date of Execution</div>
               </div>
             </div>
           </div>
@@ -480,7 +480,7 @@ export default function ProfessionalExpertAgreementPage() {
 
         {/* Footnote */}
         <div className="bg-gray-50 p-6 border-t border-gray-100 text-center">
-          <p className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.3em]">
+          <p className="text-[9px] font-bold text-gray-400  tracking-[0.3em]">
             Form Hr-Pea-2026 • Electronic Processing via iCAAP Administrative Suite
           </p>
         </div>
@@ -493,7 +493,7 @@ export default function ProfessionalExpertAgreementPage() {
           <AlertCircle className="text-amber-600" size={24} />
         </div>
         <div>
-          <h5 className="text-amber-800 font-black text-xs uppercase tracking-widest mb-1">Compliance Requirement</h5>
+          <h5 className="text-amber-800 font-black text-xs  tracking-widest mb-1">Compliance Requirement</h5>
           <p className="text-amber-700/70 text-sm font-medium">
             Agreement must be fully executed and approved by the Human Resources Division prior to the commencement of any professional services. Attach specialized credentials if required.
           </p>
@@ -501,7 +501,7 @@ export default function ProfessionalExpertAgreementPage() {
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center print:hidden">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">iCAAP Contractual Services Division © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">iCAAP Contractual Services Division © 2026</p>
       </footer>
 
       {/* Print-only styles */}

@@ -187,10 +187,10 @@ export default function PurchaseRequisitionPage() {
         {/* Official Header Section */}
         <div className="bg-[#0a2f5f] p-10 text-white text-center relative overflow-hidden">
           <div className="relative z-10">
-            <h2 className="text-2xl font-black tracking-[0.2em] uppercase mb-1">Los Angeles Unified School District</h2>
-            <h3 className="text-lg font-bold opacity-80 uppercase tracking-widest mb-4">Human Resources Division • Management Services</h3>
+            <h2 className="text-2xl font-black tracking-[0.2em]  mb-1">Los Angeles Unified School District</h2>
+            <h3 className="text-lg font-bold opacity-80  tracking-widest mb-4">Human Resources Division • Management Services</h3>
             <div className="inline-block px-8 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-              <span className="text-xs font-black uppercase tracking-[0.3em]">Purchase Requisition Form</span>
+              <span className="text-xs font-black  tracking-[0.3em]">Purchase Requisition Form</span>
             </div>
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">Lausd</div>
@@ -210,8 +210,8 @@ export default function PurchaseRequisitionPage() {
                 <Plus className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" size={24} />
               </div>
               <div className="flex flex-col">
-                <span className="text-base font-black text-[#0a2f5f] uppercase tracking-wider group-hover:translate-x-1 transition-transform">District Warehouse Order</span>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Standard Inventory fulfillment</span>
+                <span className="text-base font-black text-[#0a2f5f]  tracking-wider group-hover:translate-x-1 transition-transform">District Warehouse Order</span>
+                <span className="text-[10px] font-bold text-gray-400  tracking-widest">Standard Inventory fulfillment</span>
               </div>
             </label>
             <div className="w-px h-12 bg-gray-200 hidden lg:block"></div>
@@ -226,8 +226,8 @@ export default function PurchaseRequisitionPage() {
                 <Plus className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" size={24} />
               </div>
               <div className="flex flex-col">
-                <span className="text-base font-black text-[#0a2f5f] uppercase tracking-wider group-hover:translate-x-1 transition-transform">Outside Vendor</span>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Quote document must be attached</span>
+                <span className="text-base font-black text-[#0a2f5f]  tracking-wider group-hover:translate-x-1 transition-transform">Outside Vendor</span>
+                <span className="text-[10px] font-bold text-gray-400  tracking-widest">Quote document must be attached</span>
               </div>
             </label>
           </div>
@@ -241,14 +241,14 @@ export default function PurchaseRequisitionPage() {
                   <Building2 className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Vendor Details</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Payee Information</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Vendor Details</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Payee Information</p>
                 </div>
               </div>
               
               <div className="space-y-6">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Company Name</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Company Name</label>
                   <input 
                     type="text" 
                     value={data.vendor.name} 
@@ -259,7 +259,7 @@ export default function PurchaseRequisitionPage() {
                 </div>
                 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Mailing Address</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Mailing Address</label>
                   <textarea 
                     value={data.vendor.address} 
                     onChange={e => setData({...data, vendor: {...data.vendor, address: e.target.value}})}
@@ -270,7 +270,7 @@ export default function PurchaseRequisitionPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">City</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">City</label>
                     <input 
                       type="text" 
                       value={data.vendor.city} 
@@ -279,13 +279,13 @@ export default function PurchaseRequisitionPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">State / Zip Code</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">State / Zip Code</label>
                     <div className="flex gap-2">
                       <input 
                         type="text" 
                         value={data.vendor.state} 
                         onChange={e => setData({...data, vendor: {...data.vendor, state: e.target.value}})}
-                        className="w-1/3 px-2 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 text-center shadow-inner uppercase"
+                        className="w-1/3 px-2 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#0a2f5f]/20 outline-none transition-all font-bold text-gray-700 text-center shadow-inner "
                       />
                       <input 
                         type="text" 
@@ -306,14 +306,14 @@ export default function PurchaseRequisitionPage() {
                   <Briefcase className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Requesting Office</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Department Source</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Requesting Office</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Department Source</p>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Office / Unit Name</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Office / Unit Name</label>
                   <input 
                     type="text" 
                     value={data.office.name} 
@@ -323,7 +323,7 @@ export default function PurchaseRequisitionPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Official Requestor</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Official Requestor</label>
                   <div className="relative">
                     <input 
                       type="text" 
@@ -337,7 +337,7 @@ export default function PurchaseRequisitionPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Phone Extension</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Phone Extension</label>
                     <input 
                       type="text" 
                       value={data.office.phone} 
@@ -346,7 +346,7 @@ export default function PurchaseRequisitionPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Location / Cubicle</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Location / Cubicle</label>
                     <input 
                       type="text" 
                       value={data.office.cubicle} 
@@ -357,7 +357,7 @@ export default function PurchaseRequisitionPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Document Date</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Document Date</label>
                   <input 
                     type="date" 
                     value={data.office.date} 
@@ -377,13 +377,13 @@ export default function PurchaseRequisitionPage() {
                   <Receipt className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Line Item Details</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Inventory & Service breakdown</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Line Item Details</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Inventory & Service breakdown</p>
                 </div>
               </div>
               <button 
                 onClick={addItem}
-                className="group flex items-center gap-2 px-8 py-3 bg-[#0a2f5f] text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-[#0a2f5f] transition-all shadow-xl shadow-[#0a2f5f]/20"
+                className="group flex items-center gap-2 px-8 py-3 bg-[#0a2f5f] text-white font-black text-[10px]  tracking-widest rounded-2xl hover:bg-[#0a2f5f] transition-all shadow-xl shadow-[#0a2f5f]/20"
               >
                 <Plus size={18} className="group-hover:rotate-90 transition-transform" /> Add New Row
               </button>
@@ -394,14 +394,14 @@ export default function PurchaseRequisitionPage() {
                 <table className="w-full border-collapse text-xs">
                   <thead>
                     <tr className="bg-gray-50/80 border-b-2 border-gray-100">
-                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[80px]">Ln</th>
-                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Qty</th>
-                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Unit</th>
-                      <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Pg</th>
-                      <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[220px]">Stock # / Code</th>
-                      <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest">Description</th>
-                      <th className="p-6 text-right font-black text-[#0a2f5f] uppercase tracking-widest w-[140px]">Unit Cost</th>
-                      <th className="p-6 text-right font-black text-[#0a2f5f] uppercase tracking-widest w-[160px]">Total</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f]  tracking-widest w-[80px]">Ln</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f]  tracking-widest w-[100px]">Qty</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f]  tracking-widest w-[100px]">Unit</th>
+                      <th className="p-6 text-center font-black text-[#0a2f5f]  tracking-widest w-[100px]">Pg</th>
+                      <th className="p-6 text-left font-black text-[#0a2f5f]  tracking-widest w-[220px]">Stock # / Code</th>
+                      <th className="p-6 text-left font-black text-[#0a2f5f]  tracking-widest">Description</th>
+                      <th className="p-6 text-right font-black text-[#0a2f5f]  tracking-widest w-[140px]">Unit Cost</th>
+                      <th className="p-6 text-right font-black text-[#0a2f5f]  tracking-widest w-[160px]">Total</th>
                       <th className="p-6 text-center w-[80px] print:hidden"></th>
                     </tr>
                   </thead>
@@ -422,7 +422,7 @@ export default function PurchaseRequisitionPage() {
                             type="text" 
                             value={item.unit} 
                             onChange={e => updateItem(idx, 'unit', e.target.value)}
-                            className="w-full p-4 bg-transparent focus:bg-white rounded-xl outline-none font-black text-center uppercase group-hover:bg-white/50 transition-all text-sm"
+                            className="w-full p-4 bg-transparent focus:bg-white rounded-xl outline-none font-black text-center  group-hover:bg-white/50 transition-all text-sm"
                           />
                         </td>
                         <td className="p-2">
@@ -487,14 +487,14 @@ export default function PurchaseRequisitionPage() {
                     <FileText className="text-[#0a2f5f]" size={24} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Justification</h4>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Reasoning for procurement</p>
+                    <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Justification</h4>
+                    <p className="text-[10px] font-bold text-gray-400  tracking-widest">Reasoning for procurement</p>
                   </div>
                 </div>
 
                 <div className="space-y-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Equipment to be used by</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Equipment to be used by</label>
                     <input 
                       type="text" 
                       value={data.justification.usedBy} 
@@ -504,7 +504,7 @@ export default function PurchaseRequisitionPage() {
                     />
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Formal Reason for Request</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Formal Reason for Request</label>
                     <textarea 
                       value={data.justification.reason1} 
                       onChange={e => setData({...data, justification: {...data.justification, reason1: e.target.value}})}
@@ -528,8 +528,8 @@ export default function PurchaseRequisitionPage() {
                     <Calculator className="text-[#0a2f5f]" size={24} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Accounting Process</h4>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Funding allocation strings</p>
+                    <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Accounting Process</h4>
+                    <p className="text-[10px] font-bold text-gray-400  tracking-widest">Funding allocation strings</p>
                   </div>
                 </div>
 
@@ -537,11 +537,11 @@ export default function PurchaseRequisitionPage() {
                   <table className="w-full border-collapse text-[10px]">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-100">
-                        <th className="p-4 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[60px]">Acct</th>
-                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest">Cost Center</th>
-                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[100px]">Fund</th>
-                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">Functional Area</th>
-                        <th className="p-4 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">Gl / Acct</th>
+                        <th className="p-4 text-center font-black text-[#0a2f5f]  tracking-widest w-[60px]">Acct</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f]  tracking-widest">Cost Center</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f]  tracking-widest w-[100px]">Fund</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f]  tracking-widest w-[120px]">Functional Area</th>
+                        <th className="p-4 text-left font-black text-[#0a2f5f]  tracking-widest w-[120px]">Gl / Acct</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -591,14 +591,14 @@ export default function PurchaseRequisitionPage() {
             <div className="lg:col-span-5">
               <div className="bg-[#0a2f5f] p-12 rounded-[4rem] text-white shadow-2xl shadow-[#0a2f5f]/30 sticky top-12 overflow-hidden">
                 <div className="relative z-10">
-                  <h4 className="text-sm font-black uppercase tracking-[0.3em] mb-10 text-white/50 border-b border-white/10 pb-4">Financial Summary</h4>
+                  <h4 className="text-sm font-black  tracking-[0.3em] mb-10 text-white/50 border-b border-white/10 pb-4">Financial Summary</h4>
                   <div className="space-y-6">
                     <div className="flex justify-between items-center text-xl font-bold">
-                      <span className="opacity-40 uppercase text-[10px] tracking-[0.2em]">Merchandise Subtotal</span>
+                      <span className="opacity-40  text-[10px] tracking-[0.2em]">Merchandise Subtotal</span>
                       <span className="font-black font-mono tracking-tight">${subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                     </div>
                     <div className="flex justify-between items-center text-xl font-bold">
-                      <span className="opacity-40 uppercase text-[10px] tracking-[0.2em]">Estimated Sales Tax</span>
+                      <span className="opacity-40  text-[10px] tracking-[0.2em]">Estimated Sales Tax</span>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30">$</span>
                         <input 
@@ -610,7 +610,7 @@ export default function PurchaseRequisitionPage() {
                       </div>
                     </div>
                     <div className="flex justify-between items-center text-xl font-bold">
-                      <span className="opacity-40 uppercase text-[10px] tracking-[0.2em]">Delivery & Handling</span>
+                      <span className="opacity-40  text-[10px] tracking-[0.2em]">Delivery & Handling</span>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30">$</span>
                         <input 
@@ -624,7 +624,7 @@ export default function PurchaseRequisitionPage() {
                     <div className="pt-10 mt-10 border-t border-white/10">
                       <div className="flex justify-between items-end mb-8">
                         <div className="flex flex-col">
-                          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 mb-2">Total Fiscal Obligation</span>
+                          <span className="text-[10px] font-black  tracking-[0.4em] text-white/40 mb-2">Total Fiscal Obligation</span>
                           <span className="text-6xl font-black text-[#ffca38] tracking-tighter font-mono">
                             ${total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                           </span>
@@ -636,7 +636,7 @@ export default function PurchaseRequisitionPage() {
                       <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
                         <div className="flex items-center gap-3 text-[#ffca38] mb-2">
                           <ShieldCheck size={18} />
-                          <span className="text-[10px] font-black uppercase tracking-widest">Encumbrance Verification</span>
+                          <span className="text-[10px] font-black  tracking-widest">Encumbrance Verification</span>
                         </div>
                         <p className="text-[10px] text-white/50 leading-relaxed font-bold italic">
                           &quot;I hereby certify that the items listed are necessary for the conduct of official business of the Los Angeles Unified School District.&quot;
@@ -654,19 +654,19 @@ export default function PurchaseRequisitionPage() {
           <div className="mt-20 pt-16 border-t-2 border-gray-100">
             <div className="flex items-center gap-4 mb-12 justify-center">
               <History className="text-[#0a2f5f]" size={24} />
-              <h4 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-[0.2em]">Official Approval Workflow</h4>
+              <h4 className="text-2xl font-black text-[#0a2f5f]  tracking-[0.2em]">Official Approval Workflow</h4>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               <div className="relative group">
                 <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#0a2f5f] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">01</div>
                 <div className="bg-white p-8 rounded-[2.5rem] border-2 border-gray-100 shadow-sm group-hover:shadow-xl transition-all h-full">
-                  <h5 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-6">Unit Administrator</h5>
+                  <h5 className="text-xs font-black  tracking-widest text-gray-400 mb-6">Unit Administrator</h5>
                   <div className="space-y-4">
                     <div className="h-px bg-gray-100 w-full mb-8"></div>
                     <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-30">Signature</span>
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-30">Date</span>
+                      <span className="text-[10px] font-black  tracking-widest opacity-30">Signature</span>
+                      <span className="text-[10px] font-black  tracking-widest opacity-30">Date</span>
                     </div>
                   </div>
                 </div>
@@ -675,12 +675,12 @@ export default function PurchaseRequisitionPage() {
               <div className="relative group">
                 <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#0a2f5f] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">02</div>
                 <div className="bg-white p-8 rounded-[2.5rem] border-2 border-gray-100 shadow-sm group-hover:shadow-xl transition-all h-full">
-                  <h5 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-6">Budget Approval</h5>
+                  <h5 className="text-xs font-black  tracking-widest text-gray-400 mb-6">Budget Approval</h5>
                   <div className="space-y-4">
                     <div className="h-px bg-gray-100 w-full mb-8"></div>
                     <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-30">Signature</span>
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-30">Date</span>
+                      <span className="text-[10px] font-black  tracking-widest opacity-30">Signature</span>
+                      <span className="text-[10px] font-black  tracking-widest opacity-30">Date</span>
                     </div>
                   </div>
                 </div>
@@ -689,13 +689,13 @@ export default function PurchaseRequisitionPage() {
               <div className="relative group">
                 <div className="absolute -top-4 -left-4 w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center font-black text-[#0a2f5f] border-4 border-white shadow-lg group-hover:scale-110 transition-transform">03</div>
                 <div className="bg-white p-8 rounded-[2.5rem] border-2 border-gray-100 shadow-sm group-hover:shadow-xl transition-all h-full">
-                  <h5 className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1 leading-tight">Branch Administrator</h5>
-                  <p className="text-[9px] font-bold text-gray-300 uppercase tracking-tighter mb-4">(Orders $500.00+)</p>
+                  <h5 className="text-xs font-black  tracking-widest text-gray-400 mb-1 leading-tight">Branch Administrator</h5>
+                  <p className="text-[9px] font-bold text-gray-300  tracking-tighter mb-4">(Orders $500.00+)</p>
                   <div className="space-y-4">
                     <div className="h-px bg-gray-100 w-full mb-8"></div>
                     <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-30">Signature</span>
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-30">Date</span>
+                      <span className="text-[10px] font-black  tracking-widest opacity-30">Signature</span>
+                      <span className="text-[10px] font-black  tracking-widest opacity-30">Date</span>
                     </div>
                   </div>
                 </div>
@@ -706,13 +706,13 @@ export default function PurchaseRequisitionPage() {
       </div>
 
       <footer className="py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Lausd Management Services Document Repository © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Lausd Management Services Document Repository © 2026</p>
       </footer>
 
       {loading && (
         <div className="fixed inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center z-50">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#0a2f5f] mb-6 shadow-2xl"></div>
-          <div className="text-xs font-black uppercase tracking-[0.5em] text-[#0a2f5f] animate-pulse">Initializing Document...</div>
+          <div className="text-xs font-black  tracking-[0.5em] text-[#0a2f5f] animate-pulse">Initializing Document...</div>
         </div>
       )}
 

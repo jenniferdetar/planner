@@ -150,14 +150,14 @@ export default function TranscriptRequestPage() {
                 <Plus className="text-[#0a2f5f]" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">New Request Intake</h2>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Register incoming academic records</p>
+                <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">New Request Intake</h2>
+                <p className="text-[10px] font-bold text-gray-400  tracking-widest">Register incoming academic records</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
               <div className="space-y-1">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee Number (En)</label>
+                <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Employee Number (En)</label>
                 <input 
                   type="text" 
                   value={newRequest.en} 
@@ -167,7 +167,7 @@ export default function TranscriptRequestPage() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Teacher Name</label>
+                <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Teacher Name</label>
                 <div className="relative">
                   <input 
                     type="text" 
@@ -180,7 +180,7 @@ export default function TranscriptRequestPage() {
                 </div>
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Source / From</label>
+                <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Source / From</label>
                 <div className="relative">
                   <select 
                     value={newRequest.requestFrom} 
@@ -196,7 +196,7 @@ export default function TranscriptRequestPage() {
                 </div>
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Date Received</label>
+                <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Date Received</label>
                 <div className="relative">
                   <input 
                     type="date" 
@@ -209,7 +209,7 @@ export default function TranscriptRequestPage() {
               </div>
 
               <div className="space-y-1 md:col-span-2 lg:col-span-3">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Program Track</label>
+                <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Program Track</label>
                 <select 
                   value={newRequest.program} 
                   onChange={e => handleProgramChange(e.target.value)}
@@ -220,7 +220,7 @@ export default function TranscriptRequestPage() {
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Assigned Adviser</label>
+                <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Assigned Adviser</label>
                 <input 
                   type="text" 
                   value={newRequest.adviser} 
@@ -230,7 +230,7 @@ export default function TranscriptRequestPage() {
               </div>
 
               <div className="space-y-1 lg:col-span-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Nature of Inquiry</label>
+                <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Nature of Inquiry</label>
                 <textarea 
                   value={newRequest.nature} 
                   onChange={e => setNewRequest({...newRequest, nature: e.target.value})}
@@ -239,7 +239,7 @@ export default function TranscriptRequestPage() {
                 />
               </div>
               <div className="space-y-1 lg:col-span-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Processing Notes</label>
+                <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Processing Notes</label>
                 <textarea 
                   value={newRequest.notes} 
                   onChange={e => setNewRequest({...newRequest, notes: e.target.value})}
@@ -253,7 +253,7 @@ export default function TranscriptRequestPage() {
               <button 
                 onClick={addRequest}
                 disabled={!newRequest.name}
-                className="group flex items-center gap-3 px-12 py-4 bg-[#0a2f5f] text-white font-black text-sm uppercase tracking-[0.2em] rounded-[2rem] hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
+                className="group flex items-center gap-3 px-12 py-4 bg-[#0a2f5f] text-white font-black text-sm  tracking-[0.2em] rounded-[2rem] hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
               >
                 Initiate Log Entry
                 <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
@@ -267,34 +267,34 @@ export default function TranscriptRequestPage() {
         <div className="lg:col-span-4 space-y-8">
           <div className="bg-[#99B3C5] p-10 rounded-[3rem] text-white shadow-xl relative overflow-hidden group">
             <div className="relative z-10">
-              <h3 className="text-xs font-black uppercase tracking-[0.3em] mb-8 opacity-60">Log Summary</h3>
+              <h3 className="text-xs font-black  tracking-[0.3em] mb-8 opacity-60">Log Summary</h3>
               <div className="flex flex-col gap-1">
                 <span className="text-6xl font-black tracking-tighter">{filteredLog.length}</span>
-                <span className="text-xs font-black uppercase tracking-widest opacity-80">Active Requests</span>
+                <span className="text-xs font-black  tracking-widest opacity-80">Active Requests</span>
               </div>
               <div className="mt-10 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10">
                 <div className="flex items-center gap-3 mb-2">
                   <CheckCircle2 size={16} className="text-white/60" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">Real-time Sync Active</span>
+                  <span className="text-[10px] font-black  tracking-widest">Real-time Sync Active</span>
                 </div>
-                <p className="text-[10px] text-white/40 font-bold uppercase leading-tight">Last Entry: {filteredLog[0]?.dateReceived || 'N/A'}</p>
+                <p className="text-[10px] text-white/40 font-bold  leading-tight">Last Entry: {filteredLog[0]?.dateReceived || 'N/A'}</p>
               </div>
             </div>
             <ClipboardList className="absolute -bottom-10 -right-10 text-[15rem] opacity-10 group-hover:rotate-12 transition-transform duration-700" />
           </div>
 
           <div className="bg-white p-10 rounded-[3rem] border-2 border-gray-100 shadow-xl">
-            <h4 className="text-[#0a2f5f] font-black uppercase tracking-widest text-xs mb-6 border-b border-gray-50 pb-4">Internal Guidance</h4>
+            <h4 className="text-[#0a2f5f] font-black  tracking-widest text-xs mb-6 border-b border-gray-50 pb-4">Internal Guidance</h4>
             <div className="space-y-6">
               <div className="flex gap-4">
                 <div className="w-2 h-2 rounded-full bg-[#ffca38] mt-1 shrink-0 shadow-[0_0_8px_rgba(255,202,56,0.6)]"></div>
-                <p className="text-[11px] text-[#0a2f5f] font-bold leading-relaxed uppercase tracking-wider">
+                <p className="text-[11px] text-[#0a2f5f] font-bold leading-relaxed  tracking-wider">
                   Ensure all Employee Numbers are verified against Sap before entry.
                 </p>
               </div>
               <div className="flex gap-4">
                 <div className="w-2 h-2 rounded-full bg-[#FFA1AB] mt-1 shrink-0 shadow-[0_0_8px_rgba(255,161,171,0.6)]"></div>
-                <p className="text-[11px] text-[#0a2f5f] font-bold leading-relaxed uppercase tracking-wider">
+                <p className="text-[11px] text-[#0a2f5f] font-bold leading-relaxed  tracking-wider">
                   Flag requests from &quot;Salary Credit Assistants&quot; for priority processing.
                 </p>
               </div>
@@ -311,8 +311,8 @@ export default function TranscriptRequestPage() {
               <Filter className="text-white/60" size={24} />
             </div>
             <div>
-              <h2 className="text-2xl font-black uppercase tracking-tight leading-none mb-1">Transcript Request Log</h2>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">Administrative Master Log • 2025/26 Cycle</p>
+              <h2 className="text-2xl font-black  tracking-tight leading-none mb-1">Transcript Request Log</h2>
+              <p className="text-[10px] font-black  tracking-[0.3em] opacity-40">Administrative Master Log • 2025/26 Cycle</p>
             </div>
           </div>
           
@@ -332,14 +332,14 @@ export default function TranscriptRequestPage() {
           <table className="w-full border-collapse text-xs">
             <thead>
               <tr className="bg-gray-50/80 border-b-2 border-gray-100">
-                <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[120px]">Employee #</th>
-                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[250px]">Teacher Name</th>
-                <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[140px]">Date Rec.</th>
-                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[250px]">Program Track</th>
-                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest">Nature of Inquiry</th>
-                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[180px]">Adviser</th>
-                <th className="p-6 text-center font-black text-[#0a2f5f] uppercase tracking-widest w-[80px]">By</th>
-                <th className="p-6 text-left font-black text-[#0a2f5f] uppercase tracking-widest w-[250px]">Notes</th>
+                <th className="p-6 text-center font-black text-[#0a2f5f]  tracking-widest w-[120px]">Employee #</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f]  tracking-widest w-[250px]">Teacher Name</th>
+                <th className="p-6 text-center font-black text-[#0a2f5f]  tracking-widest w-[140px]">Date Rec.</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f]  tracking-widest w-[250px]">Program Track</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f]  tracking-widest">Nature of Inquiry</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f]  tracking-widest w-[180px]">Adviser</th>
+                <th className="p-6 text-center font-black text-[#0a2f5f]  tracking-widest w-[80px]">By</th>
+                <th className="p-6 text-left font-black text-[#0a2f5f]  tracking-widest w-[250px]">Notes</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -351,14 +351,14 @@ export default function TranscriptRequestPage() {
                   <td className="p-6">
                     <div className="flex flex-col">
                       <span className="text-sm font-black text-[#0a2f5f] group-hover:translate-x-1 transition-transform">{entry.name}</span>
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">From: {entry.requestFrom}</span>
+                      <span className="text-[9px] font-bold text-gray-400  tracking-widest">From: {entry.requestFrom}</span>
                     </div>
                   </td>
                   <td className="p-6 text-center font-bold text-gray-500 tabular-nums">
                     {entry.dateReceived}
                   </td>
                   <td className="p-6">
-                    <span className="px-4 py-1.5 bg-[#9ADBDE]/20 text-[#0a2f5f] rounded-full text-[10px] font-black uppercase tracking-wider border border-[#9ADBDE]/30">
+                    <span className="px-4 py-1.5 bg-[#9ADBDE]/20 text-[#0a2f5f] rounded-full text-[10px] font-black  tracking-wider border border-[#9ADBDE]/30">
                       {entry.program}
                     </span>
                   </td>
@@ -379,7 +379,7 @@ export default function TranscriptRequestPage() {
                     <span className="font-black text-xs text-[#0a2f5f]/40">{entry.by}</span>
                   </td>
                   <td className="p-6">
-                    <p className="text-gray-400 font-bold leading-relaxed text-[10px] uppercase tracking-tight">
+                    <p className="text-gray-400 font-bold leading-relaxed text-[10px]  tracking-tight">
                       {entry.notes || '—'}
                     </p>
                   </td>
@@ -390,7 +390,7 @@ export default function TranscriptRequestPage() {
                   <td colSpan={8} className="p-24 text-center">
                     <div className="flex flex-col items-center gap-4 opacity-20">
                       <Search size={64} className="text-[#0a2f5f]" />
-                      <div className="text-xs font-black uppercase tracking-[0.5em] text-[#0a2f5f]">No Matching Records Found</div>
+                      <div className="text-xs font-black  tracking-[0.5em] text-[#0a2f5f]">No Matching Records Found</div>
                     </div>
                   </td>
                 </tr>
@@ -403,19 +403,19 @@ export default function TranscriptRequestPage() {
       {loading && (
         <div className="fixed inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center z-50">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#0a2f5f] mb-6 shadow-2xl"></div>
-          <div className="text-xs font-black uppercase tracking-[0.5em] text-[#0a2f5f] animate-pulse">Accessing Archive...</div>
+          <div className="text-xs font-black  tracking-[0.5em] text-[#0a2f5f] animate-pulse">Accessing Archive...</div>
         </div>
       )}
 
       {saving && (
         <div className="fixed bottom-12 right-12 bg-[#0a2f5f] text-white px-10 py-4 rounded-2xl shadow-2xl flex items-center gap-4 animate-bounce z-50 border-2 border-white/20">
           <Save size={20} />
-          <span className="text-xs font-black uppercase tracking-widest">Synchronizing Log...</span>
+          <span className="text-xs font-black  tracking-widest">Synchronizing Log...</span>
         </div>
       )}
 
       <footer className="py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Lausd Management Services Document Repository © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Lausd Management Services Document Repository © 2026</p>
       </footer>
 
       <style jsx global>{`

@@ -124,7 +124,7 @@ export default function IcaapNotesPage() {
                   <Plus className="text-[#5d84b2]" size={24} />
                   New Record Entry
                 </h2>
-                <div className="text-[10px] font-black uppercase tracking-widest text-[#0a2f5f]/30 px-3 py-1 bg-[#0a2f5f]/5 rounded-full">
+                <div className="text-[10px] font-black  tracking-widest text-[#0a2f5f]/30 px-3 py-1 bg-[#0a2f5f]/5 rounded-full">
                   Lined Paper Mode
                 </div>
               </div>
@@ -170,7 +170,7 @@ export default function IcaapNotesPage() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-40">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0a2f5f]"></div>
-                <div className="text-sm font-bold uppercase tracking-widest text-[#0a2f5f]">Archiving...</div>
+                <div className="text-sm font-bold  tracking-widest text-[#0a2f5f]">Archiving...</div>
               </div>
             ) : savedNotes.length > 0 ? (
               <div className="space-y-6">
@@ -180,11 +180,11 @@ export default function IcaapNotesPage() {
                     <div className="relative p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all">
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2 text-xs font-black text-[#0a2f5f]/40 uppercase tracking-tighter">
+                          <div className="flex items-center gap-2 text-xs font-black text-[#0a2f5f]/40  tracking-tighter">
                             <Calendar size={12} />
                             {formatDate(note.savedAt)}
                           </div>
-                          <div className="flex items-center gap-2 text-xs font-black text-[#0a2f5f]/40 uppercase tracking-tighter">
+                          <div className="flex items-center gap-2 text-xs font-black text-[#0a2f5f]/40  tracking-tighter">
                             <Clock size={12} />
                             {formatTime(note.savedAt)}
                           </div>
@@ -214,7 +214,7 @@ export default function IcaapNotesPage() {
       </div>
 
       <footer className="mt-20 pt-12 border-t border-[#0a2f5f]/5 text-center">
-        <p className="text-[#0a2f5f]/30 text-sm font-bold uppercase tracking-[0.2em]">iCAAP Administrative Archive © 2026</p>
+        <p className="text-[#0a2f5f]/30 text-sm font-bold  tracking-[0.2em]">iCAAP Administrative Archive © 2026</p>
       </footer>
     </div>
   );

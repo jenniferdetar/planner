@@ -52,7 +52,7 @@ export default function IcaapFormsPage() {
                 <div className="flex justify-between items-start mb-2">
                   <h2 className="text-2xl font-black text-[#0a2f5f]">{form.title}</h2>
                   {form.href === '#' && (
-                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-300 bg-gray-50 px-3 py-1 rounded-full border">In Queue</span>
+                    <span className="text-[10px] font-black  tracking-widest text-gray-300 bg-gray-50 px-3 py-1 rounded-full border">In Queue</span>
                   )}
                 </div>
                 <p className="text-gray-500 font-medium leading-relaxed mb-6">
@@ -60,13 +60,13 @@ export default function IcaapFormsPage() {
                 </p>
                 
                 {form.href === '#' ? (
-                  <div className="flex items-center gap-2 text-gray-300 font-black text-xs uppercase tracking-widest cursor-not-allowed">
+                  <div className="flex items-center gap-2 text-gray-300 font-black text-xs  tracking-widest cursor-not-allowed">
                     Under Development <ArrowRight size={14} />
                   </div>
                 ) : (
                   <Link 
                     href={form.href} 
-                    className="inline-flex items-center gap-2 text-[#0a2f5f] font-black text-xs uppercase tracking-widest group-hover:gap-4 transition-all"
+                    className="inline-flex items-center gap-2 text-[#0a2f5f] font-black text-xs  tracking-widest group-hover:gap-4 transition-all"
                   >
                     Initiate Document <ArrowRight size={14} className="text-[#0a2f5f]" />
                   </Link>
@@ -87,22 +87,22 @@ export default function IcaapFormsPage() {
             <div className="flex gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.5)]"></div>
-                <span className="text-xs font-black uppercase tracking-widest opacity-60">Real-time Sync</span>
+                <span className="text-xs font-black  tracking-widest opacity-60">Real-time Sync</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.5)]"></div>
-                <span className="text-xs font-black uppercase tracking-widest opacity-60">Secure Storage</span>
+                <span className="text-xs font-black  tracking-widest opacity-60">Secure Storage</span>
               </div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
               <div className="text-2xl font-black mb-1">100%</div>
-              <div className="text-[10px] font-black uppercase tracking-widest opacity-40 leading-tight">Digital Filing</div>
+              <div className="text-[10px] font-black  tracking-widest opacity-40 leading-tight">Digital Filing</div>
             </div>
             <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
               <div className="text-2xl font-black mb-1">24/7</div>
-              <div className="text-[10px] font-black uppercase tracking-widest opacity-40 leading-tight">Access Availability</div>
+              <div className="text-[10px] font-black  tracking-widest opacity-40 leading-tight">Access Availability</div>
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function IcaapFormsPage() {
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">iCAAP Documentation Portal © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">iCAAP Documentation Portal © 2026</p>
       </footer>
     </div>
   );

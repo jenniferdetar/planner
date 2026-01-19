@@ -142,7 +142,7 @@ export default function GoalsPage() {
 
       <section className="bg-white rounded-[2rem] border border-slate-200 shadow-sm p-8 md:p-12 mb-12">
         <div className="text-center mb-8">
-          <div className="text-xs font-black uppercase tracking-[0.3em] text-gray-400">My Personal Goals</div>
+          <div className="text-xs font-black  tracking-[0.3em] text-gray-400">My Personal Goals</div>
           <p className="text-xs text-gray-500 mt-2">
             What one thing do you want to be intentional about this year? Decide what you want to track and define one way to clearly measure success.
           </p>
@@ -174,7 +174,7 @@ export default function GoalsPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
           <Activity className="text-slate-300 animate-pulse mb-4" size={48} />
-          <div className="text-slate-400 font-black uppercase tracking-widest text-xs">Accessing Objective Database...</div>
+          <div className="text-slate-400 font-black  tracking-widest text-xs">Accessing Objective Database...</div>
         </div>
       ) : (
         <div className="grid gap-8 md:grid-cols-2">
@@ -189,11 +189,11 @@ export default function GoalsPage() {
                       {goal.status === 'completed' ? <Trophy size={20} className="text-[#FFC68D]" /> : <Flame size={20} className="text-[#FFC68D]" />}
                     </div>
                     <div>
-                      <h2 className="text-2xl font-black text-[#0a2f5f] leading-tight uppercase tracking-tighter">{goal.title}</h2>
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{goal.category}</div>
+                      <h2 className="text-2xl font-black text-[#0a2f5f] leading-tight  tracking-tighter">{goal.title}</h2>
+                      <div className="text-[10px] font-black text-gray-400  tracking-[0.2em]">{goal.category}</div>
                     </div>
                   </div>
-                  <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${
+                  <div className={`px-4 py-2 rounded-xl text-[10px] font-black  tracking-widest ${
                     goal.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
                   }`}>
                     {goal.status}
@@ -208,7 +208,7 @@ export default function GoalsPage() {
                 
                 <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
                   <div className="flex justify-between items-end mb-3">
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Execution Progress</span>
+                    <span className="text-[10px] font-black text-gray-400  tracking-widest">Execution Progress</span>
                     <span className="text-2xl font-black text-[#FFC68D]">{goal.progress_percent}%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden shadow-inner">
@@ -224,11 +224,11 @@ export default function GoalsPage() {
                 </div>
 
                 <div className="mt-8 flex items-center justify-between border-t border-slate-50 pt-6">
-                  <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                  <div className="flex items-center gap-2 text-[10px] font-black text-gray-400  tracking-widest">
                     <Award size={14} className="text-[#FFC68D]" />
                     Smart Certified
                   </div>
-                  <button className="flex items-center gap-2 text-[#FFC68D] font-black text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform">
+                  <button className="flex items-center gap-2 text-[#FFC68D] font-black text-xs  tracking-widest group-hover:translate-x-1 transition-transform">
                     View Details <ChevronRight size={16} />
                   </button>
                 </div>
@@ -238,8 +238,8 @@ export default function GoalsPage() {
           {goals.length === 0 && (
             <div className="col-span-2 py-32 text-center bg-slate-50 rounded-[4rem] border-4 border-dashed border-slate-100">
               <Rocket className="text-slate-200 mx-auto mb-6" size={64} />
-              <p className="text-xl font-black text-[#7c2d12] uppercase tracking-tight">No Active Objectives</p>
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mt-2">Initialize your strategic roadmap to begin tracking progress</p>
+              <p className="text-xl font-black text-[#7c2d12]  tracking-tight">No Active Objectives</p>
+              <p className="text-gray-400 font-bold  tracking-widest text-xs mt-2">Initialize your strategic roadmap to begin tracking progress</p>
             </div>
           )}
         </div>
@@ -250,13 +250,13 @@ export default function GoalsPage() {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <ShieldCheck className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Strategy Verification</h2>
+              <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Strategy Verification</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Achievement records are audited against strategic criteria to ensure alignment with your long-term vision board.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs  tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <Award size={16} />
             Achievement Data Integrity Verified
           </div>
@@ -266,18 +266,18 @@ export default function GoalsPage() {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <TrendingUp className="text-[#FFC68D]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Achievement Momentum</h2>
+              <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Achievement Momentum</h2>
             </div>
             <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
               Current progress indicates high execution velocity. Maintain focus on quarterly milestones to maximize output.
             </p>
           </div>
-          <div className="text-4xl font-black text-[#0a2f5f] opacity-10 uppercase italic tracking-tighter">Velocity Projections</div>
+          <div className="text-4xl font-black text-[#0a2f5f] opacity-10  italic tracking-tighter">Velocity Projections</div>
         </div>
       </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Strategic Achievement Portal © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Strategic Achievement Portal © 2026</p>
       </footer>
     </div>
   );

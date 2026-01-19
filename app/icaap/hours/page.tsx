@@ -195,13 +195,13 @@ export default function IcaapHoursPage() {
             <table className="w-full text-left border-collapse min-w-[1200px]">
               <thead>
                 <tr className="bg-[#f8fafc] border-b-2 border-gray-100">
-                  <th className="p-6 font-black uppercase tracking-widest text-[10px] text-[#0a2f5f] sticky left-0 bg-[#f8fafc] z-10 border-r border-gray-100 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.05)]">Staff Member</th>
+                  <th className="p-6 font-black  tracking-widest text-[10px] text-[#0a2f5f] sticky left-0 bg-[#f8fafc] z-10 border-r border-gray-100 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.05)]">Staff Member</th>
                   {MONTHS.map(m => (
-                    <th key={m} className="p-4 font-black uppercase tracking-widest text-[10px] text-gray-400 text-center">
+                    <th key={m} className="p-4 font-black  tracking-widest text-[10px] text-gray-400 text-center">
                       {MONTH_LABELS[m]}
                     </th>
                   ))}
-                  <th className="p-4 font-black uppercase tracking-widest text-[10px] text-center bg-[#0a2f5f] text-white">Ytd Total</th>
+                  <th className="p-4 font-black  tracking-widest text-[10px] text-center bg-[#0a2f5f] text-white">Ytd Total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -223,7 +223,7 @@ export default function IcaapHoursPage() {
               </tbody>
               <tfoot className="bg-[#f8fafc] font-black border-t-4 border-[#0a2f5f]">
                 <tr>
-                  <td className="p-6 sticky left-0 bg-[#f8fafc] z-10 text-[#0a2f5f] uppercase tracking-widest text-xs border-r border-gray-100 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.05)]">Registry Grand Total</td>
+                  <td className="p-6 sticky left-0 bg-[#f8fafc] z-10 text-[#0a2f5f]  tracking-widest text-xs border-r border-gray-100 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.05)]">Registry Grand Total</td>
                   {MONTHS.map(m => (
                     <td key={m} className="p-4 text-center text-[#0a2f5f] text-lg">
                       {formatVal(columnTotals[m])}
@@ -243,19 +243,19 @@ export default function IcaapHoursPage() {
       <section className="mt-20">
         <div className="flex items-center gap-3 mb-8">
           <Calendar className="text-[#0a2f5f]" size={24} />
-          <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Dec 2025 Roster</h2>
+          <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Dec 2025 Roster</h2>
           <div className="h-px flex-grow bg-gradient-to-r from-[#0a2f5f]/20 to-transparent"></div>
         </div>
-        <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mb-8 -mt-4">Additional Compensation Records</p>
+        <p className="text-gray-400 font-bold  tracking-widest text-[10px] mb-8 -mt-4">Additional Compensation Records</p>
         
         <div className="bg-white rounded-[2.5rem] border-2 border-[#0a2f5f]/5 shadow-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50 border-b">
-                  <th className="p-6 font-black uppercase tracking-widest text-[10px] text-gray-400">Staff Member</th>
-                  <th className="p-6 font-black uppercase tracking-widest text-[10px] text-gray-400">Assigned Program</th>
-                  <th className="p-6 font-black uppercase tracking-widest text-[10px] text-gray-400 text-center">Approved Hours</th>
+                  <th className="p-6 font-black  tracking-widest text-[10px] text-gray-400">Staff Member</th>
+                  <th className="p-6 font-black  tracking-widest text-[10px] text-gray-400">Assigned Program</th>
+                  <th className="p-6 font-black  tracking-widest text-[10px] text-gray-400 text-center">Approved Hours</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -263,7 +263,7 @@ export default function IcaapHoursPage() {
                   <tr key={i} className="hover:bg-gray-50 transition-colors">
                     <td className="p-5 text-sm font-bold text-gray-700">{row.name}</td>
                     <td className="p-5">
-                      <span className="px-3 py-1 bg-blue-50 text-[#0a2f5f] text-[10px] font-black uppercase tracking-widest rounded-full border border-blue-100">
+                      <span className="px-3 py-1 bg-blue-50 text-[#0a2f5f] text-[10px] font-black  tracking-widest rounded-full border border-blue-100">
                         {row.program}
                       </span>
                     </td>
@@ -284,7 +284,7 @@ export default function IcaapHoursPage() {
             <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
               <Calculator size={20} />
             </div>
-            <h3 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Audit Verification</h3>
+            <h3 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Audit Verification</h3>
           </div>
           <p className="text-gray-500 text-sm leading-relaxed max-w-xl">
             These records have been cross-referenced with Sap payroll data and iCAAP attendance logs. All hours listed are approved for the 2025/26 Academic Cycle.
@@ -294,9 +294,9 @@ export default function IcaapHoursPage() {
         <div className="relative group">
           <div className="absolute inset-0 bg-emerald-500 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <div className="relative w-40 h-40 rounded-full border-4 border-emerald-500/20 flex flex-col items-center justify-center p-4 text-center transform -rotate-12 group-hover:rotate-0 transition-transform duration-700">
-            <div className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] mb-1">Certified</div>
+            <div className="text-[10px] font-black text-emerald-600  tracking-[0.2em] mb-1">Certified</div>
             <div className="w-12 h-px bg-emerald-200 mb-2"></div>
-            <div className="text-[8px] font-bold text-emerald-500/60 uppercase tracking-widest leading-tight">iCAAP Administrative<br/>Records Office</div>
+            <div className="text-[8px] font-bold text-emerald-500/60  tracking-widest leading-tight">iCAAP Administrative<br/>Records Office</div>
             <div className="mt-2 text-emerald-600">
               <ShieldCheck size={24} />
             </div>
@@ -305,7 +305,7 @@ export default function IcaapHoursPage() {
       </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">iCAAP Payroll Support Division © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">iCAAP Payroll Support Division © 2026</p>
       </footer>
     </div>
   );

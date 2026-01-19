@@ -203,7 +203,7 @@ export default function SpendingPlanPage() {
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#fdfdfd]">
       <Loader2 className="animate-spin text-[#99B3C5] mb-4" size={48} />
-      <div className="text-xs font-black uppercase tracking-[0.3em] text-gray-400">Loading Allocation Ledger...</div>
+      <div className="text-xs font-black  tracking-[0.3em] text-gray-400">Loading Allocation Ledger...</div>
     </div>
   );
 
@@ -217,24 +217,24 @@ export default function SpendingPlanPage() {
           <table className="w-full text-left border-collapse min-w-[1400px]">
             <thead>
               <tr className="bg-[#f8fafc] border-b border-gray-100">
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] sticky left-0 bg-[#f8fafc] z-20 border-r border-gray-50" rowSpan={2}>Operational Item</th>
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] text-center border-r border-gray-50" rowSpan={2}>Budgeted</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] sticky left-0 bg-[#f8fafc] z-20 border-r border-gray-50" rowSpan={2}>Operational Item</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] text-center border-r border-gray-50" rowSpan={2}>Budgeted</th>
                 {PAY_WEEKS.map(pw => (
-                  <th key={pw.id} className="p-6 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] text-center border-r border-gray-50" colSpan={2}>
+                  <th key={pw.id} className="p-6 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] text-center border-r border-gray-50" colSpan={2}>
                     <div className="flex flex-col items-center gap-2">
                       <div className={`w-3 h-3 rounded-full ${pw.color} opacity-50 animate-pulse`}></div>
                       {pw.label}
                     </div>
                   </th>
                 ))}
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] text-center border-l border-gray-50" rowSpan={2}>Total Spent</th>
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] text-center border-l border-gray-50" rowSpan={2}>Registry Remainder</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] text-center border-l border-gray-50" rowSpan={2}>Total Spent</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] text-center border-l border-gray-50" rowSpan={2}>Registry Remainder</th>
               </tr>
               <tr className="bg-white border-b border-gray-100">
                 {PAY_WEEKS.map(pw => (
                   <React.Fragment key={pw.id}>
-                    <th className="p-4 font-black text-gray-400 text-[9px] uppercase tracking-widest text-center border-r border-gray-50 bg-slate-50/50">Spent</th>
-                    <th className="p-4 font-black text-blue-400 text-[9px] uppercase tracking-widest text-center border-r border-gray-50">Cycle Rem.</th>
+                    <th className="p-4 font-black text-gray-400 text-[9px]  tracking-widest text-center border-r border-gray-50 bg-slate-50/50">Spent</th>
+                    <th className="p-4 font-black text-blue-400 text-[9px]  tracking-widest text-center border-r border-gray-50">Cycle Rem.</th>
                   </React.Fragment>
                 ))}
               </tr>
@@ -242,7 +242,7 @@ export default function SpendingPlanPage() {
             <tbody>
               {/* Income Header Row */}
               <tr className="bg-blue-50/50 group">
-                <td className="p-8 border-b border-blue-100 sticky left-0 bg-blue-50 group-hover:bg-blue-100/50 z-20 border-r border-blue-100 font-black text-[#0a2f5f] uppercase tracking-widest text-xs">
+                <td className="p-8 border-b border-blue-100 sticky left-0 bg-blue-50 group-hover:bg-blue-100/50 z-20 border-r border-blue-100 font-black text-[#0a2f5f]  tracking-widest text-xs">
                   <div className="flex items-center gap-3">
                     <Activity size={16} className="text-[#0a2f5f]/40" />
                     Income Baseline
@@ -279,7 +279,7 @@ export default function SpendingPlanPage() {
               {CATEGORIES.map(cat => (
                 <React.Fragment key={cat.name}>
                   <tr className="bg-slate-100/50">
-                    <td colSpan={10} className="p-4 px-8 border-b border-slate-200 font-black text-[#0a2f5f] uppercase tracking-[0.3em] text-[10px] italic">
+                    <td colSpan={10} className="p-4 px-8 border-b border-slate-200 font-black text-[#0a2f5f]  tracking-[0.3em] text-[10px] italic">
                       {cat.name} Portfolio
                     </td>
                   </tr>
@@ -327,7 +327,7 @@ export default function SpendingPlanPage() {
             {/* Footer */}
             <tfoot>
               <tr className="bg-[#0a2f5f] text-white">
-                <td className="p-10 sticky left-0 bg-[#0a2f5f] z-20 font-black uppercase tracking-[0.3em] text-xs">Aggregate Totals</td>
+                <td className="p-10 sticky left-0 bg-[#0a2f5f] z-20 font-black  tracking-[0.3em] text-xs">Aggregate Totals</td>
                 <td className="p-10 text-center font-black opacity-60 text-sm border-r border-white/10">{formatCurrency(calculations.totalBudget)}</td>
                 {PAY_WEEKS.map(pw => (
                   <React.Fragment key={pw.id}>
@@ -351,7 +351,7 @@ export default function SpendingPlanPage() {
         <div className="bg-[#99B3C5]/10 p-10 rounded-[3rem] border-2 border-[#99B3C5]/20 relative overflow-hidden">
           <Info className="text-[#0a2f5f]/20 absolute -right-4 -top-4" size={120} />
           <div className="relative z-10">
-            <h4 className="text-[#0a2f5f] font-black uppercase tracking-[0.2em] text-[10px] mb-6 flex items-center gap-2">
+            <h4 className="text-[#0a2f5f] font-black  tracking-[0.2em] text-[10px] mb-6 flex items-center gap-2">
               <Landmark size={14} />
               Fiscal Directive
             </h4>
@@ -367,13 +367,13 @@ export default function SpendingPlanPage() {
               <PieChart className="text-[#0a2f5f]" size={32} />
             </div>
             <div>
-              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Operational Integrity</div>
+              <div className="text-[10px] font-black text-gray-400  tracking-widest mb-1">Operational Integrity</div>
               <div className="text-2xl font-black text-[#0a2f5f]">Ledger Synchronized</div>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex flex-col items-end">
-              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Net Position</div>
+              <div className="text-[10px] font-black text-gray-400  tracking-widest mb-1">Net Position</div>
               <div className="text-xl font-black text-[#0a2f5f]">{formatCurrency(calculations.totalIncome - calculations.totalSpent)}</div>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
@@ -384,13 +384,13 @@ export default function SpendingPlanPage() {
       </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Official Disbursement Allocation Registry © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Official Disbursement Allocation Registry © 2026</p>
       </footer>
 
       {saving && (
         <div className="fixed bottom-8 right-8 bg-[#0a2f5f] text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-4 duration-500">
           <Loader2 className="animate-spin" size={20} />
-          <span className="font-black uppercase tracking-widest text-xs">Registry Auto-Save Active</span>
+          <span className="font-black  tracking-widest text-xs">Registry Auto-Save Active</span>
         </div>
       )}
     </div>

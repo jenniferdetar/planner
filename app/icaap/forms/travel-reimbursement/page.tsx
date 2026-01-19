@@ -200,10 +200,10 @@ export default function TravelReimbursementPage() {
         {/* Official Header */}
         <div className="bg-[#0a2f5f] p-10 text-white text-center relative overflow-hidden">
           <div className="relative z-10">
-            <h2 className="text-2xl font-black tracking-[0.2em] uppercase mb-1">Los Angeles Unified School District</h2>
-            <h3 className="text-lg font-bold opacity-80 uppercase tracking-widest mb-4">Travel & Professional Expense Reimbursement</h3>
+            <h2 className="text-2xl font-black tracking-[0.2em]  mb-1">Los Angeles Unified School District</h2>
+            <h3 className="text-lg font-bold opacity-80  tracking-widest mb-4">Travel & Professional Expense Reimbursement</h3>
             <div className="inline-block px-8 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-              <span className="text-xs font-black uppercase tracking-[0.3em]">Official Expenditure Claim</span>
+              <span className="text-xs font-black  tracking-[0.3em]">Official Expenditure Claim</span>
             </div>
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] opacity-5 pointer-events-none font-black">Travel</div>
@@ -218,15 +218,15 @@ export default function TravelReimbursementPage() {
                   <UserCircle className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Claimant Information</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Personnel Details</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Claimant Information</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Personnel Details</p>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Full Name</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Full Name</label>
                     <input 
                       type="text" 
                       value={data.claimant.name} 
@@ -235,7 +235,7 @@ export default function TravelReimbursementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Employee Id</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Employee Id</label>
                     <input 
                       type="text" 
                       value={data.claimant.employeeId} 
@@ -246,7 +246,7 @@ export default function TravelReimbursementPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Office / Unit</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Office / Unit</label>
                   <input 
                     type="text" 
                     value={data.claimant.unit} 
@@ -257,7 +257,7 @@ export default function TravelReimbursementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Phone</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Phone</label>
                     <input 
                       type="tel" 
                       value={data.claimant.phone} 
@@ -266,7 +266,7 @@ export default function TravelReimbursementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Email</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Email</label>
                     <input 
                       type="email" 
                       value={data.claimant.email} 
@@ -285,14 +285,14 @@ export default function TravelReimbursementPage() {
                   <MapPin className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Trip Details</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Purpose & Destination</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Trip Details</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Purpose & Destination</p>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Purpose of Travel</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Purpose of Travel</label>
                   <div className="relative">
                     <textarea 
                       value={data.trip.purpose} 
@@ -311,7 +311,7 @@ export default function TravelReimbursementPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Destination</label>
+                  <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Destination</label>
                   <input 
                     type="text" 
                     value={data.trip.destination} 
@@ -322,7 +322,7 @@ export default function TravelReimbursementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Departure Date</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Departure Date</label>
                     <input 
                       type="date" 
                       value={data.trip.startDate} 
@@ -331,7 +331,7 @@ export default function TravelReimbursementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">Return Date</label>
+                    <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">Return Date</label>
                     <input 
                       type="date" 
                       value={data.trip.endDate} 
@@ -352,13 +352,13 @@ export default function TravelReimbursementPage() {
                   <Car className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Mileage Log</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Official Mileage Claim</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Mileage Log</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Official Mileage Claim</p>
                 </div>
               </div>
               <button 
                 onClick={addMileage}
-                className="flex items-center gap-2 px-6 py-2 bg-[#0a2f5f] text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#0a2f5f] transition-all shadow-lg shadow-[#0a2f5f]/20"
+                className="flex items-center gap-2 px-6 py-2 bg-[#0a2f5f] text-white rounded-full font-bold text-xs  tracking-widest hover:bg-[#0a2f5f] transition-all shadow-lg shadow-[#0a2f5f]/20"
               >
                 <Plus size={16} />
                 Add Entry
@@ -369,11 +369,11 @@ export default function TravelReimbursementPage() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr>
-                    <th className="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Date</th>
-                    <th className="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Origin</th>
-                    <th className="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400">Destination</th>
-                    <th className="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Miles</th>
-                    <th className="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400"></th>
+                    <th className="p-6 text-[10px] font-black  tracking-widest text-gray-400">Date</th>
+                    <th className="p-6 text-[10px] font-black  tracking-widest text-gray-400">Origin</th>
+                    <th className="p-6 text-[10px] font-black  tracking-widest text-gray-400">Destination</th>
+                    <th className="p-6 text-[10px] font-black  tracking-widest text-gray-400 text-center">Miles</th>
+                    <th className="p-6 text-[10px] font-black  tracking-widest text-gray-400"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -436,13 +436,13 @@ export default function TravelReimbursementPage() {
                   <Receipt className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Incidental Expenses</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tolls, Parking, Registration, etc.</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Incidental Expenses</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Tolls, Parking, Registration, etc.</p>
                 </div>
               </div>
               <button 
                 onClick={addExpense}
-                className="flex items-center gap-2 px-6 py-2 bg-[#0a2f5f] text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#0a2f5f] transition-all shadow-lg shadow-[#0a2f5f]/20"
+                className="flex items-center gap-2 px-6 py-2 bg-[#0a2f5f] text-white rounded-full font-bold text-xs  tracking-widest hover:bg-[#0a2f5f] transition-all shadow-lg shadow-[#0a2f5f]/20"
               >
                 <Plus size={16} />
                 Add Expense
@@ -464,7 +464,7 @@ export default function TravelReimbursementPage() {
                         type="date" 
                         value={expense.date}
                         onChange={e => updateExpense(expense.id, 'date', e.target.value)}
-                        className="bg-transparent border-0 font-bold text-xs text-gray-400 uppercase tracking-widest focus:ring-0 p-0"
+                        className="bg-transparent border-0 font-bold text-xs text-gray-400  tracking-widest focus:ring-0 p-0"
                       />
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-black text-gray-400">$</span>
@@ -498,8 +498,8 @@ export default function TravelReimbursementPage() {
                   <Landmark className="text-[#0a2f5f]" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Administrative Allocation</h4>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Account Structure</p>
+                  <h4 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Administrative Allocation</h4>
+                  <p className="text-[10px] font-bold text-gray-400  tracking-widest">Account Structure</p>
                 </div>
               </div>
 
@@ -508,7 +508,7 @@ export default function TravelReimbursementPage() {
                   const key = k as keyof TRData['accounting'];
                   return (
                     <div key={key} className="space-y-1">
-                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
+                      <label className="text-[10px] font-black text-gray-400  tracking-widest ml-2">
                         {key === 'cc' ? 'Cost Center' : key === 'functionalArea' ? 'Func Area' : key.toUpperCase()}
                       </label>
                       <input 
@@ -528,25 +528,25 @@ export default function TravelReimbursementPage() {
               <div className="bg-[#0a2f5f] rounded-[3rem] p-10 text-white shadow-2xl shadow-[#0a2f5f]/30 relative overflow-hidden h-full">
                 <div className="relative z-10 h-full flex flex-col justify-between">
                   <div>
-                    <h4 className="text-white/60 font-black uppercase tracking-widest text-[10px] mb-6 flex items-center gap-2">
+                    <h4 className="text-white/60 font-black  tracking-widest text-[10px] mb-6 flex items-center gap-2">
                       <ShieldCheck size={14} />
                       Claim Summary
                     </h4>
                     <div className="text-6xl font-black mb-2 tracking-tighter">
                       ${grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
-                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Total Reimbursement Due</p>
+                    <p className="text-white/40 text-[10px] font-bold  tracking-widest">Total Reimbursement Due</p>
                   </div>
                   
                   <div className="mt-12 pt-8 border-t border-white/10 space-y-4">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-white/40 font-black uppercase tracking-widest flex items-center gap-2">
+                      <span className="text-white/40 font-black  tracking-widest flex items-center gap-2">
                         <Car size={12} /> Mileage
                       </span>
                       <span className="font-bold">${mileageCost.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-white/40 font-black uppercase tracking-widest flex items-center gap-2">
+                      <span className="text-white/40 font-black  tracking-widest flex items-center gap-2">
                         <Receipt size={12} /> Incidental
                       </span>
                       <span className="font-bold">${otherCost.toFixed(2)}</span>
@@ -560,19 +560,19 @@ export default function TravelReimbursementPage() {
 
           {/* Authorization */}
           <div className="mt-12 p-10 bg-white border-2 border-gray-100 rounded-[3rem] group hover:border-[#9ADBDE]/20 transition-all duration-500">
-            <h4 className="text-[#0a2f5f] font-black uppercase tracking-widest text-xs mb-8">Official Authorizations</h4>
+            <h4 className="text-[#0a2f5f] font-black  tracking-widest text-xs mb-8">Official Authorizations</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               <div className="space-y-4">
                 <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 italic text-gray-300 font-serif">Claimant Signature</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Employee / Claimant</div>
+                <div className="text-[10px] font-black text-gray-400  tracking-widest">Employee / Claimant</div>
               </div>
               <div className="space-y-4">
-                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f] uppercase tracking-tight italic text-gray-200 font-handwriting">P. Pernin</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Administrative Approval</div>
+                <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f]  tracking-tight italic text-gray-200 font-handwriting">P. Pernin</div>
+                <div className="text-[10px] font-black text-gray-400  tracking-widest">Administrative Approval</div>
               </div>
               <div className="space-y-4">
                 <div className="h-16 border-b-2 border-gray-200 flex items-end pb-2 font-bold text-[#0a2f5f]">{new Date().toLocaleDateString()}</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Date of Filing</div>
+                <div className="text-[10px] font-black text-gray-400  tracking-widest">Date of Filing</div>
               </div>
             </div>
           </div>
@@ -580,7 +580,7 @@ export default function TravelReimbursementPage() {
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center print:hidden">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">iCAAP Fiscal Services Division © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">iCAAP Fiscal Services Division © 2026</p>
       </footer>
 
       <style jsx global>{`

@@ -155,7 +155,7 @@ export default function IntentionsPage() {
             <div className="space-y-8">
               <div className="flex items-center gap-3 mb-2">
                 <Scroll className="text-[#99B3C5]" size={24} />
-                <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Work Vision</h2>
+                <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Work Vision</h2>
               </div>
               <p className="text-gray-500 font-medium leading-relaxed italic">
                 When looking forward to the coming year, what would you love for your work to look like each day? 
@@ -176,7 +176,7 @@ export default function IntentionsPage() {
             <div className="space-y-8">
               <div className="flex items-center gap-3 mb-2">
                 <Heart className="text-[#FFA1AB]" size={24} />
-                <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Core Values</h2>
+                <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Core Values</h2>
               </div>
               <p className="text-gray-500 font-medium leading-relaxed italic">
                 Do you love it when you have the time to be...
@@ -193,14 +193,14 @@ export default function IntentionsPage() {
                       />
                       <Zap size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" />
                     </div>
-                    <span className={`text-sm font-black uppercase tracking-widest transition-colors ${vision.loves.includes(option) ? 'text-[#0a2f5f]' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                    <span className={`text-sm font-black  tracking-widest transition-colors ${vision.loves.includes(option) ? 'text-[#0a2f5f]' : 'text-gray-400 group-hover:text-gray-600'}`}>
                       {option}
                     </span>
                   </label>
                 ))}
               </div>
               <div className="p-8 bg-amber-50/50 rounded-[2rem] border border-amber-100/50">
-                <p className="text-xs font-bold text-amber-800/60 uppercase tracking-[0.2em] mb-4">Official Affirmation</p>
+                <p className="text-xs font-bold text-amber-800/60  tracking-[0.2em] mb-4">Official Affirmation</p>
                 <p className="font-serif italic text-lg text-amber-900/80 leading-relaxed">
                   &quot;These values represent the foundation of my professional and personal growth for the year 2026.&quot;
                 </p>
@@ -224,8 +224,8 @@ export default function IntentionsPage() {
               <div className={`w-12 h-12 ${field.color} rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-current/20 group-hover:scale-110 transition-transform`}>
                 {field.icon}
               </div>
-              <label className="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-2">{field.label}</label>
-              <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest mb-6">{field.sub}</p>
+              <label className="block text-xs font-black text-gray-400  tracking-[0.2em] mb-2">{field.label}</label>
+              <p className="text-[10px] font-bold text-gray-300  tracking-widest mb-6">{field.sub}</p>
               <input 
                 type="text"
                 value={vision[field.key as keyof VisionData]}
@@ -241,8 +241,8 @@ export default function IntentionsPage() {
         <section className="relative overflow-hidden bg-gradient-to-br from-[#0a2f5f] to-[#0a2f5f] rounded-[4rem] p-12 md:p-20 text-white shadow-2xl">
           <div className="relative z-10">
             <div className="mb-16 text-center max-w-2xl mx-auto">
-              <div className="inline-block px-4 py-1 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-4">Aspiration Matrix</div>
-              <h2 className="text-5xl font-black mb-6 tracking-tight uppercase">Dream Big</h2>
+              <div className="inline-block px-4 py-1 bg-white/10 rounded-full text-[10px] font-black  tracking-[0.3em] mb-4">Aspiration Matrix</div>
+              <h2 className="text-5xl font-black mb-6 tracking-tight ">Dream Big</h2>
               <p className="text-white/60 font-bold leading-relaxed">Where would you like to be in a year? Run a marathon? Pay off your home? Hit an income goal? Define your trajectory.</p>
             </div>
             
@@ -254,7 +254,7 @@ export default function IntentionsPage() {
                 { label: 'Spiritually', key: 'dreamSpiritually', color: 'border-amber-500/30', glow: 'shadow-amber-500/10' }
               ].map(field => (
                 <div key={field.key} className={`bg-white/5 backdrop-blur-md p-8 rounded-[2.5rem] border ${field.color} ${field.glow} shadow-2xl focus-within:bg-white/10 transition-all`}>
-                  <label className="block font-black uppercase tracking-[0.2em] text-[10px] mb-6 opacity-60">{field.label}</label>
+                  <label className="block font-black  tracking-[0.2em] text-[10px] mb-6 opacity-60">{field.label}</label>
                   <textarea 
                     value={vision[field.key as keyof VisionData]}
                     onChange={(e) => setVision({...vision, [field.key]: e.target.value})}
@@ -272,7 +272,7 @@ export default function IntentionsPage() {
         {/* Narrative Manifest */}
         <section className="relative p-12 md:p-20 rounded-[4rem] border-4 border-dashed border-gray-100 bg-[#fdfbf7] shadow-inner overflow-hidden">
           <div className="max-w-4xl mx-auto relative z-10 text-2xl md:text-3xl leading-[4.5rem] font-serif text-[#0a2f5f]/80">
-            <span className="text-sm font-black uppercase tracking-[0.3em] text-[#99B3C5] block mb-8">Narrative Manifest</span>
+            <span className="text-sm font-black  tracking-[0.3em] text-[#99B3C5] block mb-8">Narrative Manifest</span>
             This year, more than anything else, I want to focus on {' '}
             <input 
               type="text" 
@@ -326,12 +326,12 @@ export default function IntentionsPage() {
         <section className="pb-20">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h2 className="text-3xl font-black text-[#0a2f5f] uppercase tracking-tight">Specific Intentions</h2>
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1">Categorized milestones and action items</p>
+              <h2 className="text-3xl font-black text-[#0a2f5f]  tracking-tight">Specific Intentions</h2>
+              <p className="text-gray-400 font-bold  tracking-widest text-[10px] mt-1">Categorized milestones and action items</p>
             </div>
             <button 
               onClick={addIntention}
-              className="flex items-center gap-2 px-8 py-4 bg-[#99B3C5]/10 text-[#99B3C5] font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-[#99B3C5]/20 transition-all shadow-sm"
+              className="flex items-center gap-2 px-8 py-4 bg-[#99B3C5]/10 text-[#99B3C5] font-black  tracking-widest text-xs rounded-2xl hover:bg-[#99B3C5]/20 transition-all shadow-sm"
             >
               <Plus size={16} />
               Add Intention
@@ -349,7 +349,7 @@ export default function IntentionsPage() {
                     type="text"
                     value={intention.category}
                     onChange={(e) => updateIntention(index, 'category', e.target.value)}
-                    className="text-[10px] font-black uppercase tracking-[0.3em] text-[#99B3C5] bg-transparent border-none p-0 focus:ring-0 w-full"
+                    className="text-[10px] font-black  tracking-[0.3em] text-[#99B3C5] bg-transparent border-none p-0 focus:ring-0 w-full"
                     placeholder="Category"
                   />
                   <textarea 
@@ -376,17 +376,17 @@ export default function IntentionsPage() {
           <div className="w-20 h-20 bg-[#0a2f5f]/5 rounded-full flex items-center justify-center mx-auto mb-8">
             <Sparkles className="text-[#0a2f5f]/20" size={32} />
           </div>
-          <p className="text-[#0a2f5f]/40 text-xs font-black uppercase tracking-[0.4em] mb-4">Official Vision Document</p>
+          <p className="text-[#0a2f5f]/40 text-xs font-black  tracking-[0.4em] mb-4">Official Vision Document</p>
           <p className="text-gray-300 font-serif italic text-lg max-w-lg mx-auto leading-relaxed">
             &quot;Dream big, plan with intention, and live with purpose.&quot;
           </p>
           <div className="mt-12 flex justify-center gap-8">
             <div className="text-center">
-              <span className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Status</span>
+              <span className="block text-[10px] font-black  tracking-widest text-gray-400 mb-1">Status</span>
               <span className="text-xs font-bold text-[#0a2f5f]">Authenticated</span>
             </div>
             <div className="text-center">
-              <span className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Cycle</span>
+              <span className="block text-[10px] font-black  tracking-widest text-gray-400 mb-1">Cycle</span>
               <span className="text-xs font-bold text-[#0a2f5f]">2026_PLAN_01</span>
             </div>
           </div>

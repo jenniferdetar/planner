@@ -46,7 +46,7 @@ export default function PersonalPlannerPage() {
     <div className="p-4 md:p-8 max-w-[1600px] mx-auto bg-[#fdfdfd] min-h-screen">
         <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-4 items-start">
         <aside className="border border-slate-200 rounded-xl p-5">
-          <div className="text-center text-[11px] font-black uppercase tracking-[0.3em] text-[#4a7f8f] mb-4">
+          <div className="text-center text-[11px] font-black  tracking-[0.3em] text-[#4a7f8f] mb-4">
             Notes
           </div>
           <div className="space-y-2">
@@ -54,7 +54,7 @@ export default function PersonalPlannerPage() {
               <div key={idx} className="border-b border-slate-200 h-4"></div>
             ))}
           </div>
-          <div className="mt-8 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">February</div>
+          <div className="mt-8 text-[10px] font-black  tracking-[0.3em] text-gray-400">February</div>
           <div className="mt-2 grid grid-cols-7 gap-1 text-[10px] text-gray-400">
             {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day) => (
               <div key={day} className="text-center">{day}</div>
@@ -66,14 +66,14 @@ export default function PersonalPlannerPage() {
         </aside>
 
         <section className="border border-slate-200 rounded-xl overflow-hidden">
-          <div className="flex items-center justify-center gap-3 py-3 text-[12px] font-black uppercase tracking-[0.4em] text-[#f38aa3]">
+          <div className="flex items-center justify-center gap-3 py-3 text-[12px] font-black  tracking-[0.4em] text-[#f38aa3]">
             {monthLabel}
           </div>
           <div className="grid grid-cols-7 border-t border-slate-200">
             {DAYS.map((day: { label: string, color: string }) => (
               <div
                 key={day.label}
-                className="text-center text-[10px] font-black uppercase tracking-[0.3em] py-2 text-white"
+                className="text-center text-[10px] font-black  tracking-[0.3em] py-2 text-white"
                 style={{ backgroundColor: day.color }}
               >
                 {day.label}

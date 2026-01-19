@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Indie_Flower } from "next/font/google";
+import { Geist, Geist_Mono, Coming_Soon } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const indieFlower = Indie_Flower({
+const comingSoon = Coming_Soon({
   weight: "400",
-  variable: "--font-indie-flower",
+  variable: "--font-coming-soon",
   subsets: ["latin"],
 });
 
@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${indieFlower.variable} antialiased bg-gray-50 font-indie`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${comingSoon.variable} antialiased bg-gray-50 font-handwriting`}>
         <TopNav />
         <main className="min-h-screen">
           {children}

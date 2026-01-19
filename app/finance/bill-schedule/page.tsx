@@ -113,7 +113,7 @@ export default function BillSchedulePage() {
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
           <div className="max-w-xl">
-            <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight mb-4 flex items-center gap-3">
+            <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight mb-4 flex items-center gap-3">
               <CheckCircle2 className="text-[#FFA1AB]" size={24} />
               Annual Payment Registry
             </h2>
@@ -121,7 +121,7 @@ export default function BillSchedulePage() {
               Maintain precise records of recurring financial obligations. Verify completion by marking the corresponding month in the registry below.
             </p>
           </div>
-          <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] bg-gray-50 px-6 py-3 rounded-full border">
+          <div className="flex items-center gap-2 text-[10px] font-black text-gray-400  tracking-[0.2em] bg-gray-50 px-6 py-3 rounded-full border">
             <Search size={14} />
             Filter Categories
           </div>
@@ -131,13 +131,13 @@ export default function BillSchedulePage() {
           <table className="w-full text-left border-collapse min-w-[1000px]">
             <thead>
               <tr className="border-b-2 border-gray-100">
-                <th className="py-6 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] w-32">Category</th>
-                <th className="py-6 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] w-48">Registry Item</th>
-                <th className="py-6 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] w-24">Amount</th>
+                <th className="py-6 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] w-32">Category</th>
+                <th className="py-6 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] w-48">Registry Item</th>
+                <th className="py-6 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] w-24">Amount</th>
                 <th className="py-6">
                   <div className="grid grid-cols-12 gap-2 text-center">
                     {MONTHS.map((m, i) => (
-                      <span key={i} className="text-[10px] font-black text-[#0a2f5f] uppercase tracking-widest opacity-40">
+                      <span key={i} className="text-[10px] font-black text-[#0a2f5f]  tracking-widest opacity-40">
                         {m}
                       </span>
                     ))}
@@ -152,7 +152,7 @@ export default function BillSchedulePage() {
                 <tr key={i} className="group hover:bg-slate-50/50 transition-colors">
                   <td className="py-5">
                     <span
-                      className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
+                      className="text-[10px] font-black  tracking-widest px-3 py-1 rounded-full border"
                       style={{
                         color: categoryColor,
                         backgroundColor: `${categoryColor}14`,
@@ -200,7 +200,7 @@ export default function BillSchedulePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="bg-[#FFA1AB]/10 p-8 rounded-[2rem] border-2 border-[#FFA1AB]/20">
-          <h4 className="text-[#0a2f5f] font-black uppercase tracking-[0.2em] text-[10px] mb-4 flex items-center gap-2">
+          <h4 className="text-[#0a2f5f] font-black  tracking-[0.2em] text-[10px] mb-4 flex items-center gap-2">
             <AlertCircle size={14} />
             Compliance Note
           </h4>
@@ -214,16 +214,16 @@ export default function BillSchedulePage() {
               <ArrowUpRight className="text-[#0a2f5f]" size={24} />
             </div>
             <div>
-              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Liability Status</div>
+              <div className="text-[10px] font-black text-gray-400  tracking-widest mb-1">Liability Status</div>
               <div className="text-lg font-black text-[#0a2f5f]">All Systems Operational</div>
             </div>
           </div>
-          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#0a2f5f]/30 italic">Registry Secure</div>
+          <div className="text-[10px] font-black  tracking-[0.3em] text-[#0a2f5f]/30 italic">Registry Secure</div>
         </div>
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Official Liability Registry © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Official Liability Registry © 2026</p>
       </footer>
       </div>
     </div>

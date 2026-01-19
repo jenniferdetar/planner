@@ -120,7 +120,7 @@ export default function HealthPage() {
 <div className="flex flex-wrap gap-4 mb-12">
         <button 
           onClick={() => setActiveTab('produce')}
-          className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+          className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black  tracking-widest text-xs transition-all ${
             activeTab === 'produce' 
               ? 'bg-[#9ADBDE] text-[#0a2f5f] shadow-lg' 
               : 'bg-white text-[#0a2f5f] border-2 border-[#9ADBDE]/20 hover:bg-[#9ADBDE]/5'
@@ -131,7 +131,7 @@ export default function HealthPage() {
         </button>
         <button 
           onClick={() => setActiveTab('medication')}
-          className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${
+          className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black  tracking-widest text-xs transition-all ${
             activeTab === 'medication' 
               ? 'bg-[#9ADBDE] text-[#0a2f5f] shadow-lg' 
               : 'bg-white text-[#0a2f5f] border-2 border-[#9ADBDE]/20 hover:bg-[#9ADBDE]/5'
@@ -146,7 +146,7 @@ export default function HealthPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
             <Activity className="text-slate-300 animate-pulse mb-4" size={48} />
-            <div className="text-slate-400 font-black uppercase tracking-widest text-xs">Accessing Medical Records...</div>
+            <div className="text-slate-400 font-black  tracking-widest text-xs">Accessing Medical Records...</div>
           </div>
         ) : activeTab === 'produce' ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -176,13 +176,13 @@ export default function HealthPage() {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <ShieldCheck className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Data Integrity</h2>
+              <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Data Integrity</h2>
             </div>
             <p className="text-gray-500 font-medium leading-relaxed italic mb-8">
               Wellness records are synchronized with the secure administrative ledger to ensure continuity of care.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs uppercase tracking-[0.2em] bg-white p-4 rounded-2xl border">
+          <div className="flex items-center gap-4 text-[#0a2f5f] font-black text-xs  tracking-[0.2em] bg-white p-4 rounded-2xl border">
             <Stethoscope size={16} />
             Medical Records Verified
           </div>
@@ -192,7 +192,7 @@ export default function HealthPage() {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <TrendingUp className="text-[#0a2f5f]" size={24} />
-              <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Vitality Metrics</h2>
+              <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Vitality Metrics</h2>
             </div>
             <p className="text-[#0a2f5f]/70 font-medium leading-relaxed italic mb-8">
               Current nutritional intake and medication adherence are within optimal parameters. Maintain consistency.
@@ -203,7 +203,7 @@ export default function HealthPage() {
       </section>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Health & Wellness Registry © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Health & Wellness Registry © 2026</p>
       </footer>
     </div>
   );
@@ -229,9 +229,9 @@ function ListSection({ title, type, icon, items, onUpdate, onAdd, onRemove, colo
           <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center shadow-inner`}>
             {icon}
           </div>
-          <h2 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">{title}</h2>
+          <h2 className="text-xl font-black text-[#0a2f5f]  tracking-tight">{title}</h2>
         </div>
-        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+        <p className="text-[10px] font-black text-gray-400  tracking-widest">
           {items.length} Registered Items
         </p>
       </div>
@@ -265,7 +265,7 @@ function ListSection({ title, type, icon, items, onUpdate, onAdd, onRemove, colo
       <div className="p-6 bg-slate-50/50 mt-auto">
         <button 
           onClick={() => onAdd(type)}
-          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border-2 border-[#0a2f5f]/10 text-[#0a2f5f] font-black uppercase tracking-widest text-[10px] hover:bg-[#0a2f5f] hover:text-white hover:border-[#0a2f5f] transition-all shadow-sm"
+          className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-white border-2 border-[#0a2f5f]/10 text-[#0a2f5f] font-black  tracking-widest text-[10px] hover:bg-[#0a2f5f] hover:text-white hover:border-[#0a2f5f] transition-all shadow-sm"
         >
           <Plus size={14} />
           Append Record

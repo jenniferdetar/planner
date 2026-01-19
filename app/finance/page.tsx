@@ -67,11 +67,11 @@ export default function FinancePage() {
                 {link.icon}
               </div>
               <h3 className="text-2xl font-black text-[#0a2f5f] mb-2">{link.label}</h3>
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-relaxed">
+              <p className="text-xs font-bold text-gray-400  tracking-widest leading-relaxed">
                 {link.sub}
               </p>
             </div>
-            <div className="mt-8 flex items-center text-[#0a2f5f] font-black text-sm uppercase tracking-widest gap-2">
+            <div className="mt-8 flex items-center text-[#0a2f5f] font-black text-sm  tracking-widest gap-2">
               Review Ledger <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
@@ -79,7 +79,7 @@ export default function FinancePage() {
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Fiscal Operations Registry © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Fiscal Operations Registry © 2026</p>
       </footer>
     </div>
   );

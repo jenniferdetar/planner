@@ -131,12 +131,12 @@ export default function BudgetOverviewPage() {
         <div className="p-10 border-b border-gray-50 bg-[#f8fafc] flex justify-between items-center">
           <div className="flex items-center gap-3">
             <PieChart className="text-[#0a2f5f]" size={24} />
-            <h2 className="text-2xl font-black text-[#0a2f5f] uppercase tracking-tight">Ledger Allocation Breakdown</h2>
+            <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight">Ledger Allocation Breakdown</h2>
           </div>
           {saving && (
             <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-full border border-blue-100 animate-pulse">
               <Save size={14} />
-              <span className="text-[10px] font-black uppercase tracking-widest">Encrypting...</span>
+              <span className="text-[10px] font-black  tracking-widest">Encrypting...</span>
             </div>
           )}
         </div>
@@ -145,11 +145,11 @@ export default function BudgetOverviewPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-white">
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] border-b-2 border-gray-50">Operational Item</th>
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] border-b-2 border-gray-50">Class</th>
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] border-b-2 border-gray-50 text-right">Budgeted</th>
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] border-b-2 border-gray-50 text-right">Actual</th>
-                <th className="p-8 font-black text-[#0a2f5f] text-[10px] uppercase tracking-[0.2em] border-b-2 border-gray-50 text-right">Variance</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] border-b-2 border-gray-50">Operational Item</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] border-b-2 border-gray-50">Class</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] border-b-2 border-gray-50 text-right">Budgeted</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] border-b-2 border-gray-50 text-right">Actual</th>
+                <th className="p-8 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] border-b-2 border-gray-50 text-right">Variance</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -160,10 +160,10 @@ export default function BudgetOverviewPage() {
                   <tr key={item.item} className="group hover:bg-slate-50 transition-colors">
                     <td className="p-8">
                       <div className="text-sm font-black text-[#0a2f5f] mb-1">{item.item}</div>
-                      <div className="text-[10px] font-black text-[#FFC68D] uppercase tracking-widest">{item.category}</div>
+                      <div className="text-[10px] font-black text-[#FFC68D]  tracking-widest">{item.category}</div>
                     </td>
                     <td className="p-8">
-                      <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border ${item.type === 'Fixed' ? 'bg-gray-50 text-gray-400 border-gray-100' : 'bg-blue-50 text-blue-500 border-blue-100'}`}>
+                      <span className={`text-[10px] font-black  tracking-widest px-3 py-1 rounded-full border ${item.type === 'Fixed' ? 'bg-gray-50 text-gray-400 border-gray-100' : 'bg-blue-50 text-blue-500 border-blue-100'}`}>
                         {item.type}
                       </span>
                     </td>
@@ -190,7 +190,7 @@ export default function BudgetOverviewPage() {
             </tbody>
             <tfoot className="bg-slate-50 border-t-4 border-white">
               <tr className="font-black">
-                <td colSpan={2} className="p-10 text-[#0a2f5f] uppercase tracking-widest text-xs">Consolidated Registry Totals</td>
+                <td colSpan={2} className="p-10 text-[#0a2f5f]  tracking-widest text-xs">Consolidated Registry Totals</td>
                 <td className="p-10 text-right text-gray-400 text-sm">{formatCurrency(totals.budget)}</td>
                 <td className="p-10 text-right text-[#0a2f5f] text-sm">{formatCurrency(totals.actual)}</td>
                 <td className="p-10 text-right">
@@ -206,7 +206,7 @@ export default function BudgetOverviewPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-[#FFC68D]/10 p-10 rounded-[3rem] border-2 border-[#FFC68D]/20">
-          <h4 className="text-[#0a2f5f] font-black uppercase tracking-[0.2em] text-[10px] mb-6">Auditor&apos;s Certification</h4>
+          <h4 className="text-[#0a2f5f] font-black  tracking-[0.2em] text-[10px] mb-6">Auditor&apos;s Certification</h4>
           <p className="text-[#0a2f5f] font-serif italic text-lg leading-relaxed">
             &quot;Variance analysis is critical for maintaining long-term solvency. Negative variances should be investigated and rectified in the subsequent fiscal period.&quot;
           </p>
@@ -218,18 +218,18 @@ export default function BudgetOverviewPage() {
                 <ShieldCheck className="text-[#0a2f5f]" size={28} />
               </div>
               <div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Audit Status</div>
+                <div className="text-[10px] font-black text-gray-400  tracking-widest mb-1">Audit Status</div>
                 <div className="text-xl font-black text-[#0a2f5f]">Records Verified</div>
               </div>
             </div>
             <ArrowUpRight className="text-[#0a2f5f] opacity-20" size={32} />
           </div>
-          <div className="mt-8 text-[10px] font-black uppercase tracking-[0.4em] text-gray-400">Ledger Compliance Registry v4.0</div>
+          <div className="mt-8 text-[10px] font-black  tracking-[0.4em] text-gray-400">Ledger Compliance Registry v4.0</div>
         </div>
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">Official Fiscal Audit Registry © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Official Fiscal Audit Registry © 2026</p>
       </footer>
     </div>
   );
@@ -246,16 +246,16 @@ function SummaryCard({ title, value, icon, sub, isVariance }: { title: string; v
             {icon}
           </div>
           {isVariance && (
-            <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border ${isNegative ? 'bg-rose-50 text-rose-500 border-rose-100' : 'bg-emerald-50 text-emerald-500 border-emerald-100'}`}>
+            <span className={`text-[10px] font-black  tracking-widest px-3 py-1 rounded-full border ${isNegative ? 'bg-rose-50 text-rose-500 border-rose-100' : 'bg-emerald-50 text-emerald-500 border-emerald-100'}`}>
               {isNegative ? 'Over Budget' : 'Within Budget'}
             </span>
           )}
         </div>
-        <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">{title}</p>
+        <p className="text-[10px] font-black text-gray-400  tracking-[0.2em] mb-2">{title}</p>
         <p className={`text-4xl font-black tracking-tighter ${isVariance ? (isNegative ? 'text-rose-500' : 'text-emerald-600') : 'text-[#0a2f5f]'}`}>
           {new Intl.NumberFormat('en-Us', { style: 'currency', currency: 'Usd', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value)}
         </p>
-        <p className="mt-4 text-[10px] font-bold text-gray-300 uppercase tracking-widest">{sub}</p>
+        <p className="mt-4 text-[10px] font-bold text-gray-300  tracking-widest">{sub}</p>
       </div>
       <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50/50 rounded-bl-[100px] -mr-16 -mt-16 group-hover:bg-[#FFC68D]/5 transition-colors"></div>
     </div>

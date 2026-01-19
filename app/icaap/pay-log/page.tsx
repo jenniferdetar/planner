@@ -119,7 +119,7 @@ export default function IcaapPayLogPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-40 gap-4 opacity-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0a2f5f]"></div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-[#0a2f5f]">Compiling Registry Data...</p>
+          <p className="text-[10px] font-black  tracking-widest text-[#0a2f5f]">Compiling Registry Data...</p>
         </div>
       ) : (
         <div className="bg-white rounded-[3rem] border-2 border-gray-100 shadow-2xl overflow-hidden mb-12">
@@ -127,11 +127,11 @@ export default function IcaapPayLogPage() {
             <table className="w-full text-left border-collapse min-w-[1200px]">
               <thead>
                 <tr className="bg-[#0a2f5f] text-white">
-                  <th rowSpan={2} className="p-8 font-black uppercase tracking-[0.2em] text-[10px] sticky left-0 bg-[#0a2f5f] z-20 border-r border-white/10 shadow-xl">
+                  <th rowSpan={2} className="p-8 font-black  tracking-[0.2em] text-[10px] sticky left-0 bg-[#0a2f5f] z-20 border-r border-white/10 shadow-xl">
                     Staff Member
                   </th>
                   {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
-                    <th key={m.key} colSpan={3} className="p-4 font-black uppercase tracking-[0.2em] text-[10px] text-center border-l border-white/10 bg-white/5">
+                    <th key={m.key} colSpan={3} className="p-4 font-black  tracking-[0.2em] text-[10px] text-center border-l border-white/10 bg-white/5">
                       {m.label}
                     </th>
                   ))}
@@ -139,9 +139,9 @@ export default function IcaapPayLogPage() {
                 <tr className="bg-[#0a2f5f]/95 text-white/50">
                   {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
                     <React.Fragment key={`${m.key}-sub`}>
-                      <th className="px-4 py-3 text-[9px] font-black uppercase text-center border-l border-white/10 tracking-widest">Hrs</th>
-                      <th className="px-4 py-3 text-[9px] font-black uppercase text-center tracking-widest">Log</th>
-                      <th className="px-4 py-3 text-[9px] font-black uppercase text-center tracking-widest">Appr</th>
+                      <th className="px-4 py-3 text-[9px] font-black  text-center border-l border-white/10 tracking-widest">Hrs</th>
+                      <th className="px-4 py-3 text-[9px] font-black  text-center tracking-widest">Log</th>
+                      <th className="px-4 py-3 text-[9px] font-black  text-center tracking-widest">Appr</th>
                     </React.Fragment>
                   ))}
                 </tr>
@@ -155,7 +155,7 @@ export default function IcaapPayLogPage() {
 
                   return (
                     <tr key={name} className="hover:bg-[#f8fafc] transition-colors group">
-                      <td className="p-6 font-black text-[#0a2f5f] text-xs uppercase tracking-tight sticky left-0 bg-white group-hover:bg-[#f8fafc] z-10 border-r border-gray-100 shadow-[10px_0_15px_-5px_rgba(0,0,0,0.02)]">
+                      <td className="p-6 font-black text-[#0a2f5f] text-xs  tracking-tight sticky left-0 bg-white group-hover:bg-[#f8fafc] z-10 border-r border-gray-100 shadow-[10px_0_15px_-5px_rgba(0,0,0,0.02)]">
                         {name}
                       </td>
                       {MONTHS.filter(m => filterMonth === 'all' || m.key === filterMonth).map(m => (
@@ -166,7 +166,7 @@ export default function IcaapPayLogPage() {
                           <td className={`p-4 text-center ${getCellBg(paylog[m.key], 'paylog')}`}>
                             <div className="flex flex-col items-center justify-center gap-1">
                               {getStatusIcon(paylog[m.key])}
-                              <span className="text-[9px] font-black uppercase text-gray-400 tracking-tighter leading-tight">
+                              <span className="text-[9px] font-black  text-gray-400 tracking-tighter leading-tight">
                                 {paylog[m.key] || '-'}
                               </span>
                             </div>
@@ -174,7 +174,7 @@ export default function IcaapPayLogPage() {
                           <td className={`p-4 text-center ${getCellBg(approval[m.key], 'approval')}`}>
                             <div className="flex flex-col items-center justify-center gap-1">
                               {getStatusIcon(approval[m.key])}
-                              <span className="text-[9px] font-black uppercase text-gray-400 tracking-tighter leading-tight">
+                              <span className="text-[9px] font-black  text-gray-400 tracking-tighter leading-tight">
                                 {approval[m.key] || '-'}
                               </span>
                             </div>
@@ -217,7 +217,7 @@ export default function IcaapPayLogPage() {
             <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
               <Calculator size={20} />
             </div>
-            <h3 className="text-xl font-black text-[#0a2f5f] uppercase tracking-tight">Financial Audit Verification</h3>
+            <h3 className="text-xl font-black text-[#0a2f5f]  tracking-tight">Financial Audit Verification</h3>
           </div>
           <p className="text-gray-500 text-sm font-medium leading-relaxed max-w-xl">
             This consolidated paylog registry has been cross-referenced with District payroll systems and iCAAP attendance certification logs. All records are verified for the current fiscal cycle.
@@ -227,9 +227,9 @@ export default function IcaapPayLogPage() {
         <div className="relative group">
           <div className="absolute inset-0 bg-emerald-500 rounded-full blur-3xl opacity-5 group-hover:opacity-10 transition-opacity"></div>
           <div className="relative w-40 h-40 rounded-full border-4 border-emerald-500/10 flex flex-col items-center justify-center p-4 text-center transform -rotate-12 group-hover:rotate-0 transition-transform duration-1000">
-            <div className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] mb-1">Certified</div>
+            <div className="text-[10px] font-black text-emerald-600  tracking-[0.2em] mb-1">Certified</div>
             <div className="w-12 h-px bg-emerald-200 mb-2"></div>
-            <div className="text-[8px] font-bold text-emerald-500/40 uppercase tracking-widest leading-tight italic">iCAAP Expenditure<br/>Verification Office</div>
+            <div className="text-[8px] font-bold text-emerald-500/40  tracking-widest leading-tight italic">iCAAP Expenditure<br/>Verification Office</div>
             <div className="mt-2 text-emerald-600">
               <ShieldCheck size={28} />
             </div>
@@ -238,7 +238,7 @@ export default function IcaapPayLogPage() {
       </section>
       
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.5em]">iCAAP Financial Support Division © 2026</p>
+        <p className="text-gray-400 text-[10px] font-black  tracking-[0.5em]">iCAAP Financial Support Division © 2026</p>
       </footer>
     </div>
   );
