@@ -134,7 +134,7 @@ export default function MeetingsPage() {
   };
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto bg-[#fdfdfd] min-h-screen font-handwriting">
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Meeting Form */}
@@ -143,7 +143,7 @@ export default function MeetingsPage() {
             <div className="absolute top-0 left-0 w-full h-2 bg-[#FFC68D]"></div>
             
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight flex items-center gap-3">
+              <h2 className="text-xl font-black text-[#0a2f5f] tracking-tight flex items-center gap-3">
                 {editingMeeting ? <Plus className="rotate-45" size={24} /> : <Plus size={24} />}
                 {editingMeeting ? 'Edit Registry Entry' : 'New Meeting Record'}
               </h2>
@@ -170,7 +170,7 @@ export default function MeetingsPage() {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    className="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-xl outline-none font-bold text-[#0a2f5f] transition-all"
+                    className="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all text-sm"
                     placeholder="Enter official meeting title..."
                   />
                 </div>
@@ -184,7 +184,7 @@ export default function MeetingsPage() {
                       required
                       value={formData.date}
                       onChange={(e) => setFormData({...formData, date: e.target.value})}
-                      className="w-full p-4 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-xl outline-none font-bold text-[#0a2f5f] transition-all"
+                      className="w-full p-4 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all text-sm"
                     />
                   </div>
                 </div>
@@ -197,7 +197,7 @@ export default function MeetingsPage() {
                       type="text"
                       value={formData.location || ''}
                       onChange={(e) => setFormData({...formData, location: e.target.value})}
-                      className="w-full p-4 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-xl outline-none font-bold text-[#0a2f5f] transition-all"
+                      className="w-full p-4 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all text-sm"
                       placeholder="Zoom, Office, Hq..."
                     />
                   </div>
@@ -211,7 +211,7 @@ export default function MeetingsPage() {
                       type="time"
                       value={formData.start_time || ''}
                       onChange={(e) => setFormData({...formData, start_time: e.target.value})}
-                      className="w-full p-4 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-xl outline-none font-bold text-[#0a2f5f] transition-all"
+                      className="w-full p-4 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all text-sm"
                     />
                   </div>
                 </div>
@@ -224,7 +224,7 @@ export default function MeetingsPage() {
                       type="time"
                       value={formData.end_time || ''}
                       onChange={(e) => setFormData({...formData, end_time: e.target.value})}
-                      className="w-full p-4 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-xl outline-none font-bold text-[#0a2f5f] transition-all"
+                      className="w-full p-4 pl-16 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all text-sm"
                     />
                   </div>
                 </div>
@@ -238,13 +238,13 @@ export default function MeetingsPage() {
                     value={attendeeInput}
                     onChange={(e) => setAttendeeInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addAttendee())}
-                    className="flex-1 p-4 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-xl outline-none font-bold text-[#0a2f5f] transition-all"
+                    className="flex-1 p-4 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-bold text-[#0a2f5f] transition-all text-sm"
                     placeholder="Register attendee name..."
                   />
                   <button 
                     type="button"
                     onClick={addAttendee}
-                    className="px-6 bg-[#FFC68D] text-[#0a2f5f] font-black tracking-wider text-sm rounded-xl hover:bg-[#ffb05c] transition-all shadow-lg shadow-[#FFC68D]/20"
+                    className="px-6 bg-[#FFC68D] text-[#0a2f5f] font-black tracking-wider text-sm rounded-2xl hover:bg-[#ffb05c] transition-all shadow-lg shadow-[#FFC68D]/20"
                   >
                     Register
                   </button>
@@ -266,7 +266,7 @@ export default function MeetingsPage() {
                 <textarea 
                   value={formData.agenda || ''}
                   onChange={(e) => setFormData({...formData, agenda: e.target.value})}
-                  className="w-full min-h-[120px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none font-serif text-lg text-[#0a2f5f] transition-all resize-none"
+                  className="w-full min-h-[120px] p-6 bg-slate-50 border-2 border-transparent focus:border-[#FFC68D]/20 rounded-2xl outline-none text-sm text-[#0a2f5f] transition-all resize-none"
                   placeholder="Official objectives and talking points..."
                 />
               </div>
@@ -276,7 +276,7 @@ export default function MeetingsPage() {
                   <button 
                     type="button"
                     onClick={() => handleDeleteMeeting(editingMeeting.id!)}
-                    className="flex items-center gap-2 px-6 py-3 bg-red-50 text-red-600 rounded-xl font-black tracking-wider text-sm hover:bg-red-100 transition-all"
+                    className="flex items-center gap-2 px-6 py-3 bg-red-50 text-red-600 rounded-2xl font-black tracking-wider text-sm hover:bg-red-100 transition-all"
                   >
                     <Trash2 size={16} />
                     Expunge Record
@@ -285,7 +285,7 @@ export default function MeetingsPage() {
                 <button 
                   type="submit"
                   disabled={saving}
-                  className="ml-auto flex items-center gap-3 px-10 py-4 bg-[#0a2f5f] text-white rounded-xl font-black tracking-wider text-sm hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
+                  className="ml-auto flex items-center gap-3 px-10 py-4 bg-[#0a2f5f] text-white rounded-2xl font-black tracking-wider text-sm hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
                 >
                   <Save size={18} />
                   {saving ? 'Processing...' : editingMeeting ? 'Update Record' : 'Certify Meeting'}
@@ -302,7 +302,7 @@ export default function MeetingsPage() {
                 <FileText size={20} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-[#0a2f5f] tracking-tight">Executive Minutes</h2>
+                <h2 className="text-xl font-black text-[#0a2f5f] tracking-tight">Executive Minutes</h2>
                 <p className="text-sm font-black text-gray-400 tracking-wider">Formal discussion log and action items</p>
               </div>
             </div>
@@ -310,7 +310,7 @@ export default function MeetingsPage() {
               value={formData.notes || ''}
               onChange={(e) => setFormData({...formData, notes: e.target.value})}
               placeholder="Record formal minutes and definitive outcomes..."
-              className="w-full min-h-[400px] p-6 bg-transparent border-none focus:ring-0 text-lg font-serif leading-[2.5rem] outline-none relative z-10 text-[#0a2f5f]/80"
+              className="w-full min-h-[400px] p-6 bg-transparent border-none focus:ring-0 text-sm leading-[2.5rem] outline-none relative z-10 text-[#0a2f5f]/80"
               style={{ backgroundImage: 'linear-gradient(#e6e2d3 1px, transparent 1px)', backgroundSize: '100% 2.5rem' }}
             />
             <div className="absolute -bottom-10 -right-10 text-[15rem] opacity-[0.02] pointer-events-none font-black text-[#0a2f5f]">
@@ -324,7 +324,7 @@ export default function MeetingsPage() {
           <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-xl relative overflow-hidden">
             <div className="flex items-center gap-3 mb-6">
               <Calendar className="text-[#FFC68D]" size={20} />
-              <h2 className="text-xl font-black text-[#0a2f5f] tracking-tight">Archive Registry</h2>
+              <h2 className="text-lg font-black text-[#0a2f5f] tracking-tight">Archive Registry</h2>
             </div>
             
             {loading ? (
@@ -387,7 +387,7 @@ export default function MeetingsPage() {
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-4">
                 <Info className="text-[#FFC68D]" size={20} />
-                <h3 className="text-lg font-black  tracking-tight">System Notice</h3>
+                <h3 className="text-lg font-black tracking-tight">System Notice</h3>
               </div>
               <p className="text-sm font-medium opacity-70 leading-relaxed italic mb-6">
                 &quot;Registry records are immutable once certified. Ensure all attendees and outcomes are accurately captured before archiving.&quot;
@@ -396,7 +396,7 @@ export default function MeetingsPage() {
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full border-2 border-white/20 flex items-center justify-center font-black text-sm">A</div>
                 <div>
-                  <p className="text-sm font-black  tracking-widest">Auth Level</p>
+                  <p className="text-sm font-black tracking-widest">Auth Level</p>
                   <p className="text-sm font-bold text-[#FFC68D]">Administrator</p>
                 </div>
               </div>
@@ -407,7 +407,7 @@ export default function MeetingsPage() {
       </div>
       
       <footer className="mt-20 py-12 text-center">
-        <p className="text-gray-400 text-sm font-black  tracking-[0.4em]">Official Communication Log © 2026</p>
+        <p className="text-gray-400 text-sm font-black tracking-[0.4em]">Official Communication Log © 2026</p>
       </footer>
     </div>
   );

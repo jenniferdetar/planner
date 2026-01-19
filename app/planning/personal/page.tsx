@@ -179,7 +179,7 @@ export default function PersonalPlannerPage() {
             <div className="flex justify-between items-start mb-4">
               <div className="w-[140px] flex justify-between px-1">
                 {dayLabels.map((label, i) => (
-                  <span key={i} className="text-[12px] font-black" style={{ color: dayHeaderColors[i] }}>{label}</span>
+                  <span key={i} className="text-sm font-black" style={{ color: dayHeaderColors[i] }}>{label}</span>
                 ))}
               </div>
               <div className="flex-grow text-center pr-12">
@@ -204,7 +204,7 @@ export default function PersonalPlannerPage() {
                         />
                       ))}
                     </div>
-                    <span className="text-[14pt] text-slate-500 font-medium leading-tight truncate">{item}</span>
+                    <span className="text-sm text-slate-500 font-medium leading-tight truncate">{item}</span>
                   </div>
                 );
               })}
@@ -216,7 +216,7 @@ export default function PersonalPlannerPage() {
   );
 
   return (
-    <div className="p-4 md:p-6 w-full bg-[#fdfdfd] min-h-screen font-sans">
+    <div className="p-4 md:p-6 w-full bg-[#fdfdfd] min-h-screen font-handwriting">
       {/* Header */}
       <header className="mb-8">
         <div className="flex items-center gap-4 mb-4">
@@ -254,7 +254,7 @@ export default function PersonalPlannerPage() {
 
           return (
             <div key={dateStr} className="border-t-2 pt-6 pb-6 bg-white rounded-2xl px-6 shadow-sm border-slate-100" style={{ borderTopColor: dayColor }}>
-              <h2 className="text-[16px] font-black tracking-[0.2em] mb-8" style={{ color: dayColor }}>
+              <h2 className="text-lg font-black tracking-[0.2em] mb-8" style={{ color: dayColor }}>
                 {dayLabel}
               </h2>
               

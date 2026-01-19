@@ -69,7 +69,7 @@ export default function MantraPage() {
             <Quote size={80} className="text-[#0a2f5f]" />
           </div>
           
-          <div className="relative z-10">
+          <div className="relative z-10 font-handwriting">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-12 gap-4 opacity-40">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0a2f5f]"></div>
@@ -79,7 +79,7 @@ export default function MantraPage() {
               <>
                 <textarea 
                   placeholder="What is your focus today? What intent do you want to carry?"
-                  className="w-full min-h-[200px] bg-transparent border-none text-center text-3xl md:text-4xl font-serif font-black text-[#0a2f5f] placeholder:text-gray-100 outline-none leading-tight resize-none italic"
+                  className="w-full min-h-[200px] bg-transparent border-none text-center text-2xl md:text-3xl font-black text-[#0a2f5f] placeholder:text-gray-100 outline-none leading-tight resize-none italic"
                   value={mantra}
                   onChange={(e) => setMantra(e.target.value)}
                 ></textarea>
@@ -94,7 +94,7 @@ export default function MantraPage() {
                   <button 
                     onClick={saveMantra}
                     disabled={saving}
-                    className="group flex items-center gap-3 px-10 py-3 bg-[#0a2f5f] text-white font-black text-sm tracking-wider rounded-full hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
+                    className="group flex items-center gap-3 px-10 py-3 bg-[#0a2f5f] text-white font-black text-sm tracking-wider rounded-2xl hover:bg-[#0a2f5f] transition-all disabled:opacity-50 shadow-2xl shadow-[#0a2f5f]/20"
                   >
                     {saving ? 'Saving...' : 'Set Mantra'}
                     <Save size={18} className="group-hover:scale-110 transition-transform" />
@@ -106,7 +106,7 @@ export default function MantraPage() {
         </div>
       </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-handwriting">
         <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all duration-500">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#99B3C5] opacity-10 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
           <div className="relative z-10 flex items-start gap-4">
@@ -138,7 +138,7 @@ export default function MantraPage() {
         </div>
       </div>
 
-      <footer className="mt-20 py-12 border-t border-gray-100 text-center">
+      <footer className="mt-20 py-12 border-t border-gray-100 text-center font-handwriting">
         <p className="text-gray-300 text-sm font-black tracking-widest">Intentional Living Portal © 2026</p>
       </footer>
     </div>
