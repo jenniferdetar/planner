@@ -176,38 +176,58 @@ export default function PersonalPlannerPage() {
       {ROUTINES.map((routine) => {
         return (
           <div key={routine.title} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <div className="flex justify-between items-start mb-4">
-              <div className="w-[140px] flex justify-between px-1">
-                {dayLabels.map((label, i) => (
-                  <span key={i} className="text-sm font-black" style={{ color: dayHeaderColors[i] }}>{label}</span>
-                ))}
-              </div>
-              <div className="flex-grow text-center pr-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-2">
+                {routine.icon}
                 <h3 className="text-sm font-black uppercase tracking-widest text-slate-700">{routine.title}</h3>
               </div>
             </div>
-            
-            <div className="space-y-2">
-              {routine.items.map((item, itemIdx) => {
-                const habits = habitStatus[`${routine.title}-${itemIdx}`] || Array(7).fill(false);
-                return (
-                  <div key={item} className="flex items-center gap-4">
-                    <div className="grid grid-cols-7 gap-1 w-[140px] shrink-0">
-                      {habits.map((completed, dayIdx) => (
-                        <div 
-                          key={dayIdx} 
-                          onClick={() => toggleHabit(routine.title, itemIdx, dayIdx)}
-                          className="w-[18px] h-[18px] rounded-sm border border-slate-100 cursor-pointer transition-all hover:scale-110" 
-                          style={{ 
-                            backgroundColor: completed ? routine.color : `${routine.color}22` 
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-slate-500 font-medium leading-tight truncate">{item}</span>
-                  </div>
-                );
-              })}
+            <div className="grid grid-cols-[auto_1fr] gap-4 items-start">
+              <div>
+                <div className="grid grid-cols-7 gap-1 mb-2 justify-items-center">
+                  {dayLabels.map((label, i) => (
+                    <span key={`${label}-${i}`} className="text-[11px] font-black" style={{ color: dayHeaderColors[i] }}>
+                      {label}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-col gap-1">
+                  {routine.items.map((_, itemIdx) => {
+                    const habits = habitStatus[`${routine.title}-${itemIdx}`] || Array(7).fill(false);
+                    return (
+                      <div key={`${routine.title}-${itemIdx}`} className="grid grid-cols-7 gap-1">
+                        {habits.map((completed, dayIdx) => (
+                          <button
+                            key={`${routine.title}-${itemIdx}-${dayIdx}`}
+                            type="button"
+                            onClick={() => toggleHabit(routine.title, itemIdx, dayIdx)}
+                            className="w-[18px] h-[18px] rounded-sm border border-slate-100 cursor-pointer transition-transform hover:scale-110 relative"
+                            style={{
+                              backgroundColor: completed ? routine.color : `${routine.color}22`
+                            }}
+                            aria-pressed={completed}
+                            aria-label={`${routine.title} ${routine.items[itemIdx]} ${DAYS[dayIdx].label}`}
+                          >
+                            {completed && (
+                              <span className="absolute inset-0 flex items-center justify-center text-[11px] text-white font-black">
+                                ✓
+                              </span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <ul className="text-sm text-slate-500 font-medium leading-tight space-y-2">
+                {routine.items.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="text-slate-300">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         );
@@ -245,7 +265,7 @@ export default function PersonalPlannerPage() {
       </header>
 
       {/* Weekly Columns */}
-      <div className="grid grid-cols-1 gap-12">
+      <div className="flex flex-col gap-12">
         {weekDays.map((day, idx) => {
           const dateStr = day.toISOString().split('T')[0];
           const dayTasks = tasks.filter(t => t.due_date === dateStr);

@@ -20,21 +20,14 @@ interface PlannerEvent {
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const STYLE_MAP: Record<string, { bg: string; border: string; text: string }> = {
-  due:    { bg: '#dc2626', border: '#facc15', text: '#ffffff' },
-  holiday:{ bg: '#ffe1b0', border: '#f59e0b', text: '#9a4d00' },
-  csea:   { bg: '#00326b', border: '#ffca38', text: '#ffca38' },
-  lafed:  { bg: '#00493a', border: '#ffca38', text: '#ffffff' },
-  payday: { bg: '#22c55e', border: '#facc15', text: '#ffffff' },
-  budget: { bg: '#ffd4a8', border: '#f97316', text: '#9a3412' },
-  budgetpay: { bg: '#bff0d4', border: '#10b981', text: '#0b4a3a' },
-  lunch: { bg: '#00493a', border: '#00493a', text: '#edf0ee' },
-  christmas: { bg: '#0f6b3a', border: '#dc2626', text: '#ffffff' },
-  birthday:{ bg: '#ffd9b5', border: '#fb923c', text: '#8a2d0f' },
-  travel:  { bg: '#e0ccff', border: '#8b5cf6', text: '#4c1d95' },
-  home:    { bg: '#ffeab5', border: '#eab308', text: '#7a5b00' },
-  personal:{ bg: '#dbeafe', border: '#60a5fa', text: '#1e3a8a' },
-  burntorange: { bg: '#c75b12', border: '#8d3f0c', text: '#ffffff' },
-  default:{ bg: '#e5e7eb', border: '#9ca3af', text: '#111827' }
+  payday:  { bg: '#22c55e', border: '#facc15', text: '#ffffff' },
+  due:     { bg: '#dc2626', border: '#facc15', text: '#ffffff' },
+  lafed:   { bg: '#00493a', border: '#ffca38', text: '#ffffff' },
+  csea:    { bg: '#00326b', border: '#ffca38', text: '#ffca38' },
+  meeting: { bg: '#dbeafe', border: '#bfdbfe', text: '#1d4ed8' },
+  task:    { bg: '#fef3c7', border: '#fde68a', text: '#b45309' },
+  expense: { bg: '#ffe4e6', border: '#fecdd3', text: '#be123c' },
+  default: { bg: 'rgba(10, 47, 95, 0.1)', border: 'rgba(10, 47, 95, 0.2)', text: '#0a2f5f' }
 };
 
 const getHourSlots = (start: number, end: number, step: number = 30) => {
@@ -262,14 +255,13 @@ export default function WorkPlannerPage() {
   const classifyEvent = (event: PlannerEvent) => {
     const text = (event.title || '').toLowerCase();
     const category = (event.category || '').toLowerCase();
-    if (/due/i.test(text) || /due/i.test(category)) return 'due';
-    if (category === 'meeting' || /meeting/i.test(text)) {
-      if (/la fed/i.test(text) || /lafed/i.test(text)) return 'lafed';
-      return 'csea';
-    }
-    if (/la fed/i.test(text) || /lafed/i.test(text)) return 'lafed';
-    if (/lunch/i.test(text)) return 'lunch';
     if (/paydy/i.test(text) || /payday/i.test(text)) return 'payday';
+    if (/due/i.test(text) || /due/i.test(category)) return 'due';
+    if (/la fed/i.test(text) || /lafed/i.test(text)) return 'lafed';
+    if (/csea/i.test(text) || /csea/i.test(category)) return 'csea';
+    if (event.type === 'meeting') return 'meeting';
+    if (event.type === 'task') return 'task';
+    if (event.type === 'event' && /lunch/i.test(text)) return 'task';
     return 'default';
   };
 
