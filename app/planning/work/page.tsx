@@ -20,10 +20,10 @@ interface PlannerEvent {
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const STYLE_MAP: Record<string, { bg: string; border: string; text: string }> = {
-  due:    { bg: '#ffd6e2', border: '#ff6b98', text: '#7a0f2b' },
+  due:    { bg: '#dc2626', border: '#facc15', text: '#ffffff' },
   holiday:{ bg: '#ffe1b0', border: '#f59e0b', text: '#9a4d00' },
   csea:   { bg: '#b7dbff', border: '#3b82f6', text: '#0b3b70' },
-  payday: { bg: '#c9f5dd', border: '#22c55e', text: '#0f4d2c' },
+  payday: { bg: '#22c55e', border: '#facc15', text: '#ffffff' },
   budget: { bg: '#ffd4a8', border: '#f97316', text: '#9a3412' },
   budgetpay: { bg: '#bff0d4', border: '#10b981', text: '#0b4a3a' },
   lunch: { bg: '#00493a', border: '#00493a', text: '#edf0ee' },
@@ -220,9 +220,10 @@ export default function WorkPlannerPage() {
   const classifyEvent = (event: PlannerEvent) => {
     const text = (event.title || '').toLowerCase();
     const category = (event.category || '').toLowerCase();
+    if (/due/i.test(text) || /due/i.test(category)) return 'due';
     if (category === 'meeting' || /meeting/i.test(text)) return 'csea';
     if (/lunch/i.test(text)) return 'lunch';
-    if (/payday/i.test(text)) return 'payday';
+    if (/paydy/i.test(text) || /payday/i.test(text)) return 'payday';
     return 'default';
   };
 

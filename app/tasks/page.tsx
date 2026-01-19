@@ -108,6 +108,8 @@ export default function TasksPage() {
                       )}
                       {task.category && (
                         <div className={`flex items-center gap-1.5 text-[10px] font-black  tracking-widest px-2 py-0.5 rounded-md border ${
+                          task.category.toLowerCase().includes('due')
+                            ? 'bg-[#dc2626] text-white border-[#facc15]' :
                           task.category.toUpperCase().includes('CSEA')
                             ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38]'
                             : 'bg-blue-50 text-[#0a2f5f] border-transparent'
