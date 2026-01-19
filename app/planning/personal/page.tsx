@@ -167,64 +167,61 @@ export default function PersonalPlannerPage() {
 
   const weekRangeLabel = `${weekDays[0].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()} - ${weekDays[6].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()}`;
 
-  const dayHeaderColors = ['#f38aa3', '#f3a25a', '#7fc9d6', '#3c6f8f', '#f28b85', '#f1c07a', '#7fc9d6'];
+  const dayHeaderColors = ['#f7b7b7', '#f7d1a3', '#c7e7ea', '#b7c4d3', '#f7b7b7', '#f7d1a3', '#c7e7ea'];
   const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
   // Force redeploy trigger
   const renderRoutines = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mb-8">
-      {ROUTINES.map((routine) => {
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 mb-10">
+      {ROUTINES.map((routine, routineIdx) => {
         return (
-          <div key={routine.title} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center gap-2">
-                {routine.icon}
-                <h3 className="text-sm font-black uppercase tracking-widest text-slate-700">{routine.title}</h3>
-              </div>
-            </div>
-            <div className="grid grid-cols-[auto_1fr] gap-4 items-start">
+          <div key={routine.title} className="bg-transparent p-0">
+            <h3 className="text-lg font-black text-center tracking-[0.12em] text-slate-700 mb-4">
+              {routine.title}
+            </h3>
+            <div className="grid grid-cols-[auto_1fr] gap-6 items-start">
               <div>
-                <div className="grid grid-cols-7 gap-1 mb-2 justify-items-center">
-                  {dayLabels.map((label, i) => (
-                    <span key={`${label}-${i}`} className="text-[11px] font-black" style={{ color: dayHeaderColors[i] }}>
-                      {label}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex flex-col gap-1">
+                {routineIdx < 2 && (
+                  <div className="grid grid-cols-7 gap-2 mb-3 justify-items-center">
+                    {dayLabels.map((label, i) => (
+                      <span key={`${label}-${i}`} className="text-sm font-black" style={{ color: dayHeaderColors[i] }}>
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <div className="flex flex-col gap-2">
                   {routine.items.map((_, itemIdx) => {
                     const habits = habitStatus[`${routine.title}-${itemIdx}`] || Array(7).fill(false);
                     return (
-                      <div key={`${routine.title}-${itemIdx}`} className="grid grid-cols-7 gap-1">
+                      <div key={`${routine.title}-${itemIdx}`} className="grid grid-cols-7 gap-2">
                         {habits.map((completed, dayIdx) => (
                           <button
                             key={`${routine.title}-${itemIdx}-${dayIdx}`}
                             type="button"
                             onClick={() => toggleHabit(routine.title, itemIdx, dayIdx)}
-                            className="w-[18px] h-[18px] rounded-sm border border-slate-100 cursor-pointer transition-transform hover:scale-110 relative"
+                            className="w-[22px] h-[22px] rounded-sm border border-white/80 cursor-pointer transition-transform hover:scale-105"
                             style={{
-                              backgroundColor: completed ? routine.color : `${routine.color}22`
+                              backgroundColor: dayHeaderColors[dayIdx],
+                              opacity: completed ? 1 : 0.55
                             }}
                             aria-pressed={completed}
                             aria-label={`${routine.title} ${routine.items[itemIdx]} ${DAYS[dayIdx].label}`}
-                          >
-                            {completed && (
-                              <span className="absolute inset-0 flex items-center justify-center text-[11px] text-white font-black">
-                                ✓
-                              </span>
-                            )}
-                          </button>
+                          />
                         ))}
                       </div>
                     );
                   })}
                 </div>
               </div>
-              <ul className="text-sm text-slate-500 font-medium leading-tight space-y-2">
+              <ul
+                className={`text-[22px] text-slate-600 font-medium leading-none list-none flex flex-col gap-2 ${
+                  routineIdx < 2 ? 'pt-[36px]' : 'pt-[6px]'
+                }`}
+              >
                 {routine.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2">
-                    <span className="text-slate-300">•</span>
-                    <span>{item}</span>
+                  <li key={item} className="h-[22px] flex items-center">
+                    {item}
                   </li>
                 ))}
               </ul>
