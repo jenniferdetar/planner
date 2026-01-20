@@ -9,6 +9,7 @@ import { OpusGoal } from '@/types/database.types';
 interface PlannerEvent {
   id: string;
   title: string;
+  date: string;
   time: string | null;
   endTime?: string | null;
   category: string;
