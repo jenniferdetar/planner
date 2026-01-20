@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
-import StatCard from '@/components/StatCard';
-import { CheckCircle2, AlertCircle, Clock, ShieldCheck, Calculator, FileSpreadsheet } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 
 const MONTHS = [
   { key: 'jul', label: 'Jul 2025' },
