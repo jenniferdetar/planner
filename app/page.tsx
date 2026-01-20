@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { getPaydayEvents } from '@/lib/paydayEvents';
 import { 
   Calendar as CalendarIcon, ChevronRight, 
   Activity, ChevronLeft
@@ -73,6 +74,8 @@ export default function Home() {
     if (calendarError) console.error('Error fetching calendar events:', calendarError);
     if (expensesError) console.error('Error fetching expenses:', expensesError);
 
+    const paydayEvents = getPaydayEvents(startStr, endStr);
+
     const combinedEvents: CalendarEvent[] = [
       ...(meetings || []).map(m => ({
         id: m.id,
@@ -103,7 +106,8 @@ export default function Home() {
         category: 'Expense',
         date: ex.date,
         type: 'expense' as const
-      }))
+      })),
+      ...paydayEvents
     ];
 
     // Deduplicate events by title and date
@@ -165,27 +169,7 @@ export default function Home() {
         <Link href="/planning/work" className="planner-header-pill pill-work">Work Planner</Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-4 items-start">
-        <aside className="border border-slate-200 rounded-xl p-5 bg-white">
-          <div className="text-center text-[11px] font-black tracking-[0.3em] text-[#4a7f8f] mb-4">
-            Notes
-          </div>
-          <div className="space-y-2">
-            {Array.from({ length: 24 }).map((_, idx) => (
-              <div key={idx} className="border-b border-slate-200 h-4"></div>
-            ))}
-          </div>
-          <div className="mt-8 text-[10px] font-black tracking-[0.3em] text-gray-400 uppercase">{nextMonthName}</div>
-          <div className="mt-2 grid grid-cols-7 gap-1 text-[10px] text-gray-400">
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-              <div key={`${day}-${i}`} className="text-center">{day}</div>
-            ))}
-            {Array.from({ length: 35 }).map((_, idx) => (
-              <div key={idx} className="h-4 border border-slate-200/60"></div>
-            ))}
-          </div>
-        </aside>
-
+      <div className="grid grid-cols-1 gap-4 items-start">
         <section className="border border-slate-200 rounded-xl overflow-hidden bg-white">
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
             <div className="flex items-center gap-3">
@@ -256,8 +240,8 @@ export default function Home() {
                           setSelectedEvent(e);
                         }}
                         className={`text-[8px] px-2 py-1 rounded-full font-black cursor-pointer hover:brightness-95 transition-all truncate ${
-                          (e.title?.toLowerCase().includes('paydy') || e.title?.toLowerCase().includes('payday')) ? 'bg-[#22c55e] text-white border border-[#eab308]' :
-                          (e.title?.toLowerCase().includes('budget') || e.category?.toLowerCase().includes('budget')) ? 'bg-[#86efac] text-white border border-[#eab308]' :
+                          (e.title?.toLowerCase().includes('paydy') || e.title?.toLowerCase().includes('payday')) ? 'bg-[#22c55e] text-white border border-[#facc15]' :
+                          (e.title?.toLowerCase().includes('budget') || e.category?.toLowerCase().includes('budget')) ? 'bg-[#facc15] text-white border border-[#86efac]' :
                           (e.title?.toLowerCase().includes('due') || e.category?.toLowerCase().includes('due')) ? 'bg-[#dc2626] text-white border border-[#facc15]' :
                           (e.title?.toLowerCase().includes('la fed') || e.title?.toLowerCase().includes('lafed')) ? 'bg-[#00326b] text-[#ffca38] border border-[#ffca38]' :
                           (e.category?.toUpperCase().includes('CSEA') || e.title?.toUpperCase().includes('CSEA')) ? 'bg-[#00326b] text-[#ffca38] border border-[#ffca38]' :
@@ -289,8 +273,8 @@ export default function Home() {
           <div className="bg-white rounded-[3rem] p-10 max-w-lg w-full shadow-2xl border-4 border-[#0a2f5f]/10 animate-in fade-in zoom-in duration-300">
             <div className="flex justify-between items-start mb-6">
               <div className={`px-4 py-2 rounded-2xl text-[10px] font-black ${
-                (selectedEvent.title?.toLowerCase().includes('paydy') || selectedEvent.title?.toLowerCase().includes('payday')) ? 'bg-[#22c55e] text-white' :
-                (selectedEvent.title?.toLowerCase().includes('budget') || selectedEvent.category?.toLowerCase().includes('budget')) ? 'bg-[#86efac] text-white' :
+                (selectedEvent.title?.toLowerCase().includes('paydy') || selectedEvent.title?.toLowerCase().includes('payday')) ? 'bg-[#22c55e] text-white border border-[#facc15]' :
+                (selectedEvent.title?.toLowerCase().includes('budget') || selectedEvent.category?.toLowerCase().includes('budget')) ? 'bg-[#facc15] text-white border border-[#86efac]' :
                 (selectedEvent.title?.toLowerCase().includes('la fed') || selectedEvent.title?.toLowerCase().includes('lafed')) ? 'bg-[#00326b] text-[#ffca38]' :
                 (selectedEvent.category?.toUpperCase().includes('CSEA') || selectedEvent.title?.toUpperCase().includes('CSEA')) ? 'bg-[#00326b] text-[#ffca38]' : 'bg-slate-100 text-slate-500'
               }`}>

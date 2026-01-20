@@ -1,24 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Coming_Soon } from "next/font/google";
+import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import AppShell from "@/components/AppShell";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-jakarta-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
 });
-
-const comingSoon = Coming_Soon({
-  weight: "400",
-  variable: "--font-coming-soon",
-  subsets: ["latin"],
-});
-
-import TopNav from "@/components/TopNav";
 
 export const metadata: Metadata = {
   title: "Opus One Planner",
@@ -32,11 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${comingSoon.variable} antialiased bg-gray-50 font-handwriting`}>
-        <TopNav />
-        <main className="min-h-screen">
-          {children}
-        </main>
+      <body className={`${jakartaSans.variable} ${spaceGrotesk.variable} antialiased asana-body`}>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

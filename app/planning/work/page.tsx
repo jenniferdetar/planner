@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { getPaydayEvents } from '@/lib/paydayEvents';
 
 import { Briefcase, Target, Zap, Award, Clock, User, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { OpusGoal } from '@/types/database.types';
@@ -20,8 +21,8 @@ interface PlannerEvent {
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const STYLE_MAP: Record<string, { bg: string; border: string; text: string }> = {
-  payday:  { bg: '#22c55e', border: '#eab308', text: '#ffffff' },
-  budget:  { bg: '#86efac', border: '#eab308', text: '#ffffff' },
+  payday:  { bg: '#22c55e', border: '#facc15', text: '#ffffff' },
+  budget:  { bg: '#facc15', border: '#86efac', text: '#ffffff' },
   due:     { bg: '#dc2626', border: '#facc15', text: '#ffffff' },
   lafed:   { bg: '#00326b', border: '#ffca38', text: '#ffca38' },
   csea:    { bg: '#00326b', border: '#ffca38', text: '#ffca38' },
@@ -109,6 +110,8 @@ export default function WorkPlannerPage() {
         .gte('date', startDate)
         .lte('date', endDate);
 
+      const paydayEvents = getPaydayEvents(startDate, endDate);
+
       const eventMap: Record<string, PlannerEvent[]> = {};
       weekDates.forEach(date => {
         const rawEvents: PlannerEvent[] = [];
@@ -149,6 +152,16 @@ export default function WorkPlannerPage() {
         });
 
         calendarEvents?.filter(e => e.date === date).forEach(e => {
+          rawEvents.push({
+            id: e.id,
+            title: e.title,
+            time: null,
+            category: e.category,
+            type: 'event'
+          });
+        });
+
+        paydayEvents.filter(e => e.date === date).forEach(e => {
           rawEvents.push({
             id: e.id,
             title: e.title,

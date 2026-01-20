@@ -17,22 +17,22 @@ export default function HubHeader({
   title, 
   subtitle, 
   icon: Icon, 
-  iconBgColor = 'bg-[#0a2f5f]',
-  textColor = 'text-[#0a2f5f]',
+  iconBgColor = 'bg-[var(--asana-accent)]',
+  textColor = 'text-[var(--asana-text)]',
   hideHubSuffix = false,
   children
 }: HubHeaderProps) {
   return (
-    <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div className="flex items-center gap-4">
-        <div className={`w-14 h-14 rounded-2xl ${iconBgColor} flex items-center justify-center shadow-xl shadow-black/10`}>
+        <div className={`w-12 h-12 rounded-2xl ${iconBgColor} flex items-center justify-center shadow-lg shadow-black/20`}>
           <Icon className="text-white" size={32} />
         </div>
         <div>
-          <h1 className={`text-4xl font-black ${textColor} tracking-tight`}>
+          <h1 className={`text-3xl font-bold ${textColor} tracking-tight font-display`}>
             {title}{!hideHubSuffix && ' Hub'}
           </h1>
-          <p className="text-gray-400 font-bold tracking-widest text-xs italic">{subtitle}</p>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--asana-muted)]">{subtitle}</p>
         </div>
       </div>
       {children && (
