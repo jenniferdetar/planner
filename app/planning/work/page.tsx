@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { getPaydayEvents } from '@/lib/paydayEvents';
 
 import { Briefcase, Target, Zap, Award, Clock, User, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { OpusGoal } from '@/types/database.types';
@@ -92,84 +91,13 @@ export default function WorkPlannerPage() {
       const { data: goalsData } = await supabase.from('opus_goals').select('*');
       setGoals(goalsData || []);
 
-      const { data: tasks } = await supabase
-        .from('opus_tasks')
-        .select('*')
-        .gte('due_date', startDate)
-        .lte('due_date', endDate);
-
-      const { data: meetings } = await supabase
-        .from('opus_meetings')
-        .select('*')
-        .gte('date', startDate)
-        .lte('date', endDate);
-
-      const { data: calendarEvents } = await supabase
-        .from('calendar_by_date')
-        .select('*')
-        .gte('date', startDate)
-        .lte('date', endDate);
-
-      const paydayEvents = getPaydayEvents(startDate, endDate);
+      const response = await fetch(`/api/calendar?start=${startDate}&end=${endDate}`);
+      const payload = await response.json();
+      const calendarData = (payload?.events || []) as PlannerEvent[];
 
       const eventMap: Record<string, PlannerEvent[]> = {};
       weekDates.forEach(date => {
-        const rawEvents: PlannerEvent[] = [];
-        tasks?.filter(t => t.due_date === date).forEach(t => {
-          let dueTime = t.due_time;
-          if (t.title?.toUpperCase().includes('NEO')) {
-            dueTime = '12:00';
-          } else if (t.title?.toUpperCase().includes('RPM')) {
-            dueTime = '17:30';
-          }
-          
-          rawEvents.push({
-            id: t.id,
-            title: t.title,
-            time: dueTime,
-            category: t.category,
-            type: 'task',
-            priority: t.priority,
-            completed: t.completed
-          });
-        });
-        meetings?.filter(m => m.date === date).forEach(m => {
-          let startTime = m.start_time;
-          if (m.title?.toUpperCase().includes('NEO')) {
-            startTime = '12:00';
-          } else if (m.title?.toUpperCase().includes('RPM')) {
-            startTime = '17:30';
-          }
-
-          rawEvents.push({
-            id: m.id,
-            title: m.title,
-            time: startTime,
-            endTime: m.end_time,
-            category: 'meeting',
-            type: 'meeting'
-          });
-        });
-
-        calendarEvents?.filter(e => e.date === date).forEach(e => {
-          rawEvents.push({
-            id: e.id,
-            title: e.title,
-            time: null,
-            category: e.category,
-            type: 'event'
-          });
-        });
-
-        paydayEvents.filter(e => e.date === date).forEach(e => {
-          rawEvents.push({
-            id: e.id,
-            title: e.title,
-            time: null,
-            category: e.category,
-            type: 'event'
-          });
-        });
+        const rawEvents = calendarData.filter(event => event.date === date);
 
         // Deduplicate events by title and time
         eventMap[date] = rawEvents.reduce((acc: PlannerEvent[], current) => {

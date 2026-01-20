@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
-import { getPaydayEvents } from '@/lib/paydayEvents';
 import { 
   Calendar as CalendarIcon, ChevronRight, 
   Activity, ChevronLeft
@@ -16,6 +14,7 @@ interface CalendarEvent {
   date: string;
   type: 'meeting' | 'task' | 'event' | 'expense';
   time?: string;
+  endTime?: string | null;
 }
 
 const DAYS = [
@@ -41,86 +40,16 @@ export default function Home() {
     const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     const endStr = endOfMonth.toISOString().split('T')[0];
 
-    // Fetch Meetings
-    const { data: meetings, error: meetingsError } = await supabase
-      .from('opus_meetings')
-      .select('*')
-      .gte('date', startStr)
-      .lte('date', endStr);
+    try {
+      const response = await fetch(`/api/calendar?start=${startStr}&end=${endStr}`);
+      const payload = await response.json();
+      const combinedEvents = (payload?.events || []) as CalendarEvent[];
+      setEvents(combinedEvents.sort((a, b) => a.date.localeCompare(b.date)));
+    } catch (error) {
+      console.error('Error fetching calendar events:', error);
+      setEvents([]);
+    }
 
-    // Fetch Tasks
-    const { data: tasks, error: tasksError } = await supabase
-      .from('opus_tasks')
-      .select('*')
-      .gte('due_date', startStr)
-      .lte('due_date', endStr);
-
-    // Fetch Events from calendar_by_date
-    const { data: calendarEvents, error: calendarError } = await supabase
-      .from('calendar_by_date')
-      .select('*')
-      .gte('date', startStr)
-      .lte('date', endStr);
-
-    // Fetch HOA Expenses
-    const { data: expenses, error: expensesError } = await supabase
-      .from('hoa_expenses')
-      .select('*')
-      .gte('date', startStr)
-      .lte('date', endStr);
-
-    if (meetingsError) console.error('Error fetching meetings:', meetingsError);
-    if (tasksError) console.error('Error fetching opus tasks:', tasksError);
-    if (calendarError) console.error('Error fetching calendar events:', calendarError);
-    if (expensesError) console.error('Error fetching expenses:', expensesError);
-
-    const paydayEvents = getPaydayEvents(startStr, endStr);
-
-    const combinedEvents: CalendarEvent[] = [
-      ...(meetings || []).map(m => ({
-        id: m.id,
-        title: m.title,
-        category: m.category || 'Meeting',
-        date: m.date,
-        type: 'meeting' as const,
-        time: m.start_time
-      })),
-      ...(tasks || []).map(t => ({
-        id: t.id,
-        title: t.title,
-        category: t.category || 'Opus Task',
-        date: t.due_date,
-        type: 'task' as const,
-        time: t.due_time
-      })),
-      ...(calendarEvents || []).map(e => ({
-        id: e.id,
-        title: e.title,
-        category: e.category || 'Event',
-        date: e.date,
-        type: 'event' as const
-      })),
-      ...(expenses || []).map(ex => ({
-        id: ex.id,
-        title: `${ex.vendor}: $${ex.amount}`,
-        category: 'Expense',
-        date: ex.date,
-        type: 'expense' as const
-      })),
-      ...paydayEvents
-    ];
-
-    // Deduplicate events by title and date
-    const uniqueEvents = combinedEvents.reduce((acc: CalendarEvent[], current) => {
-      const x = acc.find(item => item.title === current.title && item.date === current.date);
-      if (!x) {
-        return acc.concat([current]);
-      } else {
-        return acc;
-      }
-    }, []);
-
-    setEvents(uniqueEvents.sort((a, b) => a.date.localeCompare(b.date)));
   }, []);
 
   useEffect(() => {

@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   ChevronDown,
   Home,
-  Inbox,
   Layers,
   Plus,
   Search,
@@ -25,7 +24,6 @@ type NavItem = {
 
 const PRIMARY_ITEMS: NavItem[] = [
   { label: 'Home', href: '/', icon: Home },
-  { label: 'Inbox', href: '/tasks', icon: Inbox },
   { label: 'My tasks', href: '/planning/work', icon: CheckCircle2 }
 ];
 
@@ -89,7 +87,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div className="h-9 w-9 rounded-xl bg-[var(--asana-accent)] text-white flex items-center justify-center font-black">
             O
           </div>
-          <div className="text-sm font-bold tracking-[0.2em] uppercase text-white/90">Opus</div>
+          <div className="text-sm font-bold tracking-[0.2em] uppercase text-[var(--asana-text)]">Opus</div>
         </div>
         <NavSection title="Work" items={PRIMARY_ITEMS} pathname={pathname} />
         <NavSection title="Projects" items={PROJECT_ITEMS} pathname={pathname} />
@@ -106,7 +104,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <div className="asana-main">
         <header className="asana-topbar">
           <div className="flex items-center gap-3">
-            <button className="hidden md:flex h-9 w-9 items-center justify-center rounded-full bg-[var(--asana-chip)] text-white/80">
+            <button className="hidden md:flex h-9 w-9 items-center justify-center rounded-full bg-[var(--asana-chip)] text-[var(--asana-text)]">
               <Plus size={16} />
             </button>
             <div className="asana-search">
@@ -114,7 +112,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <input
                 type="text"
                 placeholder="Search"
-                className="flex-1 bg-transparent text-sm text-white/90 placeholder:text-[var(--asana-muted)] focus:outline-none"
+                className="flex-1 bg-transparent text-sm text-[var(--asana-text)] placeholder:text-[var(--asana-muted)] focus:outline-none"
               />
               <span className="asana-kbd">Cmd K</span>
             </div>
