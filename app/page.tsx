@@ -256,9 +256,10 @@ export default function Home() {
                           setSelectedEvent(e);
                         }}
                         className={`text-[8px] px-2 py-1 rounded-full font-black cursor-pointer hover:brightness-95 transition-all truncate ${
-                          (e.title?.toLowerCase().includes('paydy') || e.title?.toLowerCase().includes('payday')) ? 'bg-[#22c55e] text-white border border-[#facc15]' :
+                          (e.title?.toLowerCase().includes('paydy') || e.title?.toLowerCase().includes('payday')) ? 'bg-[#22c55e] text-white border border-[#eab308]' :
+                          (e.title?.toLowerCase().includes('budget') || e.category?.toLowerCase().includes('budget')) ? 'bg-[#86efac] text-white border border-[#eab308]' :
                           (e.title?.toLowerCase().includes('due') || e.category?.toLowerCase().includes('due')) ? 'bg-[#dc2626] text-white border border-[#facc15]' :
-                          (e.title?.toLowerCase().includes('la fed') || e.title?.toLowerCase().includes('lafed')) ? 'bg-[#00493a] text-white border border-[#ffca38]' :
+                          (e.title?.toLowerCase().includes('la fed') || e.title?.toLowerCase().includes('lafed')) ? 'bg-[#00326b] text-[#ffca38] border border-[#ffca38]' :
                           e.category?.toUpperCase().includes('CSEA') ? 'bg-[#00326b] text-[#ffca38] border border-[#ffca38]' :
                           e.type === 'meeting' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
                           e.type === 'task' ? 'bg-amber-100 text-amber-700 border border-amber-200' :
@@ -289,6 +290,8 @@ export default function Home() {
             <div className="flex justify-between items-start mb-6">
               <div className={`px-4 py-2 rounded-2xl text-[10px] font-black ${
                 (selectedEvent.title?.toLowerCase().includes('paydy') || selectedEvent.title?.toLowerCase().includes('payday')) ? 'bg-[#22c55e] text-white' :
+                (selectedEvent.title?.toLowerCase().includes('budget') || selectedEvent.category?.toLowerCase().includes('budget')) ? 'bg-[#86efac] text-white' :
+                (selectedEvent.title?.toLowerCase().includes('la fed') || selectedEvent.title?.toLowerCase().includes('lafed')) ? 'bg-[#00326b] text-[#ffca38]' :
                 selectedEvent.category?.toUpperCase().includes('CSEA') ? 'bg-[#00326b] text-[#ffca38]' : 'bg-slate-100 text-slate-500'
               }`}>
                 {selectedEvent.category}

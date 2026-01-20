@@ -103,6 +103,12 @@ export default function WorkPlannerPage() {
         .gte('date', startDate)
         .lte('date', endDate);
 
+      const { data: calendarEvents } = await supabase
+        .from('calendar_by_date')
+        .select('*')
+        .gte('date', startDate)
+        .lte('date', endDate);
+
       const eventMap: Record<string, PlannerEvent[]> = {};
       weekDates.forEach(date => {
         const rawEvents: PlannerEvent[] = [];
@@ -139,6 +145,16 @@ export default function WorkPlannerPage() {
             endTime: m.end_time,
             category: 'meeting',
             type: 'meeting'
+          });
+        });
+
+        calendarEvents?.filter(e => e.date === date).forEach(e => {
+          rawEvents.push({
+            id: e.id,
+            title: e.title,
+            time: null,
+            category: e.category,
+            type: 'event'
           });
         });
 
