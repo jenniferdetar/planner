@@ -20,9 +20,10 @@ interface PlannerEvent {
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const STYLE_MAP: Record<string, { bg: string; border: string; text: string }> = {
-  payday:  { bg: '#22c55e', border: '#facc15', text: '#ffffff' },
+  payday:  { bg: '#22c55e', border: '#eab308', text: '#ffffff' },
+  budget:  { bg: '#86efac', border: '#eab308', text: '#ffffff' },
   due:     { bg: '#dc2626', border: '#facc15', text: '#ffffff' },
-  lafed:   { bg: '#00493a', border: '#ffca38', text: '#ffffff' },
+  lafed:   { bg: '#00326b', border: '#ffca38', text: '#ffca38' },
   csea:    { bg: '#00326b', border: '#ffca38', text: '#ffca38' },
   meeting: { bg: '#dbeafe', border: '#bfdbfe', text: '#1d4ed8' },
   task:    { bg: '#fef3c7', border: '#fde68a', text: '#b45309' },
@@ -256,6 +257,7 @@ export default function WorkPlannerPage() {
     const text = (event.title || '').toLowerCase();
     const category = (event.category || '').toLowerCase();
     if (/paydy/i.test(text) || /payday/i.test(text)) return 'payday';
+    if (/budget/i.test(text) || /budget/i.test(category)) return 'budget';
     if (/due/i.test(text) || /due/i.test(category)) return 'due';
     if (/la fed/i.test(text) || /lafed/i.test(text)) return 'lafed';
     if (/csea/i.test(text) || /csea/i.test(category)) return 'csea';
