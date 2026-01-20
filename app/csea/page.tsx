@@ -174,11 +174,11 @@ export default function CseaPage() {
   };
 
   return (
-    <div className="p-4 md:p-8 w-full bg-[#fdfdfd] min-h-screen">
+    <div className="p-4 md:p-8 w-full bg-[#fdfdfd] min-h-screen font-handwriting">
 <div className="flex flex-wrap gap-4 mb-12">
         <button 
           onClick={() => setActiveTab('issues')}
-          className={`px-8 py-4 rounded-2xl font-black  tracking-widest text-xs transition-all border-2 ${
+          className={`px-8 py-4 rounded-3xl font-black  tracking-widest text-sm transition-all border-2 ${
             activeTab === 'issues' 
               ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38] shadow-lg' 
               : 'bg-white text-[#00326b] border-[#ffca38]/10 hover:bg-[#ffca38]/5'
@@ -188,7 +188,7 @@ export default function CseaPage() {
         </button>
         <button 
           onClick={() => setActiveTab('meetings')}
-          className={`px-8 py-4 rounded-2xl font-black  tracking-widest text-xs transition-all border-2 ${
+          className={`px-8 py-4 rounded-3xl font-black  tracking-widest text-sm transition-all border-2 ${
             activeTab === 'meetings' 
               ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38] shadow-lg' 
               : 'bg-white text-[#00326b] border-[#ffca38]/10 hover:bg-[#ffca38]/5'
@@ -198,7 +198,7 @@ export default function CseaPage() {
         </button>
         <button 
           onClick={() => setActiveTab('notes')}
-          className={`px-8 py-4 rounded-2xl font-black  tracking-widest text-xs transition-all border-2 ${
+          className={`px-8 py-4 rounded-3xl font-black  tracking-widest text-sm transition-all border-2 ${
             activeTab === 'notes' 
               ? 'bg-[#00326b] text-[#ffca38] border-[#ffca38] shadow-lg' 
               : 'bg-white text-[#00326b] border-[#ffca38]/10 hover:bg-[#ffca38]/5'

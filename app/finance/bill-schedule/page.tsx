@@ -106,21 +106,21 @@ export default function BillSchedulePage() {
   }
 
   return (
-    <div className="bg-[#fdfdfd] min-h-screen">
-        <section className="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
+    <div className="bg-[#fdfdfd] min-h-screen font-handwriting">
+        <section className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-100 overflow-hidden mb-12 relative">
         <div className="absolute top-0 left-0 w-full h-2 bg-[#FFA1AB]"></div>
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
           <div className="max-w-xl">
-            <h2 className="text-2xl font-black text-[#0a2f5f]  tracking-tight mb-4 flex items-center gap-3">
+            <h2 className="text-xl font-black text-[#0a2f5f] tracking-tight mb-4 flex items-center gap-3">
               <CheckCircle2 className="text-[#FFA1AB]" size={24} />
               Annual Payment Registry
             </h2>
-            <p className="text-gray-500 font-medium leading-relaxed italic">
+            <p className="text-gray-500 font-medium leading-relaxed italic text-sm">
               Maintain precise records of recurring financial obligations. Verify completion by marking the corresponding month in the registry below.
             </p>
           </div>
-          <div className="flex items-center gap-2 text-[10px] font-black text-gray-400  tracking-[0.2em] bg-gray-50 px-6 py-3 rounded-full border">
+          <div className="flex items-center gap-2 text-sm font-black text-gray-400 tracking-[0.2em] bg-gray-50 px-6 py-3 rounded-full border">
             <Search size={14} />
             Filter Categories
           </div>
@@ -130,13 +130,13 @@ export default function BillSchedulePage() {
           <table className="w-full text-left border-collapse min-w-[1000px]">
             <thead>
               <tr className="border-b-2 border-gray-100">
-                <th className="py-6 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] w-32">Category</th>
-                <th className="py-6 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] w-48">Registry Item</th>
-                <th className="py-6 font-black text-[#0a2f5f] text-[10px]  tracking-[0.2em] w-24">Amount</th>
+                <th className="py-6 font-black text-[#0a2f5f] text-sm tracking-[0.2em] w-32">Category</th>
+                <th className="py-6 font-black text-[#0a2f5f] text-sm tracking-[0.2em] w-48">Registry Item</th>
+                <th className="py-6 font-black text-[#0a2f5f] text-sm tracking-[0.2em] w-24">Amount</th>
                 <th className="py-6">
                   <div className="grid grid-cols-12 gap-2 text-center">
                     {MONTHS.map((m, i) => (
-                      <span key={i} className="text-[10px] font-black text-[#0a2f5f]  tracking-widest opacity-40">
+                      <span key={i} className="text-sm font-black text-[#0a2f5f] tracking-widest opacity-40">
                         {m}
                       </span>
                     ))}
@@ -151,7 +151,7 @@ export default function BillSchedulePage() {
                 <tr key={i} className="group hover:bg-slate-50/50 transition-colors">
                   <td className="py-5">
                     <span
-                      className="text-[10px] font-black  tracking-widest px-3 py-1 rounded-full border"
+                      className="text-sm font-black tracking-widest px-3 py-1 rounded-full border"
                       style={{
                         color: categoryColor,
                         backgroundColor: `${categoryColor}14`,
@@ -198,31 +198,31 @@ export default function BillSchedulePage() {
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-[#FFA1AB]/10 p-8 rounded-[2rem] border-2 border-[#FFA1AB]/20">
-          <h4 className="text-[#0a2f5f] font-black  tracking-[0.2em] text-[10px] mb-4 flex items-center gap-2">
+        <div className="bg-[#FFA1AB]/10 p-8 rounded-3xl border-2 border-[#FFA1AB]/20">
+          <h4 className="text-[#0a2f5f] font-black tracking-[0.2em] text-sm mb-4 flex items-center gap-2">
             <AlertCircle size={14} />
             Compliance Note
           </h4>
-          <p className="text-[#0a2f5f] font-serif italic text-lg leading-relaxed">
+          <p className="text-[#0a2f5f] italic text-sm leading-relaxed">
             &quot;Ensure all digital transactions are cross-referenced with bank statements before final monthly certification.&quot;
           </p>
         </div>
-        <div className="md:col-span-2 bg-slate-50 p-8 rounded-[2rem] border-2 border-slate-100 flex items-center justify-between">
+        <div className="md:col-span-2 bg-slate-50 p-8 rounded-3xl border-2 border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm border border-slate-200">
               <ArrowUpRight className="text-[#0a2f5f]" size={24} />
             </div>
             <div>
-              <div className="text-[10px] font-black text-gray-400  tracking-widest mb-1">Liability Status</div>
+              <div className="text-sm font-black text-gray-400 tracking-widest mb-1">Liability Status</div>
               <div className="text-lg font-black text-[#0a2f5f]">All Systems Operational</div>
             </div>
           </div>
-          <div className="text-[10px] font-black  tracking-[0.3em] text-[#0a2f5f]/30 italic">Registry Secure</div>
+          <div className="text-sm font-black tracking-[0.3em] text-[#0a2f5f]/30 italic">Registry Secure</div>
         </div>
       </div>
 
       <footer className="mt-20 py-12 border-t border-gray-100 text-center">
-        <p className="text-gray-400 text-[10px] font-black  tracking-[0.4em]">Official Liability Registry © 2026</p>
+        <p className="text-gray-400 text-sm font-black tracking-[0.4em]">Official Liability Registry © 2026</p>
       </footer>
     </div>
   );
