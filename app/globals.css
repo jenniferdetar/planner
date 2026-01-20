@@ -34,12 +34,7 @@ body {
   line-height: 1.5;
 }
 
-h1 { font-size: 48px !important; }
-h2 { font-size: 34px !important; }
-h3 { font-size: 26px !important; }
-h4 { font-size: 20px !important; }
-h5 { font-size: 16px !important; }
-h6 { font-size: 14px !important; }
+h1, h2, h3, h4, h5, h6 { font-size: 14pt !important; }
 
 /* Force Tailwind text utilities to the global 14pt size. */
 .text-xs,
@@ -54,7 +49,8 @@ h6 { font-size: 14px !important; }
 .text-6xl,
 .text-7xl,
 .text-8xl,
-.text-9xl {
+.text-9xl,
+[class^="text-"] {
   font-size: 14pt !important;
 }
 
