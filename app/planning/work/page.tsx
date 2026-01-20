@@ -388,11 +388,18 @@ export default function WorkPlannerPage() {
                     <div className="absolute top-1 left-2 text-[14pt] font-black text-amber-600/40 tracking-wider uppercase">Events</div>
                     {allDayEvents.length > 0 ? (
                       <div className="space-y-1 pt-3">
-                        {allDayEvents.map((e, i) => (
-                          <div key={i} className="text-[14pt] p-1 bg-amber-100 text-amber-800 rounded-lg font-black tracking-wider border border-amber-200 shadow-sm">
-                            {e.title}
-                          </div>
-                        ))}
+                        {allDayEvents.map((e, i) => {
+                          const style = STYLE_MAP[classifyEvent(e)] || STYLE_MAP.default;
+                          return (
+                            <div 
+                              key={i} 
+                              className="text-[14pt] p-1 rounded-lg font-black tracking-wider border shadow-sm"
+                              style={{ backgroundColor: style.bg, borderColor: style.border, color: style.text }}
+                            >
+                              {e.title}
+                            </div>
+                          );
+                        })}
                       </div>
                     ) : (
                       <div
