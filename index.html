@@ -83,6 +83,12 @@
             border: 1px solid #c62828 !important;
         }
 
+        .event-payday {
+            background-color: #2e7d32 !important;
+            color: white !important;
+            border: 1px solid #1b5e20 !important;
+        }
+
 
         .day-right {
             width: 65%;
@@ -773,6 +779,7 @@
             const t = title.toUpperCase();
             if (t.includes('CSEA') || t.includes('LA FED')) return 'event-pill event-csea';
             if (t.includes('DUE')) return 'event-pill event-due';
+            if (t.includes("JENNIFER'S PAYDAY") || t.includes("BUDGET/PAY BILLS")) return 'event-pill event-payday';
             return 'event-pill';
         }
 
@@ -847,8 +854,21 @@
             }
         }
 
+        const PAYDAYS = [
+            '2025-07-08', '2025-07-23', '2025-08-08', '2025-08-22', '2025-09-08', '2025-09-23',
+            '2025-10-08', '2025-10-23', '2025-11-07', '2025-11-21', '2025-12-08', '2025-12-23',
+            '2026-01-08', '2026-01-23', '2026-02-06', '2026-02-23', '2026-03-06', '2026-03-23',
+            '2026-04-08', '2026-04-23', '2026-05-08', '2026-05-22', '2026-06-08', '2026-06-23'
+        ];
+
+        const BUDGET_DAYS = [
+            '2025-07-05', '2025-07-20', '2025-08-05', '2025-08-19', '2025-09-05', '2025-09-20',
+            '2025-10-05', '2025-10-20', '2025-11-04', '2025-11-18', '2025-12-05', '2025-12-20',
+            '2026-01-05', '2026-01-20', '2026-02-03', '2026-02-20', '2026-03-03', '2026-03-20',
+            '2026-04-05', '2026-04-20', '2026-05-05', '2026-05-19', '2026-06-05', '2026-06-20'
+        ];
+
         function getStaticWeeklyInfo(dayIndex, dateStr) {
-            // Mapping from screenshots
             const info = {
                 tasks: [],
                 notes: [],
@@ -856,7 +876,11 @@
                 spending: ''
             };
 
-            if (dayStr(dateStr) === '2025-12-28') { // Sunday
+            const dStr = dayStr(dateStr);
+            if (PAYDAYS.includes(dStr)) info.notes.push("Jennifer's Payday");
+            if (BUDGET_DAYS.includes(dStr)) info.notes.push("Budget/Pay Bills");
+
+            if (dStr === '2025-12-28') { // Sunday
                 info.tasks = ["Make menu plan", "Grocery shop", "Clean out purse"];
             } else if (dayStr(dateStr) === '2025-12-29') { // Monday
                 info.tasks = ["Dust furniture", "Vacuum house", "1 Thessalonians 2"];
