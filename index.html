@@ -72,26 +72,56 @@
         .day-fri { background-color: var(--friday); }
         .day-sat { background-color: var(--saturday); }
 
-        .quote-section {
+        .hero {
+            position: relative;
+            padding: 16px 10px 14px;
             text-align: center;
-            padding: 40px 0;
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 6px;
         }
 
-        .quote-be-real {
-            font-size: 5rem;
-            font-weight: bold;
-            margin: 0;
-            line-height: 1;
+        .stripe-bar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            height: 12px;
+            border: 1px solid #d7d7d7;
+            overflow: hidden;
+        }
+
+        .stripe { height: 100%; }
+        .coral { background: #f79292; }
+        .gold { background: #f5c27a; }
+        .teal { background: #78c0aa; }
+        .navy { background: #4a7c96; }
+
+        .hero-text h1 {
+            margin: 12px 0 2px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.05rem;
+        }
+        .hero-text .subtitle {
+            font-family: var(--font-handwriting);
+            font-size: 1.2rem;
+            color: #f5c27a;
+            margin-top: -2px;
         }
         .be { color: #f88d8d; }
         .real { color: #78c0aa; }
-        
-        .quote-not-perfect {
-            font-family: var(--font-handwriting);
-            font-size: 4rem;
-            color: #f5c27a;
-            margin-top: -20px;
+
+        .personal-pill {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 6px 12px;
+            background: #4a7c96;
+            color: #ffca38;
+            border: 1px solid #ffca38;
+            border-radius: 9999px;
+            font-weight: 700;
+            letter-spacing: 0.05rem;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .calendar-grid {
@@ -105,40 +135,40 @@
         .calendar-day {
             background-color: white;
             height: 100%;
-            padding: 10px;
+            padding: 6px;
             position: relative;
             display: flex;
             flex-direction: column;
         }
 
         .day-number {
-            font-size: 0.85rem;
+            font-size: 0.65rem;
             color: #666;
         }
 
         .events-list {
-            margin-top: 4px;
+            margin-top: 2px;
             font-family: var(--font-sans);
-            font-size: 0.85rem;
-            line-height: 1.2;
+            font-size: 0.65rem;
+            line-height: 1.1;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 2px;
         }
 
         .event-pill {
             display: inline-block;
-            padding: 6px 10px;
+            padding: 4px 8px;
             border-radius: 9999px;
             border: 1px solid var(--border-color);
             background-color: #f9fafb;
             color: var(--text-main);
             font-family: var(--font-sans);
             font-weight: 600;
-            font-size: 0.8rem;
-            letter-spacing: 0.015rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.01rem;
         }
 
         .event-item {
@@ -172,25 +202,42 @@
         .badge {
             display: inline-block;
             margin: 0;
-            padding: 6px 10px;
+            padding: 4px 8px;
             border-radius: 9999px;
             font-family: var(--font-sans);
             font-weight: bold;
             color: white;
             text-align: center;
-            font-size: 0.78rem;
-            letter-spacing: 0.06rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.045rem;
         }
 
         .holiday-label {
-            font-size: 0.68rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
             color: #666;
-            letter-spacing: 0.05rem;
+            letter-spacing: 0.04rem;
         }
     </style>
 </head>
 <body>
+
+<div class="hero">
+    <div class="stripe-bar">
+        <div class="stripe coral"></div>
+        <div class="stripe gold"></div>
+        <div class="stripe teal"></div>
+        <div class="stripe navy"></div>
+        <div class="stripe coral"></div>
+        <div class="stripe gold"></div>
+        <div class="stripe teal"></div>
+    </div>
+    <div class="hero-text">
+        <h1><span class="be">BE</span> <span class="real">REAL</span></h1>
+        <div class="subtitle">not perfect</div>
+    </div>
+    <div class="personal-pill">Personal Planner</div>
+</div>
 
 <div class="planner-container">
     <div class="month-header">January 2026</div>
@@ -203,11 +250,6 @@
         <div class="day-thu">Thursday</div>
         <div class="day-fri">Friday</div>
         <div class="day-sat">Saturday</div>
-    </div>
-
-    <div class="quote-section">
-        <h1 class="quote-be-real"><span class="be">BE</span> <span class="real">REAL</span></h1>
-        <div class="quote-not-perfect">not perfect</div>
     </div>
 
     <div id="calendar" class="calendar-grid">
