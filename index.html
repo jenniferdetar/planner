@@ -20,7 +20,7 @@
             --border-color: #e5e7eb;
             --text-main: #333;
             --font-handwriting: 'Coming Soon', cursive;
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-sans: 'Coming Soon', cursive;
         }
 
         body {
@@ -160,6 +160,12 @@
             border: 1px solid #ffca38;
         }
 
+        .event-due {
+            background-color: #c62828;
+            color: white;
+            border: 1px solid #ffca38;
+        }
+
         .badge {
             display: inline-block;
             margin: 0;
@@ -242,6 +248,9 @@
             if (lower.includes('budget')) {
                 classes.push('event-budget-reminder');
             }
+            if (lower.includes('due')) {
+                classes.push('event-due');
+            }
             if (lower.includes('csea') || lower.includes('la fed')) {
                 classes.push('event-csea');
             }
@@ -254,13 +263,20 @@
             return classes.join(' ');
         }
 
+        function getDateKey(value) {
+            if (!value) return '';
+            const d = new Date(value);
+            if (!isNaN(d)) return d.toISOString().slice(0, 10);
+            return String(value).slice(0, 10);
+        }
+
         function getBudgetReminderDates(events, year, month) {
             const reminders = new Set();
             events.forEach(e => {
                 const lower = (e.title || '').toLowerCase();
                 if (!lower.includes("jennifer's payday")) return;
                 const d = new Date(e.date);
-                if (d.getFullYear() !== year || d.getMonth() !== month) return;
+                if (isNaN(d) || d.getFullYear() !== year || d.getMonth() !== month) return;
                 const reminder = new Date(d);
                 reminder.setDate(d.getDate() - 3);
                 if (reminder.getMonth() === month && reminder.getFullYear() === year) {
@@ -297,7 +313,7 @@
                 if (budgetReminderDates.has(dateStr)) {
                     staticEvents.push({ title: 'Budget/Pay Bills', type: 'budget-reminder' });
                 }
-                const dbEvents = events.filter(e => e.date === dateStr);
+                const dbEvents = events.filter(e => getDateKey(e.date) === dateStr);
                 
                 const dayEl = document.createElement('div');
                 dayEl.className = 'calendar-day';
