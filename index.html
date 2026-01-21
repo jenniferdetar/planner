@@ -20,13 +20,16 @@
             --border-color: #b0b3ba;
             --text-main: #333;
             --font-handwriting: 'Coming Soon', cursive;
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-sans: 'Coming Soon', cursive;
+            --csea-blue: #00326b;
+            --csea-yellow: #ffca38;
         }
 
         body {
             margin: 0;
             padding: 20px;
             font-family: var(--font-sans);
+            font-size: 16px; /* 12pt equivalent */
             background-color: #f3f4f6;
             color: var(--text-main);
         }
@@ -36,109 +39,50 @@
             margin: 0 auto;
             background: white;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color); /* Stronger outer border */
         }
 
-        /* Weekly Header */
-        .weekly-header-bar {
-            background-color: var(--wednesday);
-            color: white;
-            text-align: center;
-            padding: 8px;
-            font-weight: bold;
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
-        /* Habit Trackers */
-        .habit-trackers {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .habit-section {
-            font-size: 0.8rem;
-        }
-
-        .habit-section-title {
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .habit-days-labels {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-size: 0.6rem;
-            margin-bottom: 4px;
-        }
-
-        .habit-days-labels span { color: #888; }
-
-        .habit-item {
-            display: grid;
-            grid-template-columns: repeat(7, 20px) 1fr;
-            gap: 4px;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-
-        .habit-box {
-            width: 18px;
-            height: 18px;
-            border: 1px solid #ddd;
-            border-radius: 2px;
-        }
-
-        .habit-label {
-            margin-left: 10px;
-            font-family: var(--font-handwriting);
-            font-size: 0.85rem;
-        }
-
-        .box-sun { background-color: rgba(248, 141, 141, 0.3); }
-        .box-mon { background-color: rgba(245, 194, 122, 0.3); }
-        .box-tue { background-color: rgba(120, 192, 170, 0.3); }
-        .box-wed { background-color: rgba(74, 124, 150, 0.3); }
-        .box-thu { background-color: rgba(249, 139, 96, 0.3); }
-        .box-fri { background-color: rgba(245, 194, 122, 0.3); }
-        .box-sat { background-color: rgba(120, 192, 170, 0.3); }
-
-        /* Enjoy Family Banner */
-        .family-banner {
-            background-color: var(--sunday);
-            color: white;
-            padding: 6px;
-            text-align: left;
-            padding-left: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            letter-spacing: 0.1rem;
-            text-transform: uppercase;
-        }
-
-        /* Day Layout */
+        /* All grid items should have consistent borders for gridlines */
         .day-container {
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
             display: flex;
-            height: 320px; /* Uniform height to fit Jan 26 style content */
+            height: 320px;
             overflow: hidden;
         }
-
+        
         .day-left {
             width: 35%;
-            border-right: 1px solid #eee;
+            border-right: 2px solid var(--border-color); /* Visible gridline */
             padding: 15px;
             display: flex;
             flex-direction: column;
         }
+
+        /* Event Pill Styling */
+        .event-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            margin: 2px 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            background-color: #f9fafb;
+            font-family: var(--font-handwriting);
+        }
+
+        .event-csea {
+            background-color: var(--csea-blue) !important;
+            color: var(--csea-yellow) !important;
+            border: 2px solid var(--csea-yellow) !important;
+        }
+
+        .event-due {
+            background-color: #e53935 !important;
+            color: white !important;
+            border: 1px solid #c62828 !important;
+        }
+
 
         .day-right {
             width: 65%;
@@ -306,7 +250,7 @@
             margin: 20px auto;
             background: white;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
         }
 
         .work-page {
@@ -321,7 +265,7 @@
         }
 
         .work-section-header {
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             margin-bottom: 0;
             height: 100%;
         }
@@ -333,6 +277,28 @@
             height: calc(100% - 35px);
         }
 
+        .priority-cell {
+            border-right: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+            padding: 10px;
+            min-height: 60px;
+        }
+
+        .priority-cell:nth-child(3n) { border-right: none; }
+        .priority-cell:nth-child(n+4) { border-bottom: none; }
+
+        .priority-label {
+            font-size: 0.6rem;
+            color: #4a7c96;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .priority-content {
+            font-family: var(--font-handwriting);
+            font-size: 0.85rem;
+        }
+
         /* Todo Weekly Grid */
         .todo-weekly-grid {
             display: grid;
@@ -340,15 +306,18 @@
             height: calc(100% - 35px);
         }
 
-        /* Daily Schedule Grid */
-        .work-schedule-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 7 columns on one page */
-            gap: 8px;
+        .todo-cell {
+            border-right: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+            padding: 10px;
+            min-height: 80px;
         }
 
+        .todo-cell:nth-child(3n) { border-right: none; }
+        .todo-cell:nth-child(n+4) { border-bottom: none; }
+
         .day-column {
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
         }
 
         .day-col-header.sun-bg { background-color: rgba(248, 141, 141, 0.1); }
@@ -427,11 +396,120 @@
             letter-spacing: 0.045rem;
         }
 
-        .holiday-label {
-            font-size: 0.6rem;
+        .habit-trackers {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-bottom: 2px solid var(--border-color);
+            background-color: #fcfcfc;
+        }
+
+        .habit-section {
+            border-right: 2px solid var(--border-color);
+            padding: 10px;
+        }
+
+        .habit-section:last-child { border-right: none; }
+
+        .habit-section-title {
+            font-size: 0.75rem;
+            font-weight: bold;
             text-transform: uppercase;
-            color: #666;
-            letter-spacing: 0.04rem;
+            margin-bottom: 8px;
+            text-align: center;
+            letter-spacing: 0.05rem;
+        }
+
+        .habit-days-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            padding-right: 40%;
+        }
+
+        .habit-days-labels span {
+            font-size: 0.6rem;
+            width: 12px;
+            text-align: center;
+            color: #888;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .habit-box {
+            width: 12px;
+            height: 12px;
+            border: 1px solid #ccc;
+            margin-right: 2px;
+            background: white;
+        }
+
+        .box-sun { background-color: rgba(248, 141, 141, 0.1); }
+        .box-mon { background-color: rgba(245, 194, 122, 0.1); }
+        .box-tue { background-color: rgba(120, 192, 170, 0.1); }
+        .box-wed { background-color: rgba(74, 124, 150, 0.1); }
+        .box-thu { background-color: rgba(249, 139, 96, 0.1); }
+        .box-fri { background-color: rgba(245, 194, 122, 0.1); }
+        .box-sat { background-color: rgba(120, 192, 170, 0.1); }
+
+        .habit-label {
+            font-size: 0.65rem;
+            margin-left: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .weekly-header-bar {
+            background-color: #4a7c96;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 0.2rem;
+            font-size: 0.9rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .family-banner {
+            background-color: #f98b60;
+            color: white;
+            text-align: center;
+            padding: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 0.1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .work-header {
+            border-bottom: 2px solid var(--border-color) !important;
+            padding-bottom: 12px !important;
+        }
+
+        .work-section-title {
+            background-color: #f5f5f5;
+            padding: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .work-schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border: 2px solid var(--border-color);
+        }
+
+        .day-col-header {
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: stretch;
         }
     </style>
 </head>
@@ -568,13 +646,13 @@
             5: { '8am': 'Paylogs' }
         };
 
-        function renderWorkPlanner() {
+        function renderWorkPlanner(events = []) {
             const start = new Date(workWeekStart);
             const end = new Date(workWeekStart);
             end.setDate(workWeekStart.getDate() + 6);
             
-            const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' });
-            const rangeText = `${fmt.format(start).toUpperCase()} - ${fmt.format(end).toUpperCase()}, ${start.getFullYear()}`;
+            const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            const rangeText = `${fmt.format(start).toUpperCase()} - ${fmt.format(end).toUpperCase()}`;
             
             document.getElementById('work-range-single').textContent = rangeText;
 
@@ -586,19 +664,40 @@
             for (let i = 0; i < 7; i++) {
                 const currentDate = new Date(start);
                 currentDate.setDate(start.getDate() + i);
+                const dateStr = currentDate.toISOString().slice(0, 10);
                 
                 const col = document.createElement('div');
                 col.className = 'day-column';
                 
                 const header = document.createElement('div');
                 header.className = `day-col-header ${DAY_CLASSES[i]}-bg`;
+                header.style.display = 'flex';
                 header.innerHTML = `
-                    <div class="day-col-num ${DAY_CLASSES[i]}-text" style="border-right: 1px solid var(--border-color);">${currentDate.getDate()}</div>
-                    <div class="day-col-name ${DAY_CLASSES[i]}-text" style="font-size: 0.65rem;">${workDayNames[i]}</div>
+                    <div class="day-col-num ${DAY_CLASSES[i]}-text" style="border-right: 1px solid var(--border-color); width: 35px; flex-shrink: 0;">${currentDate.getDate()}</div>
+                    <div class="day-col-name ${DAY_CLASSES[i]}-text" style="font-size: 0.65rem; flex-grow: 1;">${workDayNames[i]}</div>
                 `;
                 col.appendChild(header);
 
-                const highlights = workHighlights[i] || {};
+                const highlights = { ...(workHighlights[i] || {}) };
+                
+                // Add DB events to highlights if they match a time pattern or just add them
+                const dayEvents = events.filter(e => e.date === dateStr);
+                dayEvents.forEach(e => {
+                    // Simple time extraction: if title is "8am Meeting", use "8am"
+                    const timeMatch = e.title.match(/^(\d{1,2}(am|pm))/i);
+                    if (timeMatch) {
+                        const time = timeMatch[1].toLowerCase();
+                        if (workTimes.includes(time)) {
+                            highlights[time] = (highlights[time] ? highlights[time] + ', ' : '') + e.title;
+                        } else {
+                            // Put in 9am if no match
+                            highlights['9am'] = (highlights['9am'] ? highlights['9am'] + ', ' : '') + e.title;
+                        }
+                    } else {
+                        // Default to 9am or 8am
+                        highlights['8am'] = (highlights['8am'] ? highlights['8am'] + ', ' : '') + e.title;
+                    }
+                });
                 
                 if (i === 0) { // Sunday special
                     const restText = highlights['10am'] || 'Take time to rest today!';
@@ -607,11 +706,15 @@
                     workTimes.forEach(time => {
                         const row = document.createElement('div');
                         row.className = 'time-slot-row';
+                        const content = highlights[time] || '';
+                        const pillClass = content ? getPillClass(content) : '';
+                        
                         row.innerHTML = `
                             <div class="time-slot-label" style="font-size: 0.5rem; padding: 2px 4px; width: 35px;">${time}</div>
-                            <div class="time-slot-content" style="font-size: 0.7rem; padding: 2px 4px;">${highlights[time] || ''}</div>
+                            <div class="time-slot-content" style="font-size: 0.65rem; padding: 2px 4px;">
+                                ${content ? (pillClass !== 'event-pill' ? `<span class="${pillClass}" style="font-size: 0.6rem; padding: 1px 6px;">${content}</span>` : content) : ''}
+                            </div>
                         `;
-                        // Adjusting column layout for density
                         row.style.gridTemplateColumns = '35px 1fr';
                         col.appendChild(row);
                     });
@@ -666,6 +769,13 @@
             });
         }
 
+        function getPillClass(title) {
+            const t = title.toUpperCase();
+            if (t.includes('CSEA') || t.includes('LA FED')) return 'event-pill event-csea';
+            if (t.includes('DUE')) return 'event-pill event-due';
+            return 'event-pill';
+        }
+
         function renderWeeklyPlanner(events) {
             const container = document.getElementById('weekly-calendar');
             if (!container) return;
@@ -703,6 +813,13 @@
                     </div>
                 `;
 
+                // Combine static notes and DB events for the right side
+                // If it's a "Due" or "CSEA" event, render as pill. Otherwise as note row.
+                const allItems = [
+                    ...staticDayInfo.notes.map(n => ({ title: n, isStatic: true })),
+                    ...dbEvents.map(e => ({ title: e.title, isStatic: false }))
+                ];
+
                 let rightHtml = `
                     <div class="day-header-title ${dayClass}-text">
                         <span>${dayName}, ${monthDay}</span>
@@ -710,9 +827,14 @@
                     </div>
                     <div class="lined-area">
                         <div class="main-notes">
-                            ${staticDayInfo.notes.map(n => `<div class="note-row"><div class="note-checkbox"></div>${n}</div>`).join('')}
-                            ${dbEvents.map(e => `<div class="note-row"><div class="note-checkbox"></div>${e.title}</div>`).join('')}
-                            ${Array(Math.max(0, 8 - staticDayInfo.notes.length - dbEvents.length)).fill('<div class="note-row"><div class="note-checkbox"></div></div>').join('')}
+                            ${allItems.map(item => {
+                                const pillClass = getPillClass(item.title);
+                                if (pillClass !== 'event-pill') {
+                                    return `<div class="note-row"><span class="${pillClass}">${item.title}</span></div>`;
+                                }
+                                return `<div class="note-row"><div class="note-checkbox"></div>${item.title}</div>`;
+                            }).join('')}
+                            ${Array(Math.max(0, 10 - allItems.length)).fill('<div class="note-row"><div class="note-checkbox"></div></div>').join('')}
                         </div>
                     </div>
                 `;
@@ -765,8 +887,10 @@
 
         // Initialize
         renderHabits();
-        renderWorkPlanner();
-        fetchEvents().then(renderWeeklyPlanner);
+        fetchEvents().then(events => {
+            renderWeeklyPlanner(events);
+            renderWorkPlanner(events);
+        });
     </script>
 
 </body>
