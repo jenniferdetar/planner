@@ -581,7 +581,10 @@
         const { createClient } = window.supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentWeekStart = new Date('2025-12-28T00:00:00');
+        // Initialize currentWeekStart to the Sunday of the current week
+        const now = new Date();
+        let currentWeekStart = new Date(now.setDate(now.getDate() - now.getDay()));
+        currentWeekStart.setHours(0, 0, 0, 0);
         const workTimes = ['5am','6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm'];
         const workDayNames = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
         const DAY_CLASSES = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
