@@ -108,10 +108,15 @@
         .be { color: #f88d8d; }
         .real { color: #78c0aa; }
 
-        .personal-pill {
+        .pill-group {
             position: absolute;
             top: 10px;
             right: 10px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .pill-button {
             padding: 6px 12px;
             background: #4a7c96;
             color: #ffca38;
@@ -122,12 +127,16 @@
             text-transform: uppercase;
             font-size: 0.75rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-decoration: none;
+            display: inline-block;
         }
+
+        .pill-work { background: #00326b; }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            grid-auto-rows: 180px;
+            grid-auto-rows: 140px;
             background-color: var(--border-color);
             gap: 1px;
         }
@@ -135,10 +144,11 @@
         .calendar-day {
             background-color: white;
             height: 100%;
-            padding: 6px;
+            padding: 6px 6px 4px;
             position: relative;
             display: flex;
             flex-direction: column;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .day-number {
@@ -199,6 +209,128 @@
             border: 1px solid #ffca38;
         }
 
+        .work-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .work-header {
+            text-align: center;
+            padding: 12px 16px 6px;
+            letter-spacing: 0.2rem;
+            font-size: 0.8rem;
+            color: #4a7c96;
+            text-transform: uppercase;
+        }
+
+        .work-subtitle {
+            text-align: center;
+            background: #f5c27a;
+            color: #00326b;
+            font-weight: 700;
+            padding: 8px;
+            letter-spacing: 0.1rem;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .work-focus-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .work-notes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .work-notes-grid.weekly { grid-template-columns: repeat(4, 1fr); }
+
+        .work-focus-cell, .work-notes-cell {
+            border-right: 1px solid var(--border-color);
+            padding: 10px;
+            background: #f9fafb;
+            min-height: 48px;
+            font-size: 0.75rem;
+        }
+
+        .work-focus-cell:nth-child(3n), .work-notes-cell:nth-child(3n) { border-right: none; }
+        .work-notes-grid.weekly .work-notes-cell:nth-child(4n) { border-right: none; }
+
+        .focus-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.05rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: 90px repeat(7, 1fr);
+            grid-auto-rows: minmax(28px, auto);
+        }
+
+        .time-head {
+            background: #f9f4e6;
+            font-weight: 700;
+            letter-spacing: 0.08rem;
+            text-transform: uppercase;
+            padding: 10px 6px;
+            color: #4a7c96;
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .work-day-head {
+            background: #f5c27a;
+            color: #00326b;
+            font-weight: 700;
+            letter-spacing: 0.08rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            padding: 10px 6px;
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .day-number-small {
+            display: block;
+            color: #333;
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+        }
+
+        .time-cell {
+            background: #fdf7ed;
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.7rem;
+            padding: 8px 6px;
+            color: #666;
+        }
+
+        .slot-cell {
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            min-height: 28px;
+            padding: 6px 8px;
+            font-size: 0.7rem;
+            color: #333;
+        }
+
+        .slot-cell:last-child { border-right: none; }
+
+        .work-note {
+            color: #00326b;
+            font-weight: 700;
+            letter-spacing: 0.02rem;
+        }
+
         .badge {
             display: inline-block;
             margin: 0;
@@ -236,7 +368,10 @@
         <h1><span class="be">BE</span> <span class="real">REAL</span></h1>
         <div class="subtitle">not perfect</div>
     </div>
-    <div class="personal-pill">Personal Planner</div>
+    <div class="pill-group">
+        <a class="pill-button" href="#calendar">Personal Planner</a>
+        <a class="pill-button pill-work" href="#work-planner">Work Planner</a>
+    </div>
 </div>
 
 <div class="planner-container">
@@ -257,6 +392,49 @@
     </div>
 </div>
 
+<div id="work-planner" class="work-container">
+    <div class="work-header">
+        <div class="work-range" id="work-range"></div>
+    </div>
+    <div class="work-subtitle">Priorities &amp; Encouragement</div>
+    <div class="work-focus-grid">
+        <div class="work-focus-cell">
+            <div class="focus-label">Priority #1</div>
+            <div>Finish key deliverables</div>
+        </div>
+        <div class="work-focus-cell">
+            <div class="focus-label">Priority #2</div>
+            <div>Support the team</div>
+        </div>
+        <div class="work-focus-cell">
+            <div class="focus-label">Priority #3</div>
+            <div>Prepare next week</div>
+        </div>
+    </div>
+    <div class="work-notes-grid">
+        <div class="work-notes-cell">
+            <div class="focus-label">Looking forward to</div>
+            <div>Momentum on projects</div>
+        </div>
+        <div class="work-notes-cell">
+            <div class="focus-label">Encourage</div>
+            <div>Partner on wins</div>
+        </div>
+        <div class="work-notes-cell">
+            <div class="focus-label">Learn or read</div>
+            <div>Strategy materials</div>
+        </div>
+    </div>
+    <div class="work-subtitle">To-Do This Week</div>
+    <div class="work-notes-grid weekly">
+        <div class="work-notes-cell">MTWTFSS</div>
+        <div class="work-notes-cell">MTWTFSS</div>
+        <div class="work-notes-cell">MTWTFSS</div>
+        <div class="work-notes-cell">MTWTFSS</div>
+    </div>
+    <div class="work-grid" id="work-grid"></div>
+</div>
+
     <script>
         // Supabase Configuration
         // Note: Replace these with your actual Supabase credentials
@@ -266,6 +444,63 @@
         // Initialize the Supabase client
         const { createClient } = window.supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const workWeekStart = new Date('2026-01-04');
+        const workTimes = ['5am','6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm'];
+        const workDayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        const workHighlights = {
+            0: { '9am': 'Plan week', '3pm': 'Restore energy' },
+            1: { '8am': 'Standup', '11am': '1:1s', '2pm': 'Deep work' },
+            2: { '9am': 'Project sprint', '1pm': 'Review deck' },
+            3: { '10am': 'Collab block', '4pm': 'Status wrap' },
+            4: { '9am': 'Content prep', '2pm': 'Outreach' },
+            5: { '11am': 'Retro', '3pm': 'Plan next week' },
+            6: { '10am': 'Rest', '2pm': 'Light planning' }
+        };
+
+        function renderWorkPlanner() {
+            const rangeEl = document.getElementById('work-range');
+            const end = new Date(workWeekStart);
+            end.setDate(workWeekStart.getDate() + 6);
+            const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' });
+            rangeEl.textContent = `${fmt.format(workWeekStart)} - ${fmt.format(end)}, ${workWeekStart.getFullYear()}`;
+            const grid = document.getElementById('work-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = '90px repeat(7, 1fr)';
+
+            const timeHead = document.createElement('div');
+            timeHead.className = 'time-head';
+            timeHead.textContent = 'Time';
+            grid.appendChild(timeHead);
+
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(workWeekStart);
+                d.setDate(workWeekStart.getDate() + i);
+                const head = document.createElement('div');
+                head.className = 'work-day-head';
+                head.innerHTML = `<span class="day-number-small">${d.getDate()}</span>${workDayNames[i]}`;
+                grid.appendChild(head);
+            }
+
+            workTimes.forEach(time => {
+                const timeCell = document.createElement('div');
+                timeCell.className = 'time-cell';
+                timeCell.textContent = time;
+                grid.appendChild(timeCell);
+
+                for (let day = 0; day < 7; day++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'slot-cell';
+                    const dayNotes = workHighlights[day] || {};
+                    if (dayNotes[time]) {
+                        slot.classList.add('work-note');
+                        slot.textContent = dayNotes[time];
+                    }
+                    grid.appendChild(slot);
+                }
+            });
+        }
 
         async function fetchEvents() {
             try {
@@ -416,6 +651,9 @@
                 events.push({ title: 'Flight to San Jose' });
                 events.push({ title: 'CSEA N.E.O.' });
             }
+            if (day === 23) {
+                events.push({ title: 'CSEA MB Committee' });
+            }
             if (day === 24) {
                 events.push({ title: 'Mentored Session' });
                 events.push({ title: 'CSEA MB Committee' });
@@ -440,6 +678,7 @@
         }
 
         // Initialize
+        renderWorkPlanner();
         fetchEvents().then(renderCalendar);
     </script>
 
