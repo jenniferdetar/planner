@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>January 2026 Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --sunday: #f88d8d;
+            --monday: #f5c27a;
+            --tuesday: #78c0aa;
+            --wednesday: #4a7c96;
+            --thursday: #f88d8d;
+            --friday: #f5c27a;
+            --saturday: #78c0aa;
+            --border-color: #e5e7eb;
+            --text-main: #333;
+            --font-handwriting: 'Coming Soon', cursive;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: var(--font-sans);
+            background-color: #fff;
+            color: var(--text-main);
+        }
+
+        .planner-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .month-header {
+            text-align: left;
+            padding: 10px 20px;
+            color: var(--sunday);
+            font-size: 2.5rem;
+            letter-spacing: 0.5rem;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .days-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.8rem;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+        }
+
+        .days-header div {
+            padding: 10px 0;
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+        .days-header div:last-child { border-right: none; }
+
+        .day-sun { background-color: var(--sunday); }
+        .day-mon { background-color: var(--monday); }
+        .day-tue { background-color: var(--tuesday); }
+        .day-wed { background-color: var(--wednesday); }
+        .day-thu { background-color: var(--thursday); }
+        .day-fri { background-color: var(--friday); }
+        .day-sat { background-color: var(--saturday); }
+
+        .quote-section {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .quote-be-real {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1;
+        }
+        .be { color: #f88d8d; }
+        .real { color: #78c0aa; }
+        
+        .quote-not-perfect {
+            font-family: var(--font-handwriting);
+            font-size: 4rem;
+            color: #f5c27a;
+            margin-top: -20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background-color: var(--border-color);
+            gap: 1px;
+        }
+
+        .calendar-day {
+            background-color: white;
+            min-height: 150px;
+            padding: 8px;
+            position: relative;
+        }
+
+        .day-number {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .events-list {
+            margin-top: 5px;
+            font-family: var(--font-handwriting);
+            font-size: 1rem;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .event-item {
+            margin-bottom: 4px;
+        }
+
+        .badge {
+            display: block;
+            margin: 5px auto;
+            padding: 8px;
+            border-radius: 12px;
+            font-family: var(--font-sans);
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            width: 80%;
+            font-size: 0.8rem;
+            letter-spacing: 0.1rem;
+        }
+
+        .badge-budget {
+            background: linear-gradient(to right, #f5c27a 15%, #4a7c96 15%);
+        }
+
+        .badge-payday {
+            background-color: #78c0aa;
+            opacity: 0.8;
+        }
+
+        .mlk-day-img {
+            width: 100%;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+        }
+
+        .holiday-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="planner-container">
+    <div class="month-header">January 2026</div>
+    
+    <div class="days-header">
+        <div class="day-sun">Sunday</div>
+        <div class="day-mon">Monday</div>
+        <div class="day-tue">Tuesday</div>
+        <div class="day-wed">Wednesday</div>
+        <div class="day-thu">Thursday</div>
+        <div class="day-fri">Friday</div>
+        <div class="day-sat">Saturday</div>
+    </div>
+
+    <div class="quote-section">
+        <h1 class="quote-be-real"><span class="be">BE</span> <span class="real">REAL</span></h1>
+        <div class="quote-not-perfect">not perfect</div>
+    </div>
+
+    <div id="calendar" class="calendar-grid">
+        <!-- Calendar days will be injected here -->
+    </div>
+</div>
+
+    <script>
+        // Supabase Configuration
+        // Note: Replace these with your actual Supabase credentials
+        const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
+        
+        // Initialize the Supabase client
+        const { createClient } = window.supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function fetchEvents() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('calendar_by_date')
+                    .select('*')
+                    .gte('date', '2026-01-01')
+                    .lte('date', '2026-01-31');
+                
+                if (error) throw error;
+                return data || [];
+            } catch (err) {
+                console.error('Error fetching events:', err);
+                return [];
+            }
+        }
+
+        function renderCalendar(events) {
+            const calendarEl = document.getElementById('calendar');
+            calendarEl.innerHTML = ''; // Clear previous
+            
+            const year = 2026;
+            const month = 0; // January
+
+            // Jan 1st 2026 is a Thursday (4)
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = 31;
+
+            // Empty days before the 1st
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                calendarEl.appendChild(emptyDay);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                // Static events to match screenshot for January 2026
+                const staticEvents = getStaticEvents(day);
+                const dbEvents = events.filter(e => e.date === dateStr);
+                
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                
+                let html = `<div class="day-number">${day}</div>`;
+                html += `<div class="events-list">`;
+                
+                // Render Static Events First (like Holidays and fixed bills)
+                staticEvents.forEach(e => {
+                    if (e.type === 'image') {
+                        html += `
+                        <div class="mlk-container">
+                            <img src="${e.src}" alt="${e.title}" class="mlk-day-img">
+                            <div class="holiday-label">${e.title}</div>
+                        </div>`;
+                    } else if (e.type === 'holiday') {
+                        html += `<div class="holiday-label">${e.title}</div>`;
+                    } else {
+                        html += `<div class="event-item">${e.title}</div>`;
+                    }
+                });
+
+                // Render DB Events
+                dbEvents.forEach(e => {
+                    if (e.title.toLowerCase().includes('budget')) {
+                        html += `<div class="badge badge-budget">BUDGET</div>`;
+                    } else if (e.title.toLowerCase().includes('payday')) {
+                        html += `<div class="badge badge-payday">PAY DAY</div>`;
+                    } else {
+                        html += `<div class="event-item">${e.title}</div>`;
+                    }
+                });
+
+                html += `</div>`;
+                dayEl.innerHTML = html;
+                calendarEl.appendChild(dayEl);
+            }
+        }
+
+        function getStaticEvents(day) {
+            const events = [];
+            if (day === 1) {
+                events.push({ title: 'HOA Due $520' });
+                events.push({ title: 'Mortgage Due $2250' });
+                events.push({ title: "NEW YEAR'S DAY", type: 'holiday' });
+            }
+            if (day === 2) events.push({ title: 'Chris Plant Content Release' });
+            if (day === 3) events.push({ title: 'Mentor Session' });
+            if (day === 5) events.push({ title: 'Quiz Submission' });
+            if (day === 7) {
+                events.push({ title: 'CSEA RPM Region 8' });
+                events.push({ title: 'CSEA MB Committee' });
+            }
+            if (day === 10) events.push({ title: 'Heloc Due' });
+            if (day === 12) {
+                events.push({ title: 'Paramount + Due' });
+                events.push({ title: 'Quiz Submission' });
+                events.push({ title: 'CSEA Steward Meeting' });
+            }
+            if (day === 15) events.push({ title: 'CSEA Statewide Blitz' });
+            if (day === 19) {
+                events.push({ 
+                    title: 'MARTIN LUTHER KING JR. DAY', 
+                    type: 'image', 
+                    src: 'https://www.whitehouse.gov/wp-content/uploads/2023/01/MLK-Day-Hero.jpg?w=1536' 
+                });
+            }
+            if (day === 20) events.push({ title: 'Spectrum Due' });
+            if (day === 21) events.push({ title: 'ADT Due' });
+            if (day === 22) {
+                events.push({ title: 'CSEA MB Committee' });
+                events.push({ title: 'Flight to San Jose' });
+                events.push({ title: 'CSEA N.E.O.' });
+            }
+            if (day === 24) {
+                events.push({ title: 'Mentored Session' });
+                events.push({ title: 'CSEA MB Committee' });
+                events.push({ title: 'Order Buspirone' });
+            }
+            if (day === 25) {
+                events.push({ title: 'CSEA MB Committee' });
+                events.push({ title: 'Flight to Burbank' });
+            }
+            if (day === 26) {
+                events.push({ title: 'Verizon Due' });
+                events.push({ title: 'Quiz Submission' });
+                events.push({ title: 'CSEA Stewards Meeting' });
+                events.push({ title: 'CSEA RPM Region 19' });
+                events.push({ title: 'LA Fed' });
+            }
+            if (day === 29) events.push({ title: 'CSEA Chapter Meeting' });
+            if (day === 30) events.push({ title: 'Content Release' });
+            if (day === 31) events.push({ title: 'Mentored Session' });
+            
+            return events;
+        }
+
+        // Initialize
+        fetchEvents().then(renderCalendar);
+    </script>
+
+</body>
+</html>
