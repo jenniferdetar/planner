@@ -246,6 +246,14 @@
             text-transform: uppercase;
             font-size: 0.75rem;
             text-decoration: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pill-button:hover {
+            background: #3a6b86;
         }
 
         .pill-work { background: #00326b; }
@@ -536,8 +544,10 @@
         <div class="subtitle">not perfect</div>
     </div>
     <div class="pill-group">
-        <a class="pill-button" href="#calendar">Personal Planner</a>
-        <a class="pill-button pill-work" href="#work-planner">Work Planner</a>
+        <button class="pill-button" onclick="changeWeek(-1)">← Prev</button>
+        <a class="pill-button" href="#calendar">Personal</a>
+        <a class="pill-button pill-work" href="#work-planner">Work</a>
+        <button class="pill-button" onclick="changeWeek(1)">Next →</button>
     </div>
 </div>
 
@@ -641,21 +651,21 @@
         const { createClient } = window.supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const workWeekStart = new Date('2025-12-28T00:00:00');
+        let currentWeekStart = new Date('2025-12-28T00:00:00');
         const workTimes = ['5am','6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm'];
         const workDayNames = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
         const workHighlights = {
-            0: { '10am': 'Take time to rest today!' }, // Sunday special in screenshot
+            0: { '10am': 'Take time to rest today!' },
             1: { '5am': '', '8am': 'Standup' },
             3: { '5am': 'NEW YEAR\'S EVE' },
             4: { '5am': 'NEW YEAR\'S DAY' },
             5: { '8am': 'Paylogs' }
         };
 
-        function renderWorkPlanner(events = []) {
-            const start = new Date(workWeekStart);
-            const end = new Date(workWeekStart);
-            end.setDate(workWeekStart.getDate() + 6);
+        function renderWorkPlanner(events = [], weekStart) {
+            const start = new Date(weekStart);
+            const end = new Date(weekStart);
+            end.setDate(start.getDate() + 6);
             
             const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
             const rangeText = `${fmt.format(start).toUpperCase()} - ${fmt.format(end).toUpperCase()}`;
@@ -686,28 +696,25 @@
 
                 const highlights = { ...(workHighlights[i] || {}) };
                 
-                // Add DB events to highlights if they match a time pattern or just add them
                 const dayEvents = events.filter(e => e.date === dateStr);
                 dayEvents.forEach(e => {
-                    // Simple time extraction: if title is "8am Meeting", use "8am"
                     const timeMatch = e.title.match(/^(\d{1,2}(am|pm))/i);
                     if (timeMatch) {
                         const time = timeMatch[1].toLowerCase();
                         if (workTimes.includes(time)) {
                             highlights[time] = (highlights[time] ? highlights[time] + ', ' : '') + e.title;
                         } else {
-                            // Put in 9am if no match
                             highlights['9am'] = (highlights['9am'] ? highlights['9am'] + ', ' : '') + e.title;
                         }
                     } else {
-                        // Default to 9am or 8am
                         highlights['8am'] = (highlights['8am'] ? highlights['8am'] + ', ' : '') + e.title;
                     }
                 });
                 
                 if (i === 0) { // Sunday special
                     const restText = highlights['10am'] || 'Take time to rest today!';
-                    col.innerHTML += `<div class="sunday-rest-cell" style="font-size: 0.7rem; padding: 10px;">${restText}</div>`;
+                    const pillClass = getPillClass(restText);
+                    col.innerHTML += `<div class="sunday-rest-cell" style="font-size: 0.7rem; padding: 10px;"><span class="${pillClass}">${restText}</span></div>`;
                 } else {
                     workTimes.forEach(time => {
                         const row = document.createElement('div');
@@ -718,7 +725,7 @@
                         row.innerHTML = `
                             <div class="time-slot-label" style="font-size: 0.5rem; padding: 2px 4px; width: 35px;">${time}</div>
                             <div class="time-slot-content" style="font-size: 0.65rem; padding: 2px 4px;">
-                                ${content ? (pillClass !== 'event-pill' ? `<span class="${pillClass}" style="font-size: 0.6rem; padding: 1px 6px;">${content}</span>` : content) : ''}
+                                ${content ? `<span class="${pillClass}" style="font-size: 0.6rem; padding: 1px 6px;">${content}</span>` : ''}
                             </div>
                         `;
                         row.style.gridTemplateColumns = '35px 1fr';
@@ -729,14 +736,18 @@
             }
         }
 
-        async function fetchEvents() {
+        async function fetchEvents(startDate) {
             try {
-                // Fetching for the specific week in the screenshot
+                const startStr = startDate.toISOString().slice(0, 10);
+                const endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 6);
+                const endStr = endDate.toISOString().slice(0, 10);
+
                 const { data, error } = await supabaseClient
                     .from('calendar_by_date')
                     .select('*')
-                    .gte('date', '2025-12-28')
-                    .lte('date', '2026-01-03');
+                    .gte('date', startStr)
+                    .lte('date', endStr);
                 
                 if (error) throw error;
                 return data || [];
@@ -759,6 +770,7 @@
             Object.keys(HABITS).forEach(id => {
                 const container = document.getElementById(id);
                 if (!container) return;
+                container.innerHTML = '';
                 
                 HABITS[id].forEach(habit => {
                     const row = document.createElement('div');
@@ -783,16 +795,21 @@
             return 'event-pill';
         }
 
-        function renderWeeklyPlanner(events) {
+        function renderWeeklyPlanner(events, weekStart) {
             const container = document.getElementById('weekly-calendar');
             if (!container) return;
             container.innerHTML = '';
 
-            const startDate = new Date('2025-12-28T00:00:00');
+            const start = new Date(weekStart);
+            const end = new Date(weekStart);
+            end.setDate(start.getDate() + 6);
+
+            const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('weekly-range').textContent = `${fmt.format(start).toUpperCase()} - ${fmt.format(end).toUpperCase()}`;
             
             for (let i = 0; i < 7; i++) {
-                const currentDate = new Date(startDate);
-                currentDate.setDate(startDate.getDate() + i);
+                const currentDate = new Date(start);
+                currentDate.setDate(start.getDate() + i);
                 const dateStr = currentDate.toISOString().slice(0, 10);
                 const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
                 const monthDay = currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }).toUpperCase();
@@ -820,8 +837,6 @@
                     </div>
                 `;
 
-                // Combine static notes and DB events for the right side
-                // If it's a "Due" or "CSEA" event, render as pill. Otherwise as note row.
                 const allItems = [
                     ...staticDayInfo.notes.map(n => ({ title: n, isStatic: true })),
                     ...dbEvents.map(e => ({ title: e.title, isStatic: false }))
@@ -836,10 +851,7 @@
                         <div class="main-notes">
                             ${allItems.map(item => {
                                 const pillClass = getPillClass(item.title);
-                                if (pillClass !== 'event-pill') {
-                                    return `<div class="note-row"><span class="${pillClass}">${item.title}</span></div>`;
-                                }
-                                return `<div class="note-row"><div class="note-checkbox"></div>${item.title}</div>`;
+                                return `<div class="note-row" style="margin-bottom: 4px;"><span class="${pillClass}">${item.title}</span></div>`;
                             }).join('')}
                             ${Array(Math.max(0, 10 - allItems.length)).fill('<div class="note-row"><div class="note-checkbox"></div></div>').join('')}
                         </div>
@@ -852,6 +864,18 @@
                 `;
                 container.appendChild(dayEl);
             }
+        }
+
+        function changeWeek(offset) {
+            currentWeekStart.setDate(currentWeekStart.getDate() + (offset * 7));
+            refreshPlanner();
+        }
+
+        async function refreshPlanner() {
+            const events = await fetchEvents(currentWeekStart);
+            renderWeeklyPlanner(events, currentWeekStart);
+            renderWorkPlanner(events, currentWeekStart);
+            renderHabits();
         }
 
         const PAYDAYS = [
@@ -877,29 +901,36 @@
             };
 
             const dStr = dayStr(dateStr);
+            const d = new Date(dateStr + 'T00:00:00');
+            const dayOfWeek = d.getDay(); // 0=Sun, 1=Mon, etc.
+
             if (PAYDAYS.includes(dStr)) info.notes.push("Jennifer's Payday");
             if (BUDGET_DAYS.includes(dStr)) info.notes.push("Budget/Pay Bills");
 
-            if (dStr === '2025-12-28') { // Sunday
-                info.tasks = ["Make menu plan", "Grocery shop", "Clean out purse"];
-            } else if (dayStr(dateStr) === '2025-12-29') { // Monday
-                info.tasks = ["Dust furniture", "Vacuum house", "1 Thessalonians 2"];
-            } else if (dayStr(dateStr) === '2025-12-30') { // Tuesday
-                info.tasks = ["Clean out fridge", "Mop hard surfaces", "Take out all trash", "Clean microwave & stovetop", "1 Thessalonians 3"];
-            } else if (dayStr(dateStr) === '2025-12-31') { // Wednesday
-                info.tasks = ["Clean bathrooms", "Change towels in bathrooms", "Re-stock toilet paper", "1 Thessalonians 4"];
+            // Default Tasks by Day of Week
+            const defaultTasks = {
+                0: ["Make menu plan", "Grocery shop", "Clean out purse"],
+                1: ["Dust furniture", "Vacuum house"],
+                2: ["Clean out fridge", "Mop hard surfaces", "Take out all trash", "Clean microwave & stovetop"],
+                3: ["Clean bathrooms", "Change towels in bathrooms", "Re-stock toilet paper"],
+                4: ["Change bedroom sheets"],
+                5: ["Clean electronic screens", "Sort paperwork & mail", "Take out all trash"],
+                6: ["Clean car"]
+            };
+            
+            info.tasks = [...(defaultTasks[dayOfWeek] || [])];
+
+            // Specific Date Overrides or Holidays
+            if (dStr === '2025-12-31') {
                 info.holiday = "NEW YEAR'S EVE";
-            } else if (dayStr(dateStr) === '2026-01-01') { // Thursday
-                info.tasks = ["Change bedroom sheets", "1 Thessalonians 5"];
-                info.notes = ["HOA Due $520", "Mortgage Due $2250"];
+            } else if (dStr === '2026-01-01') {
+                info.notes.push("HOA Due $520", "Mortgage Due $2250");
                 info.holiday = "NEW YEAR'S DAY";
                 info.spending = "$ 2,770";
-            } else if (dayStr(dateStr) === '2026-01-02') { // Friday
-                info.tasks = ["Clean electronic screens", "Sort paperwork & mail", "Take out all trash", "Jude 1"];
-                info.notes = ["Chris Plant", "Content Release"];
-            } else if (dayStr(dateStr) === '2026-01-03') { // Saturday
-                info.tasks = ["Clean car"];
-                info.notes = ["Mentor Session"];
+            } else if (dStr === '2026-01-02') {
+                info.notes.push("Chris Plant", "Content Release");
+            } else if (dStr === '2026-01-03') {
+                info.notes.push("Mentor Session");
             }
 
             return info;
@@ -910,11 +941,7 @@
         }
 
         // Initialize
-        renderHabits();
-        fetchEvents().then(events => {
-            renderWeeklyPlanner(events);
-            renderWorkPlanner(events);
-        });
+        refreshPlanner();
     </script>
 
 </body>
