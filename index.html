@@ -17,7 +17,7 @@
             --thursday: #f88d8d;
             --friday: #f5c27a;
             --saturday: #78c0aa;
-            --border-color: #e5e7eb;
+            --border-color: #b0b3ba;
             --text-main: #333;
             --font-handwriting: 'Coming Soon', cursive;
             --font-sans: 'Coming Soon', cursive;
@@ -97,15 +97,18 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
+            grid-auto-rows: 180px;
             background-color: var(--border-color);
             gap: 1px;
         }
 
         .calendar-day {
             background-color: white;
-            min-height: 150px;
-            padding: 8px;
+            height: 100%;
+            padding: 10px;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .day-number {
