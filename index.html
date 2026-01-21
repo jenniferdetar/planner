@@ -115,50 +115,69 @@
 
         .events-list {
             margin-top: 5px;
-            font-family: var(--font-handwriting);
-            font-size: 1rem;
-            line-height: 1.2;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            line-height: 1.3;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .event-pill {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 9999px;
+            border: 1px solid var(--border-color);
+            background-color: #f9fafb;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.02rem;
         }
 
         .event-item {
-            margin-bottom: 4px;
+            margin: 0;
+        }
+
+        .event-csea {
+            background-color: #00326b;
+            color: #ffca38;
+            border: 1px solid #ffca38;
+        }
+
+        .event-payday {
+            background-color: #0a8658;
+            color: white;
+            border: 1px solid #ffca38;
+        }
+
+        .event-budget-reminder {
+            background-color: #37b37a;
+            color: white;
+            border: 1px solid #ffca38;
         }
 
         .badge {
-            display: block;
-            margin: 5px auto;
-            padding: 8px;
-            border-radius: 12px;
+            display: inline-block;
+            margin: 0;
+            padding: 8px 12px;
+            border-radius: 9999px;
             font-family: var(--font-sans);
             font-weight: bold;
             color: white;
             text-align: center;
-            width: 80%;
-            font-size: 0.8rem;
-            letter-spacing: 0.1rem;
-        }
-
-        .badge-budget {
-            background: linear-gradient(to right, #f5c27a 15%, #4a7c96 15%);
-        }
-
-        .badge-payday {
-            background-color: #78c0aa;
-            opacity: 0.8;
-        }
-
-        .mlk-day-img {
-            width: 100%;
-            margin: 5px 0;
-            border: 1px solid #ddd;
+            font-size: 0.85rem;
+            letter-spacing: 0.08rem;
         }
 
         .holiday-label {
-            font-size: 0.6rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             color: #666;
-            margin-top: 5px;
+            letter-spacing: 0.06rem;
         }
     </style>
 </head>
@@ -213,12 +232,52 @@
             }
         }
 
+        function getEventClass(title, type) {
+            const classes = ['event-pill'];
+            const lower = title.toLowerCase();
+
+            if (lower.includes("jennifer's payday")) {
+                classes.push('event-payday');
+            }
+            if (lower.includes('budget')) {
+                classes.push('event-budget-reminder');
+            }
+            if (lower.includes('csea') || lower.includes('la fed')) {
+                classes.push('event-csea');
+            }
+
+            if (type === 'holiday') {
+                classes.push('holiday-label');
+            } else {
+                classes.push('event-item');
+            }
+            return classes.join(' ');
+        }
+
+        function getBudgetReminderDates(events, year, month) {
+            const reminders = new Set();
+            events.forEach(e => {
+                const lower = (e.title || '').toLowerCase();
+                if (!lower.includes("jennifer's payday")) return;
+                const d = new Date(e.date);
+                if (d.getFullYear() !== year || d.getMonth() !== month) return;
+                const reminder = new Date(d);
+                reminder.setDate(d.getDate() - 3);
+                if (reminder.getMonth() === month && reminder.getFullYear() === year) {
+                    reminders.add(reminder.toISOString().slice(0, 10));
+                }
+            });
+            return reminders;
+        }
+
         function renderCalendar(events) {
             const calendarEl = document.getElementById('calendar');
             calendarEl.innerHTML = ''; // Clear previous
             
             const year = 2026;
             const month = 0; // January
+
+            const budgetReminderDates = getBudgetReminderDates(events, year, month);
 
             // Jan 1st 2026 is a Thursday (4)
             const firstDay = new Date(year, month, 1).getDay();
@@ -234,8 +293,10 @@
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 
-                // Static events to match screenshot for January 2026
                 const staticEvents = getStaticEvents(day);
+                if (budgetReminderDates.has(dateStr)) {
+                    staticEvents.push({ title: 'Budget/Pay Bills', type: 'budget-reminder' });
+                }
                 const dbEvents = events.filter(e => e.date === dateStr);
                 
                 const dayEl = document.createElement('div');
@@ -244,30 +305,14 @@
                 let html = `<div class="day-number">${day}</div>`;
                 html += `<div class="events-list">`;
                 
-                // Render Static Events First (like Holidays and fixed bills)
                 staticEvents.forEach(e => {
-                    if (e.type === 'image') {
-                        html += `
-                        <div class="mlk-container">
-                            <img src="${e.src}" alt="${e.title}" class="mlk-day-img">
-                            <div class="holiday-label">${e.title}</div>
-                        </div>`;
-                    } else if (e.type === 'holiday') {
-                        html += `<div class="holiday-label">${e.title}</div>`;
-                    } else {
-                        html += `<div class="event-item">${e.title}</div>`;
-                    }
+                    const staticClass = getEventClass(e.title, e.type);
+                    html += `<div class="${staticClass}">${e.title}</div>`;
                 });
 
-                // Render DB Events
                 dbEvents.forEach(e => {
-                    if (e.title.toLowerCase().includes('budget')) {
-                        html += `<div class="badge badge-budget">BUDGET</div>`;
-                    } else if (e.title.toLowerCase().includes('payday')) {
-                        html += `<div class="badge badge-payday">PAY DAY</div>`;
-                    } else {
-                        html += `<div class="event-item">${e.title}</div>`;
-                    }
+                    const baseClass = getEventClass(e.title, e.type);
+                    html += `<div class="${baseClass}">${e.title}</div>`;
                 });
 
                 html += `</div>`;
@@ -300,8 +345,7 @@
             if (day === 19) {
                 events.push({ 
                     title: 'MARTIN LUTHER KING JR. DAY', 
-                    type: 'image', 
-                    src: 'https://www.whitehouse.gov/wp-content/uploads/2023/01/MLK-Day-Hero.jpg?w=1536' 
+                    type: 'holiday'
                 });
             }
             if (day === 20) events.push({ title: 'Spectrum Due' });
