@@ -27,50 +27,162 @@
             margin: 0;
             padding: 20px;
             font-family: var(--font-sans);
-            background-color: #fff;
+            font-size: 16px; /* 12pt equivalent */
+            background-color: #f3f4f6;
             color: var(--text-main);
         }
 
         .planner-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            border: 1px solid var(--border-color);
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 2px solid var(--border-color); /* Stronger outer border */
         }
 
-        .month-header {
-            text-align: left;
-            padding: 10px 20px;
-            color: var(--sunday);
-            font-size: 2.5rem;
-            letter-spacing: 0.5rem;
-            font-weight: 400;
-            text-transform: uppercase;
+        /* Weekly Layout Containers */
+        .day-container {
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            height: 320px;
+            overflow: hidden;
+        }
+        
+        .day-left {
+            width: 35%;
+            border-right: 2px solid var(--border-color);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .days-header {
+        .day-right {
+            width: 65%;
+            padding: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Event Pill Styling - Consistent across all views */
+        .event-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            margin: 2px 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            background-color: #f9fafb;
+            font-family: var(--font-handwriting);
+        }
+
+        .event-csea {
+            background-color: #00326b !important;
+            color: #ffca38 !important;
+            border: 2px solid #ffca38 !important;
+        }
+
+        .event-due {
+            background-color: #c62828 !important;
+            color: white !important;
+            border: 1px solid #c62828 !important;
+        }
+
+        .event-payday {
+            background-color: #2e7d32 !important;
+            color: white !important;
+            border: 1px solid #1b5e20 !important;
+        }
+
+        .habit-trackers {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            border-bottom: 2px solid var(--border-color);
+            background-color: #fcfcfc;
+        }
+
+        .habit-section {
+            border-right: 2px solid var(--border-color);
+            padding: 10px;
+        }
+
+        .habit-section:last-child { border-right: none; }
+
+        .habit-section-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            text-align: center;
+            letter-spacing: 0.05rem;
+        }
+
+        .habit-days-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            padding-right: 40%;
+        }
+
+        .habit-days-labels span {
+            font-size: 0.6rem;
+            width: 12px;
+            text-align: center;
+            color: #888;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .habit-box {
+            width: 12px;
+            height: 12px;
+            border: 1px solid #ccc;
+            margin-right: 2px;
+            background: white;
+        }
+
+        .box-sun { background-color: rgba(248, 141, 141, 0.1); }
+        .box-mon { background-color: rgba(245, 194, 122, 0.1); }
+        .box-tue { background-color: rgba(120, 192, 170, 0.1); }
+        .box-wed { background-color: rgba(74, 124, 150, 0.1); }
+        .box-thu { background-color: rgba(249, 139, 96, 0.1); }
+        .box-fri { background-color: rgba(245, 194, 122, 0.1); }
+        .box-sat { background-color: rgba(120, 192, 170, 0.1); }
+
+        .habit-label {
+            font-size: 0.65rem;
+            margin-left: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .weekly-header-bar {
+            background-color: #4a7c96;
+            color: white;
+            padding: 8px;
             text-align: center;
             font-weight: bold;
+            letter-spacing: 0.2rem;
+            font-size: 0.9rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .family-banner {
+            background-color: #f88d8d;
             color: white;
-            font-size: 0.8rem;
+            text-align: center;
+            padding: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
             letter-spacing: 0.1rem;
-            text-transform: uppercase;
+            border-bottom: 2px solid var(--border-color);
         }
-
-        .days-header div {
-            padding: 10px 0;
-            border-right: 1px solid rgba(255,255,255,0.2);
-        }
-        .days-header div:last-child { border-right: none; }
-
-        .day-sun { background-color: var(--sunday); }
-        .day-mon { background-color: var(--monday); }
-        .day-tue { background-color: var(--tuesday); }
-        .day-wed { background-color: var(--wednesday); }
-        .day-thu { background-color: var(--thursday); }
-        .day-fri { background-color: var(--friday); }
-        .day-sat { background-color: var(--saturday); }
 
         .hero {
             position: relative;
@@ -370,26 +482,51 @@
         <div class="subtitle">not perfect</div>
     </div>
     <div class="pill-group">
-        <a class="pill-button" href="#calendar">Personal Planner</a>
-        <a class="pill-button pill-work" href="#work-planner">Work Planner</a>
+        <button class="pill-button" onclick="changeWeek(-1)">← Prev</button>
+        <a class="pill-button" href="#calendar">Personal</a>
+        <a class="pill-button pill-work" href="#work-planner">Work</a>
+        <button class="pill-button" onclick="changeWeek(1)">Next →</button>
     </div>
 </div>
 
 <div class="planner-container">
-    <div class="month-header">January 2026</div>
+    <div class="weekly-header-bar" id="weekly-range">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
     
-    <div class="days-header">
-        <div class="day-sun">Sunday</div>
-        <div class="day-mon">Monday</div>
-        <div class="day-tue">Tuesday</div>
-        <div class="day-wed">Wednesday</div>
-        <div class="day-thu">Thursday</div>
-        <div class="day-fri">Friday</div>
-        <div class="day-sat">Saturday</div>
+    <div class="habit-trackers">
+        <div class="habit-section">
+            <div class="habit-section-title">Home Care</div>
+            <div class="habit-days-labels">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="habit-home-care"></div>
+        </div>
+        <div class="habit-section">
+            <div class="habit-section-title">Self Care</div>
+            <div class="habit-days-labels">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="habit-self-care"></div>
+        </div>
+        <div class="habit-section">
+            <div class="habit-section-title">Week days</div>
+            <div class="habit-days-labels">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="habit-week-days"></div>
+        </div>
+        <div class="habit-section">
+            <div class="habit-section-title">Weekends</div>
+            <div class="habit-days-labels">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="habit-weekends"></div>
+        </div>
     </div>
 
-    <div id="calendar" class="calendar-grid">
-        <!-- Calendar days will be injected here -->
+    <div class="family-banner">▲ ENJOY YOUR FAMILY ❤️</div>
+
+    <div id="weekly-calendar">
+        <!-- Weekly days will be injected here -->
     </div>
 </div>
 
@@ -437,79 +574,66 @@
 </div>
 
     <script>
-        // Supabase Configuration
-        // Note: Replace these with your actual Supabase credentials
         const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
         
-        // Initialize the Supabase client
         const { createClient } = window.supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const workWeekStart = new Date('2026-01-04');
+        let currentWeekStart = new Date('2025-12-28T00:00:00');
         const workTimes = ['5am','6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm'];
-        const workDayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        const workDayNames = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+        const DAY_CLASSES = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+        
         const workHighlights = {
-            0: { '9am': 'Plan week', '3pm': 'Restore energy' },
-            1: { '8am': 'Standup', '11am': '1:1s', '2pm': 'Deep work' },
-            2: { '9am': 'Project sprint', '1pm': 'Review deck' },
-            3: { '10am': 'Collab block', '4pm': 'Status wrap' },
-            4: { '9am': 'Content prep', '2pm': 'Outreach' },
-            5: { '11am': 'Retro', '3pm': 'Plan next week' },
-            6: { '10am': 'Rest', '2pm': 'Light planning' }
+            0: { '10am': 'Take time to rest today!' },
+            1: { '5am': '', '8am': 'Standup' },
+            3: { '5am': 'NEW YEAR\'S EVE' },
+            4: { '5am': 'NEW YEAR\'S DAY' },
+            5: { '8am': 'Paylogs' }
         };
 
-        function renderWorkPlanner() {
-            const rangeEl = document.getElementById('work-range');
-            const end = new Date(workWeekStart);
-            end.setDate(workWeekStart.getDate() + 6);
-            const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' });
-            rangeEl.textContent = `${fmt.format(workWeekStart)} - ${fmt.format(end)}, ${workWeekStart.getFullYear()}`;
-            const grid = document.getElementById('work-grid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            grid.style.gridTemplateColumns = '90px repeat(7, 1fr)';
+        const HABITS = {
+            'habit-home-care': ["Make beds", "Ana - Cleaning", "Recycling"],
+            'habit-self-care': ["Shower", "Read", "Bring lunch to work"],
+            'habit-week-days': ["Get up at 5:00 am", "Leave work at 3:30 pm", "Take train to work", "Listen to Bible app"],
+            'habit-weekends': ["Get up at 7:00 am", "Plan/prep meals for the week", "Laundry"]
+        };
 
-            const timeHead = document.createElement('div');
-            timeHead.className = 'time-head';
-            timeHead.textContent = 'Time';
-            grid.appendChild(timeHead);
+        const PAYDAYS = [
+            '2025-07-08', '2025-07-23', '2025-08-08', '2025-08-22', '2025-09-08', '2025-09-23',
+            '2025-10-08', '2025-10-23', '2025-11-07', '2025-11-21', '2025-12-08', '2025-12-23',
+            '2026-01-08', '2026-01-23', '2026-02-06', '2026-02-23', '2026-03-06', '2026-03-23',
+            '2026-04-08', '2026-04-23', '2026-05-08', '2026-05-22', '2026-06-08', '2026-06-23'
+        ];
 
-            for (let i = 0; i < 7; i++) {
-                const d = new Date(workWeekStart);
-                d.setDate(workWeekStart.getDate() + i);
-                const head = document.createElement('div');
-                head.className = 'work-day-head';
-                head.innerHTML = `<span class="day-number-small">${d.getDate()}</span>${workDayNames[i]}`;
-                grid.appendChild(head);
-            }
+        const BUDGET_DAYS = [
+            '2025-07-05', '2025-07-20', '2025-08-05', '2025-08-19', '2025-09-05', '2025-09-20',
+            '2025-10-05', '2025-10-20', '2025-11-04', '2025-11-18', '2025-12-05', '2025-12-20',
+            '2026-01-05', '2026-01-20', '2026-02-03', '2026-02-20', '2026-03-03', '2026-03-20',
+            '2026-04-05', '2026-04-20', '2026-05-05', '2026-05-19', '2026-06-05', '2026-06-20'
+        ];
 
-            workTimes.forEach(time => {
-                const timeCell = document.createElement('div');
-                timeCell.className = 'time-cell';
-                timeCell.textContent = time;
-                grid.appendChild(timeCell);
-
-                for (let day = 0; day < 7; day++) {
-                    const slot = document.createElement('div');
-                    slot.className = 'slot-cell';
-                    const dayNotes = workHighlights[day] || {};
-                    if (dayNotes[time]) {
-                        slot.classList.add('work-note');
-                        slot.textContent = dayNotes[time];
-                    }
-                    grid.appendChild(slot);
-                }
-            });
+        function getPillClass(title) {
+            const t = title.toUpperCase();
+            if (t.includes('CSEA') || t.includes('LA FED')) return 'event-pill event-csea';
+            if (t.includes('DUE')) return 'event-pill event-due';
+            if (t.includes("JENNIFER'S PAYDAY") || t.includes("BUDGET/PAY BILLS")) return 'event-pill event-payday';
+            return 'event-pill';
         }
 
-        async function fetchEvents() {
+        async function fetchEvents(startDate) {
             try {
+                const startStr = startDate.toISOString().slice(0, 10);
+                const endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 6);
+                const endStr = endDate.toISOString().slice(0, 10);
+
                 const { data, error } = await supabaseClient
                     .from('calendar_by_date')
                     .select('*')
-                    .gte('date', '2026-01-01')
-                    .lte('date', '2026-01-31');
+                    .gte('date', startStr)
+                    .lte('date', endStr);
                 
                 if (error) throw error;
                 return data || [];
@@ -519,168 +643,184 @@
             }
         }
 
-        function getEventClass(title, type) {
-            const classes = ['event-pill'];
-            const lower = title.toLowerCase();
-
-            if (lower.includes("jennifer's payday")) {
-                classes.push('event-payday');
-            }
-            if (lower.includes('budget')) {
-                classes.push('event-budget-reminder');
-            }
-            if (lower.includes('due')) {
-                classes.push('event-due');
-            }
-            if (lower.includes('csea') || lower.includes('la fed')) {
-                classes.push('event-csea');
-            }
-
-            if (type === 'holiday') {
-                classes.push('holiday-label');
-            } else {
-                classes.push('event-item');
-            }
-            return classes.join(' ');
-        }
-
-        function getDateKey(value) {
-            if (!value) return '';
-            const d = new Date(value);
-            if (!isNaN(d)) return d.toISOString().slice(0, 10);
-            return String(value).slice(0, 10);
-        }
-
-        function getBudgetReminderDates(events, year, month) {
-            const reminders = new Set();
-            events.forEach(e => {
-                const lower = (e.title || '').toLowerCase();
-                if (!lower.includes("jennifer's payday")) return;
-                const d = new Date(e.date);
-                if (isNaN(d) || d.getFullYear() !== year || d.getMonth() !== month) return;
-                const reminder = new Date(d);
-                reminder.setDate(d.getDate() - 3);
-                if (reminder.getMonth() === month && reminder.getFullYear() === year) {
-                    reminders.add(reminder.toISOString().slice(0, 10));
-                }
+        function renderHabits() {
+            Object.keys(HABITS).forEach(id => {
+                const container = document.getElementById(id);
+                if (!container) return;
+                container.innerHTML = '';
+                
+                HABITS[id].forEach(habit => {
+                    const row = document.createElement('div');
+                    row.className = 'habit-item';
+                    let boxes = '';
+                    for (let i = 0; i < 7; i++) {
+                        boxes += `<div class="habit-box box-${DAY_CLASSES[i]}"></div>`;
+                    }
+                    row.innerHTML = `${boxes}<div class="habit-label">${habit}</div>`;
+                    container.appendChild(row);
+                });
             });
-            return reminders;
         }
 
-        function renderCalendar(events) {
-            const calendarEl = document.getElementById('calendar');
-            calendarEl.innerHTML = ''; // Clear previous
+        function getStaticWeeklyInfo(dateStr) {
+            const info = { tasks: [], notes: [], holiday: '', spending: '' };
+            const dStr = dateStr.slice(0, 10);
+            const d = new Date(dateStr + 'T00:00:00');
+            const dayOfWeek = d.getDay();
+
+            if (PAYDAYS.includes(dStr)) info.notes.push("Jennifer's Payday");
+            if (BUDGET_DAYS.includes(dStr)) info.notes.push("Budget/Pay Bills");
+
+            const defaultTasks = {
+                0: ["Make menu plan", "Grocery shop", "Clean out purse"],
+                1: ["Dust furniture", "Vacuum house"],
+                2: ["Clean out fridge", "Mop hard surfaces", "Take out all trash", "Clean microwave & stovetop"],
+                3: ["Clean bathrooms", "Change towels in bathrooms", "Re-stock toilet paper"],
+                4: ["Change bedroom sheets"],
+                5: ["Clean electronic screens", "Sort paperwork & mail", "Take out all trash"],
+                6: ["Clean car"]
+            };
             
-            const year = 2026;
-            const month = 0; // January
+            info.tasks = [...(defaultTasks[dayOfWeek] || [])];
 
-            const budgetReminderDates = getBudgetReminderDates(events, year, month);
-
-            // Jan 1st 2026 is a Thursday (4)
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = 31;
-
-            // Empty days before the 1st
-            for (let i = 0; i < firstDay; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.className = 'calendar-day';
-                calendarEl.appendChild(emptyDay);
+            if (dStr === '2025-12-31') info.holiday = "NEW YEAR'S EVE";
+            else if (dStr === '2026-01-01') {
+                info.notes.push("HOA Due $520", "Mortgage Due $2250");
+                info.holiday = "NEW YEAR'S DAY";
+                info.spending = "$ 2,770";
             }
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            return info;
+        }
+
+        function renderWeeklyPlanner(events, weekStart) {
+            const container = document.getElementById('weekly-calendar');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const start = new Date(weekStart);
+            const end = new Date(weekStart);
+            end.setDate(start.getDate() + 6);
+
+            const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('weekly-range').textContent = `${fmt.format(start).toUpperCase()} - ${fmt.format(end).toUpperCase()}`;
+            
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(start);
+                currentDate.setDate(start.getDate() + i);
+                const dateStr = currentDate.toISOString().slice(0, 10);
+                const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                const monthDay = currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }).toUpperCase();
                 
-                const staticEvents = getStaticEvents(day);
-                if (budgetReminderDates.has(dateStr)) {
-                    staticEvents.push({ title: 'Budget/Pay Bills', type: 'budget-reminder' });
-                }
-                const dbEvents = events.filter(e => getDateKey(e.date) === dateStr);
-                
+                const staticDayInfo = getStaticWeeklyInfo(dateStr);
+                const dbEvents = events.filter(e => e.date === dateStr);
+                const allItems = [
+                    ...staticDayInfo.notes.map(n => ({ title: n })),
+                    ...dbEvents.map(e => ({ title: e.title }))
+                ];
+
                 const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day';
-                
-                let html = `<div class="day-number">${day}</div>`;
-                html += `<div class="events-list">`;
-                
-                staticEvents.forEach(e => {
-                    const staticClass = getEventClass(e.title, e.type);
-                    html += `<div class="${staticClass}">${e.title}</div>`;
-                });
-
-                dbEvents.forEach(e => {
-                    const baseClass = getEventClass(e.title, e.type);
-                    html += `<div class="${baseClass}">${e.title}</div>`;
-                });
-
-                html += `</div>`;
-                dayEl.innerHTML = html;
-                calendarEl.appendChild(dayEl);
+                dayEl.className = `day-container ${DAY_CLASSES[i]}-border`;
+                dayEl.innerHTML = `
+                    <div class="day-left">
+                        <div class="task-list">
+                            ${staticDayInfo.tasks.map(t => `<div class="task-item"><div class="checkbox-square" style="width:14px;height:14px;border:1px solid #ccc;margin-right:8px;background:white;"></div>${t}</div>`).join('')}
+                        </div>
+                        <div class="icon-lines-section" style="margin-top:25px;">
+                            <div class="icon-row" style="display:flex;align-items:center;margin-bottom:15px;"><div class="icon-box" style="width:24px;opacity:0.6;">🍽️</div><div class="line-placeholder" style="flex-grow:1;border-bottom:1px solid #eee;height:20px;"></div></div>
+                            <div class="icon-row" style="display:flex;align-items:center;margin-bottom:15px;"><div class="icon-box" style="width:24px;opacity:0.6;">🌸</div><div class="line-placeholder" style="flex-grow:1;border-bottom:1px solid #eee;height:20px;"></div></div>
+                            <div class="icon-row" style="display:flex;align-items:center;margin-bottom:15px;"><div class="icon-box" style="width:24px;opacity:0.6;">💰</div><div class="line-placeholder" style="flex-grow:1;border-bottom:1px solid #eee;height:20px;font-family:var(--font-handwriting);font-size:0.8rem;">${staticDayInfo.spending || ''}</div></div>
+                        </div>
+                    </div>
+                    <div class="day-right">
+                        <div class="day-header-title" style="padding:15px;font-weight:bold;text-transform:uppercase;font-size:0.8rem;display:flex;justify-content:space-between;">
+                            <span>${dayName}, ${monthDay}</span>
+                            <span style="color:var(--sunday);font-size:0.6rem;">${staticDayInfo.holiday || ''}</span>
+                        </div>
+                        <div class="lined-area" style="height:100%;background-image:linear-gradient(#fff 24px, #eee 25px);background-size:100% 25px;padding-left:40px;position:relative;">
+                            <div class="main-notes" style="padding:4px 10px;font-family:var(--font-handwriting);font-size:1rem;line-height:25px;">
+                                ${allItems.map(item => `<div class="note-row" style="margin-bottom:4px;"><span class="${getPillClass(item.title)}">${item.title}</span></div>`).join('')}
+                                ${Array(Math.max(0, 10 - allItems.length)).fill('<div class="note-row" style="min-height:25px;position:relative;"><div style="position:absolute;left:-32px;top:6px;width:12px;height:12px;border:1px solid #ccc;"></div></div>').join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(dayEl);
             }
         }
 
-        function getStaticEvents(day) {
-            const events = [];
-            if (day === 1) {
-                events.push({ title: 'HOA Due $520' });
-                events.push({ title: 'Mortgage Due $2250' });
-                events.push({ title: "NEW YEAR'S DAY", type: 'holiday' });
-            }
-            if (day === 2) events.push({ title: 'Chris Plant Content Release' });
-            if (day === 3) events.push({ title: 'Mentor Session' });
-            if (day === 5) events.push({ title: 'Quiz Submission' });
-            if (day === 7) {
-                events.push({ title: 'CSEA RPM Region 8' });
-                events.push({ title: 'CSEA MB Committee' });
-            }
-            if (day === 10) events.push({ title: 'Heloc Due' });
-            if (day === 12) {
-                events.push({ title: 'Paramount + Due' });
-                events.push({ title: 'Quiz Submission' });
-                events.push({ title: 'CSEA Steward Meeting' });
-            }
-            if (day === 15) events.push({ title: 'CSEA Statewide Blitz' });
-            if (day === 19) {
-                events.push({ 
-                    title: 'MARTIN LUTHER KING JR. DAY', 
-                    type: 'holiday'
+        function renderWorkPlanner(events = [], weekStart) {
+            const start = new Date(weekStart);
+            const end = new Date(weekStart);
+            end.setDate(start.getDate() + 6);
+            const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('work-range').textContent = `${fmt.format(start).toUpperCase()} - ${fmt.format(end).toUpperCase()}`;
+
+            const grid = document.getElementById('work-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            grid.style.display = 'grid';
+            grid.style.gridTemplateColumns = 'repeat(7, 1fr)';
+            grid.style.border = '2px solid var(--border-color)';
+
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(start);
+                currentDate.setDate(start.getDate() + i);
+                const dateStr = currentDate.toISOString().slice(0, 10);
+                const col = document.createElement('div');
+                col.style.borderRight = i < 6 ? '2px solid var(--border-color)' : 'none';
+                
+                const header = document.createElement('div');
+                header.style.padding = '8px';
+                header.style.textAlign = 'center';
+                header.style.borderBottom = '2px solid var(--border-color)';
+                header.style.background = '#f5f5f5';
+                header.innerHTML = `<div style="font-weight:bold;">${currentDate.getDate()}</div><div style="font-size:0.7rem;">${workDayNames[i]}</div>`;
+                col.appendChild(header);
+
+                const highlights = { ...(workHighlights[i] || {}) };
+                const dayEvents = events.filter(e => e.date === dateStr);
+                dayEvents.forEach(e => {
+                    const timeMatch = e.title.match(/^(\d{1,2}(am|pm))/i);
+                    const time = timeMatch ? timeMatch[1].toLowerCase() : '8am';
+                    highlights[time] = (highlights[time] ? highlights[time] + ', ' : '') + e.title;
                 });
+
+                if (i === 0) {
+                    const rest = highlights['10am'] || 'Take time to rest today!';
+                    col.innerHTML += `<div style="padding:15px;text-align:center;font-family:var(--font-handwriting);font-size:0.85rem;"><span class="${getPillClass(rest)}">${rest}</span></div>`;
+                } else {
+                    workTimes.forEach(time => {
+                        const row = document.createElement('div');
+                        row.style.display = 'grid';
+                        row.style.gridTemplateColumns = '35px 1fr';
+                        row.style.minHeight = '28px';
+                        row.style.borderBottom = '1px solid #eee';
+                        const content = highlights[time] || '';
+                        row.innerHTML = `
+                            <div style="font-size:0.5rem;color:#888;display:flex;align-items:center;justify-content:center;border-right:1px solid #eee;background:#fafafa;">${time}</div>
+                            <div style="padding:2px 4px;font-family:var(--font-handwriting);font-size:0.7rem;">${content ? `<span class="${getPillClass(content)}">${content}</span>` : ''}</div>
+                        `;
+                        col.appendChild(row);
+                    });
+                }
+                grid.appendChild(col);
             }
-            if (day === 20) events.push({ title: 'Spectrum Due' });
-            if (day === 21) events.push({ title: 'ADT Due' });
-            if (day === 22) {
-                events.push({ title: 'CSEA MB Committee' });
-                events.push({ title: 'Flight to San Jose' });
-                events.push({ title: 'CSEA N.E.O.' });
-            }
-            if (day === 23) {
-                events.push({ title: 'CSEA MB Committee' });
-            }
-            if (day === 24) {
-                events.push({ title: 'Mentored Session' });
-                events.push({ title: 'CSEA MB Committee' });
-                events.push({ title: 'Order Buspirone' });
-            }
-            if (day === 25) {
-                events.push({ title: 'CSEA MB Committee' });
-                events.push({ title: 'Flight to Burbank' });
-            }
-            if (day === 26) {
-                events.push({ title: 'Verizon Due' });
-                events.push({ title: 'Quiz Submission' });
-                events.push({ title: 'CSEA Stewards Meeting' });
-                events.push({ title: 'CSEA RPM Region 19' });
-                events.push({ title: 'LA Fed' });
-            }
-            if (day === 29) events.push({ title: 'CSEA Chapter Meeting' });
-            if (day === 30) events.push({ title: 'Content Release' });
-            if (day === 31) events.push({ title: 'Mentored Session' });
-            
-            return events;
         }
 
-        // Initialize
-        renderWorkPlanner();
-        fetchEvents().then(renderCalendar);
+        function changeWeek(offset) {
+            currentWeekStart.setDate(currentWeekStart.getDate() + (offset * 7));
+            refreshPlanner();
+        }
+
+        async function refreshPlanner() {
+            const events = await fetchEvents(currentWeekStart);
+            renderWeeklyPlanner(events, currentWeekStart);
+            renderWorkPlanner(events, currentWeekStart);
+            renderHabits();
+        }
+
+        refreshPlanner();
     </script>
 
 </body>
