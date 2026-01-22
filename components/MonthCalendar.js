@@ -82,15 +82,19 @@ export default function MonthCalendar({ events, monthDate }) {
             <div key={cell.dateStr} className="month-day">
               <div className="month-day-header">
                 <span className="day-number">{cell.dayNumber}</span>
-                {cell.holiday && <span className="holiday-label">{cell.holiday}</span>}
               </div>
               <div className="month-events">
                 {cell.items.map((item, idx) => (
-                  <div key={`${cell.dateStr}-${idx}`} className={getPillClass(item.title)}>
+                  <div key={`${cell.dateStr}-${idx}`} className="month-event-item">
                     {item.title}
                   </div>
                 ))}
               </div>
+              {cell.holiday && (
+                <div className="holiday-container">
+                  <span className="holiday-label">{cell.holiday}</span>
+                </div>
+              )}
             </div>
           );
         })}
@@ -98,33 +102,34 @@ export default function MonthCalendar({ events, monthDate }) {
 
       <style jsx>{`
         .month-calendar {
-          max-width: 1000px;
+          max-width: 1200px;
           margin: 0 auto;
           background: white;
-          border: 2px solid var(--border-color);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          border: 1px solid var(--border-color);
         }
 
         .month-title {
           text-align: center;
           color: #f79292;
-          font-size: 3.5rem;
-          margin: 20px 0;
-          letter-spacing: 0.2rem;
+          font-size: 5rem;
+          margin: 30px 0;
+          letter-spacing: 0.5rem;
+          font-weight: 300;
         }
 
         .month-day-headers {
           display: grid;
           grid-template-columns: repeat(7, 1fr);
+          border-bottom: 1px solid var(--border-color);
         }
 
         .month-day-head {
-          padding: 10px;
+          padding: 15px;
           text-align: center;
           font-weight: bold;
           color: white;
-          font-size: 0.9rem;
-          letter-spacing: 0.1rem;
+          font-size: 1.1rem;
+          letter-spacing: 0.15rem;
         }
 
         .sun-bg { background-color: #f88d8d; }
@@ -140,13 +145,12 @@ export default function MonthCalendar({ events, monthDate }) {
           grid-template-columns: repeat(7, 1fr);
           background-color: var(--border-color);
           gap: 1px;
-          border-top: 1px solid var(--border-color);
         }
 
         .month-day {
           background: white;
-          min-height: 140px;
-          padding: 8px;
+          min-height: 180px;
+          padding: 10px;
           display: flex;
           flex-direction: column;
           position: relative;
@@ -154,61 +158,78 @@ export default function MonthCalendar({ events, monthDate }) {
 
         .month-day.empty {
           background: white;
-          border-bottom: 1px solid var(--border-color);
         }
 
         .month-day-header {
           display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 4px;
+          justify-content: flex-start;
+          margin-bottom: 10px;
         }
 
         .day-number {
-          font-size: 0.9rem;
-          font-weight: bold;
-        }
-
-        .holiday-label {
-          font-size: 0.5rem;
-          text-transform: uppercase;
-          color: #666;
-          text-align: right;
+          font-size: 1.2rem;
+          color: #999;
+          font-weight: 400;
         }
 
         .month-events {
+          flex-grow: 1;
           display: flex;
           flex-direction: column;
-          gap: 2px;
+          gap: 4px;
           align-items: center;
+          justify-content: center;
+          text-align: center;
+        }
+
+        .month-event-item {
+          font-family: var(--font-handwriting);
+          font-size: 1.3rem;
+          color: #333;
+          line-height: 1.2;
+        }
+
+        .holiday-container {
+          margin-top: auto;
+          text-align: center;
+          padding-top: 4px;
+        }
+
+        .holiday-label {
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          color: #888;
+          letter-spacing: 0.05rem;
         }
 
         .be-real-banner {
           position: absolute;
-          top: 50%;
+          top: 45%;
           transform: translate(-50%, -50%);
           text-align: center;
           z-index: 10;
           pointer-events: none;
+          white-space: nowrap;
         }
 
         .be-real-banner .be {
-          font-size: 4rem;
+          font-size: 8rem;
           color: #f88d8d;
           font-weight: bold;
+          margin-right: 20px;
         }
 
         .be-real-banner .real {
-          font-size: 4rem;
+          font-size: 8rem;
           color: #78c0aa;
           font-weight: bold;
         }
 
         .be-real-banner .subtitle {
           font-family: var(--font-handwriting);
-          font-size: 2.5rem;
+          font-size: 6rem;
           color: #f5c27a;
-          margin-top: -15px;
+          margin-top: -40px;
         }
       `}</style>
     </div>
