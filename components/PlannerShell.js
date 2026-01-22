@@ -3,9 +3,9 @@ import Link from 'next/link';
 export default function PlannerShell({
   title = 'Personal Ops Hub',
   subtitle = 'not perfect',
-  currentWeekRange,
-  onPrevWeek,
-  onNextWeek,
+  currentRange,
+  onPrev,
+  onNext,
   active = 'home',
   children
 }) {
@@ -26,7 +26,7 @@ export default function PlannerShell({
           <div className="subtitle">{subtitle}</div>
         </div>
         <div className="pill-group">
-          <button className="pill-button" type="button" onClick={onPrevWeek}>
+          <button className="pill-button" type="button" onClick={onPrev}>
             ← Prev
           </button>
           <Link className={`pill-button ${active === 'home' ? 'pill-active' : ''}`} href="/">
@@ -38,13 +38,13 @@ export default function PlannerShell({
           <Link className={`pill-button pill-work ${active === 'work' ? 'pill-active' : ''}`} href="/work-planner">
             Work
           </Link>
-          <button className="pill-button" type="button" onClick={onNextWeek}>
+          <button className="pill-button" type="button" onClick={onNext}>
             Next →
           </button>
         </div>
       </header>
-      {currentWeekRange ? (
-        <div className="weekly-range">{currentWeekRange}</div>
+      {currentRange ? (
+        <div className="weekly-range">{currentRange}</div>
       ) : null}
       {children}
     </div>

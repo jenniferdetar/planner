@@ -1,0 +1,216 @@
+import { getPillClass, getStaticWeeklyInfo } from '../lib/planner';
+
+export default function MonthCalendar({ events, monthDate }) {
+  const { year, month, daysInMonth, startDayOfWeek, monthLabel } = monthDate;
+
+  // Create grid cells
+  const cells = [];
+  
+  // Empty cells for the start of the month
+  for (let i = 0; i < startDayOfWeek; i++) {
+    cells.push({ type: 'empty' });
+  }
+
+  // Days of the month
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    const dateStr = date.toISOString().slice(0, 10);
+    const dayOfWeek = date.getDay();
+    const staticInfo = getStaticWeeklyInfo(dateStr);
+    const dbEvents = events.filter(e => e.date === dateStr);
+    
+    const allItems = [
+      ...staticInfo.notes.map(n => ({ title: n })),
+      ...dbEvents.map(e => ({ title: e.title }))
+    ];
+
+    cells.push({
+      type: 'day',
+      dayNumber: d,
+      dateStr,
+      dayOfWeek,
+      items: allItems,
+      holiday: staticInfo.holiday
+    });
+  }
+
+  // Fill remaining cells to complete the last row
+  const remaining = (7 - (cells.length % 7)) % 7;
+  for (let i = 0; i < remaining; i++) {
+    cells.push({ type: 'empty' });
+  }
+
+  const DAY_NAMES = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+  const DAY_CLASSES = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+  return (
+    <div className="month-calendar">
+      <h1 className="month-title">{monthLabel}</h1>
+      
+      <div className="month-day-headers">
+        {DAY_NAMES.map((name, i) => (
+          <div key={name} className={`month-day-head ${DAY_CLASSES[i]}-bg`}>
+            {name}
+          </div>
+        ))}
+      </div>
+
+      <div className="month-grid">
+        {cells.map((cell, i) => {
+          if (cell.type === 'empty') {
+            // Check if we should put the "BE REAL" text in the first row empty space
+            const isFirstRow = i < 7;
+            const isMiddleOfEmpty = isFirstRow && i === Math.floor(startDayOfWeek / 2);
+            const bannerStyle = {
+              left: `${(startDayOfWeek / 2 - i) * 100}%`,
+              width: `${startDayOfWeek * 100}%`
+            };
+            
+            return (
+              <div key={`empty-${i}`} className="month-day empty">
+                {isMiddleOfEmpty && startDayOfWeek > 2 && (
+                   <div className="be-real-banner" style={bannerStyle}>
+                     <span className="be">BE</span> <span className="real">REAL</span>
+                     <div className="subtitle">not perfect</div>
+                   </div>
+                )}
+              </div>
+            );
+          }
+
+          return (
+            <div key={cell.dateStr} className="month-day">
+              <div className="month-day-header">
+                <span className="day-number">{cell.dayNumber}</span>
+                {cell.holiday && <span className="holiday-label">{cell.holiday}</span>}
+              </div>
+              <div className="month-events">
+                {cell.items.map((item, idx) => (
+                  <div key={`${cell.dateStr}-${idx}`} className={getPillClass(item.title)}>
+                    {item.title}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <style jsx>{`
+        .month-calendar {
+          max-width: 1000px;
+          margin: 0 auto;
+          background: white;
+          border: 2px solid var(--border-color);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .month-title {
+          text-align: center;
+          color: #f79292;
+          font-size: 3.5rem;
+          margin: 20px 0;
+          letter-spacing: 0.2rem;
+        }
+
+        .month-day-headers {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+        }
+
+        .month-day-head {
+          padding: 10px;
+          text-align: center;
+          font-weight: bold;
+          color: white;
+          font-size: 0.9rem;
+          letter-spacing: 0.1rem;
+        }
+
+        .sun-bg { background-color: #f88d8d; }
+        .mon-bg { background-color: #f5c27a; }
+        .tue-bg { background-color: #78c0aa; }
+        .wed-bg { background-color: #4a7c96; }
+        .thu-bg { background-color: #f88d8d; }
+        .fri-bg { background-color: #f5c27a; }
+        .sat-bg { background-color: #78c0aa; }
+
+        .month-grid {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          background-color: var(--border-color);
+          gap: 1px;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .month-day {
+          background: white;
+          min-height: 140px;
+          padding: 8px;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+        }
+
+        .month-day.empty {
+          background: white;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .month-day-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 4px;
+        }
+
+        .day-number {
+          font-size: 0.9rem;
+          font-weight: bold;
+        }
+
+        .holiday-label {
+          font-size: 0.5rem;
+          text-transform: uppercase;
+          color: #666;
+          text-align: right;
+        }
+
+        .month-events {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          align-items: center;
+        }
+
+        .be-real-banner {
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          text-align: center;
+          z-index: 10;
+          pointer-events: none;
+        }
+
+        .be-real-banner .be {
+          font-size: 4rem;
+          color: #f88d8d;
+          font-weight: bold;
+        }
+
+        .be-real-banner .real {
+          font-size: 4rem;
+          color: #78c0aa;
+          font-weight: bold;
+        }
+
+        .be-real-banner .subtitle {
+          font-family: var(--font-handwriting);
+          font-size: 2.5rem;
+          color: #f5c27a;
+          margin-top: -15px;
+        }
+      `}</style>
+    </div>
+  );
+}

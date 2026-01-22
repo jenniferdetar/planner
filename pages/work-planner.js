@@ -18,9 +18,9 @@ export default function WorkPlannerPage() {
     <PlannerShell
       title="BE REAL"
       subtitle="not perfect"
-      currentWeekRange={currentWeekRange}
-      onPrevWeek={() => setWeekStart(prev => (prev ? addDays(prev, -7) : prev))}
-      onNextWeek={() => setWeekStart(prev => (prev ? addDays(prev, 7) : prev))}
+      currentRange={currentWeekRange}
+      onPrev={() => setWeekStart(prev => (prev ? addDays(prev, -7) : prev))}
+      onNext={() => setWeekStart(prev => (prev ? addDays(prev, 7) : prev))}
       active="work"
     >
       {!weekStart ? (

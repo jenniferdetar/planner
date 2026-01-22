@@ -1,36 +1,55 @@
 import { useEffect, useState } from 'react';
-import HomeCalendar from '../components/HomeCalendar';
+import MonthCalendar from '../components/MonthCalendar';
 import PlannerShell from '../components/PlannerShell';
-import { addDays, getStartOfWeek, getWeekRangeLabel } from '../lib/planner';
+import { getMonthInfo } from '../lib/planner';
 import { usePlannerEvents } from '../lib/usePlannerEvents';
 
 export default function HomePage() {
-  const [weekStart, setWeekStart] = useState(null);
+  const [currentDate, setCurrentDate] = useState(null);
 
   useEffect(() => {
-    setWeekStart(getStartOfWeek(new Date()));
+    setCurrentDate(new Date());
   }, []);
 
-  const { events, status, hasSupabase } = usePlannerEvents(weekStart);
-  const currentWeekRange = weekStart ? getWeekRangeLabel(weekStart) : '';
+  const monthDate = currentDate ? getMonthInfo(currentDate) : null;
+  // Fetch a broad range to cover the whole month (e.g. 42 days from first day)
+  const { events, status, hasSupabase } = usePlannerEvents(
+    monthDate?.firstDay,
+    42
+  );
+
+  const handlePrev = () => {
+    setCurrentDate(prev => {
+      const next = new Date(prev);
+      next.setMonth(next.getMonth() - 1);
+      return next;
+    });
+  };
+
+  const handleNext = () => {
+    setCurrentDate(prev => {
+      const next = new Date(prev);
+      next.setMonth(next.getMonth() + 1);
+      return next;
+    });
+  };
 
   return (
     <PlannerShell
       title="BE REAL"
       subtitle="not perfect"
-      currentWeekRange={currentWeekRange}
-      onPrevWeek={() => setWeekStart(prev => (prev ? addDays(prev, -7) : prev))}
-      onNextWeek={() => setWeekStart(prev => (prev ? addDays(prev, 7) : prev))}
+      onPrev={handlePrev}
+      onNext={handleNext}
       active="home"
     >
-      {!weekStart ? (
-        <div className="status-banner">Preparing your week...</div>
+      {!currentDate ? (
+        <div className="status-banner">Preparing calendar...</div>
       ) : !hasSupabase ? (
         <div className="status-banner">Supabase env vars are missing; events will not load.</div>
       ) : status === 'loading' ? (
-        <div className="status-banner">Loading week data...</div>
+        <div className="status-banner">Loading calendar data...</div>
       ) : null}
-      {weekStart ? <HomeCalendar events={events} weekStart={weekStart} /> : null}
+      {monthDate ? <MonthCalendar events={events} monthDate={monthDate} /> : null}
     </PlannerShell>
   );
 }
