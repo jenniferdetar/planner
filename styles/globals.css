@@ -14,13 +14,13 @@
 
 * {
   box-sizing: border-box;
+  font-size: 12pt;
 }
 
 body {
   margin: 0;
   padding: 20px;
   font-family: var(--font-sans);
-  font-size: 12pt;
   background: radial-gradient(circle at top, #f7f5f0 0%, #f3f4f6 60%, #eceff3 100%);
   color: var(--text-main);
 }

@@ -38,6 +38,7 @@ export default function HomePage() {
     <PlannerShell
       title="BE REAL"
       subtitle="not perfect"
+      currentRange={monthDate?.monthLabel}
       onPrev={handlePrev}
       onNext={handleNext}
       active="home"

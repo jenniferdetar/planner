@@ -204,7 +204,7 @@ export default function MonthCalendar({ events, monthDate }) {
 
         .month-event-item {
           font-family: var(--font-handwriting);
-          font-size: 1.3rem;
+          font-size: 1.2rem;
           color: #333;
           line-height: 1.2;
         }
