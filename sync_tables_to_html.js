@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 
-const ROOT_DIR = path.resolve(__dirname, '..');
+const ROOT_DIR = __dirname;
 const MIGRATIONS_DIR = path.join(ROOT_DIR, 'supabase', 'migrations');
 const OUTPUT_DIR = path.join(ROOT_DIR, 'supabase', 'html');
 

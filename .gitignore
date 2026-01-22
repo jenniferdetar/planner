@@ -1,8 +1,10 @@
 .vercel
 .env*.local
+.vscode
 .DS_Store
 node_modules
 .zencoder
 .zenflow
+.next
 supabase/.temp
 supabase/.branches
