@@ -20,7 +20,7 @@ body {
   margin: 0;
   padding: 20px;
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 12pt;
   background: radial-gradient(circle at top, #f7f5f0 0%, #f3f4f6 60%, #eceff3 100%);
   color: var(--text-main);
 }
@@ -84,7 +84,7 @@ a {
   font-weight: 700;
   letter-spacing: 0.05rem;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   text-decoration: none;
   display: inline-block;
@@ -100,7 +100,7 @@ a {
   text-align: center;
   font-weight: 700;
   letter-spacing: 0.2rem;
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: #4a7c96;
   text-transform: uppercase;
   margin-bottom: 14px;
@@ -140,7 +140,7 @@ a {
 .habit-section:last-child { border-right: none; }
 
 .habit-section-title {
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 8px;
@@ -156,7 +156,7 @@ a {
 }
 
 .habit-days-labels span {
-  font-size: 0.6rem;
+  font-size: 1rem;
   width: 12px;
   text-align: center;
   color: #888;
@@ -185,7 +185,7 @@ a {
 .box-sat { background-color: rgba(120, 192, 170, 0.1); }
 
 .habit-label {
-  font-size: 0.65rem;
+  font-size: 1rem;
   margin-left: 6px;
   white-space: nowrap;
   overflow: hidden;
@@ -197,7 +197,7 @@ a {
   color: white;
   text-align: center;
   padding: 4px;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: bold;
   letter-spacing: 0.1rem;
   border-bottom: 2px solid var(--border-color);
@@ -240,7 +240,7 @@ a {
 .task-item {
   display: flex;
   align-items: center;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .checkbox-square {
@@ -274,14 +274,14 @@ a {
 
 .line-placeholder-spending {
   font-family: var(--font-handwriting);
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 
 .day-header-title {
   padding: 15px;
   font-weight: bold;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 1rem;
   display: flex;
   justify-content: space-between;
 }
@@ -324,7 +324,7 @@ a {
   padding: 4px 12px;
   border-radius: 9999px;
   margin: 2px 0;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: bold;
   border: 1px solid #ddd;
   background-color: #f9fafb;
@@ -369,7 +369,7 @@ a {
   font-weight: 700;
   padding: 8px;
   letter-spacing: 0.1rem;
-  font-size: 0.8rem;
+  font-size: 1rem;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
 }
@@ -389,7 +389,7 @@ a {
   padding: 10px;
   background: #f9fafb;
   min-height: 48px;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .work-focus-cell:nth-child(3n),
@@ -397,7 +397,7 @@ a {
 .work-notes-grid.weekly .work-notes-cell:nth-child(4n) { border-right: none; }
 
 .focus-label {
-  font-size: 0.7rem;
+  font-size: 1rem;
   letter-spacing: 0.05rem;
   color: #666;
   text-transform: uppercase;
@@ -430,7 +430,7 @@ a {
   font-weight: 700;
   letter-spacing: 0.08rem;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: 10px 6px;
   border-bottom: 1px solid var(--border-color);
   text-align: center;
@@ -439,7 +439,7 @@ a {
 .day-number-small {
   display: block;
   color: #333;
-  font-size: 0.85rem;
+  font-size: 1rem;
   margin-bottom: 2px;
 }
 
@@ -451,7 +451,7 @@ a {
 }
 
 .work-time-label {
-  font-size: 0.5rem;
+  font-size: 1rem;
   color: #888;
   display: flex;
   align-items: center;
@@ -463,14 +463,14 @@ a {
 .work-time-slot {
   padding: 2px 4px;
   font-family: var(--font-handwriting);
-  font-size: 0.7rem;
+  font-size: 1rem;
 }
 
 .work-rest {
   padding: 15px;
   text-align: center;
   font-family: var(--font-handwriting);
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
 .home-calendar {
@@ -499,7 +499,7 @@ a {
 .home-calendar-header p {
   margin: 0;
   color: #666;
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
 .home-links {
@@ -532,13 +532,13 @@ a {
 }
 
 .day-number {
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: #666;
   font-weight: 700;
 }
 
 .calendar-day-name {
-  font-size: 0.65rem;
+  font-size: 1rem;
   letter-spacing: 0.08rem;
   color: #4a7c96;
   font-weight: 700;
@@ -547,7 +547,7 @@ a {
 .events-list {
   margin-top: 2px;
   font-family: var(--font-sans);
-  font-size: 0.65rem;
+  font-size: 1rem;
   line-height: 1.1;
   display: flex;
   flex-direction: column;
@@ -556,7 +556,7 @@ a {
 }
 
 .holiday-label {
-  font-size: 0.6rem;
+  font-size: 1rem;
   text-transform: uppercase;
   color: #666;
   letter-spacing: 0.04rem;

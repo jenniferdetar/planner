@@ -1,4 +1,4 @@
-import { getPillClass, getStaticWeeklyInfo } from '../lib/planner';
+import { getStaticWeeklyInfo } from '../lib/planner';
 
 export default function MonthCalendar({ events, monthDate }) {
   const { year, month, daysInMonth, startDayOfWeek, monthLabel } = monthDate;
@@ -43,6 +43,25 @@ export default function MonthCalendar({ events, monthDate }) {
   const DAY_NAMES = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
   const DAY_CLASSES = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
+  // Determine where to put the "BE REAL" banner
+  // Prefer the larger empty block (start or end of month)
+  const showInStart = startDayOfWeek >= 3;
+  const showInEnd = !showInStart && remaining >= 3;
+  
+  let bannerCellIndex = -1;
+  let bannerBlockWidth = 0;
+  let bannerBlockStart = 0;
+
+  if (showInStart) {
+    bannerCellIndex = Math.floor(startDayOfWeek / 2);
+    bannerBlockWidth = startDayOfWeek;
+    bannerBlockStart = 0;
+  } else if (showInEnd) {
+    bannerCellIndex = (cells.length - remaining) + Math.floor(remaining / 2);
+    bannerBlockWidth = remaining;
+    bannerBlockStart = cells.length - remaining;
+  }
+
   return (
     <div className="month-calendar">
       <h1 className="month-title">{monthLabel}</h1>
@@ -58,17 +77,15 @@ export default function MonthCalendar({ events, monthDate }) {
       <div className="month-grid">
         {cells.map((cell, i) => {
           if (cell.type === 'empty') {
-            // Check if we should put the "BE REAL" text in the first row empty space
-            const isFirstRow = i < 7;
-            const isMiddleOfEmpty = isFirstRow && i === Math.floor(startDayOfWeek / 2);
+            const isBannerCell = i === bannerCellIndex;
             const bannerStyle = {
-              left: `${(startDayOfWeek / 2 - i) * 100}%`,
-              width: `${startDayOfWeek * 100}%`
+              left: `${(bannerBlockStart + bannerBlockWidth / 2 - i) * 100}%`,
+              width: `${bannerBlockWidth * 100}%`
             };
             
             return (
               <div key={`empty-${i}`} className="month-day empty">
-                {isMiddleOfEmpty && startDayOfWeek > 2 && (
+                {isBannerCell && (
                    <div className="be-real-banner" style={bannerStyle}>
                      <span className="be">BE</span> <span className="real">REAL</span>
                      <div className="subtitle">not perfect</div>
@@ -106,6 +123,7 @@ export default function MonthCalendar({ events, monthDate }) {
           margin: 0 auto;
           background: white;
           border: 1px solid var(--border-color);
+          overflow-x: auto;
         }
 
         .month-title {
@@ -121,6 +139,7 @@ export default function MonthCalendar({ events, monthDate }) {
           display: grid;
           grid-template-columns: repeat(7, 1fr);
           border-bottom: 1px solid var(--border-color);
+          min-width: 800px;
         }
 
         .month-day-head {
@@ -128,7 +147,7 @@ export default function MonthCalendar({ events, monthDate }) {
           text-align: center;
           font-weight: bold;
           color: white;
-          font-size: 1.1rem;
+          font-size: 1.2rem;
           letter-spacing: 0.15rem;
         }
 
@@ -145,6 +164,7 @@ export default function MonthCalendar({ events, monthDate }) {
           grid-template-columns: repeat(7, 1fr);
           background-color: var(--border-color);
           gap: 1px;
+          min-width: 800px;
         }
 
         .month-day {
@@ -167,7 +187,7 @@ export default function MonthCalendar({ events, monthDate }) {
         }
 
         .day-number {
-          font-size: 1.2rem;
+          font-size: 1rem;
           color: #999;
           font-weight: 400;
         }
@@ -196,7 +216,7 @@ export default function MonthCalendar({ events, monthDate }) {
         }
 
         .holiday-label {
-          font-size: 0.7rem;
+          font-size: 1rem;
           text-transform: uppercase;
           color: #888;
           letter-spacing: 0.05rem;
