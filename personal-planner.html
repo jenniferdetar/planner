@@ -51,18 +51,20 @@
 
         .notebook-container {
             display: flex;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: auto;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            min-width: fit-content;
         }
 
         .notebook-spread {
             display: flex;
             gap: 2px; /* Narrow center divider */
-            width: 1300px; /* Reduced from max-width 1600px */
+            width: 1300px;
             background: #ddd; /* Divider color */
             border: 1px solid #ddd;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
 
         .notebook-page {
@@ -299,11 +301,10 @@
         }
 
         .nav-controls {
-            position: fixed;
-            top: 20px;
-            left: 20px;
             display: flex;
             gap: 10px;
+            margin-bottom: 20px;
+            z-index: 10;
         }
 
         .nav-btn {
