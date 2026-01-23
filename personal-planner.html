@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --sun-bg: #f59e9e;
+            --mon-bg: #f6d2a2;
+            --tue-bg: #a2d9d9;
+            --wed-bg: #5a8ca0;
+            --thu-bg: #f59e9e;
+            --fri-bg: #f6d2a2;
+            --sat-bg: #a2d9d9;
+            --border-color: #333;
+            --text-color: #333;
+            --header-blue: #5a8ca0;
+        }
+
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+        }
+
+        .notebook-spread {
+            display: flex;
+            gap: 20px;
+            max-width: 1600px;
+        }
+
+        .notebook-page {
+            width: 750px;
+            padding: 30px;
+            background: #fff;
+            position: relative;
+            box-shadow: 10px 0 15px -5px rgba(0,0,0,0.1);
+            min-height: 1000px;
+        }
+
+        .header-bar {
+            background-color: var(--header-blue);
+            color: white;
+            text-align: center;
+            padding: 5px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .habit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .habit-section {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .habit-title {
+            text-align: center;
+            font-size: 0.8rem;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .habit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.75rem;
+        }
+
+        .checkbox-grid {
+            display: flex;
+            gap: 2px;
+        }
+
+        .tiny-check {
+            width: 10px;
+            height: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .day-section {
+            margin-bottom: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 5px;
+        }
+
+        .day-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--sun-bg);
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .day-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 15px;
+        }
+
+        .day-sidebar {
+            font-size: 0.75rem;
+            color: #666;
+            border-right: 1px solid #eee;
+            padding-right: 10px;
+        }
+
+        .day-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .task-line {
+            border-bottom: 1px solid #f0f0f0;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .check-box {
+            width: 12px;
+            height: 12px;
+            border: 1px solid #999;
+        }
+
+        .enjoy-banner {
+            background-color: #f59e9e;
+            color: white;
+            text-align: center;
+            font-size: 0.7rem;
+            padding: 3px;
+            margin: 10px 0;
+            letter-spacing: 2px;
+        }
+
+        .nav-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            text-decoration: none;
+            color: black;
+            border-radius: 15px;
+        }
+
+        .event-item {
+            font-weight: bold;
+            color: var(--header-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-controls">
+        <a href="index.html" class="nav-btn">Back to Calendar</a>
+        <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
+        <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
+    </div>
+
+    <div class="notebook-spread">
+        <!-- LEFT PAGE -->
+        <div class="notebook-page">
+            <div id="week-header-left" class="header-bar">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
+            
+            <div class="habit-grid">
+                <div class="habit-section">
+                    <div class="habit-title">Home Care</div>
+                    <div class="habit-list">
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Make beds</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Ana - Cleaning</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Recycling</div>
+                    </div>
+                </div>
+                <div class="habit-section">
+                    <div class="habit-title">Self Care</div>
+                    <div class="habit-list">
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Shower</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Read</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Bring lunch to work</div>
+                    </div>
+                </div>
+                <div class="habit-section">
+                    <div class="habit-title">Week days</div>
+                    <div class="habit-list">
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Get up at 5:00 am</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Leave work at 3:30 pm</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Take train to work</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Listen to Bible app</div>
+                    </div>
+                </div>
+                <div class="habit-section">
+                    <div class="habit-title">Weekends</div>
+                    <div class="habit-list">
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Get up at 7:00 am</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Plan/prep meals for week</div>
+                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Laundry</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="enjoy-banner">❤ ENJOY YOUR FAMILY ❤</div>
+
+            <div id="days-left-container">
+                <!-- Sunday, Monday, Tuesday injected here -->
+            </div>
+        </div>
+
+        <!-- RIGHT PAGE -->
+        <div class="notebook-page">
+            <div id="week-header-right" class="header-bar">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
+            
+            <div id="days-right-container">
+                <!-- Wednesday, Thursday, Friday, Saturday injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentStartDate = new Date(2025, 11, 28); // Start Sunday Dec 28, 2025
+
+        const sidebarTasks = {
+            0: "Make menu plan\nGrocery shop\nClean out purse",
+            1: "Dust furniture\nVacuum house\nBible Study",
+            2: "Clean out fridge\nMop hard surfaces\nTake out all trash",
+            3: "Clean bathrooms\nChange towels\nRe-stock toilet paper",
+            4: "Change bedroom sheets\nLaundry Day",
+            5: "Clean electronic screens\nSort paperwork & mail",
+            6: "Clean car\nWater plants"
+        };
+
+        async function fetchWeekEvents(startDate) {
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 6);
+            
+            const startStr = startDate.toISOString().split('T')[0];
+            const endStr = endDate.toISOString().split('T')[0];
+
+            const { data, error } = await supabaseClient
+                .from('calendar_by_date')
+                .select('*')
+                .gte('date', startStr)
+                .lte('date', endStr);
+
+            return data || [];
+        }
+
+        function renderSpread() {
+            const leftContainer = document.getElementById('days-left-container');
+            const rightContainer = document.getElementById('days-right-container');
+            leftContainer.innerHTML = '';
+            rightContainer.innerHTML = '';
+
+            const weekEnd = new Date(currentStartDate);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+
+            const headerStr = `${currentStartDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})} - ${weekEnd.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`.toUpperCase();
+            document.getElementById('week-header-left').innerText = headerStr;
+            document.getElementById('week-header-right').innerText = headerStr;
+
+            fetchWeekEvents(currentStartDate).then(events => {
+                for (let i = 0; i < 7; i++) {
+                    const dayDate = new Date(currentStartDate);
+                    dayDate.setDate(dayDate.getDate() + i);
+                    const dayStr = dayDate.toISOString().split('T')[0];
+                    const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'long' });
+                    const formattedDate = dayDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+                    const dayEvents = events.filter(e => e.date === dayStr);
+
+                    const dayHtml = `
+                        <div class="day-section">
+                            <div class="day-header">${dayName}, ${formattedDate}</div>
+                            <div class="day-layout">
+                                <div class="day-sidebar">
+                                    ${sidebarTasks[i].split('\n').map(t => `• ${t}`).join('<br>')}
+                                </div>
+                                <div class="day-content">
+                                    ${dayEvents.map(e => `
+                                        <div class="task-line">
+                                            <div class="check-box"></div>
+                                            <span class="event-item">${e.title}</span>
+                                        </div>
+                                    `).join('')}
+                                    ${Array(Math.max(3, 8 - dayEvents.length)).fill(0).map(() => `
+                                        <div class="task-line"><div class="check-box"></div></div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    if (i < 3) leftContainer.innerHTML += dayHtml;
+                    else rightContainer.innerHTML += dayHtml;
+                }
+            });
+        }
+
+        function changeWeek(delta) {
+            currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
+            renderSpread();
+        }
+
+        renderSpread();
+    </script>
+</body>
+</html>
