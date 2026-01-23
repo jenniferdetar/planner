@@ -137,16 +137,21 @@
             font-size: 0.8rem;
             border-bottom: 1px solid var(--border-color);
             color: #fff;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .time-slot {
-            min-height: 30px;
+            height: 40px;
             border-bottom: 1px dotted #ccc;
             display: flex;
             align-items: center;
             padding: 2px 5px;
             font-size: 0.65rem;
             position: relative;
+            box-sizing: border-box;
         }
 
         .time-label {
@@ -161,6 +166,10 @@
             flex-grow: 1;
             outline: none;
             word-break: break-word;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
         }
 
         .event-entry {
@@ -169,6 +178,7 @@
             padding: 2px 5px;
             font-weight: bold;
             width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             box-sizing: border-box;
