@@ -191,6 +191,8 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
+        <a href="work-planner.html" class="nav-link">Work Planner</a>
+        <a href="personal-planner.html" class="nav-link">Personal Planner</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
@@ -201,12 +203,13 @@
     <div class="main-container">
         <div class="notebook-page">
         <div class="header-controls">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
-                <a href="personal-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
-            </div>
+            <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
             <h1 id="current-month-display" class="month-title">JANUARY 2026</h1>
-            <button class="nav-btn" onclick="changeMonth(1)">Next</button>
+            <div style="display: flex; gap: 10px;">
+                <a href="work-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Work Planner</a>
+                <a href="personal-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
+                <button class="nav-btn" onclick="changeMonth(1)">Next</button>
+            </div>
         </div>
 
 
@@ -309,7 +312,17 @@
                     if (container) {
                         const pill = document.createElement('div');
                         pill.className = getEventClass(event.title);
-                        pill.innerText = event.title;
+                        
+                        let displayTitle = event.title;
+                        if (event.time) {
+                            const [h, m] = event.time.split(':');
+                            const hour = parseInt(h);
+                            const ampm = hour >= 12 ? 'p' : 'a';
+                            const displayHour = hour % 12 || 12;
+                            displayTitle = `${displayHour}${ampm} ${event.title}`;
+                        }
+                        
+                        pill.innerText = displayTitle;
                         container.appendChild(pill);
                     }
                 });
