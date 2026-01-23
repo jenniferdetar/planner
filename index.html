@@ -7,6 +7,7 @@
     <!-- v2.1.1 -->
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
     <style>
         :root {
             --sun-bg: #f59e9e;
@@ -57,11 +58,13 @@
         }
 
         .notebook-page {
-            width: 1000px;
+            width: 100%;
+            max-width: 1000px;
             padding: 40px;
             background: #fff;
             position: relative;
             box-shadow: 10px 0 15px -5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
 
 
@@ -221,12 +224,16 @@
     </div>
 
     <script>
-        // Supabase Configuration
-        const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentDate = new Date(2026, 0, 1); // Start at Jan 2026
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        let currentDate = dateParam ? new Date(dateParam) : new Date(2026, 0, 1);
+        
+        // Ensure currentDate is first of month for display purposes
+        if (dateParam) {
+            currentDate.setDate(1);
+        }
 
         async function fetchEvents(month, year) {
             // Use YYYY-MM-DD format for reliable Supabase date filtering
@@ -263,6 +270,10 @@
             const monthName = currentDate.toLocaleString('default', { month: 'long' }).toUpperCase();
             
             document.getElementById('current-month-display').innerText = `${monthName} ${year}`;
+            
+            // Update planner links
+            const firstOfMonth = `${year}-${String(month + 1).padStart(2, '0')}-01`;
+            updateNavigationLinks(firstOfMonth);
 
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -294,6 +305,9 @@
                 
                 const dayNum = document.createElement('div');
                 dayNum.className = 'day-number';
+                dayNum.style.cursor = 'pointer';
+                dayNum.title = 'View week in Work Planner';
+                dayNum.onclick = () => window.location.href = `work-planner.html?date=${dateKey}`;
                 dayNum.innerText = i;
                 dayDiv.appendChild(dayNum);
 
@@ -331,8 +345,18 @@
 
         function changeMonth(delta) {
             currentDate.setMonth(currentDate.getMonth() + delta);
+            const dateStr = currentDate.toISOString().split('T')[0];
+            const newUrl = window.location.pathname + '?date=' + dateStr;
+            window.history.pushState({ date: dateStr }, '', newUrl);
             renderCalendar();
         }
+
+        window.onpopstate = function(event) {
+            const date = event.state ? event.state.date : dateParam;
+            currentDate = date ? new Date(date) : new Date(2026, 0, 1);
+            if (date) currentDate.setDate(1);
+            renderCalendar();
+        };
 
         // Initial render
         renderCalendar();

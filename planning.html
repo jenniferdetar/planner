@@ -6,6 +6,7 @@
     <title>Planning - Home Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
     <style>
         :root {
             --header-blue: #5a8ca0;
@@ -42,7 +43,7 @@
             padding: 40px;
         }
         .notebook-page {
-            width: 800px;
+            width: 100%; max-width: 800px; box-sizing: border-box;
             background: #fff;
             padding: 40px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -102,8 +103,6 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const CATEGORY = 'Planning';
 

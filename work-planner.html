@@ -6,6 +6,7 @@
     <title>Work Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
     <style>
         :root {
             --sun-bg: #f59e9e;
@@ -150,10 +151,11 @@
         }
 
         .time-label {
-            width: 35px;
+            width: 55px;
             color: #888;
             font-size: 0.55rem;
             flex-shrink: 0;
+            white-space: nowrap;
         }
 
         .slot-content {
@@ -227,32 +229,33 @@
             <div class="planner-header">
                 <div id="week-range" class="date-range">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
                 <h2 style="margin: 5px 0; color: var(--header-blue);">WORK PLANNER</h2>
+                <div id="save-status" style="font-size: 0.7rem; color: #888;">All changes saved</div>
             </div>
 
             <div class="top-grid">
                 <div class="top-section">
                     <div class="section-title">Priority #1</div>
-                    <div class="editable-area" contenteditable="true" id="priority-1"></div>
+                    <div class="editable-area" contenteditable="true" id="priority-1" data-field="priority-1"></div>
                 </div>
                 <div class="top-section">
                     <div class="section-title">Priority #2</div>
-                    <div class="editable-area" contenteditable="true" id="priority-2"></div>
+                    <div class="editable-area" contenteditable="true" id="priority-2" data-field="priority-2"></div>
                 </div>
                 <div class="top-section">
                     <div class="section-title">Priority #3</div>
-                    <div class="editable-area" contenteditable="true" id="priority-3"></div>
+                    <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3"></div>
                 </div>
                 <div class="top-section">
                     <div class="section-title">One thing I'm looking forward to</div>
-                    <div class="editable-area" contenteditable="true" id="looking-forward"></div>
+                    <div class="editable-area" contenteditable="true" id="looking-forward" data-field="looking-forward"></div>
                 </div>
                 <div class="top-section">
                     <div class="section-title">Someone I can encourage</div>
-                    <div class="editable-area" contenteditable="true" id="encourage"></div>
+                    <div class="editable-area" contenteditable="true" id="encourage" data-field="encourage"></div>
                 </div>
                 <div class="top-section">
                     <div class="section-title">Something I'd like to read/listen to</div>
-                    <div class="editable-area" contenteditable="true" id="read-listen"></div>
+                    <div class="editable-area" contenteditable="true" id="read-listen" data-field="read-listen"></div>
                 </div>
             </div>
 
@@ -263,11 +266,19 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentStartDate = new Date(2025, 11, 28); // Start Sunday Dec 28, 2025
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        let currentStartDate = dateParam ? new Date(dateParam) : new Date(2025, 11, 28);
+        
+        // Adjust to Sunday of the week
+        if (dateParam) {
+            const day = currentStartDate.getDay();
+            currentStartDate.setDate(currentStartDate.getDate() - day);
+        }
+        
+        let saveTimeout = null;
 
         async function fetchWeekEvents(startDate) {
             const endDate = new Date(startDate);
@@ -283,6 +294,53 @@
                 .lte('date', endStr);
 
             return data || [];
+        }
+
+        async function fetchPlannerData(startDate) {
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 6);
+            const startStr = startDate.toISOString().split('T')[0];
+            const endStr = endDate.toISOString().split('T')[0];
+
+            const { data, error } = await supabaseClient
+                .from('planner_data')
+                .select('*')
+                .gte('date', startStr)
+                .lte('date', endStr);
+
+            return data || [];
+        }
+
+        async function savePlannerData(date, fieldId, content) {
+            const saveStatus = document.getElementById('save-status');
+            saveStatus.innerText = 'Saving...';
+
+            const { error } = await supabaseClient
+                .from('planner_data')
+                .upsert({ 
+                    date: date, 
+                    field_id: fieldId, 
+                    content: content,
+                    updated_at: new Date()
+                }, { onConflict: 'date,field_id' });
+
+            if (error) {
+                console.error('Save error:', error);
+                saveStatus.innerText = 'Error saving';
+            } else {
+                saveStatus.innerText = 'All changes saved';
+            }
+        }
+
+        function handleInput(e) {
+            const el = e.target;
+            const fieldId = el.getAttribute('data-field');
+            const date = el.getAttribute('data-date') || currentStartDate.toISOString().split('T')[0];
+            const content = el.innerText;
+
+            document.getElementById('save-status').innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => savePlannerData(date, fieldId, content), 1000);
         }
 
         function getTimeSlots() {
@@ -345,9 +403,9 @@
             return null;
         }
 
-        function renderPlanner() {
+        async function renderPlanner() {
             const container = document.getElementById('planner-columns');
-            container.innerHTML = '';
+            container.innerHTML = 'Loading...';
 
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
@@ -355,58 +413,101 @@
             const rangeStr = `${currentStartDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})} - ${weekEnd.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`.toUpperCase();
             document.getElementById('week-range').innerText = rangeStr;
 
+            updateNavigationLinks(currentStartDate);
+
+            // Clear top priorities
+            document.querySelectorAll('.editable-area').forEach(el => {
+                el.innerText = '';
+                el.oninput = handleInput;
+            });
+
             const timeSlots = getTimeSlots();
             const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const dayClasses = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
-            fetchWeekEvents(currentStartDate).then(events => {
-                for (let i = 0; i < 7; i++) {
-                    const dayDate = new Date(currentStartDate);
-                    dayDate.setDate(dayDate.getDate() + i);
-                    const dayStr = dayDate.toISOString().split('T')[0];
-                    const dayEvents = events.filter(e => e.date === dayStr);
+            const [events, plannerData] = await Promise.all([
+                fetchWeekEvents(currentStartDate),
+                fetchPlannerData(currentStartDate)
+            ]);
 
-                    const dayCol = document.createElement('div');
-                    dayCol.className = 'day-col';
-
-                    const header = document.createElement('div');
-                    header.className = `day-header ${dayClasses[i]}-header`;
-                    header.innerHTML = `${dayDate.getDate()}<br>${dayNames[i].toUpperCase()}`;
-                    dayCol.appendChild(header);
-
-                    timeSlots.forEach(slot => {
-                        const slotDiv = document.createElement('div');
-                        slotDiv.className = 'time-slot';
-                        
-                        const label = document.createElement('div');
-                        label.className = 'time-label';
-                        label.innerText = formatTimeLabel(slot);
-                        slotDiv.appendChild(label);
-
-                        const content = document.createElement('div');
-                        content.className = 'slot-content';
-                        
-                        const eventTitle = getEventForSlot(dayEvents, slot, i);
-                        if (eventTitle) {
-                            content.innerHTML = `<div class="event-entry">${eventTitle}</div>`;
-                        } else {
-                            content.contentEditable = "true";
-                            content.id = `slot-${dayStr}-${slot}`;
-                        }
-                        
-                        slotDiv.appendChild(content);
-                        dayCol.appendChild(slotDiv);
-                    });
-
-                    container.appendChild(dayCol);
+            // Fill top priorities from plannerData
+            const startStr = currentStartDate.toISOString().split('T')[0];
+            plannerData.forEach(item => {
+                if (item.date === startStr) {
+                    const el = document.querySelector(`[data-field="${item.field_id}"]`);
+                    if (el && !item.field_id.startsWith('slot-')) {
+                        el.innerText = item.content;
+                    }
                 }
             });
+
+            container.innerHTML = '';
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(currentStartDate);
+                dayDate.setDate(dayDate.getDate() + i);
+                const dayStr = dayDate.toISOString().split('T')[0];
+                const dayEvents = events.filter(e => e.date === dayStr);
+
+                const dayCol = document.createElement('div');
+                dayCol.className = 'day-col';
+
+                const header = document.createElement('div');
+                header.className = `day-header ${dayClasses[i]}-header`;
+                header.innerHTML = `${dayDate.getDate()}<br>${dayNames[i].toUpperCase()}`;
+                dayCol.appendChild(header);
+
+                timeSlots.forEach(slot => {
+                    const slotDiv = document.createElement('div');
+                    slotDiv.className = 'time-slot';
+                    
+                    const label = document.createElement('div');
+                    label.className = 'time-label';
+                    label.innerText = formatTimeLabel(slot);
+                    slotDiv.appendChild(label);
+
+                    const content = document.createElement('div');
+                    content.className = 'slot-content';
+                    
+                    const eventTitle = getEventForSlot(dayEvents, slot, i);
+                    if (eventTitle) {
+                        content.innerHTML = `<div class="event-entry">${eventTitle}</div>`;
+                    } else {
+                        content.contentEditable = "true";
+                        content.setAttribute('data-field', `slot-${slot}`);
+                        content.setAttribute('data-date', dayStr);
+                        content.oninput = handleInput;
+                        
+                        const saved = plannerData.find(d => d.date === dayStr && d.field_id === `slot-${slot}`);
+                        if (saved) {
+                            content.innerText = saved.content;
+                        }
+                    }
+                    
+                    slotDiv.appendChild(content);
+                    dayCol.appendChild(slotDiv);
+                });
+
+                container.appendChild(dayCol);
+            }
         }
 
         function changeWeek(delta) {
             currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
+            const dateStr = currentStartDate.toISOString().split('T')[0];
+            const newUrl = window.location.pathname + '?date=' + dateStr;
+            window.history.pushState({ date: dateStr }, '', newUrl);
             renderPlanner();
         }
+
+        window.onpopstate = function(event) {
+            const date = event.state ? event.state.date : dateParam;
+            currentStartDate = date ? new Date(date) : new Date(2025, 11, 28);
+            if (date) {
+                const day = currentStartDate.getDay();
+                currentStartDate.setDate(currentStartDate.getDate() - day);
+            }
+            renderPlanner();
+        };
 
         renderPlanner();
     </script>

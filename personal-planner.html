@@ -6,6 +6,7 @@
     <title>Personal Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
     <style>
         :root {
             --sun-bg: #f59e9e;
@@ -101,8 +102,11 @@
         }
 
         .mini-day-box {
-            height: 15px;
-            border-radius: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 1px;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .mini-day-box.sun { background-color: #f9d7d7; }
@@ -112,6 +116,21 @@
         .mini-day-box.thu { background-color: #f9d7d7; }
         .mini-day-box.fri { background-color: #fce8cc; }
         .mini-day-box.sat { background-color: #d1eded; }
+
+        .mini-day-box.checked {
+            background-color: #333 !important;
+            position: relative;
+        }
+        
+        .mini-day-box.checked::after {
+            content: "✓";
+            color: white;
+            font-size: 8px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
         .mini-week-row {
             display: flex;
@@ -170,12 +189,6 @@
             font-size: 0.65rem;
             flex-grow: 1;
             white-space: nowrap;
-        }
-
-        .mini-day-box {
-            width: 12px;
-            height: 12px;
-            border-radius: 1px;
         }
 
         .mini-week-header {
@@ -291,6 +304,23 @@
             height: 14px;
             border: 1px solid #f59e9e;
             flex-shrink: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .check-box.checked::after {
+            content: "✓";
+            color: #f59e9e;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .editable-task {
+            flex-grow: 1;
+            outline: none;
+            min-width: 50px;
         }
 
         .enjoy-banner {
@@ -343,6 +373,7 @@
         <div class="nav-controls">
             <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
             <a href="work-planner.html" class="nav-btn" style="text-decoration: none;">Work Planner</a>
+            <div id="save-status" style="font-size: 0.7rem; color: #888; align-self: center;">All changes saved</div>
             <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
         </div>
 
@@ -479,11 +510,19 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentStartDate = new Date(2025, 11, 28); // Start Sunday Dec 28, 2025
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        let currentStartDate = dateParam ? new Date(dateParam) : new Date(2025, 11, 28);
+        
+        // Adjust to Sunday of the week
+        if (dateParam) {
+            const day = currentStartDate.getDay();
+            currentStartDate.setDate(currentStartDate.getDate() - day);
+        }
+
+        let saveTimeout = null;
 
         const sidebarTasks = {
             0: "Make menu plan\nGrocery shop\nClean out purse",
@@ -498,7 +537,6 @@
         async function fetchWeekEvents(startDate) {
             const endDate = new Date(startDate);
             endDate.setDate(endDate.getDate() + 6);
-            
             const startStr = startDate.toISOString().split('T')[0];
             const endStr = endDate.toISOString().split('T')[0];
 
@@ -511,71 +549,249 @@
             return data || [];
         }
 
-        function renderSpread() {
+        async function fetchPlannerData(startDate) {
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 6);
+            const startStr = startDate.toISOString().split('T')[0];
+            const endStr = endDate.toISOString().split('T')[0];
+
+            const { data, error } = await supabaseClient
+                .from('planner_data')
+                .select('*')
+                .gte('date', startStr)
+                .lte('date', endStr);
+
+            return data || [];
+        }
+
+        async function savePlannerData(date, fieldId, content) {
+            const saveStatus = document.getElementById('save-status');
+            saveStatus.innerText = 'Saving...';
+
+            const { error } = await supabaseClient
+                .from('planner_data')
+                .upsert({ 
+                    date: date, 
+                    field_id: fieldId, 
+                    content: content,
+                    updated_at: new Date()
+                }, { onConflict: 'date,field_id' });
+
+            if (error) {
+                console.error('Save error:', error);
+                saveStatus.innerText = 'Error saving';
+            } else {
+                saveStatus.innerText = 'All changes saved';
+            }
+        }
+
+        function handleInput(e) {
+            const el = e.target;
+            const fieldId = el.getAttribute('data-field');
+            const date = el.getAttribute('data-date');
+            const content = el.innerText;
+
+            document.getElementById('save-status').innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => savePlannerData(date, fieldId, content), 1000);
+        }
+
+        function toggleBox(e) {
+            const el = e.target;
+            el.classList.toggle('checked');
+            const fieldId = el.getAttribute('data-field');
+            const date = el.getAttribute('data-date');
+            const content = el.classList.contains('checked') ? 'true' : 'false';
+
+            savePlannerData(date, fieldId, content);
+        }
+
+        async function renderSpread() {
             const container = document.getElementById('days-container');
-            container.innerHTML = '';
+            container.innerHTML = 'Loading...';
 
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
+            const startStr = currentStartDate.toISOString().split('T')[0];
 
             const headerStr = `${currentStartDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})} - ${weekEnd.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`.toUpperCase();
             document.getElementById('week-header-left').innerText = headerStr;
 
-            fetchWeekEvents(currentStartDate).then(events => {
-                for (let i = 0; i < 7; i++) {
-                    const dayDate = new Date(currentStartDate);
-                    dayDate.setDate(dayDate.getDate() + i);
-                    const dayStr = dayDate.toISOString().split('T')[0];
-                    const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'long' });
-                    const formattedDate = dayDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+            updateNavigationLinks(currentStartDate);
 
-                    const dayEvents = events.filter(e => e.date === dayStr);
+            const [events, plannerData] = await Promise.all([
+                fetchWeekEvents(currentStartDate),
+                fetchPlannerData(currentStartDate)
+            ]);
 
-                    const dayHtml = `
-                        <div class="day-section">
-                            <div class="day-header">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
-                            <div class="day-layout">
-                                <div class="day-sidebar">
-                                    <ul class="sidebar-task-list">
-                                        ${sidebarTasks[i].split('\n').map(t => `<li class="sidebar-task-item">${t}</li>`).join('')}
-                                    </ul>
-                                    <div class="sidebar-icon-row">
-                                        <span class="sidebar-icon">🍴</span>
-                                        <div class="sidebar-line"></div>
-                                    </div>
-                                    <div class="sidebar-icon-row">
-                                        <span class="sidebar-icon">🌸</span>
-                                        <div class="sidebar-line"></div>
-                                    </div>
-                                    <div class="sidebar-icon-row">
-                                        <span class="sidebar-icon">💲</span>
-                                        <div class="sidebar-line"></div>
-                                    </div>
+            // Habit Box Setup
+            document.querySelectorAll('.mini-week-row').forEach((row, rowIndex) => {
+                const habitName = row.querySelector('.habit-label').innerText.replace(/\s+/g, '-').toLowerCase();
+                const boxes = row.querySelectorAll('.mini-day-box');
+                boxes.forEach((box, dayIndex) => {
+                    const boxDate = new Date(currentStartDate);
+                    boxDate.setDate(boxDate.getDate() + dayIndex);
+                    const boxDateStr = boxDate.toISOString().split('T')[0];
+                    const fieldId = `habit-${habitName}`;
+                    
+                    box.setAttribute('data-field', fieldId);
+                    box.setAttribute('data-date', boxDateStr);
+                    box.onclick = toggleBox;
+                    
+                    const saved = plannerData.find(d => d.date === boxDateStr && d.field_id === fieldId);
+                    if (saved && saved.content === 'true') {
+                        box.classList.add('checked');
+                    } else {
+                        box.classList.remove('checked');
+                    }
+                });
+            });
+
+            container.innerHTML = '';
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(currentStartDate);
+                dayDate.setDate(dayDate.getDate() + i);
+                const dayStr = dayDate.toISOString().split('T')[0];
+                const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'long' });
+                const formattedDate = dayDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+                const dayEvents = events.filter(e => e.date === dayStr);
+
+                const dayHtml = `
+                    <div class="day-section">
+                        <div class="day-header">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
+                        <div class="day-layout">
+                            <div class="day-sidebar">
+                                <ul class="sidebar-task-list">
+                                    ${sidebarTasks[i].split('\n').map((t, ti) => {
+                                        const fieldId = `sidebar-task-${ti}`;
+                                        const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
+                                        const isChecked = saved && saved.content.startsWith('[x]');
+                                        const text = saved ? saved.content.replace('[x]', '').replace('[ ]', '') : t;
+                                        return `
+                                            <li class="sidebar-task-item">
+                                                <div class="check-box ${isChecked ? 'checked' : ''}" 
+                                                     onclick="toggleSidebarTask(event, '${dayStr}', '${fieldId}')"></div>
+                                                <span contenteditable="true" 
+                                                      data-date="${dayStr}" 
+                                                      data-field="${fieldId}" 
+                                                      oninput="handleSidebarTaskInput(event, '${dayStr}', '${fieldId}')">${text}</span>
+                                            </li>
+                                        `;
+                                    }).join('')}
+                                </ul>
+                                <div class="sidebar-icon-row">
+                                    <span class="sidebar-icon">🍴</span>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)"></div>
                                 </div>
-                                <div class="day-content">
-                                    ${dayEvents.map(e => `
-                                        <div class="task-line">
-                                            <div class="check-box"></div>
-                                            <span class="event-item">${e.title}</span>
-                                        </div>
-                                    `).join('')}
-                                    ${Array(Math.max(4, 10 - dayEvents.length)).fill(0).map(() => `
-                                        <div class="task-line"><div class="check-box"></div></div>
-                                    `).join('')}
+                                <div class="sidebar-icon-row">
+                                    <span class="sidebar-icon">🌸</span>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="self-care" oninput="handleInput(event)"></div>
+                                </div>
+                                <div class="sidebar-icon-row">
+                                    <span class="sidebar-icon">💲</span>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="financial" oninput="handleInput(event)"></div>
                                 </div>
                             </div>
+                            <div class="day-content">
+                                ${dayEvents.map((e, ei) => `
+                                    <div class="task-line">
+                                        <div class="check-box" onclick="toggleTask(event, '${dayStr}', 'event-${ei}')"></div>
+                                        <span class="event-item">${e.title}</span>
+                                    </div>
+                                `).join('')}
+                                ${Array(Math.max(4, 10 - dayEvents.length)).fill(0).map((_, ti) => {
+                                    const fieldId = `daily-task-${ti}`;
+                                    const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
+                                    const isChecked = saved && saved.content.startsWith('[x]');
+                                    const text = saved ? saved.content.replace('[x]', '').replace('[ ]', '') : '';
+                                    return `
+                                        <div class="task-line">
+                                            <div class="check-box ${isChecked ? 'checked' : ''}" 
+                                                 onclick="toggleDailyTask(event, '${dayStr}', '${fieldId}')"></div>
+                                            <div class="editable-task" contenteditable="true" 
+                                                 data-date="${dayStr}" data-field="${fieldId}" 
+                                                 oninput="handleDailyTaskInput(event, '${dayStr}', '${fieldId}')">${text}</div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
                         </div>
-                    `;
+                    </div>
+                `;
+                container.innerHTML += dayHtml;
+            }
 
-                    container.innerHTML += dayHtml;
+            // Fill sidebar icons from plannerData
+            plannerData.forEach(item => {
+                if (item.field_id === 'meal-plan' || item.field_id === 'self-care' || item.field_id === 'financial') {
+                    const el = document.querySelector(`[data-date="${item.date}"][data-field="${item.field_id}"]`);
+                    if (el) el.innerText = item.content;
                 }
             });
         }
 
+        function toggleSidebarTask(e, date, fieldId) {
+            const box = e.target;
+            const span = box.nextElementSibling;
+            box.classList.toggle('checked');
+            const isChecked = box.classList.contains('checked');
+            const content = (isChecked ? '[x]' : '[ ]') + span.innerText;
+            savePlannerData(date, fieldId, content);
+        }
+
+        function handleSidebarTaskInput(e, date, fieldId) {
+            const span = e.target;
+            const box = span.previousElementSibling;
+            const isChecked = box.classList.contains('checked');
+            const content = (isChecked ? '[x]' : '[ ]') + span.innerText;
+            
+            document.getElementById('save-status').innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => savePlannerData(date, fieldId, content), 1000);
+        }
+
+        function toggleDailyTask(e, date, fieldId) {
+            const box = e.target;
+            const div = box.nextElementSibling;
+            box.classList.toggle('checked');
+            const isChecked = box.classList.contains('checked');
+            const content = (isChecked ? '[x]' : '[ ]') + div.innerText;
+            savePlannerData(date, fieldId, content);
+        }
+
+        function handleDailyTaskInput(e, date, fieldId) {
+            const div = e.target;
+            const box = div.previousElementSibling;
+            const isChecked = box.classList.contains('checked');
+            const content = (isChecked ? '[x]' : '[ ]') + div.innerText;
+            
+            document.getElementById('save-status').innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => savePlannerData(date, fieldId, content), 1000);
+        }
+
+        function toggleTask(e) {
+            e.target.classList.toggle('checked');
+        }
+
         function changeWeek(delta) {
             currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
+            const dateStr = currentStartDate.toISOString().split('T')[0];
+            const newUrl = window.location.pathname + '?date=' + dateStr;
+            window.history.pushState({ date: dateStr }, '', newUrl);
             renderSpread();
         }
+
+        window.onpopstate = function(event) {
+            const date = event.state ? event.state.date : dateParam;
+            currentStartDate = date ? new Date(date) : new Date(2025, 11, 28);
+            if (date) {
+                const day = currentStartDate.getDay();
+                currentStartDate.setDate(currentStartDate.getDate() - day);
+            }
+            renderSpread();
+        };
 
         renderSpread();
     </script>
