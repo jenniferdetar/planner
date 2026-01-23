@@ -59,20 +59,21 @@
 
         .notebook-spread {
             display: flex;
-            gap: 2px; /* Narrow center divider */
-            width: 1300px;
-            background: #ddd; /* Divider color */
-            border: 1px solid #ddd;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            flex-shrink: 0;
+            flex-direction: column;
+            gap: 20px;
+            width: 800px;
+            background: #fff;
+            border: none;
+            box-shadow: none;
         }
 
         .notebook-page {
-            width: 650px; /* Reduced from 750px */
-            padding: 25px; /* Reduced from 30px */
+            width: 100%;
+            padding: 30px;
             background: #fff;
             position: relative;
-            min-height: 1000px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            min-height: auto;
         }
 
         /* Mini Week Habit Styles */
@@ -466,17 +467,8 @@
 
             <div class="enjoy-banner">🏠 ❤ ENJOY YOUR FAMILY ❤ 🏠</div>
 
-            <div id="days-left-container">
-                <!-- Sunday, Monday, Tuesday injected here -->
-            </div>
-        </div>
-
-        <!-- RIGHT PAGE -->
-        <div class="notebook-page">
-            <div id="week-header-right" class="header-bar">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
-            
-            <div id="days-right-container">
-                <!-- Wednesday, Thursday, Friday, Saturday injected here -->
+            <div id="days-container">
+                <!-- All 7 days injected here -->
             </div>
         </div>
     </div>
@@ -515,17 +507,14 @@
         }
 
         function renderSpread() {
-            const leftContainer = document.getElementById('days-left-container');
-            const rightContainer = document.getElementById('days-right-container');
-            leftContainer.innerHTML = '';
-            rightContainer.innerHTML = '';
+            const container = document.getElementById('days-container');
+            container.innerHTML = '';
 
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
 
             const headerStr = `${currentStartDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})} - ${weekEnd.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`.toUpperCase();
             document.getElementById('week-header-left').innerText = headerStr;
-            document.getElementById('week-header-right').innerText = headerStr;
 
             fetchWeekEvents(currentStartDate).then(events => {
                 for (let i = 0; i < 7; i++) {
@@ -573,8 +562,7 @@
                         </div>
                     `;
 
-                    if (i < 3) leftContainer.innerHTML += dayHtml;
-                    else rightContainer.innerHTML += dayHtml;
+                    container.innerHTML += dayHtml;
                 }
             });
         }
