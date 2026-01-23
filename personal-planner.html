@@ -52,23 +52,24 @@
         .notebook-container {
             display: flex;
             justify-content: center;
-            padding: 20px 20px 20px 60px; /* Added left padding */
+            padding: 20px;
+            overflow-x: auto;
         }
 
         .notebook-spread {
             display: flex;
             gap: 2px; /* Narrow center divider */
-            max-width: 1600px;
+            width: 1300px; /* Reduced from max-width 1600px */
             background: #ddd; /* Divider color */
             border: 1px solid #ddd;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
         .notebook-page {
-            width: 750px;
-            padding: 30px;
+            width: 650px; /* Reduced from 750px */
+            padding: 25px; /* Reduced from 30px */
             background: #fff;
             position: relative;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             min-height: 1000px;
         }
 
@@ -135,45 +136,59 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: auto auto;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .habit-section {
-            border: 1px solid #ddd;
-            padding: 10px;
+            padding: 5px;
         }
 
         .habit-title {
-            text-align: center;
-            font-size: 0.8rem;
-            border-bottom: 1px solid #ddd;
+            text-align: right;
+            font-size: 0.75rem;
             margin-bottom: 5px;
             font-weight: bold;
+            padding-right: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .habit-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .habit-item {
+        .mini-week-row {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.75rem;
+            gap: 5px;
+            margin-bottom: 2px;
         }
 
-        .checkbox-grid {
-            display: flex;
+        .habit-label {
+            font-size: 0.65rem;
+            flex-grow: 1;
+            white-space: nowrap;
+        }
+
+        .mini-day-box {
+            width: 12px;
+            height: 12px;
+            border-radius: 1px;
+        }
+
+        .mini-week-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
             gap: 2px;
+            text-align: center;
+            font-size: 0.6rem;
+            font-weight: bold;
+            margin-bottom: 2px;
+            width: 98px;
         }
 
-        .tiny-check {
-            width: 10px;
-            height: 10px;
-            border: 1px solid #ccc;
+        .mini-week-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            width: 98px;
         }
 
         .day-section {
@@ -192,15 +207,63 @@
 
         .day-layout {
             display: grid;
-            grid-template-columns: 180px 1fr;
+            grid-template-columns: 140px 1fr;
             gap: 15px;
         }
 
         .day-sidebar {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: #666;
             border-right: 1px solid #eee;
             padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sidebar-task-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .sidebar-task-item::before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #f59e9e;
+            flex-shrink: 0;
+        }
+
+        .sidebar-icon-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 5px;
+        }
+
+        .sidebar-icon {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-line {
+            flex-grow: 1;
+            height: 1px;
+            background: #eee;
         }
 
         .day-content {
@@ -219,9 +282,10 @@
         }
 
         .check-box {
-            width: 12px;
-            height: 12px;
-            border: 1px solid #999;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #f59e9e;
+            flex-shrink: 0;
         }
 
         .enjoy-banner {
@@ -335,7 +399,7 @@
                                 <div class="mini-week-days">
                                     <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
                                 </div>
-                                <span class="habit-label">Bring lunch</span>
+                                <span class="habit-label">Bring lunch to work</span>
                             </div>
                         </div>
                     </div>
@@ -349,13 +413,25 @@
                                 <div class="mini-week-days">
                                     <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
                                 </div>
-                                <span class="habit-label">Get up 5:00 am</span>
+                                <span class="habit-label">Get up at 5:00 am</span>
                             </div>
                             <div class="mini-week-row">
                                 <div class="mini-week-days">
                                     <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
                                 </div>
-                                <span class="habit-label">Leave 3:30 pm</span>
+                                <span class="habit-label">Leave work at 3:30 pm</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Take train to work</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Listen to Bible app</span>
                             </div>
                         </div>
                     </div>
@@ -369,7 +445,13 @@
                                 <div class="mini-week-days">
                                     <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
                                 </div>
-                                <span class="habit-label">Get up 7:00 am</span>
+                                <span class="habit-label">Get up at 7:00 am</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Plan/prep meals for the week</span>
                             </div>
                             <div class="mini-week-row">
                                 <div class="mini-week-days">
@@ -381,7 +463,7 @@
                     </div>
                 </div>
 
-            <div class="enjoy-banner">❤ ENJOY YOUR FAMILY ❤</div>
+            <div class="enjoy-banner">🏠 ❤ ENJOY YOUR FAMILY ❤ 🏠</div>
 
             <div id="days-left-container">
                 <!-- Sunday, Monday, Tuesday injected here -->
@@ -407,8 +489,8 @@
 
         const sidebarTasks = {
             0: "Make menu plan\nGrocery shop\nClean out purse",
-            1: "Dust furniture\nVacuum house\nBible Study",
-            2: "Clean out fridge\nMop hard surfaces\nTake out all trash",
+            1: "Dust furniture\nVacuum house\n1 Thessalonians 2",
+            2: "Clean out fridge\nMop hard surfaces\nTake out all trash\nClean microwave & stovetop\n1 Thessalonians 3",
             3: "Clean bathrooms\nChange towels\nRe-stock toilet paper",
             4: "Change bedroom sheets\nLaundry Day",
             5: "Clean electronic screens\nSort paperwork & mail",
@@ -456,10 +538,24 @@
 
                     const dayHtml = `
                         <div class="day-section">
-                            <div class="day-header">${dayName}, ${formattedDate}</div>
+                            <div class="day-header">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
                             <div class="day-layout">
                                 <div class="day-sidebar">
-                                    ${sidebarTasks[i].split('\n').map(t => `• ${t}`).join('<br>')}
+                                    <ul class="sidebar-task-list">
+                                        ${sidebarTasks[i].split('\n').map(t => `<li class="sidebar-task-item">${t}</li>`).join('')}
+                                    </ul>
+                                    <div class="sidebar-icon-row">
+                                        <span class="sidebar-icon">🍴</span>
+                                        <div class="sidebar-line"></div>
+                                    </div>
+                                    <div class="sidebar-icon-row">
+                                        <span class="sidebar-icon">🌸</span>
+                                        <div class="sidebar-line"></div>
+                                    </div>
+                                    <div class="sidebar-icon-row">
+                                        <span class="sidebar-icon">💲</span>
+                                        <div class="sidebar-line"></div>
+                                    </div>
                                 </div>
                                 <div class="day-content">
                                     ${dayEvents.map(e => `
@@ -468,7 +564,7 @@
                                             <span class="event-item">${e.title}</span>
                                         </div>
                                     `).join('')}
-                                    ${Array(Math.max(3, 8 - dayEvents.length)).fill(0).map(() => `
+                                    ${Array(Math.max(4, 10 - dayEvents.length)).fill(0).map(() => `
                                         <div class="task-line"><div class="check-box"></div></div>
                                     `).join('')}
                                 </div>
