@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOA - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --header-blue: #5a8ca0;
+            --border-color: #333;
+        }
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .global-header {
+            background: #fff;
+            padding: 10px 40px;
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+        .notebook-page {
+            width: 800px;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+        .page-title {
+            color: var(--header-blue);
+            border-bottom: 2px solid var(--header-blue);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .notes-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            font-family: 'Coming Soon', cursive;
+            font-size: 1.1rem;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            line-height: 1.5;
+            resize: vertical;
+        }
+        .save-status {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="hoa.html" class="nav-link">HOA</a>
+        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+    </header>
+
+    <div class="container">
+        <div class="notebook-page">
+            <h1 class="page-title">HOA Notes</h1>
+            <div class="notes-section">
+                <textarea id="notes-area" placeholder="Write your HOA notes here..."></textarea>
+                <div id="save-status" class="save-status">All changes saved</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const CATEGORY = 'HOA';
+
+        const notesArea = document.getElementById('notes-area');
+        const saveStatus = document.getElementById('save-status');
+        let timeout = null;
+
+        async function loadNotes() {
+            const { data, error } = await supabaseClient
+                .from('category_notes')
+                .select('content')
+                .eq('category', CATEGORY)
+                .single();
+            
+            if (data) {
+                notesArea.value = data.content;
+            }
+        }
+
+        async function saveNotes() {
+            saveStatus.innerText = 'Saving...';
+            const content = notesArea.value;
+
+            // Try to update first
+            const { error: updateError } = await supabaseClient
+                .from('category_notes')
+                .update({ content, updated_at: new Date() })
+                .eq('category', CATEGORY);
+
+            // If update fails (e.g. doesn't exist yet), insert
+            if (updateError) {
+                 await supabaseClient
+                    .from('category_notes')
+                    .insert({ category: CATEGORY, content });
+            }
+
+            saveStatus.innerText = 'All changes saved';
+        }
+
+        notesArea.addEventListener('input', () => {
+            saveStatus.innerText = 'Unsaved changes';
+            clearTimeout(timeout);
+            timeout = setTimeout(saveNotes, 1000);
+        });
+
+        loadNotes();
+    </script>
+</body>
+</html>

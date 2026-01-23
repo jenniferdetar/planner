@@ -17,16 +17,42 @@
             --sat-bg: #a2d9d9;
             --border-color: #333;
             --text-color: #333;
+            --header-blue: #5a8ca0;
         }
 
         body {
             font-family: 'Coming Soon', cursive;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #fff;
             color: var(--text-color);
+        }
+
+        .global-header {
+            background: #fff;
+            padding: 10px 40px;
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .main-container {
             display: flex;
             justify-content: center;
+            padding: 20px;
         }
 
         .notebook-page {
@@ -162,7 +188,17 @@
     </style>
 </head>
 <body>
-    <div class="notebook-page">
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="hoa.html" class="nav-link">HOA</a>
+        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+    </header>
+
+    <div class="main-container">
+        <div class="notebook-page">
         <div class="header-controls">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
@@ -176,6 +212,7 @@
 
         <div id="calendar-grid" class="calendar-grid">
             <!-- Calendar will be injected here -->
+        </div>
         </div>
     </div>
 

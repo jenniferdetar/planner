@@ -23,17 +23,44 @@
         body {
             font-family: 'Coming Soon', cursive;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #f0f0f0;
             color: var(--text-color);
+        }
+
+        .global-header {
+            background: #fff;
+            padding: 10px 40px;
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notebook-container {
             display: flex;
             justify-content: center;
+            padding: 20px 20px 20px 60px; /* Added left padding */
         }
 
         .notebook-spread {
             display: flex;
-            gap: 20px;
+            gap: 2px; /* Narrow center divider */
             max-width: 1600px;
+            background: #ddd; /* Divider color */
+            border: 1px solid #ddd;
         }
 
         .notebook-page {
@@ -41,8 +68,56 @@
             padding: 30px;
             background: #fff;
             position: relative;
-            box-shadow: 10px 0 15px -5px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             min-height: 1000px;
+        }
+
+        /* Mini Week Habit Styles */
+        .habit-mini-week {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .mini-week-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .mini-week-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .mini-day-box {
+            height: 15px;
+            border-radius: 2px;
+        }
+
+        .mini-day-box.sun { background-color: #f9d7d7; }
+        .mini-day-box.mon { background-color: #fce8cc; }
+        .mini-day-box.tue { background-color: #d1eded; }
+        .mini-day-box.wed { background-color: #c4d6dd; }
+        .mini-day-box.thu { background-color: #f9d7d7; }
+        .mini-day-box.fri { background-color: #fce8cc; }
+        .mini-day-box.sat { background-color: #d1eded; }
+
+        .mini-week-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .habit-label {
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            width: 120px;
         }
 
         .header-bar {
@@ -185,52 +260,126 @@
     </style>
 </head>
 <body>
-    <div class="nav-controls">
-        <a href="index.html" class="nav-btn">Back to Calendar</a>
-        <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
-        <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
-    </div>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="hoa.html" class="nav-link">HOA</a>
+        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+    </header>
 
-    <div class="notebook-spread">
-        <!-- LEFT PAGE -->
-        <div class="notebook-page">
-            <div id="week-header-left" class="header-bar">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
-            
-            <div class="habit-grid">
-                <div class="habit-section">
-                    <div class="habit-title">Home Care</div>
-                    <div class="habit-list">
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Make beds</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Ana - Cleaning</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Recycling</div>
+    <div class="notebook-container">
+        <div class="nav-controls">
+            <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
+            <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
+        </div>
+
+        <div class="notebook-spread">
+            <!-- LEFT PAGE -->
+            <div class="notebook-page">
+                <div id="week-header-left" class="header-bar">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
+                
+                <div class="habit-grid">
+                    <div class="habit-section">
+                        <div class="habit-title">Home Care</div>
+                        <div class="habit-mini-week">
+                            <div class="mini-week-header">
+                                <span style="color:var(--sun-bg)">S</span>
+                                <span style="color:var(--mon-bg)">M</span>
+                                <span style="color:var(--tue-bg)">T</span>
+                                <span style="color:var(--wed-bg)">W</span>
+                                <span style="color:var(--thu-bg)">T</span>
+                                <span style="color:var(--fri-bg)">F</span>
+                                <span style="color:var(--sat-bg)">S</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Make beds</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Ana - Cleaning</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Recycling</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="habit-section">
+                        <div class="habit-title">Self Care</div>
+                        <div class="habit-mini-week">
+                            <div class="mini-week-header">
+                                <span style="color:var(--sun-bg)">S</span><span style="color:var(--mon-bg)">M</span><span style="color:var(--tue-bg)">T</span><span style="color:var(--wed-bg)">W</span><span style="color:var(--thu-bg)">T</span><span style="color:var(--fri-bg)">F</span><span style="color:var(--sat-bg)">S</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Shower</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Read</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Bring lunch</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="habit-section">
+                        <div class="habit-title">Week days</div>
+                        <div class="habit-mini-week">
+                            <div class="mini-week-header">
+                                <span style="color:var(--sun-bg)">S</span><span style="color:var(--mon-bg)">M</span><span style="color:var(--tue-bg)">T</span><span style="color:var(--wed-bg)">W</span><span style="color:var(--thu-bg)">T</span><span style="color:var(--fri-bg)">F</span><span style="color:var(--sat-bg)">S</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Get up 5:00 am</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Leave 3:30 pm</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="habit-section">
+                        <div class="habit-title">Weekends</div>
+                        <div class="habit-mini-week">
+                            <div class="mini-week-header">
+                                <span style="color:var(--sun-bg)">S</span><span style="color:var(--mon-bg)">M</span><span style="color:var(--tue-bg)">T</span><span style="color:var(--wed-bg)">W</span><span style="color:var(--thu-bg)">T</span><span style="color:var(--fri-bg)">F</span><span style="color:var(--sat-bg)">S</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Get up 7:00 am</span>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div><div class="mini-day-box mon"></div><div class="mini-day-box tue"></div><div class="mini-day-box wed"></div><div class="mini-day-box thu"></div><div class="mini-day-box fri"></div><div class="mini-day-box sat"></div>
+                                </div>
+                                <span class="habit-label">Laundry</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="habit-section">
-                    <div class="habit-title">Self Care</div>
-                    <div class="habit-list">
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Shower</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Read</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Bring lunch to work</div>
-                    </div>
-                </div>
-                <div class="habit-section">
-                    <div class="habit-title">Week days</div>
-                    <div class="habit-list">
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Get up at 5:00 am</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Leave work at 3:30 pm</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Take train to work</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Listen to Bible app</div>
-                    </div>
-                </div>
-                <div class="habit-section">
-                    <div class="habit-title">Weekends</div>
-                    <div class="habit-list">
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Get up at 7:00 am</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Plan/prep meals for week</div>
-                        <div class="habit-item"><div class="checkbox-grid"><div class="tiny-check"></div><div class="tiny-check"></div><div class="tiny-check"></div></div> Laundry</div>
-                    </div>
-                </div>
-            </div>
 
             <div class="enjoy-banner">❤ ENJOY YOUR FAMILY ❤</div>
 
