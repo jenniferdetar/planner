@@ -27,6 +27,7 @@ CREATE POLICY "Allow public read access category_entries" ON category_entries FO
 CREATE POLICY "Allow public insert" ON category_notes FOR INSERT TO public WITH CHECK (true);
 CREATE POLICY "Allow public update" ON category_notes FOR UPDATE TO public USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public insert category_entries" ON category_entries FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "Allow public update category_entries" ON category_entries FOR UPDATE TO public USING (true) WITH CHECK (true);
 CREATE POLICY "Allow public delete category_entries" ON category_entries FOR DELETE TO public USING (true);
 
 -- Table to store member interaction logs

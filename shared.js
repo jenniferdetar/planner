@@ -108,9 +108,23 @@ async function saveCategoryEntry(category, content) {
     
     if (error) {
         console.error('Error saving entry:', error);
+        alert('Save failed: ' + error.message);
         return null;
     }
     return data;
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
 }
 
 async function deleteCategoryEntry(id) {
