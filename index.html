@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --sun-bg: #f59e9e;
+            --mon-bg: #f6d2a2;
+            --tue-bg: #a2d9d9;
+            --wed-bg: #5a8ca0;
+            --thu-bg: #f59e9e;
+            --fri-bg: #f6d2a2;
+            --sat-bg: #a2d9d9;
+            --border-color: #333;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 20px;
+            background-color: #fff;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+        }
+
+        .notebook-page {
+            width: 1000px;
+            padding: 40px;
+            background: #fff;
+            border-left: 30px solid #eee;
+            position: relative;
+            box-shadow: 10px 0 15px -5px rgba(0,0,0,0.1);
+        }
+
+        .notebook-lines {
+            position: absolute;
+            left: -30px;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background-image: linear-gradient(#ccc 1px, transparent 1px);
+            background-size: 100% 30px;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .month-title {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--sun-bg);
+            margin: 0;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 2px solid var(--border-color);
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            font-size: 1.2rem;
+            border-radius: 20px;
+        }
+
+        .banner {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+        }
+
+        .banner-text {
+            font-size: 5rem;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .banner-be-real {
+            color: #f59e9e; /* Sun/Pinkish */
+            display: inline-block;
+            margin-right: 15px;
+            text-shadow: 2px 2px 0px rgba(162, 217, 217, 0.5);
+        }
+        .banner-not-perfect {
+            color: #f6d2a2; /* Mon/Yellowish */
+            display: block;
+            font-size: 7rem;
+            margin-top: -40px;
+            color: #d4af37; /* Metallic Gold look */
+            transform: rotate(-2deg);
+        }
+        
+        /* Specific pill colors based on keywords */
+        .event-pill.csea, .event-pill.la-fed { 
+            background-color: #00326b; 
+            color: #ffca38; 
+            border: 2px solid #ffca38; 
+        }
+        .event-pill.due { 
+            background-color: #ff0000; 
+            color: #ffffff; 
+            border: none;
+        }
+        .event-pill.meeting { border-left: 5px solid #a2d9d9; }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border-top: 2px solid var(--border-color);
+            border-left: 2px solid var(--border-color);
+        }
+
+        .day-header {
+            text-align: center;
+            padding: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-right: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .day-header.sun { background-color: var(--sun-bg); }
+        .day-header.mon { background-color: var(--mon-bg); }
+        .day-header.tue { background-color: var(--tue-bg); }
+        .day-header.wed { background-color: var(--wed-bg); }
+        .day-header.thu { background-color: var(--thu-bg); }
+        .day-header.fri { background-color: var(--fri-bg); }
+        .day-header.sat { background-color: var(--sat-bg); }
+
+        .calendar-day {
+            min-height: 150px;
+            border-right: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+            padding: 10px;
+            position: relative;
+        }
+
+        .day-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .event-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .event-pill {
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            padding: 4px 10px;
+            font-size: 0.9rem;
+            line-height: 1.2;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .event-payday, .event-budget {
+            background-color: #28a745 !important;
+            color: #ffffff !important;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            border: none !important;
+        }
+
+        .empty-day {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="notebook-page">
+        <div class="notebook-lines"></div>
+        <div class="header-controls">
+            <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
+            <h1 id="current-month-display" class="month-title">JANUARY 2026</h1>
+            <button class="nav-btn" onclick="changeMonth(1)">Next</button>
+        </div>
+
+        <div class="banner">
+            <div class="banner-text">
+                <span class="banner-be-real">BE REAL</span>
+                <span class="banner-not-perfect">not perfect</span>
+            </div>
+        </div>
+
+        <div id="calendar-grid" class="calendar-grid">
+            <!-- Calendar will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentDate = new Date(2026, 0, 1); // Start at Jan 2026
+
+        // LAUSD Payday Logic for 2025-2026 (Green dates in image)
+        const paydays2025_2026 = {
+            '2025-07-08': true, '2025-07-23': true,
+            '2025-08-08': true, '2025-08-22': true,
+            '2025-09-08': true, '2025-09-23': true,
+            '2025-10-08': true, '2025-10-23': true,
+            '2025-11-07': true, '2025-11-21': true,
+            '2025-12-08': true, '2025-12-23': true,
+            '2026-01-08': true, '2026-01-23': true,
+            '2026-02-06': true, '2026-02-23': true,
+            '2026-03-06': true, '2026-03-23': true,
+            '2026-04-08': true, '2026-04-23': true,
+            '2026-05-08': true, '2026-05-22': true,
+            '2026-06-08': true, '2026-06-23': true
+        };
+
+        function getBudgetReminderDates(paydayStr) {
+            const date = new Date(paydayStr + 'T12:00:00'); // Use noon to avoid TZ issues
+            date.setDate(date.getDate() - 3);
+            return date.toISOString().split('T')[0];
+        }
+
+        // Pre-calculate budget days
+        const budgetDays = {};
+        Object.keys(paydays2025_2026).forEach(pKey => {
+            budgetDays[getBudgetReminderDates(pKey)] = true;
+        });
+
+        async function fetchEvents(month, year) {
+            const startDate = new Date(year, month, 1).toISOString();
+            const endDate = new Date(year, month + 1, 0).toISOString();
+
+            const { data, error } = await supabase
+                .from('calendar_by_date')
+                .select('*')
+                .gte('date', startDate)
+                .lte('date', endDate);
+
+            if (error) {
+                console.error('Error fetching events:', error);
+                return [];
+            }
+            return data || [];
+        }
+
+        function getEventClass(title) {
+            const lowerTitle = title.toLowerCase();
+            if (lowerTitle.includes('csea')) return 'event-pill csea';
+            if (lowerTitle.includes('la fed')) return 'event-pill la-fed';
+            if (lowerTitle.includes('due')) return 'event-pill due';
+            if (lowerTitle.includes('meeting')) return 'event-pill meeting';
+            return 'event-pill';
+        }
+
+        const staticEvents = [
+            { date: '2026-01-01', title: "New Year's Day" },
+            { date: '2026-01-01', title: "HOA Due $520" },
+            { date: '2026-01-01', title: "Mortgage Due $2,250" },
+            { date: '2026-01-02', title: "Chris Plant Content Release" },
+            { date: '2026-01-03', title: "Mentor Session" },
+            { date: '2026-01-05', title: "Quiz Submission" },
+            { date: '2026-01-07', title: "CSEA RPM Region 8" },
+            { date: '2026-01-07', title: "CSEA MB Committee" },
+            { date: '2026-01-08', title: "CSEA Chapter E-Board" },
+            { date: '2026-01-08', title: "Schools First CC Due" },
+            { date: '2026-01-10', title: "Heloc Due" },
+            { date: '2026-01-12', title: "Paramount + Due" },
+            { date: '2026-01-12', title: "Quiz Submission" },
+            { date: '2026-01-12', title: "CSEA Steward Meeting" },
+            { date: '2026-01-15', title: "CSEA Statewide Blitz" },
+            { date: '2026-01-19', title: "Martin Luther King Jr. Day" },
+            { date: '2026-01-20', title: "Spectrum Due" },
+            { date: '2026-01-21', title: "ADT Due" },
+            { date: '2026-01-22', title: "CSEA MB Committee" },
+            { date: '2026-01-22', title: "Flight to San Jose" },
+            { date: '2026-01-22', title: "CSEA N.E.O." },
+            { date: '2026-01-23', title: "Content Release" },
+            { date: '2026-01-23', title: "CSEA MB Committee" },
+            { date: '2026-01-24', title: "Mentored Session" },
+            { date: '2026-01-24', title: "CSEA MB Committee" },
+            { date: '2026-01-24', title: "Order Busparone" },
+            { date: '2026-01-25', title: "CSEA MB Committee" },
+            { date: '2026-01-25', title: "Flight to Burbank" },
+            { date: '2026-01-26', title: "Verizon Due" },
+            { date: '2026-01-26', title: "Quiz Submission" },
+            { date: '2026-01-26', title: "CSEA Stewards Meeting" },
+            { date: '2026-01-26', title: "CSEA RPM Region 19" },
+            { date: '2026-01-26', title: "LA Fed" },
+            { date: '2026-01-29', title: "CSEA Chapter Meeting" },
+            { date: '2026-01-30', title: "Content Release" },
+            { date: '2026-01-31', title: "Mentored Session" }
+        ];
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const monthName = currentDate.toLocaleString('default', { month: 'long' }).toUpperCase();
+            
+            document.getElementById('current-month-display').innerText = `${monthName} ${year}`;
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            // Day Headers
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            days.forEach((day, index) => {
+                const header = document.createElement('div');
+                header.className = `day-header ${day.toLowerCase().substring(0, 3)}`;
+                header.innerText = day;
+                grid.appendChild(header);
+            });
+
+            // Empty slots for previous month
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'calendar-day empty-day';
+                grid.appendChild(empty);
+            }
+
+            // Days of the month
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayDate = new Date(year, month, i);
+                const dateKey = dayDate.toISOString().split('T')[0];
+                
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                
+                const dayNum = document.createElement('div');
+                dayNum.className = 'day-number';
+                dayNum.innerText = i;
+                dayDiv.appendChild(dayNum);
+
+                const eventContainer = document.createElement('div');
+                eventContainer.className = 'event-container';
+                eventContainer.id = `events-${dateKey}`;
+                dayDiv.appendChild(eventContainer);
+
+                // Add Payday logic
+                if (paydays2025_2026[dateKey]) {
+                    const paydayPill = document.createElement('div');
+                    paydayPill.className = 'event-pill event-payday';
+                    paydayPill.innerText = "Jennifer's Payday";
+                    eventContainer.appendChild(paydayPill);
+                }
+
+                // Add Budget reminder logic (3 days before any payday)
+                if (budgetDays[dateKey]) {
+                    const budgetPill = document.createElement('div');
+                    budgetPill.className = 'event-pill event-budget';
+                    budgetPill.innerText = 'Budget/Pay Bills';
+                    eventContainer.appendChild(budgetPill);
+                }
+
+                // Add static events
+                staticEvents.filter(e => e.date === dateKey).forEach(event => {
+                    const pill = document.createElement('div');
+                    pill.className = getEventClass(event.title);
+                    pill.innerText = event.title;
+                    eventContainer.appendChild(pill);
+                });
+
+                grid.appendChild(dayDiv);
+            }
+
+            // Fetch and render Supabase events
+            fetchEvents(month, year).then(events => {
+                events.forEach(event => {
+                    const container = document.getElementById(`events-${event.date}`);
+                    if (container) {
+                        const pill = document.createElement('div');
+                        pill.className = getEventClass(event.title);
+                        pill.innerText = event.title;
+                        container.appendChild(pill);
+                    }
+                });
+            });
+        }
+
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        // Initial render
+        renderCalendar();
+    </script>
+</body>
+</html>
