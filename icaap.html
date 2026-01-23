@@ -236,7 +236,10 @@
                                     <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
                                     <datalist id="members-list"></datalist>
                                 </td>
-                                <td><input type="text" id="log-location" class="log-input" placeholder="Location"></td>
+                                <td>
+                                    <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
+                                    <datalist id="schools-list"></datalist>
+                                </td>
                                 <td>
                                     <input type="text" id="log-discussion" class="log-input" placeholder="Discussion" list="issues-list">
                                     <datalist id="issues-list"></datalist>
@@ -267,10 +270,11 @@
         let cachedMembers = [];
 
         async function populateDatalists() {
-            const [members, stewards, issues] = await Promise.all([
+            const [members, stewards, issues, schools] = await Promise.all([
                 fetchCseaMembers(),
                 fetchCseaStewards(),
-                fetchCseaIssues()
+                fetchCseaIssues(),
+                fetchSchoolDirectory()
             ]);
 
             cachedMembers = members;
@@ -283,6 +287,9 @@
 
             const issuesList = document.getElementById('issues-list');
             issuesList.innerHTML = issues.map(i => `<option value="${i.issue_name}">`).join('');
+
+            const schoolsList = document.getElementById('schools-list');
+            schoolsList.innerHTML = schools.map(s => `<option value="${s.site_name}">`).join('');
         }
 
         document.getElementById('log-member').addEventListener('input', (e) => {

@@ -508,8 +508,6 @@
     </div>
 
     <script>
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
         let currentStartDate = dateParam ? new Date(dateParam) : new Date(2025, 11, 28);
@@ -532,51 +530,13 @@
             6: "Clean car\nWater plants"
         };
 
-        async function fetchWeekEvents(startDate) {
-            const endDate = new Date(startDate);
-            endDate.setDate(endDate.getDate() + 6);
-            const startStr = startDate.toISOString().split('T')[0];
-            const endStr = endDate.toISOString().split('T')[0];
-
-            const { data, error } = await supabaseClient
-                .from('calendar_by_date')
-                .select('*')
-                .gte('date', startStr)
-                .lte('date', endStr);
-
-            return data || [];
-        }
-
-        async function fetchPlannerData(startDate) {
-            const endDate = new Date(startDate);
-            endDate.setDate(endDate.getDate() + 6);
-            const startStr = startDate.toISOString().split('T')[0];
-            const endStr = endDate.toISOString().split('T')[0];
-
-            const { data, error } = await supabaseClient
-                .from('planner_data')
-                .select('*')
-                .gte('date', startStr)
-                .lte('date', endStr);
-
-            return data || [];
-        }
-
-        async function savePlannerData(date, fieldId, content) {
+        async function handleSavePlannerData(date, fieldId, content) {
             const saveStatus = document.getElementById('save-status');
             saveStatus.innerText = 'Saving...';
 
-            const { error } = await supabaseClient
-                .from('planner_data')
-                .upsert({ 
-                    date: date, 
-                    field_id: fieldId, 
-                    content: content,
-                    updated_at: new Date()
-                }, { onConflict: 'date,field_id' });
+            const success = await savePlannerData(date, fieldId, content);
 
-            if (error) {
-                console.error('Save error:', error);
+            if (!success) {
                 saveStatus.innerText = 'Error saving';
             } else {
                 saveStatus.innerText = 'All changes saved';
@@ -591,7 +551,7 @@
 
             document.getElementById('save-status').innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => savePlannerData(date, fieldId, content), 1000);
+            saveTimeout = setTimeout(() => handleSavePlannerData(date, fieldId, content), 1000);
         }
 
         function toggleBox(e) {
@@ -601,7 +561,7 @@
             const date = el.getAttribute('data-date');
             const content = el.classList.contains('checked') ? 'true' : 'false';
 
-            savePlannerData(date, fieldId, content);
+            handleSavePlannerData(date, fieldId, content);
         }
 
         async function renderSpread() {
@@ -618,7 +578,7 @@
             updateNavigationLinks(currentStartDate);
 
             const [events, plannerData] = await Promise.all([
-                fetchWeekEvents(currentStartDate),
+                fetchCalendarEvents(currentStartDate),
                 fetchPlannerData(currentStartDate)
             ]);
 

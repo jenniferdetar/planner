@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 Home Planner</title>
-    <!-- v2.1.1 -->
+    <!-- v2.2.0 -->
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
@@ -221,8 +221,6 @@
     </div>
 
     <script>
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
         let currentDate = dateParam ? new Date(dateParam) : new Date(2026, 0, 1);
@@ -230,24 +228,6 @@
         // Ensure currentDate is first of month for display purposes
         if (dateParam) {
             currentDate.setDate(1);
-        }
-
-        async function fetchEvents(month, year) {
-            // Use YYYY-MM-DD format for reliable Supabase date filtering
-            const startStr = `${year}-${String(month + 1).padStart(2, '0')}-01`;
-            const endStr = `${year}-${String(month + 1).padStart(2, '0')}-${new Date(year, month + 1, 0).getDate()}`;
-
-            const { data, error } = await supabaseClient
-                .from('calendar_by_date')
-                .select('*')
-                .gte('date', startStr)
-                .lte('date', endStr);
-
-            if (error) {
-                console.error('Error fetching events:', error);
-                return [];
-            }
-            return data || [];
         }
 
         function getEventClass(title) {
@@ -261,7 +241,7 @@
             return 'event-pill';
         }
 
-        function renderCalendar() {
+        async function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
             const monthName = currentDate.toLocaleString('default', { month: 'long' }).toUpperCase();
@@ -317,26 +297,25 @@
             }
 
             // Fetch and render Supabase events
-            fetchEvents(month, year).then(events => {
-                events.forEach(event => {
-                    const container = document.getElementById(`events-${event.date}`);
-                    if (container) {
-                        const pill = document.createElement('div');
-                        pill.className = getEventClass(event.title);
-                        
-                        let displayTitle = event.title;
-                        if (event.time) {
-                            const [h, m] = event.time.split(':');
-                            const hour = parseInt(h);
-                            const ampm = hour >= 12 ? 'p' : 'a';
-                            const displayHour = hour % 12 || 12;
-                            displayTitle = `${displayHour}${ampm} ${event.title}`;
-                        }
-                        
-                        pill.innerText = displayTitle;
-                        container.appendChild(pill);
+            const events = await fetchCalendarEvents(new Date(year, month, 1), daysInMonth);
+            events.forEach(event => {
+                const container = document.getElementById(`events-${event.date}`);
+                if (container) {
+                    const pill = document.createElement('div');
+                    pill.className = getEventClass(event.title);
+                    
+                    let displayTitle = event.title;
+                    if (event.time) {
+                        const [h, m] = event.time.split(':');
+                        const hour = parseInt(h);
+                        const ampm = hour >= 12 ? 'p' : 'a';
+                        const displayHour = hour % 12 || 12;
+                        displayTitle = `${displayHour}${ampm} ${event.title}`;
                     }
-                });
+                    
+                    pill.innerText = displayTitle;
+                    container.appendChild(pill);
+                }
             });
         }
 

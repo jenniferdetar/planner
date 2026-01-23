@@ -134,6 +134,58 @@
             color: #666;
             text-align: right;
         }
+
+        /* Interaction Log Table Styles */
+        .log-section {
+            margin-top: 40px;
+            overflow-x: auto;
+        }
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        .log-table th {
+            background-color: #2d5a45;
+            color: white;
+            padding: 12px 10px;
+            text-align: left;
+            border: 1px solid #1e3d2e;
+            font-weight: 600;
+        }
+        .log-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        .log-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .log-input-row td {
+            background-color: #fffde7;
+        }
+        .log-input {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 5px;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem;
+        }
+        .add-log-btn {
+            background-color: #2d5a45;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .add-log-btn:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -158,6 +210,51 @@
                 <div id="entries-list" class="entries-list">
                     <!-- Entries will be loaded here -->
                 </div>
+
+                <div class="log-section">
+                    <h2 class="page-title">Member Interaction Log</h2>
+                    <table class="log-table">
+                        <thead>
+                            <tr>
+                                <th>Date Spoke with Member</th>
+                                <th>Member Name</th>
+                                <th>Member Work Location</th>
+                                <th>What was discussed</th>
+                                <th>Who was involved</th>
+                                <th>CSEA Contact Person</th>
+                                <th>Point of Contact</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="interaction-log-body">
+                            <!-- Existing interactions -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="log-input-row">
+                                <td><input type="date" id="log-date" class="log-input"></td>
+                                <td>
+                                    <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
+                                    <datalist id="members-list"></datalist>
+                                </td>
+                                <td>
+                                    <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
+                                    <datalist id="schools-list"></datalist>
+                                </td>
+                                <td>
+                                    <input type="text" id="log-discussion" class="log-input" placeholder="Discussion" list="issues-list">
+                                    <datalist id="issues-list"></datalist>
+                                </td>
+                                <td><input type="text" id="log-who" class="log-input" placeholder="Who involved"></td>
+                                <td>
+                                    <input type="text" id="log-contact" class="log-input" placeholder="Contact person" list="stewards-list">
+                                    <datalist id="stewards-list"></datalist>
+                                </td>
+                                <td><input type="text" id="log-poc" class="log-input" placeholder="Point of contact"></td>
+                                <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -167,6 +264,41 @@
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
+        const logBody = document.getElementById('interaction-log-body');
+
+        // Reference Data
+        let cachedMembers = [];
+
+        async function populateDatalists() {
+            const [members, stewards, issues, schools] = await Promise.all([
+                fetchCseaMembers(),
+                fetchCseaStewards(),
+                fetchCseaIssues(),
+                fetchSchoolDirectory()
+            ]);
+
+            cachedMembers = members;
+
+            const membersList = document.getElementById('members-list');
+            membersList.innerHTML = members.map(m => `<option value="${m.name}">`).join('');
+
+            const stewardsList = document.getElementById('stewards-list');
+            stewardsList.innerHTML = stewards.map(s => `<option value="${s.name}">`).join('');
+
+            const issuesList = document.getElementById('issues-list');
+            issuesList.innerHTML = issues.map(i => `<option value="${i.issue_name}">`).join('');
+
+            const schoolsList = document.getElementById('schools-list');
+            schoolsList.innerHTML = schools.map(s => `<option value="${s.site_name}">`).join('');
+        }
+
+        document.getElementById('log-member').addEventListener('input', (e) => {
+            const memberName = e.target.value;
+            const member = cachedMembers.find(m => m.name === memberName);
+            if (member && member.work_location) {
+                document.getElementById('log-location').value = member.work_location;
+            }
+        });
 
         function formatDate(dateStr) {
             const date = new Date(dateStr);
@@ -221,8 +353,70 @@
             }
         }
 
+        // Interaction Log Functions
+        async function loadInteractions() {
+            const interactions = await fetchInteractions(CATEGORY);
+            logBody.innerHTML = '';
+            interactions.forEach(inter => {
+                logBody.appendChild(createInteractionRow(inter));
+            });
+        }
+
+        function createInteractionRow(inter) {
+            const tr = document.createElement('tr');
+            tr.id = `inter-${inter.id}`;
+            tr.innerHTML = `
+                <td>${inter.date_spoke}</td>
+                <td>${inter.member_name}</td>
+                <td>${inter.work_location || ''}</td>
+                <td>${inter.discussion || ''}</td>
+                <td>${inter.who_involved || ''}</td>
+                <td>${inter.contact_person || ''}</td>
+                <td>${inter.point_of_contact || ''}</td>
+                <td><span class="delete-btn" onclick="handleDeleteInteraction(${inter.id})">Delete</span></td>
+            `;
+            return tr;
+        }
+
+        async function handleAddInteraction() {
+            const interaction = {
+                date_spoke: document.getElementById('log-date').value,
+                member_name: document.getElementById('log-member').value,
+                work_location: document.getElementById('log-location').value,
+                discussion: document.getElementById('log-discussion').value,
+                who_involved: document.getElementById('log-who').value,
+                contact_person: document.getElementById('log-contact').value,
+                point_of_contact: document.getElementById('log-poc').value
+            };
+
+            if (!interaction.date_spoke || !interaction.member_name) {
+                alert('Date and Member Name are required');
+                return;
+            }
+
+            const newInter = await saveInteraction(CATEGORY, interaction);
+            if (newInter) {
+                logBody.prepend(createInteractionRow(newInter));
+                // Clear inputs
+                ['log-date', 'log-member', 'log-location', 'log-discussion', 'log-who', 'log-contact', 'log-poc'].forEach(id => {
+                    document.getElementById(id).value = '';
+                });
+            }
+        }
+
+        async function handleDeleteInteraction(id) {
+            if (confirm('Are you sure you want to delete this log entry?')) {
+                const success = await deleteInteraction(id);
+                if (success) {
+                    document.getElementById(`inter-${id}`).remove();
+                }
+            }
+        }
+
         // Initialize
         loadEntries();
+        loadInteractions();
+        populateDatalists();
     </script>
 </body>
 </html>

@@ -1,10 +1,13 @@
 const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
 
-let supabase;
+let supabaseClient;
 if (typeof window !== 'undefined' && window.supabase) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
+
+// Global reference for notebooks that expect 'supabase'
+const supabase = supabaseClient;
 
 function updateNavigationLinks(date) {
     if (!date) return;
@@ -30,9 +33,66 @@ function updateNavigationLinks(date) {
     });
 }
 
+// Planner Data Logic
+async function fetchPlannerData(startDate, days = 7) {
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + (days - 1));
+    const startStr = startDate instanceof Date ? startDate.toISOString().split('T')[0] : startDate;
+    const endStr = endDate.toISOString().split('T')[0];
+
+    const { data, error } = await supabaseClient
+        .from('planner_data')
+        .select('*')
+        .gte('date', startStr)
+        .lte('date', endStr);
+
+    if (error) {
+        console.error('Error fetching planner data:', error);
+        return [];
+    }
+    return data || [];
+}
+
+async function savePlannerData(date, fieldId, content) {
+    const { error } = await supabaseClient
+        .from('planner_data')
+        .upsert({ 
+            date: date, 
+            field_id: fieldId, 
+            content: content,
+            updated_at: new Date()
+        }, { onConflict: 'date,field_id' });
+
+    if (error) {
+        console.error('Save error:', error);
+        return false;
+    }
+    return true;
+}
+
+// Calendar Events Logic
+async function fetchCalendarEvents(startDate, days = 7) {
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + (days - 1));
+    const startStr = startDate instanceof Date ? startDate.toISOString().split('T')[0] : startDate;
+    const endStr = endDate.toISOString().split('T')[0];
+
+    const { data, error } = await supabaseClient
+        .from('calendar_by_date')
+        .select('*')
+        .gte('date', startStr)
+        .lte('date', endStr);
+
+    if (error) {
+        console.error('Error fetching calendar events:', error);
+        return [];
+    }
+    return data || [];
+}
+
 // Notes Logic
 async function fetchCategoryEntries(category) {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('category_entries')
         .select('*')
         .eq('category', category)
@@ -47,7 +107,7 @@ async function fetchCategoryEntries(category) {
 
 async function saveCategoryEntry(category, content) {
     if (!content.trim()) return null;
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('category_entries')
         .insert({ category, content })
         .select()
@@ -61,7 +121,7 @@ async function saveCategoryEntry(category, content) {
 }
 
 async function deleteCategoryEntry(id) {
-    const { error } = await supabase
+    const { error } = await supabaseClient
         .from('category_entries')
         .delete()
         .eq('id', id);
@@ -75,7 +135,7 @@ async function deleteCategoryEntry(id) {
 
 // Interaction Log Logic
 async function fetchInteractions(category) {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('member_interactions')
         .select('*')
         .eq('category', category)
@@ -89,7 +149,7 @@ async function fetchInteractions(category) {
 }
 
 async function saveInteraction(category, interaction) {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('member_interactions')
         .insert({ category, ...interaction })
         .select()
@@ -103,7 +163,7 @@ async function saveInteraction(category, interaction) {
 }
 
 async function deleteInteraction(id) {
-    const { error } = await supabase
+    const { error } = await supabaseClient
         .from('member_interactions')
         .delete()
         .eq('id', id);
@@ -117,17 +177,22 @@ async function deleteInteraction(id) {
 
 // Reference Tables Logic
 async function fetchCseaMembers() {
-    const { data } = await supabase.from('csea_members').select('*').order('name');
+    const { data } = await supabaseClient.from('csea_members').select('*').order('name');
     return data || [];
 }
 
 async function fetchCseaStewards() {
-    const { data } = await supabase.from('csea_stewards').select('*').order('name');
+    const { data } = await supabaseClient.from('csea_stewards').select('*').order('name');
     return data || [];
 }
 
 async function fetchCseaIssues() {
-    const { data } = await supabase.from('csea_issues').select('*').order('issue_name');
+    const { data } = await supabaseClient.from('csea_issues').select('*').order('issue_name');
+    return data || [];
+}
+
+async function fetchSchoolDirectory() {
+    const { data } = await supabaseClient.from('school_directory').select('*').order('site_name');
     return data || [];
 }
 
