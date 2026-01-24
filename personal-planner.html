@@ -715,15 +715,20 @@
 
                 // Auto-populate financial line if "Due" events exist
                 const dueList = [];
+                console.log(`Processing day: ${dayStr}, Events found: ${dayEvents.length}`);
                 dayEvents.forEach(e => {
-                    const titleLower = e.title.toLowerCase();
+                    const titleLower = e.title.toLowerCase().trim();
+                    console.log(`  Checking event: "${e.title}"`);
                     Object.keys(billAmounts).forEach(bill => {
-                        if (titleLower.includes(bill.toLowerCase())) {
+                        const billLower = bill.toLowerCase().trim();
+                        if (titleLower.includes(billLower)) {
+                            console.log(`    Matched bill: ${bill}`);
                             dueList.push(`${bill}: ${billAmounts[bill]}`);
                         }
                     });
                 });
                 const autoFinancial = dueList.join(', ');
+                if (autoFinancial) console.log(`Auto-financial result for ${dayStr}: ${autoFinancial}`);
 
                 const dayHtml = `
                     <div class="day-section">
@@ -749,18 +754,30 @@
                                 }).join('')}
                                 <div class="sidebar-icon-row" style="margin-top: 10px;">
                                     <span class="sidebar-icon">🍴</span>
-                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)"></div>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)">${
+                                        (() => {
+                                            const saved = plannerData.find(d => d.date === dayStr && d.field_id === 'meal-plan');
+                                            return saved ? saved.content : '';
+                                        })()
+                                    }</div>
                                 </div>
                                 <div class="sidebar-icon-row">
                                     <span class="sidebar-icon">🌸</span>
-                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="self-care" oninput="handleInput(event)"></div>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="self-care" oninput="handleInput(event)">${
+                                        (() => {
+                                            const saved = plannerData.find(d => d.date === dayStr && d.field_id === 'self-care');
+                                            return saved ? saved.content : '';
+                                        })()
+                                    }</div>
                                 </div>
                                 <div class="sidebar-icon-row">
                                     <span class="sidebar-icon">💲</span>
                                     <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="financial" oninput="handleInput(event)">${
                                         (() => {
                                             const saved = plannerData.find(d => d.date === dayStr && d.field_id === 'financial');
-                                            return saved ? saved.content : autoFinancial;
+                                            // Auto-population trumps manual entry
+                                            if (autoFinancial) return autoFinancial;
+                                            return saved ? saved.content : '';
                                         })()
                                     }</div>
                                 </div>
@@ -801,14 +818,6 @@
                 `;
                 container.innerHTML += dayHtml;
             }
-
-            // Fill sidebar icons from plannerData
-            plannerData.forEach(item => {
-                if (item.field_id === 'meal-plan' || item.field_id === 'self-care') {
-                    const el = document.querySelector(`[data-date="${item.date}"][data-field="${item.field_id}"]`);
-                    if (el && item.content) el.innerText = item.content;
-                }
-            });
         }
 
         function toggleDailyTask(e, date, fieldId) {
