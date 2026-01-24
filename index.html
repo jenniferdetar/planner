@@ -236,17 +236,6 @@
             currentDate.setDate(1);
         }
 
-        function getEventClass(title) {
-            const lowerTitle = title.toLowerCase();
-            if (lowerTitle.includes('csea')) return 'event-pill csea';
-            if (lowerTitle.includes('la fed')) return 'event-pill la-fed';
-            if (lowerTitle.includes('due')) return 'event-pill due';
-            if (lowerTitle.includes('meeting')) return 'event-pill meeting';
-            if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
-            if (lowerTitle.includes('budget')) return 'event-pill budget';
-            return 'event-pill';
-        }
-
         async function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -312,11 +301,7 @@
                     
                     let displayTitle = event.title;
                     if (event.time) {
-                        const [h, m] = event.time.split(':');
-                        const hour = parseInt(h);
-                        const ampm = hour >= 12 ? 'p' : 'a';
-                        const displayHour = hour % 12 || 12;
-                        displayTitle = `${displayHour}${ampm} ${event.title}`;
+                        displayTitle = `${formatTime(event.time, true)} ${event.title}`;
                     }
                     
                     pill.innerText = displayTitle;

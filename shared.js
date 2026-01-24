@@ -127,6 +127,29 @@ function formatDate(dateStr) {
     });
 }
 
+function formatTime(timeStr, compact = false, showSpace = false) {
+    if (!timeStr) return '';
+    const [h, m] = timeStr.split(':').map(Number);
+    let ampm = compact ? (h >= 12 ? 'p' : 'a') : (h >= 12 ? 'pm' : 'am');
+    if (showSpace && !compact) ampm = ' ' + ampm;
+    const displayHour = h % 12 || 12;
+    if (compact && m === 0) {
+        return `${displayHour}${ampm}`;
+    }
+    return `${displayHour}:${m.toString().padStart(2, '0')}${ampm}`;
+}
+
+function getEventClass(title) {
+    const lowerTitle = title.toLowerCase();
+    if (lowerTitle.includes('csea')) return 'event-pill csea';
+    if (lowerTitle.includes('la fed')) return 'event-pill la-fed';
+    if (lowerTitle.includes('due')) return 'event-pill due';
+    if (lowerTitle.includes('meeting')) return 'event-pill meeting';
+    if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
+    if (lowerTitle.includes('budget')) return 'event-pill budget';
+    return 'event-pill';
+}
+
 async function deleteCategoryEntry(id) {
     const client = getSupabase();
     if (!client) return false;

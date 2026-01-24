@@ -217,10 +217,20 @@
         .day-header {
             font-size: 0.8rem;
             text-transform: uppercase;
-            color: var(--sun-bg);
             margin-bottom: 5px;
             font-weight: bold;
+            padding: 5px;
+            color: white;
+            text-align: center;
         }
+
+        .day-header.sun { background-color: var(--sun-bg); }
+        .day-header.mon { background-color: var(--mon-bg); }
+        .day-header.tue { background-color: var(--tue-bg); }
+        .day-header.wed { background-color: var(--wed-bg); }
+        .day-header.thu { background-color: var(--thu-bg); }
+        .day-header.fri { background-color: var(--fri-bg); }
+        .day-header.sat { background-color: var(--sat-bg); }
 
         .day-layout {
             display: grid;
@@ -606,7 +616,9 @@
             "Summer Saver": "$400.00",
             "Tahoe's Major Repairs": "$200.00",
             "Vacation": "$125.00",
-            "Schools First Credit Card": "$600.00" 
+            "Schools First Credit Card": "$600.00",
+            "Paramount+": "$12.99",
+            "Taxes": "$TBD"
         };
 
         // Adjust to Sunday of the week
@@ -649,17 +661,6 @@
             const content = el.classList.contains('checked') ? 'true' : 'false';
 
             handleSavePlannerData(date, fieldId, content);
-        }
-
-        function getEventClass(title) {
-            const lowerTitle = title.toLowerCase();
-            if (lowerTitle.includes('csea')) return 'event-pill csea';
-            if (lowerTitle.includes('la fed')) return 'event-pill la-fed';
-            if (lowerTitle.includes('due')) return 'event-pill due';
-            if (lowerTitle.includes('meeting')) return 'event-pill meeting';
-            if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
-            if (lowerTitle.includes('budget')) return 'event-pill budget';
-            return 'event-pill';
         }
 
         async function renderSpread() {
@@ -709,6 +710,7 @@
                 dayDate.setDate(dayDate.getDate() + i);
                 const dayStr = dayDate.toISOString().split('T')[0];
                 const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'long' });
+                const dayClass = dayDate.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
                 const formattedDate = dayDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
                 const dayEvents = events.filter(e => e.date === dayStr);
@@ -736,7 +738,7 @@
 
                 const dayHtml = `
                     <div class="day-section">
-                        <div class="day-header">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
+                        <div class="day-header ${dayClass}">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
                         <div class="day-layout">
                             <div class="day-sidebar">
                                 ${allDayEvents.map(e => `
@@ -787,20 +789,12 @@
                                 </div>
                             </div>
                             <div class="day-content">
-                                ${timedEvents.map(e => {
-                                    const timeLabel = e.time.split(':').slice(0, 2).join(':');
-                                    // Convert 24h to 12h for display if needed
-                                    let [h, m] = timeLabel.split(':').map(Number);
-                                    const ampm = h >= 12 ? 'pm' : 'am';
-                                    h = h % 12 || 12;
-                                    const displayTime = `${h}:${m.toString().padStart(2, '0')}${ampm}`;
-                                    return `
+                                ${timedEvents.map(e => `
                                         <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 2px;">
                                             <div class="check-box-spacer"></div>
-                                            <div class="${getEventClass(e.title)}">${displayTime} ${e.title}</div>
+                                            <div class="${getEventClass(e.title)}">${formatTime(e.time)} ${e.title}</div>
                                         </div>
-                                    `;
-                                }).join('')}
+                                    `).join('')}
                                 ${Array(Math.max(4, 10 - (timedEvents.length))).fill(0).map((_, ti) => {
                                     const fieldId = `daily-task-${ti}`;
                                     const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);

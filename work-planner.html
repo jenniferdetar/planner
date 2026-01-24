@@ -363,14 +363,6 @@
             return slots;
         }
 
-        function formatTimeLabel(timeStr) {
-            const [h, m] = timeStr.split(':');
-            let hour = parseInt(h);
-            const ampm = hour >= 12 ? 'pm' : 'am';
-            hour = hour % 12 || 12;
-            return `${hour}:${m} ${ampm}`;
-        }
-
         function getEventForSlot(dayEvents, timeSlot, dayIndex) {
             const [h, m] = timeSlot.split(':').map(Number);
             const slotTotalMinutes = h * 60 + m;
@@ -411,18 +403,6 @@
             }
 
             return null;
-        }
-
-        function getEventClass(title) {
-            const lowerTitle = title.toLowerCase();
-            const classes = ['event-pill'];
-            if (lowerTitle.includes('csea')) classes.push('csea');
-            if (lowerTitle.includes('la fed')) classes.push('la-fed');
-            if (lowerTitle.includes('due')) classes.push('due');
-            if (lowerTitle.includes('meeting')) classes.push('meeting');
-            if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) classes.push('pay-day');
-            if (lowerTitle.includes('budget')) classes.push('budget');
-            return classes.join(' ');
         }
 
         async function renderPlanner() {
@@ -484,7 +464,7 @@
                     
                     const label = document.createElement('div');
                     label.className = 'time-label';
-                    label.innerText = formatTimeLabel(slot);
+                    label.innerText = formatTime(slot, false, true);
                     slotDiv.appendChild(label);
 
                     const content = document.createElement('div');
