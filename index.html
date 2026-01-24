@@ -221,9 +221,15 @@
     </div>
 
     <script>
+        function parseLocalDate(dateStr) {
+            if (!dateStr) return null;
+            const [year, month, day] = dateStr.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentDate = dateParam ? new Date(dateParam) : new Date(2026, 0, 1);
+        let currentDate = dateParam ? parseLocalDate(dateParam) : new Date(2026, 0, 1);
         
         // Ensure currentDate is first of month for display purposes
         if (dateParam) {
