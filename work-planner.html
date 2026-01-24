@@ -120,7 +120,7 @@
         @media (min-width: 900px) {
             .daily-columns {
                 grid-template-columns: repeat(7, 1fr);
-                gap: 5px;
+                gap: 0;
             }
         }
 
@@ -128,6 +128,11 @@
             border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
+            border-left: none;
+        }
+
+        .day-col:first-child {
+            border-left: 1px solid var(--border-color);
         }
 
         .day-header {
