@@ -177,7 +177,7 @@
             overflow: hidden;
         }
 
-        .event-entry {
+        .event-pill {
             background-color: #f0f0f0;
             border-radius: 8px;
             padding: 2px 8px;
@@ -193,19 +193,19 @@
             box-sizing: border-box;
         }
 
-        .event-entry.csea, .event-entry.la-fed { 
+        .event-pill.csea, .event-pill.la-fed { 
             background-color: #00326b; 
             color: #ffca38; 
             border: 2px solid #ffca38; 
         }
-        .event-entry.due { 
+        .event-pill.due { 
             background-color: #ff0000; 
             color: #ffffff; 
             border: none;
         }
-        .event-entry.meeting { border-left: 5px solid #a2d9d9; }
+        .event-pill.meeting { border-left: 5px solid #a2d9d9; }
         
-        .event-entry.pay-day {
+        .event-pill.pay-day {
             background-color: #1b5e20; /* Deep Green */
             color: #ffffff !important;
             font-weight: bold;
@@ -215,7 +215,7 @@
             box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
-        .event-entry.budget {
+        .event-pill.budget {
             background-color: #408686;
             color: white;
             font-weight: bold;
@@ -409,7 +409,7 @@
 
         function getEventClass(title) {
             const lowerTitle = title.toLowerCase();
-            const classes = ['event-entry'];
+            const classes = ['event-pill'];
             if (lowerTitle.includes('csea')) classes.push('csea');
             if (lowerTitle.includes('la fed')) classes.push('la-fed');
             if (lowerTitle.includes('due')) classes.push('due');
