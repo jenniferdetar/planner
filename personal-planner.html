@@ -574,16 +574,6 @@
 
         let saveTimeout = null;
 
-        const sidebarTasks = {
-            0: "Make menu plan\nGrocery shop\nClean out purse",
-            1: "Dust furniture\nVacuum house\n1 Thessalonians 2",
-            2: "Clean out fridge\nMop hard surfaces\nTake out all trash\nClean microwave & stovetop\n1 Thessalonians 3",
-            3: "Clean bathrooms\nChange towels\nRe-stock toilet paper",
-            4: "Change bedroom sheets\nLaundry Day",
-            5: "Clean electronic screens\nSort paperwork & mail",
-            6: "Clean car\nWater plants"
-        };
-
         async function handleSavePlannerData(date, fieldId, content) {
             const saveStatus = document.getElementById('save-status');
             saveStatus.innerText = 'Saving...';
@@ -679,7 +669,6 @@
                 const formattedDate = dayDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
                 const dayEvents = events.filter(e => e.date === dayStr);
-                const sidebarItems = sidebarTasks[i].split('\n');
                 
                 // Separate all-day and timed events
                 const allDayEvents = dayEvents.filter(e => !e.time);
@@ -695,11 +684,18 @@
                                         <div class="${getEventClass(e.title)}">${e.title}</div>
                                     </div>
                                 `).join('')}
-                                ${sidebarItems.map(t => `
-                                    <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 2px;">
-                                        <div class="${getEventClass(t)}">${t}</div>
-                                    </div>
-                                `).join('')}
+                                ${Array(6).fill(0).map((_, li) => {
+                                    const fieldId = `sidebar-line-${li}`;
+                                    const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
+                                    const text = saved ? saved.content : '';
+                                    return `
+                                        <div class="task-line">
+                                            <div class="editable-task" contenteditable="true" 
+                                                 data-date="${dayStr}" data-field="${fieldId}" 
+                                                 oninput="handleInput(event)">${text}</div>
+                                        </div>
+                                    `;
+                                }).join('')}
                                 <div class="sidebar-icon-row" style="margin-top: 10px;">
                                     <span class="sidebar-icon">🍴</span>
                                     <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)"></div>
