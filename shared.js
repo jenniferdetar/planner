@@ -24,35 +24,54 @@ async function fetchPlannerData(startDate, days = 7) {
     const endStr = endDate.toISOString().split('T')[0];
 
     const { data, error } = await client
-        .from('planner_data')
-        .select('*')
-        .gte('date', startStr)
-        .lte('date', endStr);
+        .from('work_planner_edits')
+        .select('date_key, slot_key, value')
+        .gte('date_key', startStr)
+        .lte('date_key', endStr);
 
     if (error) {
         console.error('Error fetching planner data:', error);
         return [];
     }
-    return data || [];
+    // Map back to internal format for compatibility
+    return (data || []).map(item => ({
+        date: item.date_key,
+        field_id: item.slot_key,
+        content: item.value
+    }));
 }
 
 async function savePlannerData(date, fieldId, content) {
     const client = getSupabase();
     if (!client) return false;
-    const { error } = await client
-        .from('planner_data')
-        .upsert({ 
-            date: date, 
-            field_id: fieldId, 
-            content: content,
-            updated_at: new Date()
-        }, { onConflict: 'date,field_id' });
 
-    if (error) {
-        console.error('Save error:', error);
+    // Manual upsert: delete existing then insert
+    // Since we don't have a unique constraint, this prevents duplicates
+    try {
+        await client
+            .from('work_planner_edits')
+            .delete()
+            .eq('date_key', date)
+            .eq('slot_key', fieldId);
+
+        const { error } = await client
+            .from('work_planner_edits')
+            .insert({ 
+                date_key: date, 
+                slot_key: fieldId, 
+                value: content,
+                updated_at: new Date().toISOString()
+            });
+
+        if (error) {
+            console.error('Save error:', error);
+            return false;
+        }
+        return true;
+    } catch (err) {
+        console.error('Unexpected save error:', err);
         return false;
     }
-    return true;
 }
 
 // Calendar Events Logic
@@ -253,7 +272,8 @@ function updateNavigationLinks(date) {
         'financial.html',
         'hoa.html',
         'icaap.html',
-        'planning.html'
+        'planning.html',
+        'intentions-dreams.html'
     ];
     document.querySelectorAll('a.nav-link, a.nav-btn').forEach(link => {
         const href = link.getAttribute('href');
