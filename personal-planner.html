@@ -235,7 +235,7 @@
             padding-right: 10px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 5px;
         }
 
         .sidebar-task-list {
@@ -287,6 +287,7 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
+            padding-left: 5px;
         }
 
         .task-line {
@@ -679,12 +680,26 @@
 
                 const dayEvents = events.filter(e => e.date === dayStr);
                 const sidebarItems = sidebarTasks[i].split('\n');
+                
+                // Separate all-day and timed events
+                const allDayEvents = dayEvents.filter(e => !e.start_time);
+                const timedEvents = dayEvents.filter(e => e.start_time);
 
                 const dayHtml = `
                     <div class="day-section">
                         <div class="day-header">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
                         <div class="day-layout">
                             <div class="day-sidebar">
+                                ${sidebarItems.map(t => `
+                                    <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 2px;">
+                                        <div class="${getEventClass(t)}">${t}</div>
+                                    </div>
+                                `).join('')}
+                                ${allDayEvents.map(e => `
+                                    <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 2px;">
+                                        <div class="${getEventClass(e.title)}">${e.title}</div>
+                                    </div>
+                                `).join('')}
                                 <div class="sidebar-icon-row">
                                     <span class="sidebar-icon">🍴</span>
                                     <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)"></div>
@@ -699,17 +714,12 @@
                                 </div>
                             </div>
                             <div class="day-content">
-                                ${sidebarItems.map(t => `
+                                ${timedEvents.map(e => `
                                     <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 5px;">
-                                        <div class="${getEventClass(t)}">${t}</div>
+                                        <div class="${getEventClass(e.title)}">${e.start_time ? e.start_time + ' ' : ''}${e.title}</div>
                                     </div>
                                 `).join('')}
-                                ${dayEvents.map((e, ei) => `
-                                    <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 5px;">
-                                        <div class="${getEventClass(e.title)}">${e.title}</div>
-                                    </div>
-                                `).join('')}
-                                ${Array(Math.max(4, 10 - dayEvents.length)).fill(0).map((_, ti) => {
+                                ${Array(Math.max(4, 10 - timedEvents.length)).fill(0).map((_, ti) => {
                                     const fieldId = `daily-task-${ti}`;
                                     const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
                                     const isChecked = saved && saved.content.startsWith('[x]');
