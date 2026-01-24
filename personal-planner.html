@@ -580,19 +580,19 @@
             "Trailblazer Registration": "$28.00",
             "DWP": "$100.00",
             "Jeff's Credit Cards": "$500.00",
-            "Jennifer's Student Loans - Sallie Mae": "$500.00",
+            "Sallie Mae": "$500.00",
             "Schools First Loan": "$142.00",
-            "Jennifer's Student Loans - NelNet": "$600.00",
+            "NelNet": "$600.00",
             "Ana": "$320.00",
             "Gas": "$600.00",
             "Laundry": "$80.00",
             "Groceries": "$600.00",
             "ADT": "$53.00",
-            "Amazon - Necessitites": "$100.00",
+            "Amazon": "$100.00",
             "Hair (Expensive)": "$110.00",
             "Orkin": "$50.00",
             "Hair (Cheap)": "$50.00",
-            "HELOC (California Credit Union)": "$357.00",
+            "HELOC": "$357.00",
             "HOA": "$520.00",
             "Mortgage": "$2,025.00",
             "Spectrum": "$197.00",
@@ -716,9 +716,9 @@
                 // Auto-populate financial line if "Due" events exist
                 const dueList = [];
                 dayEvents.forEach(e => {
-                    const title = e.title;
+                    const titleLower = e.title.toLowerCase();
                     Object.keys(billAmounts).forEach(bill => {
-                        if (title.includes(bill)) {
+                        if (titleLower.includes(bill.toLowerCase())) {
                             dueList.push(`${bill}: ${billAmounts[bill]}`);
                         }
                     });
