@@ -293,7 +293,6 @@ LA Fed	9/21/26	5:00 PM
 LA Fed	10/19/26	5:00 PM
 LA Fed	11/16/26	5:00 PM
 LA Fed	12/21/26	5:00 PM
-LA Fed MLK Celebration	1/17/26	8:00 AM
 Labor Day	9/7/26	
 Labor Day	9/6/27	
 Lincoln Detar	2/12/26	

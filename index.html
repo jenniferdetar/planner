@@ -193,6 +193,7 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
+        <a href="monthly-review.html" class="nav-link">Monthly Review</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
@@ -292,7 +293,16 @@
             }
 
             // Fetch and render Supabase events
-            const events = await fetchCalendarEvents(new Date(year, month, 1), daysInMonth);
+            let events = await fetchCalendarEvents(new Date(year, month, 1), daysInMonth);
+            
+            // Filter out specific events for 1/17/2026
+            events = events.filter(event => {
+                if (event.date === '2026-01-17' && event.title.toUpperCase().includes('LA FED MLK CELEBRATION')) {
+                    return false;
+                }
+                return true;
+            });
+
             events.forEach(event => {
                 const container = document.getElementById(`events-${event.date}`);
                 if (container) {

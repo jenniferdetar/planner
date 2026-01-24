@@ -134,11 +134,37 @@
             color: #666;
             text-align: right;
         }
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 2px 12px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            font-size: 0.9rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .mantra-section {
+            display: none;
+            background: #fffcf0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .mantra-para {
+            margin-bottom: 15px;
+            text-indent: 20px;
+        }
     </style>
 </head>
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
+        <a href="monthly-review.html" class="nav-link">Monthly Review</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
@@ -148,7 +174,35 @@
 
     <div class="container">
         <div class="notebook-page">
-            <h1 class="page-title">Planning Notes</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--header-blue); margin-bottom: 20px; padding-bottom: 10px;">
+                <h1 class="page-title" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">Planning Notes</h1>
+                <button class="nav-btn" onclick="toggleMantra()">Mantra</button>
+            </div>
+
+            <div id="mantra-display" class="mantra-section">
+                <p class="mantra-para">
+                    I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly. I will schedule solitude the way others schedule meetings, because if my calendar has no white space, something is out of alignment. Rest is not a reward for productivity; it is a responsibility I owe to my body, my mind, and my spirit.
+                </p>
+                <p class="mantra-para">
+                    I lead without shrinking. I have earned my seat at the table, and when necessary, I am capable of building the table myself. I will speak when I know something and step forward when I am ready, not when I am pressured. Visibility does not require apology, and leadership does not require loudness. It requires clarity, consistency, and the courage to stand steady even when it would be easier to disappear.
+                </p>
+                <p class="mantra-para">
+                    I build what grounds me. I value practical skills that feed people, calm homes, and create stability. There is dignity in old ways done well, and in returning to work that uses my hands and steadies my nervous system. When life feels chaotic, I come back to the tangible and the orderly. Creating structure is how I restore peace.
+                </p>
+                <p class="mantra-para">
+                    I serve with boundaries. I help people who are willing to participate in their own growth, and I release the need to rescue, overextend, or prove my worth through exhaustion. My generosity is intentional, not reactive, and my compassion does not require self-abandonment. I am allowed to care deeply without carrying everything.
+                </p>
+                <p class="mantra-para">
+                    I protect joy as a non-negotiable. Not every moment must be productive to be valuable. Some moments exist simply to be remembered—shared meals, laughter, road trips, quiet conversations, and ordinary days that become sacred because I was fully present. Joy is not a distraction from my purpose; it is evidence that I am living it.
+                </p>
+                <p class="mantra-para">
+                    I trust the pace of my life. I am not late, not behind, and not missing anything meant for me. I am becoming. I will not rush what is meant to mature, and I will not carry what was never mine to hold. Consistency matters more than urgency, and faith steadies me when fear tries to speak louder.
+                </p>
+                <p class="mantra-para">
+                    I am building a life where work is meaningful but not consuming, leadership is steady rather than frantic, service is impactful without being depleting, and home is calm instead of chaotic. My faith remains central, my values guide my choices, and my peace is protected on purpose. I move forward with intention, rooted rather than rushed, trusting that this way of living is not only sustainable—it is right.
+                </p>
+            </div>
+
             <div class="notes-section">
                 <div class="input-group">
                     <textarea id="new-note-content" placeholder="Type a new note here..."></textarea>
@@ -213,6 +267,15 @@
                 if (success) {
                     document.getElementById(`entry-${id}`).remove();
                 }
+            }
+        }
+
+        function toggleMantra() {
+            const display = document.getElementById('mantra-display');
+            if (display.style.display === 'block') {
+                display.style.display = 'none';
+            } else {
+                display.style.display = 'block';
             }
         }
 

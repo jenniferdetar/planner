@@ -426,6 +426,7 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
+        <a href="monthly-review.html" class="nav-link">Monthly Review</a>
         <a href="work-planner.html" class="nav-link">Work Planner</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
@@ -676,10 +677,18 @@
 
             updateNavigationLinks(currentStartDate);
 
-            const [events, plannerData] = await Promise.all([
+            let [events, plannerData] = await Promise.all([
                 fetchCalendarEvents(currentStartDate),
                 fetchPlannerData(currentStartDate)
             ]);
+
+            // Filter out specific events for 1/17/2026
+            events = events.filter(event => {
+                if (event.date === '2026-01-17' && event.title.toUpperCase().includes('LA FED MLK CELEBRATION')) {
+                    return false;
+                }
+                return true;
+            });
 
             // Habit Box Setup
             document.querySelectorAll('.mini-week-row').forEach((row, rowIndex) => {
