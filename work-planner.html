@@ -257,6 +257,7 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
+        <a href="personal-planner.html" class="nav-link">Personal Planner</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
@@ -265,15 +266,14 @@
     </header>
 
     <div class="notebook-container">
-        <div class="nav-controls">
-            <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
-            <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
-        </div>
-
         <div class="notebook-page">
             <div class="planner-header">
                 <div id="week-range" class="date-range">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
-                <h2 style="margin: 5px 0; color: var(--header-blue);">WORK PLANNER</h2>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin: 5px 0;">
+                    <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
+                    <h2 style="margin: 0; color: var(--header-blue);">WORK PLANNER</h2>
+                    <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
+                </div>
                 <div id="save-status" style="font-size: 0.7rem; color: #888;">All changes saved</div>
             </div>
 
