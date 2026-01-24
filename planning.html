@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intentions & Dreams - Home Planner</title>
+    <title>Planning - Home Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
         :root {
-            --header-blue: #5a8ca0;
+            --header-blue: #00326b;
             --border-color: #333;
             --tan-bg: #fffcf0;
             --text-color: #333;
@@ -22,23 +22,32 @@
             color: var(--text-color);
         }
         .global-header {
-            background: #fff;
+            background: #00326b;
             padding: 10px 20px;
             display: flex;
-            gap: 20px;
+            gap: 15px;
             border-bottom: 1px solid #ddd;
             position: sticky;
             top: 0;
             z-index: 1000;
+            align-items: center;
         }
         .nav-link {
             text-decoration: none;
-            color: #333;
+            color: #ffca38;
             font-weight: bold;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
         }
         .container {
             display: flex;
@@ -206,7 +215,7 @@
         <div class="notebook-page">
             <div class="page-header">
                 <div class="subtitle">Take a Moment</div>
-                <h1 class="page-title">Intentions & Dreams</h1>
+                <h1 class="page-title">Planning</h1>
                 <p class="intro-text">
                     As you begin a new year, take a moment to reflect on what you enjoy most and dream big!
                 </p>
