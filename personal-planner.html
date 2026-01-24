@@ -678,30 +678,13 @@
                 const formattedDate = dayDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
                 const dayEvents = events.filter(e => e.date === dayStr);
+                const sidebarItems = sidebarTasks[i].split('\n');
 
                 const dayHtml = `
                     <div class="day-section">
                         <div class="day-header">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
                         <div class="day-layout">
                             <div class="day-sidebar">
-                                <ul class="sidebar-task-list">
-                                    ${sidebarTasks[i].split('\n').map((t, ti) => {
-                                        const fieldId = `sidebar-task-${ti}`;
-                                        const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
-                                        const isChecked = saved && saved.content.startsWith('[x]');
-                                        const text = saved ? saved.content.replace('[x]', '').replace('[ ]', '') : t;
-                                        return `
-                                            <li class="sidebar-task-item">
-                                                <div class="check-box ${isChecked ? 'checked' : ''}" 
-                                                     onclick="toggleSidebarTask(event, '${dayStr}', '${fieldId}')"></div>
-                                                <span contenteditable="true" 
-                                                      data-date="${dayStr}" 
-                                                      data-field="${fieldId}" 
-                                                      oninput="handleSidebarTaskInput(event, '${dayStr}', '${fieldId}')">${text}</span>
-                                            </li>
-                                        `;
-                                    }).join('')}
-                                </ul>
                                 <div class="sidebar-icon-row">
                                     <span class="sidebar-icon">🍴</span>
                                     <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)"></div>
@@ -716,6 +699,11 @@
                                 </div>
                             </div>
                             <div class="day-content">
+                                ${sidebarItems.map(t => `
+                                    <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 5px;">
+                                        <div class="${getEventClass(t)}">${t}</div>
+                                    </div>
+                                `).join('')}
                                 ${dayEvents.map((e, ei) => `
                                     <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 5px;">
                                         <div class="${getEventClass(e.title)}">${e.title}</div>
@@ -750,26 +738,6 @@
                     if (el) el.innerText = item.content;
                 }
             });
-        }
-
-        function toggleSidebarTask(e, date, fieldId) {
-            const box = e.target;
-            const span = box.nextElementSibling;
-            box.classList.toggle('checked');
-            const isChecked = box.classList.contains('checked');
-            const content = (isChecked ? '[x]' : '[ ]') + span.innerText;
-            savePlannerData(date, fieldId, content);
-        }
-
-        function handleSidebarTaskInput(e, date, fieldId) {
-            const span = e.target;
-            const box = span.previousElementSibling;
-            const isChecked = box.classList.contains('checked');
-            const content = (isChecked ? '[x]' : '[ ]') + span.innerText;
-            
-            document.getElementById('save-status').innerText = 'Unsaved changes';
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => savePlannerData(date, fieldId, content), 1000);
         }
 
         function toggleDailyTask(e, date, fieldId) {
