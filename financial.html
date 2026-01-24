@@ -11,6 +11,12 @@
         :root {
             --header-blue: #00326b;
             --border-color: #333;
+            --row-auto: #2d8a2d;
+            --row-bill: #00326b;
+            --row-cash: #d14d9c;
+            --row-cc: #d68100;
+            --row-housing: #a33b3b;
+            --row-savings: #7a4da3;
         }
         body {
             font-family: 'Coming Soon', cursive;
@@ -55,98 +61,124 @@
             box-sizing: border-box;
         }
         .notebook-page {
-            width: 100%; box-sizing: border-box;
+            width: 100%;
+            max-width: 1000px;
+            box-sizing: border-box;
             background: #fff;
-            padding: 20px;
+            padding: 40px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            min-height: 600px;
+            min-height: 1000px;
+        }
+        .schedule-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icon-circle {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ffca38;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffca38;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
         }
         .page-title {
-            color: var(--header-blue);
-            border-bottom: 2px solid var(--header-blue);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+            color: #333;
+            font-size: 1.5rem;
+            margin: 0;
             letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        .notes-section {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            font-family: 'Coming Soon', cursive;
-            font-size: 1.1rem;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            line-height: 1.5;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-        .save-btn {
-            align-self: flex-end;
-            padding: 8px 20px;
-            background-color: var(--header-blue);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Coming Soon', cursive;
-            font-size: 1rem;
-        }
-        .save-btn:hover {
-            opacity: 0.9;
-        }
-        .entries-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .note-entry {
-            background: #fff;
-            border-left: 4px solid var(--header-blue);
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-radius: 0 4px 4px 0;
-            position: relative;
-        }
-        .entry-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 8px;
-        }
-        .entry-content {
-            white-space: pre-wrap;
+        .subtitle {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 10px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
             line-height: 1.4;
         }
-        .delete-btn {
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .bill-table th {
+            border-bottom: 1px solid #ccc;
+            padding: 8px;
+            font-weight: normal;
+            color: #666;
+            text-align: left;
+        }
+        .bill-table td {
+            padding: 4px 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .month-col {
+            width: 25px;
+            text-align: center;
+            padding: 4px 2px !important;
+        }
+        .row-auto { color: var(--row-auto); }
+        .row-bill { color: var(--row-bill); }
+        .row-cash { color: var(--row-cash); }
+        .row-cc { color: var(--row-cc); }
+        .row-housing { color: var(--row-housing); }
+        .row-savings { color: var(--row-savings); }
+
+        .editable-cell {
+            outline: none;
+            min-width: 50px;
+        }
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #ddd;
+            display: inline-block;
             cursor: pointer;
-            color: #cc0000;
-            opacity: 0.5;
+            transition: all 0.2s;
         }
-        .delete-btn:hover {
-            opacity: 1;
+        .checkbox.checked {
+            background-color: #333 !important;
+            position: relative;
         }
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+        }
+
+        /* Monthly Colors */
+        .cb-j { background-color: #ffcccc; }
+        .cb-f { background-color: #ffe6cc; }
+        .cb-m { background-color: #ffffcc; }
+        .cb-a { background-color: #e6ffcc; }
+        .cb-ma { background-color: #ccffcc; }
+        .cb-jun { background-color: #ccffe6; }
+        .cb-jul { background-color: #ccffff; }
+        .cb-au { background-color: #cce6ff; }
+        .cb-s { background-color: #ccccff; }
+        .cb-o { background-color: #e6ccff; }
+        .cb-n { background-color: #ffccff; }
+        .cb-d { background-color: #ffcce6; }
+
         .save-status {
-            font-size: 0.7rem;
-            color: #888;
-            height: 15px;
-            text-align: right;
-            margin-bottom: 5px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.8rem;
+            color: #666;
         }
     </style>
 </head>
@@ -160,78 +192,537 @@
         <a href="planning.html" class="nav-link">Planning</a>
     </header>
 
+    <div id="save-status" class="save-status">All changes saved</div>
+
     <div class="container">
         <div class="notebook-page">
-            <h1 class="page-title">Financial Notes</h1>
-            <div class="notes-section">
-                <div class="input-group">
-                    <textarea id="new-note-content" placeholder="Type a new note here..."></textarea>
-                    <button class="save-btn" onclick="handleAddNote()">Save Note</button>
-                    <div id="save-status" class="save-status">All changes saved</div>
-                </div>
-                <div id="entries-list" class="entries-list">
-                    <!-- Entries will be loaded here -->
-                </div>
+            <div class="schedule-header">
+                <div class="icon-circle">$</div>
+                <h1 class="page-title">Bill Payment Schedule</h1>
+                <p class="subtitle">Keep track of your bill payments by listing recurring expenses, including how much they cost and what date they're typically paid. Check them off the list below as you pay your bills each month.</p>
             </div>
+
+            <table class="bill-table">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">Category</th>
+                        <th style="width: 200px;">Item</th>
+                        <th style="width: 80px;">Amount</th>
+                        <th class="month-col">J</th>
+                        <th class="month-col">F</th>
+                        <th class="month-col">M</th>
+                        <th class="month-col">A</th>
+                        <th class="month-col">M</th>
+                        <th class="month-col">J</th>
+                        <th class="month-col">J</th>
+                        <th class="month-col">A</th>
+                        <th class="month-col">S</th>
+                        <th class="month-col">O</th>
+                        <th class="month-col">N</th>
+                        <th class="month-col">D</th>
+                    </tr>
+                </thead>
+                <tbody id="bill-body">
+                    <!-- Pre-populated from image -->
+                    <tr class="row-auto">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-1">Auto</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-1">Auto Maintenance</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-1">$100</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-1-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-1-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-1-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-1-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-1-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-1-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-1-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-1-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-1-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-1-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-1-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-1-12"></div></td>
+                    </tr>
+                    <tr class="row-auto">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-2">Auto</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-2">Mercury Auto Insurance</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-2">$388</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-2-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-2-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-2-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-2-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-2-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-2-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-2-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-2-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-2-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-2-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-2-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-2-12"></div></td>
+                    </tr>
+                    <tr class="row-auto">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-3">Auto</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-3">Tahoe Registration</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-3">$15</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-3-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-3-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-3-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-3-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-3-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-3-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-3-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-3-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-3-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-3-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-3-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-3-12"></div></td>
+                    </tr>
+                    <tr class="row-auto">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-4">Auto</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-4">Trailblazer Registration</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-4">$28</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-4-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-4-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-4-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-4-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-4-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-4-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-4-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-4-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-4-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-4-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-4-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-4-12"></div></td>
+                    </tr>
+                    <tr class="row-bill">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-5">Bill Pay</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-5">DWP</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-5">$100</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-5-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-5-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-5-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-5-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-5-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-5-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-5-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-5-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-5-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-5-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-5-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-5-12"></div></td>
+                    </tr>
+                    <tr class="row-bill">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-6">Bill Pay</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-6">Jeff's Credit Cards</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-6">$500</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-6-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-6-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-6-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-6-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-6-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-6-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-6-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-6-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-6-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-6-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-6-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-6-12"></div></td>
+                    </tr>
+                    <tr class="row-bill">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-7">Bill Pay</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-7">Jennifer's Student Loans</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-7">$150</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-7-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-7-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-7-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-7-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-7-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-7-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-7-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-7-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-7-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-7-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-7-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-7-12"></div></td>
+                    </tr>
+                    <tr class="row-bill">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-8">Bill Pay</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-8">Schools First Loan</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-8">$142</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-8-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-8-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-8-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-8-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-8-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-8-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-8-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-8-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-8-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-8-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-8-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-8-12"></div></td>
+                    </tr>
+                    <tr class="row-cash">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-9">Cash</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-9">Cleaning Lady</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-9">$320</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-9-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-9-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-9-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-9-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-9-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-9-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-9-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-9-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-9-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-9-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-9-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-9-12"></div></td>
+                    </tr>
+                    <tr class="row-cash">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-10">Cash</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-10">Gas</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-10">$600</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-10-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-10-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-10-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-10-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-10-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-10-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-10-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-10-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-10-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-10-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-10-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-10-12"></div></td>
+                    </tr>
+                    <tr class="row-cash">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-11">Cash</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-11">Laundry</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-11">$80</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-11-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-11-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-11-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-11-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-11-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-11-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-11-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-11-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-11-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-11-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-11-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-11-12"></div></td>
+                    </tr>
+                    <tr class="row-cc">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-12">Credit Card</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-12">ADT</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-12">$53</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-12-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-12-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-12-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-12-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-12-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-12-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-12-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-12-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-12-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-12-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-12-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-12-12"></div></td>
+                    </tr>
+                    <tr class="row-cc">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-13">Credit Card</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-13">Amazon</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-13">$100</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-13-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-13-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-13-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-13-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-13-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-13-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-13-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-13-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-13-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-13-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-13-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-13-12"></div></td>
+                    </tr>
+                    <tr class="row-cc">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-14">Credit Card</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-14">Groceries</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-14">$600</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-14-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-14-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-14-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-14-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-14-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-14-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-14-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-14-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-14-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-14-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-14-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-14-12"></div></td>
+                    </tr>
+                    <tr class="row-cc">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-15">Credit Card</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-15">Hair</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-15">$110</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-15-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-15-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-15-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-15-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-15-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-15-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-15-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-15-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-15-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-15-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-15-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-15-12"></div></td>
+                    </tr>
+                    <tr class="row-cc">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-16">Credit Card</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-16">Orkin</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-16">$50</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-16-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-16-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-16-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-16-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-16-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-16-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-16-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-16-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-16-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-16-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-16-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-16-12"></div></td>
+                    </tr>
+                    <tr class="row-housing">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-17">Housing</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-17">HELOC</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-17">$357</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-17-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-17-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-17-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-17-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-17-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-17-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-17-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-17-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-17-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-17-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-17-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-17-12"></div></td>
+                    </tr>
+                    <tr class="row-housing">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-18">Housing</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-18">HOA</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-18">$520</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-18-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-18-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-18-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-18-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-18-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-18-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-18-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-18-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-18-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-18-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-18-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-18-12"></div></td>
+                    </tr>
+                    <tr class="row-housing">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-19">Housing</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-19">Mortgage</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-19">$2,250</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-19-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-19-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-19-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-19-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-19-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-19-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-19-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-19-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-19-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-19-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-19-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-19-12"></div></td>
+                    </tr>
+                    <tr class="row-housing">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-20">Housing</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-20">Spectrum</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-20">$197</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-20-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-20-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-20-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-20-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-20-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-20-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-20-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-20-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-20-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-20-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-20-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-20-12"></div></td>
+                    </tr>
+                    <tr class="row-housing">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-21">Housing</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-21">Verizon</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-21">$283</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-21-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-21-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-21-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-21-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-21-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-21-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-21-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-21-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-21-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-21-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-21-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-21-12"></div></td>
+                    </tr>
+                    <tr class="row-savings">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-22">Savings</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-22">Blow</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-22">$200</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-22-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-22-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-22-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-22-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-22-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-22-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-22-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-22-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-22-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-22-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-22-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-22-12"></div></td>
+                    </tr>
+                    <tr class="row-savings">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-23">Savings</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-23">HSA</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-23">$200</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-23-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-23-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-23-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-23-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-23-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-23-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-23-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-23-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-23-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-23-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-23-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-23-12"></div></td>
+                    </tr>
+                    <tr class="row-savings">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-24">Savings</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-24">Summer Saver</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-24">$400</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-24-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-24-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-24-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-24-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-24-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-24-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-24-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-24-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-24-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-24-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-24-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-24-12"></div></td>
+                    </tr>
+                    <tr class="row-savings">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-25">Savings</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-25">Tahoe's Major Repairs</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-25">$200</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-25-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-25-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-25-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-25-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-25-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-25-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-25-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-25-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-25-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-25-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-25-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-25-12"></div></td>
+                    </tr>
+                    <tr class="row-savings">
+                        <td class="editable-cell" contenteditable="true" data-field="cat-26">Savings</td>
+                        <td class="editable-cell" contenteditable="true" data-field="item-26">Vacation</td>
+                        <td class="editable-cell" contenteditable="true" data-field="amt-26">$125</td>
+                        <td class="month-col"><div class="checkbox cb-j" data-field="chk-26-1"></div></td>
+                        <td class="month-col"><div class="checkbox cb-f" data-field="chk-26-2"></div></td>
+                        <td class="month-col"><div class="checkbox cb-m" data-field="chk-26-3"></div></td>
+                        <td class="month-col"><div class="checkbox cb-a" data-field="chk-26-4"></div></td>
+                        <td class="month-col"><div class="checkbox cb-ma" data-field="chk-26-5"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jun" data-field="chk-26-6"></div></td>
+                        <td class="month-col"><div class="checkbox cb-jul" data-field="chk-26-7"></div></td>
+                        <td class="month-col"><div class="checkbox cb-au" data-field="chk-26-8"></div></td>
+                        <td class="month-col"><div class="checkbox cb-s" data-field="chk-26-9"></div></td>
+                        <td class="month-col"><div class="checkbox cb-o" data-field="chk-26-10"></div></td>
+                        <td class="month-col"><div class="checkbox cb-n" data-field="chk-26-11"></div></td>
+                        <td class="month-col"><div class="checkbox cb-d" data-field="chk-26-12"></div></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        const CATEGORY = 'Financial';
-        const entriesList = document.getElementById('entries-list');
-        const newNoteContent = document.getElementById('new-note-content');
-        const saveStatus = document.getElementById('save-status');
+        let saveTimeout;
+        const PLANNING_DATE = '2026-financial';
 
-        function createEntryElement(entry) {
-            const div = document.createElement('div');
-            div.className = 'note-entry';
-            div.id = `entry-${entry.id}`;
-            div.innerHTML = `
-                <div class="entry-header">
-                    <span>${formatDate(entry.created_at)}</span>
-                    <span class="delete-btn" onclick="handleDeleteNote(${entry.id})">Delete</span>
-                </div>
-                <div class="entry-content">${entry.content}</div>
-            `;
-            return div;
-        }
+        async function init() {
+            // Load data from Supabase
+            const data = await fetchPlannerData(PLANNING_DATE);
+            
+            if (data && data.length > 0) {
+                data.forEach(item => {
+                    if (item.field_id.startsWith('chk-')) {
+                        const el = document.querySelector(`.checkbox[data-field="${item.field_id}"]`);
+                        if (el && item.content === 'true') el.classList.add('checked');
+                    } else {
+                        const el = document.querySelector(`[data-field="${item.field_id}"]`);
+                        if (el) el.innerText = item.content;
+                    }
+                });
+            }
 
-        async function loadEntries() {
-            const entries = await fetchCategoryEntries(CATEGORY);
-            entriesList.innerHTML = '';
-            entries.forEach(entry => {
-                entriesList.appendChild(createEntryElement(entry));
+            // Set up event listeners for checkboxes
+            document.querySelectorAll('.checkbox').forEach(cb => {
+                cb.addEventListener('click', () => {
+                    cb.classList.toggle('checked');
+                    const isChecked = cb.classList.contains('checked');
+                    const fieldId = cb.getAttribute('data-field');
+                    handleSave(fieldId, isChecked.toString());
+                });
+            });
+
+            // Set up event listeners for editable cells
+            document.querySelectorAll('.editable-cell').forEach(cell => {
+                cell.addEventListener('input', () => {
+                    const fieldId = cell.getAttribute('data-field');
+                    const content = cell.innerText;
+                    handleSave(fieldId, content);
+                });
             });
         }
 
-        async function handleAddNote() {
-            const content = newNoteContent.value;
-            if (!content.trim()) return;
-
-            saveStatus.innerText = 'Saving...';
-            const newEntry = await saveCategoryEntry(CATEGORY, content);
-            
-            if (newEntry) {
-                newNoteContent.value = '';
-                saveStatus.innerText = 'Saved';
-                entriesList.prepend(createEntryElement(newEntry));
-                setTimeout(() => { saveStatus.innerText = ''; }, 2000);
-            } else {
-                saveStatus.innerText = 'Error saving';
-            }
+        function handleSave(fieldId, content) {
+            const status = document.getElementById('save-status');
+            status.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                status.innerText = 'Saving...';
+                const success = await savePlannerData(PLANNING_DATE, fieldId, content);
+                status.innerText = success ? 'All changes saved' : 'Error saving';
+            }, 1000);
         }
 
-        async function handleDeleteNote(id) {
-            if (confirm('Are you sure you want to delete this note?')) {
-                const success = await deleteCategoryEntry(id);
-                if (success) {
-                    document.getElementById(`entry-${id}`).remove();
-                }
-            }
-        }
-
-        // Initialize
-        loadEntries();
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
