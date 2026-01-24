@@ -354,6 +354,53 @@
             font-weight: bold;
             color: var(--header-blue);
         }
+
+        /* Specialized event pill styles */
+        .event-pill {
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            line-height: 1.2;
+            border: 1px solid #ccc;
+            text-align: center;
+            display: inline-block;
+            margin: 1px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .event-pill.csea, .event-pill.la-fed { 
+            background-color: #00326b; 
+            color: #ffca38; 
+            border: 2px solid #ffca38; 
+        }
+        .event-pill.due { 
+            background-color: #ff0000; 
+            color: #ffffff; 
+            border: none;
+        }
+        .event-pill.meeting { border-left: 5px solid #a2d9d9; }
+        
+        .event-pill.pay-day {
+            background-color: #1b5e20; /* Deep Green */
+            color: #ffffff !important;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .event-pill.budget {
+            background-color: #408686;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            border-left: 10px solid #d4af37;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -563,6 +610,17 @@
             handleSavePlannerData(date, fieldId, content);
         }
 
+        function getEventClass(title) {
+            const lowerTitle = title.toLowerCase();
+            if (lowerTitle.includes('csea')) return 'event-pill csea';
+            if (lowerTitle.includes('la fed')) return 'event-pill la-fed';
+            if (lowerTitle.includes('due')) return 'event-pill due';
+            if (lowerTitle.includes('meeting')) return 'event-pill meeting';
+            if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
+            if (lowerTitle.includes('budget')) return 'event-pill budget';
+            return 'event-pill';
+        }
+
         async function renderSpread() {
             const container = document.getElementById('days-container');
             container.innerHTML = 'Loading...';
@@ -652,9 +710,8 @@
                             </div>
                             <div class="day-content">
                                 ${dayEvents.map((e, ei) => `
-                                    <div class="task-line">
-                                        <div class="check-box" onclick="toggleTask(event, '${dayStr}', 'event-${ei}')"></div>
-                                        <span class="event-item">${e.title}</span>
+                                    <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 5px;">
+                                        <div class="${getEventClass(e.title)}">${e.title}</div>
                                     </div>
                                 `).join('')}
                                 ${Array(Math.max(4, 10 - dayEvents.length)).fill(0).map((_, ti) => {

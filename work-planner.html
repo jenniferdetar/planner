@@ -178,15 +178,51 @@
         }
 
         .event-entry {
-            background: #e3f2fd;
-            border-left: 3px solid var(--header-blue);
-            padding: 2px 5px;
-            font-weight: bold;
-            width: 100%;
-            height: 100%;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 2px 8px;
+            font-size: 0.65rem;
+            line-height: 1.2;
+            border: 1px solid #ccc;
+            text-align: center;
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
             box-sizing: border-box;
+        }
+
+        .event-entry.csea, .event-entry.la-fed { 
+            background-color: #00326b; 
+            color: #ffca38; 
+            border: 2px solid #ffca38; 
+        }
+        .event-entry.due { 
+            background-color: #ff0000; 
+            color: #ffffff; 
+            border: none;
+        }
+        .event-entry.meeting { border-left: 5px solid #a2d9d9; }
+        
+        .event-entry.pay-day {
+            background-color: #1b5e20; /* Deep Green */
+            color: #ffffff !important;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .event-entry.budget {
+            background-color: #408686;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            border-left: 10px solid #d4af37;
+            border-radius: 4px;
         }
 
         .nav-controls {
@@ -371,6 +407,18 @@
             return null;
         }
 
+        function getEventClass(title) {
+            const lowerTitle = title.toLowerCase();
+            const classes = ['event-entry'];
+            if (lowerTitle.includes('csea')) classes.push('csea');
+            if (lowerTitle.includes('la fed')) classes.push('la-fed');
+            if (lowerTitle.includes('due')) classes.push('due');
+            if (lowerTitle.includes('meeting')) classes.push('meeting');
+            if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) classes.push('pay-day');
+            if (lowerTitle.includes('budget')) classes.push('budget');
+            return classes.join(' ');
+        }
+
         async function renderPlanner() {
             const container = document.getElementById('planner-columns');
             container.innerHTML = 'Loading...';
@@ -438,7 +486,7 @@
                     
                     const eventTitle = getEventForSlot(dayEvents, slot, i);
                     if (eventTitle) {
-                        content.innerHTML = `<div class="event-entry">${eventTitle}</div>`;
+                        content.innerHTML = `<div class="${getEventClass(eventTitle)}">${eventTitle}</div>`;
                     } else {
                         content.contentEditable = "true";
                         content.setAttribute('data-field', `slot-${slot}`);
