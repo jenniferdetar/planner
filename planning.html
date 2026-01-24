@@ -56,15 +56,25 @@
             padding: 20px;
             width: 100%;
             box-sizing: border-box;
+            max-width: 1900px;
+            margin: 0 auto;
+        }
+        .planner-spread {
+            display: flex;
+            gap: 40px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         .notebook-page {
-            width: 100%;
+            flex: 1;
+            min-width: 800px;
             max-width: 900px;
             box-sizing: border-box;
             background: #fff;
             padding: 60px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            min-height: 1000px;
+            min-height: 1100px;
         }
         .page-header {
             text-align: center;
@@ -209,6 +219,11 @@
             text-align: center;
             margin-top: 5px;
         }
+        .left-col, .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
     </style>
 </head>
 <body>
@@ -224,111 +239,206 @@
     <div id="save-status" class="save-status">All changes saved</div>
 
     <div class="container">
-        <div class="notebook-page">
-            <div class="page-header">
-                <div class="subtitle">Be Thoughtful</div>
-                <h1 class="page-title">Intentions & Dreams</h1>
-                <p class="intro-text">
-                    What do you want to prioritize in your daily work when planning for the upcoming year?<br>
-                    On the following pages, focus on your mission, vision, values, and purpose.
-                </p>
-            </div>
+        <div class="planner-spread">
+            <div class="notebook-page">
+                <div class="page-header">
+                    <div class="subtitle">Be Thoughtful</div>
+                    <h1 class="page-title">Intentions & Dreams</h1>
+                    <p class="intro-text">
+                        What do you want to prioritize in your daily work when planning for the upcoming year?<br>
+                        On the following pages, focus on your mission, vision, values, and purpose.
+                    </p>
+                </div>
 
-            <div class="top-grid">
-                <div class="section-box">
-                    <div class="section-prompt">
-                        When looking forward <span>to the coming year, what would you love for your work to look like each day? What fills you up in the time you spend at work? Take a few moments to consider what you love most as you begin today.</span>
+                <div class="top-grid">
+                    <div class="section-box">
+                        <div class="section-prompt">
+                            When looking forward <span>to the coming year, what would you love for your work to look like each day? What fills you up in the time you spend at work? Take a few moments to consider what you love most as you begin today.</span>
+                        </div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-4"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-5"></div></div>
                     </div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-1"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-2"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-5"></div></div>
-                </div>
-                <div class="section-box">
-                    <div class="section-prompt">
-                        Do you love <span>it when you have the time to be ...</span>
-                    </div>
-                    <div class="checkbox-grid">
-                        <div class="checkbox-item" data-value="Creative"><div class="checkbox"></div> Creative</div>
-                        <div class="checkbox-item" data-value="Energetic"><div class="checkbox"></div> Energetic</div>
-                        <div class="checkbox-item" data-value="Fun"><div class="checkbox"></div> Fun</div>
-                        <div class="checkbox-item" data-value="Quiet"><div class="checkbox"></div> Quiet</div>
-                        <div class="checkbox-item" data-value="Generous"><div class="checkbox"></div> Generous</div>
-                        <div class="checkbox-item" data-value="Loud"><div class="checkbox"></div> Loud</div>
-                        <div class="checkbox-item" data-value="Encouraging"><div class="checkbox"></div> Encouraging</div>
-                        <div class="checkbox-item" data-value="Involved"><div class="checkbox"></div> Involved</div>
-                        <div class="checkbox-item" data-value="Reliable"><div class="checkbox"></div> Reliable</div>
-                        <div class="checkbox-item" data-value="Genuine"><div class="checkbox"></div> Genuine</div>
-                        <div class="checkbox-item" data-value="Independent"><div class="checkbox"></div> Independent</div>
-                        <div class="checkbox-item" data-value="Curious"><div class="checkbox"></div> Curious</div>
-                        <div class="checkbox-item" data-value="Excited"><div class="checkbox"></div> Excited</div>
-                        <div class="checkbox-item" data-value="Valuable"><div class="checkbox"></div> Valuable</div>
-                        <div class="checkbox-item" data-value="A leader"><div class="checkbox"></div> A leader</div>
-                        <div class="checkbox-item" data-value="Custom1" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="love-custom1" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
-                        <div class="checkbox-item" data-value="Servant-hearted"><div class="checkbox"></div> Servant-hearted</div>
-                        <div class="checkbox-item" data-value="Custom2" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="love-custom2" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
+                    <div class="section-box">
+                        <div class="section-prompt">
+                            Do you love <span>it when you have the time to be ...</span>
+                        </div>
+                        <div class="checkbox-grid">
+                            <div class="checkbox-item" data-value="Creative" data-prefix="love-cb-"><div class="checkbox"></div> Creative</div>
+                            <div class="checkbox-item" data-value="Energetic" data-prefix="love-cb-"><div class="checkbox"></div> Energetic</div>
+                            <div class="checkbox-item" data-value="Fun" data-prefix="love-cb-"><div class="checkbox"></div> Fun</div>
+                            <div class="checkbox-item" data-value="Quiet" data-prefix="love-cb-"><div class="checkbox"></div> Quiet</div>
+                            <div class="checkbox-item" data-value="Generous" data-prefix="love-cb-"><div class="checkbox"></div> Generous</div>
+                            <div class="checkbox-item" data-value="Loud" data-prefix="love-cb-"><div class="checkbox"></div> Loud</div>
+                            <div class="checkbox-item" data-value="Encouraging" data-prefix="love-cb-"><div class="checkbox"></div> Encouraging</div>
+                            <div class="checkbox-item" data-value="Involved" data-prefix="love-cb-"><div class="checkbox"></div> Involved</div>
+                            <div class="checkbox-item" data-value="Reliable" data-prefix="love-cb-"><div class="checkbox"></div> Reliable</div>
+                            <div class="checkbox-item" data-value="Genuine" data-prefix="love-cb-"><div class="checkbox"></div> Genuine</div>
+                            <div class="checkbox-item" data-value="Independent" data-prefix="love-cb-"><div class="checkbox"></div> Independent</div>
+                            <div class="checkbox-item" data-value="Curious" data-prefix="love-cb-"><div class="checkbox"></div> Curious</div>
+                            <div class="checkbox-item" data-value="Excited" data-prefix="love-cb-"><div class="checkbox"></div> Excited</div>
+                            <div class="checkbox-item" data-value="Valuable" data-prefix="love-cb-"><div class="checkbox"></div> Valuable</div>
+                            <div class="checkbox-item" data-value="A leader" data-prefix="love-cb-"><div class="checkbox"></div> A leader</div>
+                            <div class="checkbox-item" data-value="Custom1" data-prefix="love-cb-" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="love-custom1" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
+                            <div class="checkbox-item" data-value="Servant-hearted" data-prefix="love-cb-"><div class="checkbox"></div> Servant-hearted</div>
+                            <div class="checkbox-item" data-value="Custom2" data-prefix="love-cb-" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="love-custom2" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="full-width-prompt">
+                    <div class="prompt-text">What is your absolute favorite thing you love doing at work each day?</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="favorite-thing"></div></div>
+                </div>
+
+                <div class="full-width-prompt">
+                    <div class="prompt-text">What didn't you enjoy in your work over the last year?</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="not-enjoyed"></div></div>
+                </div>
+
+                <div class="full-width-prompt">
+                    <div class="prompt-text">What was simply fun for you as you look back over the last year, personally or professionally?</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="fun-last-year"></div></div>
+                </div>
+
+                <div class="dream-big-title">
+                    Dream big | <span>Where would you like to be financially, physically, emotionally, and spiritually in a year? Do you want to run a half marathon? Pay off your home? Or hit a certain income goal? Write it down so you can keep track of it, and dream big in the next 12 months!</span>
+                </div>
+
+                <div class="dream-grid">
+                    <div class="dream-box">
+                        <div class="dream-label">Financially</div>
+                        <div class="editable-area" contenteditable="true" data-field="dream-financial" style="min-height: 80px;"></div>
+                    </div>
+                    <div class="dream-box">
+                        <div class="dream-label">Physically</div>
+                        <div class="editable-area" contenteditable="true" data-field="dream-physical" style="min-height: 80px;"></div>
+                    </div>
+                    <div class="dream-box">
+                        <div class="dream-label">Emotionally</div>
+                        <div class="editable-area" contenteditable="true" data-field="dream-emotional" style="min-height: 80px;"></div>
+                    </div>
+                    <div class="dream-box">
+                        <div class="dream-label">Spiritually</div>
+                        <div class="editable-area" contenteditable="true" data-field="dream-spiritual" style="min-height: 80px;"></div>
+                    </div>
+                </div>
+
+                <div class="footer-prompts">
+                    <div class="footer-prompt-item">
+                        <span>This year, more than anything else, I want to focus on</span>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="focus-this-year"></div></div>
+                    </div>
+                    <div class="footer-prompt-item">
+                        <span>To make that happen, I'm going to spend my time and energy on</span>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="spend-time-on"></div></div>
+                    </div>
+                    <div class="footer-prompt-item">
+                        <span>Instead of spending too much time on</span>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="less-time-on" style="width: 150px;"></div></div>
+                        <span>, I'm going to dream big about</span>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="dream-big-about"></div></div>
+                    </div>
+                    <div class="footer-prompt-item">
+                        <span>This is so worth it because</span>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="worth-it-because" style="width: 200px;"></div></div>
+                        <span>are depending on me!</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="full-width-prompt">
-                <div class="prompt-text">What is your absolute favorite thing you love doing at work each day?</div>
-                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="favorite-thing"></div></div>
-            </div>
+            <!-- Page 2: Take a Moment -->
+            <div class="notebook-page">
+                <div class="page-header">
+                    <div class="subtitle">Take a Moment</div>
+                    <h1 class="page-title">Intentions & Dreams</h1>
+                    <p class="intro-text">
+                        As you begin a new year, take a moment to reflect on what you enjoy most and dream big!
+                    </p>
+                </div>
 
-            <div class="full-width-prompt">
-                <div class="prompt-text">What didn't you enjoy in your work over the last year?</div>
-                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="not-enjoyed"></div></div>
-            </div>
+                <div class="top-grid">
+                    <div class="left-col">
+                        <div class="section-box" style="margin-bottom: 20px;">
+                            <div class="section-prompt">
+                                Mission | <span>When thinking of your work, what do you consider to be your mission?</span>
+                            </div>
+                            <div class="footer-prompt-item">
+                                <span>My mission in my work is</span>
+                                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="mission-work"></div></div>
+                            </div>
+                            <div class="footer-prompt-item">
+                                <span>My goal is to</span>
+                                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-each-day"></div></div>
+                                <span>each day,</span>
+                            </div>
+                            <div class="footer-prompt-item">
+                                <span>and I strive to</span>
+                                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="strive-to"></div></div>
+                            </div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="mission-ruled-1"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="mission-ruled-2"></div></div>
+                        </div>
 
-            <div class="full-width-prompt">
-                <div class="prompt-text">What was simply fun for you as you look back over the last year, personally or professionally?</div>
-                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="fun-last-year"></div></div>
-            </div>
+                        <div class="section-box">
+                            <div class="section-prompt">
+                                Vision | <span>So what on earth is the difference between your MISSION and your VISION? Your mission looks closely at what you're doing today and who you're serving, while your vision is where you'd love to go one day.</span>
+                            </div>
+                            <div class="prompt-text">Think BIG. Dream WILDLY.</div>
+                            <div class="prompt-text" style="font-size: 0.75rem; margin-top: 10px;">Where would you love to be in one year? Who do you serve today, and how would you love to serve them in a year, or even in five years? Take a few minutes, cast your vision looking into the future ~ and simply dream of where you'd love to be.</div>
+                            
+                            <div class="prompt-text" style="margin-top: 15px;">Looking forward to the year ahead, I'd love to ...</div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-1yr-1"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-1yr-2"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-1yr-3"></div></div>
 
-            <div class="dream-big-title">
-                Dream big | <span>Where would you like to be financially, physically, emotionally, and spiritually in a year? Do you want to run a half marathon? Pay off your home? Or hit a certain income goal? Write it down so you can keep track of it, and dream big in the next 12 months!</span>
-            </div>
+                            <div class="prompt-text" style="margin-top: 15px;">In the next five years, I hope to ...</div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-5yr-1"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-5yr-2"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-5yr-3"></div></div>
+                        </div>
+                    </div>
 
-            <div class="dream-grid">
-                <div class="dream-box">
-                    <div class="dream-label">Financially</div>
-                    <div class="editable-area" contenteditable="true" data-field="dream-financial" style="min-height: 80px;"></div>
-                </div>
-                <div class="dream-box">
-                    <div class="dream-label">Physically</div>
-                    <div class="editable-area" contenteditable="true" data-field="dream-physical" style="min-height: 80px;"></div>
-                </div>
-                <div class="dream-box">
-                    <div class="dream-label">Emotionally</div>
-                    <div class="editable-area" contenteditable="true" data-field="dream-emotional" style="min-height: 80px;"></div>
-                </div>
-                <div class="dream-box">
-                    <div class="dream-label">Spiritually</div>
-                    <div class="editable-area" contenteditable="true" data-field="dream-spiritual" style="min-height: 80px;"></div>
-                </div>
-            </div>
+                    <div class="right-col">
+                        <div class="section-box" style="margin-bottom: 20px;">
+                            <div class="section-prompt">
+                                Value | <span>What (or who?) do you value? What lights you up when you wake up each day? Here are a few examples to get you started if you're stumped ...</span>
+                            </div>
+                            <div class="prompt-text">I value ...</div>
+                            <div class="checkbox-grid">
+                                <div class="checkbox-item" data-value="Community" data-prefix="value-cb-"><div class="checkbox"></div> Community</div>
+                                <div class="checkbox-item" data-value="Gratitude" data-prefix="value-cb-"><div class="checkbox"></div> Gratitude</div>
+                                <div class="checkbox-item" data-value="My family" data-prefix="value-cb-"><div class="checkbox"></div> My family</div>
+                                <div class="checkbox-item" data-value="Humility" data-prefix="value-cb-"><div class="checkbox"></div> Humility</div>
+                                <div class="checkbox-item" data-value="Integrity" data-prefix="value-cb-"><div class="checkbox"></div> Integrity</div>
+                                <div class="checkbox-item" data-value="Innovation" data-prefix="value-cb-"><div class="checkbox"></div> Innovation</div>
+                                <div class="checkbox-item" data-value="Determination" data-prefix="value-cb-"><div class="checkbox"></div> Determination</div>
+                                <div class="checkbox-item" data-value="Organization" data-prefix="value-cb-"><div class="checkbox"></div> Organization</div>
+                                <div class="checkbox-item" data-value="Grit" data-prefix="value-cb-"><div class="checkbox"></div> Grit</div>
+                                <div class="checkbox-item" data-value="Resourcefulness" data-prefix="value-cb-"><div class="checkbox"></div> Resourcefulness</div>
+                                <div class="checkbox-item" data-value="My health" data-prefix="value-cb-"><div class="checkbox"></div> My health</div>
+                                <div class="checkbox-item" data-value="Frugality" data-prefix="value-cb-"><div class="checkbox"></div> Frugality</div>
+                                <div class="checkbox-item" data-value="Confidence" data-prefix="value-cb-"><div class="checkbox"></div> Confidence</div>
+                                <div class="checkbox-item" data-value="CustomValue1" data-prefix="value-cb-" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="value-custom1" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
+                                <div class="checkbox-item" data-value="My faith" data-prefix="value-cb-"><div class="checkbox"></div> My faith</div>
+                                <div class="checkbox-item" data-value="CustomValue2" data-prefix="value-cb-" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="value-custom2" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
+                            </div>
+                        </div>
 
-            <div class="footer-prompts">
-                <div class="footer-prompt-item">
-                    <span>This year, more than anything else, I want to focus on</span>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="focus-this-year"></div></div>
-                </div>
-                <div class="footer-prompt-item">
-                    <span>To make that happen, I'm going to spend my time and energy on</span>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="spend-time-on"></div></div>
-                </div>
-                <div class="footer-prompt-item">
-                    <span>Instead of spending too much time on</span>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="less-time-on" style="width: 150px;"></div></div>
-                    <span>, I'm going to dream big about</span>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="dream-big-about"></div></div>
-                </div>
-                <div class="footer-prompt-item">
-                    <span>This is so worth it because</span>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="worth-it-because" style="width: 200px;"></div></div>
-                    <span>are depending on me!</span>
+                        <div class="section-box">
+                            <div class="section-prompt">
+                                Purpose | <span>When you were created, you were uniquely gifted in a way that simply no one else was. You were perfectly designed to fulfill a purpose that only you can.</span>
+                            </div>
+                            <div class="prompt-text" style="font-size: 0.75rem;">What is your purpose? What are you gifted in that serves those around you each day? Looking forward, envision what the lives of those around you might look like when you fully step into exactly who you were made to be.</div>
+                            <div class="ruled-line" style="margin-top: 15px;"><div class="editable-area" contenteditable="true" data-field="purpose-1"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="purpose-2"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="purpose-3"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="purpose-4"></div></div>
+                            <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="purpose-5"></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -344,9 +454,10 @@
             
             if (data && data.length > 0) {
                 data.forEach(item => {
-                    if (item.field_id.startsWith('love-cb-')) {
-                        const valueName = item.field_id.replace('love-cb-', '');
-                        const el = document.querySelector(`.checkbox-item[data-value="${valueName}"] .checkbox`);
+                    if (item.field_id.startsWith('love-cb-') || item.field_id.startsWith('value-cb-')) {
+                        const prefix = item.field_id.startsWith('love-cb-') ? 'love-cb-' : 'value-cb-';
+                        const valueName = item.field_id.replace(prefix, '');
+                        const el = document.querySelector(`.checkbox-item[data-value="${valueName}"][data-prefix="${prefix}"] .checkbox`);
                         if (el) {
                             if (item.content === 'true') el.classList.add('checked');
                         }
@@ -376,7 +487,8 @@
                     cb.classList.toggle('checked');
                     const isChecked = cb.classList.contains('checked');
                     const valueName = item.getAttribute('data-value');
-                    handleSave(`love-cb-${valueName}`, isChecked.toString());
+                    const prefix = item.getAttribute('data-prefix');
+                    handleSave(`${prefix}${valueName}`, isChecked.toString());
                 });
             });
         }
