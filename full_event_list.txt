@@ -1,399 +1,422 @@
-New Year's Day	1/1/26
-HOA Due	1/1/26
-Mortgage Due	1/1/26
-Chris Plant	1/2/26
-CSEA RPM Region 26	1/5/26
-Certificated & Classified Off-cycles	1/5/26
-CSEA MB Committee	1/7/26
-CSEA RPM Region 8	1/7/26
-CSEA Chapter E-Board	1/8/26
-CSEA RPM Region 59	1/8/26
-Schools First Credit Card Due	1/8/26
-HELOC Due	1/10/26
-Vic Samples	1/10/26
-Jackob Sikorowski	1/11/26
-Paramount+ Due	1/13/26
-CSEA Statewide Blitz	1/15/26
-Semi-Monthly Cut-Off	1/15/26
-CSEA State E-Board Area B	1/17/26
-LA Fed MLK Celebration	1/17/26
-ML King Day	1/19/26
-ADT Due	1/19/26
-CSEA RPM Region 66	1/21/26
-Spectrum Due	1/21/26
-CSEA 500 NEO	1/22/26
-Classified Cutoff	1/22/26
-CSEA MB Committee	1/22/26
-CSEA MB Committee	1/23/26
-CSEA MB Committee	1/24/26
-CSEA MB Committee	1/25/26
-CSEA RPM Region 19	1/26/26
-LA Fed	1/26/26
-Verizon Due	1/26/26
-Certificated Cutoff	1/28/26
-CSEA Chapter 500 Meeting	1/29/26
-Semi-Monthly Cut-Off	1/30/26
-HOA Due	2/1/26
-Jeremy Giampietro	2/1/26
-Mortgage Due	2/1/26
-Terry Samples	2/1/26
-Groundhog Day	2/2/26
-CSEA RPM Region 26	2/2/26
-CSEA MB Committee	2/4/26
-CSEA RPM Region 8	2/4/26
-Nicole Lederman	2/4/26
-CSEA Chapter E-Board	2/5/26
-CSEA RPM Region 59	2/5/26
-Certificated & Classified Off-cycles	2/5/26
-Greg Gramenz	2/7/26
-Schools First Credit Card Due	2/8/26
-Dennis Frazier	2/9/26
-HELOC Due	2/10/26
-Norm Todd	2/11/26
-Lincoln Detar	2/12/26
-CSEA Statewide Blitz	2/13/26
-Paramount+ Due	2/13/26
-Semi-Monthly Cut-Off	2/13/26
-Valentines Day	2/14/26
-Presidents' Day	2/16/26
-Chinese New  Year	2/17/26
-Mardi Gras	2/17/26
-Ash Wednesday	2/18/26
-CSEA RPM Region 66	2/18/26
-CSEA 500 NEO	2/19/26
-ADT Due	2/19/26
-Classified Cutoff	2/19/26
-CSEA State E-Board San Jose	2/21/26
-Spectrum Due	2/21/26
-CSEA RPM Region 19	2/23/26
-LA Fed	2/23/26
-Craig Kinart	2/24/26
-Geoff Strong	2/24/26
-Certificated Cutoff	2/25/26
-CSEA Chapter 500 Meeting	2/26/26
-Verizon Due	2/26/26
-Semi-Monthly Cut-Off	2/27/26
-HOA Due	3/1/26
-Mortgage Due	3/1/26
-CSEA RPM Region 26	3/2/26
-CSEA MB Committee	3/4/26
-CSEA RPM Region 8	3/4/26
-CSEA Chapter E-Board	3/5/26
-CSEA RPM Region 59	3/5/26
-Certificated & Classified Off-cycles	3/5/26
-Daylight Saving	3/8/26
-Schools First Credit Card Due	3/8/26
-HELOC Due	3/10/26
-CSEA Statewide Blitz	3/13/26
-Paramount+ Due	3/13/26
-CSEA RPM Region 19	3/16/26
-LA Fed	3/16/26
-Semi-Monthly Cut-Off	3/16/26
-St. Patrick's Day	3/17/26
-CSEA RPM Region 66	3/18/26
-CSEA 500 NEO	3/19/26
-ADT Due	3/19/26
-CSEA State E-Board Area E	3/21/26
-Spectrum Due	3/21/26
-Classified Cutoff	3/23/26
-Certificated Cutoff	3/25/26
-CSEA Chapter 500 Meeting	3/26/26
-Semi-Monthly Cut-Off	3/26/26
-Verizon Due	3/26/26
-April Fool's Day	4/1/26
-CSEA MB Committee	4/1/26
-CSEA RPM Region 8	4/1/26
-HOA Due	4/1/26
-Mortgage Due	4/1/26
-Passover	4/2/26
-CSEA Chapter E-Board	4/2/26
-CSEA RPM Region 59	4/2/26
-Good Friday	4/3/26
-Certificated & Classified Off-cycles	4/3/26
-Easter	4/5/26
-CSEA RPM Region 26	4/6/26
-Schools First Credit Card Due	4/8/26
-HELOC Due	4/10/26
-Tom Detar	4/11/26
-Paramount+ Due	4/13/26
-Taxes Due	4/15/26
-CSEA RPM Region 66	4/15/26
-CSEA Statewide Blitz	4/15/26
-CSEA 500 NEO	4/16/26
-Semi-Monthly Cut-Off	4/16/26
-CSEA State E-Board San Jose	4/18/26
-ADT Due	4/19/26
-Brienne Detar	4/20/26
-LA Fed	4/21/26
-Spectrum Due	4/21/26
-Admin Assist Day	4/22/26
-Earth Day	4/22/26
-CSEA Chapter 500 Meeting	4/23/26
-Harrison Detar	4/23/26
-Closure of eBay Lush Life Essesntials	4/24/26
-CSEA E-Board	4/25/26
-Verizon Due	4/26/26
-Certificated Cutoff	4/27/26
-HOA Due	5/1/26
-Jeff' TAVR Surgery	5/1/26
-Mortgage Due	5/1/26
-Semi-Monthly Cut-Off	5/1/26
-CSEA Member Recognition	5/3/26
-CSEA RPM Region 26	5/4/26
-Renee Frazier	5/4/26
-Cinco de Mayo	5/5/26
-Certificated & Classified Off-cycles	5/5/26
-CSEA MB Committee	5/6/26
-CSEA RPM Region 8	5/6/26
-CSEA Chapter E-Board	5/7/26
-CSEA RPM Region 59	5/7/26
-Schools First Credit Card Due	5/8/26
-Cinnamon Capsules Auto Delivery	5/9/26
-Nick Thompson	5/9/26
-Mother's Day	5/10/26
-Communications Academy	5/10/26
-HELOC Due	5/10/26
-Paramount+ Due	5/13/26
-CSEA Statewide Blitz	5/15/26
-Semi-Monthly Cut-Off	5/15/26
-Armed Forces Day	5/16/26
-CSEA State E-Board Area I	5/16/26
-CSEA RPM Region 19	5/18/26
-LA Fed	5/18/26
-ADT Due	5/19/26
-CSEA RPM Region 66	5/20/26
-Classified Cutoff	5/21/26
-Spectrum Due	5/21/26
-Pentecost	5/24/26
-Memorial Day	5/25/26
-Verizon Due	5/26/26
-CSEA 500 NEO	5/28/26
-CSEA Chapter 500 Meeting	5/28/26
-Certificated Cutoff	5/28/26
-CSEA RPM Region 26	6/1/26
-HOA Due	6/1/26
-Mortgage Due	6/1/26
-Semi-Monthly Cut-Off	6/1/26
-CSEA MB Committee	6/3/26
-CSEA RPM Region 8	6/3/26
-CSEA Chapter E-Board	6/4/26
-CSEA RPM Region 59	6/4/26
-Certificated & Classified Off-cycles	6/5/26
-CSEA Area I Planning Meeting 	6/8/26
-Schools First Credit Card Due	6/8/26
-Chelsea Samples	6/10/26
-HELOC Due	6/10/26
-Jeff Detar	6/12/26
-Paramount+ Due	6/13/26
-Flag Day	6/14/26
-Kay Partain	6/14/26
-CSEA RPM Region 19	6/15/26
-LA Fed	6/15/26
-Semi-Monthly Cut-Off	6/15/26
-CSEA RPM Region 66	6/17/26
-CSEA Chapter 500 Meeting	6/18/26
-Classified Cutoff	6/18/26
-Juneteenth	6/19/26
-CSEA 500 NEO	6/19/26
-ADT Due	6/19/26
-CSEA State E-Board San Jose	6/20/26
-Classified Cutoff	6/20/26
-Father's Day	6/21/26
-Spectrum Due	6/21/26
-Certificated Cutoff	6/23/26
-CSEA Statewide Blitz	6/24/26
-Verizon Due	6/26/26
-Semi-Monthly Cut-Off	6/29/26
-HOA Due	7/1/26
-Mortgage Due	7/1/26
-Certificated & Classified Off-cycles	7/2/26
-Independence Day	7/4/26
-Schools First Credit Card Due	7/8/26
-HELOC Due	7/10/26
-Jim Samples	7/12/26
-Paramount+ Due	7/13/26
-CSEA 500 NEO	7/16/26
-Jacee Plant	7/16/26
-CSEA State E-Board San Jose	7/18/26
-CSEA LA 500 Per Diem	7/19/26
-ADT Due	7/19/26
-Spectrum Due	7/21/26
-Chris Sikorowski	7/22/26
-Classified Cutoff	7/22/26
-Allison Sikorowski	7/23/26
-CSEA Conference	7/25/26
-Parents' Day	7/26/26
-CSEA Conference	7/26/26
-Verizon Due	7/26/26
-CSEA Conference	7/27/26
-CSEA Conference	7/28/26
-CSEA Conference	7/29/26
-CJ Samples	7/30/26
-CSEA Conference	7/30/26
-HOA Due	8/1/26
-Mortgage Due	8/1/26
-CSEA RPM Region 26	8/3/26
-Rose Samples	8/3/26
-CSEA RPM Region 59	8/6/26
-Lynda Samples	8/8/26
-Schools First Credit Card Due	8/8/26
-HELOC Due	8/10/26
-Paramount+ Due	8/13/26
-Christine Nelson	8/15/26
-CSEA RPM Region 19	8/17/26
-LA Fed	8/17/26
-CSEA RPM Region 66	8/19/26
-ADT Due	8/19/26
-CSEA 500 NEO	8/20/26
-Kathie Frazier	8/21/26
-Spectrum Due	8/21/26
-Cynthia Frazier	8/22/26
-Verizon Due	8/26/26
-HOA Due	9/1/26
-Mortgage Due	9/1/26
-CSEA MB Committee	9/2/26
-CSEA RPM Region 8	9/2/26
-CSEA Chapter E-Board	9/3/26
-CSEA RPM Region 59	9/3/26
-Bonnie Ratner	9/3/26
-Eberardo Rodriguez	9/3/26
-Labor Day	9/7/26
-CSEA RPM Region 26	9/7/26
-Schools First Credit Card Due	9/8/26
-Cinnamon Capsules Auto Delivery	9/9/26
-Classified Cutoff	9/9/26
-HELOC Due	9/10/26
-Patriot Day	9/11/26
-Rosh Hashanah	9/12/26
-Grandparents Day	9/13/26
-Paramount+ Due	9/13/26
-CSEA RPM Region 66	9/16/26
-Constitution Day	9/17/26
-CSEA 500 NEO	9/17/26
-CSEA State E-Board San Jose	9/19/26
-ADT Due	9/19/26
-Emily Partain	9/19/26
-Yom Kippur	9/21/26
-CSEA RPM Region 19	9/21/26
-LA Fed	9/21/26
-Spectrum Due	9/21/26
-Susan Borders	9/23/26
-CSEA Chapter 500 Meeting	9/24/26
-Verizon Due	9/26/26
-CSEA Chapter E-Board	10/1/26
-CSEA RPM Region 59	10/1/26
-HOA Due	10/1/26
-Mortgage Due	10/1/26
-CSEA Open House	10/3/26
-Allyson McCleave	10/3/26
-CSEA RPM Region 26	10/5/26
-Anniversary	10/5/26
-CSEA MB Committee	10/7/26
-CSEA RPM Region 8	10/7/26
-Schools First Credit Card Due	10/8/26
-HELOC Due	10/10/26
-Columbus Day	10/12/26
-Marjorie Avila	10/13/26
-Paramount+ Due	10/13/26
-CSEA 500 NEO	10/15/26
-Boss's Day	10/16/26
-CSEA State E-Board Area D	10/17/26
-CSEA RPM Region 19	10/19/26
-LA Fed	10/19/26
-ADT Due	10/19/26
-Joie Plant	10/20/26
-CSEA RPM Region 66	10/21/26
-Spectrum Due	10/21/26
-Debbie Mickle	10/23/26
-United Nations Day	10/24/26
-Jana Plant	10/26/26
-Verizon Due	10/26/26
-CSEA Chapter 500 Meeting	10/29/26
-Gayle Samples	10/29/26
-Halloween	10/31/26
-Daylight Saving	11/1/26
-HOA Due	11/1/26
-Mortgage Due	11/1/26
-CSEA RPM Region 26	11/2/26
-CSEA MB Committee	11/4/26
-CSEA RPM Region 8	11/4/26
-CSEA Chapter E-Board	11/5/26
-CSEA RPM Region 59	11/5/26
-CSEA Super Session	11/6/26
-CSEA Super Session	11/7/26
-CSEA Super Session	11/8/26
-Schools First Credit Card Due	11/8/26
-CSEA Super Session	11/9/26
-HELOC Due	11/10/26
-Veterans Day	11/11/26
-Donna Perkins	11/11/26
-Susan Frazier	11/11/26
-Paramount+ Due	11/13/26
-CSEA RPM Region 19	11/16/26
-LA Fed	11/16/26
-CSEA RPM Region 66	11/18/26
-Dianne Strong	11/18/26
-CSEA 500 NEO	11/19/26
-CSEA Chapter 500 Meeting	11/19/26
-ADT Due	11/19/26
-CSEA State E-Board San Jose	11/21/26
-Spectrum Due	11/21/26
-Thanksgiving	11/26/26
-Verizon Due	11/26/26
-HOA Due	12/1/26
-Mortgage Due	12/1/26
-CSEA MB Committee	12/2/26
-CSEA RPM Region 8	12/2/26
-CSEA Chapter E-Board	12/3/26
-CSEA RPM Region 59	12/3/26
-Pearl Harbor	12/7/26
-CSEA RPM Region 26	12/7/26
-Jennifer Detar	12/8/26
-Schools First Credit Card Due	12/8/26
-HELOC Due	12/10/26
-CSEA State E-Board San Jose	12/12/26
-Paramount+ Due	12/13/26
-CSEA RPM Region 66	12/16/26
-CSEA 500 NEO	12/17/26
-CSEA Chapter 500 Meeting	12/17/26
-Jaelyn Plant	12/18/26
-ADT Due	12/19/26
-Elias Sikorowski	12/19/26
-CSEA RPM Region 19	12/21/26
-LA Fed	12/21/26
-Spectrum Due	12/21/26
-Christmas Eve	12/24/26
-Christmas Day	12/25/26
-Kwanzaa begins	12/26/26
-Verizon Due	12/26/26
-New Year's Eve	12/31/26
-New Year's Day	1/1/27
-CSEA State E-Board	1/16/27
-ML King Day	1/18/27
-Chinese New  Year	2/6/27
-Mardi Gras	2/9/27
-Ash Wednesday	2/10/27
-Presidents' Day	2/15/27
-CSEA State E-Board San Jose	2/20/27
-Daylight Saving	3/14/27
-St. Patrick's Day	3/17/27
-CSEA State E-Board	3/20/27
-Good Friday	3/26/27
-Easter	3/28/27
-April Fool's Day	4/1/27
-Taxes Due	4/15/27
-CSEA State E-Board San Jose	4/17/27
-Admin Assist Day	4/21/27
-Passover	4/22/27
-Earth Day	4/22/27
-Cinco de Mayo	5/5/27
-Mother's Day	5/9/27
-Armed Forces Day	5/15/27
-CSEA State E-Board	5/15/27
-Pentecost	5/16/27
-Memorial Day	5/31/27
-Flag Day	6/14/27
-Juneteenth	6/19/27
-CSEA State E-Board San Jose	6/19/27
-Father's Day	6/20/27
-Independence Day	7/4/27
+Holiday	Date	
+Admin Assist Day	4/22/26	
+Admin Assist Day	4/21/27	
+ADT Due	1/19/26	
+ADT Due	2/19/26	
+ADT Due	3/19/26	
+ADT Due	4/19/26	
+ADT Due	5/19/26	
+ADT Due	6/19/26	
+ADT Due	7/19/26	
+ADT Due	8/19/26	
+ADT Due	9/19/26	
+ADT Due	10/19/26	
+ADT Due	11/19/26	
+ADT Due	12/19/26	
+Allison Sikorowski	7/23/26	
+Allyson McCleave	10/3/26	
+Anniversary	10/5/26	
+April Fool's Day	4/1/26	
+April Fool's Day	4/1/27	
+Armed Forces Day	5/16/26	
+Armed Forces Day	5/15/27	
+Ash Wednesday	2/18/26	
+Ash Wednesday	2/10/27	
+Aviation Day	8/19/27	
+Bonnie Ratner	9/3/26	
+Boss's Day	10/16/26	
+Boss's Day	10/16/27	
+Brienne Detar	4/20/26	
+Certificated & Classified Off-cycles	1/5/26	
+Certificated & Classified Off-cycles	2/5/26	
+Certificated & Classified Off-cycles	3/5/26	
+Certificated & Classified Off-cycles	4/3/26	
+Certificated & Classified Off-cycles	5/5/26	
+Certificated & Classified Off-cycles	6/5/26	
+Certificated & Classified Off-cycles	7/2/26	
+Certificated Cutoff	1/28/26	
+Certificated Cutoff	2/25/26	
+Certificated Cutoff	3/25/26	
+Certificated Cutoff	4/27/26	
+Certificated Cutoff	5/28/26	
+Certificated Cutoff	6/23/26	
+Chelsea Samples	6/10/26	
+Chinese New  Year	2/17/26	
+Chinese New  Year	2/6/27	
+Chris Plant	1/2/26	
+Chris Sikorowski	7/22/26	
+Christine Nelson	8/15/26	
+Christmas Day	12/25/26	
+Christmas Day	12/25/27	
+Christmas Eve	12/24/26	
+Christmas Eve	12/24/27	
+Cinco de Mayo	5/5/26	
+Cinco de Mayo	5/5/27	
+CJ Samples	7/30/26	
+Classified Cutoff	1/22/26	
+Classified Cutoff	2/19/26	
+Classified Cutoff	3/23/26	
+Classified Cutoff	5/21/26	
+Classified Cutoff	6/18/26	
+Classified Cutoff	6/20/26	
+Classified Cutoff	7/22/26	
+Classified Cutoff	9/9/26	
+Columbus Day	10/12/26	
+Columbus Day	10/11/27	
+Communications Academy	5/10/26	
+Constitution Day	9/17/26	
+Constitution Day	9/17/27	
+Craig Kinart	2/24/26	
+CSEA 500 NEO	1/22/26	12:00 PM
+CSEA 500 NEO	2/19/26	12:00 PM
+CSEA 500 NEO	3/19/26	12:00 PM
+CSEA 500 NEO	4/16/26	12:00 PM
+CSEA 500 NEO	5/28/26	12:00 PM
+CSEA 500 NEO	6/19/26	12:00 PM
+CSEA 500 NEO	7/16/26	12:00 PM
+CSEA 500 NEO	8/20/26	12:00 PM
+CSEA 500 NEO	9/17/26	12:00 PM
+CSEA 500 NEO	10/15/26	12:00 PM
+CSEA 500 NEO	11/19/26	12:00 PM
+CSEA 500 NEO	12/17/26	12:00 PM
+CSEA Area I Planning Meeting 	6/8/26	8:00 AM
+CSEA Chapter 500 Meeting	1/29/26	5:30 PM
+CSEA Chapter 500 Meeting	2/26/26	5:30 PM
+CSEA Chapter 500 Meeting	3/26/26	5:30 PM
+CSEA Chapter 500 Meeting	4/23/26	5:30 PM
+CSEA Chapter 500 Meeting	5/28/26	5:30 PM
+CSEA Chapter 500 Meeting	6/18/26	5:30 PM
+CSEA Chapter 500 Meeting	9/24/26	5:30 PM
+CSEA Chapter 500 Meeting	10/29/26	5:30 PM
+CSEA Chapter 500 Meeting	11/19/26	5:30 PM
+CSEA Chapter 500 Meeting	12/17/26	5:30 PM
+CSEA Chapter E-Board	1/8/26	5:00 PM
+CSEA Chapter E-Board	2/5/26	5:00 PM
+CSEA Chapter E-Board	3/5/26	5:00 PM
+CSEA Chapter E-Board	4/2/26	5:00 PM
+CSEA Chapter E-Board	5/7/26	5:00 PM
+CSEA Chapter E-Board	6/4/26	5:00 PM
+CSEA Chapter E-Board	9/3/26	5:00 PM
+CSEA Chapter E-Board	10/1/26	5:00 PM
+CSEA Chapter E-Board	11/5/26	5:00 PM
+CSEA Chapter E-Board	12/3/26	5:00 PM
+CSEA Conference	7/25/26	
+CSEA Conference	7/26/26	
+CSEA Conference	7/27/26	
+CSEA Conference	7/28/26	
+CSEA Conference	7/29/26	
+CSEA Conference	7/30/26	
+CSEA Chapter E-Board	4/25/26	5:00 PM
+CSEA LA 500 Per Diem	7/19/26	
+CSEA MB Committee	1/7/26	5:30 PM
+CSEA MB Committee	1/22/26	5:30 PM
+CSEA MB Committee	1/23/26	5:30 PM
+CSEA MB Committee	1/24/26	5:30 PM
+CSEA MB Committee	1/25/26	5:30 PM
+CSEA MB Committee	2/4/26	5:30 PM
+CSEA MB Committee	3/4/26	5:30 PM
+CSEA MB Committee	4/1/26	5:30 PM
+CSEA MB Committee	5/6/26	5:30 PM
+CSEA MB Committee	6/3/26	5:30 PM
+CSEA MB Committee	9/2/26	5:30 PM
+CSEA MB Committee	10/7/26	5:30 PM
+CSEA MB Committee	11/4/26	5:30 PM
+CSEA MB Committee	12/2/26	5:30 PM
+CSEA Member Recognition	5/3/26	9:00 AM
+CSEA Open House	10/3/26	9:00 AM
+CSEA RPM Region 19	1/26/26	5:30 PM
+CSEA RPM Region 19	2/23/26	5:30 PM
+CSEA RPM Region 19	3/16/26	5:30 PM
+CSEA RPM Region 19	5/18/26	5:30 PM
+CSEA RPM Region 19	6/15/26	5:30 PM
+CSEA RPM Region 19	8/17/26	5:30 PM
+CSEA RPM Region 19	9/21/26	5:30 PM
+CSEA RPM Region 19	10/19/26	5:30 PM
+CSEA RPM Region 19	11/16/26	5:30 PM
+CSEA RPM Region 19	12/21/26	5:30 PM
+CSEA RPM Region 26	1/5/26	5:30 PM
+CSEA RPM Region 26	2/2/26	5:30 PM
+CSEA RPM Region 26	3/2/26	5:30 PM
+CSEA RPM Region 26	4/6/26	5:30 PM
+CSEA RPM Region 26	5/4/26	5:30 PM
+CSEA RPM Region 26	6/1/26	5:30 PM
+CSEA RPM Region 26	8/3/26	5:30 PM
+CSEA RPM Region 26	9/7/26	5:30 PM
+CSEA RPM Region 26	10/5/26	5:30 PM
+CSEA RPM Region 26	11/2/26	5:30 PM
+CSEA RPM Region 26	12/7/26	5:30 PM
+CSEA RPM Region 59	1/8/26	5:30 PM
+CSEA RPM Region 59	2/5/26	5:30 PM
+CSEA RPM Region 59	3/5/26	5:30 PM
+CSEA RPM Region 59	4/2/26	5:30 PM
+CSEA RPM Region 59	5/7/26	5:30 PM
+CSEA RPM Region 59	6/4/26	5:30 PM
+CSEA RPM Region 59	8/6/26	5:30 PM
+CSEA RPM Region 59	9/3/26	5:30 PM
+CSEA RPM Region 59	10/1/26	5:30 PM
+CSEA RPM Region 59	11/5/26	5:30 PM
+CSEA RPM Region 59	12/3/26	5:30 PM
+CSEA RPM Region 66	1/21/26	5:30 PM
+CSEA RPM Region 66	2/18/26	5:30 PM
+CSEA RPM Region 66	3/18/26	5:30 PM
+CSEA RPM Region 66	4/15/26	5:30 PM
+CSEA RPM Region 66	5/20/26	5:30 PM
+CSEA RPM Region 66	6/17/26	5:30 PM
+CSEA RPM Region 66	8/19/26	5:30 PM
+CSEA RPM Region 66	9/16/26	5:30 PM
+CSEA RPM Region 66	10/21/26	5:30 PM
+CSEA RPM Region 66	11/18/26	5:30 PM
+CSEA RPM Region 66	12/16/26	5:30 PM
+CSEA RPM Region 8	1/7/26	5:30 PM
+CSEA RPM Region 8	2/4/26	5:30 PM
+CSEA RPM Region 8	3/4/26	5:30 PM
+CSEA RPM Region 8	4/1/26	5:30 PM
+CSEA RPM Region 8	5/6/26	5:30 PM
+CSEA RPM Region 8	6/3/26	5:30 PM
+CSEA RPM Region 8	9/2/26	5:30 PM
+CSEA RPM Region 8	10/7/26	5:30 PM
+CSEA RPM Region 8	11/4/26	5:30 PM
+CSEA RPM Region 8	12/2/26	5:30 PM
+CSEA State E-Board	1/16/27	5:30 PM
+CSEA State E-Board	3/20/27	5:30 PM
+CSEA State E-Board	5/15/27	5:30 PM
+CSEA State E-Board	10/16/27	5:30 PM
+CSEA State E-Board Area B	1/17/26	9:00 AM
+CSEA State E-Board Area D	10/17/26	9:00 AM
+CSEA State E-Board Area E	3/21/26	9:00 AM
+CSEA State E-Board Area I	5/16/26	9:00 AM
+CSEA State E-Board San Jose	2/21/26	9:00 AM
+CSEA State E-Board San Jose	4/18/26	9:00 AM
+CSEA State E-Board San Jose	6/20/26	9:00 AM
+CSEA State E-Board San Jose	7/18/26	9:00 AM
+CSEA State E-Board San Jose	9/19/26	9:00 AM
+CSEA State E-Board San Jose	11/21/26	9:00 AM
+CSEA State E-Board San Jose	12/12/26	9:00 AM
+CSEA State E-Board San Jose	2/20/27	9:00 AM
+CSEA State E-Board San Jose	4/17/27	9:00 AM
+CSEA State E-Board San Jose	6/19/27	9:00 AM
+CSEA State E-Board San Jose	8/21/27	9:00 AM
+CSEA State E-Board San Jose	9/18/27	9:00 AM
+CSEA State E-Board San Jose	11/20/27	9:00 AM
+CSEA State E-Board San Jose	12/11/27	9:00 AM
+CSEA Statewide Blitz	1/15/26	8:30 AM
+CSEA Statewide Blitz	2/13/26	8:30 AM
+CSEA Statewide Blitz	3/13/26	8:30 AM
+CSEA Statewide Blitz	4/15/26	8:30 AM
+CSEA Statewide Blitz	5/15/26	8:30 AM
+CSEA Statewide Blitz	6/24/26	8:30 AM
+CSEA Super Session	11/6/26	
+CSEA Super Session	11/7/26	
+CSEA Super Session	11/8/26	
+CSEA Super Session	11/9/26	
+Cynthia Frazier	8/22/26	
+Daylight Saving	3/8/26	
+Daylight Saving	11/1/26	
+Daylight Saving	3/14/27	
+Daylight Saving	11/7/27	
+Debbie Mickle	10/23/26	
+Dennis Frazier	2/9/26	
+Dianne Strong	11/18/26	
+Donna Perkins	11/11/26	
+Earth Day	4/22/26	
+Earth Day	4/22/27	
+Easter	4/5/26	
+Easter	3/28/27	
+Eberardo Rodriguez	9/3/26	
+Elias Sikorowski	12/19/26	
+Emily Partain	9/19/26	
+Father's Day	6/21/26	
+Father's Day	6/20/27	
+Flag Day	6/14/26	
+Flag Day	6/14/27	
+Gayle Samples	10/29/26	
+Geoff Strong	2/24/26	
+Good Friday	4/3/26	
+Good Friday	3/26/27	
+Grandparents Day	9/13/26	
+Grandparents Day	9/12/27	
+Greg Gramenz	2/7/26	
+Groundhog Day	2/2/26	
+Halloween	10/31/26	
+Halloween	10/31/27	
+Harrison Detar	4/23/26	
+HELOC Due	1/10/26	
+HELOC Due	2/10/26	
+HELOC Due	3/10/26	
+HELOC Due	4/10/26	
+HELOC Due	5/10/26	
+HELOC Due	6/10/26	
+HELOC Due	7/10/26	
+HELOC Due	8/10/26	
+HELOC Due	9/10/26	
+HELOC Due	10/10/26	
+HELOC Due	11/10/26	
+HELOC Due	12/10/26	
+HOA Due	1/1/26	
+HOA Due	2/1/26	
+HOA Due	3/1/26	
+HOA Due	4/1/26	
+HOA Due	5/1/26	
+HOA Due	6/1/26	
+HOA Due	7/1/26	
+HOA Due	8/1/26	
+HOA Due	9/1/26	
+HOA Due	10/1/26	
+HOA Due	11/1/26	
+HOA Due	12/1/26	
+Independence Day	7/4/26	
+Independence Day	7/4/27	
+Jacee Plant	7/16/26	
+Jackob Sikorowski	1/11/26	
+Jaelyn Plant	12/18/26	
+Jana Plant	10/26/26	
+Jeff Detar	6/12/26	
+Jeff' TAVR Surgery	5/1/26	
+Jennifer Detar	12/8/26	
+Jeremy Giampietro	2/1/26	
+Jim Samples	7/12/26	
+Joie Plant	10/20/26	
+Juneteenth	6/19/26	
+Juneteenth	6/19/27	
+Kathie Frazier	8/21/26	
+Kay Partain	6/14/26	
+Kwanzaa begins	12/26/26	
+Kwanzaa begins	12/26/27	
+LA Fed	1/26/26	5:00 PM
+LA Fed	2/23/26	5:00 PM
+LA Fed	3/16/26	5:00 PM
+LA Fed	4/21/26	5:00 PM
+LA Fed	5/18/26	5:00 PM
+LA Fed	6/15/26	5:00 PM
+LA Fed	8/17/26	5:00 PM
+LA Fed	9/21/26	5:00 PM
+LA Fed	10/19/26	5:00 PM
+LA Fed	11/16/26	5:00 PM
+LA Fed	12/21/26	5:00 PM
+LA Fed MLK Celebration	1/17/26	8:00 AM
+Labor Day	9/7/26	
+Labor Day	9/6/27	
+Lincoln Detar	2/12/26	
+Lynda Samples	8/8/26	
+Mardi Gras	2/17/26	
+Mardi Gras	2/9/27	
+Marjorie Avila	10/13/26	
+Memorial Day	5/25/26	
+Memorial Day	5/31/27	
+ML King Day	1/19/26	
+ML King Day	1/18/27	
+Mortgage Due	1/1/26	
+Mortgage Due	2/1/26	
+Mortgage Due	3/1/26	
+Mortgage Due	4/1/26	
+Mortgage Due	5/1/26	
+Mortgage Due	6/1/26	
+Mortgage Due	7/1/26	
+Mortgage Due	8/1/26	
+Mortgage Due	9/1/26	
+Mortgage Due	10/1/26	
+Mortgage Due	11/1/26	
+Mortgage Due	12/1/26	
+Mother's Day	5/10/26	
+Mother's Day	5/9/27	
+New Year's Day	1/1/26	
+New Year's Day	1/1/27	
+New Year's Eve	12/31/26	
+New Year's Eve	12/31/27	
+Nick Thompson	5/9/26	
+Nicole Lederman	2/4/26	
+Norm Todd	2/11/26	
+Paramount+ Due	1/13/26	
+Paramount+ Due	2/13/26	
+Paramount+ Due	3/13/26	
+Paramount+ Due	4/13/26	
+Paramount+ Due	5/13/26	
+Paramount+ Due	6/13/26	
+Paramount+ Due	7/13/26	
+Paramount+ Due	8/13/26	
+Paramount+ Due	9/13/26	
+Paramount+ Due	10/13/26	
+Paramount+ Due	11/13/26	
+Paramount+ Due	12/13/26	
+Parents' Day	7/26/26	
+Parents' Day	7/25/27	
+Passover	4/2/26	
+Passover	4/22/27	
+Patriot Day	9/11/26	
+Patriot Day	9/11/27	
+Pearl Harbor	12/7/26	
+Pearl Harbor	12/7/27	
+Pentecost	5/24/26	
+Pentecost	5/16/27	
+Presidents' Day	2/16/26	
+Presidents' Day	2/15/27	
+Renee Frazier	5/4/26	
+Rose Samples	8/3/26	
+Rosh Hashanah	9/12/26	
+Rosh Hashanah	10/2/27	
+Schools First Credit Card Due	1/8/26	6:00 PM
+Schools First Credit Card Due	2/8/26	6:00 PM
+Schools First Credit Card Due	3/8/26	6:00 PM
+Schools First Credit Card Due	4/8/26	6:00 PM
+Schools First Credit Card Due	5/8/26	6:00 PM
+Schools First Credit Card Due	6/8/26	6:00 PM
+Schools First Credit Card Due	7/8/26	6:00 PM
+Schools First Credit Card Due	8/8/26	6:00 PM
+Schools First Credit Card Due	9/8/26	6:00 PM
+Schools First Credit Card Due	10/8/26	6:00 PM
+Schools First Credit Card Due	11/8/26	6:00 PM
+Schools First Credit Card Due	12/8/26	6:00 PM
+Semi-Monthly Cut-Off	1/15/26	6:00 PM
+Semi-Monthly Cut-Off	1/30/26	6:00 PM
+Semi-Monthly Cut-Off	2/13/26	6:00 PM
+Semi-Monthly Cut-Off	2/27/26	6:00 PM
+Semi-Monthly Cut-Off	3/16/26	6:00 PM
+Semi-Monthly Cut-Off	3/26/26	6:00 PM
+Semi-Monthly Cut-Off	4/16/26	6:00 PM
+Semi-Monthly Cut-Off	5/1/26	6:00 PM
+Semi-Monthly Cut-Off	5/15/26	6:00 PM
+Semi-Monthly Cut-Off	6/1/26	6:00 PM
+Semi-Monthly Cut-Off	6/15/26	6:00 PM
+Semi-Monthly Cut-Off	6/29/26	6:00 PM
+Spectrum Due	1/21/26	
+Spectrum Due	2/21/26	
+Spectrum Due	3/21/26	
+Spectrum Due	4/21/26	
+Spectrum Due	5/21/26	
+Spectrum Due	6/21/26	
+Spectrum Due	7/21/26	
+Spectrum Due	8/21/26	
+Spectrum Due	9/21/26	
+Spectrum Due	10/21/26	
+Spectrum Due	11/21/26	
+Spectrum Due	12/21/26	
+St. Patrick's Day	3/17/26	
+St. Patrick's Day	3/17/27	
+Susan Borders	9/23/26	
+Susan Frazier	11/11/26	
+Taxes Due	4/15/26	
+Taxes Due	4/15/27	
+Terry Samples	2/1/26	
+Thanksgiving	11/26/26	
+Thanksgiving	11/25/27	
+Tom Detar	4/11/26	
+United Nations Day	10/24/26	
+United Nations Day	10/24/27	
+Valentines Day	2/14/26	
+Verizon Due	1/26/26	
+Verizon Due	2/26/26	
+Verizon Due	3/26/26	
+Verizon Due	4/26/26	
+Verizon Due	5/26/26	
+Verizon Due	6/26/26	
+Verizon Due	7/26/26	
+Verizon Due	8/26/26	
+Verizon Due	9/26/26	
+Verizon Due	10/26/26	
+Verizon Due	11/26/26	
+Verizon Due	12/26/26	
+Veterans Day	11/11/26	
+Veterans Day	11/11/27	
+Vic Samples	1/10/26	
+Yom Kippur	9/21/26	
+Yom Kippur	10/11/27	

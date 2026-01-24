@@ -10,7 +10,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const events = [];
 
 // 1. Process the new list
-const filePath = '/var/folders/cr/mdgmhpb142qc9fz6c0h81s5w0000gn/T/zencoder/pasted/files/20260123151849-e5ag64.txt';
+const filePath = '/Users/jenniferdetar/git/full_event_list.txt';
 const rawData = fs.readFileSync(filePath, 'utf8');
 const lines = rawData.split('\n');
 
