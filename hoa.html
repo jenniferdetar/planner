@@ -41,6 +41,8 @@
             display: flex;
             justify-content: center;
             padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .notebook-page {
             width: 100%; box-sizing: border-box;
@@ -130,15 +132,19 @@
             opacity: 1;
         }
         .save-status {
-            font-size: 0.8rem;
-            color: #666;
+            font-size: 0.7rem;
+            color: #888;
+            height: 15px;
             text-align: right;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
+        <a href="work-planner.html" class="nav-link">Work Planner</a>
+        <a href="personal-planner.html" class="nav-link">Personal Planner</a>
         <a href="monthly-review.html" class="nav-link">Monthly Review</a>
         <a href="planning.html" class="nav-link">Intentions</a>
         <a href="csea.html" class="nav-link">CSEA</a>
@@ -154,7 +160,7 @@
                 <div class="input-group">
                     <textarea id="new-note-content" placeholder="Type a new note here..."></textarea>
                     <button class="save-btn" onclick="handleAddNote()">Save Note</button>
-                    <div id="save-status" class="save-status"></div>
+                    <div id="save-status" class="save-status">All changes saved</div>
                 </div>
                 <div id="entries-list" class="entries-list">
                     <!-- Entries will be loaded here -->

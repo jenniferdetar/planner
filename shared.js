@@ -272,7 +272,8 @@ function updateNavigationLinks(date) {
         'financial.html',
         'hoa.html',
         'icaap.html',
-        'planning.html'
+        'planning.html',
+        'monthly-review.html'
     ];
     document.querySelectorAll('a.nav-link, a.nav-btn').forEach(link => {
         const href = link.getAttribute('href');
