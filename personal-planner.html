@@ -700,6 +700,18 @@
                                         <div class="${getEventClass(t)}">${t}</div>
                                     </div>
                                 `).join('')}
+                                <div class="sidebar-icon-row" style="margin-top: 10px;">
+                                    <span class="sidebar-icon">🍴</span>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)"></div>
+                                </div>
+                                <div class="sidebar-icon-row">
+                                    <span class="sidebar-icon">🌸</span>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="self-care" oninput="handleInput(event)"></div>
+                                </div>
+                                <div class="sidebar-icon-row">
+                                    <span class="sidebar-icon">💲</span>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="financial" oninput="handleInput(event)"></div>
+                                </div>
                             </div>
                             <div class="day-content">
                                 ${timedEvents.map(e => {
@@ -715,18 +727,6 @@
                                         </div>
                                     `;
                                 }).join('')}
-                                <div class="sidebar-icon-row">
-                                    <span class="sidebar-icon">🍴</span>
-                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)"></div>
-                                </div>
-                                <div class="sidebar-icon-row">
-                                    <span class="sidebar-icon">🌸</span>
-                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="self-care" oninput="handleInput(event)"></div>
-                                </div>
-                                <div class="sidebar-icon-row">
-                                    <span class="sidebar-icon">💲</span>
-                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="financial" oninput="handleInput(event)"></div>
-                                </div>
                                 ${Array(Math.max(4, 10 - (timedEvents.length))).fill(0).map((_, ti) => {
                                     const fieldId = `daily-task-${ti}`;
                                     const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
