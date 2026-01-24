@@ -310,6 +310,13 @@
             justify-content: center;
         }
 
+        .check-box-spacer {
+            width: 14px;
+            height: 14px;
+            border: 1px solid transparent;
+            flex-shrink: 0;
+        }
+
         .check-box.checked::after {
             content: "✓";
             color: #f59e9e;
@@ -367,7 +374,7 @@
             text-align: center;
             display: inline-block;
             margin: 1px 0;
-            width: 100%;
+            width: auto;
             box-sizing: border-box;
         }
 
@@ -566,6 +573,38 @@
         const dateParam = urlParams.get('date');
         let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date(2025, 11, 28);
         
+        const billAmounts = {
+            "Auto Maintenance": "$100.00",
+            "Mercury Auto Insurance": "$388.00",
+            "Tahoe Registration": "$15.00",
+            "Trailblazer Registration": "$28.00",
+            "DWP": "$100.00",
+            "Jeff's Credit Cards": "$500.00",
+            "Jennifer's Student Loans - Sallie Mae": "$500.00",
+            "Schools First Loan": "$142.00",
+            "Jennifer's Student Loans - NelNet": "$600.00",
+            "Ana": "$320.00",
+            "Gas": "$600.00",
+            "Laundry": "$80.00",
+            "Groceries": "$600.00",
+            "ADT": "$53.00",
+            "Amazon - Necessitites": "$100.00",
+            "Hair (Expensive)": "$110.00",
+            "Orkin": "$50.00",
+            "Hair (Cheap)": "$50.00",
+            "HELOC (California Credit Union)": "$357.00",
+            "HOA": "$520.00",
+            "Mortgage": "$2,025.00",
+            "Spectrum": "$197.00",
+            "Verizon": "$283.00",
+            "Blow": "$200.00",
+            "HSA": "$200.00",
+            "Summer Saver": "$400.00",
+            "Tahoe's Major Repairs": "$200.00",
+            "Vacation": "$125.00",
+            "Schools First Credit Card": "$600.00" 
+        };
+
         // Adjust to Sunday of the week
         if (dateParam) {
             const day = currentStartDate.getDay();
@@ -674,6 +713,18 @@
                 const allDayEvents = dayEvents.filter(e => !e.time);
                 const timedEvents = dayEvents.filter(e => e.time);
 
+                // Auto-populate financial line if "Due" events exist
+                const dueList = [];
+                dayEvents.forEach(e => {
+                    const title = e.title;
+                    Object.keys(billAmounts).forEach(bill => {
+                        if (title.includes(bill)) {
+                            dueList.push(`${bill}: ${billAmounts[bill]}`);
+                        }
+                    });
+                });
+                const autoFinancial = dueList.join(', ');
+
                 const dayHtml = `
                     <div class="day-section">
                         <div class="day-header">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
@@ -706,7 +757,12 @@
                                 </div>
                                 <div class="sidebar-icon-row">
                                     <span class="sidebar-icon">💲</span>
-                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="financial" oninput="handleInput(event)"></div>
+                                    <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="financial" oninput="handleInput(event)">${
+                                        (() => {
+                                            const saved = plannerData.find(d => d.date === dayStr && d.field_id === 'financial');
+                                            return saved ? saved.content : autoFinancial;
+                                        })()
+                                    }</div>
                                 </div>
                             </div>
                             <div class="day-content">
@@ -719,6 +775,7 @@
                                     const displayTime = `${h}:${m.toString().padStart(2, '0')}${ampm}`;
                                     return `
                                         <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 2px;">
+                                            <div class="check-box-spacer"></div>
                                             <div class="${getEventClass(e.title)}">${displayTime} ${e.title}</div>
                                         </div>
                                     `;
@@ -747,9 +804,9 @@
 
             // Fill sidebar icons from plannerData
             plannerData.forEach(item => {
-                if (item.field_id === 'meal-plan' || item.field_id === 'self-care' || item.field_id === 'financial') {
+                if (item.field_id === 'meal-plan' || item.field_id === 'self-care') {
                     const el = document.querySelector(`[data-date="${item.date}"][data-field="${item.field_id}"]`);
-                    if (el) el.innerText = item.content;
+                    if (el && item.content) el.innerText = item.content;
                 }
             });
         }

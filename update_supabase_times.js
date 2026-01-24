@@ -22,8 +22,21 @@ lines.forEach((line, index) => {
     
     const title = parts[0].trim();
     const dateStrRaw = parts[1].trim();
-    let time = parts[2] ? parts[2].trim() : null;
-    if (time === "") time = null;
+    let timeRaw = parts[2] ? parts[2].trim() : null;
+    let time = null;
+    
+    if (timeRaw) {
+        // Normalize time to HH:MM:SS (24h)
+        let [timePart, ampm] = timeRaw.split(' ');
+        let [hours, minutes] = timePart.split(':').map(Number);
+        
+        if (ampm) {
+            if (ampm.toUpperCase() === 'PM' && hours < 12) hours += 12;
+            if (ampm.toUpperCase() === 'AM' && hours === 12) hours = 0;
+        }
+        
+        time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+    }
     
     const dateParts = dateStrRaw.split('/');
     if (dateParts.length !== 3) return;

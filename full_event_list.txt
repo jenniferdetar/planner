@@ -354,18 +354,18 @@ Renee Frazier	5/4/26
 Rose Samples	8/3/26	
 Rosh Hashanah	9/12/26	
 Rosh Hashanah	10/2/27	
-Schools First Credit Card Due	1/8/26	6:00 PM
-Schools First Credit Card Due	2/8/26	6:00 PM
-Schools First Credit Card Due	3/8/26	6:00 PM
-Schools First Credit Card Due	4/8/26	6:00 PM
-Schools First Credit Card Due	5/8/26	6:00 PM
-Schools First Credit Card Due	6/8/26	6:00 PM
-Schools First Credit Card Due	7/8/26	6:00 PM
-Schools First Credit Card Due	8/8/26	6:00 PM
-Schools First Credit Card Due	9/8/26	6:00 PM
-Schools First Credit Card Due	10/8/26	6:00 PM
-Schools First Credit Card Due	11/8/26	6:00 PM
-Schools First Credit Card Due	12/8/26	6:00 PM
+Schools First Credit Card Due	1/8/26	
+Schools First Credit Card Due	2/8/26	
+Schools First Credit Card Due	3/8/26	
+Schools First Credit Card Due	4/8/26	
+Schools First Credit Card Due	5/8/26	
+Schools First Credit Card Due	6/8/26	
+Schools First Credit Card Due	7/8/26	
+Schools First Credit Card Due	8/8/26	
+Schools First Credit Card Due	9/8/26	
+Schools First Credit Card Due	10/8/26	
+Schools First Credit Card Due	11/8/26	
+Schools First Credit Card Due	12/8/26	
 Semi-Monthly Cut-Off	1/15/26	6:00 PM
 Semi-Monthly Cut-Off	1/30/26	6:00 PM
 Semi-Monthly Cut-Off	2/13/26	6:00 PM
