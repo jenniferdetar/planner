@@ -25,6 +25,7 @@
             background: #00326b;
             padding: 10px 20px;
             display: flex;
+            justify-content: center;
             gap: 15px;
             border-bottom: 1px solid #ddd;
             position: sticky;
@@ -58,9 +59,10 @@
         }
         .notebook-page {
             width: 100%;
+            max-width: 900px;
             box-sizing: border-box;
             background: #fff;
-            padding: 40px;
+            padding: 60px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             min-height: 1000px;
         }
@@ -69,8 +71,8 @@
             margin-bottom: 40px;
         }
         .subtitle {
-            font-size: 0.8rem;
-            letter-spacing: 3px;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
             color: #888;
             margin-bottom: 5px;
@@ -83,112 +85,122 @@
             text-transform: uppercase;
         }
         .intro-text {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #666;
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.4;
+            text-align: center;
         }
-        .grid {
+        .top-grid {
             display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 30px;
-            margin-top: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+            margin-bottom: 40px;
         }
-        .section {
-            border: 1px solid #eee;
-            padding: 20px;
+        .section-box {
             background-color: var(--tan-bg);
+            padding: 20px;
+            border: 1px solid #eee;
             border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-        }
-        .section-header {
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-            flex-wrap: wrap;
-        }
-        .section-title {
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
         .section-prompt {
             font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .section-prompt span {
             font-weight: normal;
-            color: #777;
-            font-style: italic;
-            line-height: 1.3;
         }
-        .content-para {
-            font-size: 1rem;
-            line-height: 1.8;
-            margin-bottom: 15px;
-            color: #444;
+        .ruled-line {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 8px;
+            min-height: 24px;
+            width: 100%;
+            display: flex;
+            align-items: center;
         }
-        .value-list {
+        .editable-area {
+            outline: none;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+        .checkbox-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 10px;
         }
-        .value-item {
+        .checkbox-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            cursor: pointer;
         }
         .checkbox {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border: 1px solid #333;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            cursor: pointer;
             background: #fff;
         }
         .checkbox.checked::after {
-            content: "✓";
-            font-size: 11px;
-            font-weight: bold;
+            content: "■";
+            font-size: 10px;
         }
-        .editable-area {
-            outline: none;
-            min-height: 1.2em;
-            display: inline-block;
-            min-width: 50px;
+        .full-width-prompt {
+            margin-top: 30px;
+            margin-bottom: 15px;
         }
-        .editable-area:focus {
-            background-color: rgba(90, 140, 160, 0.05);
-        }
-        .underline-text {
-            text-decoration: underline;
-            text-decoration-color: #ccc;
-            text-underline-offset: 4px;
-        }
-        .ruled-line {
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 5px;
-            min-height: 24px;
-            width: 100%;
-        }
-        #save-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
+        .prompt-text {
             font-size: 0.8rem;
-            display: none;
-            z-index: 1000;
+            margin-bottom: 5px;
+        }
+        .dream-big-title {
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #333;
+            display: inline-block;
+        }
+        .dream-big-title span {
+            font-weight: normal;
+            font-size: 0.75rem;
+        }
+        .dream-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid #ddd;
+        }
+        .dream-box {
+            padding: 15px;
+            border: 1px solid #ddd;
+            min-height: 100px;
+        }
+        .dream-label {
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .footer-prompts {
+            margin-top: 40px;
+        }
+        .footer-prompt-item {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        .footer-prompt-item .ruled-line {
+            flex-grow: 1;
         }
         .save-status {
             font-size: 0.7rem;
@@ -202,11 +214,11 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="planning.html" class="nav-link">Planning</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
     </header>
 
     <div id="save-status" class="save-status">All changes saved</div>
@@ -214,104 +226,109 @@
     <div class="container">
         <div class="notebook-page">
             <div class="page-header">
-                <div class="subtitle">Take a Moment</div>
-                <h1 class="page-title">Planning</h1>
+                <div class="subtitle">Be Thoughtful</div>
+                <h1 class="page-title">Intentions & Dreams</h1>
                 <p class="intro-text">
-                    As you begin a new year, take a moment to reflect on what you enjoy most and dream big!
+                    What do you want to prioritize in your daily work when planning for the upcoming year?<br>
+                    On the following pages, focus on your mission, vision, values, and purpose.
                 </p>
             </div>
 
-            <div class="grid">
-                <!-- Mission Section -->
-                <div class="section">
-                    <div class="section-header">
-                        <span class="section-title">Mission</span>
-                        <span class="section-prompt">| When thinking of your work, what do you consider to be your mission?</span>
+            <div class="top-grid">
+                <div class="section-box">
+                    <div class="section-prompt">
+                        When looking forward <span>to the coming year, what would you love for your work to look like each day? What fills you up in the time you spend at work? Take a few moments to consider what you love most as you begin today.</span>
                     </div>
-                    <div class="content-para">
-                        My mission in my work is <span class="underline-text editable-area" contenteditable="true" data-field="mission-1" style="width: 60%;"></span>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="mission-1b" style="width: 100%;"></span></div>
-                        My goal is to <span class="underline-text editable-area" contenteditable="true" data-field="mission-2" style="width: 60%;"></span> each day,
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="mission-2b" style="width: 100%;"></span></div>
-                        and I strive to <span class="underline-text editable-area" contenteditable="true" data-field="mission-3" style="width: 60%;"></span>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="mission-3b" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="mission-4" style="width: 100%;"></span></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-5"></div></div>
+                </div>
+                <div class="section-box">
+                    <div class="section-prompt">
+                        Do you love <span>it when you have the time to be ...</span>
+                    </div>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item" data-value="Creative"><div class="checkbox"></div> Creative</div>
+                        <div class="checkbox-item" data-value="Energetic"><div class="checkbox"></div> Energetic</div>
+                        <div class="checkbox-item" data-value="Fun"><div class="checkbox"></div> Fun</div>
+                        <div class="checkbox-item" data-value="Quiet"><div class="checkbox"></div> Quiet</div>
+                        <div class="checkbox-item" data-value="Generous"><div class="checkbox"></div> Generous</div>
+                        <div class="checkbox-item" data-value="Loud"><div class="checkbox"></div> Loud</div>
+                        <div class="checkbox-item" data-value="Encouraging"><div class="checkbox"></div> Encouraging</div>
+                        <div class="checkbox-item" data-value="Involved"><div class="checkbox"></div> Involved</div>
+                        <div class="checkbox-item" data-value="Reliable"><div class="checkbox"></div> Reliable</div>
+                        <div class="checkbox-item" data-value="Genuine"><div class="checkbox"></div> Genuine</div>
+                        <div class="checkbox-item" data-value="Independent"><div class="checkbox"></div> Independent</div>
+                        <div class="checkbox-item" data-value="Curious"><div class="checkbox"></div> Curious</div>
+                        <div class="checkbox-item" data-value="Excited"><div class="checkbox"></div> Excited</div>
+                        <div class="checkbox-item" data-value="Valuable"><div class="checkbox"></div> Valuable</div>
+                        <div class="checkbox-item" data-value="A leader"><div class="checkbox"></div> A leader</div>
+                        <div class="checkbox-item" data-value="Custom1" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="love-custom1" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
+                        <div class="checkbox-item" data-value="Servant-hearted"><div class="checkbox"></div> Servant-hearted</div>
+                        <div class="checkbox-item" data-value="Custom2" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="love-custom2" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Value Section -->
-                <div class="section">
-                    <div class="section-header">
-                        <span class="section-title">Value</span>
-                        <span class="section-prompt">| What (or who?) do you value? What lights you up when you wake up each day? Here are a few examples to get you started if you're stumped ...</span>
-                    </div>
-                    <div style="font-size: 0.9rem; margin-bottom: 10px;">I value ...</div>
-                    <div class="value-list">
-                        <div class="value-item" data-value="Community"><div class="checkbox"></div> Community</div>
-                        <div class="value-item" data-value="Gratitude"><div class="checkbox"></div> Gratitude</div>
-                        <div class="value-item" data-value="Family"><div class="checkbox"></div> My family</div>
-                        <div class="value-item" data-value="Humility"><div class="checkbox"></div> Humility</div>
-                        <div class="value-item" data-value="Integrity"><div class="checkbox"></div> Integrity</div>
-                        <div class="value-item" data-value="Innovation"><div class="checkbox"></div> Innovation</div>
-                        <div class="value-item" data-value="Determination"><div class="checkbox"></div> Determination</div>
-                        <div class="value-item" data-value="Organization"><div class="checkbox"></div> Organization</div>
-                        <div class="value-item" data-value="Grit"><div class="checkbox"></div> Grit</div>
-                        <div class="value-item" data-value="Resourcefulness"><div class="checkbox"></div> Resourcefulness</div>
-                        <div class="value-item" data-value="Health"><div class="checkbox"></div> My health</div>
-                        <div class="value-item" data-value="Frugality"><div class="checkbox"></div> Frugality</div>
-                        <div class="value-item" data-value="Confidence"><div class="checkbox"></div> Confidence</div>
-                        <div class="value-item" data-value="Custom1" style="grid-column: span 2; display: flex; align-items: center; gap: 8px;">
-                            <div class="checkbox"></div> 
-                            <span class="underline-text editable-area" contenteditable="true" data-field="value-custom1-text" style="width: 80%;" onclick="event.stopPropagation()"></span>
-                        </div>
-                        <div class="value-item" data-value="Faith"><div class="checkbox"></div> My faith</div>
-                        <div class="value-item" data-value="Custom2" style="grid-column: span 2; display: flex; align-items: center; gap: 8px;">
-                            <div class="checkbox"></div> 
-                            <span class="underline-text editable-area" contenteditable="true" data-field="value-custom2-text" style="width: 80%;" onclick="event.stopPropagation()"></span>
-                        </div>
-                    </div>
+            <div class="full-width-prompt">
+                <div class="prompt-text">What is your absolute favorite thing you love doing at work each day?</div>
+                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="favorite-thing"></div></div>
+            </div>
+
+            <div class="full-width-prompt">
+                <div class="prompt-text">What didn't you enjoy in your work over the last year?</div>
+                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="not-enjoyed"></div></div>
+            </div>
+
+            <div class="full-width-prompt">
+                <div class="prompt-text">What was simply fun for you as you look back over the last year, personally or professionally?</div>
+                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="fun-last-year"></div></div>
+            </div>
+
+            <div class="dream-big-title">
+                Dream big | <span>Where would you like to be financially, physically, emotionally, and spiritually in a year? Do you want to run a half marathon? Pay off your home? Or hit a certain income goal? Write it down so you can keep track of it, and dream big in the next 12 months!</span>
+            </div>
+
+            <div class="dream-grid">
+                <div class="dream-box">
+                    <div class="dream-label">Financially</div>
+                    <div class="editable-area" contenteditable="true" data-field="dream-financial" style="min-height: 80px;"></div>
                 </div>
-
-                <!-- Vision Section -->
-                <div class="section">
-                    <div class="section-header">
-                        <span class="section-title">Vision</span>
-                        <span class="section-prompt">| So what on earth is the difference between your MISSION and your VISION? Your mission looks closely at what you're doing today and who you're serving, while your vision is where you'd love to go one day. Think BIG. Dream WILDLY. Where would you love to be in one year? Who do you serve today, and how would you love to serve them in a year, or even in five years? Take a few minutes, cast your vision looking into the future ~ and simply dream of where you'd love to be.</span>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <div style="font-size: 0.8rem; font-weight: bold; margin-bottom: 5px;">Looking forward to the year ahead, I'd love to ...</div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-1year-1" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-1year-2" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-1year-3" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-1year-4" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-1year-5" style="width: 100%;"></span></div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.8rem; font-weight: bold; margin-bottom: 5px;">In the next five years, I hope to ...</div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-5year-1" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-5year-2" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-5year-3" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-5year-4" style="width: 100%;"></span></div>
-                        <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="vision-5year-5" style="width: 100%;"></span></div>
-                    </div>
+                <div class="dream-box">
+                    <div class="dream-label">Physically</div>
+                    <div class="editable-area" contenteditable="true" data-field="dream-physical" style="min-height: 80px;"></div>
                 </div>
+                <div class="dream-box">
+                    <div class="dream-label">Emotionally</div>
+                    <div class="editable-area" contenteditable="true" data-field="dream-emotional" style="min-height: 80px;"></div>
+                </div>
+                <div class="dream-box">
+                    <div class="dream-label">Spiritually</div>
+                    <div class="editable-area" contenteditable="true" data-field="dream-spiritual" style="min-height: 80px;"></div>
+                </div>
+            </div>
 
-                <!-- Purpose Section -->
-                <div class="section">
-                    <div class="section-header">
-                        <span class="section-title">Purpose</span>
-                        <span class="section-prompt">| When you were created, you were uniquely gifted in a way that simply no one else was. You were perfectly designed to fulfill a purpose that only you can. What is your purpose? What are you gifted in that serves those around you each day? Looking forward, envision what the lives of those around you might look like when you fully step into exactly who you were made to be.</span>
-                    </div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-1" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-2" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-3" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-4" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-5" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-6" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-7" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-8" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-9" style="width: 100%;"></span></div>
-                    <div class="ruled-line"><span class="editable-area" contenteditable="true" data-field="purpose-10" style="width: 100%;"></span></div>
+            <div class="footer-prompts">
+                <div class="footer-prompt-item">
+                    <span>This year, more than anything else, I want to focus on</span>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="focus-this-year"></div></div>
+                </div>
+                <div class="footer-prompt-item">
+                    <span>To make that happen, I'm going to spend my time and energy on</span>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="spend-time-on"></div></div>
+                </div>
+                <div class="footer-prompt-item">
+                    <span>Instead of spending too much time on</span>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="less-time-on" style="width: 150px;"></div></div>
+                    <span>, I'm going to dream big about</span>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="dream-big-about"></div></div>
+                </div>
+                <div class="footer-prompt-item">
+                    <span>This is so worth it because</span>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="worth-it-because" style="width: 200px;"></div></div>
+                    <span>are depending on me!</span>
                 </div>
             </div>
         </div>
@@ -319,60 +336,25 @@
 
     <script>
         let saveTimeout;
-        const INTENTIONS_DATE = '2026-intentions';
+        const PLANNING_DATE = '2026-planning';
 
         async function init() {
-            // Default values (only if empty)
-            const defaults = {
-                'mission-1': 'to bring clarity and peace of mind',
-                'mission-2': 'help others move from overwhelm to order',
-                'mission-3': 'operate with excellence, communicate clearly, and create systems',
-                'mission-3b': 'that allow people to breathe easier, grow confidently, and feel supported.',
-                'vision-1year-1': 'step fully into leadership with confidence, serve my chapter with transparency, grow my business',
-                'vision-1year-2': 'to a consistent and sustainable level, and create more peace, stability, and margin in my life.',
-                'vision-5year-1': 'build a thriving remote team, open a dedicated office space for my business, help Jeff launch',
-                'vision-5year-2': 'his counseling practice and nonprofit, expand my leadership impact within CSEA, and create',
-                'vision-5year-3': 'financial stability that gives my family freedom, rest, and room to breathe.',
-                'purpose-1': "I was created to bring order where there's chaos, clarity where there's confusion, and support where",
-                'purpose-2': "people feel alone. I'm gifted in building systems, uplifting others, and seeing solutions quickly.",
-                'purpose-3': "My purpose is to serve with integrity, lead with compassion, and use the talents God gave me",
-                'purpose-4': "to help people find stability and confidence - in their work, their finances, and their lives."
-            };
-
-            const defaultChecked = ['Community', 'Gratitude', 'Family', 'Humility', 'Integrity', 'Innovation', 'Determination', 'Organization', 'Grit', 'Resourcefulness', 'Health', 'Confidence', 'Faith'];
-
             // Load data from Supabase
-            const data = await fetchPlannerData(INTENTIONS_DATE);
-            const hasData = data && data.length > 0;
-
-            if (!hasData) {
-                // Set defaults if no data exists
-                Object.keys(defaults).forEach(key => {
-                    const el = document.querySelector(`[data-field="${key}"]`);
-                    if (el) el.innerText = defaults[key];
-                });
-                defaultChecked.forEach(val => {
-                    const el = document.querySelector(`.value-item[data-value="${val}"] .checkbox`);
-                    if (el) el.classList.add('checked');
-                });
-            } else {
+            const data = await fetchPlannerData(PLANNING_DATE);
+            
+            if (data && data.length > 0) {
                 data.forEach(item => {
-                    if (item.field_id.startsWith('value-')) {
-                        if (item.field_id.endsWith('-text')) {
-                            const el = document.querySelector(`[data-field="${item.field_id}"]`);
-                            if (el) el.innerText = item.content;
-                        } else {
-                            const valueName = item.field_id.replace('value-', '');
-                            const el = document.querySelector(`.value-item[data-value="${valueName}"] .checkbox`);
-                            if (el) {
-                                if (item.content === 'true') el.classList.add('checked');
-                                else el.classList.remove('checked');
-                            }
+                    if (item.field_id.startsWith('love-cb-')) {
+                        const valueName = item.field_id.replace('love-cb-', '');
+                        const el = document.querySelector(`.checkbox-item[data-value="${valueName}"] .checkbox`);
+                        if (el) {
+                            if (item.content === 'true') el.classList.add('checked');
                         }
                     } else {
                         const el = document.querySelector(`[data-field="${item.field_id}"]`);
                         if (el) {
-                            el.innerText = item.content;
+                            if (el.tagName === 'DIV') el.innerText = item.content;
+                            else el.value = item.content;
                         }
                     }
                 });
@@ -388,35 +370,25 @@
             });
 
             // Set up event listeners for checkboxes
-            document.querySelectorAll('.value-item').forEach(item => {
+            document.querySelectorAll('.checkbox-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const cb = item.querySelector('.checkbox');
                     cb.classList.toggle('checked');
                     const isChecked = cb.classList.contains('checked');
                     const valueName = item.getAttribute('data-value');
-                    handleSave(`value-${valueName}`, isChecked.toString());
+                    handleSave(`love-cb-${valueName}`, isChecked.toString());
                 });
             });
         }
 
         function handleSave(fieldId, content) {
-            const statusEl = document.getElementById('save-status');
-            statusEl.innerText = 'Unsaved changes';
-            statusEl.style.display = 'block';
-
+            const status = document.getElementById('save-status');
+            status.innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                const success = await savePlannerData(INTENTIONS_DATE, fieldId, content);
-                if (success) {
-                    statusEl.innerText = 'All changes saved';
-                    setTimeout(() => {
-                        if (statusEl.innerText === 'All changes saved') {
-                            statusEl.style.display = 'none';
-                        }
-                    }, 2000);
-                } else {
-                    statusEl.innerText = 'Save error';
-                }
+                status.innerText = 'Saving...';
+                const success = await savePlannerData(PLANNING_DATE, fieldId, content);
+                status.innerText = success ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
 
