@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Breakdown - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --header-blue: #00326b;
+            --border-color: #333;
+            --csea-yellow: #ffca38;
+            --pastel-green: #e6ffcc;
+            --pastel-blue: #cce6ff;
+            --pastel-pink: #ffcce6;
+            --pastel-yellow: #ffffcc;
+        }
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .global-header {
+            background: #00326b;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
+        }
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            font-size: 0.9rem;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover {
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 1000px;
+            box-sizing: border-box;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-height: 1000px;
+            position: relative;
+        }
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--header-blue);
+            padding-bottom: 20px;
+        }
+        .page-title {
+            color: var(--header-blue);
+            font-size: 2rem;
+            margin: 0;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        .date-display {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        .section-box {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .breakdown-table td {
+            padding: 10px 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .label {
+            color: #444;
+            font-weight: bold;
+        }
+        .value-cell {
+            text-align: right;
+            width: 120px;
+            background: #fff;
+            border: 1px dashed #ccc;
+            padding: 5px;
+            outline: none;
+        }
+        .total-row {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--header-blue);
+            background: var(--pastel-yellow);
+        }
+        .net-pay-box {
+            grid-column: span 2;
+            text-align: center;
+            padding: 20px;
+            background: var(--header-blue);
+            color: #fff;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .net-pay-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--csea-yellow);
+        }
+        .allocation-table {
+            width: 100%;
+            grid-column: span 2;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .allocation-table th {
+            background: var(--header-blue);
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .allocation-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .allocation-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .editable-name {
+            width: 100%;
+            outline: none;
+        }
+        .editable-amt {
+            width: 120px;
+            text-align: right;
+            outline: none;
+            font-weight: bold;
+        }
+        .status-row {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--pastel-green);
+            border-radius: 8px;
+            margin-top: 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .remaining-amount {
+            color: #d32f2f;
+        }
+        .remaining-amount.zero {
+            color: #2e7d32;
+        }
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.8rem;
+            color: #666;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="check-breakdown.html" class="nav-link">Check Breakdown</a>
+        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="hoa.html" class="nav-link">HOA</a>
+        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+    </header>
+
+    <div id="save-status" class="save-status">All changes saved</div>
+
+    <div class="container">
+        <div class="notebook-page">
+            <div class="header-section">
+                <h1 class="page-title">Paycheck Allocation</h1>
+                <div id="date-display" class="date-display">Week of ...</div>
+                <div style="margin-top: 15px;">
+                    <a href="financial.html" class="nav-btn" style="text-decoration: none; display: inline-block; padding: 5px 15px; border: 1px solid #333; border-radius: 12px; color: #333; font-size: 0.85rem;">← Back to Bill Schedule</a>
+                </div>
+            </div>
+
+            <div class="grid-container">
+                <!-- Left: Gross & Taxes -->
+                <div class="section-box">
+                    <div class="section-title">Income & Taxes</div>
+                    <table class="breakdown-table">
+                        <tr>
+                            <td class="label">Gross Pay</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-gross" id="cb-gross">0.00</div></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Federal Tax</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-fed-tax" id="cb-fed-tax">0.00</div></td>
+                        </tr>
+                        <tr>
+                            <td class="label">State Tax</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-state-tax" id="cb-state-tax">0.00</div></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Social Security</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-ss" id="cb-ss">0.00</div></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Medicare</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-medicare" id="cb-medicare">0.00</div></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Right: Other Deductions -->
+                <div class="section-box">
+                    <div class="section-title">Other Deductions</div>
+                    <table class="breakdown-table">
+                        <tr>
+                            <td class="label">401k / Retirement</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-401k" id="cb-401k">0.00</div></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Health Insurance</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-health" id="cb-health">0.00</div></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Other Deduction 1</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-other-1" id="cb-other-1">0.00</div></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Other Deduction 2</td>
+                            <td><div class="value-cell" contenteditable="true" data-field="cb-other-2" id="cb-other-2">0.00</div></td>
+                        </tr>
+                        <tr class="total-row">
+                            <td class="label">Total Deductions</td>
+                            <td style="text-align: right; padding-right: 5px;" id="cb-total-deductions">0.00</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Net Pay Highlight -->
+                <div class="net-pay-box">
+                    <div style="text-transform: uppercase; letter-spacing: 2px;">Estimated Net Pay</div>
+                    <div class="net-pay-amount" id="cb-net-pay">$0.00</div>
+                </div>
+
+                <!-- Allocations Table -->
+                <table class="allocation-table">
+                    <thead>
+                        <tr>
+                            <th>Category / Bill</th>
+                            <th style="text-align: right;">Amount Allocated</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allocation-body">
+                        <!-- 15 rows for allocations -->
+                        <script>
+                            for(let i=1; i<=15; i++) {
+                                document.write(`
+                                    <tr>
+                                        <td><div class="editable-name" contenteditable="true" data-field="cb-alloc-name-${i}" placeholder="Category ${i}..."></div></td>
+                                        <td><div class="editable-amt" contenteditable="true" data-field="cb-alloc-amt-${i}">0.00</div></td>
+                                    </tr>
+                                `);
+                            }
+                        </script>
+                    </tbody>
+                </table>
+
+                <div class="status-row">
+                    <div>Remaining to Allocate:</div>
+                    <div class="remaining-amount" id="cb-remaining">$0.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date') || new Date().toISOString().split('T')[0];
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Display Date
+            const dateObj = new Date(dateParam + 'T12:00:00');
+            document.getElementById('date-display').innerText = `Paycheck for week of ${dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+
+            // Load Data
+            const data = await fetchPlannerData(dateParam, 1);
+            data.forEach(item => {
+                const el = document.querySelector(`[data-field="${item.field_id}"]`);
+                if (el) {
+                    if (el.tagName === 'DIV') el.innerText = item.content;
+                }
+            });
+
+            // Initial Calculation
+            calculate();
+
+            // Setup Auto-save and Auto-calculate
+            document.querySelectorAll('[contenteditable="true"]').forEach(cell => {
+                cell.addEventListener('input', () => {
+                    calculate();
+                    saveWithDebounce(dateParam, cell.dataset.field, cell.innerText);
+                });
+                
+                // Placeholder behavior
+                cell.addEventListener('focus', () => {
+                    if (cell.innerText === '0.00' || cell.innerText === '0') {
+                        // Optional: clear if zero
+                    }
+                });
+            });
+        });
+
+        function calculate() {
+            const getVal = (id) => parseFloat(document.getElementById(id).innerText.replace(/[^0-9.-]+/g,"")) || 0;
+            
+            const gross = getVal('cb-gross');
+            const fed = getVal('cb-fed-tax');
+            const state = getVal('cb-state-tax');
+            const ss = getVal('cb-ss');
+            const med = getVal('cb-medicare');
+            const k401 = getVal('cb-401k');
+            const health = getVal('cb-health');
+            const other1 = getVal('cb-other-1');
+            const other2 = getVal('cb-other-2');
+
+            const totalDeductions = fed + state + ss + med + k401 + health + other1 + other2;
+            const netPay = gross - totalDeductions;
+
+            document.getElementById('cb-total-deductions').innerText = totalDeductions.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            document.getElementById('cb-net-pay').innerText = '$' + netPay.toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+            // Allocations
+            let totalAllocated = 0;
+            document.querySelectorAll('.editable-amt').forEach(el => {
+                totalAllocated += parseFloat(el.innerText.replace(/[^0-9.-]+/g,"")) || 0;
+            });
+
+            const remaining = netPay - totalAllocated;
+            const remainingEl = document.getElementById('cb-remaining');
+            remainingEl.innerText = '$' + remaining.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            
+            if (Math.abs(remaining) < 0.01) {
+                remainingEl.className = 'remaining-amount zero';
+            } else {
+                remainingEl.className = 'remaining-amount';
+            }
+        }
+
+        let debounceTimer;
+        function saveWithDebounce(date, field, content) {
+            document.getElementById('save-status').innerText = 'Saving...';
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(async () => {
+                const success = await savePlannerData(date, field, content);
+                if (success) {
+                    document.getElementById('save-status').innerText = 'All changes saved';
+                } else {
+                    document.getElementById('save-status').innerText = 'Error saving';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
