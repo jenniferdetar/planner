@@ -272,8 +272,7 @@ function updateNavigationLinks(date) {
         'financial.html',
         'hoa.html',
         'icaap.html',
-        'planning.html',
-        'intentions-dreams.html'
+        'planning.html'
     ];
     document.querySelectorAll('a.nav-link, a.nav-btn').forEach(link => {
         const href = link.getAttribute('href');

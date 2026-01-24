@@ -1,4 +1,3 @@
-
 const { createClient } = require('@supabase/supabase-js');
 
 const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
@@ -6,13 +5,13 @@ const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-async function checkKnownTable() {
-    const { data, error } = await supabase.from('category_entries').select('*').limit(1);
+async function checkPlannerData() {
+    const { data, error } = await supabase.from('planner_data').select('*').limit(1);
     if (error) {
-        console.error('Error fetching category_entries:', error);
+        console.error('planner_data error:', error.message);
     } else {
-        console.log('Successfully fetched from category_entries:', data);
+        console.log('planner_data exists! Data:', data);
     }
 }
 
-checkKnownTable();
+checkPlannerData();
