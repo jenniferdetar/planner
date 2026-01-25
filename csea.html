@@ -237,14 +237,13 @@
                             <tr>
                                 <th>Date Spoke</th>
                                 <th>Member Name</th>
-                                <th>#</th>
                                 <th>Type</th>
                                 <th>Member Number</th>
                                 <th>Site/Location</th>
                                 <th>Discussion/Concern</th>
                                 <th>Involved/Action</th>
-                                <th>Union Rep/Outcome</th>
-                                <th>Labor Rep</th>
+                                <th>Union/Labor Rep</th>
+                                <th>Outcome</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -258,7 +257,6 @@
                                     <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
                                     <datalist id="members-list"></datalist>
                                 </td>
-                                <td></td>
                                 <td>
                                     <select id="log-type" class="log-input">
                                         <option value="Auto">Auto-Detect</option>
@@ -277,10 +275,12 @@
                                 </td>
                                 <td><input type="text" id="log-who" class="log-input" placeholder="Who involved"></td>
                                 <td>
-                                    <input type="text" id="log-contact" class="log-input" placeholder="Rep/Outcome" list="stewards-list">
-                                    <datalist id="stewards-list"></datalist>
+                                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                                        <input type="text" id="log-contact" class="log-input" placeholder="Union Rep" list="stewards-list">
+                                        <input type="text" id="log-labor-rep" class="log-input" placeholder="Labor Rep">
+                                    </div>
                                 </td>
-                                <td><input type="text" id="log-labor-rep" class="log-input" placeholder="Labor Rep"></td>
+                                <td><input type="text" id="log-outcome" class="log-input" placeholder="Outcome"></td>
                                 <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
                             </tr>
                         </tfoot>
@@ -387,11 +387,9 @@
             const interactions = await fetchInteractions(CATEGORY);
             interactionLogBody.innerHTML = '';
             
-            let count = 1;
-            
             interactions.forEach(inter => {
                 const type = detectType(inter);
-                interactionLogBody.appendChild(createInteractionRow(inter, type, count++));
+                interactionLogBody.appendChild(createInteractionRow(inter, type));
             });
         }
 
@@ -416,20 +414,22 @@
             return isInquiry ? 'Inquiry' : 'Grievance';
         }
 
-        function createInteractionRow(inter, type, index) {
+        function createInteractionRow(inter, type) {
             const tr = document.createElement('tr');
             tr.id = `inter-${inter.id}`;
+            
+            const reps = [inter.contact_person, inter.labor_rep].filter(Boolean).join(' / ');
+            
             tr.innerHTML = `
                 <td>${inter.date_spoke}</td>
                 <td>${inter.member_name}</td>
-                <td>${index || ''}</td>
                 <td><span style="color: ${type === 'Grievance' ? '#cc0000' : '#2d5a45'}; font-weight: bold;">${type}</span></td>
                 <td>${inter.member_number || ''}</td>
                 <td>${inter.work_location || ''}</td>
                 <td>${inter.discussion || ''}</td>
                 <td>${inter.who_involved || ''}</td>
-                <td>${inter.contact_person || ''}</td>
-                <td>${inter.labor_rep || ''}</td>
+                <td>${reps}</td>
+                <td>${inter.outcome || ''}</td>
                 <td><span class="delete-btn" onclick="handleDeleteInteraction(${inter.id})">Delete</span></td>
             `;
             return tr;
@@ -445,7 +445,8 @@
                 discussion: document.getElementById(`log-discussion`).value,
                 who_involved: document.getElementById(`log-who`).value,
                 contact_person: document.getElementById(`log-contact`).value,
-                labor_rep: document.getElementById(`log-labor-rep`).value
+                labor_rep: document.getElementById(`log-labor-rep`).value,
+                outcome: document.getElementById(`log-outcome`).value
             };
 
             if (!interaction.date_spoke || !interaction.member_name) {
@@ -453,19 +454,15 @@
                 return;
             }
 
-            // If user explicitly chose a type, we might want to store it. 
-            // For now, our detector uses keywords, so manual choice is for UI feedback.
-            // If we want to persist "Grievance" vs "Inquiry" regardless of keywords, 
-            // we should save it in the packed JSON.
             if (explicitType !== 'Auto') {
                 interaction.explicit_type = explicitType;
             }
 
             const newInter = await saveInteraction(CATEGORY, interaction);
             if (newInter) {
-                loadInteractions(); // Reload to update numbering
+                loadInteractions(); 
                 // Clear inputs
-                const fields = ['date', 'member', 'number', 'location', 'discussion', 'who', 'contact', 'labor-rep'];
+                const fields = ['date', 'member', 'number', 'location', 'discussion', 'who', 'contact', 'labor-rep', 'outcome'];
                 fields.forEach(f => {
                     const el = document.getElementById(`log-${f}`);
                     if (el) el.value = '';
