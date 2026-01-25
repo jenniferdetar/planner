@@ -169,84 +169,73 @@
                 <tbody id="tracking-body">
                     <script>
                         const employees = [
-                            'Adalid Sanchez Rodriguez', 'Adan Saucedo', 'Adrian Irvine', 'Adriana Gomez', 
-                            'Adriana Ojeda', 'Agnes Lewis', 'Alberto Solorzano', 'Alexander Aston', 
-                            'Alexis Contreras', 'Alice Hilal', 'Alicia Cerna', 'Aline Millan', 
-                            'Alyson Han', 'Amber Mastroianni', 'Amber Wilton', 'Ameel Noos', 
-                            'Amparo Martin', 'Ana Guevara', 'Ancelmo Ramos', 'Andrea Chagoya', 
-                            'Andrea Douglas', 'Andreina Morales', 'Angela Lopez', 'Anna Quezada', 
-                            'Anthony Bernard', 'Anthony Morales', 'Anthony Zarate', 'Antoinette Matiga', 
-                            'Araksya Manukyan', 'Aya Shigenaga', 'Baharak Saadat Beheshti', 'Barbara Stoliker', 
-                            'Barry Blisten', 'Beatris Segura', 'Bennett Winter', 'Beverly Junio Magee', 
-                            'Bienvenido Pineda', 'Brigette Pena', 'Carmen Fuentes', 'Cassondra Holt Hightower', 
-                            'Cecille Basilio', 'Charles Izuakor', 'Cherie Lebron', 'Chevon Booker', 
-                            'Chinedu Ezeh', 'Christa Mcmullin', 'Christina Clark', 'Christina Silva', 
-                            'Christina Sithole', 'Christine Choi', 'Christopher Linares', 'Claire Daigle', 
-                            'Claudia Franco', 'Crystal Cohen', 'Crystal Mendez', 'Crystal Rivera', 
-                            'Cynthia Barrilleaux', 'Cynthia Bitterman', 'Cynthia Timm', 'Dalese Hardin', 
-                            'Dana Fikes', 'Daniel Saldana', 'Danielle O\'conner', 'David Hadjichristodoulou', 
-                            'Dawn Sebastian', 'Dawnise Francisco', 'Deanna Baldwin', 'Debora Wechsler', 
-                            'Deborah Francois', 'Dominique Harris', 'Dora Marquez', 'Douglas Reisgen', 
-                            'Dulce Bacon', 'Eberardo Rodriguez', 'Edith Braswell Grant', 'Efren Rodriguez', 
-                            'Eileen Alcorn', 'Eimi Miller', 'Elisabeth Mullins Medina', 'Elizabeth Chavez', 
-                            'Elizabeth Elizalde', 'Elizabeth Romero', 'Emilee Velazco Franco', 'Emily Wassler', 
-                            'Emir Gonzalez', 'Enas Makar', 'Eric Hopson', 'Erica Pan', 
-                            'Erica Sanchez', 'Erika Paz', 'Erin Mettlen', 'Ester Yang', 
-                            'Evelyn Mcfarlane', 'Farhad Mahmud', 'Frances Morales', 'Freshta Sidiqi', 
-                            'Gavriela Trujillo', 'Gene Dean', 'Genesis Aguirre', 'Gladys Barbosa', 
-                            'Glenda Tamay', 'Guillermo Diaz', 'Gustavo Lopez', 'Hamilton Gernon Wyatt', 
-                            'Hector Martinez', 'Hina Ahmad', 'Ida Quijada', 'Iliana Quintero', 
-                            'Indira Ortiz', 'Irma Salas', 'Irma Torres', 'Isidro Castillo', 
-                            'Ivy Grace Thorne', 'Jacqueline Cruz', 'Jacqueline Palacios', 'Jakeisha Sanders', 
-                            'Jamall Farr', 'Janet Ledesma', 'Jasmin Segovia', 'Javier Ponce Garcia', 
-                            'Jeanine Flier', 'Jeanne Garcia Armstrong', 'Jeen Yu', 'Jehisol Urbina', 
-                            'Jennifer Lopez', 'Jennifer Washington', 'Jenny Peterson', 'Jereme Stark', 
-                            'Jiabei Li', 'Jittima Bouillot', 'Jordan Baldry', 'Jordan Gonzalez', 
-                            'Jorge Torres', 'Jose Alvarenga', 'Jose Hernandez', 'Jose Romero', 
-                            'Joseph Thomas', 'Joseph Zeccola', 'Joy Kasper', 'Juan Catalan', 
-                            'Juan Pina', 'Julia Calamandrei', 'Julian Mendez', 'Julianne Fassett', 
-                            'Julie Ann Resurreccion', 'Julie Sornberger', 'Karen Caruso', 'Karen Siercke Noriega', 
-                            'Karina Maravilla', 'Karsina Gaither', 'Kelsie Hogen', 'Kelvin Means', 
-                            'Kerry Shimizu', 'Kevin Seegan', 'Kimberly Rabas', 'Kionna Hawkins', 
-                            'Kristine Adams', 'Kristy Beaudry', 'Ladan Dejam', 'Lailani Joy Gonzaga', 
-                            'Lanette Black', 'Laveda Harris', 'Lawrence Ramos', 'Leslie Anderson', 
-                            'Leslie Black', 'Leslie Perez', 'Leslie Zamora', 'Leticia Gudino', 
-                            'Leticia Martinez', 'Liberty Amos', 'Lila Rosas Madrigal', 'Liliana Amezcua', 
-                            'Liliana Jauregui George', 'Liliana Martinez', 'Lilit Akilian', 'Linda Hoang', 
-                            'Linda Santana', 'Linda Taylor', 'Lisa Darbidian', 'Lisa Harvey', 
-                            'Lisa Marks', 'Louise Cummings', 'Luciano Latini', 'Lucrecia Yescas Luna', 
-                            'Ma Joanna Razon', 'Ma Teresa Aki', 'Maeli Montecinos', 'Maikai Finnell', 
-                            'Malika Ferrell', 'Malina Rios', 'Mandana Saidi', 'Maria Aldave Cabrera', 
-                            'Maria Hernandez', 'Maria Pinto', 'Maria Zamora', 'Marianne Valencia', 
-                            'Marie Bennett', 'Marites Felicilda', 'Mark Todd', 'Marla Pizzuto', 
-                            'Marlene Yu', 'Marta Martin', 'Mary Jane Opoku', 'Matthew Miller', 
-                            'Mayra Alcantar', 'Mayra Rodarte Nava', 'Melanie Ronning', 'Melinda Duran', 
-                            'Michelle Lopez', 'Miguel Agredano', 'Miisha Davis', 'Miriam Oguejiofor', 
-                            'Nancy Madrid', 'Nayeli Meza Amaral', 'Neta Markusfeld', 'Nicole Douglass', 
-                            'Nicoli Ueda', 'Nora Watanabe', 'Nune Mc Combs', 'Oscar Montenegro', 
-                            'Palma Scirone', 'Paola Martinez', 'Patricia Castillo', 'Patricia Chavez', 
-                            'Patrick Navas', 'Paula Dominguez', 'Paulette Duarte', 'Paulette Shelley', 
-                            'Pedro Aguilar', 'Praveen Ray', 'Ralph Bravo', 'Rana Khan', 
-                            'Raquel Huerta', 'Rebeca Chaidez', 'Rene Gaudet', 'Rhory Rebellon', 
-                            'Richard Lee', 'Rick Swanson', 'Robert Jones', 'Robert Moose', 
-                            'Robin Aaron', 'Rosalina Pacheco', 'Rosalyn Lee', 'Rosanna Davisson', 
-                            'Rosemarie Fagfoomsintu', 'Ross Kramer', 'Ruth Rendon', 'Ryan Boyes', 
-                            'Sabrina Sheikh', 'Sabrina Sullivan', 'Sallyann Tejeda', 'Sandra Canela', 
-                            'Sandra Hernandez', 'Sandra Meredith', 'Sandra Mijarez', 'Sandra Valdivia', 
-                            'Sandy Estrada', 'Sandy Walker', 'Sara O\'connor', 'Scott Cody', 
-                            'Senisa Austin', 'Shannon Moultrie', 'Shannon Sayer', 'Sharon Maculada', 
-                            'Shawn Hall', 'Sherita Rogers', 'Sheveeta Jackson', 'Silvia Ramos', 
-                            'Silvia Sanchez', 'Sofia Manzo Reyes', 'Sofia Vasserman', 'Stacey Byham', 
-                            'Stacey Williams', 'Staci Holmes', 'Stephanie Harlow', 'Stephen Maccarone', 
-                            'Suhjung Ko', 'Susan Deloach', 'Susan Nolan', 'Susana Mislang', 
-                            'Susana Santa Cruz', 'Tacy Schull', 'Tamryn Wilkins', 'Tanya Acosta', 
-                            'Tarah Bagadiong Trice', 'Tatianika Montalbo', 'Tiffany Vojkovich', 'Toby Sperber', 
-                            'Tonya Boyd', 'Tonya Thompson', 'Troy Poe', 'Valerie De La Rosa', 
-                            'Valerie Hoggard', 'Vanessa Sandoval', 'Veganush Frnzyan', 'Veronica Arevalo', 
-                            'Veronica Rodriguez Sifontes', 'Veronica Viramontes', 'Victor Castaneda', 'Victoria Maldonado', 
-                            'Wendy Jasso', 'Wendy Marrero', 'Wendy Mora', 'Xiaowei Wei', 
-                            'Yasmin Lilly', 'Yesenia Duran', 'Yesenia Enriquez', 'Yolanda Hashimoto', 
-                            'Young Choy', 'Yuriko Jung', 'Zina Dixon'
+                            "Adalid Sanchez Rodriguez", "Adrian Irvine", "Adriana Gomez", "Adriana Ojeda",
+                            "Agnes Lewis", "Alberto Solorzano", "Alicia Cerna", "Alyson Han",
+                            "Amber Mastroianni", "Amber Trudgeon", "Ancelmo Ramos", "Andrea Chagoya",
+                            "Andrea Douglas", "Andreina Morales", "Angel Gamino", "Angela Lopez",
+                            "Anna Quezada", "Anthony Morales", "Anthony Zarate", "Araksya Manukyan",
+                            "Avia Greene-Vanburen", "Aya Shigenaga", "Baharak Saadat Beheshti", "Barry Blisten",
+                            "Beatris Segura", "Bennett Winter", "Bernice Grewell-Godinez", "Beverly Junio-Magee",
+                            "Bienvenido Pineda", "Brigette Pena", "Carmen Fuentes", "Charles Izuakor",
+                            "Cherie Lebron", "Chevon Booker", "Chinedu Ezeh", "Christa Mcmullin",
+                            "Christina Clark", "Christina Sithole", "Christine Choi", "Claire Daigle",
+                            "Claudia Franco", "Connie Gracia-Barraza", "Crystal Mendez", "Crystal Rivera",
+                            "Cynthia Barrilleaux", "Cynthia Bitterman", "Cynthia Timm", "D.m. Grant",
+                            "Dana Fikes", "Dawn Sebastian", "Dawnise Francisco", "Debora Wechsler",
+                            "Diana Olivas", "Dominique Harris", "Dora Marquez", "Douglas Klaif",
+                            "Douglas Reisgen", "Dulce Bacon", "Eberardo Rodriguez", "Edith Braswell-Grant",
+                            "Edith Janec", "Efren Rodriguez", "Eileen Alcorn", "Eimi Miller",
+                            "Elisabeth Mullins Medina", "Elizabeth Elizalde", "Elizabeth Romero",
+                            "Emily Wassler", "Emir Gonzalez", "Enas Makar", "Eric Hopson",
+                            "Erica Sanchez", "Erika Paz", "Ester Yang", "Evelyn Mcfarlane",
+                            "Farhad Mahmud", "Frances Morales", "Freshta Sidiqi", "Gavriela Trujillo",
+                            "Gene Dean", "Genesis Aguirre", "Gina Go", "Glenda Tamay",
+                            "Guillermo Diaz", "Gustavo Lopez", "Hamilton Gernon Wyatt", "Hector Martinez",
+                            "Hina Ahmad", "Ida Quijada", "Iliana Quintero", "Indira Ortiz",
+                            "Irma Griffiths", "Irma Salas", "Irma Torres", "Isidro Castillo",
+                            "Ivy Grace Thorne", "Jacqueline Cruz", "Jakeisha Sanders", "Jamall Farr",
+                            "Janet Frnzyan", "Jasmin Segovia", "Javier Ponce Garcia", "Jeanne Garcia-Armstrong",
+                            "Jehisol Urbina", "Jennifer Washington", "Jenny Peterson", "Jereme Stark",
+                            "Jhun De Guzman", "Jiabei Li", "Jittima Bouillot", "John Kuykendall",
+                            "Jordan Gonzalez", "Jorge Torres", "Jose Alvarenga", "Jose Hernandez",
+                            "Jose Romero", "Joseph Thomas", "Joseph Zeccola", "Joshua Griffiths",
+                            "Joy Kasper", "Juan Pina", "Julia Calamandrei", "Julian Mendez",
+                            "Julianne Fassett", "Julie Ann Resurreccion", "Julie Sornberger", "Karen Caruso",
+                            "Karina Maravilla", "Karsina Gaither", "Kelsie Hogen", "Kelvin Means",
+                            "Kerry Shimizu", "Kevin Seegan", "Kimberly Rabas", "Kionna Hawkins",
+                            "Kristalyn Smith", "Kristy Beaudry", "La Tresha Glasco", "Lanette Black",
+                            "Laura Incelli", "Laveda Harris", "Lawrence Ramos", "Leslie Anderson",
+                            "Leslie Black", "Leslie Perez", "Leticia Gudino", "Liberty Amos",
+                            "Lila Rosas Madrigal", "Liliana Amezcua", "Liliana Jauregui-George", "Lilit Akilian",
+                            "Linda Hoang", "Linda Taylor", "Lisa Darbidian", "Lisa Harvey",
+                            "Lisa Marks", "Luciano Latini", "Ma Teresa Aki", "Maeli Montecinos",
+                            "Maikai Finnell", "Malika Ferrell", "Malina Rios", "Mandana Saidi",
+                            "Maria Aldave Cabrera", "Maria Hernandez", "Maria Pinto", "Maria Zamora",
+                            "Marianne Valencia", "Marie Bennett", "Marissa Gilmore", "Marites Felicilda",
+                            "Mark Todd", "Marla Pizzuto", "Marlene Yu", "Mary Jane Opoku",
+                            "Matthew Miller", "Mayra Alcantar", "Mayra Rodarte-Nava", "Melinda Duran",
+                            "Michael Juarez", "Michelle Lopez", "Miguel Agredano", "Miisha Davis",
+                            "Nancy Madrid", "Naomi Kaidin", "Nayeli Meza Amaral", "Nicole Douglass",
+                            "Nora Watanabe", "Nune Mc Combs", "Oscar Montenegro", "Paola Martinez",
+                            "Patricia Castillo", "Patricia Chavez", "Patrick Navas", "Paula Dominguez",
+                            "Paulette Shelley", "Praveen Ray", "Rana Khan", "Raquel Huerta",
+                            "Rebeca Chaidez", "Rene Gaudet", "Rhory Rebellon", "Rick Swanson",
+                            "Robert Jones", "Robert Moose", "Robin Aaron", "Rodolfo Gutierrez",
+                            "Rosalina Pacheco", "Rosalyn Lee", "Rosemarie Fagfoomsintu", "Ross Kramer",
+                            "Sabrina Sheikh", "Sallyann Tejeda", "Salvador Magana-Arriola", "Sandra Hernandez",
+                            "Sandra Valdivia", "Sandy Estrada", "Sandy Walker", "Sara Goico Alcantar",
+                            "Senisa Austin", "Shannon Sayer", "Sharon Maculada", "Shawn Hall",
+                            "Sherita Rogers", "Sheveeta Jackson", "Silvia Sanchez", "Sofia Manzo-Reyes",
+                            "Sofia Vasserman", "Stacey Byham", "Stacey Williams", "Staci Holmes",
+                            "Stacy Orosco", "Stephanie Harlow", "Stephen Maccarone", "Steven Vitela",
+                            "Suhjung Ko", "Susan Deloach", "Susan Nolan", "Susana Mislang",
+                            "Susana Santa Cruz", "Susanna Garcia", "Tacy Schull", "Tamryn Wilkins",
+                            "Tarah Bagadiong-Trice", "Tiffanie Griffin", "Tiffany Vojkovich", "Toby Sperber",
+                            "Troy Poe", "Valerie De La Rosa", "Valerie Hoggard", "Vanessa Sandoval",
+                            "Veganush Frnzyan", "Veronica Arevalo", "Veronica Viramontes", "Victor Castaneda",
+                            "Victoria Maldonado", "Wendy Jasso", "Wendy Marrero", "Wendy Mora",
+                            "Xiaowei Wei", "Yasmin Lilly", "Yesenia Enriquez", "Yolanda Hashimoto",
+                            "Young Choy", "Zarui Grigoryan", "Zina Dixon"
                         ];
                         employees.forEach((emp, eIdx) => {
                             document.write(`<tr>`);
@@ -271,33 +260,54 @@
         let allEmployees = [];
 
         async function init() {
-            // Load custom/placeholder data first
-            const plannerData = await fetchPlannerData(PERSISTENCE_KEY, 1);
-            
             // Load all tracking data in parallel
-            const [hoursData, approvalData, paylogData, dbNames] = await Promise.all([
+            const [hoursData, approvalData, paylogData] = await Promise.all([
                 fetchHoursWorked(),
                 fetchApprovalDates(),
-                fetchPaylogSubmissions(),
-                fetchAllTrackingNames()
+                fetchPaylogSubmissions()
             ]);
 
+            // Load custom/placeholder data
+            const plannerData = await fetchPlannerData(PERSISTENCE_KEY, 1);
+            
+            // Extract all names from the fetched data
+            const dbNames = new Set();
+            hoursData.forEach(r => { if (r.name) dbNames.add(r.name); });
+            approvalData.forEach(r => { if (r.Name) dbNames.add(r.Name); });
+            paylogData.forEach(r => { if (r.name) dbNames.add(r.name); });
+
             // Merge hardcoded employees with any new names from DB
-            const nameSet = new Set(employees);
-            dbNames.forEach(name => nameSet.add(name));
+            const toTitleCase = (str) => {
+                if (!str) return '';
+                return str.split(' ').map(word => {
+                    if (word.includes('-')) {
+                        return word.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('-');
+                    }
+                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                }).join(' ');
+            };
+
+            const nameSet = new Set(employees.map(toTitleCase));
+            dbNames.forEach(name => nameSet.add(toTitleCase(name)));
             allEmployees = [...nameSet].sort();
 
             // Re-render table rows if names changed or to ensure consistency
             renderTableRows();
 
             const hoursMap = {};
-            hoursData.forEach(row => hoursMap[row.name] = row);
+            hoursData.forEach(row => {
+                if (row.name) hoursMap[row.name.toLowerCase()] = row;
+            });
 
             const approvalMap = {};
-            approvalData.forEach(row => approvalMap[row.Name] = row);
+            approvalData.forEach(row => {
+                if (row.Name) approvalMap[row.Name.toLowerCase()] = row;
+            });
 
             const paylogMap = {};
-            paylogData.forEach(row => paylogMap[row.name] = row);
+            paylogData.forEach(row => {
+                if (row.name) paylogMap[row.name.toLowerCase()] = row;
+            });
 
             // Populate custom data
             plannerData.forEach(item => {
@@ -313,7 +323,8 @@
                 if (parts[1] === 'total') {
                     const eIdx = parseInt(parts[2]);
                     const empName = allEmployees[eIdx];
-                    const row = hoursMap[empName];
+                    if (!empName) return;
+                    const row = hoursMap[empName.toLowerCase()];
                     if (row && row.total !== undefined && row.total !== null) {
                         cell.innerText = row.total;
                     }
@@ -322,22 +333,24 @@
                     const eIdx = parseInt(parts[2]);
                     const type = parts[3];
                     const empName = allEmployees[eIdx];
+                    if (!empName) return;
                     const monthName = months[mIdx].split(' ')[0];
+                    const lowerEmpName = empName.toLowerCase();
 
                     if (type === 'hours') {
-                        const row = hoursMap[empName];
+                        const row = hoursMap[lowerEmpName];
                         if (row) {
                             const val = row[monthName.toLowerCase().substring(0, 3)];
                             if (val !== undefined && val !== null) cell.innerText = val;
                         }
                     } else if (type === 'approval') {
-                        const row = approvalMap[empName];
+                        const row = approvalMap[lowerEmpName];
                         if (row) {
                             const val = row[monthName.substring(0, 3)];
                             if (val !== undefined && val !== null) cell.innerText = val;
                         }
                     } else if (type === 'paylog') {
-                        const row = paylogMap[empName];
+                        const row = paylogMap[lowerEmpName];
                         if (row) {
                             const val = row[monthName.toLowerCase().substring(0, 3)];
                             if (val !== undefined && val !== null) cell.innerText = val;

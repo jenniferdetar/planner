@@ -138,6 +138,15 @@
             flex-shrink: 0;
             margin-top: 5px;
             background-color: #fff9f0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--mantra-green);
+        }
+        .checkbox-box.checked::after {
+            content: "✓";
         }
         .manifesto-text {
             font-size: 1.1rem;
@@ -304,7 +313,33 @@
 
         async function init() {
             loadFeatured();
+            loadManifestoState();
             loadMantras();
+            setupManifestoListeners();
+        }
+
+        async function loadManifestoState() {
+            const data = await fetchPlannerData(PERSISTENCE_KEY);
+            document.querySelectorAll('.manifesto-item').forEach((item, idx) => {
+                const state = data.find(d => d.field_id === `manifesto-${idx}`);
+                if (state && state.content === 'true') {
+                    item.querySelector('.checkbox-box').classList.add('checked');
+                }
+            });
+        }
+
+        function setupManifestoListeners() {
+            document.querySelectorAll('.manifesto-item').forEach((item, idx) => {
+                const checkbox = item.querySelector('.checkbox-box');
+                checkbox.addEventListener('click', async () => {
+                    checkbox.classList.toggle('checked');
+                    const isChecked = checkbox.classList.contains('checked');
+                    const status = document.getElementById('save-status');
+                    status.innerText = 'Saving...';
+                    const success = await savePlannerData(PERSISTENCE_KEY, `manifesto-${idx}`, isChecked.toString());
+                    status.innerText = success ? 'All changes saved' : 'Error saving';
+                });
+            });
         }
 
         async function loadFeatured() {

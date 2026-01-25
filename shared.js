@@ -366,20 +366,37 @@ async function saveTrackingData(table, name, month, value) {
     
     const nameCol = (table === 'hours_worked' || table === 'paylog_submission') ? 'name' : 'Name';
     
-    // Try update first
-    const { data: updateData, error: updateError } = await client
+    // 1. Try exact match first
+    let { data: existingData, error: fetchError } = await client
         .from(table)
-        .update({ [col]: value })
-        .eq(nameCol, name)
-        .select();
+        .select('*')
+        .eq(nameCol, name);
 
-    if (updateError) {
-        console.error(`Error updating ${table}:`, updateError);
-        return false;
+    // 2. If no exact match, try case-insensitive match (using ilike)
+    if (!fetchError && (!existingData || existingData.length === 0)) {
+        const { data: ciData, error: ciError } = await client
+            .from(table)
+            .select('*')
+            .ilike(nameCol, name);
+        if (!ciError && ciData && ciData.length > 0) {
+            existingData = ciData;
+        }
     }
 
-    // If no rows were updated, it means the record doesn't exist, so insert it
-    if (!updateData || updateData.length === 0) {
+    if (existingData && existingData.length > 0) {
+        // Update the existing record (use the exact name from the DB to be safe)
+        const dbName = existingData[0][nameCol];
+        const { error: updateError } = await client
+            .from(table)
+            .update({ [col]: value })
+            .eq(nameCol, dbName);
+        
+        if (updateError) {
+            console.error(`Error updating ${table}:`, updateError);
+            return false;
+        }
+    } else {
+        // Insert new record
         const { error: insertError } = await client
             .from(table)
             .insert({ [nameCol]: name, [col]: value });
