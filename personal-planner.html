@@ -746,20 +746,23 @@
                 const timedEvents = dayEvents.filter(e => e.time);
 
                 // Auto-populate financial line if "Due" events exist
-                const dueList = [];
-                console.log(`Processing day: ${dayStr}, Events found: ${dayEvents.length}`);
+                let totalFinancial = 0;
+                let foundBills = false;
                 dayEvents.forEach(e => {
                     const titleLower = e.title.toLowerCase().trim();
-                    console.log(`  Checking event: "${e.title}"`);
                     Object.keys(billAmounts).forEach(bill => {
                         const billLower = bill.toLowerCase().trim();
                         if (titleLower.includes(billLower)) {
-                            console.log(`    Matched bill: ${bill}`);
-                            dueList.push(billAmounts[bill]);
+                            foundBills = true;
+                            const amountStr = billAmounts[bill].replace(/[$,]/g, '');
+                            const amount = parseFloat(amountStr);
+                            if (!isNaN(amount)) {
+                                totalFinancial += amount;
+                            }
                         }
                     });
                 });
-                const autoFinancial = dueList.join(', ');
+                const autoFinancial = foundBills ? '$' + totalFinancial.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
                 if (autoFinancial) console.log(`Auto-financial result for ${dayStr}: ${autoFinancial}`);
 
                 const dayHtml = `
