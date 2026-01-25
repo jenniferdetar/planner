@@ -213,6 +213,7 @@
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
     </header>
     <div class="container">
         <div class="notebook-page">
@@ -392,6 +393,18 @@
             return isInquiry ? 'Inquiry' : 'Grievance';
         }
         function createInteractionRow(inter, type) {
+            // Move specific long messages to the outcome column if they are in contact_person
+            const stringsToShift = [
+                "When the seniority list gets printed, it has to be checked multiple times by different departments (some are short-staffed) to make sure all of our members are accounted for. These reports go to Letetsia first to review, and she catches many of the mistakes that appear",
+                "District does not offer Golden Handshakes",
+                "No lays off are happening, just involuntary movements"
+            ];
+
+            if (stringsToShift.includes(inter.contact_person)) {
+                inter.outcome = inter.contact_person;
+                inter.contact_person = '';
+            }
+
             const tr = document.createElement('tr');
             tr.id = `inter-${inter.id}`;
             const reps = [inter.contact_person, inter.labor_rep].filter(Boolean).join(' / ');

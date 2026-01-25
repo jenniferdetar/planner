@@ -68,14 +68,6 @@ CREATE TABLE IF NOT EXISTS csea_stewards (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- CSEA Issues Reference
-CREATE TABLE IF NOT EXISTS csea_issues (
-    id SERIAL PRIMARY KEY,
-    issue_name TEXT NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
 -- School Directory Reference
 CREATE TABLE IF NOT EXISTS school_directory (
     id SERIAL PRIMARY KEY,
@@ -87,17 +79,14 @@ CREATE TABLE IF NOT EXISTS school_directory (
 -- Enable RLS for new tables
 ALTER TABLE csea_members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE csea_stewards ENABLE ROW LEVEL SECURITY;
-ALTER TABLE csea_issues ENABLE ROW LEVEL SECURITY;
 ALTER TABLE school_directory ENABLE ROW LEVEL SECURITY;
 
 -- Public read access for references
 CREATE POLICY "Allow public read members" ON csea_members FOR SELECT TO public USING (true);
 CREATE POLICY "Allow public read stewards" ON csea_stewards FOR SELECT TO public USING (true);
-CREATE POLICY "Allow public read issues" ON csea_issues FOR SELECT TO public USING (true);
 CREATE POLICY "Allow public read schools" ON school_directory FOR SELECT TO public USING (true);
 
 -- Allow public insert for setup/management
 CREATE POLICY "Allow public insert members" ON csea_members FOR INSERT TO public WITH CHECK (true);
 CREATE POLICY "Allow public insert stewards" ON csea_stewards FOR INSERT TO public WITH CHECK (true);
-CREATE POLICY "Allow public insert issues" ON csea_issues FOR INSERT TO public WITH CHECK (true);
 CREATE POLICY "Allow public insert schools" ON school_directory FOR INSERT TO public WITH CHECK (true);

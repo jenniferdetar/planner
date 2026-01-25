@@ -177,6 +177,7 @@
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
     </header>
     <div class="container">
         <div class="notebook-page">
@@ -204,33 +205,6 @@
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
-        const logBody = document.getElementById('interaction-log-body');
-        // Reference Data
-        let cachedMembers = [];
-        async function populateDatalists() {
-            const [members, stewards, issues, schools] = await Promise.all([
-                fetchCseaMembers(),
-                fetchCseaStewards(),
-                fetchCseaIssues(),
-                fetchSchoolDirectory()
-            ]);
-            cachedMembers = members;
-            const membersList = document.getElementById('members-list');
-            membersList.innerHTML = members.map(m => `<option value="${m.name}">`).join('');
-            const stewardsList = document.getElementById('stewards-list');
-            stewardsList.innerHTML = stewards.map(s => `<option value="${s.name}">`).join('');
-            const issuesList = document.getElementById('issues-list');
-            issuesList.innerHTML = issues.map(i => `<option value="${i.issue_name}">`).join('');
-            const schoolsList = document.getElementById('schools-list');
-            schoolsList.innerHTML = schools.map(s => `<option value="${s.site_name}">`).join('');
-        }
-        document.getElementById('log-member').addEventListener('input', (e) => {
-            const memberName = e.target.value;
-            const member = cachedMembers.find(m => m.name === memberName);
-            if (member && member.work_location) {
-                document.getElementById('log-location').value = member.work_location;
-            }
-        });
         function createEntryElement(entry) {
             const div = document.createElement('div');
             div.className = 'note-entry';
@@ -275,7 +249,6 @@
         }
         // Initialize
         loadEntries();
-        populateDatalists();
     </script>
 </body>
 </html>

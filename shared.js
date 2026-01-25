@@ -18,16 +18,25 @@ async function fetchPlannerData(startDate, days = 7) {
         console.error('Supabase client not initialized');
         return [];
     }
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + (days - 1));
-    const startStr = startDate instanceof Date ? startDate.toISOString().split('T')[0] : startDate;
-    const endStr = endDate.toISOString().split('T')[0];
 
-    const { data, error } = await client
-        .from('work_planner_edits')
-        .select('date_key, slot_key, value')
-        .gte('date_key', startStr)
-        .lte('date_key', endStr);
+    let query = client.from('work_planner_edits').select('date_key, slot_key, value');
+
+    // Determine if startDate is a specific date or a generic persistence key
+    const isDateString = typeof startDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(startDate);
+    const isDateObject = startDate instanceof Date;
+
+    if (isDateString || isDateObject) {
+        const startStr = isDateObject ? startDate.toISOString().split('T')[0] : startDate;
+        const endDate = new Date(startStr);
+        endDate.setDate(endDate.getDate() + (days - 1));
+        const endStr = endDate.toISOString().split('T')[0];
+        query = query.gte('date_key', startStr).lte('date_key', endStr);
+    } else {
+        // Treat as a literal persistence key (e.g., 'icaap-tracking-data', '2026-planning')
+        query = query.eq('date_key', startDate);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         console.error('Error fetching planner data:', error);
@@ -306,8 +315,25 @@ async function fetchCseaStewards() {
 async function fetchCseaIssues() {
     const client = getSupabase();
     if (!client) return [];
-    const { data } = await client.from('csea_issues').select('*').order('issue_name');
-    return data || [];
+    
+    // Combine logic: Get unique discussion topics from member_interactions
+    const { data, error } = await client
+        .from('member_interactions')
+        .select('discussion')
+        .not('discussion', 'is', null)
+        .order('discussion');
+    
+    if (error) {
+        console.error('Error fetching issues from interactions:', error);
+        return [];
+    }
+    
+    // Filter for unique, non-empty values and map to issue_name format
+    const uniqueDiscussions = [...new Set(data.map(i => i.discussion.trim()))]
+        .filter(d => d.length > 0)
+        .map(d => ({ issue_name: d }));
+        
+    return uniqueDiscussions;
 }
 
 async function fetchSchoolDirectory() {
@@ -331,9 +357,10 @@ function updateNavigationLinks(date) {
         'planning.html',
         'monthly-review.html',
         'check-breakdown.html',
-        'icaap-tracking.html'
+        'icaap-tracking.html',
+        'mantra.html'
     ];
-    document.querySelectorAll('a.nav-link, a.nav-btn').forEach(link => {
+    document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill').forEach(link => {
         const href = link.getAttribute('href');
         if (href) {
             const base = href.split('?')[0];

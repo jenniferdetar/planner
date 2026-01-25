@@ -13,7 +13,6 @@ const tables = [
     'member_interactions',
     'csea_members',
     'csea_stewards',
-    'csea_issues',
     'school_directory'
 ];
 

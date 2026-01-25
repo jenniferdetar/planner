@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantra - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --header-blue: #00326b;
+            --mantra-green: #4f7942;
+            --soft-bg: #fdfcf0;
+            --border-color: #ddd;
+        }
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .global-header {
+            background: #00326b;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            min-height: 800px;
+            border-radius: 8px;
+            background-image: linear-gradient(#f1f1f1 1px, transparent 1px);
+            background-size: 100% 30px;
+            position: relative;
+        }
+        .notebook-page::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50px;
+            width: 2px;
+            height: 100%;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        .page-title {
+            color: var(--mantra-green);
+            font-family: 'Indie Flower', cursive;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: none;
+        }
+        .featured-section {
+            background-color: var(--soft-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 1px dashed var(--mantra-green);
+            position: relative;
+        }
+        .featured-label {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: white;
+            padding: 0 10px;
+            color: var(--mantra-green);
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .featured-mantra-text {
+            font-family: 'Indie Flower', cursive;
+            font-size: 2.2rem;
+            line-height: 1.2;
+            color: #333;
+            outline: none;
+            min-height: 1em;
+        }
+        .section-title {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .input-group {
+            margin-bottom: 30px;
+            background: #fff;
+            padding: 10px 10px 10px 60px;
+        }
+        .mantra-input {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            font-family: 'Coming Soon', cursive;
+            font-size: 1.2rem;
+            padding: 10px 0;
+            outline: none;
+            background: transparent;
+        }
+        .add-btn {
+            background-color: var(--mantra-green);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            margin-top: 10px;
+            float: right;
+        }
+        .mantras-list {
+            margin-top: 40px;
+            padding-left: 60px;
+        }
+        .mantra-item {
+            margin-bottom: 20px;
+            position: relative;
+            padding-right: 40px;
+        }
+        .mantra-text {
+            font-size: 1.3rem;
+            line-height: 30px; /* Match background-size */
+            color: #444;
+        }
+        .mantra-date {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        .delete-btn {
+            position: absolute;
+            right: 0;
+            top: 5px;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 0.8rem;
+        }
+        .delete-btn:hover {
+            color: #cc0000;
+        }
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.75rem;
+            color: #666;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="hoa.html" class="nav-link">HOA</a>
+        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
+
+    <div id="save-status" class="save-status">All changes saved</div>
+
+    <div class="container">
+        <div class="notebook-page">
+            <h1 class="page-title">Daily Mantras</h1>
+
+            <div class="featured-section">
+                <div class="featured-label">Core Focus</div>
+                <div id="featured-mantra" class="featured-mantra-text" contenteditable="true" oninput="handleFeaturedSave()">
+                    Quiet the mind, and the soul will speak.
+                </div>
+            </div>
+
+            <div class="section-title">Collection</div>
+            
+            <div class="input-group">
+                <input type="text" id="new-mantra" class="mantra-input" placeholder="Enter a new mantra..." onkeypress="if(event.key==='Enter')handleAddMantra()">
+                <button class="add-btn" onclick="handleAddMantra()">Add to Collection</button>
+            </div>
+
+            <div id="mantras-list" class="mantras-list">
+                <!-- Mantras will load here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CATEGORY = 'Mantra';
+        const FEATURED_KEY = 'featured-mantra';
+        const PERSISTENCE_KEY = 'mantra-data';
+        let saveTimeout;
+
+        async function init() {
+            loadFeatured();
+            loadMantras();
+        }
+
+        async function loadFeatured() {
+            const data = await fetchPlannerData(PERSISTENCE_KEY);
+            const featured = data.find(d => d.field_id === FEATURED_KEY);
+            if (featured) {
+                document.getElementById('featured-mantra').innerText = featured.content;
+            }
+        }
+
+        async function handleFeaturedSave() {
+            const content = document.getElementById('featured-mantra').innerText;
+            const status = document.getElementById('save-status');
+            status.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                status.innerText = 'Saving...';
+                const success = await savePlannerData(PERSISTENCE_KEY, FEATURED_KEY, content);
+                status.innerText = success ? 'All changes saved' : 'Error saving';
+            }, 1000);
+        }
+
+        async function loadMantras() {
+            const entries = await fetchCategoryEntries(CATEGORY);
+            const list = document.getElementById('mantras-list');
+            list.innerHTML = '';
+            entries.forEach(entry => {
+                list.appendChild(createMantraElement(entry));
+            });
+        }
+
+        function createMantraElement(entry) {
+            const div = document.createElement('div');
+            div.className = 'mantra-item';
+            div.id = `mantra-${entry.id}`;
+            div.innerHTML = `
+                <div class="mantra-date">${formatDate(entry.created_at)}</div>
+                <div class="mantra-text">${entry.content}</div>
+                <span class="delete-btn" onclick="handleDeleteMantra(${entry.id})">Delete</span>
+            `;
+            return div;
+        }
+
+        async function handleAddMantra() {
+            const input = document.getElementById('new-mantra');
+            const content = input.value.trim();
+            if (!content) return;
+
+            const status = document.getElementById('save-status');
+            status.innerText = 'Saving...';
+            const newEntry = await saveCategoryEntry(CATEGORY, content);
+            if (newEntry) {
+                input.value = '';
+                status.innerText = 'Saved';
+                document.getElementById('mantras-list').prepend(createMantraElement(newEntry));
+                setTimeout(() => { status.innerText = 'All changes saved'; }, 2000);
+            }
+        }
+
+        async function handleDeleteMantra(id) {
+            if (confirm('Delete this mantra?')) {
+                const success = await deleteCategoryEntry(id);
+                if (success) {
+                    document.getElementById(`mantra-${id}`).remove();
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

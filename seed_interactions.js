@@ -86,8 +86,9 @@ const interactions = [
         work_location: 'John B Monlux Elementary',
         discussion: 'Lay offs',
         who_involved: '',
-        contact_person: 'No lays off are happening, just involuntary movements',
-        point_of_contact: ''
+        contact_person: '',
+        point_of_contact: '',
+        outcome: 'No lays off are happening, just involuntary movements'
     },
     {
         category: 'CSEA',
@@ -96,8 +97,9 @@ const interactions = [
         work_location: 'Beaudry',
         discussion: 'If LAUSD is considering offering a Golden Handshake for early retirement next year',
         who_involved: 'Emailed Benefits',
-        contact_person: 'District does not offer Golden Handshakes',
-        point_of_contact: ''
+        contact_person: '',
+        point_of_contact: '',
+        outcome: 'District does not offer Golden Handshakes'
     },
     {
         category: 'CSEA',
@@ -126,8 +128,9 @@ const interactions = [
         work_location: 'Beaudry',
         discussion: 'Seniority List',
         who_involved: '',
-        contact_person: 'When the seniority list gets printed, it has to be checked multiple times by different departments (some are short-staffed) to make sure all of our members are accounted for. These reports go to Letetsia first to review, and she catches many of the mistakes that appear',
-        point_of_contact: ''
+        contact_person: '',
+        point_of_contact: '',
+        outcome: 'When the seniority list gets printed, it has to be checked multiple times by different departments (some are short-staffed) to make sure all of our members are accounted for. These reports go to Letetsia first to review, and she catches many of the mistakes that appear'
     },
     {
         category: 'CSEA',

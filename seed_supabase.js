@@ -28,7 +28,25 @@ lines.forEach(line => {
     const year = '20' + dateParts[2]; // assuming 26/27 are 2026/2027
     const dateStr = `${year}-${month}-${day}`;
     
-    events.push({ date: dateStr, title });
+    const event = { date: dateStr, title };
+
+    // Add time if present
+    if (parts.length >= 3 && parts[2].trim()) {
+        const timeStr = parts[2].trim();
+        const timeMatch = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (timeMatch) {
+            let hours = parseInt(timeMatch[1]);
+            const minutes = timeMatch[2];
+            const ampm = timeMatch[3].toUpperCase();
+            
+            if (ampm === 'PM' && hours < 12) hours += 12;
+            if (ampm === 'AM' && hours === 12) hours = 0;
+            
+            event.time = `${hours.toString().padStart(2, '0')}:${minutes}:00`;
+        }
+    }
+    
+    events.push(event);
 });
 
 // 2. Add "Jennifer's Paycheck" (8th/23rd logic) for 2026

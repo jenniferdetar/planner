@@ -78,14 +78,21 @@
             background-color: var(--table-green);
             color: white;
         }
-        .month-col {
+        .month-header {
+            min-width: 150px;
+        }
+        .employee-col {
             background-color: #f9f9f9;
             font-weight: bold;
             text-align: left;
-            min-width: 100px;
-        }
-        .employee-col {
             min-width: 150px;
+            position: sticky;
+            right: 0;
+            border-left: 2px solid var(--border-color);
+        }
+        .header-row .employee-col {
+            background-color: var(--table-green);
+            z-index: 10;
         }
         .sub-header {
             font-size: 9px;
@@ -122,30 +129,36 @@
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
     </header>
     <div id="save-status" class="save-status">All changes saved</div>
     <div class="container">
         <div class="notebook-page">
-            <h1 class="page-title">iCAAP Tracking Log</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h1 class="page-title" style="margin-bottom: 0; border-bottom: none;">iCAAP Tracking Log</h1>
+                <a href="icaap.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue);">
+                    <span>📝</span> iCAAP Notes
+                </a>
+            </div>
+            <div style="border-bottom: 2px solid var(--header-blue); margin-bottom: 20px;"></div>
             <table class="tracking-table">
                 <thead>
                     <tr class="header-row">
-                        <th rowspan="2" class="month-col">Month</th>
                         <script>
-                            const employees = [
-                                'Brian Wanta', 'Elizabeth Leones', 'Ernie Cadena', 'Esmeralda Flores', 
-                                'Ester Cid', 'Isabel Ramierz', 'Jennifer Burbank', 'Jerri Paley-Hayashi', 
-                                'Mary Rose Charazrian', 'Mary Rose Ghazarian', 'Norma Fuentes', 
-                                'Roberta Barrera', 'Sindy Banuelos', 'Triny', 'Victor Lopez'
+                            const months = [
+                                'July 2025', 'August 2025', 'September 2025', 'October 2025', 
+                                'November 2025', 'December 2025', 'January 2026', 'February 2026', 
+                                'March 2026', 'April 2026', 'May 2026', 'June 2026'
                             ];
-                            employees.forEach(emp => {
-                                document.write(`<th colspan="3" class="employee-col">${emp}</th>`);
+                            months.forEach(month => {
+                                document.write(`<th colspan="3" class="month-header">${month}</th>`);
                             });
+                            document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
                         </script>
                     </tr>
                     <tr class="sub-header">
                         <script>
-                            employees.forEach(emp => {
+                            months.forEach(month => {
                                 document.write(`<th>Paylog Sub.</th><th>Hours</th><th>Approval</th>`);
                             });
                         </script>
@@ -153,20 +166,95 @@
                 </thead>
                 <tbody id="tracking-body">
                     <script>
-                        const months = [
-                            'July 2025', 'August 2025', 'September 2025', 'October 2025', 
-                            'November 2025', 'December 2025', 'January 2026', 'February 2026', 
-                            'March 2026', 'April 2026', 'May 2026', 'June 2026'
+                        const employees = [
+                            'Robin Aaron', 'Tanya Acosta', 'Kristine Adams', 'Miguel Agredano', 'Pedro Aguilar', 
+                            'Genesis Aguirre', 'Hina Ahmad', 'Ma Teresa Aki', 'Lilit Akilian', 'Mayra Alcantar', 
+                            'Eileen Alcorn', 'Maria Aldave Cabrera', 'Jose Alvarenga', 'Liliana Amezcua', 
+                            'Liberty Amos', 'Leslie Anderson', 'Veronica Arevalo', 'Alexander Aston', 
+                            'Senisa Austin', 'Dulce Bacon', 'Tarah Bagadiong Trice', 'Jordan Baldry', 
+                            'Deanna Baldwin', 'Gladys Barbosa', 'Cynthia Barrilleaux', 'Cecille Basilio', 
+                            'Kristy Beaudry', 'Marie Bennett', 'Anthony Bernard', 'Cynthia Bitterman', 
+                            'Lanette Black', 'Leslie Black', 'Barry Blisten', 'Chevon Booker', 
+                            'Jittima Bouillot', 'Tonya Boyd', 'Ryan Boyes', 'Edith Braswell Grant', 
+                            'Ralph Bravo', 'Stacey Byham', 'Julia Calamandrei', 'Sandra Canela', 
+                            'Karen Caruso', 'Victor Castaneda', 'Isidro Castillo', 'Patricia Castillo', 
+                            'Juan Catalan', 'Alicia Cerna', 'Andrea Chagoya', 'Rebeca Chaidez', 
+                            'Elizabeth Chavez', 'Patricia Chavez', 'Christine Choi', 'Young Choy', 
+                            'Christina Clark', 'Scott Cody', 'Crystal Cohen', 'Alexis Contreras', 
+                            'Jacqueline Cruz', 'Louise Cummings', 'Claire Daigle', 'Lisa Darbidian', 
+                            'Miisha Davis', 'Rosanna Davisson', 'Valerie De La Rosa', 'Gene Dean', 
+                            'Ladan Dejam', 'Susan Deloach', 'Guillermo Diaz', 'Zina Dixon', 
+                            'Paula Dominguez', 'Andrea Douglas', 'Nicole Douglass', 'Paulette Duarte', 
+                            'Melinda Duran', 'Yesenia Duran', 'Elizabeth Elizalde', 'Yesenia Enriquez', 
+                            'Sandy Estrada', 'Chinedu Ezeh', 'Rosemarie Fagfoomsintu', 'Jamall Farr', 
+                            'Julianne Fassett', 'Marites Felicilda', 'Malika Ferrell', 'Dana Fikes', 
+                            'Maikai Finnell', 'Jeanine Flier', 'Dawnise Francisco', 'Claudia Franco', 
+                            'Deborah Francois', 'Veganush Frnzyan', 'Carmen Fuentes', 'Karsina Gaither', 
+                            'Jeanne Garcia Armstrong', 'Rene Gaudet', 'Hamilton Gernon Wyatt', 
+                            'Lailani Joy Gonzaga', 'Emir Gonzalez', 'Leticia Gudino', 'Ana Guevara', 
+                            'David Hadjichristodoulou', 'Shawn Hall', 'Alyson Han', 'Dalese Hardin', 
+                            'Stephanie Harlow', 'Dominique Harris', 'Laveda Harris', 'Lisa Harvey', 
+                            'Yolanda Hashimoto', 'Kionna Hawkins', 'Jose Hernandez', 'Maria Hernandez', 
+                            'Sandra Hernandez', 'Alice Hilal', 'Linda Hoang', 'Valerie Hoggard', 
+                            'Staci Holmes', 'Cassondra Holt Hightower', 'Eric Hopson', 'Raquel Huerta', 
+                            'Adrian Irvine', 'Charles Izuakor', 'Sheveeta Jackson', 'Wendy Jasso', 
+                            'Liliana Jauregui George', 'Robert Jones', 'Yuriko Jung', 'Beverly Junio Magee', 
+                            'Joy Kasper', 'Rana Khan', 'Suhjung Ko', 'Ross Kramer', 'Luciano Latini', 
+                            'Cherie Lebron', 'Janet Ledesma', 'Richard Lee', 'Rosalyn Lee', 
+                            'Agnes Lewis', 'Jiabei Li', 'Yasmin Lilly', 'Christopher Linares', 
+                            'Angela Lopez', 'Gustavo Lopez', 'Jennifer Lopez', 'Michelle Lopez', 
+                            'Stephen Maccarone', 'Sharon Maculada', 'Nancy Madrid', 'Farhad Mahmud', 
+                            'Enas Makar', 'Victoria Maldonado', 'Araksya Manukyan', 'Sofia Manzo Reyes', 
+                            'Karina Maravilla', 'Lisa Marks', 'Neta Markusfeld', 'Dora Marquez', 
+                            'Wendy Marrero', 'Amparo Martin', 'Marta Martin', 'Hector Martinez', 
+                            'Leticia Martinez', 'Liliana Martinez', 'Paola Martinez', 'Amber Mastroianni', 
+                            'Antoinette Matiga', 'Nune Mc Combs', 'Evelyn Mcfarlane', 'Christa Mcmullin', 
+                            'Kelvin Means', 'Crystal Mendez', 'Julian Mendez', 'Sandra Meredith', 
+                            'Erin Mettlen', 'Nayeli Meza Amaral', 'Sandra Mijarez', 'Aline Millan', 
+                            'Eimi Miller', 'Matthew Miller', 'Susana Mislang', 'Tatianika Montalbo', 
+                            'Maeli Montecinos', 'Oscar Montenegro', 'Robert Moose', 'Wendy Mora', 
+                            'Andreina Morales', 'Anthony Morales', 'Frances Morales', 'Shannon Moultrie', 
+                            'Elisabeth Mullins Medina', 'Patrick Navas', 'Susan Nolan', 'Ameel Noos', 
+                            'Danielle O\'conner', 'Sara O\'connor', 'Miriam Oguejiofor', 'Adriana Ojeda', 
+                            'Mary Jane Opoku', 'Indira Ortiz', 'Rosalina Pacheco', 'Jacqueline Palacios', 
+                            'Erica Pan', 'Erika Paz', 'Brigette Pena', 'Leslie Perez', 'Jenny Peterson', 
+                            'Juan Pina', 'Bienvenido Pineda', 'Maria Pinto', 'Marla Pizzuto', 
+                            'Troy Poe', 'Javier Ponce Garcia', 'Anna Quezada', 'Ida Quijada', 
+                            'Iliana Quintero', 'Kimberly Rabas', 'Ancelmo Ramos', 'Lawrence Ramos', 
+                            'Silvia Ramos', 'Praveen Ray', 'Ma Joanna Razon', 'Rhory Rebellon', 
+                            'Douglas Reisgen', 'Ruth Rendon', 'Julie Ann Resurreccion', 'Malina Rios', 
+                            'Crystal Rivera', 'Mayra Rodarte Nava', 'Veronica Rodriguez Sifontes', 
+                            'Eberardo Rodriguez', 'Efren Rodriguez', 'Sherita Rogers', 'Elizabeth Romero', 
+                            'Jose Romero', 'Melanie Ronning', 'Lila Rosas Madrigal', 'Baharak Saadat Beheshti', 
+                            'Mandana Saidi', 'Irma Salas', 'Daniel Saldana', 'Adalid Sanchez Rodriguez', 
+                            'Erica Sanchez', 'Silvia Sanchez', 'Jakeisha Sanders', 'Vanessa Sandoval', 
+                            'Susana Santa Cruz', 'Linda Santana', 'Adan Saucedo', 'Shannon Sayer', 
+                            'Tacy Schull', 'Palma Scirone', 'Dawn Sebastian', 'Kevin Seegan', 
+                            'Jasmin Segovia', 'Beatris Segura', 'Sabrina Sheikh', 'Paulette Shelley', 
+                            'Aya Shigenaga', 'Kerry Shimizu', 'Freshta Sidiqi', 'Karen Siercke Noriega', 
+                            'Christina Silva', 'Christina Sithole', 'Alberto Solorzano', 'Julie Sornberger', 
+                            'Toby Sperber', 'Jereme Stark', 'Barbara Stoliker', 'Sabrina Sullivan', 
+                            'Rick Swanson', 'Glenda Tamay', 'Linda Taylor', 'Sallyann Tejeda', 
+                            'Joseph Thomas', 'Tonya Thompson', 'Ivy Grace Thorne', 'Cynthia Timm', 
+                            'Mark Todd', 'Irma Torres', 'Jorge Torres', 'Gavriela Trujillo', 
+                            'Nicoli Ueda', 'Jehisol Urbina', 'Sandra Valdivia', 'Marianne Valencia', 
+                            'Sofia Vasserman', 'Emilee Velazco Franco', 'Tiffany Vojkovich', 
+                            'Sandy Walker', 'Jennifer Washington', 'Emily Wassler', 'Nora Watanabe', 
+                            'Debora Wechsler', 'Xiaowei Wei', 'Tamryn Wilkins', 'Stacey Williams', 
+                            'Amber Wilton', 'Bennett Winter', 'Ester Yang', 'Lucrecia Yescas Luna', 
+                            'Jeen Yu', 'Marlene Yu', 'Leslie Zamora', 'Maria Zamora', 'Anthony Zarate', 
+                            'Joseph Zeccola'
                         ];
-                        months.forEach((month, mIdx) => {
+                        employees.forEach((emp, eIdx) => {
                             document.write(`<tr>`);
-                            document.write(`<td class="month-col">${month}</td>`);
-                            employees.forEach((emp, eIdx) => {
+                            months.forEach((month, mIdx) => {
                                 ['paylog', 'hours', 'approval'].forEach(type => {
+                                    // Keep fieldId logic consistent with data (mIdx-eIdx)
                                     const fieldId = `icaap-${mIdx}-${eIdx}-${type}`;
                                     document.write(`<td class="editable-cell" contenteditable="true" data-field="${fieldId}"></td>`);
                                 });
                             });
+                            document.write(`<td class="employee-col">${emp}</td>`);
                             document.write(`</tr>`);
                         });
                     </script>
