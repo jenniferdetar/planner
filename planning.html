@@ -60,35 +60,40 @@
         }
         .planner-spread {
             display: flex;
-            gap: 40px;
+            flex-direction: column;
+            gap: 20px;
             width: 100%;
-            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
         }
         .notebook-page {
-            flex: 1;
-            min-width: 600px;
+            width: 100%;
             box-sizing: border-box;
             background: #fff;
-            padding: 60px;
+            padding: 40px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            min-height: 1100px;
+            min-height: auto;
+            margin-bottom: 20px;
+        }
+        .section-header {
+            text-align: left;
+            border-bottom: 2px solid var(--header-blue);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            color: var(--header-blue);
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         .page-header {
             text-align: center;
             margin-bottom: 40px;
         }
-        .subtitle {
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #888;
-            margin-bottom: 5px;
-        }
         .page-title {
-            font-size: 2.2rem;
-            color: #333;
+            font-size: 2.8rem;
+            color: var(--header-blue);
             margin: 0 0 15px 0;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             text-transform: uppercase;
         }
         .intro-text {
@@ -240,13 +245,14 @@
         <div class="planner-spread">
             <div class="notebook-page">
                 <div class="page-header">
-                    <div class="subtitle">Be Thoughtful</div>
                     <h1 class="page-title">Intentions & Dreams</h1>
                     <p class="intro-text">
                         What do you want to prioritize in your daily work when planning for the upcoming year?<br>
                         On the following pages, focus on your mission, vision, values, and purpose.
                     </p>
                 </div>
+
+                <div class="section-header">Be Thoughtful</div>
 
                 <div class="top-grid">
                     <div class="section-box">
@@ -345,17 +351,11 @@
                         <span>are depending on me!</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- Page 2: Take a Moment -->
-            <div class="notebook-page">
-                <div class="page-header">
-                    <div class="subtitle">Take a Moment</div>
-                    <h1 class="page-title">Intentions & Dreams</h1>
-                    <p class="intro-text">
-                        As you begin a new year, take a moment to reflect on what you enjoy most and dream big!
-                    </p>
-                </div>
+                <div class="section-header" style="margin-top: 60px;">Take a Moment</div>
+                <p class="intro-text" style="margin-bottom: 30px;">
+                    As you begin a new year, take a moment to reflect on what you enjoy most and dream big!
+                </p>
 
                 <div class="top-grid">
                     <div class="left-col">
