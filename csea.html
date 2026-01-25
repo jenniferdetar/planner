@@ -235,13 +235,16 @@
                     <table class="log-table">
                         <thead>
                             <tr>
-                                <th>Date Spoke with Member</th>
+                                <th>Date Spoke</th>
                                 <th>Member Name</th>
-                                <th>Member Work Location</th>
-                                <th>What was discussed</th>
-                                <th>Who was involved</th>
-                                <th>CSEA Contact Person</th>
-                                <th>Point of Contact</th>
+                                <th>#</th>
+                                <th>Type</th>
+                                <th>Member Number</th>
+                                <th>Site/Location</th>
+                                <th>Discussion/Concern</th>
+                                <th>Involved/Action</th>
+                                <th>Union Rep/Outcome</th>
+                                <th>Labor Rep</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -255,6 +258,15 @@
                                     <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
                                     <datalist id="members-list"></datalist>
                                 </td>
+                                <td></td>
+                                <td>
+                                    <select id="log-type" class="log-input">
+                                        <option value="Auto">Auto-Detect</option>
+                                        <option value="Grievance">Grievance</option>
+                                        <option value="Inquiry">Inquiry</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" id="log-number" class="log-input" placeholder="Number"></td>
                                 <td>
                                     <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
                                     <datalist id="schools-list"></datalist>
@@ -265,10 +277,10 @@
                                 </td>
                                 <td><input type="text" id="log-who" class="log-input" placeholder="Who involved"></td>
                                 <td>
-                                    <input type="text" id="log-contact" class="log-input" placeholder="Contact person" list="stewards-list">
+                                    <input type="text" id="log-contact" class="log-input" placeholder="Rep/Outcome" list="stewards-list">
                                     <datalist id="stewards-list"></datalist>
                                 </td>
-                                <td><input type="text" id="log-poc" class="log-input" placeholder="Point of contact"></td>
+                                <td><input type="text" id="log-labor-rep" class="log-input" placeholder="Labor Rep"></td>
                                 <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
                             </tr>
                         </tfoot>
@@ -283,7 +295,7 @@
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
-        const logBody = document.getElementById('interaction-log-body');
+        const interactionLogBody = document.getElementById('interaction-log-body');
 
         // Reference Data
         let cachedMembers = [];
@@ -311,13 +323,16 @@
             schoolsList.innerHTML = schools.map(s => `<option value="${s.site_name}">`).join('');
         }
 
-        document.getElementById('log-member').addEventListener('input', (e) => {
-            const memberName = e.target.value;
-            const member = cachedMembers.find(m => m.name === memberName);
-            if (member && member.work_location) {
-                document.getElementById('log-location').value = member.work_location;
-            }
-        });
+        const logMember = document.getElementById('log-member');
+        if (logMember) {
+            logMember.addEventListener('input', (e) => {
+                const memberName = e.target.value;
+                const member = cachedMembers.find(m => m.name === memberName);
+                if (member && member.work_location) {
+                    document.getElementById(`log-location`).value = member.work_location;
+                }
+            });
+        }
 
         function createEntryElement(entry) {
             const div = document.createElement('div');
@@ -370,37 +385,67 @@
         // Interaction Log Functions
         async function loadInteractions() {
             const interactions = await fetchInteractions(CATEGORY);
-            logBody.innerHTML = '';
+            interactionLogBody.innerHTML = '';
+            
+            let count = 1;
+            
             interactions.forEach(inter => {
-                logBody.appendChild(createInteractionRow(inter));
+                const type = detectType(inter);
+                interactionLogBody.appendChild(createInteractionRow(inter, type, count++));
             });
         }
 
-        function createInteractionRow(inter) {
+        function detectType(inter) {
+            // Priority: Explicitly saved type if it exists
+            if (inter.explicit_type) return inter.explicit_type;
+
+            // Heuristic based on discussion content
+            const discussion = (inter.discussion || '').toLowerCase();
+            const isInquiry = discussion.includes('lay off') || 
+                             discussion.includes('handshake') || 
+                             discussion.includes('salary study') || 
+                             discussion.includes('seniority') || 
+                             discussion.includes('fsa') || 
+                             discussion.includes('invoice') || 
+                             discussion.includes('lunch schedule') ||
+                             discussion.includes('benefits') ||
+                             discussion.includes('probation') ||
+                             discussion.includes('transfer') ||
+                             discussion.includes('vacation');
+            
+            return isInquiry ? 'Inquiry' : 'Grievance';
+        }
+
+        function createInteractionRow(inter, type, index) {
             const tr = document.createElement('tr');
             tr.id = `inter-${inter.id}`;
             tr.innerHTML = `
                 <td>${inter.date_spoke}</td>
                 <td>${inter.member_name}</td>
+                <td>${index || ''}</td>
+                <td><span style="color: ${type === 'Grievance' ? '#cc0000' : '#2d5a45'}; font-weight: bold;">${type}</span></td>
+                <td>${inter.member_number || ''}</td>
                 <td>${inter.work_location || ''}</td>
                 <td>${inter.discussion || ''}</td>
                 <td>${inter.who_involved || ''}</td>
                 <td>${inter.contact_person || ''}</td>
-                <td>${inter.point_of_contact || ''}</td>
+                <td>${inter.labor_rep || ''}</td>
                 <td><span class="delete-btn" onclick="handleDeleteInteraction(${inter.id})">Delete</span></td>
             `;
             return tr;
         }
 
         async function handleAddInteraction() {
+            const explicitType = document.getElementById('log-type').value;
             const interaction = {
-                date_spoke: document.getElementById('log-date').value,
-                member_name: document.getElementById('log-member').value,
-                work_location: document.getElementById('log-location').value,
-                discussion: document.getElementById('log-discussion').value,
-                who_involved: document.getElementById('log-who').value,
-                contact_person: document.getElementById('log-contact').value,
-                point_of_contact: document.getElementById('log-poc').value
+                date_spoke: document.getElementById(`log-date`).value,
+                member_name: document.getElementById(`log-member`).value,
+                member_number: document.getElementById(`log-number`).value,
+                work_location: document.getElementById(`log-location`).value,
+                discussion: document.getElementById(`log-discussion`).value,
+                who_involved: document.getElementById(`log-who`).value,
+                contact_person: document.getElementById(`log-contact`).value,
+                labor_rep: document.getElementById(`log-labor-rep`).value
             };
 
             if (!interaction.date_spoke || !interaction.member_name) {
@@ -408,13 +453,24 @@
                 return;
             }
 
+            // If user explicitly chose a type, we might want to store it. 
+            // For now, our detector uses keywords, so manual choice is for UI feedback.
+            // If we want to persist "Grievance" vs "Inquiry" regardless of keywords, 
+            // we should save it in the packed JSON.
+            if (explicitType !== 'Auto') {
+                interaction.explicit_type = explicitType;
+            }
+
             const newInter = await saveInteraction(CATEGORY, interaction);
             if (newInter) {
-                logBody.prepend(createInteractionRow(newInter));
+                loadInteractions(); // Reload to update numbering
                 // Clear inputs
-                ['log-date', 'log-member', 'log-location', 'log-discussion', 'log-who', 'log-contact', 'log-poc'].forEach(id => {
-                    document.getElementById(id).value = '';
+                const fields = ['date', 'member', 'number', 'location', 'discussion', 'who', 'contact', 'labor-rep'];
+                fields.forEach(f => {
+                    const el = document.getElementById(`log-${f}`);
+                    if (el) el.value = '';
                 });
+                document.getElementById('log-type').value = 'Auto';
             }
         }
 

@@ -620,6 +620,7 @@
             "Laundry": "$80.00",
             "Groceries": "$600.00",
             "ADT": "$53.00",
+            "Amazon - Necessities": "$100.00",
             "Amazon": "$100.00",
             "Hair (Expensive)": "$110.00",
             "Orkin": "$50.00",
@@ -810,9 +811,9 @@
                                     <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="financial" oninput="handleInput(event)">${
                                         (() => {
                                             const saved = plannerData.find(d => d.date === dayStr && d.field_id === 'financial');
-                                            // Auto-population trumps manual entry
-                                            if (autoFinancial) return autoFinancial;
-                                            return saved ? saved.content : '';
+                                            // Manual entry trumps auto-population if it exists
+                                            if (saved && saved.content) return saved.content;
+                                            return autoFinancial || '';
                                         })()
                                     }</div>
                                 </div>

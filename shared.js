@@ -198,21 +198,59 @@ async function fetchInteractions(category) {
         console.error('Error fetching interactions:', error);
         return [];
     }
-    return data;
+    
+    // Unpack extra fields from point_of_contact if they exist
+    return (data || []).map(inter => {
+        if (inter.point_of_contact && inter.point_of_contact.startsWith('{')) {
+            try {
+                const extra = JSON.parse(inter.point_of_contact);
+                return { ...inter, ...extra };
+            } catch (e) {
+                return inter;
+            }
+        }
+        return inter;
+    });
 }
 
 async function saveInteraction(category, interaction) {
     const client = getSupabase();
     if (!client) return null;
+    
+    // Pack extra fields into point_of_contact to avoid schema changes
+    const knownFields = ['id', 'category', 'date_spoke', 'member_name', 'work_location', 'discussion', 'who_involved', 'contact_person', 'created_at'];
+    const extraFields = {};
+    const baseInteraction = { category };
+    
+    Object.keys(interaction).forEach(key => {
+        if (knownFields.includes(key)) {
+            baseInteraction[key] = interaction[key];
+        } else {
+            extraFields[key] = interaction[key];
+        }
+    });
+    
+    if (Object.keys(extraFields).length > 0) {
+        baseInteraction.point_of_contact = JSON.stringify(extraFields);
+    }
+    
     const { data, error } = await client
         .from('member_interactions')
-        .insert({ category, ...interaction })
+        .insert(baseInteraction)
         .select()
         .single();
     
     if (error) {
         console.error('Error saving interaction:', error);
         return null;
+    }
+    
+    // Unpack for the response
+    if (data.point_of_contact && data.point_of_contact.startsWith('{')) {
+        try {
+            const extra = JSON.parse(data.point_of_contact);
+            return { ...data, ...extra };
+        } catch (e) {}
     }
     return data;
 }
