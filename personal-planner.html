@@ -20,7 +20,6 @@
             --text-color: #333;
             --header-blue: #00326b;
         }
-
         body {
             font-family: 'Coming Soon', cursive;
             margin: 0;
@@ -28,7 +27,6 @@
             background-color: #f0f0f0;
             color: var(--text-color);
         }
-
         .global-header {
             background: #00326b;
             padding: 10px 20px;
@@ -41,7 +39,6 @@
             z-index: 1000;
             align-items: center;
         }
-
         .nav-link {
             text-decoration: none;
             color: #ffca38;
@@ -55,12 +52,10 @@
             border-radius: 20px;
             transition: all 0.2s ease;
         }
-
         .nav-link:hover {
             background-color: #ffca38;
             color: #00326b;
         }
-
         .notebook-container {
             display: flex;
             flex-direction: column;
@@ -69,7 +64,6 @@
             width: 100%;
             box-sizing: border-box;
         }
-
         .notebook-spread {
             display: flex;
             flex-direction: column;
@@ -79,7 +73,6 @@
             border: none;
             box-shadow: none;
         }
-
         .notebook-page {
             width: 100%;
             padding: 20px;
@@ -89,14 +82,12 @@
             min-height: auto;
             box-sizing: border-box;
         }
-
         /* Mini Week Habit Styles */
         .habit-mini-week {
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
-
         .mini-week-header {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -105,13 +96,11 @@
             font-size: 0.7rem;
             font-weight: bold;
         }
-
         .mini-week-days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 2px;
         }
-
         .mini-day-box {
             width: 12px;
             height: 12px;
@@ -119,7 +108,6 @@
             cursor: pointer;
             border: 1px solid rgba(0,0,0,0.05);
         }
-
         .mini-day-box.sun { background-color: #f9d7d7; }
         .mini-day-box.mon { background-color: #fce8cc; }
         .mini-day-box.tue { background-color: #d1eded; }
@@ -127,12 +115,10 @@
         .mini-day-box.thu { background-color: #f9d7d7; }
         .mini-day-box.fri { background-color: #fce8cc; }
         .mini-day-box.sat { background-color: #d1eded; }
-
         .mini-day-box.checked {
             background-color: #333 !important;
             position: relative;
         }
-        
         .mini-day-box.checked::after {
             content: "✓";
             color: white;
@@ -142,8 +128,6 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-
-
         .header-bar {
             background-color: var(--header-blue);
             color: white;
@@ -154,7 +138,6 @@
             margin-bottom: 10px;
             text-transform: uppercase;
         }
-
         .habit-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -163,21 +146,18 @@
             margin-bottom: 20px;
             width: 100%;
         }
-
         .habit-section {
             padding: 5px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
-
         .habit-mini-week {
             display: flex;
             flex-direction: column;
             gap: 2px;
             width: fit-content;
         }
-
         .habit-title {
             text-align: left;
             font-size: 0.8rem;
@@ -187,21 +167,18 @@
             letter-spacing: 1px;
             width: 100%;
         }
-
         .mini-week-row {
             display: flex;
             align-items: center;
             gap: 5px;
             margin-bottom: 5px;
         }
-
         .habit-label {
             font-size: 0.75rem;
             flex-grow: 1;
             white-space: nowrap;
             text-align: left;
         }
-
         .mini-week-header {
             display: grid;
             grid-template-columns: repeat(7, 12px);
@@ -211,20 +188,17 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
-
         .mini-week-days {
             display: grid;
             grid-template-columns: repeat(7, 12px);
             gap: 5px;
             width: auto;
         }
-
         .day-section {
             margin-bottom: 15px;
             border-top: 1px solid #eee;
             padding-top: 5px;
         }
-
         .day-header {
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -234,7 +208,6 @@
             color: white;
             text-align: center;
         }
-
         .day-header.sun { background-color: var(--sun-bg); }
         .day-header.mon { background-color: var(--mon-bg); }
         .day-header.tue { background-color: var(--tue-bg); }
@@ -242,13 +215,11 @@
         .day-header.thu { background-color: var(--thu-bg); }
         .day-header.fri { background-color: var(--fri-bg); }
         .day-header.sat { background-color: var(--sat-bg); }
-
         .day-layout {
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 15px;
         }
-
         .day-sidebar {
             font-size: 0.65rem;
             color: #666;
@@ -258,7 +229,6 @@
             flex-direction: column;
             gap: 5px;
         }
-
         .sidebar-task-list {
             list-style: none;
             padding: 0;
@@ -267,13 +237,11 @@
             flex-direction: column;
             gap: 2px;
         }
-
         .sidebar-task-item {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-
         .sidebar-task-item::before {
             content: "";
             display: inline-block;
@@ -282,7 +250,6 @@
             border: 1px solid #f59e9e;
             flex-shrink: 0;
         }
-
         .sidebar-icon-row {
             display: flex;
             align-items: center;
@@ -291,13 +258,11 @@
             border-bottom: 1px solid #f0f0f0;
             padding-bottom: 5px;
         }
-
         .sidebar-icon {
             font-size: 1rem;
             width: 20px;
             text-align: center;
         }
-
         .sidebar-line {
             flex-grow: 1;
             min-height: 20px;
@@ -305,14 +270,12 @@
             display: flex;
             align-items: center;
         }
-
         .day-content {
             display: flex;
             flex-direction: column;
             gap: 5px;
             padding-left: 5px;
         }
-
         .task-line {
             border-bottom: 1px solid #f0f0f0;
             height: 25px;
@@ -321,7 +284,6 @@
             gap: 10px;
             font-size: 0.85rem;
         }
-
         .check-box {
             width: 14px;
             height: 14px;
@@ -332,27 +294,23 @@
             align-items: center;
             justify-content: center;
         }
-
         .check-box-spacer {
             width: 14px;
             height: 14px;
             border: 1px solid transparent;
             flex-shrink: 0;
         }
-
         .check-box.checked::after {
             content: "✓";
             color: #f59e9e;
             font-size: 12px;
             font-weight: bold;
         }
-
         .editable-task {
             flex-grow: 1;
             outline: none;
             min-width: 50px;
         }
-
         .enjoy-banner {
             background-color: #f59e9e;
             color: white;
@@ -362,14 +320,12 @@
             margin: 10px 0;
             letter-spacing: 2px;
         }
-
         .nav-controls {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             z-index: 10;
         }
-
         .nav-btn {
             background: white;
             border: 1px solid var(--border-color);
@@ -380,12 +336,10 @@
             color: black;
             border-radius: 15px;
         }
-
         .event-item {
             font-weight: bold;
             color: var(--header-blue);
         }
-
         /* Specialized event pill styles */
         .event-pill {
             background-color: #f0f0f0;
@@ -400,7 +354,6 @@
             width: auto;
             box-sizing: border-box;
         }
-
         .event-pill.csea, .event-pill.la-fed { 
             background-color: #00326b; 
             color: #ffca38; 
@@ -412,7 +365,6 @@
             border: none;
         }
         .event-pill.meeting { border-left: 5px solid #a2d9d9; }
-        
         .event-pill.pay-day {
             background-color: #1b5e20; /* Deep Green */
             color: #ffffff !important;
@@ -422,7 +374,6 @@
             border-radius: 4px;
             box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
-
         .event-pill.budget {
             background-color: #408686;
             color: white;
@@ -444,14 +395,12 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="check-breakdown.html" class="nav-link">Check Breakdown</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
     </header>
-
     <div class="notebook-container">
             <!-- LEFT PAGE -->
             <div class="notebook-page">
@@ -464,7 +413,6 @@
                     </div>
                     <div id="save-status" class="save-status">All changes saved</div>
                 </div>
-                
                 <div class="habit-grid">
                     <div class="habit-section">
                         <div class="habit-title">Home Care</div>
@@ -583,26 +531,21 @@
                         </div>
                     </div>
                 </div>
-
             <div class="enjoy-banner">🏠 ❤ ENJOY YOUR FAMILY ❤ 🏠</div>
-
             <div id="days-container">
                 <!-- All 7 days injected here -->
             </div>
         </div>
     </div>
-
     <script>
         function parseLocalDate(dateStr) {
             if (!dateStr) return null;
             const [year, month, day] = dateStr.split('-').map(Number);
             return new Date(year, month - 1, day);
         }
-
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
         let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date(2025, 11, 28);
-        
         const billAmounts = {
             "Auto Maintenance": "$100.00",
             "Mercury Auto Insurance": "$388.00",
@@ -639,67 +582,52 @@
             "Paramount+": "$12.99",
             "Taxes": "$TBD"
         };
-
         // Adjust to Sunday of the week
         if (dateParam) {
             const day = currentStartDate.getDay();
             currentStartDate.setDate(currentStartDate.getDate() - day);
         }
-
         let saveTimeout = null;
-
         async function handleSavePlannerData(date, fieldId, content) {
             const saveStatus = document.getElementById('save-status');
             saveStatus.innerText = 'Saving...';
-
             const success = await savePlannerData(date, fieldId, content);
-
             if (!success) {
                 saveStatus.innerText = 'Error saving';
             } else {
                 saveStatus.innerText = 'All changes saved';
             }
         }
-
         function handleInput(e) {
             const el = e.target;
             const fieldId = el.getAttribute('data-field');
             const date = el.getAttribute('data-date');
             const content = el.innerText;
-
             document.getElementById('save-status').innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => handleSavePlannerData(date, fieldId, content), 1000);
         }
-
         function toggleBox(e) {
             const el = e.target;
             el.classList.toggle('checked');
             const fieldId = el.getAttribute('data-field');
             const date = el.getAttribute('data-date');
             const content = el.classList.contains('checked') ? 'true' : 'false';
-
             handleSavePlannerData(date, fieldId, content);
         }
-
         async function renderSpread() {
             const container = document.getElementById('days-container');
             container.innerHTML = 'Loading...';
-
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
             const startStr = currentStartDate.toISOString().split('T')[0];
-
             const headerStr = `${currentStartDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})} - ${weekEnd.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`.toUpperCase();
             document.getElementById('week-header-left').innerText = headerStr;
-
             updateNavigationLinks(currentStartDate);
-
             let [events, plannerData] = await Promise.all([
                 fetchCalendarEvents(currentStartDate),
                 fetchPlannerData(currentStartDate)
             ]);
-
             // Filter out specific events for 1/17/2026
             events = events.filter(event => {
                 if (event.date === '2026-01-17' && event.title.toUpperCase().includes('LA FED MLK CELEBRATION')) {
@@ -707,7 +635,6 @@
                 }
                 return true;
             });
-
             // Habit Box Setup
             document.querySelectorAll('.mini-week-row').forEach((row, rowIndex) => {
                 const habitName = row.querySelector('.habit-label').innerText.replace(/\s+/g, '-').toLowerCase();
@@ -717,11 +644,9 @@
                     boxDate.setDate(boxDate.getDate() + dayIndex);
                     const boxDateStr = boxDate.toISOString().split('T')[0];
                     const fieldId = `habit-${habitName}`;
-                    
                     box.setAttribute('data-field', fieldId);
                     box.setAttribute('data-date', boxDateStr);
                     box.onclick = toggleBox;
-                    
                     const saved = plannerData.find(d => d.date === boxDateStr && d.field_id === fieldId);
                     if (saved && saved.content === 'true') {
                         box.classList.add('checked');
@@ -730,7 +655,6 @@
                     }
                 });
             });
-
             container.innerHTML = '';
             for (let i = 0; i < 7; i++) {
                 const dayDate = new Date(currentStartDate);
@@ -739,13 +663,10 @@
                 const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'long' });
                 const dayClass = dayDate.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
                 const formattedDate = dayDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
-
                 const dayEvents = events.filter(e => e.date === dayStr);
-                
                 // Separate all-day and timed events
                 const allDayEvents = dayEvents.filter(e => !e.time);
                 const timedEvents = dayEvents.filter(e => e.time);
-
                 // Auto-populate financial line if "Due" events exist
                 let totalFinancial = 0;
                 let foundBills = false;
@@ -765,7 +686,6 @@
                 });
                 const autoFinancial = foundBills ? '$' + totalFinancial.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
                 if (autoFinancial) console.log(`Auto-financial result for ${dayStr}: ${autoFinancial}`);
-
                 const dayHtml = `
                     <div class="day-section">
                         <div class="day-header ${dayClass}">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
@@ -847,7 +767,6 @@
                 container.innerHTML += dayHtml;
             }
         }
-
         function toggleDailyTask(e, date, fieldId) {
             const box = e.target;
             const div = box.nextElementSibling;
@@ -856,22 +775,18 @@
             const content = (isChecked ? '[x]' : '[ ]') + div.innerText;
             handleSavePlannerData(date, fieldId, content);
         }
-
         function handleDailyTaskInput(e, date, fieldId) {
             const div = e.target;
             const box = div.previousElementSibling;
             const isChecked = box.classList.contains('checked');
             const content = (isChecked ? '[x]' : '[ ]') + div.innerText;
-            
             document.getElementById('save-status').innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => handleSavePlannerData(date, fieldId, content), 1000);
         }
-
         function toggleTask(e) {
             e.target.classList.toggle('checked');
         }
-
         function changeWeek(delta) {
             currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
             const dateStr = currentStartDate.toISOString().split('T')[0];
@@ -879,7 +794,6 @@
             window.history.pushState({ date: dateStr }, '', newUrl);
             renderSpread();
         }
-
         window.onpopstate = function(event) {
             const date = event.state ? event.state.date : dateParam;
             currentStartDate = date ? new Date(date) : new Date(2025, 11, 28);
@@ -889,7 +803,6 @@
             }
             renderSpread();
         };
-
         renderSpread();
     </script>
 </body>

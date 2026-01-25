@@ -21,7 +21,6 @@
             --header-blue: #00326b;
             --tan-bg: #fffcf0;
         }
-
         body {
             font-family: 'Coming Soon', cursive;
             margin: 0;
@@ -29,7 +28,6 @@
             background-color: #f0f0f0;
             color: var(--text-color);
         }
-
         .global-header {
             background: #00326b;
             padding: 10px 20px;
@@ -42,7 +40,6 @@
             z-index: 1000;
             align-items: center;
         }
-
         .nav-link {
             text-decoration: none;
             color: #ffca38;
@@ -56,12 +53,10 @@
             border-radius: 20px;
             transition: all 0.2s ease;
         }
-
         .nav-link:hover {
             background-color: #ffca38;
             color: #00326b;
         }
-
         .notebook-container {
             display: flex;
             flex-direction: column;
@@ -70,7 +65,6 @@
             width: 100%;
             box-sizing: border-box;
         }
-
         .notebook-page {
             width: 100%;
             padding: 20px;
@@ -79,20 +73,17 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             min-height: 1000px;
         }
-
         .planner-header {
             text-align: center;
             border-bottom: 2px solid var(--border-color);
             margin-bottom: 20px;
             padding-bottom: 10px;
         }
-
         .date-range {
             font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-
         .top-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -100,12 +91,10 @@
             margin-bottom: 20px;
             border: 1px solid var(--border-color);
         }
-
         .top-section {
             border: 1px solid #eee;
             padding: 10px;
         }
-
         .section-title {
             font-size: 0.7rem;
             font-weight: bold;
@@ -115,37 +104,31 @@
             margin-bottom: 5px;
             border-bottom: 1px solid #ddd;
         }
-
         .editable-area {
             min-height: 40px;
             font-size: 0.9rem;
             outline: none;
         }
-
         .daily-columns {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
             gap: 20px;
         }
-
         @media (min-width: 900px) {
             .daily-columns {
                 grid-template-columns: repeat(7, 1fr);
                 gap: 0;
             }
         }
-
         .day-col {
             border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             border-left: none;
         }
-
         .day-col:first-child {
             border-left: 1px solid var(--border-color);
         }
-
         .day-header {
             text-align: center;
             padding: 5px;
@@ -158,7 +141,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .time-slot {
             height: 40px;
             border-bottom: 1px dotted #ccc;
@@ -169,7 +151,6 @@
             position: relative;
             box-sizing: border-box;
         }
-
         .time-label {
             width: 55px;
             color: #888;
@@ -177,7 +158,6 @@
             flex-shrink: 0;
             white-space: nowrap;
         }
-
         .slot-content {
             flex-grow: 1;
             outline: none;
@@ -187,7 +167,6 @@
             align-items: center;
             overflow: hidden;
         }
-
         .event-pill {
             background-color: #f0f0f0;
             border-radius: 8px;
@@ -203,7 +182,6 @@
             height: 100%;
             box-sizing: border-box;
         }
-
         .event-pill.csea, .event-pill.la-fed { 
             background-color: #00326b; 
             color: #ffca38; 
@@ -215,7 +193,6 @@
             border: none;
         }
         .event-pill.meeting { border-left: 5px solid #a2d9d9; }
-        
         .event-pill.pay-day {
             background-color: #1b5e20; /* Deep Green */
             color: #ffffff !important;
@@ -225,7 +202,6 @@
             border-radius: 4px;
             box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
-
         .event-pill.budget {
             background-color: #408686;
             color: white;
@@ -235,13 +211,11 @@
             border-left: 10px solid #d4af37;
             border-radius: 4px;
         }
-
         .nav-controls {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-
         .nav-btn {
             background: white;
             border: 1px solid var(--border-color);
@@ -253,7 +227,6 @@
             border-radius: 15px;
             font-size: 0.8rem;
         }
-
         /* Day Colors */
         .sun-header { background: var(--sun-bg); }
         .mon-header { background: var(--mon-bg); }
@@ -262,7 +235,6 @@
         .thu-header { background: var(--thu-bg); }
         .fri-header { background: var(--fri-bg); }
         .sat-header { background: var(--sat-bg); }
-
         .save-status {
             font-size: 0.7rem;
             color: #888;
@@ -275,14 +247,12 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="check-breakdown.html" class="nav-link">Check Breakdown</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
     </header>
-
     <div class="notebook-container">
         <div class="notebook-page">
             <div class="planner-header">
@@ -294,7 +264,6 @@
                 </div>
                 <div id="save-status" class="save-status">All changes saved</div>
             </div>
-
             <div class="top-grid">
                 <div class="top-section">
                     <div class="section-title">Priority #1</div>
@@ -321,56 +290,45 @@
                     <div class="editable-area" contenteditable="true" id="read-listen" data-field="read-listen"></div>
                 </div>
             </div>
-
             <div id="planner-columns" class="daily-columns">
                 <!-- Days will be injected here -->
             </div>
         </div>
     </div>
-
     <script>
         function parseLocalDate(dateStr) {
             if (!dateStr) return null;
             const [year, month, day] = dateStr.split('-').map(Number);
             return new Date(year, month - 1, day);
         }
-
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
         let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date(2025, 11, 28);
-        
         // Adjust to Sunday of the week
         if (dateParam) {
             const day = currentStartDate.getDay();
             currentStartDate.setDate(currentStartDate.getDate() - day);
         }
-        
         let saveTimeout = null;
-
         async function handleSavePlannerData(date, fieldId, content) {
             const saveStatus = document.getElementById('save-status');
             saveStatus.innerText = 'Saving...';
-
             const success = await savePlannerData(date, fieldId, content);
-
             if (!success) {
                 saveStatus.innerText = 'Error saving';
             } else {
                 saveStatus.innerText = 'All changes saved';
             }
         }
-
         function handleInput(e) {
             const el = e.target;
             const fieldId = el.getAttribute('data-field');
             const date = el.getAttribute('data-date') || currentStartDate.toISOString().split('T')[0];
             const content = el.innerText;
-
             document.getElementById('save-status').innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => handleSavePlannerData(date, fieldId, content), 1000);
         }
-
         function getTimeSlots() {
             const slots = [];
             for (let hour = 6; hour <= 21; hour++) {
@@ -380,11 +338,9 @@
             slots.push(`22:00`);
             return slots;
         }
-
         function getEventForSlot(dayEvents, timeSlot, dayIndex) {
             const [h, m] = timeSlot.split(':').map(Number);
             const slotTotalMinutes = h * 60 + m;
-
             // 1. Check for database events with an explicit time
             const exactMatch = dayEvents.find(e => {
                 if (!e.time) return false;
@@ -392,64 +348,50 @@
                 return (eh * 60 + em) === slotTotalMinutes;
             });
             if (exactMatch) return exactMatch.title;
-
             // 2. Specific logic rules (Fallbacks or duration-based)
-            
             // Rule: Chapter (5:30 - 7:30)
             const chapterEvent = dayEvents.find(e => e.title.toUpperCase().includes('CHAPTER'));
             if (chapterEvent) {
                 if (slotTotalMinutes >= (17 * 60 + 30) && slotTotalMinutes < (19 * 60 + 30)) return chapterEvent.title;
             }
-
             // Rule: Steward (4:00 - 5:00)
             const stewardEvent = dayEvents.find(e => e.title.toUpperCase().includes('STEWARD'));
             if (stewardEvent) {
                 if (slotTotalMinutes >= (16 * 60) && slotTotalMinutes < (17 * 60)) return stewardEvent.title;
             }
-
             // Rule: LA Fed (7:00 - 8:00)
             const laFedEvent = dayEvents.find(e => e.title.toUpperCase().includes('LA FED'));
             if (laFedEvent) {
                 if (slotTotalMinutes >= (19 * 60) && slotTotalMinutes < (20 * 60)) return laFedEvent.title;
             }
-
             // Rule: RPM (Hardcoded logic if not explicit in DB)
             const rpmEvent = dayEvents.find(e => e.title.toUpperCase().includes('RPM'));
             if (rpmEvent && !rpmEvent.time) {
                 const rpmStartMinutes = (dayIndex === 4) ? (17 * 60) : (17 * 60 + 30); // Thu 5:00, else 5:30
                 if (slotTotalMinutes === rpmStartMinutes) return rpmEvent.title;
             }
-
             return null;
         }
-
         async function renderPlanner() {
             const container = document.getElementById('planner-columns');
             container.innerHTML = 'Loading...';
-
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
-
             const rangeStr = `${currentStartDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})} - ${weekEnd.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`.toUpperCase();
             document.getElementById('week-range').innerText = rangeStr;
-
             updateNavigationLinks(currentStartDate);
-
             // Clear top priorities
             document.querySelectorAll('.editable-area').forEach(el => {
                 el.innerText = '';
                 el.oninput = handleInput;
             });
-
             const timeSlots = getTimeSlots();
             const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const dayClasses = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-
             const [events, plannerData] = await Promise.all([
                 fetchCalendarEvents(currentStartDate),
                 fetchPlannerData(currentStartDate)
             ]);
-
             // Fill top priorities from plannerData
             const startStr = currentStartDate.toISOString().split('T')[0];
             plannerData.forEach(item => {
@@ -460,38 +402,30 @@
                     }
                 }
             });
-
             container.innerHTML = '';
             for (let i = 0; i < 7; i++) {
                 const dayDate = new Date(currentStartDate);
                 dayDate.setDate(dayDate.getDate() + i);
                 const dayStr = dayDate.toISOString().split('T')[0];
                 let dayEvents = events.filter(e => e.date === dayStr);
-
                 if (dayStr === '2026-01-17') {
                     dayEvents = dayEvents.filter(e => !e.title.toUpperCase().includes('LA FED MLK CELEBRATION'));
                 }
-
                 const dayCol = document.createElement('div');
                 dayCol.className = 'day-col';
-
                 const header = document.createElement('div');
                 header.className = `day-header ${dayClasses[i]}-header`;
                 header.innerHTML = `${dayDate.getDate()}<br>${dayNames[i].toUpperCase()}`;
                 dayCol.appendChild(header);
-
                 timeSlots.forEach(slot => {
                     const slotDiv = document.createElement('div');
                     slotDiv.className = 'time-slot';
-                    
                     const label = document.createElement('div');
                     label.className = 'time-label';
                     label.innerText = formatTime(slot, false, true);
                     slotDiv.appendChild(label);
-
                     const content = document.createElement('div');
                     content.className = 'slot-content';
-                    
                     const eventTitle = getEventForSlot(dayEvents, slot, i);
                     if (eventTitle) {
                         content.innerHTML = `<div class="${getEventClass(eventTitle)}">${eventTitle}</div>`;
@@ -500,21 +434,17 @@
                         content.setAttribute('data-field', `slot-${slot}`);
                         content.setAttribute('data-date', dayStr);
                         content.oninput = handleInput;
-                        
                         const saved = plannerData.find(d => d.date === dayStr && d.field_id === `slot-${slot}`);
                         if (saved) {
                             content.innerText = saved.content;
                         }
                     }
-                    
                     slotDiv.appendChild(content);
                     dayCol.appendChild(slotDiv);
                 });
-
                 container.appendChild(dayCol);
             }
         }
-
         function changeWeek(delta) {
             currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
             const dateStr = currentStartDate.toISOString().split('T')[0];
@@ -522,7 +452,6 @@
             window.history.pushState({ date: dateStr }, '', newUrl);
             renderPlanner();
         }
-
         window.onpopstate = function(event) {
             const date = event.state ? event.state.date : dateParam;
             currentStartDate = date ? new Date(date) : new Date(2025, 11, 28);
@@ -532,7 +461,6 @@
             }
             renderPlanner();
         };
-
         renderPlanner();
     </script>
 </body>

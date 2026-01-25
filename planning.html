@@ -230,16 +230,13 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="check-breakdown.html" class="nav-link">Check Breakdown</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
     </header>
-
     <div id="save-status" class="save-status">All changes saved</div>
-
     <div class="container">
         <div class="planner-spread">
             <div class="notebook-page">
@@ -250,9 +247,7 @@
                         On the following pages, focus on your mission, vision, values, and purpose.
                     </p>
                 </div>
-
                 <div class="section-header">Be Thoughtful</div>
-
                 <div class="top-grid">
                     <div class="section-box">
                         <div class="section-prompt">
@@ -290,26 +285,21 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="full-width-prompt">
                     <div class="prompt-text">What is your absolute favorite thing you love doing at work each day?</div>
                     <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="favorite-thing"></div></div>
                 </div>
-
                 <div class="full-width-prompt">
                     <div class="prompt-text">What didn't you enjoy in your work over the last year?</div>
                     <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="not-enjoyed"></div></div>
                 </div>
-
                 <div class="full-width-prompt">
                     <div class="prompt-text">What was simply fun for you as you look back over the last year, personally or professionally?</div>
                     <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="fun-last-year"></div></div>
                 </div>
-
                 <div class="dream-big-title">
                     Dream big | <span>Where would you like to be financially, physically, emotionally, and spiritually in a year? Do you want to run a half marathon? Pay off your home? Or hit a certain income goal? Write it down so you can keep track of it, and dream big in the next 12 months!</span>
                 </div>
-
                 <div class="dream-grid">
                     <div class="dream-box">
                         <div class="dream-label">Financially</div>
@@ -328,7 +318,6 @@
                         <div class="editable-area" contenteditable="true" data-field="dream-spiritual" style="min-height: 80px;"></div>
                     </div>
                 </div>
-
                 <div class="footer-prompts">
                     <div class="footer-prompt-item">
                         <span>This year, more than anything else, I want to focus on</span>
@@ -350,12 +339,10 @@
                         <span>are depending on me!</span>
                     </div>
                 </div>
-
                 <div class="section-header" style="margin-top: 60px;">Take a Moment</div>
                 <p class="intro-text" style="margin-bottom: 30px;">
                     As you begin a new year, take a moment to reflect on what you enjoy most and dream big!
                 </p>
-
                 <div class="top-grid">
                     <div class="left-col">
                         <div class="section-box" style="margin-bottom: 20px;">
@@ -378,26 +365,22 @@
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="mission-ruled-1"></div></div>
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="mission-ruled-2"></div></div>
                         </div>
-
                         <div class="section-box">
                             <div class="section-prompt">
                                 Vision | <span>So what on earth is the difference between your MISSION and your VISION? Your mission looks closely at what you're doing today and who you're serving, while your vision is where you'd love to go one day.</span>
                             </div>
                             <div class="prompt-text">Think BIG. Dream WILDLY.</div>
                             <div class="prompt-text" style="font-size: 0.75rem; margin-top: 10px;">Where would you love to be in one year? Who do you serve today, and how would you love to serve them in a year, or even in five years? Take a few minutes, cast your vision looking into the future ~ and simply dream of where you'd love to be.</div>
-                            
                             <div class="prompt-text" style="margin-top: 15px;">Looking forward to the year ahead, I'd love to ...</div>
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-1yr-1"></div></div>
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-1yr-2"></div></div>
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-1yr-3"></div></div>
-
                             <div class="prompt-text" style="margin-top: 15px;">In the next five years, I hope to ...</div>
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-5yr-1"></div></div>
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-5yr-2"></div></div>
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="vision-5yr-3"></div></div>
                         </div>
                     </div>
-
                     <div class="right-col">
                         <div class="section-box" style="margin-bottom: 20px;">
                             <div class="section-prompt">
@@ -423,7 +406,6 @@
                                 <div class="checkbox-item" data-value="CustomValue2" data-prefix="value-cb-" style="border-bottom: 1px solid #ddd;"><div class="checkbox"></div> <div class="editable-area" contenteditable="true" data-field="value-custom2" style="width: 80px;" onclick="event.stopPropagation()"></div></div>
                             </div>
                         </div>
-
                         <div class="section-box">
                             <div class="section-prompt">
                                 Purpose | <span>When you were created, you were uniquely gifted in a way that simply no one else was. You were perfectly designed to fulfill a purpose that only you can.</span>
@@ -440,15 +422,12 @@
             </div>
         </div>
     </div>
-
     <script>
         let saveTimeout;
         const PLANNING_DATE = '2026-planning';
-
         async function init() {
             // Load data from Supabase
             const data = await fetchPlannerData(PLANNING_DATE);
-            
             if (data && data.length > 0) {
                 data.forEach(item => {
                     if (item.field_id.startsWith('love-cb-') || item.field_id.startsWith('value-cb-')) {
@@ -467,7 +446,6 @@
                     }
                 });
             }
-
             // Set up event listeners for text areas
             document.querySelectorAll('.editable-area').forEach(el => {
                 el.addEventListener('input', (e) => {
@@ -476,7 +454,6 @@
                     handleSave(fieldId, content);
                 });
             });
-
             // Set up event listeners for checkboxes
             document.querySelectorAll('.checkbox-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -489,7 +466,6 @@
                 });
             });
         }
-
         function handleSave(fieldId, content) {
             const status = document.getElementById('save-status');
             status.innerText = 'Unsaved changes';
@@ -500,7 +476,6 @@
                 status.innerText = success ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
-
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>

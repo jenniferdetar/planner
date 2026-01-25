@@ -153,14 +153,12 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="check-breakdown.html" class="nav-link">Check Breakdown</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
     </header>
-
     <div class="container">
         <div class="notebook-page">
             <h1 class="page-title">HOA Notes</h1>
@@ -176,13 +174,11 @@
             </div>
         </div>
     </div>
-
     <script>
         const CATEGORY = 'HOA';
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
-
         function createEntryElement(entry) {
             const div = document.createElement('div');
             div.className = 'note-entry';
@@ -196,7 +192,6 @@
             `;
             return div;
         }
-
         async function loadEntries() {
             const entries = await fetchCategoryEntries(CATEGORY);
             entriesList.innerHTML = '';
@@ -204,14 +199,11 @@
                 entriesList.appendChild(createEntryElement(entry));
             });
         }
-
         async function handleAddNote() {
             const content = newNoteContent.value;
             if (!content.trim()) return;
-
             saveStatus.innerText = 'Saving...';
             const newEntry = await saveCategoryEntry(CATEGORY, content);
-            
             if (newEntry) {
                 newNoteContent.value = '';
                 saveStatus.innerText = 'Saved';
@@ -221,7 +213,6 @@
                 saveStatus.innerText = 'Error saving';
             }
         }
-
         async function handleDeleteNote(id) {
             if (confirm('Are you sure you want to delete this note?')) {
                 const success = await deleteCategoryEntry(id);
@@ -230,7 +221,6 @@
                 }
             }
         }
-
         // Initialize
         loadEntries();
     </script>

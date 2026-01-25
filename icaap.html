@@ -172,14 +172,12 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="check-breakdown.html" class="nav-link">Check Breakdown</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
     </header>
-
     <div class="container">
         <div class="notebook-page">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -201,17 +199,14 @@
             </div>
         </div>
     </div>
-
     <script>
         const CATEGORY = 'iCAAP';
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
         const logBody = document.getElementById('interaction-log-body');
-
         // Reference Data
         let cachedMembers = [];
-
         async function populateDatalists() {
             const [members, stewards, issues, schools] = await Promise.all([
                 fetchCseaMembers(),
@@ -219,22 +214,16 @@
                 fetchCseaIssues(),
                 fetchSchoolDirectory()
             ]);
-
             cachedMembers = members;
-
             const membersList = document.getElementById('members-list');
             membersList.innerHTML = members.map(m => `<option value="${m.name}">`).join('');
-
             const stewardsList = document.getElementById('stewards-list');
             stewardsList.innerHTML = stewards.map(s => `<option value="${s.name}">`).join('');
-
             const issuesList = document.getElementById('issues-list');
             issuesList.innerHTML = issues.map(i => `<option value="${i.issue_name}">`).join('');
-
             const schoolsList = document.getElementById('schools-list');
             schoolsList.innerHTML = schools.map(s => `<option value="${s.site_name}">`).join('');
         }
-
         document.getElementById('log-member').addEventListener('input', (e) => {
             const memberName = e.target.value;
             const member = cachedMembers.find(m => m.name === memberName);
@@ -242,7 +231,6 @@
                 document.getElementById('log-location').value = member.work_location;
             }
         });
-
         function createEntryElement(entry) {
             const div = document.createElement('div');
             div.className = 'note-entry';
@@ -256,7 +244,6 @@
             `;
             return div;
         }
-
         async function loadEntries() {
             const entries = await fetchCategoryEntries(CATEGORY);
             entriesList.innerHTML = '';
@@ -264,14 +251,11 @@
                 entriesList.appendChild(createEntryElement(entry));
             });
         }
-
         async function handleAddNote() {
             const content = newNoteContent.value;
             if (!content.trim()) return;
-
             saveStatus.innerText = 'Saving...';
             const newEntry = await saveCategoryEntry(CATEGORY, content);
-            
             if (newEntry) {
                 newNoteContent.value = '';
                 saveStatus.innerText = 'Saved';
@@ -281,7 +265,6 @@
                 saveStatus.innerText = 'Error saving';
             }
         }
-
         async function handleDeleteNote(id) {
             if (confirm('Are you sure you want to delete this note?')) {
                 const success = await deleteCategoryEntry(id);
@@ -290,7 +273,6 @@
                 }
             }
         }
-
         // Initialize
         loadEntries();
         populateDatalists();

@@ -143,20 +143,17 @@
         .wide .editable-area {
             min-height: 80px;
         }
-
     </style>
 </head>
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="check-breakdown.html" class="nav-link">Check Breakdown</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
     </header>
-
     <div class="container">
         <div class="notebook-page">
             <div class="review-header">
@@ -170,7 +167,6 @@
                     <div id="save-status" class="save-status">All changes saved</div>
                 </div>
             </div>
-
             <div class="review-grid">
                 <div class="review-box">
                     <div class="box-title">What was your biggest win this month?</div>
@@ -180,12 +176,10 @@
                     <div class="box-title">What do you wish you'd done differently in the last few weeks?</div>
                     <div class="editable-area" contenteditable="true" id="review-different" data-field="review-different"></div>
                 </div>
-                
                 <div class="review-box wide">
                     <div class="box-title">What did you do that was fun, personally or professionally, this month?</div>
                     <div class="editable-area" contenteditable="true" id="review-fun" data-field="review-fun"></div>
                 </div>
-
                 <div class="review-box">
                     <div class="box-title">What change did you make that you want to continue?</div>
                     <div class="editable-area" contenteditable="true" id="review-change" data-field="review-change"></div>
@@ -194,7 +188,6 @@
                     <div class="box-title">What did you manage well over the last few weeks?</div>
                     <div class="editable-area" contenteditable="true" id="review-manage" data-field="review-manage"></div>
                 </div>
-
                 <div class="review-box">
                     <div class="box-title">What's your biggest goal for the upcoming month?</div>
                     <div class="editable-area" contenteditable="true" id="review-goal" data-field="review-goal"></div>
@@ -206,33 +199,26 @@
             </div>
         </div>
     </div>
-
     <script>
         const monthPicker = document.getElementById('month-picker');
         const saveStatus = document.getElementById('save-status');
         let saveTimeout = null;
-
         // Set initial month to January 2026 based on planner context
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
         let currentDate = dateParam ? new Date(dateParam) : new Date(2026, 0, 1);
-        
         // Adjust to first of month
         currentDate.setDate(1);
-        
         const monthStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
         monthPicker.value = monthStr;
-
         async function loadReviewData() {
             const dateKey = `${monthPicker.value}-01`;
             const data = await fetchPlannerData(dateKey, 31);
-            
             // Clear existing
             document.querySelectorAll('.editable-area').forEach(el => {
                 el.innerText = '';
                 el.oninput = handleInput;
             });
-
             // Fill
             data.forEach(item => {
                 if (item.date === dateKey) {
@@ -241,7 +227,6 @@
                 }
             });
         }
-
         function handleMonthChange() {
             const dateStr = `${monthPicker.value}-01`;
             const newUrl = window.location.pathname + '?date=' + dateStr;
@@ -249,13 +234,11 @@
             loadReviewData();
             updateNavigationLinks(dateStr);
         }
-
         function handleInput(e) {
             const el = e.target;
             const fieldId = el.getAttribute('data-field');
             const date = `${monthPicker.value}-01`;
             const content = el.innerText;
-
             saveStatus.innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
@@ -264,13 +247,11 @@
                 saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
-
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             loadReviewData();
             updateNavigationLinks(`${monthPicker.value}-01`);
         });
-
         window.onpopstate = (event) => {
             if (event.state && event.state.date) {
                 const parts = event.state.date.split('-');
@@ -278,7 +259,6 @@
                 loadReviewData();
             }
         };
-
     </script>
 </body>
 </html>
