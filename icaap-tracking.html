@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCAAP Tracking - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --header-blue: #00326b;
+            --table-green: #1b5e20;
+            --border-color: #ccc;
+        }
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .global-header {
+            background: #00326b;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .container {
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+        }
+        .notebook-page {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-width: max-content;
+        }
+        .page-title {
+            color: var(--header-blue);
+            border-bottom: 2px solid var(--header-blue);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .tracking-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 11px;
+        }
+        .tracking-table th, .tracking-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: center;
+        }
+        .header-row {
+            background-color: var(--table-green);
+            color: white;
+        }
+        .month-col {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            text-align: left;
+            min-width: 100px;
+        }
+        .employee-col {
+            min-width: 150px;
+        }
+        .sub-header {
+            font-size: 9px;
+            background-color: #e8f5e9;
+        }
+        .editable-cell {
+            outline: none;
+            min-height: 20px;
+            background-color: #fff;
+        }
+        .editable-cell:focus {
+            background-color: #fffde7;
+            box-shadow: inset 0 0 0 2px var(--header-blue);
+        }
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.75rem;
+            color: #666;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="check-breakdown.html" class="nav-link">Check Breakdown</a>
+        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="hoa.html" class="nav-link">HOA</a>
+        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+    </header>
+
+    <div id="save-status" class="save-status">All changes saved</div>
+
+    <div class="container">
+        <div class="notebook-page">
+            <h1 class="page-title">iCAAP Tracking Log</h1>
+            <table class="tracking-table">
+                <thead>
+                    <tr class="header-row">
+                        <th rowspan="2" class="month-col">Month</th>
+                        <script>
+                            const employees = [
+                                'Brian Wanta', 'Elizabeth Leones', 'Ernie Cadena', 'Esmeralda Flores', 
+                                'Ester Cid', 'Isabel Ramierz', 'Jennifer Burbank', 'Jerri Paley-Hayashi', 
+                                'Mary Rose Charazrian', 'Mary Rose Ghazarian', 'Norma Fuentes', 
+                                'Roberta Barrera', 'Sindy Banuelos', 'Triny', 'Victor Lopez'
+                            ];
+                            employees.forEach(emp => {
+                                document.write(`<th colspan="3" class="employee-col">${emp}</th>`);
+                            });
+                        </script>
+                    </tr>
+                    <tr class="sub-header">
+                        <script>
+                            employees.forEach(emp => {
+                                document.write(`<th>Paylog Sub.</th><th>Hours</th><th>Approval</th>`);
+                            });
+                        </script>
+                    </tr>
+                </thead>
+                <tbody id="tracking-body">
+                    <script>
+                        const months = [
+                            'July 2025', 'August 2025', 'September 2025', 'October 2025', 
+                            'November 2025', 'December 2025', 'January 2026', 'February 2026', 
+                            'March 2026', 'April 2026', 'May 2026', 'June 2026'
+                        ];
+                        months.forEach((month, mIdx) => {
+                            document.write(`<tr>`);
+                            document.write(`<td class="month-col">${month}</td>`);
+                            employees.forEach((emp, eIdx) => {
+                                ['paylog', 'hours', 'approval'].forEach(type => {
+                                    const fieldId = `icaap-${mIdx}-${eIdx}-${type}`;
+                                    document.write(`<td class="editable-cell" contenteditable="true" data-field="${fieldId}"></td>`);
+                                });
+                            });
+                            document.write(`</tr>`);
+                        });
+                    </script>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const PERSISTENCE_KEY = 'icaap-tracking-data';
+        let saveTimeout;
+
+        async function init() {
+            const data = await fetchPlannerData(PERSISTENCE_KEY, 1);
+            data.forEach(item => {
+                const el = document.querySelector(`[data-field="${item.field_id}"]`);
+                if (el) el.innerText = item.content;
+            });
+
+            document.querySelectorAll('.editable-cell').forEach(cell => {
+                cell.addEventListener('input', () => {
+                    handleSave(cell.dataset.field, cell.innerText);
+                });
+            });
+        }
+
+        function handleSave(fieldId, content) {
+            const status = document.getElementById('save-status');
+            status.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                status.innerText = 'Saving...';
+                const success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                status.innerText = success ? 'All changes saved' : 'Error saving';
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

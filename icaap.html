@@ -12,6 +12,25 @@
             --header-blue: #00326b;
             --border-color: #333;
         }
+        .tracking-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #2d5a45;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            transition: opacity 0.2s;
+            font-family: 'Coming Soon', cursive;
+            border: none;
+            cursor: pointer;
+        }
+        .tracking-pill:hover {
+            opacity: 0.9;
+        }
         body {
             font-family: 'Coming Soon', cursive;
             margin: 0;
@@ -163,7 +182,13 @@
 
     <div class="container">
         <div class="notebook-page">
-            <h1 class="page-title">iCAAP Notes</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h1 class="page-title" style="margin-bottom: 0; border-bottom: none;">iCAAP Notes</h1>
+                <a href="icaap-tracking.html" class="tracking-pill">
+                    <span>📅</span> iCAAP Tracking Log
+                </a>
+            </div>
+            <div style="border-bottom: 2px solid var(--header-blue); margin-bottom: 20px;"></div>
             <div class="notes-section">
                 <div class="input-group">
                     <textarea id="new-note-content" placeholder="Type a new note here..."></textarea>

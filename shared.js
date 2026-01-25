@@ -330,7 +330,8 @@ function updateNavigationLinks(date) {
         'icaap.html',
         'planning.html',
         'monthly-review.html',
-        'check-breakdown.html'
+        'check-breakdown.html',
+        'icaap-tracking.html'
     ];
     document.querySelectorAll('a.nav-link, a.nav-btn').forEach(link => {
         const href = link.getAttribute('href');

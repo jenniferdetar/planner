@@ -4,11 +4,12 @@ const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 async function checkColumns() {
-    const { data, error } = await supabase.from('member_interactions').select('*').limit(1);
+    const { data, error } = await supabase.from('member_interactions').select('member_name').limit(50);
     if (error) {
         console.error('Error:', error.message);
     } else if (data.length > 0) {
-        console.log('Columns:', Object.keys(data[0]));
+        const names = [...new Set(data.map(d => d.member_name))].sort();
+        console.log('Unique Names:', names);
     } else {
         console.log('No data found to check columns');
     }
