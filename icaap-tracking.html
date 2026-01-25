@@ -87,8 +87,9 @@
             text-align: left;
             min-width: 150px;
             position: sticky;
-            right: 0;
-            border-left: 2px solid var(--border-color);
+            left: 0;
+            border-right: 2px solid var(--border-color);
+            z-index: 5;
         }
         .header-row .employee-col {
             background-color: var(--table-green);
@@ -150,10 +151,10 @@
                                 'November 2025', 'December 2025', 'January 2026', 'February 2026', 
                                 'March 2026', 'April 2026', 'May 2026', 'June 2026'
                             ];
+                            document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
                             months.forEach(month => {
                                 document.write(`<th colspan="3" class="month-header">${month}</th>`);
                             });
-                            document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
                         </script>
                     </tr>
                     <tr class="sub-header">
@@ -247,6 +248,7 @@
                         ];
                         employees.forEach((emp, eIdx) => {
                             document.write(`<tr>`);
+                            document.write(`<td class="employee-col">${emp}</td>`);
                             months.forEach((month, mIdx) => {
                                 ['paylog', 'hours', 'approval'].forEach(type => {
                                     // Keep fieldId logic consistent with data (mIdx-eIdx)
@@ -254,7 +256,6 @@
                                     document.write(`<td class="editable-cell" contenteditable="true" data-field="${fieldId}"></td>`);
                                 });
                             });
-                            document.write(`<td class="employee-col">${emp}</td>`);
                             document.write(`</tr>`);
                         });
                     </script>
@@ -265,25 +266,125 @@
     <script>
         const PERSISTENCE_KEY = 'icaap-tracking-data';
         let saveTimeout;
+        let allEmployees = [];
+
         async function init() {
-            const data = await fetchPlannerData(PERSISTENCE_KEY, 1);
-            data.forEach(item => {
+            // Load custom/placeholder data first
+            const plannerData = await fetchPlannerData(PERSISTENCE_KEY, 1);
+            
+            // Load all tracking data in parallel
+            const [hoursData, approvalData, paylogData, dbNames] = await Promise.all([
+                fetchHoursWorked(),
+                fetchApprovalDates(),
+                fetchPaylogSubmissions(),
+                fetchAllTrackingNames()
+            ]);
+
+            // Merge hardcoded employees with any new names from DB
+            const nameSet = new Set(employees);
+            dbNames.forEach(name => nameSet.add(name));
+            allEmployees = [...nameSet].sort();
+
+            // Re-render table rows if names changed or to ensure consistency
+            renderTableRows();
+
+            const hoursMap = {};
+            hoursData.forEach(row => hoursMap[row.name] = row);
+
+            const approvalMap = {};
+            approvalData.forEach(row => approvalMap[row.Name] = row);
+
+            const paylogMap = {};
+            paylogData.forEach(row => paylogMap[row.name] = row);
+
+            // Populate custom data
+            plannerData.forEach(item => {
                 const el = document.querySelector(`[data-field="${item.field_id}"]`);
                 if (el) el.innerText = item.content;
             });
+
+            // Populate real data
             document.querySelectorAll('.editable-cell').forEach(cell => {
+                const fieldId = cell.dataset.field;
+                const parts = fieldId.split('-'); // icaap, mIdx, eIdx, type
+                if (parts.length === 4) {
+                    const mIdx = parseInt(parts[1]);
+                    const eIdx = parseInt(parts[2]);
+                    const type = parts[3];
+                    const empName = allEmployees[eIdx];
+                    const monthName = months[mIdx].split(' ')[0];
+
+                    if (type === 'hours') {
+                        const row = hoursMap[empName];
+                        if (row) {
+                            const val = row[monthName.toLowerCase().substring(0, 3)];
+                            if (val !== undefined && val !== null) cell.innerText = val;
+                        }
+                    } else if (type === 'approval') {
+                        const row = approvalMap[empName];
+                        if (row) {
+                            const val = row[monthName.substring(0, 3)];
+                            if (val !== undefined && val !== null) cell.innerText = val;
+                        }
+                    } else if (type === 'paylog') {
+                        const row = paylogMap[empName];
+                        if (row) {
+                            const val = row[monthName.substring(0, 3)];
+                            if (val !== undefined && val !== null) cell.innerText = val;
+                        }
+                    }
+                }
+
                 cell.addEventListener('input', () => {
-                    handleSave(cell.dataset.field, cell.innerText);
+                    handleSave(cell);
                 });
             });
         }
-        function handleSave(fieldId, content) {
+
+        function renderTableRows() {
+            const tbody = document.getElementById('tracking-body');
+            tbody.innerHTML = '';
+            allEmployees.forEach((emp, eIdx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="employee-col">${emp}</td>`;
+                months.forEach((month, mIdx) => {
+                    ['paylog', 'hours', 'approval'].forEach(type => {
+                        const fieldId = `icaap-${mIdx}-${eIdx}-${type}`;
+                        tr.innerHTML += `<td class="editable-cell" contenteditable="true" data-field="${fieldId}"></td>`;
+                    });
+                });
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleSave(cell) {
+            const fieldId = cell.dataset.field;
+            const content = cell.innerText;
             const status = document.getElementById('save-status');
             status.innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
-                const success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                
+                const parts = fieldId.split('-');
+                const mIdx = parseInt(parts[1]);
+                const eIdx = parseInt(parts[2]);
+                const type = parts[3];
+                const empName = allEmployees[eIdx];
+                const monthName = months[mIdx].split(' ')[0];
+
+                let success = false;
+                if (type === 'hours') {
+                    success = await saveTrackingData('hours_worked', empName, monthName, content);
+                } else if (type === 'approval') {
+                    success = await saveTrackingData('approval_dates', empName, monthName, content);
+                } else if (type === 'paylog') {
+                    success = await saveTrackingData('Paylog_Submission', empName, monthName, content);
+                    if (!success) {
+                        success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                    }
+                }
+                
                 status.innerText = success ? 'All changes saved' : 'Error saving';
             }, 1000);
         }

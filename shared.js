@@ -305,6 +305,74 @@ async function fetchCseaMembers() {
     return data || [];
 }
 
+async function fetchHoursWorked() {
+    const client = getSupabase();
+    if (!client) return [];
+    const { data, error } = await client.from('hours_worked').select('*');
+    if (error) {
+        console.error('Error fetching hours_worked:', error);
+        return [];
+    }
+    return data || [];
+}
+
+async function fetchApprovalDates() {
+    const client = getSupabase();
+    if (!client) return [];
+    const { data, error } = await client.from('approval_dates').select('*');
+    if (error) {
+        console.error('Error fetching approval_dates:', error);
+        return [];
+    }
+    return data || [];
+}
+
+async function fetchPaylogSubmissions() {
+    const client = getSupabase();
+    if (!client) return [];
+    const { data, error } = await client.from('Paylog_Submission').select('*');
+    if (error) {
+        // Fallback if table doesn't exist yet
+        console.warn('Paylog_Submission table not found, using empty data');
+        return [];
+    }
+    return data || [];
+}
+
+async function fetchAllTrackingNames() {
+    const hours = await fetchHoursWorked();
+    const approvals = await fetchApprovalDates();
+    const paylogs = await fetchPaylogSubmissions();
+    
+    const names = new Set();
+    hours.forEach(r => names.add(r.name));
+    approvals.forEach(r => names.add(r.Name));
+    paylogs.forEach(r => names.add(r.name));
+    
+    return [...names].sort();
+}
+
+async function saveTrackingData(table, name, month, value) {
+    const client = getSupabase();
+    if (!client) return false;
+    
+    // Normalize month: lowercase for hours_worked, Capitalized for others
+    const col = table === 'hours_worked' ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
+    
+    const nameCol = (table === 'hours_worked' || table === 'Paylog_Submission') ? 'name' : 'Name';
+    
+    const { error } = await client
+        .from(table)
+        .update({ [col]: value })
+        .eq(nameCol, name);
+
+    if (error) {
+        console.error(`Error saving to ${table}:`, error);
+        return false;
+    }
+    return true;
+}
+
 async function fetchCseaStewards() {
     const client = getSupabase();
     if (!client) return [];
