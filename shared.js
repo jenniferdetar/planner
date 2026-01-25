@@ -330,10 +330,10 @@ async function fetchApprovalDates() {
 async function fetchPaylogSubmissions() {
     const client = getSupabase();
     if (!client) return [];
-    const { data, error } = await client.from('Paylog_Submission').select('*');
+    const { data, error } = await client.from('paylog_submission').select('*');
     if (error) {
         // Fallback if table doesn't exist yet
-        console.warn('Paylog_Submission table not found, using empty data');
+        console.warn('paylog_submission table not found, using empty data');
         return [];
     }
     return data || [];
@@ -356,20 +356,40 @@ async function saveTrackingData(table, name, month, value) {
     const client = getSupabase();
     if (!client) return false;
     
-    // Normalize month: lowercase for hours_worked, Capitalized for others
-    const col = table === 'hours_worked' ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
+    // Normalize month: lowercase for hours_worked and paylog_submission, Capitalized for others
+    let col = (table === 'hours_worked' || table === 'paylog_submission') ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
     
-    const nameCol = (table === 'hours_worked' || table === 'Paylog_Submission') ? 'name' : 'Name';
+    // Override for 'total' column in hours_worked
+    if (table === 'hours_worked' && month.toLowerCase() === 'total') {
+        col = 'total';
+    }
     
-    const { error } = await client
+    const nameCol = (table === 'hours_worked' || table === 'paylog_submission') ? 'name' : 'Name';
+    
+    // Try update first
+    const { data: updateData, error: updateError } = await client
         .from(table)
         .update({ [col]: value })
-        .eq(nameCol, name);
+        .eq(nameCol, name)
+        .select();
 
-    if (error) {
-        console.error(`Error saving to ${table}:`, error);
+    if (updateError) {
+        console.error(`Error updating ${table}:`, updateError);
         return false;
     }
+
+    // If no rows were updated, it means the record doesn't exist, so insert it
+    if (!updateData || updateData.length === 0) {
+        const { error: insertError } = await client
+            .from(table)
+            .insert({ [nameCol]: name, [col]: value });
+        
+        if (insertError) {
+            console.error(`Error inserting into ${table}:`, insertError);
+            return false;
+        }
+    }
+    
     return true;
 }
 

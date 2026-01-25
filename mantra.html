@@ -122,6 +122,40 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 5px;
         }
+        .manifesto-section {
+            margin-top: 30px;
+        }
+        .manifesto-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            align-items: flex-start;
+        }
+        .checkbox-box {
+            width: 25px;
+            height: 25px;
+            border: 2px solid #f6d2a2;
+            flex-shrink: 0;
+            margin-top: 5px;
+            background-color: #fff9f0;
+        }
+        .manifesto-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+        }
+        .floral-corner {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 1;
+            background-image: url('https://www.transparenttextures.com/patterns/floral-paper.png');
+        }
         .input-group {
             margin-bottom: 30px;
             background: #fff;
@@ -207,12 +241,45 @@
 
     <div class="container">
         <div class="notebook-page">
+            <div class="floral-corner"></div>
             <h1 class="page-title">Daily Mantras</h1>
 
             <div class="featured-section">
                 <div class="featured-label">Core Focus</div>
                 <div id="featured-mantra" class="featured-mantra-text" contenteditable="true" oninput="handleFeaturedSave()">
                     Quiet the mind, and the soul will speak.
+                </div>
+            </div>
+
+            <div class="section-title">2026 Manifesto</div>
+            <div class="manifesto-section">
+                <div class="manifesto-item">
+                    <div class="checkbox-box"></div>
+                    <p class="manifesto-text">I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly. I will schedule solitude the way others schedule meetings, because if my calendar has no white space, something is out of alignment. Rest is not a reward for productivity; it is a responsibility I owe to my body, my mind, and my spirit.</p>
+                </div>
+                <div class="manifesto-item">
+                    <div class="checkbox-box"></div>
+                    <p class="manifesto-text">I lead without shrinking. I have earned my seat at the table, and when necessary, I am capable of building the table myself. I will speak when I know something and step forward when I am ready, not when I am pressured. Visibility does not require apology, and leadership does not require loudness. It requires clarity, consistency, and the courage to stand steady even when it would be easier to disappear.</p>
+                </div>
+                <div class="manifesto-item">
+                    <div class="checkbox-box"></div>
+                    <p class="manifesto-text">I build what grounds me. I value practical skills that feed people, calm homes, and create stability. There is dignity in old ways done well, and in returning to work that uses my hands and steadies my nervous system. When life feels chaotic, I come back to the tangible and the orderly. Creating structure is how I restore peace.</p>
+                </div>
+                <div class="manifesto-item">
+                    <div class="checkbox-box"></div>
+                    <p class="manifesto-text">I serve with boundaries. I help people who are willing to participate in their own growth, and I release the need to rescue, overextend, or prove my worth through exhaustion. My generosity is intentional, not reactive, and my compassion does not require self-abandonment. I am allowed to care deeply without carrying everything.</p>
+                </div>
+                <div class="manifesto-item">
+                    <div class="checkbox-box"></div>
+                    <p class="manifesto-text">I protect joy as a non-negotiable. Not every moment must be productive to be valuable. Some moments exist simply to be remembered—shared meals, laughter, road trips, quiet conversations, and ordinary days that become sacred because I was fully present. Joy is not a distraction from my purpose; it is evidence that I am living it.</p>
+                </div>
+                <div class="manifesto-item">
+                    <div class="checkbox-box"></div>
+                    <p class="manifesto-text">I trust the pace of my life. I am not late, not behind, and not missing anything meant for me. I am becoming. I will not rush what is meant to mature, and I will not carry what was never mine to hold. Consistency matters more than urgency, and faith steadies me when fear tries to speak louder.</p>
+                </div>
+                <div class="manifesto-item">
+                    <div class="checkbox-box"></div>
+                    <p class="manifesto-text">I am building a life where work is meaningful but not consuming, leadership is steady rather than frantic, service is impactful without being depleting, and home is calm instead of chaotic. My faith remains central, my values guide my choices, and my peace is protected on purpose. I move forward with intention, rooted rather than rushed, trusting that this way of living is not only sustainable—it is right.</p>
                 </div>
             </div>
 
