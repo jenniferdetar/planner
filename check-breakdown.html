@@ -161,10 +161,10 @@
                     <th class="account-col">Account</th>
                     <script>
                         const dates = [
-                            '7/8/2025', '7/23/2025', '8/8/2025', '8/23/2025', '9/08/2025', 
-                            '9/23/2025', '10/8/2025', '10/23/2025', '11/8/2025', '11/23/2025', 
-                            '12/8/2025', '12/23/2025', '1/8/2026', '1/23/2026', '2/8/2026', 
-                            '2/23/2026', '3/8/2026', '3/23/2026', '4/8/2026', '4/23/2026'
+                            '7/5/2025', '7/20/2025', '8/5/2025', '8/19/2025', '9/5/2025', 
+                            '9/20/2025', '10/5/2025', '10/20/2025', '11/4/2025', '11/18/2025', 
+                            '12/5/2025', '12/20/2025', '1/5/2026', '1/20/2026', '2/3/2026', 
+                            '2/20/2026', '3/3/2026', '3/20/2026', '4/5/2026', '4/20/2026'
                         ];
                         dates.forEach(d => document.write(`<th>${d}</th>`));
                     </script>
@@ -230,13 +230,71 @@
                 if (el) el.innerText = item.content;
             });
 
-            // Setup Auto-save
+            // Setup Auto-save and Calculation
             document.querySelectorAll('.data-cell').forEach(cell => {
+                const rowIndex = parseInt(cell.dataset.row);
+                if (rowIndex === 25 || rowIndex === 2) {
+                    cell.contentEditable = "false";
+                }
+
                 cell.addEventListener('input', () => {
                     saveWithDebounce(PERSISTENCE_KEY, cell.dataset.field, cell.innerText);
+                    if (rowIndex !== 25) {
+                        calculateColumn(parseInt(cell.dataset.col));
+                    }
                 });
             });
+
+            // Initial calculation
+            for (let i = 0; i < dates.length; i++) {
+                calculateColumn(i);
+            }
         });
+
+        function parseAmount(text) {
+            if (!text) return 0;
+            return parseFloat(text.replace(/[$,]/g, '')) || 0;
+        }
+
+        function formatAmount(amount) {
+            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function calculateColumn(colIndex) {
+            const rows = document.querySelectorAll('#sheet-body tr');
+            let income = 0;
+            let expenses = 0;
+            let jennifersCheck = 0;
+
+            // First pass to get Jennifer's Check
+            const checkCell = rows[1].querySelector(`[data-col="${colIndex}"]`);
+            if (checkCell) {
+                jennifersCheck = parseAmount(checkCell.innerText);
+            }
+
+            // Calculate and set Tithe (10% rounded up)
+            const titheCell = rows[2].querySelector(`[data-col="${colIndex}"]`);
+            if (titheCell) {
+                const titheAmount = Math.ceil(jennifersCheck * 0.1);
+                titheCell.innerText = formatAmount(titheAmount);
+            }
+
+            rows.forEach((row, rowIndex) => {
+                const cell = row.querySelector(`[data-col="${colIndex}"]`);
+                if (!cell) return;
+                
+                if (rowIndex === 25) {
+                    cell.innerText = formatAmount(income - expenses);
+                } else {
+                    const val = parseAmount(cell.innerText);
+                    if (rowIndex === 0 || rowIndex === 1) {
+                        income += val;
+                    } else if (rowIndex >= 2 && rowIndex <= 24) {
+                        expenses += val;
+                    }
+                }
+            });
+        }
 
         let debounceTimer;
         function saveWithDebounce(date, field, content) {

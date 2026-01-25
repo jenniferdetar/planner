@@ -755,7 +755,7 @@
                         const billLower = bill.toLowerCase().trim();
                         if (titleLower.includes(billLower)) {
                             console.log(`    Matched bill: ${bill}`);
-                            dueList.push(`${bill}: ${billAmounts[bill]}`);
+                            dueList.push(billAmounts[bill]);
                         }
                     });
                 });
@@ -816,7 +816,7 @@
                             </div>
                             <div class="day-content">
                                 ${timedEvents.map(e => `
-                                        <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 2px;">
+                                        <div class="task-line" style="border-bottom: none; height: 25px; margin-bottom: 2px;">
                                             <div class="check-box-spacer"></div>
                                             <div class="${getEventClass(e.title)}">${formatTime(e.time)} ${e.title}</div>
                                         </div>
