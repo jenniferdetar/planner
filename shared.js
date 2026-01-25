@@ -146,6 +146,24 @@ function formatDate(dateStr) {
     });
 }
 
+function formatDateMMM(dateStr) {
+    if (!dateStr) return '';
+    // Handle YYYY-MM-DD by splitting to avoid timezone shifts
+    const parts = dateStr.split('-');
+    let date;
+    if (parts.length === 3) {
+        date = new Date(parts[0], parts[1] - 1, parts[2]);
+    } else {
+        date = new Date(dateStr);
+    }
+    
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
+    }).replace(',', '');
+}
+
 function formatTime(timeStr, compact = false, showSpace = false) {
     if (!timeStr) return '';
     const [h, m] = timeStr.split(':').map(Number);

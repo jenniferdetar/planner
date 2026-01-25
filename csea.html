@@ -421,7 +421,7 @@
             const reps = [inter.contact_person, inter.labor_rep].filter(Boolean).join(' / ');
             
             tr.innerHTML = `
-                <td>${inter.date_spoke}</td>
+                <td>${formatDateMMM(inter.date_spoke)}</td>
                 <td>${inter.member_name}</td>
                 <td><span style="color: ${type === 'Grievance' ? '#cc0000' : '#2d5a45'}; font-weight: bold;">${type}</span></td>
                 <td>${inter.member_number || ''}</td>
