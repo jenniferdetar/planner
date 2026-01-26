@@ -297,12 +297,6 @@
             align-items: center;
             justify-content: center;
         }
-        .check-box-spacer {
-            width: 14px;
-            height: 14px;
-            border: 1px solid transparent;
-            flex-shrink: 0;
-        }
         .check-box.checked::after {
             content: "✓";
             color: #f59e9e;
@@ -743,12 +737,18 @@
                                 </div>
                             </div>
                             <div class="day-content">
-                                ${timedEvents.map(e => `
+                                ${timedEvents.map((e, index) => {
+                                    const eventId = `event-${index}`;
+                                    const saved = plannerData.find(d => d.date === dayStr && d.field_id === eventId);
+                                    const isChecked = saved && saved.content === 'true';
+                                    return `
                                         <div class="task-line" style="border-bottom: none; height: 25px; margin-bottom: 2px;">
-                                            <div class="check-box-spacer"></div>
+                                            <div class="check-box ${isChecked ? 'checked' : ''}" 
+                                                 onclick="toggleEventBox(event, '${dayStr}', '${eventId}')"></div>
                                             <div class="${getEventClass(e.title)}">${formatTime(e.time)} ${e.title}</div>
                                         </div>
-                                    `).join('')}
+                                    `;
+                                }).join('')}
                                 ${Array(Math.max(4, 10 - (timedEvents.length))).fill(0).map((_, ti) => {
                                     const fieldId = `daily-task-${ti}`;
                                     const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
@@ -770,6 +770,12 @@
                 `;
                 container.innerHTML += dayHtml;
             }
+        }
+        function toggleEventBox(e, date, fieldId) {
+            const box = e.target;
+            box.classList.toggle('checked');
+            const isChecked = box.classList.contains('checked');
+            handleSavePlannerData(date, fieldId, isChecked ? 'true' : 'false');
         }
         function toggleDailyTask(e, date, fieldId) {
             const box = e.target;

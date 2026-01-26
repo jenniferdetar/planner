@@ -420,13 +420,13 @@
             tr.innerHTML = `
                 <td></td>
                 <td>${formatDateMMM(inter.date_spoke)}</td>
-                <td>${inter.member_name}</td>
+                <td>${toTitleCase(inter.member_name)}</td>
                 <td><span style="color: ${type === 'Grievance' ? '#cc0000' : '#2d5a45'}; font-weight: bold;">${type}</span></td>
                 <td>${inter.member_number || ''}</td>
-                <td>${inter.work_location || ''}</td>
+                <td>${toTitleCase(inter.work_location) || ''}</td>
                 <td>${inter.discussion || ''}</td>
-                <td>${inter.who_involved || ''}</td>
-                <td>${reps}</td>
+                <td>${toTitleCase(inter.who_involved) || ''}</td>
+                <td>${toTitleCase(reps)}</td>
                 <td>${inter.outcome || ''}</td>
                 <td><span class="delete-btn" onclick="handleDeleteInteraction(${inter.id})">Delete</span></td>
             `;

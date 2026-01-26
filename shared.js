@@ -226,17 +226,20 @@ async function fetchInteractions(category) {
         return [];
     }
     
-    // Unpack extra fields from point_of_contact if they exist
+    // Unpack extra fields from point_of_contact if they exist and normalize names
     return (data || []).map(inter => {
+        let normalized = { 
+            ...inter, 
+            member_name: toTitleCase(inter.member_name),
+            work_location: toTitleCase(inter.work_location)
+        };
         if (inter.point_of_contact && inter.point_of_contact.startsWith('{')) {
             try {
                 const extra = JSON.parse(inter.point_of_contact);
-                return { ...inter, ...extra };
-            } catch (e) {
-                return inter;
-            }
+                normalized = { ...normalized, ...extra };
+            } catch (e) {}
         }
-        return inter;
+        return normalized;
     });
 }
 
@@ -302,7 +305,7 @@ async function fetchCseaMembers() {
     const client = getSupabase();
     if (!client) return [];
     const { data } = await client.from('csea_members').select('*').order('name');
-    return data || [];
+    return (data || []).map(m => ({ ...m, name: toTitleCase(m.name) }));
 }
 
 async function fetchHoursWorked() {
@@ -313,7 +316,7 @@ async function fetchHoursWorked() {
         console.error('Error fetching hours_worked:', error);
         return [];
     }
-    return data || [];
+    return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
 }
 
 async function fetchApprovalDates() {
@@ -324,7 +327,7 @@ async function fetchApprovalDates() {
         console.error('Error fetching approval_dates:', error);
         return [];
     }
-    return data || [];
+    return (data || []).map(r => ({ ...r, Name: toTitleCase(r.Name) }));
 }
 
 async function fetchPaylogSubmissions() {
@@ -336,7 +339,7 @@ async function fetchPaylogSubmissions() {
         console.warn('paylog_submission table not found, using empty data');
         return [];
     }
-    return data || [];
+    return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
 }
 
 async function fetchAllTrackingNames() {
@@ -345,9 +348,9 @@ async function fetchAllTrackingNames() {
     const paylogs = await fetchPaylogSubmissions();
     
     const names = new Set();
-    hours.forEach(r => names.add(r.name));
-    approvals.forEach(r => names.add(r.Name));
-    paylogs.forEach(r => names.add(r.name));
+    hours.forEach(r => { if (r.name) names.add(toTitleCase(r.name)); });
+    approvals.forEach(r => { if (r.Name) names.add(toTitleCase(r.Name)); });
+    paylogs.forEach(r => { if (r.name) names.add(toTitleCase(r.name)); });
     
     return [...names].sort();
 }
@@ -414,7 +417,7 @@ async function fetchCseaStewards() {
     const client = getSupabase();
     if (!client) return [];
     const { data } = await client.from('csea_stewards').select('*').order('name');
-    return data || [];
+    return (data || []).map(m => ({ ...m, name: toTitleCase(m.name) }));
 }
 
 async function fetchCseaIssues() {
@@ -445,7 +448,17 @@ async function fetchSchoolDirectory() {
     const client = getSupabase();
     if (!client) return [];
     const { data } = await client.from('school_directory').select('*').order('site_name');
-    return data || [];
+    return (data || []).map(s => ({ ...s, site_name: toTitleCase(s.site_name) }));
+}
+
+function toTitleCase(str) {
+    if (!str) return '';
+    return str.toLowerCase().split(' ').map(word => {
+        if (word.includes('-')) {
+            return word.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('-');
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
 }
 
 function updateNavigationLinks(date) {
