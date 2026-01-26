@@ -164,6 +164,23 @@
             flex-shrink: 0;
             white-space: nowrap;
         }
+        .check-box {
+            width: 14px;
+            height: 14px;
+            border: 1px solid #f59e9e;
+            flex-shrink: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+        }
+        .check-box.checked::after {
+            content: "✓";
+            color: #f59e9e;
+            font-size: 12px;
+            font-weight: bold;
+        }
         .slot-content {
             flex-grow: 1;
             outline: none;
@@ -327,6 +344,12 @@
                 saveStatus.innerText = 'All changes saved';
             }
         }
+        function toggleEventBox(e, date, fieldId) {
+            const box = e.target;
+            box.classList.toggle('checked');
+            const isChecked = box.classList.contains('checked');
+            handleSavePlannerData(date, fieldId, isChecked ? 'true' : 'false');
+        }
         function handleInput(e) {
             const el = e.target;
             const fieldId = el.getAttribute('data-field');
@@ -431,6 +454,15 @@
                     label.className = 'time-label';
                     label.innerText = formatTime(slot, false, true);
                     slotDiv.appendChild(label);
+
+                    // Add Checkbox
+                    const checkId = `check-slot-${slot}`;
+                    const isChecked = plannerData.some(d => d.date === dayStr && d.field_id === checkId && d.content === 'true');
+                    const checkBox = document.createElement('div');
+                    checkBox.className = `check-box${isChecked ? ' checked' : ''}`;
+                    checkBox.onclick = (e) => toggleEventBox(e, dayStr, checkId);
+                    slotDiv.appendChild(checkBox);
+
                     const content = document.createElement('div');
                     content.className = 'slot-content';
                     const eventTitle = getEventForSlot(dayEvents, slot, i);

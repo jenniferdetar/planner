@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Goals - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --header-blue: #00326b;
+            --border-color: #333;
+            --text-color: #333;
+            --light-blue: #e1f5fe;
+            --light-pink: #fce4ec;
+            --light-tan: #fff9c4;
+        }
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: var(--text-color);
+        }
+        .global-header {
+            background: #00326b;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
+        }
+        .notebook-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 1200px;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .trophy-icon {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin: 0 0 15px 0;
+            color: var(--text-color);
+        }
+        .intro-text {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .goal-box {
+            display: flex;
+            flex-direction: column;
+        }
+        .goal-header {
+            text-align: center;
+            padding: 8px;
+            font-size: 1.2rem;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+        .goal-header.blue { background-color: var(--light-blue); }
+        .goal-header.pink { background-color: var(--light-pink); }
+        .goal-header.tan { background-color: var(--light-tan); }
+
+        .ruled-line {
+            border-bottom: 1px solid #eee;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+        }
+        .editable-area {
+            width: 100%;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        .total-section {
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .total-label {
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+        .total-box {
+            flex-grow: 1;
+            background-color: var(--light-blue);
+            height: 35px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .save-status {
+            text-align: right;
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 10px;
+        }
+        @media (max-width: 900px) {
+            .goals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="hoa.html" class="nav-link">HOA</a>
+        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
+
+    <div class="notebook-container">
+        <div class="notebook-page">
+            <div class="trophy-icon">🏆</div>
+            <div class="page-header">
+                <h1 class="page-title">My Personal Goals</h1>
+                <p class="intro-text">
+                    What one thing do you want to be intentional about this year? Maybe it's a weight loss goal, financial goal, or daily step goal you'd love to keep up with each week. Decide what you want to track, and determine one way to clearly define success. Keep up with it weekly, and track your progress below!
+                </p>
+            </div>
+
+            <div class="goals-grid">
+                <!-- Row 1: Blue -->
+                <div class="goal-box">
+                    <div class="goal-header blue">Physical</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-6"></div></div>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-header blue">Mental</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-6"></div></div>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-header blue">Relational</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-6"></div></div>
+                </div>
+
+                <!-- Row 2: Pink -->
+                <div class="goal-box">
+                    <div class="goal-header pink">Self-Care</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-6"></div></div>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-header pink">Hobbies</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-6"></div></div>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-header pink">Home</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-6"></div></div>
+                </div>
+
+                <!-- Row 3: Blue -->
+                <div class="goal-box">
+                    <div class="goal-header blue">Career</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-6"></div></div>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-header blue">Financial</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-6"></div></div>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-header blue">Organizational</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-6"></div></div>
+                </div>
+
+                <!-- Row 4: Tan -->
+                <div class="goal-box">
+                    <div class="goal-header tan">Screen Time</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-6"></div></div>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-header tan">Learn</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-6"></div></div>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-header tan">CSEA</div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-1"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-2"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-3"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-4"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-5"></div></div>
+                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-6"></div></div>
+                </div>
+            </div>
+
+            <div class="total-section">
+                <div class="total-label">Total:</div>
+                <div class="total-box"><div class="editable-area" contenteditable="true" data-field="goal-total"></div></div>
+            </div>
+
+            <div id="save-status" class="save-status">All changes saved</div>
+        </div>
+    </div>
+
+    <script>
+        const PERSISTENCE_KEY = "personal-goals-data";
+        let saveTimeout = null;
+
+        async function init() {
+            // Load saved data
+            const data = await fetchPlannerData(PERSISTENCE_KEY, 1);
+            data.forEach(item => {
+                const el = document.querySelector(`[data-field="${item.field_id}"]`);
+                if (el) el.innerText = item.content;
+            });
+
+            // Set up save listeners
+            document.querySelectorAll('.editable-area').forEach(el => {
+                el.addEventListener('input', (e) => {
+                    const fieldId = el.getAttribute('data-field');
+                    const content = el.innerText;
+                    
+                    document.getElementById('save-status').innerText = 'Unsaved changes';
+                    clearTimeout(saveTimeout);
+                    saveTimeout = setTimeout(async () => {
+                        const success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                        if (success) {
+                            document.getElementById('save-status').innerText = 'All changes saved';
+                        } else {
+                            document.getElementById('save-status').innerText = 'Error saving';
+                        }
+                    }, 1000);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

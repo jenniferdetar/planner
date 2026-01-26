@@ -193,6 +193,7 @@ function getEventClass(title) {
     if (lowerTitle.includes('meeting')) return 'event-pill meeting';
     if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
     if (lowerTitle.includes('budget')) return 'event-pill budget';
+    if (lowerTitle.includes('dwp')) return 'event-pill dwp';
     return 'event-pill';
 }
 
@@ -437,7 +438,7 @@ async function fetchCseaIssues() {
     }
     
     // Filter for unique, non-empty values and map to issue_name format
-    const uniqueDiscussions = [...new Set(data.map(i => i.discussion.trim()))]
+    const uniqueDiscussions = [...new Set(data.map(i => toTitleCase(i.discussion.trim())))]
         .filter(d => d.length > 0)
         .map(d => ({ issue_name: d }));
         
@@ -454,10 +455,17 @@ async function fetchSchoolDirectory() {
 function toTitleCase(str) {
     if (!str) return '';
     return str.toLowerCase().split(' ').map(word => {
-        if (word.includes('-')) {
-            return word.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('-');
+        let processed = word;
+        if (processed.includes('-')) {
+            processed = processed.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('-');
         }
-        return word.charAt(0).toUpperCase() + word.slice(1);
+        if (processed.includes("'")) {
+            processed = processed.split("'").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join("'");
+        }
+        if (!word.includes('-') && !word.includes("'")) {
+            processed = processed.charAt(0).toUpperCase() + processed.slice(1);
+        }
+        return processed;
     }).join(' ');
 }
 
@@ -476,7 +484,8 @@ function updateNavigationLinks(date) {
         'monthly-review.html',
         'check-breakdown.html',
         'icaap-tracking.html',
-        'mantra.html'
+        'mantra.html',
+        'personal-goals.html'
     ];
     document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill').forEach(link => {
         const href = link.getAttribute('href');

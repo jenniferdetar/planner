@@ -83,14 +83,14 @@
 
         .header-controls {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-bottom: 20px;
+            gap: 15px;
         }
 
         .month-title {
             font-size: 1.2rem;
-            text-transform: uppercase;
             letter-spacing: 3px;
             color: var(--sun-bg);
             margin: 0;
@@ -99,11 +99,18 @@
         .nav-btn {
             background: none;
             border: 1px solid var(--border-color);
-            padding: 2px 8px;
+            padding: 4px 12px;
             cursor: pointer;
             font-family: 'Coming Soon', cursive;
             font-size: 0.9rem;
             border-radius: 12px;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.15);
+            transition: transform 0.1s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.2);
         }
 
 
@@ -139,6 +146,12 @@
             border: none;
             border-left: 10px solid #d4af37;
             border-radius: 4px;
+        }
+
+        .event-pill.dwp {
+            background-color: #00326b;
+            color: #ffffff;
+            border: none;
         }
 
         .calendar-grid {
@@ -212,6 +225,7 @@
         <a href="index.html" class="nav-link">Home</a>
         <a href="csea.html" class="nav-link">CSEA</a>
         <a href="financial.html" class="nav-link">Financial</a>
+        <a href="personal-goals.html" class="nav-link">Goals</a>
         <a href="hoa.html" class="nav-link">HOA</a>
         <a href="icaap.html" class="nav-link">iCAAP</a>
         <a href="planning.html" class="nav-link">Planning</a>
@@ -222,13 +236,12 @@
         <div class="notebook-page">
         <div class="header-controls">
             <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
-            <h1 id="current-month-display" class="month-title">JANUARY 2026</h1>
-            <div style="display: flex; gap: 10px;">
-                <a href="work-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Work Planner</a>
-                <a href="personal-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
-                <a href="monthly-review.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Monthly Review</a>
-                <button class="nav-btn" onclick="changeMonth(1)">Next</button>
-            </div>
+            <a href="personal-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal planner</a>
+            <h1 id="current-month-display" class="month-title">January 2026</h1>
+            <a href="work-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Work planner</a>
+            <a href="personal-goals.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal goals</a>
+            <a href="monthly-review.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Monthly review</a>
+            <button class="nav-btn" onclick="changeMonth(1)">Next</button>
         </div>
 
 
@@ -258,7 +271,7 @@
         async function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
-            const monthName = currentDate.toLocaleString('default', { month: 'long' }).toUpperCase();
+            const monthName = currentDate.toLocaleString('default', { month: 'long' });
             
             document.getElementById('current-month-display').innerText = `${monthName} ${year}`;
             

@@ -418,4 +418,9 @@ Veterans Day	11/11/26
 Veterans Day	11/11/27	
 Vic Samples	1/10/26	
 Yom Kippur	9/21/26	
-Yom Kippur	10/11/27	
+Yom Kippur	10/11/27	DWP Meter Reading	2/24/26
+DWP Meter Reading	4/23/26
+DWP Meter Reading	6/24/26
+DWP Meter Reading	8/21/26
+DWP Meter Reading	10/22/26
+DWP Meter Reading	12/23/26
