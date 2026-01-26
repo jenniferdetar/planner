@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSEA - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -33,7 +33,7 @@
         .nav-link {
             text-decoration: none;
             color: #ffca38;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
@@ -211,7 +211,7 @@
         }
         .interaction-log-header {
             font-family: 'Indie Flower', cursive;
-            font-weight: bold;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -423,7 +423,7 @@
                 <td></td>
                 <td>${formatDateMMM(inter.date_spoke)}</td>
                 <td>${toTitleCase(inter.member_name)}</td>
-                <td><span style="color: ${type === 'Grievance' ? '#cc0000' : '#2d5a45'}; font-weight: bold;">${type}</span></td>
+                <td><span style="color: ${type === 'Grievance' ? '#cc0000' : '#2d5a45'}; font-weight: 600;">${type}</span></td>
                 <td>${inter.member_number || ''}</td>
                 <td>${toTitleCase(inter.work_location) || ''}</td>
                 <td>${inter.discussion || ''}</td>

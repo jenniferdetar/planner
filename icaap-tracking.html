@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iCAAP Tracking - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -34,7 +34,7 @@
         .nav-link {
             text-decoration: none;
             color: #ffca38;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
@@ -96,7 +96,7 @@
             min-width: 150px;
         }
         .employee-col {
-            font-weight: bold;
+            font-weight: 600;
             text-align: left;
             min-width: 150px;
             position: sticky;
@@ -423,7 +423,7 @@
                 });
                 // Add Total Hours cell
                 const totalFieldId = `icaap-total-${eIdx}`;
-                tr.innerHTML += `<td class="editable-cell" contenteditable="false" data-field="${totalFieldId}" style="font-weight: bold; background-color: #f1f8e9;"></td>`;
+                tr.innerHTML += `<td class="editable-cell" contenteditable="false" data-field="${totalFieldId}" style="font-weight: 600; background-color: #f1f8e9;"></td>`;
                 tbody.appendChild(tr);
             });
         }
