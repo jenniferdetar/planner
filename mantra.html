@@ -275,12 +275,32 @@
         const CATEGORY = 'Mantra';
         const FEATURED_KEY = 'featured-mantra';
         const PERSISTENCE_KEY = 'mantra-data';
+        const DRAFT_KEY = 'draft-mantra';
         let saveTimeout;
 
         async function init() {
             loadManifestoState();
             loadMantras();
             setupManifestoListeners();
+            setupDraftPersistence();
+        }
+
+        async function setupDraftPersistence() {
+            const input = document.getElementById('new-mantra');
+            // Load draft
+            const data = await fetchPlannerData(DRAFT_KEY, 1);
+            if (data && data.length > 0) {
+                input.value = data[0].content;
+            }
+
+            // Save draft with debounce
+            let draftTimeout;
+            input.addEventListener('input', () => {
+                clearTimeout(draftTimeout);
+                draftTimeout = setTimeout(async () => {
+                    await savePlannerData(DRAFT_KEY, 'draft', input.value);
+                }, 1000);
+            });
         }
 
         async function loadManifestoState() {
@@ -322,9 +342,23 @@
             div.id = `mantra-${entry.id}`;
             div.innerHTML = `
                 <div class="mantra-date">${formatDate(entry.created_at)}</div>
-                <div class="mantra-text">${entry.content}</div>
+                <div class="mantra-text" contenteditable="true">${entry.content}</div>
                 <span class="delete-btn" onclick="handleDeleteMantra(${entry.id})">Delete</span>
             `;
+
+            // Add auto-save for edited mantra
+            const textEl = div.querySelector('.mantra-text');
+            let editTimeout;
+            textEl.addEventListener('input', () => {
+                clearTimeout(editTimeout);
+                const status = document.getElementById('save-status');
+                status.innerText = 'Saving...';
+                editTimeout = setTimeout(async () => {
+                    const success = await updateCategoryEntry(entry.id, textEl.innerText);
+                    status.innerText = success ? 'All changes saved' : 'Error saving';
+                }, 1000);
+            });
+
             return div;
         }
 
@@ -338,6 +372,8 @@
             const newEntry = await saveCategoryEntry(CATEGORY, content);
             if (newEntry) {
                 input.value = '';
+                // Clear draft from DB
+                await savePlannerData(DRAFT_KEY, 'draft', '');
                 status.innerText = 'Saved';
                 document.getElementById('mantras-list').prepend(createMantraElement(newEntry));
                 setTimeout(() => { status.innerText = 'All changes saved'; }, 2000);

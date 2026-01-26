@@ -166,7 +166,7 @@
             <h1 class="page-title">HOA Notes</h1>
             <div class="notes-section">
                 <div class="input-group">
-                    <textarea id="new-note-content" placeholder="Type a new note here..."></textarea>
+                    <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
                     <button class="save-btn" onclick="handleAddNote()">Save Note</button>
                     <div id="save-status" class="save-status">All changes saved</div>
                 </div>
@@ -178,9 +178,12 @@
     </div>
     <script>
         const CATEGORY = 'HOA';
+        const PERSISTENCE_KEY = `draft-note-${CATEGORY.toLowerCase()}`;
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
+        let saveTimeout = null;
+
         function createEntryElement(entry) {
             const div = document.createElement('div');
             div.className = 'note-entry';
@@ -190,7 +193,7 @@
                     <span>${formatDate(entry.created_at)}</span>
                     <span class="delete-btn" onclick="handleDeleteNote(${entry.id})">Delete</span>
                 </div>
-                <div class="entry-content">${entry.content}</div>
+                <div class="entry-content" contenteditable="true" oninput="handleEditNote(event, ${entry.id})">${entry.content}</div>
             `;
             return div;
         }
@@ -200,6 +203,30 @@
             entries.forEach(entry => {
                 entriesList.appendChild(createEntryElement(entry));
             });
+
+            // Load draft
+            const draft = await fetchPlannerData(PERSISTENCE_KEY, 1);
+            if (draft && draft.length > 0) {
+                newNoteContent.value = draft[0].content;
+            }
+        }
+        function handleDraftInput() {
+            saveStatus.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                saveStatus.innerText = 'Saving...';
+                const success = await savePlannerData(PERSISTENCE_KEY, 'draft', newNoteContent.value);
+                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
+            }, 1000);
+        }
+        function handleEditNote(e, id) {
+            saveStatus.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                saveStatus.innerText = 'Saving...';
+                const success = await updateCategoryEntry(id, e.target.innerText);
+                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
+            }, 1000);
         }
         async function handleAddNote() {
             const content = newNoteContent.value;
@@ -208,9 +235,11 @@
             const newEntry = await saveCategoryEntry(CATEGORY, content);
             if (newEntry) {
                 newNoteContent.value = '';
+                // Clear draft
+                await savePlannerData(PERSISTENCE_KEY, 'draft', '');
                 saveStatus.innerText = 'Saved';
                 entriesList.prepend(createEntryElement(newEntry));
-                setTimeout(() => { saveStatus.innerText = ''; }, 2000);
+                setTimeout(() => { saveStatus.innerText = 'All changes saved'; }, 2000);
             } else {
                 saveStatus.innerText = 'Error saving';
             }

@@ -142,6 +142,21 @@ async function saveCategoryEntry(category, content) {
     return data;
 }
 
+async function updateCategoryEntry(id, content) {
+    const client = getSupabase();
+    if (!client) return false;
+    const { error } = await client
+        .from('category_entries')
+        .update({ content, updated_at: new Date().toISOString() })
+        .eq('id', id);
+    
+    if (error) {
+        console.error('Error updating entry:', error);
+        return false;
+    }
+    return true;
+}
+
 function formatDate(dateStr) {
     if (!dateStr) return '';
     const date = new Date(dateStr);
