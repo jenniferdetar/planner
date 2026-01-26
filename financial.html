@@ -26,7 +26,7 @@
         }
         .global-header {
             background: #00326b;
-            padding: 10px 20px;
+            padding: 5px 20px;
             display: flex;
             justify-content: center;
             gap: 15px;
@@ -113,10 +113,17 @@
             font-weight: normal;
             color: #666;
             text-align: left;
+            position: sticky;
+            top: 40px;
+            background: #fff;
+            z-index: 100;
         }
         .bill-table td {
             padding: 4px 8px;
             border-bottom: 1px solid #eee;
+        }
+        .bill-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
         .month-col {
             width: 25px;

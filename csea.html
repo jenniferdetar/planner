@@ -20,7 +20,7 @@
         }
         .global-header {
             background: #00326b;
-            padding: 10px 20px;
+            padding: 5px 20px;
             display: flex;
             justify-content: center;
             gap: 15px;
@@ -167,6 +167,9 @@
             text-align: left;
             border: 1px solid #1e3d2e;
             font-weight: 600;
+            position: sticky;
+            top: 40px;
+            z-index: 100;
         }
         .log-table td {
             padding: 10px;
@@ -175,6 +178,12 @@
         }
         .log-table tr:nth-child(even) {
             background-color: #f9f9f9;
+        }
+        .log-table tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        .log-table tbody tr:hover {
+            background-color: #f1f8e9;
         }
         .log-input-row td {
             background-color: #fffde7;

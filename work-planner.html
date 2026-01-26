@@ -30,7 +30,7 @@
         }
         .global-header {
             background: #00326b;
-            padding: 10px 20px;
+            padding: 5px 20px;
             display: flex;
             justify-content: center;
             gap: 15px;
@@ -140,6 +140,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: sticky;
+            top: 40px;
+            z-index: 10;
         }
         .time-slot {
             height: 40px;
@@ -150,6 +153,9 @@
             font-size: 0.65rem;
             position: relative;
             box-sizing: border-box;
+        }
+        .time-slot:nth-child(even) {
+            background-color: #f9f9f9;
         }
         .time-label {
             width: 55px;
