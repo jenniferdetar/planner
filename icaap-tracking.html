@@ -11,7 +11,7 @@
         :root {
             --header-blue: #00326b;
             --table-green: #1b5e20;
-            --border-color: #ccc;
+            --border-color: #333;
         }
         body {
             font-family: 'Coming Soon', cursive;
@@ -56,23 +56,32 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             min-width: max-content;
         }
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
         .page-title {
             color: var(--header-blue);
-            border-bottom: 2px solid var(--header-blue);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+            font-size: 1.5rem;
+            margin: 0;
             letter-spacing: 2px;
+            text-transform: capitalize;
+            border-bottom: none;
+            padding-bottom: 0;
         }
         .tracking-table {
             border-collapse: collapse;
             width: 100%;
             font-size: 11px;
+            border: 1px solid var(--border-color);
         }
         .tracking-table th, .tracking-table td {
             border: 1px solid var(--border-color);
             padding: 8px;
             text-align: center;
+        }
+        .tracking-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
         .header-row {
             background-color: var(--table-green);
@@ -82,7 +91,6 @@
             min-width: 150px;
         }
         .employee-col {
-            background-color: #f9f9f9;
             font-weight: bold;
             text-align: left;
             min-width: 150px;
@@ -90,6 +98,13 @@
             left: 0;
             border-right: 2px solid var(--border-color);
             z-index: 5;
+            background-color: inherit;
+        }
+        .tracking-table tbody tr:nth-child(odd) .employee-col {
+            background-color: #fff;
+        }
+        .tracking-table tbody tr:nth-child(even) .employee-col {
+            background-color: #f9f9f9;
         }
         .header-row .employee-col {
             background-color: var(--table-green);
@@ -135,13 +150,14 @@
     <div id="save-status" class="save-status">All changes saved</div>
     <div class="container">
         <div class="notebook-page">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h1 class="page-title" style="margin-bottom: 0; border-bottom: none;">iCAAP Tracking Log</h1>
-                <a href="icaap.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue);">
-                    <span>📝</span> iCAAP Notes
-                </a>
+            <div class="page-header">
+                <h1 class="page-title">iCAAP Tracking Log</h1>
+                <div style="margin-top: 10px;">
+                    <a href="icaap.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue); display: inline-flex;">
+                        <span>📝</span> iCAAP Notes
+                    </a>
+                </div>
             </div>
-            <div style="border-bottom: 2px solid var(--header-blue); margin-bottom: 20px;"></div>
             <table class="tracking-table">
                 <thead>
                     <tr class="header-row">
