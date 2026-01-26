@@ -424,3 +424,8 @@ DWP Meter Reading	6/24/26
 DWP Meter Reading	8/21/26
 DWP Meter Reading	10/22/26
 DWP Meter Reading	12/23/26
+Disney Cruise	4/19/26
+Disney Cruise	4/20/26
+Disney Cruise	4/21/26
+Disney Cruise	4/22/26
+Disney Cruise	4/23/26

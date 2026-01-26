@@ -195,6 +195,7 @@ function getEventClass(title) {
     if (lowerTitle.includes('budget')) return 'event-pill budget';
     if (lowerTitle.includes('dwp')) return 'event-pill dwp';
     if (lowerTitle.includes('conference')) return 'event-pill conference';
+    if (lowerTitle.includes('cruise')) return 'event-pill cruise';
     
     // Names that are likely birthdays or explicitly Anniversary
     const celebrateNames = [
