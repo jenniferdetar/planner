@@ -67,10 +67,9 @@
         }
         .page-title {
             color: var(--header-blue);
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             margin: 0;
             letter-spacing: 1px;
-            text-transform: capitalize;
         }
         .date-range-display {
             font-size: 0.9rem;
@@ -179,7 +178,7 @@
     <div class="container">
         <div class="notebook-page">
             <div class="page-header">
-                <h1 class="page-title">iCAAP Attendance Tracking</h1>
+                <h1 class="page-title">ICAAP Attendance Tracking</h1>
                 <div id="week-nav" style="margin-top: 8px; display: flex; justify-content: center; align-items: center; gap: 15px;">
                     <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
                     <div id="date-range-display" class="date-range-display">January 5 - 9, 2026</div>
@@ -244,14 +243,14 @@
             const rangeDisplay = document.getElementById('date-range-display');
 
             const lastDay = new Date(weekdays[4]);
-            rangeDisplay.innerText = `${weekdays[0].toLocaleDateString('en-US', {month: 'long', day: 'numeric'})} - ${lastDay.toLocaleDateString('en-US', {day: 'numeric', year: 'numeric'})}`;
+            rangeDisplay.innerText = `${weekdays[0].toLocaleDateString('en-US', {month: 'long', day: 'numeric'})} - ${weekdays[0].getFullYear()} (day: ${lastDay.getDate()})`;
             
             // Header
             let headHtml = `<tr class="header-row"><th class="employee-col">Employee Name</th>`;
             weekdays.forEach(d => {
                 const dateStr = `${d.getMonth() + 1}/${d.getDate()}`;
                 const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
-                headHtml += `<th>${dateStr}<br>${dayName}</th>`;
+                headHtml += `<th>${dayName}<br>${dateStr}</th>`;
             });
             headHtml += `</tr>`;
             thead.innerHTML = headHtml;
