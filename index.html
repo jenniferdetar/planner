@@ -163,6 +163,28 @@
             letter-spacing: 1px;
         }
 
+        .event-pill.celebrate {
+            background-color: transparent;
+            color: #d4af37; /* Gold */
+            font-family: 'Coming Soon', cursive;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            text-align: center;
+            position: relative;
+            padding: 4px 0;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+        }
+
+        .event-pill.celebrate::before {
+            content: 'Celebrate ';
+            display: block;
+            font-size: 10px;
+            color: #f59e9e; /* Confetti pink */
+            margin-bottom: -4px;
+            opacity: 0.8;
+        }
+
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);

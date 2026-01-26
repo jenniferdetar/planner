@@ -195,6 +195,23 @@ function getEventClass(title) {
     if (lowerTitle.includes('budget')) return 'event-pill budget';
     if (lowerTitle.includes('dwp')) return 'event-pill dwp';
     if (lowerTitle.includes('conference')) return 'event-pill conference';
+    
+    // Names that are likely birthdays or explicitly Anniversary
+    const celebrateNames = [
+        'allison', 'allyson', 'anniversary', 'brienne', 'chelsea', 'chris', 
+        'christine', 'cj ', 'craig', 'cynthia', 'debbie', 'dennis', 
+        'dianne', 'donna', 'eberardo', 'elias', 'emily', 'gayle', 
+        'geoff', 'greg', 'harrison', 'jacee', 'jackob', 'jaelyn', 
+        'jana', 'jeff', 'jennifer', 'jeremy', 'jim', 'joie', 
+        'kathie', 'kay ', 'lincoln', 'lynda', 'marjorie', 'nick ', 
+        'nicole', 'norm ', 'renee', 'rose', 'susan', 'terry', 'tom ', 
+        'vic ', 'stephen'
+    ];
+    
+    if (celebrateNames.some(name => lowerTitle.includes(name))) {
+        return 'event-pill celebrate';
+    }
+
     return 'event-pill';
 }
 
