@@ -84,34 +84,6 @@
             margin-bottom: 40px;
             border-bottom: none;
         }
-        .featured-section {
-            background-color: var(--soft-bg);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 40px;
-            text-align: center;
-            border: 1px dashed var(--mantra-green);
-            position: relative;
-        }
-        .featured-label {
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: white;
-            padding: 0 10px;
-            color: var(--mantra-green);
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .featured-mantra-text {
-            font-family: 'Indie Flower', cursive;
-            font-size: 2.2rem;
-            line-height: 1.2;
-            color: #333;
-            outline: none;
-            min-height: 1em;
-        }
         .section-title {
             color: #888;
             font-size: 0.9rem;
@@ -252,13 +224,6 @@
             <div class="floral-corner"></div>
             <h1 class="page-title">Daily Mantras</h1>
 
-            <div class="featured-section">
-                <div class="featured-label">Core Focus</div>
-                <div id="featured-mantra" class="featured-mantra-text" contenteditable="true" oninput="handleFeaturedSave()">
-                    Quiet the mind, and the soul will speak.
-                </div>
-            </div>
-
             <div class="section-title">2026 Manifesto</div>
             <div class="manifesto-section">
                 <div class="manifesto-item">
@@ -311,7 +276,6 @@
         let saveTimeout;
 
         async function init() {
-            loadFeatured();
             loadManifestoState();
             loadMantras();
             setupManifestoListeners();
@@ -339,26 +303,6 @@
                     status.innerText = success ? 'All changes saved' : 'Error saving';
                 });
             });
-        }
-
-        async function loadFeatured() {
-            const data = await fetchPlannerData(PERSISTENCE_KEY);
-            const featured = data.find(d => d.field_id === FEATURED_KEY);
-            if (featured) {
-                document.getElementById('featured-mantra').innerText = featured.content;
-            }
-        }
-
-        async function handleFeaturedSave() {
-            const content = document.getElementById('featured-mantra').innerText;
-            const status = document.getElementById('save-status');
-            status.innerText = 'Unsaved changes';
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(async () => {
-                status.innerText = 'Saving...';
-                const success = await savePlannerData(PERSISTENCE_KEY, FEATURED_KEY, content);
-                status.innerText = success ? 'All changes saved' : 'Error saving';
-            }, 1000);
         }
 
         async function loadMantras() {
