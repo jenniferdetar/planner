@@ -100,12 +100,12 @@ CSEA Chapter E-Board	9/3/26	5:00 PM
 CSEA Chapter E-Board	10/1/26	5:00 PM
 CSEA Chapter E-Board	11/5/26	5:00 PM
 CSEA Chapter E-Board	12/3/26	5:00 PM
-CSEA Conference	7/25/26	
-CSEA Conference	7/26/26	
-CSEA Conference	7/27/26	
-CSEA Conference	7/28/26	
-CSEA Conference	7/29/26	
-CSEA Conference	7/30/26	
+Conference	7/25/26	
+Conference	7/26/26	
+Conference	7/27/26	
+Conference	7/28/26	
+Conference	7/29/26	
+Conference	7/30/26	
 CSEA Chapter E-Board	4/25/26	5:00 PM
 CSEA LA 500 Per Diem	7/19/26	
 CSEA MB Committee	1/7/26	5:30 PM

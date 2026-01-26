@@ -194,6 +194,7 @@ function getEventClass(title) {
     if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
     if (lowerTitle.includes('budget')) return 'event-pill budget';
     if (lowerTitle.includes('dwp')) return 'event-pill dwp';
+    if (lowerTitle.includes('conference')) return 'event-pill conference';
     return 'event-pill';
 }
 
