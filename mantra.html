@@ -7,76 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
+    <link href="onenote.css" rel="stylesheet">
     <style>
-        :root {
-            --header-blue: #00326b;
-            --mantra-green: #4f7942;
-            --soft-bg: #fdfcf0;
-            --border-color: #ddd;
-        }
-        body {
-            font-family: 'Coming Soon', cursive;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            align-items: center;
-        }
-        .nav-link {
-            text-decoration: none;
-            color: #ffca38;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: #ffca38;
-            color: #00326b;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .notebook-page {
-            width: 100%;
-            max-width: 1200px;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            min-height: calc(100vh - 100px);
-            border-radius: 8px;
-            background-image: linear-gradient(#f1f1f1 1px, transparent 1px);
-            background-size: 100% 30px;
-            position: relative;
-        }
-        .notebook-page::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 50px;
-            width: 2px;
-            height: 100%;
-            background-color: rgba(255, 0, 0, 0.1);
-        }
         .page-title {
             color: var(--mantra-green);
             font-family: 'Indie Flower', cursive;
@@ -94,9 +26,6 @@
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 5px;
-        }
-        .manifesto-section {
-            margin-top: 10px;
         }
         .manifesto-item {
             display: flex;
@@ -116,7 +45,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            color: var(--mantra-green);
+            color: #4f7942;
         }
         .checkbox-box.checked::after {
             content: "✓";
@@ -126,22 +55,6 @@
             line-height: 1.6;
             color: #333;
             margin: 0;
-        }
-        .floral-corner {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 150px;
-            height: 150px;
-            opacity: 0.6;
-            pointer-events: none;
-            z-index: 1;
-            background-image: url('https://www.transparenttextures.com/patterns/floral-paper.png');
-        }
-        .input-group {
-            margin-bottom: 30px;
-            background: #fff;
-            padding: 10px 10px 10px 60px;
         }
         .mantra-input {
             width: 100%;
@@ -154,7 +67,7 @@
             background: transparent;
         }
         .add-btn {
-            background-color: var(--mantra-green);
+            background-color: #4f7942;
             color: white;
             border: none;
             padding: 8px 20px;
@@ -162,11 +75,9 @@
             cursor: pointer;
             font-family: 'Coming Soon', cursive;
             margin-top: 10px;
-            float: right;
         }
         .mantras-list {
             margin-top: 40px;
-            padding-left: 60px;
         }
         .mantra-item {
             margin-bottom: 20px;
@@ -175,13 +86,8 @@
         }
         .mantra-text {
             font-size: 1.3rem;
-            line-height: 30px; /* Match background-size */
+            line-height: 30px;
             color: #444;
-        }
-        .mantra-date {
-            font-size: 0.7rem;
-            color: #aaa;
-            margin-bottom: 5px;
         }
         .delete-btn {
             position: absolute;
@@ -194,38 +100,25 @@
         .delete-btn:hover {
             color: #cc0000;
         }
-        .save-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 0.75rem;
-            color: #666;
-            z-index: 2000;
-        }
     </style>
 </head>
 <body>
-    <header class="global-header">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="csea.html" class="nav-link">Csea</a>
-        <a href="financial.html" class="nav-link">Financial</a>
-        <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="hoa.html" class="nav-link">Hoa</a>
-        <a href="icaap.html" class="nav-link">Icaap</a>
-        <a href="planning.html" class="nav-link">Planning</a>
-        <a href="mantra.html" class="nav-link">Mantra</a>
-    </header>
-
-    <div id="save-status" class="save-status">All changes saved</div>
-
-    <div class="container">
-        <div class="notebook-page">
-            <div class="floral-corner"></div>
+    <nav class="onenote-tabs">
+        <a href="index.html" class="onenote-tab tab-home">Home</a>
+        <a href="work-planner.html" class="onenote-tab tab-planning">Work</a>
+        <a href="personal-planner.html" class="onenote-tab tab-home">Personal</a>
+        <a href="csea.html" class="onenote-tab tab-csea" id="tab-csea">Csea</a>
+        <a href="hoa.html" class="onenote-tab tab-hoa" id="tab-hoa">Hoa</a>
+        <a href="icaap.html" class="onenote-tab tab-icaap" id="tab-icaap">Icaap</a>
+        <a href="financial.html" class="onenote-tab tab-financial" id="tab-financial">Financial</a>
+        <a href="planning.html" class="onenote-tab tab-planning" id="tab-planning">Planning</a>
+        <a href="personal-goals.html" class="onenote-tab tab-goals" id="tab-goals">Goals</a>
+        <a href="mantra.html" class="onenote-tab tab-mantra active" id="tab-mantra">Mantra</a>
+    </nav>
+    <div class="notepaper">
+        <div class="notepaper-content">
             <h1 class="page-title">Daily Mantras</h1>
+            <div id="save-status" class="save-status">All changes saved</div>
 
             <div class="section-title">2026 Manifesto</div>
             <div class="manifesto-section">

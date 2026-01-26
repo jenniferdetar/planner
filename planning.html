@@ -7,115 +7,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
+    <link href="onenote.css" rel="stylesheet">
     <style>
         :root {
-            --header-blue: #00326b;
-            --border-color: #333;
             --tan-bg: #fffcf0;
             --text-color: #333;
         }
-        body {
-            font-family: 'Coming Soon', cursive;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            color: var(--text-color);
-        }
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            align-items: center;
-        }
-        .nav-link {
-            text-decoration: none;
-            color: #ffca38;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: #ffca38;
-            color: #00326b;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-            margin: 0 auto;
-        }
-        .planner-spread {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            margin: 0 auto;
-        }
-        .notebook-page {
-            width: 100%;
-            max-width: 1200px;
-            box-sizing: border-box;
-            background: #fff;
-            padding: 40px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            min-height: calc(100vh - 100px);
-            margin: 0 auto 15px auto;
-        }
-        .section-header {
-            text-align: left;
-            border-bottom: 2px solid var(--header-blue);
-            margin-bottom: 20px;
-            padding-bottom: 5px;
-            color: var(--header-blue);
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .page-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .page-title {
-            font-size: 2rem;
-            color: var(--header-blue);
-            margin: 0 0 10px 0;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-        .intro-text {
-            font-size: 0.8rem;
-            color: #666;
-            width: 100%;
-            margin: 0 auto;
-            line-height: 1.4;
-            text-align: center;
-        }
-        .top-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
+        /* Keep page-specific box styles but adjust for lines */
         .section-box {
             background-color: var(--tan-bg);
             padding: 20px;
             border: 1px solid #eee;
             border-radius: 4px;
+            margin-bottom: 20px;
         }
         .section-prompt {
             font-size: 0.75rem;
@@ -229,30 +133,31 @@
     </style>
 </head>
 <body>
-    <header class="global-header">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="csea.html" class="nav-link">Csea</a>
-        <a href="financial.html" class="nav-link">Financial</a>
-        <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="hoa.html" class="nav-link">Hoa</a>
-        <a href="icaap.html" class="nav-link">Icaap</a>
-        <a href="planning.html" class="nav-link">Planning</a>
-        <a href="mantra.html" class="nav-link">Mantra</a>
-    </header>
-    <div id="save-status" class="save-status">All changes saved</div>
-    <div class="container">
-        <div class="planner-spread">
-            <div class="notebook-page">
-                <div class="page-header">
-                    <h1 class="page-title">Intentions & Dreams</h1>
-                    <div style="margin-bottom: 20px;">
-                        <a href="personal-goals.html" class="nav-link" style="display: inline-flex; border-radius: 5px;">View Personal Goals</a>
-                    </div>
-                    <p class="intro-text">
-                        What do you want to prioritize in your daily work when planning for the upcoming year?<br>
-                        On the following pages, focus on your mission, vision, values, and purpose.
-                    </p>
+    <nav class="onenote-tabs">
+        <a href="index.html" class="onenote-tab tab-home">Home</a>
+        <a href="work-planner.html" class="onenote-tab tab-planning">Work</a>
+        <a href="personal-planner.html" class="onenote-tab tab-home">Personal</a>
+        <a href="csea.html" class="onenote-tab tab-csea" id="tab-csea">Csea</a>
+        <a href="hoa.html" class="onenote-tab tab-hoa" id="tab-hoa">Hoa</a>
+        <a href="icaap.html" class="onenote-tab tab-icaap" id="tab-icaap">Icaap</a>
+        <a href="financial.html" class="onenote-tab tab-financial" id="tab-financial">Financial</a>
+        <a href="planning.html" class="onenote-tab tab-planning active" id="tab-planning">Planning</a>
+        <a href="personal-goals.html" class="onenote-tab tab-goals" id="tab-goals">Goals</a>
+        <a href="mantra.html" class="onenote-tab tab-mantra" id="tab-mantra">Mantra</a>
+    </nav>
+    <div class="notepaper">
+        <div class="notepaper-content">
+            <div id="save-status" class="save-status" style="text-align: right; margin-bottom: 10px;">All changes saved</div>
+            <div class="page-header">
+                <h1 class="page-title">Intentions & Dreams</h1>
+                <div style="margin-bottom: 20px;">
+                    <a href="personal-goals.html" class="nav-link" style="display: inline-flex; border-radius: 5px; background: #00326b; color: #ffca38; padding: 5px 15px; text-decoration: none; font-weight: 600; border: 2px solid #ffca38;">View Personal Goals</a>
                 </div>
+                <p class="intro-text">
+                    What do you want to prioritize in your daily work when planning for the upcoming year?<br>
+                    On the following pages, focus on your mission, vision, values, and purpose.
+                </p>
+            </div>
                 <div class="section-header">Be Thoughtful</div>
                 <div class="top-grid">
                     <div class="section-box">
@@ -423,7 +328,6 @@
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="purpose-4"></div></div>
                             <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="purpose-5"></div></div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
