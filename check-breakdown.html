@@ -55,12 +55,37 @@
             width: 100%;
             overflow-x: auto;
             background: #fff;
-            min-height: calc(100vh - 60px);
+            margin-top: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 1200px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            min-height: calc(100vh - 100px);
+            border-radius: 8px;
+            position: relative;
+        }
+        .page-title {
+            color: var(--header-blue);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--header-blue);
+            padding-bottom: 10px;
         }
         .sheet-table {
             border-collapse: collapse;
-            width: max-content;
-            min-width: 100%;
+            width: 100%;
             font-size: 13px;
         }
         .sheet-table th, .sheet-table td {
@@ -147,24 +172,23 @@
 <body>
     <header class="global-header">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="csea.html" class="nav-link">Csea</a>
         <a href="financial.html" class="nav-link">Financial</a>
         <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="hoa.html" class="nav-link">HOA</a>
-        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="hoa.html" class="nav-link">Hoa</a>
+        <a href="icaap.html" class="nav-link">Icaap</a>
         <a href="planning.html" class="nav-link">Planning</a>
         <a href="mantra.html" class="nav-link">Mantra</a>
     </header>
 
-    <div class="sheet-title-bar">
-        <span class="sheet-icon">📅</span>
-        <span class="sheet-name">Check Breakdown</span>
-    </div>
-
     <div id="save-status" class="save-status">All changes saved</div>
 
-    <div class="spreadsheet-container">
-        <table class="sheet-table">
+    <div class="container">
+        <div class="notebook-page">
+            <h1 class="page-title">Check Breakdown</h1>
+            
+            <div class="spreadsheet-container">
+                <table class="sheet-table">
             <thead>
                 <tr class="header-row">
                     <th class="account-col">Account</th>
@@ -223,6 +247,8 @@
                 </script>
             </tbody>
         </table>
+            </div>
+        </div>
     </div>
 
     <script>

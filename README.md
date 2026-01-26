@@ -10,9 +10,9 @@ A single-page static planner for January 2026 served as plain HTML/CSS/vanilla J
   - **Bill Payment Schedule**: Recurring expense tracker with monthly checkboxes.
   - **Check Breakdown**: Spreadsheet-style view for paycheck allocations and tithe calculations.
 - **Specialized Logs**:
-  - **CSEA/LA Fed**: Meeting notes and interaction logs for union activities.
-  - **iCAAP Tracking**: Tracking log for paylog submissions, hours, and approvals across multiple employees.
-  - **HOA & Planning**: Dedicated sections for home association and general planning.
+  - **Csea/LA Fed**: Meeting notes and interaction logs for union activities.
+  - **Icaap Tracking**: Tracking log for paylog submissions, hours, and approvals across multiple employees.
+  - **Hoa & Planning**: Dedicated sections for home association and general planning.
 
 ## Tech Stack
 
