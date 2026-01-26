@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
-    <link href="onenote.css" rel="stylesheet">
     <style>
         :root {
             --header-blue: #00326b;
@@ -17,37 +16,109 @@
             --light-pink: #fce4ec;
             --light-tan: #fff9c4;
         }
-
-        /* Adjustments for OneNote integration */
-        .page-header {
-            margin-bottom: 30px;
-            line-height: normal;
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: var(--text-color);
         }
-
+        .global-header {
+            background: #00326b;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
+        }
+        .notebook-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 1200px;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: calc(100vh - 100px);
+            margin: 0 auto;
+        }
+        .trophy-icon {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin: 0 0 15px 0;
+            color: var(--text-color);
+        }
+        .intro-text {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
         .goals-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
             margin-top: 20px;
-            line-height: normal;
         }
-
+        .goal-box {
+            display: flex;
+            flex-direction: column;
+        }
         .goal-header {
             text-align: center;
             padding: 8px;
             font-size: 1.2rem;
-            border: 1px solid #ddd;
-            margin-bottom: 0;
-            line-height: normal;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
         }
+        .goal-header.blue { background-color: var(--light-blue); }
+        .goal-header.pink { background-color: var(--light-pink); }
+        .goal-header.tan { background-color: var(--light-tan); }
 
         .ruled-line {
             border-bottom: 1px solid #eee;
-            min-height: var(--line-height, 30px);
+            min-height: 28px;
             display: flex;
             align-items: center;
             padding: 0 5px;
-            background: rgba(255,255,255,0.5);
         }
         .editable-area {
             width: 100%;
@@ -92,26 +163,23 @@
     </style>
 </head>
 <body>
-    <nav class="onenote-tabs">
-        <a href="index.html" class="onenote-tab tab-home">Home</a>
-        <a href="work-planner.html" class="onenote-tab tab-planning">Work</a>
-        <a href="personal-planner.html" class="onenote-tab tab-home">Personal</a>
-        <a href="csea.html" class="onenote-tab tab-csea" id="tab-csea">Csea</a>
-        <a href="hoa.html" class="onenote-tab tab-hoa" id="tab-hoa">Hoa</a>
-        <a href="icaap.html" class="onenote-tab tab-icaap" id="tab-icaap">Icaap</a>
-        <a href="financial.html" class="onenote-tab tab-financial" id="tab-financial">Financial</a>
-        <a href="planning.html" class="onenote-tab tab-planning" id="tab-planning">Planning</a>
-        <a href="personal-goals.html" class="onenote-tab tab-goals active" id="tab-goals">Goals</a>
-        <a href="mantra.html" class="onenote-tab tab-mantra" id="tab-mantra">Mantra</a>
-    </nav>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">Csea</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="personal-goals.html" class="nav-link">Goals</a>
+        <a href="hoa.html" class="nav-link">Hoa</a>
+        <a href="icaap.html" class="nav-link">Icaap</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
 
-    <div class="notepaper">
-        <div class="notepaper-content">
-            <h1 class="page-title">Personal Goals</h1>
-            
-            <div class="page-header" style="text-align: left;">
-                <div class="trophy-icon" style="text-align: left;">🏆</div>
-                <p class="intro-text" style="margin: 10px 0;">
+    <div class="notebook-container">
+        <div class="notebook-page">
+            <div class="trophy-icon">🏆</div>
+            <div class="page-header">
+                <h1 class="page-title">My Personal Goals</h1>
+                <p class="intro-text">
                     What one thing do you want to be intentional about this year? Maybe it's a weight loss goal, financial goal, or daily step goal you'd love to keep up with each week. Decide what you want to track, and determine one way to clearly define success. Keep up with it weekly, and track your progress below!
                 </p>
             </div>

@@ -7,9 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
-    <link href="onenote.css" rel="stylesheet">
     <style>
         :root {
+            --header-blue: #00326b;
+            --border-color: #333;
             --row-auto: #2d8a2d;
             --row-bill: #00326b;
             --row-cash: #d14d9c;
@@ -17,10 +18,88 @@
             --row-housing: #a33b3b;
             --row-savings: #7a4da3;
         }
-        /* Keep page-specific table styles but adjust for lines */
-        .schedule-table-container {
-            overflow-x: auto;
-            margin-top: 20px;
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .global-header {
+            background: #00326b;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 1200px;
+            box-sizing: border-box;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-height: calc(100vh - 100px);
+        }
+        .schedule-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icon-circle {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ffca38;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffca38;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .page-title {
+            color: #333;
+            font-size: 1.5rem;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .subtitle {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 10px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
         }
         .bill-table {
             width: 100%;
@@ -144,30 +223,30 @@
     </style>
 </head>
 <body>
-    <nav class="onenote-tabs">
-        <a href="index.html" class="onenote-tab tab-home">Home</a>
-        <a href="work-planner.html" class="onenote-tab tab-planning">Work</a>
-        <a href="personal-planner.html" class="onenote-tab tab-home">Personal</a>
-        <a href="csea.html" class="onenote-tab tab-csea" id="tab-csea">Csea</a>
-        <a href="hoa.html" class="onenote-tab tab-hoa" id="tab-hoa">Hoa</a>
-        <a href="icaap.html" class="onenote-tab tab-icaap" id="tab-icaap">Icaap</a>
-        <a href="financial.html" class="onenote-tab tab-financial active" id="tab-financial">Financial</a>
-        <a href="planning.html" class="onenote-tab tab-planning" id="tab-planning">Planning</a>
-        <a href="personal-goals.html" class="onenote-tab tab-goals" id="tab-goals">Goals</a>
-        <a href="mantra.html" class="onenote-tab tab-mantra" id="tab-mantra">Mantra</a>
-    </nav>
-    <div class="notepaper">
-        <div class="notepaper-content">
-            <div id="save-status" class="save-status" style="text-align: right; margin-bottom: 10px;">All changes saved</div>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">Csea</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="personal-goals.html" class="nav-link">Goals</a>
+        <a href="hoa.html" class="nav-link">Hoa</a>
+        <a href="icaap.html" class="nav-link">Icaap</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
+
+    <div id="save-status" class="save-status">All changes saved</div>
+
+    <div class="container">
+        <div class="notebook-page">
             <div class="schedule-header">
                 <div class="icon-circle">$</div>
                 <h1 class="page-title">Bill Payment Schedule</h1>
                 <div style="margin: 15px 0;">
-                    <a href="check-breakdown.html" class="nav-btn" style="background: #00326b; color: #ffca38; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 0.8rem; border: 2px solid #ffca38;">Check Breakdown</a>
+                    <a href="check-breakdown.html" class="nav-btn">Check Breakdown</a>
                 </div>
                 <p class="subtitle">Keep track of your bill payments by listing recurring expenses, including how much they cost and what date they're typically paid. Check them off the list below as you pay your bills each month.</p>
+
             </div>
-            <div class="schedule-table-container">
 
             <table class="bill-table">
                 <thead>
@@ -635,7 +714,6 @@
                     </tr>
                 </tbody>
             </table>
-            </div>
         </div>
     </div>
 

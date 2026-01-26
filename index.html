@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
-    <link href="onenote.css" rel="stylesheet">
     <style>
         :root {
             --sun-bg: #f59e9e;
@@ -23,32 +22,81 @@
             --header-blue: #00326b;
         }
 
-        /* Adjustments for OneNote integration */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            border-top: 2px solid var(--border-color);
-            border-left: 2px solid var(--border-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background: #fff;
-            line-height: normal; /* Override notepaper line-height */
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: var(--text-color);
         }
+
+        .global-header {
+            background: #00326b;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .notebook-page {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            background: #fff;
+            position: relative;
+            box-shadow: 10px 0 15px -5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            min-height: calc(100vh - 100px);
+            margin: 0 auto;
+        }
+
+
 
         .header-controls {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-bottom: 20px;
             gap: 15px;
-            line-height: normal;
         }
 
         .month-title {
-            font-size: 1.8rem;
+            font-size: 1.2rem;
             letter-spacing: 3px;
-            color: #333;
+            color: var(--sun-bg);
             margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         .nav-btn {
@@ -223,37 +271,34 @@
     </style>
 </head>
 <body>
-    <nav class="onenote-tabs">
-        <a href="index.html" class="onenote-tab tab-home active">Home</a>
-        <a href="work-planner.html" class="onenote-tab tab-planning">Work</a>
-        <a href="personal-planner.html" class="onenote-tab tab-home">Personal</a>
-        <a href="csea.html" class="onenote-tab tab-csea" id="tab-csea">Csea</a>
-        <a href="hoa.html" class="onenote-tab tab-hoa" id="tab-hoa">Hoa</a>
-        <a href="icaap.html" class="onenote-tab tab-icaap" id="tab-icaap">Icaap</a>
-        <a href="financial.html" class="onenote-tab tab-financial" id="tab-financial">Financial</a>
-        <a href="planning.html" class="onenote-tab tab-planning" id="tab-planning">Planning</a>
-        <a href="personal-goals.html" class="onenote-tab tab-goals" id="tab-goals">Goals</a>
-        <a href="mantra.html" class="onenote-tab tab-mantra" id="tab-mantra">Mantra</a>
-    </nav>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">Csea</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="personal-goals.html" class="nav-link">Goals</a>
+        <a href="hoa.html" class="nav-link">Hoa</a>
+        <a href="icaap.html" class="nav-link">Icaap</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
 
-    <div class="notepaper">
-        <div class="notepaper-content">
-            <div class="header-controls">
-                <div>
-                    <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
-                    <button class="nav-btn" onclick="changeMonth(1)">Next</button>
-                </div>
-                <h1 id="current-month-display" class="month-title">January 2026</h1>
-                <div style="display: flex; gap: 10px;">
-                    <a href="personal-planner.html" class="nav-btn" style="text-decoration: none;">Personal</a>
-                    <a href="work-planner.html" class="nav-btn" style="text-decoration: none;">Work</a>
-                    <a href="monthly-review.html" class="nav-btn" style="text-decoration: none;">Review</a>
-                </div>
-            </div>
+    <div class="main-container">
+        <div class="notebook-page">
+        <div class="header-controls">
+            <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
+            <a href="personal-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
+            <h1 id="current-month-display" class="month-title">January 2026</h1>
+            <a href="work-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Work Planner</a>
+            <a href="personal-goals.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Goals</a>
+            <a href="monthly-review.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Monthly Review</a>
+            <button class="nav-btn" onclick="changeMonth(1)">Next</button>
+        </div>
 
-            <div id="calendar-grid" class="calendar-grid">
-                <!-- Calendar will be injected here -->
-            </div>
+
+
+        <div id="calendar-grid" class="calendar-grid">
+            <!-- Calendar will be injected here -->
+        </div>
         </div>
     </div>
 

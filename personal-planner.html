@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
-    <link href="onenote.css" rel="stylesheet">
     <style>
         :root {
             --sun-bg: #f59e9e;
@@ -21,48 +20,69 @@
             --text-color: #333;
             --header-blue: #00326b;
         }
-
-        /* Adjustments for OneNote integration */
-        .page-header {
-            margin-bottom: 20px;
-            line-height: normal;
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: var(--text-color);
         }
-
-        .habit-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto;
-            gap: 40px;
-            margin-bottom: 20px;
-            width: 100%;
-            line-height: normal;
-        }
-
-        .day-layout {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
+        .global-header {
+            background: #00326b;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: center;
             gap: 15px;
-            line-height: normal;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
         }
-
-        .task-line {
-            border-bottom: 1px solid #f0f0f0;
-            height: var(--line-height, 30px);
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: 600;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
         }
-
-        .day-header {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            font-weight: 600;
-            padding: 5px;
-            color: white;
-            text-align: center;
-            line-height: normal;
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
+        }
+        .notebook-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .notebook-spread {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            background: #fff;
+            border: none;
+            box-shadow: none;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            background: #fff;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            min-height: calc(100vh - 100px);
+            box-sizing: border-box;
+            margin: 0 auto;
         }
         /* Mini Week Habit Styles */
         .habit-mini-week {
@@ -120,6 +140,14 @@
             margin-bottom: 10px;
             text-transform: uppercase;
         }
+        .habit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 40px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
         .habit-section {
             padding: 5px;
             display: flex;
@@ -173,6 +201,18 @@
             border-top: 1px solid #eee;
             padding-top: 5px;
         }
+        .day-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-weight: 600;
+            padding: 5px;
+            color: white;
+            text-align: center;
+            position: sticky;
+            top: 40px;
+            z-index: 10;
+        }
         .day-header.sun { background-color: var(--sun-bg); }
         .day-header.mon { background-color: var(--mon-bg); }
         .day-header.tue { background-color: var(--tue-bg); }
@@ -180,6 +220,11 @@
         .day-header.thu { background-color: var(--thu-bg); }
         .day-header.fri { background-color: var(--fri-bg); }
         .day-header.sat { background-color: var(--sat-bg); }
+        .day-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+        }
         .day-sidebar {
             font-size: 0.65rem;
             color: #666;
@@ -217,7 +262,7 @@
             margin-top: 5px;
             border-bottom: 1px solid #f0f0f0;
             padding-bottom: 2px;
-            height: var(--line-height, 30px);
+            height: 25px;
         }
         .sidebar-icon {
             font-size: 0.9rem;
@@ -231,7 +276,7 @@
         }
         .sidebar-line {
             flex-grow: 1;
-            min-height: var(--line-height, 30px);
+            min-height: 20px;
             outline: none;
             display: flex;
             align-items: center;
@@ -241,6 +286,14 @@
             flex-direction: column;
             gap: 5px;
             padding-left: 5px;
+        }
+        .task-line {
+            border-bottom: 1px solid #f0f0f0;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
         }
         .check-box {
             width: 14px;
@@ -345,32 +398,28 @@
     </style>
 </head>
 <body>
-    <nav class="onenote-tabs">
-        <a href="index.html" class="onenote-tab tab-home">Home</a>
-        <a href="work-planner.html" class="onenote-tab tab-planning">Work</a>
-        <a href="personal-planner.html" class="onenote-tab tab-home active">Personal</a>
-        <a href="csea.html" class="onenote-tab tab-csea" id="tab-csea">Csea</a>
-        <a href="hoa.html" class="onenote-tab tab-hoa" id="tab-hoa">Hoa</a>
-        <a href="icaap.html" class="onenote-tab tab-icaap" id="tab-icaap">Icaap</a>
-        <a href="financial.html" class="onenote-tab tab-financial" id="tab-financial">Financial</a>
-        <a href="planning.html" class="onenote-tab tab-planning" id="tab-planning">Planning</a>
-        <a href="personal-goals.html" class="onenote-tab tab-goals" id="tab-goals">Goals</a>
-        <a href="mantra.html" class="onenote-tab tab-mantra" id="tab-mantra">Mantra</a>
-    </nav>
-
-    <div class="notepaper">
-        <div class="notepaper-content">
-            <h1 class="page-title">Personal Planner</h1>
-            
-            <div class="planner-header" style="text-align: left; margin-bottom: 20px;">
-                <div id="week-header-left" class="date-range" style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
-                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 20px; margin: 10px 0;">
-                    <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
-                    <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
-                    <a href="index.html" class="nav-btn" style="text-decoration: none;">Calendar</a>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">Csea</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="personal-goals.html" class="nav-link">Goals</a>
+        <a href="hoa.html" class="nav-link">Hoa</a>
+        <a href="icaap.html" class="nav-link">Icaap</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
+    <div class="notebook-container">
+            <!-- LEFT PAGE -->
+            <div class="notebook-page">
+                <div class="planner-header" style="text-align: center; margin-bottom: 20px;">
+                    <div id="week-header-left" class="date-range" style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin: 10px 0;">
+                        <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
+                        <h2 style="margin: 0; color: var(--header-blue); font-size: 1.5rem; letter-spacing: 2px;">PERSONAL PLANNER</h2>
+                        <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
+                    </div>
+                    <div id="save-status" class="save-status">All changes saved</div>
                 </div>
-                <div id="save-status" class="save-status" style="text-align: left;">All changes saved</div>
-            </div>
                 <div class="habit-grid">
                     <div class="habit-section">
                         <div class="habit-title">Home Care</div>

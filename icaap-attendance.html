@@ -7,28 +7,102 @@
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
-    <link href="onenote.css" rel="stylesheet">
     <style>
         :root {
             --header-blue: #00326b;
             --table-green: #1b5e20;
             --border-color: #333;
         }
-
-        /* Adjustments for OneNote integration */
-        .page-header {
-            margin-bottom: 20px;
-            line-height: normal;
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
         }
-
+        .global-header {
+            background: #00326b;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .container {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+        }
+        .notebook-page {
+            background: #fff;
+            padding: 20px 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1200px;
+            min-height: calc(100vh - 100px);
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 10px;
+            position: sticky;
+            top: 40px;
+            background: #fff;
+            padding: 5px 0;
+            z-index: 100;
+        }
+        .page-title {
+            color: var(--header-blue);
+            font-size: 1.5rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .date-range-display {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+        .nav-btn {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 2px 10px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            font-size: 0.8rem;
+            border-radius: 12px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: black;
+        }
+        .nav-btn:hover {
+            background: #f0f0f0;
+        }
         .tracking-table {
             border-collapse: collapse;
             width: 100%;
             max-width: 900px;
+            margin: 0 auto;
             font-size: 11px;
             border: 1px solid var(--border-color);
-            line-height: normal; /* Override notepaper */
-            background: white;
         }
         .tracking-table th, .tracking-table td {
             border: 1px solid var(--border-color);
@@ -51,13 +125,13 @@
         }
         .tracking-table thead th {
             position: sticky;
-            top: 0;
+            top: 115px;
             z-index: 110;
         }
         .header-row .employee-col {
             background-color: var(--table-green);
             z-index: 120;
-            top: 0;
+            top: 115px;
         }
         .attendance-select {
             font-family: 'Coming Soon', cursive;
@@ -94,38 +168,35 @@
     </style>
 </head>
 <body>
-    <nav class="onenote-tabs">
-        <a href="index.html" class="onenote-tab tab-home">Home</a>
-        <a href="work-planner.html" class="onenote-tab tab-planning">Work</a>
-        <a href="personal-planner.html" class="onenote-tab tab-home">Personal</a>
-        <a href="csea.html" class="onenote-tab tab-csea" id="tab-csea">Csea</a>
-        <a href="hoa.html" class="onenote-tab tab-hoa" id="tab-hoa">Hoa</a>
-        <a href="icaap.html" class="onenote-tab tab-icaap active" id="tab-icaap">Icaap</a>
-        <a href="financial.html" class="onenote-tab tab-financial" id="tab-financial">Financial</a>
-        <a href="planning.html" class="onenote-tab tab-planning" id="tab-planning">Planning</a>
-        <a href="personal-goals.html" class="onenote-tab tab-goals" id="tab-goals">Goals</a>
-        <a href="mantra.html" class="onenote-tab tab-mantra" id="tab-mantra">Mantra</a>
-    </nav>
-
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">Csea</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="personal-goals.html" class="nav-link">Goals</a>
+        <a href="hoa.html" class="nav-link">Hoa</a>
+        <a href="icaap.html" class="nav-link">Icaap</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
     <div id="save-status" class="save-status">All changes saved</div>
-
-    <div class="notepaper">
-        <div class="notepaper-content">
-            <h1 class="page-title">Icaap Attendance Tracking</h1>
-            
-            <div class="page-header" style="text-align: left;">
-                <div id="week-nav" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+    <div class="container">
+        <div class="notebook-page">
+            <div class="page-header">
+                <h1 class="page-title">Icaap Attendance Tracking</h1>
+                <div id="week-nav" style="margin-top: 8px; display: flex; justify-content: center; align-items: center; gap: 15px;">
                     <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
-                    <div id="date-range-display" class="date-range-display" style="margin: 0;">January 5 - 9, 2026</div>
+                    <div id="date-range-display" class="date-range-display">January 5 - 9, 2026</div>
                     <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
                 </div>
-                
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <a href="icaap.html" class="nav-btn" style="text-decoration: none;">Notes</a>
-                    <a href="icaap-tracking.html" class="nav-btn" style="text-decoration: none;">Tracking</a>
+                <div style="margin-top: 8px; display: flex; justify-content: center; gap: 10px;">
+                    <a href="icaap.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue); display: inline-flex; font-size: 0.75rem; padding: 2px 10px;">
+                        <span>📝</span> Icaap Notes
+                    </a>
+                    <a href="icaap-tracking.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue); display: inline-flex; font-size: 0.75rem; padding: 2px 10px;">
+                        <span>📅</span> Icaap Tracking
+                    </a>
                 </div>
             </div>
-
             <table class="tracking-table">
                 <thead id="table-head">
                     <!-- Headings will be injected here -->
