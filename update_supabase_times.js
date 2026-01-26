@@ -60,12 +60,12 @@ lines.forEach((line, index) => {
             else if (paydayDate.getDay() === 0) paydayDate.setDate(day - 2);
             
             const pdStr = paydayDate.toISOString().split('T')[0];
-            events.push({ date: pdStr, title: "Jennifer's Paycheck", time: null });
+            events.push({ date: pdStr, title: "Jennifer's paycheck", time: null });
 
             // Budget 3 days before payday
             const budgetDate = new Date(paydayDate);
             budgetDate.setDate(budgetDate.getDate() - 3);
-            events.push({ date: budgetDate.toISOString().split('T')[0], title: "BUDGET", time: null });
+            events.push({ date: budgetDate.toISOString().split('T')[0], title: "Budget", time: null });
         });
     }
 });
