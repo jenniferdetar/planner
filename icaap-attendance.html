@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCAAP Attendance Tracking - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --header-blue: #00326b;
+            --table-green: #1b5e20;
+            --border-color: #333;
+        }
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .global-header {
+            background: #00326b;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            align-items: center;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .container {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+        }
+        .notebook-page {
+            background: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-width: max-content;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 0;
+            position: sticky;
+            top: 40px;
+            background: #fff;
+            padding: 10px 0;
+            z-index: 100;
+        }
+        .page-title {
+            color: var(--header-blue);
+            font-size: 1.5rem;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: capitalize;
+        }
+        .tracking-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 11px;
+            border: 1px solid var(--border-color);
+        }
+        .tracking-table th, .tracking-table td {
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            text-align: center;
+        }
+        .header-row {
+            background-color: var(--table-green);
+            color: white;
+        }
+        .employee-col {
+            font-weight: bold;
+            text-align: left;
+            min-width: 150px;
+            position: sticky;
+            left: 0;
+            border-right: 2px solid var(--border-color);
+            z-index: 5;
+            background-color: inherit;
+        }
+        .tracking-table thead th {
+            position: sticky;
+            top: 105px;
+            z-index: 110;
+        }
+        .header-row .employee-col {
+            background-color: var(--table-green);
+            z-index: 120;
+            top: 105px;
+        }
+        .attendance-select {
+            font-family: 'Coming Soon', cursive;
+            font-size: 10px;
+            width: 100%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            text-align: center;
+        }
+        .attendance-select:focus {
+            outline: 2px solid var(--header-blue);
+            background: #fffde7;
+        }
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.75rem;
+            color: #666;
+            z-index: 2000;
+        }
+        .month-section {
+            background-color: #eee;
+            font-weight: bold;
+            text-align: left !important;
+            padding-left: 10px !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="csea.html" class="nav-link">CSEA</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="hoa.html" class="nav-link">HOA</a>
+        <a href="icaap.html" class="nav-link">iCAAP</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
+    <div id="save-status" class="save-status">All changes saved</div>
+    <div class="container">
+        <div class="notebook-page">
+            <div class="page-header">
+                <h1 class="page-title">iCAAP Attendance Tracking</h1>
+                <div style="margin-top: 5px; display: flex; justify-content: center; gap: 10px;">
+                    <a href="icaap.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue); display: inline-flex;">
+                        <span>📝</span> iCAAP Notes
+                    </a>
+                    <a href="icaap-tracking.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue); display: inline-flex;">
+                        <span>📅</span> iCAAP Tracking
+                    </a>
+                </div>
+            </div>
+            <table class="tracking-table">
+                <thead id="table-head">
+                    <!-- Headings will be injected here -->
+                </thead>
+                <tbody id="tracking-body">
+                    <!-- Rows will be injected here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const employees = [
+            "Zina Dixon", "Maikai Finnell", "Rene Gaudet", "Eberardo Rodriguez", 
+            "Steve Maccarone", "Bonnie Ratner", "Patricia Pernin"
+        ];
+        const options = ["", "Cochren", "Beaudry", "Illness", "Kin Care", "Personal Necessity", "Vacation", "Berevement"];
+        const PERSISTENCE_KEY = 'icaap-attendance-data';
+        
+        // Generate weekdays for Jan-Dec 2026
+        function getWeekdaysFor2026() {
+            const days = [];
+            const start = new Date(2026, 0, 1);
+            const end = new Date(2026, 11, 31);
+            
+            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                if (d.getDay() !== 0 && d.getDay() !== 6) { // Not Sat/Sun
+                    days.push(new Date(d));
+                }
+            }
+            return days;
+        }
+
+        const weekdays = getWeekdaysFor2026();
+
+        function renderTable() {
+            const thead = document.getElementById('table-head');
+            const tbody = document.getElementById('tracking-body');
+            
+            // Header
+            let headHtml = `<tr class="header-row"><th class="employee-col">Employee Name</th>`;
+            weekdays.forEach(d => {
+                const dateStr = `${d.getMonth() + 1}/${d.getDate()}`;
+                const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+                headHtml += `<th>${dateStr}<br>${dayName}</th>`;
+            });
+            headHtml += `</tr>`;
+            thead.innerHTML = headHtml;
+
+            // Rows
+            employees.forEach(emp => {
+                const tr = document.createElement('tr');
+                let rowHtml = `<td class="employee-col">${emp}</td>`;
+                weekdays.forEach(d => {
+                    const dateKey = d.toISOString().split('T')[0];
+                    const fieldId = `attn-${emp}-${dateKey}`;
+                    rowHtml += `<td>
+                        <select class="attendance-select" data-field="${fieldId}" onchange="handleSave(this)">
+                            ${options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        </select>
+                    </td>`;
+                });
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function loadData() {
+            const data = await fetchPlannerData(PERSISTENCE_KEY, 366); // Long range for the year
+            data.forEach(item => {
+                const el = document.querySelector(`[data-field="${item.field_id}"]`);
+                if (el) el.value = item.content;
+            });
+        }
+
+        async function handleSave(select) {
+            const fieldId = select.dataset.field;
+            const content = select.value;
+            const status = document.getElementById('save-status');
+            status.innerText = 'Saving...';
+            
+            const success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+            status.innerText = success ? 'All changes saved' : 'Error saving';
+            if (success) {
+                setTimeout(() => { if(status.innerText === 'All changes saved') status.innerText = ''; }, 2000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            renderTable();
+            await loadData();
+        });
+    </script>
+</body>
+</html>
