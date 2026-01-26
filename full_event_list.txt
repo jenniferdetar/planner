@@ -27,19 +27,19 @@ Bonnie Ratner	9/3/26
 Boss's Day	10/16/26	
 Boss's Day	10/16/27	
 Brienne Detar	4/20/26	
-Certificated & Classified Off-cycles	1/5/26	
-Certificated & Classified Off-cycles	2/5/26	
-Certificated & Classified Off-cycles	3/5/26	
-Certificated & Classified Off-cycles	4/3/26	
-Certificated & Classified Off-cycles	5/5/26	
-Certificated & Classified Off-cycles	6/5/26	
-Certificated & Classified Off-cycles	7/2/26	
-Certificated Cutoff	1/28/26	
-Certificated Cutoff	2/25/26	
-Certificated Cutoff	3/25/26	
-Certificated Cutoff	4/27/26	
-Certificated Cutoff	5/28/26	
-Certificated Cutoff	6/23/26	
+Certificated & Classified Off-cycles	1/5/26	6:00 PM
+Certificated & Classified Off-cycles	2/5/26	6:00 PM
+Certificated & Classified Off-cycles	3/5/26	6:00 PM
+Certificated & Classified Off-cycles	4/3/26	6:00 PM
+Certificated & Classified Off-cycles	5/5/26	6:00 PM
+Certificated & Classified Off-cycles	6/5/26	6:00 PM
+Certificated & Classified Off-cycles	7/2/26	6:00 PM
+Certificated Cutoff	1/28/26	6:00 PM
+Certificated Cutoff	2/25/26	6:00 PM
+Certificated Cutoff	3/25/26	6:00 PM
+Certificated Cutoff	4/27/26	6:00 PM
+Certificated Cutoff	5/28/26	6:00 PM
+Certificated Cutoff	6/23/26	6:00 PM
 Chelsea Samples	6/10/26	
 Chinese New  Year	2/17/26	
 Chinese New  Year	2/6/27	
@@ -53,14 +53,14 @@ Christmas Eve	12/24/27
 Cinco de Mayo	5/5/26	
 Cinco de Mayo	5/5/27	
 CJ Samples	7/30/26	
-Classified Cutoff	1/22/26	
-Classified Cutoff	2/19/26	
-Classified Cutoff	3/23/26	
-Classified Cutoff	5/21/26	
-Classified Cutoff	6/18/26	
-Classified Cutoff	6/20/26	
-Classified Cutoff	7/22/26	
-Classified Cutoff	9/9/26	
+Classified Cutoff	1/22/26	6:00 PM
+Classified Cutoff	2/19/26	6:00 PM
+Classified Cutoff	3/23/26	6:00 PM
+Classified Cutoff	5/21/26	6:00 PM
+Classified Cutoff	6/18/26	6:00 PM
+Classified Cutoff	6/20/26	6:00 PM
+Classified Cutoff	7/22/26	6:00 PM
+Classified Cutoff	9/9/26	6:00 PM
 Columbus Day	10/12/26	
 Columbus Day	10/11/27	
 Communications Academy	5/10/26	
