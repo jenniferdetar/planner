@@ -11,6 +11,57 @@ function getSupabase() {
     return null;
 }
 
+// Auth Logic
+async function requireAuth() {
+    const client = getSupabase();
+    if (!client) return;
+
+    const { data: { session } } = await client.auth.getSession();
+    if (!session) {
+        // If on login.html, don't redirect
+        if (!window.location.pathname.endsWith('login.html')) {
+            window.location.href = 'login.html';
+        }
+    }
+    return session;
+}
+
+async function logout() {
+    const client = getSupabase();
+    if (client) {
+        await client.auth.signOut();
+        window.location.href = 'login.html';
+    }
+}
+
+// Global Auth Check
+if (typeof window !== 'undefined' && !window.location.pathname.endsWith('login.html')) {
+    requireAuth();
+}
+
+function injectLogoutButton() {
+    const header = document.querySelector('.global-header');
+    if (header && !header.querySelector('.logout-link')) {
+        const logoutBtn = document.createElement('a');
+        logoutBtn.href = '#';
+        logoutBtn.className = 'nav-link logout-link';
+        logoutBtn.innerText = 'Logout';
+        logoutBtn.onclick = (e) => {
+            e.preventDefault();
+            logout();
+        };
+        header.appendChild(logoutBtn);
+    }
+}
+
+if (typeof window !== 'undefined') {
+    if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', injectLogoutButton);
+    } else {
+        injectLogoutButton();
+    }
+}
+
 // Planner Data Logic
 async function fetchPlannerData(startDate, days = 7) {
     const client = getSupabase();

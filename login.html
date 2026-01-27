@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - 2026 Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --sun-bg: #f59e9e;
+            --header-blue: #00326b;
+            --text-color: #333;
+            --border-color: #333;
+        }
+
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid var(--header-blue);
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            color: var(--header-blue);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: 'Coming Soon', cursive;
+            box-sizing: border-box;
+        }
+
+        .login-btn {
+            background-color: var(--header-blue);
+            color: #ffca38;
+            border: 2px solid #ffca38;
+            padding: 12px 24px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: #ffca38;
+            color: var(--header-blue);
+        }
+
+        .error-message {
+            color: #ff0000;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1 class="login-title">Secure Login</h1>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+            <div id="error-message" class="error-message"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            errorMessage.style.display = 'none';
+            
+            const { data, error } = await getSupabase().auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) {
+                errorMessage.innerText = error.message;
+                errorMessage.style.display = 'block';
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Redirect if already logged in
+        async function checkAuth() {
+            const client = getSupabase();
+            const { data: { session } } = await client.auth.getSession();
+            if (session) {
+                window.location.href = 'index.html';
+            }
+        }
+        
+        window.onload = checkAuth;
+    </script>
+</body>
+</html>
