@@ -511,6 +511,7 @@ function updateNavigationLinks(date) {
         'index.html',
         'work-planner.html',
         'personal-planner.html',
+        'notebook.html',
         'csea.html',
         'financial.html',
         'hoa.html',

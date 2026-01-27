@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notebook - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --onenote-purple: #71338a;
+            --onenote-bg: #f3f2f1;
+            --notepaper-blue: #e1f5fe;
+            --notepaper-line: #b3e5fc;
+            --notepaper-red: #ffcdd2;
+            --line-height: 30px;
+            --sidebar-width: 250px;
+        }
+
+        body {
+            background-color: var(--onenote-bg);
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Global Header Styles */
+        .global-header {
+            background: #00326b;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #ffca38;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            border: 2px solid #ffca38;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: #ffca38;
+            color: #00326b;
+        }
+
+        .notebook-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar / Tabs */
+        .notebook-sidebar {
+            width: var(--sidebar-width);
+            background: #fff;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .section-header {
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notebook-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+        }
+
+        .notebook-tab:hover {
+            background: #f9f9f9;
+        }
+
+        .notebook-tab.active {
+            background: #eff6fc;
+            border-left-color: var(--onenote-purple);
+            font-weight: 600;
+        }
+
+        .tab-csea.active { border-left-color: #ffca38; }
+        .tab-hoa.active { border-left-color: #4caf50; }
+        .tab-icaap.active { border-left-color: #00326b; }
+
+        /* Notepaper Content Area */
+        .notebook-main {
+            flex-grow: 1;
+            background: #fff;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .notepaper {
+            background-color: #fff;
+            background-image: 
+                linear-gradient(90deg, transparent 79px, var(--notepaper-red) 79px, var(--notepaper-red) 81px, transparent 81px),
+                linear-gradient(var(--notepaper-line) 1px, transparent 1px);
+            background-size: 100% 100%, 100% var(--line-height);
+            padding: 40px 20px 40px 100px !important;
+            min-height: 100%;
+            line-height: var(--line-height);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .notepaper-content {
+            font-family: 'Coming Soon', cursive;
+            font-size: 1.1rem;
+            color: #333;
+            max-width: 900px;
+        }
+
+        .page-title {
+            margin: 0 0 var(--line-height) 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+            line-height: normal;
+        }
+
+        /* Note Entry Styles */
+        .input-group {
+            margin-bottom: var(--line-height);
+        }
+
+        textarea#new-note-content {
+            width: 100%;
+            min-height: calc(var(--line-height) * 4);
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Coming Soon', cursive;
+            font-size: 1.1rem;
+            line-height: var(--line-height);
+            resize: vertical;
+            padding: 0;
+            display: block;
+        }
+
+        .save-btn {
+            background: #00326b;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            margin-top: 10px;
+        }
+
+        .save-status {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-family: 'Segoe UI', sans-serif;
+            line-height: normal;
+        }
+
+        .note-entry {
+            margin-bottom: calc(var(--line-height) * 2);
+            position: relative;
+        }
+
+        .entry-header {
+            font-size: 0.8rem;
+            color: #999;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #eee;
+            margin-bottom: 5px;
+            line-height: normal;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .entry-content {
+            outline: none;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .delete-btn {
+            color: #ffcdd2;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .delete-btn:hover {
+            color: #ef5350;
+        }
+
+        /* Ensure lines align correctly */
+        p, div, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Specific tab colors */
+        .tab-csea { --tab-accent: #ffca38; }
+        .tab-hoa { --tab-accent: #4caf50; }
+        .tab-icaap { --tab-accent: #00326b; }
+
+        .tracking-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: var(--line-height);
+            line-height: normal;
+        }
+
+        .tracking-link {
+            text-decoration: none;
+            color: #00326b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid #00326b;
+            padding: 2px 10px;
+            border-radius: 15px;
+        }
+
+        .tracking-link:hover {
+            background: #00326b;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="global-header">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="notebook.html" class="nav-link" style="background: #ffca38; color: #00326b;">Notebook</a>
+        <a href="financial.html" class="nav-link">Financial</a>
+        <a href="personal-goals.html" class="nav-link">Goals</a>
+        <a href="planning.html" class="nav-link">Planning</a>
+        <a href="mantra.html" class="nav-link">Mantra</a>
+    </header>
+
+    <div class="notebook-container">
+        <div class="notebook-sidebar">
+            <div class="section-header">Sections</div>
+            <div class="notebook-tab tab-csea active" onclick="switchTab('CSEA')">
+                <span>📒</span> Csea
+            </div>
+            <div class="notebook-tab tab-hoa" onclick="switchTab('HOA')">
+                <span>🏠</span> Hoa
+            </div>
+            <div class="notebook-tab tab-icaap" onclick="switchTab('iCAAP')">
+                <span>📋</span> Icaap
+            </div>
+        </div>
+
+        <main class="notebook-main">
+            <div class="notepaper">
+                <div class="notepaper-content">
+                    <h1 id="page-title" class="page-title">Csea Notes</h1>
+                    
+                    <div id="icaap-links" class="tracking-links" style="display: none;">
+                        <a href="icaap-attendance.html" class="tracking-link">Attendance Tracking</a>
+                        <a href="icaap-tracking.html" class="tracking-link">Tracking Log</a>
+                    </div>
+
+                    <div class="notes-section">
+                        <div class="input-group">
+                            <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
+                            <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+                            <div id="save-status" class="save-status">All changes saved</div>
+                        </div>
+                        <div id="entries-list" class="entries-list">
+                            <!-- Entries will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentCategory = 'CSEA';
+        const entriesList = document.getElementById('entries-list');
+        const newNoteContent = document.getElementById('new-note-content');
+        const saveStatus = document.getElementById('save-status');
+        const pageTitle = document.getElementById('page-title');
+        const icaapLinks = document.getElementById('icaap-links');
+        let saveTimeout = null;
+
+        function getPersistenceKey(cat) {
+            return `draft-note-${cat.toLowerCase()}`;
+        }
+
+        async function switchTab(category) {
+            currentCategory = category;
+            
+            // Update UI
+            document.querySelectorAll('.notebook-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.innerText.includes(category.charAt(0).toUpperCase() + category.slice(1).toLowerCase())) {
+                    tab.classList.add('active');
+                }
+            });
+
+            pageTitle.innerText = (category === 'iCAAP' ? 'Icaap' : category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()) + ' Notes';
+            icaapLinks.style.display = (category === 'iCAAP') ? 'flex' : 'none';
+
+            // Load Content
+            await loadEntries();
+        }
+
+        function createEntryElement(entry) {
+            const div = document.createElement('div');
+            div.className = 'note-entry';
+            div.id = `entry-${entry.id}`;
+            div.innerHTML = `
+                <div class="entry-header">
+                    <span>${formatDate(entry.created_at)}</span>
+                    <span class="delete-btn" onclick="handleDeleteNote(${entry.id})">Delete</span>
+                </div>
+                <div class="entry-content" contenteditable="true" oninput="handleEditNote(event, ${entry.id})">${entry.content}</div>
+            `;
+            return div;
+        }
+
+        async function loadEntries() {
+            saveStatus.innerText = 'Loading...';
+            const entries = await fetchCategoryEntries(currentCategory);
+            entriesList.innerHTML = '';
+            entries.forEach(entry => {
+                entriesList.appendChild(createEntryElement(entry));
+            });
+
+            // Load draft
+            const draft = await fetchPlannerData(getPersistenceKey(currentCategory), 1);
+            if (draft && draft.length > 0) {
+                newNoteContent.value = draft[0].content;
+            } else {
+                newNoteContent.value = '';
+            }
+            saveStatus.innerText = 'All changes saved';
+        }
+
+        function handleDraftInput() {
+            saveStatus.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                saveStatus.innerText = 'Saving...';
+                const success = await savePlannerData(getPersistenceKey(currentCategory), 'draft', newNoteContent.value);
+                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
+            }, 1000);
+        }
+
+        async function handleEditNote(e, id) {
+            saveStatus.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                saveStatus.innerText = 'Saving...';
+                const success = await updateCategoryEntry(id, e.target.innerText);
+                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
+            }, 1000);
+        }
+
+        async function handleAddNote() {
+            const content = newNoteContent.value;
+            if (!content.trim()) return;
+            
+            saveStatus.innerText = 'Saving...';
+            const newEntry = await saveCategoryEntry(currentCategory, content);
+            if (newEntry) {
+                newNoteContent.value = '';
+                // Clear draft
+                await savePlannerData(getPersistenceKey(currentCategory), 'draft', '');
+                // Add to list at top
+                entriesList.insertBefore(createEntryElement(newEntry), entriesList.firstChild);
+                saveStatus.innerText = 'All changes saved';
+            }
+        }
+
+        async function handleDeleteNote(id) {
+            if (!confirm('Delete this note?')) return;
+            
+            const client = getSupabase();
+            const { error } = await client.from('category_entries').delete().eq('id', id);
+            
+            if (error) {
+                alert('Delete failed');
+            } else {
+                document.getElementById(`entry-${id}`).remove();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEntries();
+        });
+    </script>
+</body>
+</html>
