@@ -16,16 +16,18 @@
             --notepaper-red: #ffcdd2;
             --line-height: 30px;
             --sidebar-width: 250px;
+            --section-sidebar-width: 60px;
         }
 
         body {
             background-color: var(--onenote-bg);
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
             height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         /* Global Header Styles */
@@ -44,13 +46,13 @@
             text-decoration: none;
             color: #ffca38;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
+            padding: 4px 12px;
+            border: 1px solid #ffca38;
+            border-radius: 15px;
             transition: all 0.2s ease;
         }
         .nav-link:hover {
@@ -62,53 +64,81 @@
             display: flex;
             flex-grow: 1;
             overflow: hidden;
+            background: #fff;
         }
 
-        /* Sidebar / Tabs */
-        .notebook-sidebar {
+        /* Multi-level Sidebar */
+        .section-sidebar {
+            width: var(--section-sidebar-width);
+            background: #2b579a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.2s;
+        }
+
+        .section-icon:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .section-icon.active {
+            background: rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .pages-sidebar {
             width: var(--sidebar-width);
-            background: #fff;
+            background: #f3f2f1;
             border-right: 1px solid #ddd;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
         }
 
-        .section-header {
+        .sidebar-title {
             padding: 15px 20px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid #eee;
+            color: #333;
+            border-bottom: 1px solid #e1dfdd;
         }
 
-        .notebook-tab {
+        .page-tab {
             padding: 12px 20px;
             cursor: pointer;
-            border-left: 4px solid transparent;
-            transition: all 0.2s;
-            font-size: 1rem;
+            transition: all 0.1s;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            color: #333;
+            color: #323130;
+            border-bottom: 1px solid #f3f2f1;
         }
 
-        .notebook-tab:hover {
-            background: #f9f9f9;
+        .page-tab:hover {
+            background: #edebe9;
         }
 
-        .notebook-tab.active {
-            background: #eff6fc;
-            border-left-color: var(--onenote-purple);
+        .page-tab.active {
+            background: #fff;
+            box-shadow: -2px 0 0 var(--onenote-purple);
             font-weight: 600;
         }
-
-        .tab-csea.active { border-left-color: #ffca38; }
-        .tab-hoa.active { border-left-color: #4caf50; }
-        .tab-icaap.active { border-left-color: #00326b; }
 
         /* Notepaper Content Area */
         .notebook-main {
@@ -116,6 +146,7 @@
             background: #fff;
             overflow-y: auto;
             position: relative;
+            scrollbar-width: thin;
         }
 
         .notepaper {
@@ -124,7 +155,7 @@
                 linear-gradient(90deg, transparent 79px, var(--notepaper-red) 79px, var(--notepaper-red) 81px, transparent 81px),
                 linear-gradient(var(--notepaper-line) 1px, transparent 1px);
             background-size: 100% 100%, 100% var(--line-height);
-            padding: 40px 20px 40px 100px !important;
+            padding: 60px 40px 60px 120px !important;
             min-height: 100%;
             line-height: var(--line-height);
             position: relative;
@@ -135,71 +166,102 @@
             font-family: 'Coming Soon', cursive;
             font-size: 1.1rem;
             color: #333;
-            max-width: 900px;
+            max-width: 1000px;
+            margin: 0;
+        }
+
+        .page-header-container {
+            margin-bottom: var(--line-height);
+            height: calc(var(--line-height) * 3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-bottom: 1px solid #e1dfdd;
+            box-sizing: border-box;
         }
 
         .page-title {
-            margin: 0 0 var(--line-height) 0;
+            margin: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: #333;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 5px;
-            line-height: normal;
+            line-height: calc(var(--line-height) * 1.5);
+            font-weight: 400;
+            outline: none;
+        }
+
+        .page-meta {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.85rem;
+            color: #605e5c;
+            line-height: var(--line-height);
         }
 
         /* Note Entry Styles */
-        .input-group {
+        .new-note-area {
             margin-bottom: var(--line-height);
         }
 
         textarea#new-note-content {
             width: 100%;
-            min-height: calc(var(--line-height) * 4);
+            min-height: calc(var(--line-height) * 3);
             background: transparent;
             border: none;
             outline: none;
             font-family: 'Coming Soon', cursive;
             font-size: 1.1rem;
             line-height: var(--line-height);
-            resize: vertical;
+            resize: none;
             padding: 0;
             display: block;
         }
 
         .save-btn {
-            background: #00326b;
+            background: var(--onenote-purple);
             color: white;
             border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
+            padding: 6px 20px;
+            border-radius: 2px;
             cursor: pointer;
-            font-family: 'Coming Soon', cursive;
-            margin-top: 10px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .save-btn:hover {
+            filter: brightness(1.1);
         }
 
         .save-status {
             font-size: 0.8rem;
-            color: #888;
+            color: #a19f9d;
             margin-top: 5px;
             font-family: 'Segoe UI', sans-serif;
-            line-height: normal;
+        }
+
+        .entries-list {
+            margin-top: var(--line-height);
         }
 
         .note-entry {
-            margin-bottom: calc(var(--line-height) * 2);
+            margin-bottom: var(--line-height);
             position: relative;
         }
 
         .entry-header {
-            font-size: 0.8rem;
-            color: #999;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px dashed #eee;
-            margin-bottom: 5px;
-            line-height: normal;
             font-family: 'Segoe UI', sans-serif;
+            font-size: 0.8rem;
+            color: #a19f9d;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 2px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .note-entry:hover .entry-header {
+            opacity: 1;
         }
 
         .entry-content {
@@ -209,46 +271,33 @@
         }
 
         .delete-btn {
-            color: #ffcdd2;
+            color: #a19f9d;
             cursor: pointer;
-            transition: color 0.2s;
+            font-size: 0.75rem;
         }
 
         .delete-btn:hover {
-            color: #ef5350;
+            color: #d83b01;
         }
-
-        /* Ensure lines align correctly */
-        p, div, li {
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Specific tab colors */
-        .tab-csea { --tab-accent: #ffca38; }
-        .tab-hoa { --tab-accent: #4caf50; }
-        .tab-icaap { --tab-accent: #00326b; }
 
         .tracking-links {
             display: flex;
-            gap: 15px;
-            margin-bottom: var(--line-height);
-            line-height: normal;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         .tracking-link {
             text-decoration: none;
-            color: #00326b;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: 1px solid #00326b;
+            color: var(--onenote-purple);
+            font-size: 0.85rem;
+            background: #f3f2f1;
             padding: 2px 10px;
-            border-radius: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
         }
 
         .tracking-link:hover {
-            background: #00326b;
-            color: #fff;
+            background: #edebe9;
         }
 
     </style>
@@ -264,33 +313,36 @@
     </header>
 
     <div class="notebook-container">
-        <div class="notebook-sidebar">
-            <div class="section-header">Sections</div>
-            <div class="notebook-tab tab-csea active" onclick="switchTab('CSEA')">
-                <span>📒</span> Csea
+        <aside class="section-sidebar">
+            <div class="section-icon active" onclick="switchSection('work')" title="Work">💼</div>
+            <div class="section-icon" onclick="switchSection('personal')" title="Personal">👤</div>
+            <div class="section-icon" onclick="switchSection('planning')" title="Planning">📅</div>
+            <div class="section-icon" onclick="switchSection('financial')" title="Financial">💰</div>
+        </aside>
+
+        <aside class="pages-sidebar">
+            <div id="sidebar-title" class="sidebar-title">Work Notes</div>
+            <div id="pages-list">
+                <!-- Pages will be injected here -->
             </div>
-            <div class="notebook-tab tab-hoa" onclick="switchTab('HOA')">
-                <span>🏠</span> Hoa
-            </div>
-            <div class="notebook-tab tab-icaap" onclick="switchTab('iCAAP')">
-                <span>📋</span> Icaap
-            </div>
-        </div>
+        </aside>
 
         <main class="notebook-main">
             <div class="notepaper">
                 <div class="notepaper-content">
-                    <h1 id="page-title" class="page-title">Csea Notes</h1>
+                    <div class="page-header-container">
+                        <h1 id="page-title" class="page-title">Page Title</h1>
+                        <div id="page-meta" class="page-meta">Tuesday, January 27, 2026</div>
+                    </div>
                     
-                    <div id="icaap-links" class="tracking-links" style="display: none;">
-                        <a href="icaap-attendance.html" class="tracking-link">Attendance Tracking</a>
-                        <a href="icaap-tracking.html" class="tracking-link">Tracking Log</a>
+                    <div id="category-links" class="tracking-links" style="display: none;">
+                        <!-- Contextual links like ICAAP tracking -->
                     </div>
 
                     <div class="notes-section">
-                        <div class="input-group">
+                        <div class="new-note-area">
                             <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
-                            <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+                            <button class="save-btn" onclick="handleAddNote()">Add Note</button>
                             <div id="save-status" class="save-status">All changes saved</div>
                         </div>
                         <div id="entries-list" class="entries-list">
@@ -303,12 +355,53 @@
     </div>
 
     <script>
+        const sections = {
+            work: {
+                title: 'Work Notes',
+                icon: '💼',
+                pages: [
+                    { id: 'CSEA', name: 'CSEA', icon: '📒' },
+                    { id: 'iCAAP', name: 'iCAAP', icon: '📋' },
+                    { id: 'ICAAP-Tracking', name: 'iCAAP Tracking', icon: '📈' },
+                    { id: 'ICAAP-Attendance', name: 'iCAAP Attendance', icon: '👥' },
+                    { id: 'HOA', name: 'HOA', icon: '🏠' }
+                ]
+            },
+            personal: {
+                title: 'Personal Notes',
+                icon: '👤',
+                pages: [
+                    { id: 'Goals', name: 'Goals', icon: '🎯' },
+                    { id: 'Mantra', name: 'Mantra', icon: '✨' },
+                    { id: 'Personal-Planner', name: 'Personal Planner', icon: '🗓️' }
+                ]
+            },
+            planning: {
+                title: 'Planning Notes',
+                icon: '📅',
+                pages: [
+                    { id: 'Intentions', name: 'Intentions & Dreams', icon: '💭' },
+                    { id: 'Monthly-Review', name: 'Monthly Review', icon: '📊' }
+                ]
+            },
+            financial: {
+                title: 'Financial Notes',
+                icon: '💰',
+                pages: [
+                    { id: 'Financial-Review', name: 'Financial Review', icon: '💸' },
+                    { id: 'Budget', name: 'Budget Planning', icon: '🏦' }
+                ]
+            }
+        };
+
+        let currentSection = 'work';
         let currentCategory = 'CSEA';
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
         const pageTitle = document.getElementById('page-title');
-        const icaapLinks = document.getElementById('icaap-links');
+        const pageMeta = document.getElementById('page-meta');
+        const categoryLinks = document.getElementById('category-links');
         let saveTimeout = null;
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -317,33 +410,103 @@
         const currentYear = displayDate.getFullYear();
         const fiscalYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
 
-        function getPersistenceKey(cat) {
-            const year = cat.toLowerCase() === 'icaap' ? fiscalYear : currentYear;
-            return `draft-note-${cat.toLowerCase()}-${year}`;
-        }
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            pageMeta.innerText = displayDate.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            const catParam = urlParams.get('category');
+            if (catParam) {
+                // Find which section this category belongs to
+                for (const sectionId in sections) {
+                    if (sections[sectionId].pages.find(p => p.id === catParam)) {
+                        currentCategory = catParam;
+                        switchSection(sectionId);
+                        return;
+                    }
+                }
+            }
+            switchSection('work');
+        });
 
-        function getCategory(cat) {
-            const year = cat.toLowerCase() === 'icaap' ? fiscalYear : currentYear;
-            return `${cat}-${year}`;
+        function switchSection(sectionId) {
+            currentSection = sectionId;
+            
+            // Update sidebar icons
+            document.querySelectorAll('.section-icon').forEach(icon => {
+                icon.classList.toggle('active', icon.title.toLowerCase() === sectionId);
+            });
+
+            // Update pages list
+            const section = sections[sectionId];
+            document.getElementById('sidebar-title').innerText = section.title;
+            const pagesList = document.getElementById('pages-list');
+            pagesList.innerHTML = '';
+            
+            section.pages.forEach(page => {
+                const div = document.createElement('div');
+                div.className = `page-tab ${currentCategory === page.id ? 'active' : ''}`;
+                div.dataset.id = page.id;
+                div.innerHTML = `<span>${page.icon}</span> ${page.name}`;
+                div.onclick = () => switchTab(page.id);
+                pagesList.appendChild(div);
+            });
+
+            // Switch to first page if current category is not in this section
+            if (!section.pages.find(p => p.id === currentCategory)) {
+                switchTab(section.pages[0].id);
+            } else {
+                switchTab(currentCategory);
+            }
         }
 
         async function switchTab(category) {
             currentCategory = category;
             
-            // Update UI
-            document.querySelectorAll('.notebook-tab').forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.innerText.includes(category.charAt(0).toUpperCase() + category.slice(1).toLowerCase())) {
-                    tab.classList.add('active');
-                }
+            // Update page tabs
+            document.querySelectorAll('.page-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.id === category);
             });
 
-            const yearStr = (category.toLowerCase() === 'icaap') ? `${fiscalYear}-${fiscalYear + 1}` : currentYear;
-            pageTitle.innerText = (category === 'iCAAP' ? 'Icaap' : category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()) + ` Notes ${yearStr}`;
-            icaapLinks.style.display = (category === 'iCAAP') ? 'flex' : 'none';
+            // Find page name
+            let pageName = category;
+            for (const s in sections) {
+                const p = sections[s].pages.find(pg => pg.id === category);
+                if (p) {
+                    pageName = p.name;
+                    break;
+                }
+            }
 
-            // Load Content
+            const yearStr = (category.toLowerCase().includes('icaap')) ? `${fiscalYear}-${fiscalYear + 1}` : currentYear;
+            pageTitle.innerText = `${pageName} ${yearStr}`;
+
+            // Contextual links
+            categoryLinks.innerHTML = '';
+            categoryLinks.style.display = 'none';
+            if (category.toLowerCase().includes('icaap')) {
+                categoryLinks.style.display = 'flex';
+                categoryLinks.innerHTML = `
+                    <a href="icaap-attendance.html" class="tracking-link">Attendance Tracking</a>
+                    <a href="icaap-tracking.html" class="tracking-link">Tracking Log</a>
+                `;
+            }
+
             await loadEntries();
+        }
+
+        function getPersistenceKey(cat) {
+            const year = cat.toLowerCase().includes('icaap') ? fiscalYear : currentYear;
+            return `draft-note-${cat.toLowerCase()}-${year}`;
+        }
+
+        function getCategory(cat) {
+            const year = cat.toLowerCase().includes('icaap') ? fiscalYear : currentYear;
+            return `${cat}-${year}`;
         }
 
         function createEntryElement(entry) {
@@ -390,6 +553,21 @@
             }, 1000);
         }
 
+        async function handleAddNote() {
+            const content = newNoteContent.value.trim();
+            if (!content) return;
+
+            saveStatus.innerText = 'Saving...';
+            const entry = await saveCategoryEntry(getCategory(currentCategory), content);
+            if (entry) {
+                newNoteContent.value = '';
+                // Clear draft
+                await savePlannerData(getPersistenceKey(currentCategory), 'draft', '');
+                await loadEntries();
+                saveStatus.innerText = 'Note added';
+            }
+        }
+
         async function handleEditNote(e, id) {
             saveStatus.innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
@@ -400,38 +578,14 @@
             }, 1000);
         }
 
-        async function handleAddNote() {
-            const content = newNoteContent.value;
-            if (!content.trim()) return;
-            
-            saveStatus.innerText = 'Saving...';
-            const newEntry = await saveCategoryEntry(getCategory(currentCategory), content);
-            if (newEntry) {
-                newNoteContent.value = '';
-                // Clear draft
-                await savePlannerData(getPersistenceKey(currentCategory), 'draft', '');
-                // Add to list at top
-                entriesList.insertBefore(createEntryElement(newEntry), entriesList.firstChild);
-                saveStatus.innerText = 'All changes saved';
-            }
-        }
-
         async function handleDeleteNote(id) {
             if (!confirm('Delete this note?')) return;
-            
-            const client = getSupabase();
-            const { error } = await client.from('category_entries').delete().eq('id', id);
-            
-            if (error) {
-                alert('Delete failed');
-            } else {
+            const success = await deleteCategoryEntry(id);
+            if (success) {
                 document.getElementById(`entry-${id}`).remove();
+                saveStatus.innerText = 'Note deleted';
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadEntries();
-        });
     </script>
 </body>
 </html>
