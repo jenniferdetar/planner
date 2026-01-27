@@ -588,12 +588,37 @@ function updateNavigationLinks(date) {
         'mantra.html',
         'personal-goals.html'
     ];
-    document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill').forEach(link => {
+
+    const categoryMapping = {
+        'financial.html': 'Budget',
+        'monthly-review.html': 'Monthly-Review',
+        'icaap-tracking.html': 'ICAAP-Tracking',
+        'icaap-attendance.html': 'ICAAP-Attendance',
+        'icaap.html': 'iCAAP',
+        'csea.html': 'CSEA',
+        'hoa.html': 'HOA',
+        'mantra.html': 'Mantra',
+        'personal-goals.html': 'Goals',
+        'planning.html': 'Intentions',
+        'work-planner.html': 'Work-Planner',
+        'personal-planner.html': 'Personal-Planner'
+    };
+
+    document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill, a.tracking-link').forEach(link => {
         const href = link.getAttribute('href');
         if (href) {
-            const base = href.split('?')[0];
-            if (internalPages.includes(base)) {
-                link.href = `${base}?date=${dateStr}`;
+            let base = href.split('?')[0];
+            let targetUrl = base;
+            let params = new URLSearchParams(href.split('?')[1] || '');
+            
+            if (categoryMapping[base]) {
+                targetUrl = 'notebook.html';
+                params.set('category', categoryMapping[base]);
+            }
+            
+            if (internalPages.includes(base) || base === 'notebook.html') {
+                params.set('date', dateStr);
+                link.href = `${targetUrl}?${params.toString()}`;
             }
         }
     });

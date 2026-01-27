@@ -28,45 +28,67 @@
             padding: 0;
             background-color: #fff;
             color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
+        .notebook-container {
             display: flex;
-            justify-content: center;
+            flex-grow: 1;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .section-sidebar {
+            width: 60px;
+            background: #2b579a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
             gap: 15px;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            align-items: center;
+            flex-shrink: 0;
         }
 
-        .nav-link {
-            text-decoration: none;
-            color: #ffca38;
-            font-weight: 600;
-            font-size: 0.9rem;
+        .section-icon {
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
-            transition: all 0.2s ease;
+            justify-content: center;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.2s;
+            text-decoration: none;
         }
 
-        .nav-link:hover {
-            background-color: #ffca38;
-            color: #00326b;
+        .section-icon:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .section-icon.active {
+            background: rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .section-icon.logout-icon {
+            margin-top: auto;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+        .section-icon.logout-icon:hover {
+            opacity: 1;
+            color: #ffcdd2;
         }
 
         .main-container {
-            display: flex;
-            justify-content: center;
+            flex-grow: 1;
+            overflow-y: auto;
             padding: 10px;
-            width: 100%;
             box-sizing: border-box;
         }
 
@@ -271,22 +293,23 @@
     </style>
 </head>
 <body>
-    <header class="global-header">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="notebook.html" class="nav-link">Notebook</a>
-        <a href="financial.html" class="nav-link">Financial</a>
-        <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="planning.html" class="nav-link">Planning</a>
-        <a href="mantra.html" class="nav-link">Mantra</a>
-    </header>
+    <div class="notebook-container">
+        <aside class="section-sidebar">
+            <a href="index.html" class="section-icon active" title="Home">🏠</a>
+            <a href="notebook.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
+            <a href="notebook.html?category=Goals" class="section-icon" title="Personal">👤</a>
+            <a href="notebook.html?category=Intentions" class="section-icon" title="Planning">📅</a>
+            <a href="notebook.html?category=Budget" class="section-icon" title="Financial">💰</a>
+            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
+        </aside>
 
-    <div class="main-container">
+        <div class="main-container">
         <div class="notebook-page">
         <div class="header-controls">
             <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
-            <a href="personal-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
+            <a href="notebook.html?category=Personal-Planner" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
             <h1 id="current-month-display" class="month-title">Loading...</h1>
-            <a href="work-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Work Planner</a>
+            <a href="notebook.html?category=Work-Planner" class="nav-btn" style="text-decoration: none; display: inline-block;">Work Planner</a>
             <button class="nav-btn" onclick="changeMonth(1)">Next</button>
         </div>
 
@@ -355,7 +378,7 @@
                 dayNum.className = 'day-number';
                 dayNum.style.cursor = 'pointer';
                 dayNum.title = 'View week in Work Planner';
-                dayNum.onclick = () => window.location.href = `work-planner.html?date=${dateKey}`;
+                dayNum.onclick = () => window.location.href = `notebook.html?category=Work-Planner&date=${dateKey}`;
                 dayNum.innerText = i;
                 dayDiv.appendChild(dayNum);
 
