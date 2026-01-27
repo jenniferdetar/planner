@@ -282,7 +282,7 @@
     <div class="notebook-container">
         <div class="notebook-page">
             <div class="planner-header">
-                <div id="week-range" class="date-range">DECEMBER 28, 2025 - JANUARY 3, 2026</div>
+                <div id="week-range" class="date-range">Loading...</div>
                 <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin: 5px 0;">
                     <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
                     <h2 style="margin: 0; color: var(--header-blue);">WORK PLANNER</h2>
@@ -329,12 +329,10 @@
         }
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date(2025, 11, 28);
+        let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date();
         // Adjust to Sunday of the week
-        if (dateParam) {
-            const day = currentStartDate.getDay();
-            currentStartDate.setDate(currentStartDate.getDate() - day);
-        }
+        const startDay = currentStartDate.getDay();
+        currentStartDate.setDate(currentStartDate.getDate() - startDay);
         let saveTimeout = null;
         async function handleSavePlannerData(date, fieldId, content) {
             const saveStatus = document.getElementById('save-status');
@@ -409,7 +407,7 @@
             container.innerHTML = 'Loading...';
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
-            const rangeStr = `${currentStartDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})} - ${weekEnd.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`.toUpperCase();
+            const rangeStr = `${formatDateMMM(currentStartDate.toISOString().split('T')[0])} - ${formatDateMMM(weekEnd.toISOString().split('T')[0])}`.toUpperCase();
             document.getElementById('week-range').innerText = rangeStr;
             updateNavigationLinks(currentStartDate);
             // Clear top priorities
@@ -440,14 +438,11 @@
                 dayDate.setDate(dayDate.getDate() + i);
                 const dayStr = dayDate.toISOString().split('T')[0];
                 let dayEvents = events.filter(e => e.date === dayStr);
-                if (dayStr === '2026-01-17') {
-                    dayEvents = dayEvents.filter(e => !e.title.toUpperCase().includes('LA FED MLK CELEBRATION'));
-                }
                 const dayCol = document.createElement('div');
                 dayCol.className = 'day-col';
                 const header = document.createElement('div');
                 header.className = `day-header ${dayClasses[i]}-header`;
-                header.innerHTML = `${dayDate.getDate()}<br>${dayNames[i].toUpperCase()}`;
+                header.innerHTML = `${dayNames[i].substring(0, 3).toUpperCase()}<br>${formatDateMMM(dayStr).toUpperCase()}`;
                 dayCol.appendChild(header);
                 timeSlots.forEach(slot => {
                     const slotDiv = document.createElement('div');
@@ -495,11 +490,9 @@
         }
         window.onpopstate = function(event) {
             const date = event.state ? event.state.date : dateParam;
-            currentStartDate = date ? new Date(date) : new Date(2025, 11, 28);
-            if (date) {
-                const day = currentStartDate.getDay();
-                currentStartDate.setDate(currentStartDate.getDate() - day);
-            }
+            currentStartDate = date ? new Date(date) : new Date();
+            const day = currentStartDate.getDay();
+            currentStartDate.setDate(currentStartDate.getDate() - day);
             renderPlanner();
         };
         renderPlanner();

@@ -207,12 +207,21 @@
         </div>
     </div>
     <script>
-        const CATEGORY = 'iCAAP';
-        const PERSISTENCE_KEY = `draft-note-${CATEGORY.toLowerCase()}`;
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const startYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
+        
+        const CATEGORY = `iCAAP-${startYear}`;
+        const PERSISTENCE_KEY = `draft-note-icaap-${startYear}`;
+        
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
         let saveTimeout = null;
+
+        // Update Title
+        document.querySelector('.page-title').innerText = `Icaap Notes ${startYear}-${startYear + 1}`;
 
         function createEntryElement(entry) {
             const div = document.createElement('div');

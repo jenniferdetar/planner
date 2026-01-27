@@ -311,8 +311,20 @@
         const icaapLinks = document.getElementById('icaap-links');
         let saveTimeout = null;
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const currentYear = displayDate.getFullYear();
+        const fiscalYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
+
         function getPersistenceKey(cat) {
-            return `draft-note-${cat.toLowerCase()}`;
+            const year = cat.toLowerCase() === 'icaap' ? fiscalYear : currentYear;
+            return `draft-note-${cat.toLowerCase()}-${year}`;
+        }
+
+        function getCategory(cat) {
+            const year = cat.toLowerCase() === 'icaap' ? fiscalYear : currentYear;
+            return `${cat}-${year}`;
         }
 
         async function switchTab(category) {
@@ -326,7 +338,8 @@
                 }
             });
 
-            pageTitle.innerText = (category === 'iCAAP' ? 'Icaap' : category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()) + ' Notes';
+            const yearStr = (category.toLowerCase() === 'icaap') ? `${fiscalYear}-${fiscalYear + 1}` : currentYear;
+            pageTitle.innerText = (category === 'iCAAP' ? 'Icaap' : category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()) + ` Notes ${yearStr}`;
             icaapLinks.style.display = (category === 'iCAAP') ? 'flex' : 'none';
 
             // Load Content
@@ -337,9 +350,11 @@
             const div = document.createElement('div');
             div.className = 'note-entry';
             div.id = `entry-${entry.id}`;
+            const datePart = entry.created_at.split('T')[0];
+            const timePart = new Date(entry.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
             div.innerHTML = `
                 <div class="entry-header">
-                    <span>${formatDate(entry.created_at)}</span>
+                    <span>${formatDateMMM(datePart)} ${timePart}</span>
                     <span class="delete-btn" onclick="handleDeleteNote(${entry.id})">Delete</span>
                 </div>
                 <div class="entry-content" contenteditable="true" oninput="handleEditNote(event, ${entry.id})">${entry.content}</div>
@@ -349,7 +364,7 @@
 
         async function loadEntries() {
             saveStatus.innerText = 'Loading...';
-            const entries = await fetchCategoryEntries(currentCategory);
+            const entries = await fetchCategoryEntries(getCategory(currentCategory));
             entriesList.innerHTML = '';
             entries.forEach(entry => {
                 entriesList.appendChild(createEntryElement(entry));
@@ -390,7 +405,7 @@
             if (!content.trim()) return;
             
             saveStatus.innerText = 'Saving...';
-            const newEntry = await saveCategoryEntry(currentCategory, content);
+            const newEntry = await saveCategoryEntry(getCategory(currentCategory), content);
             if (newEntry) {
                 newNoteContent.value = '';
                 // Clear draft

@@ -185,11 +185,26 @@
                 <thead>
                     <tr class="header-row">
                         <script>
-                            const months = [
-                                'July 2025', 'August 2025', 'September 2025', 'October 2025', 
-                                'November 2025', 'December 2025', 'January 2026', 'February 2026', 
-                                'March 2026', 'April 2026', 'May 2026', 'June 2026'
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const dateParam = urlParams.get('date');
+                            let baseDate = dateParam ? new Date(dateParam) : new Date();
+                            if (isNaN(baseDate.getTime())) baseDate = new Date();
+                            
+                            // Determine fiscal year start (July)
+                            let startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
+                            
+                            const months = [];
+                            const monthNames = [
+                                'July', 'August', 'September', 'October', 
+                                'November', 'December', 'January', 'February', 
+                                'March', 'April', 'May', 'June'
                             ];
+                            
+                            for (let i = 0; i < 12; i++) {
+                                const year = i < 6 ? startYear : startYear + 1;
+                                months.push(`${monthNames[i]} ${year}`);
+                            }
+
                             document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
                             months.forEach(month => {
                                 document.write(`<th colspan="3" class="month-header">${month}</th>`);
@@ -298,16 +313,24 @@
             "Yesenia Duran", "Yesenia Enriquez", "Yolanda Hashimoto", "Young Choy",
             "Yuriko Jung", "Zarui Grigoryan", "Zina Dixon"
         ];
-        const PERSISTENCE_KEY = 'icaap-tracking-data';
+        
+        // Context variables
+        const urlParams_main = new URLSearchParams(window.location.search);
+        const dateParam_main = urlParams_main.get('date');
+        let baseDate_main = dateParam_main ? new Date(dateParam_main) : new Date();
+        if (isNaN(baseDate_main.getTime())) baseDate_main = new Date();
+        const startYear = baseDate_main.getMonth() < 6 ? baseDate_main.getFullYear() - 1 : baseDate_main.getFullYear();
+        
+        const PERSISTENCE_KEY = `icaap-tracking-data-${startYear}`;
         let saveTimeout;
         let allEmployees = [];
 
         async function init() {
-            // Load all tracking data in parallel
+            // Load all tracking data in parallel with fiscal year context
             const [hoursData, approvalData, paylogData] = await Promise.all([
-                fetchHoursWorked(),
-                fetchApprovalDates(),
-                fetchPaylogSubmissions()
+                fetchHoursWorked(startYear),
+                fetchApprovalDates(startYear),
+                fetchPaylogSubmissions(startYear)
             ]);
 
             // Load custom/placeholder data
@@ -440,7 +463,7 @@
             const totalCell = document.querySelector(`[data-field="icaap-total-${eIdx}"]`);
             if (totalCell) {
                 totalCell.innerText = total || '';
-                await saveTrackingData('hours_worked', empName, 'total', total.toString());
+                await saveTrackingData('hours_worked', empName, 'total', total.toString(), startYear);
             }
         }
 
@@ -459,7 +482,7 @@
                 if (parts[1] === 'total') {
                     const eIdx = parseInt(parts[2]);
                     const empName = allEmployees[eIdx];
-                    success = await saveTrackingData('hours_worked', empName, 'total', content);
+                    success = await saveTrackingData('hours_worked', empName, 'total', content, startYear);
                 } else {
                     const mIdx = parseInt(parts[1]);
                     const eIdx = parseInt(parts[2]);
@@ -468,12 +491,12 @@
                     const monthName = months[mIdx].split(' ')[0];
 
                     if (type === 'hours') {
-                        success = await saveTrackingData('hours_worked', empName, monthName, content);
+                        success = await saveTrackingData('hours_worked', empName, monthName, content, startYear);
                         updateTotalHours(eIdx);
                     } else if (type === 'approval') {
-                        success = await saveTrackingData('approval_dates', empName, monthName, content);
+                        success = await saveTrackingData('approval_dates', empName, monthName, content, startYear);
                     } else if (type === 'paylog') {
-                        success = await saveTrackingData('paylog_submission', empName, monthName, content);
+                        success = await saveTrackingData('paylog_submission', empName, monthName, content, startYear);
                         if (!success) {
                             success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
                         }

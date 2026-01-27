@@ -225,7 +225,13 @@
             <div class="floral-corner"></div>
             <h1 class="page-title">Daily Mantras</h1>
 
-            <div class="section-title">2026 Manifesto</div>
+            <div class="section-title" id="manifesto-title">Manifesto</div>
+            <script>
+                const mUrlParams = new URLSearchParams(window.location.search);
+                const mDateParam = mUrlParams.get('date');
+                const mYear = mDateParam ? new Date(mDateParam).getFullYear() : new Date().getFullYear();
+                document.getElementById('manifesto-title').innerText = `${mYear} Manifesto`;
+            </script>
             <div class="manifesto-section">
                 <div class="manifesto-item">
                     <div class="checkbox-box"></div>
@@ -271,10 +277,14 @@
     </div>
 
     <script>
-        const CATEGORY = 'Mantra';
-        const FEATURED_KEY = 'featured-mantra';
-        const PERSISTENCE_KEY = 'mantra-data';
-        const DRAFT_KEY = 'draft-mantra';
+        const urlParams_main = new URLSearchParams(window.location.search);
+        const dateParam_main = urlParams_main.get('date');
+        const currentYear = dateParam_main ? new Date(dateParam_main).getFullYear() : new Date().getFullYear();
+        const CATEGORY = `Mantra-${currentYear}`;
+        
+        const FEATURED_KEY = `featured-mantra-${currentYear}`;
+        const PERSISTENCE_KEY = `mantra-data-${currentYear}`;
+        const DRAFT_KEY = `draft-mantra-${currentYear}`;
         let saveTimeout;
 
         async function init() {

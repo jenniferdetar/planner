@@ -191,12 +191,26 @@
                 <tr class="header-row">
                     <th class="account-col">Account</th>
                     <script>
-                        const dates = [
-                            '7/5/2025', '7/20/2025', '8/5/2025', '8/19/2025', '9/5/2025', 
-                            '9/20/2025', '10/5/2025', '10/20/2025', '11/4/2025', '11/18/2025', 
-                            '12/5/2025', '12/20/2025', '1/5/2026', '1/20/2026', '2/3/2026', 
-                            '2/20/2026', '3/3/2026', '3/20/2026', '4/5/2026', '4/20/2026'
-                        ];
+                        const urlParamsDates = new URLSearchParams(window.location.search);
+                        const dateParamDates = urlParamsDates.get('date');
+                        let baseDateDates = dateParamDates ? new Date(dateParamDates) : new Date();
+                        if (isNaN(baseDateDates.getTime())) baseDateDates = new Date();
+                        
+                        // Set to 1st of month
+                        baseDateDates.setDate(1);
+                        
+                        const dates = [];
+                        for (let i = 0; i < 10; i++) {
+                            const d1 = new Date(baseDateDates);
+                            d1.setMonth(baseDateDates.getMonth() + i);
+                            d1.setDate(5);
+                            dates.push(`${d1.getMonth() + 1}/${d1.getDate()}/${d1.getFullYear()}`);
+                            
+                            const d2 = new Date(baseDateDates);
+                            d2.setMonth(baseDateDates.getMonth() + i);
+                            d2.setDate(20);
+                            dates.push(`${d2.getMonth() + 1}/${d2.getDate()}/${d2.getFullYear()}`);
+                        }
                         dates.forEach(d => document.write(`<th>${d}</th>`));
                     </script>
                 </tr>
@@ -252,10 +266,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             // Load Data using shared.js logic
-            // We use a fixed date "2025-01-01" to store the whole grid 
-            // OR we can use the date from the column header for date_key.
-            // Let's use "grid-system" as the date_key to keep the entire spreadsheet in one "page".
-            const PERSISTENCE_KEY = "check-breakdown-spreadsheet";
+            // We use a year-specific key for the spreadsheet
+            const urlParamsInit = new URLSearchParams(window.location.search);
+            const dateParamInit = urlParamsInit.get('date');
+            const yearInit = dateParamInit ? new Date(dateParamInit).getFullYear() : new Date().getFullYear();
+            const PERSISTENCE_KEY = `check-breakdown-${yearInit}`;
             
             const data = await fetchPlannerData(PERSISTENCE_KEY, 1);
             data.forEach(item => {

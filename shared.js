@@ -83,7 +83,7 @@ async function fetchPlannerData(startDate, days = 7) {
         const endStr = endDate.toISOString().split('T')[0];
         query = query.gte('date_key', startStr).lte('date_key', endStr);
     } else {
-        // Treat as a literal persistence key (e.g., 'icaap-tracking-data', '2026-planning')
+        // Treat as a literal persistence key (e.g., 'icaap-tracking-data', 'planning-data')
         query = query.eq('date_key', startDate);
     }
 
@@ -211,14 +211,17 @@ async function updateCategoryEntry(id, content) {
 function formatDate(dateStr) {
     if (!dateStr) return '';
     const date = new Date(dateStr);
-    return date.toLocaleString('en-US', {
+    const datePart = date.toLocaleDateString('en-US', {
         month: 'short',
-        day: 'numeric',
-        year: 'numeric',
+        day: '2-digit',
+        year: 'numeric'
+    }).replace(',', '');
+    const timePart = date.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit',
         hour12: true
     });
+    return `${datePart} ${timePart}`;
 }
 
 function formatDateMMM(dateStr) {
@@ -395,10 +398,12 @@ async function fetchCseaMembers() {
     return (data || []).map(m => ({ ...m, name: toTitleCase(m.name) }));
 }
 
-async function fetchHoursWorked() {
+async function fetchHoursWorked(year) {
     const client = getSupabase();
     if (!client) return [];
-    const { data, error } = await client.from('hours_worked').select('*');
+    let query = client.from('hours_worked').select('*');
+    if (year) query = query.eq('fiscal_year', year);
+    const { data, error } = await query;
     if (error) {
         console.error('Error fetching hours_worked:', error);
         return [];
@@ -406,10 +411,12 @@ async function fetchHoursWorked() {
     return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
 }
 
-async function fetchApprovalDates() {
+async function fetchApprovalDates(year) {
     const client = getSupabase();
     if (!client) return [];
-    const { data, error } = await client.from('approval_dates').select('*');
+    let query = client.from('approval_dates').select('*');
+    if (year) query = query.eq('fiscal_year', year);
+    const { data, error } = await query;
     if (error) {
         console.error('Error fetching approval_dates:', error);
         return [];
@@ -417,10 +424,12 @@ async function fetchApprovalDates() {
     return (data || []).map(r => ({ ...r, Name: toTitleCase(r.Name) }));
 }
 
-async function fetchPaylogSubmissions() {
+async function fetchPaylogSubmissions(year) {
     const client = getSupabase();
     if (!client) return [];
-    const { data, error } = await client.from('paylog_submission').select('*');
+    let query = client.from('paylog_submission').select('*');
+    if (year) query = query.eq('fiscal_year', year);
+    const { data, error } = await query;
     if (error) {
         // Fallback if table doesn't exist yet
         console.warn('paylog_submission table not found, using empty data');
@@ -429,10 +438,10 @@ async function fetchPaylogSubmissions() {
     return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
 }
 
-async function fetchAllTrackingNames() {
-    const hours = await fetchHoursWorked();
-    const approvals = await fetchApprovalDates();
-    const paylogs = await fetchPaylogSubmissions();
+async function fetchAllTrackingNames(year) {
+    const hours = await fetchHoursWorked(year);
+    const approvals = await fetchApprovalDates(year);
+    const paylogs = await fetchPaylogSubmissions(year);
     
     const names = new Set();
     hours.forEach(r => { if (r.name) names.add(toTitleCase(r.name)); });
@@ -442,7 +451,7 @@ async function fetchAllTrackingNames() {
     return [...names].sort();
 }
 
-async function saveTrackingData(table, name, month, value) {
+async function saveTrackingData(table, name, month, value, year) {
     const client = getSupabase();
     if (!client) return false;
     
@@ -457,17 +466,15 @@ async function saveTrackingData(table, name, month, value) {
     const nameCol = (table === 'hours_worked' || table === 'paylog_submission') ? 'name' : 'Name';
     
     // 1. Try exact match first
-    let { data: existingData, error: fetchError } = await client
-        .from(table)
-        .select('*')
-        .eq(nameCol, name);
+    let query = client.from(table).select('*').eq(nameCol, name);
+    if (year) query = query.eq('fiscal_year', year);
+    let { data: existingData, error: fetchError } = await query;
 
     // 2. If no exact match, try case-insensitive match (using ilike)
     if (!fetchError && (!existingData || existingData.length === 0)) {
-        const { data: ciData, error: ciError } = await client
-            .from(table)
-            .select('*')
-            .ilike(nameCol, name);
+        let ciQuery = client.from(table).select('*').ilike(nameCol, name);
+        if (year) ciQuery = ciQuery.eq('fiscal_year', year);
+        const { data: ciData, error: ciError } = await ciQuery;
         if (!ciError && ciData && ciData.length > 0) {
             existingData = ciData;
         }
@@ -476,10 +483,13 @@ async function saveTrackingData(table, name, month, value) {
     if (existingData && existingData.length > 0) {
         // Update the existing record (use the exact name from the DB to be safe)
         const dbName = existingData[0][nameCol];
-        const { error: updateError } = await client
-            .from(table)
-            .update({ [col]: value })
-            .eq(nameCol, dbName);
+        const updateObj = { [col]: value };
+        if (year) updateObj.fiscal_year = year;
+        
+        let updateQuery = client.from(table).update(updateObj).eq(nameCol, dbName);
+        if (year) updateQuery = updateQuery.eq('fiscal_year', year);
+        
+        const { error: updateError } = await updateQuery;
         
         if (updateError) {
             console.error(`Error updating ${table}:`, updateError);
@@ -487,9 +497,12 @@ async function saveTrackingData(table, name, month, value) {
         }
     } else {
         // Insert new record
+        const insertObj = { [nameCol]: name, [col]: value };
+        if (year) insertObj.fiscal_year = year;
+        
         const { error: insertError } = await client
             .from(table)
-            .insert({ [nameCol]: name, [col]: value });
+            .insert(insertObj);
         
         if (insertError) {
             console.error(`Error inserting into ${table}:`, insertError);
@@ -571,6 +584,7 @@ function updateNavigationLinks(date) {
         'monthly-review.html',
         'check-breakdown.html',
         'icaap-tracking.html',
+        'icaap-attendance.html',
         'mantra.html',
         'personal-goals.html'
     ];

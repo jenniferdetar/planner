@@ -717,7 +717,10 @@
 
     <script>
         let saveTimeout;
-        const PLANNING_DATE = '2026-financial';
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        const currentYear = dateParam ? new Date(dateParam).getFullYear() : new Date().getFullYear();
+        const PLANNING_DATE = `${currentYear}-financial`;
 
         async function init() {
             // Load data from Supabase

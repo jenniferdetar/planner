@@ -303,13 +303,21 @@
         </div>
     </div>
     <script>
-        const CATEGORY = 'CSEA';
-        const PERSISTENCE_KEY = `draft-note-${CATEGORY.toLowerCase()}`;
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        const currentYear = dateParam ? new Date(dateParam).getFullYear() : new Date().getFullYear();
+        const CATEGORY = `CSEA-${currentYear}`;
+        const PERSISTENCE_KEY = `draft-note-csea-${currentYear}`;
+
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
         const interactionLogBody = document.getElementById('interaction-log-body');
         let saveTimeout = null;
+
+        // Update Title
+        document.querySelector('.page-title').innerText = `Csea Notes ${currentYear}`;
+        document.querySelector('.interaction-log-header').innerText = `Member Interaction Log ${currentYear}`;
 
         // Reference Data
         let cachedMembers = [];
@@ -410,7 +418,15 @@
         }
         // Interaction Log Functions
         async function loadInteractions() {
-            const interactions = await fetchInteractions(CATEGORY);
+            let interactions = await fetchInteractions(CATEGORY);
+            
+            // Filter by current year
+            interactions = interactions.filter(inter => {
+                if (!inter.date_spoke) return false;
+                const d = new Date(inter.date_spoke);
+                return d.getFullYear() === currentYear;
+            });
+
             interactionLogBody.innerHTML = '';
             interactions.forEach(inter => {
                 const type = detectType(inter);

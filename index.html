@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 Home Planner</title>
+    <title>Home Planner</title>
     <!-- v2.2.0 -->
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -285,7 +285,7 @@
         <div class="header-controls">
             <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
             <a href="personal-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
-            <h1 id="current-month-display" class="month-title">January 2026</h1>
+            <h1 id="current-month-display" class="month-title">Loading...</h1>
             <a href="work-planner.html" class="nav-btn" style="text-decoration: none; display: inline-block;">Work Planner</a>
             <button class="nav-btn" onclick="changeMonth(1)">Next</button>
         </div>
@@ -307,12 +307,10 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentDate = dateParam ? parseLocalDate(dateParam) : new Date(2026, 0, 1);
+        let currentDate = dateParam ? parseLocalDate(dateParam) : new Date();
         
         // Ensure currentDate is first of month for display purposes
-        if (dateParam) {
-            currentDate.setDate(1);
-        }
+        currentDate.setDate(1);
 
         async function renderCalendar() {
             const year = currentDate.getFullYear();
@@ -372,11 +370,9 @@
             // Fetch and render Supabase events
             let events = await fetchCalendarEvents(new Date(year, month, 1), daysInMonth);
             
-            // Filter out specific events for 1/17/2026
+            // Filter out specific events if needed
             events = events.filter(event => {
-                if (event.date === '2026-01-17' && event.title.toUpperCase().includes('LA FED MLK CELEBRATION')) {
-                    return false;
-                }
+                // Example: if (event.date === '2026-01-17' && event.title.toUpperCase().includes('LA FED MLK CELEBRATION')) return false;
                 return true;
             });
 
@@ -407,8 +403,8 @@
 
         window.onpopstate = function(event) {
             const date = event.state ? event.state.date : dateParam;
-            currentDate = date ? new Date(date) : new Date(2026, 0, 1);
-            if (date) currentDate.setDate(1);
+            currentDate = date ? new Date(date) : new Date();
+            currentDate.setDate(1);
             renderCalendar();
         };
 

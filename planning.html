@@ -429,7 +429,10 @@
     </div>
     <script>
         let saveTimeout;
-        const PLANNING_DATE = '2026-planning';
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        const planningYear = dateParam ? new Date(dateParam).getFullYear() : new Date().getFullYear();
+        const PLANNING_DATE = `${planningYear}-planning`;
         async function init() {
             // Load data from Supabase
             const data = await fetchPlannerData(PLANNING_DATE);

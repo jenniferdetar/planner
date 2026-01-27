@@ -183,7 +183,7 @@
                 <h1 class="page-title">Icaap Attendance Tracking</h1>
                 <div id="week-nav" style="margin-top: 8px; display: flex; justify-content: center; align-items: center; gap: 15px;">
                     <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
-                    <div id="date-range-display" class="date-range-display">January 5 - 9, 2026</div>
+                    <div id="date-range-display" class="date-range-display">Loading...</div>
                     <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
                 </div>
                 <div style="margin-top: 8px; display: flex; justify-content: center; gap: 10px;">
@@ -211,7 +211,6 @@
             "Rene Gaudet", "Steve Maccarone", "Zina Dixon"
         ];
         const options = ["", "Cochren", "Beaudry", "Illness", "Kin Care", "Personal Necessity", "Vacation", "Bereavement"];
-        const PERSISTENCE_KEY = 'icaap-attendance-data';
         
         function parseLocalDate(dateStr) {
             if (!dateStr) return null;
@@ -221,13 +220,19 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date(2026, 0, 5); // Start with first Monday of 2026
+        let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date(); // Default to current date if no param
 
         // Adjust to Monday of the week
         const day = currentStartDate.getDay();
         const diff = currentStartDate.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
         currentStartDate.setDate(diff);
 
+        // Determine fiscal year start (July)
+        function getPersistenceKey() {
+            const sy = currentStartDate.getMonth() < 6 ? currentStartDate.getFullYear() - 1 : currentStartDate.getFullYear();
+            return `icaap-attendance-data-${sy}`;
+        }
+        
         function getWeekdaysForCurrentWeek() {
             const days = [];
             const tempDate = new Date(currentStartDate);
@@ -245,14 +250,16 @@
             const rangeDisplay = document.getElementById('date-range-display');
 
             const lastDay = new Date(weekdays[4]);
-            rangeDisplay.innerText = `${weekdays[0].toLocaleDateString('en-US', {month: 'long', day: 'numeric'})} - ${weekdays[0].getFullYear()} (day: ${lastDay.getDate()})`;
+            const startStr = weekdays[0].toISOString().split('T')[0];
+            const endStr = lastDay.toISOString().split('T')[0];
+            rangeDisplay.innerText = `${formatDateMMM(startStr)} - ${formatDateMMM(endStr)}`;
             
             // Header
             let headHtml = `<tr class="header-row"><th class="employee-col">Employee Name</th>`;
             weekdays.forEach(d => {
-                const dateStr = `${d.getMonth() + 1}/${d.getDate()}`;
+                const dayStr = d.toISOString().split('T')[0];
                 const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
-                headHtml += `<th>${dayName}<br>${dateStr}</th>`;
+                headHtml += `<th>${dayName}<br>${formatDateMMM(dayStr)}</th>`;
             });
             headHtml += `</tr>`;
             thead.innerHTML = headHtml;
@@ -277,7 +284,7 @@
         }
 
         async function loadData() {
-            const data = await fetchPlannerData(PERSISTENCE_KEY, 366); 
+            const data = await fetchPlannerData(getPersistenceKey(), 366); 
             data.forEach(item => {
                 const el = document.querySelector(`[data-field="${item.field_id}"]`);
                 if (el) el.value = item.content;
@@ -290,7 +297,7 @@
             const status = document.getElementById('save-status');
             status.innerText = 'Saving...';
             
-            const success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+            const success = await savePlannerData(getPersistenceKey(), fieldId, content);
             status.innerText = success ? 'All changes saved' : 'Error saving';
             if (success) {
                 setTimeout(() => { if(status.innerText === 'All changes saved') status.innerText = ''; }, 2000);
