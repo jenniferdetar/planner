@@ -254,6 +254,7 @@
         <aside class="section-sidebar">
             <a href="index.html" class="section-icon" title="Home">🏠</a>
             <a href="notebook.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
+            <a href="notebook.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
             <a href="notebook.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
             <a href="notebook.html?category=Monthly-Review" class="section-icon active" title="Planning">📅</a>
             <a href="notebook.html?category=Budget" class="section-icon" title="Financial">💰</a>
@@ -492,12 +493,20 @@
                     const isChecked = cb.classList.contains('checked');
                     const valueName = item.getAttribute('data-value');
                     const prefix = item.getAttribute('data-prefix');
-                    handleSave(`${prefix}${valueName}`, isChecked.toString());
+                    handleSave(`${prefix}${valueName}`, isChecked.toString(), true);
                 });
             });
         }
-        function handleSave(fieldId, content) {
+        async function handleSave(fieldId, content, immediate = false) {
             const status = document.getElementById('save-status');
+            
+            if (immediate) {
+                status.innerText = 'Saving...';
+                const success = await savePlannerData(PLANNING_DATE, fieldId, content);
+                status.innerText = success ? 'All changes saved' : 'Error saving';
+                return;
+            }
+
             status.innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
