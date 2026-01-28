@@ -585,7 +585,7 @@
         }
 
         .time-label {
-            width: 55px;
+            width: 40px;
             color: #888;
             font-size: 0.55rem;
             flex-shrink: 0;
@@ -619,23 +619,23 @@
             display: flex;
             align-items: center;
             overflow: hidden;
+            padding-left: 2px;
         }
 
         .event-pill {
             background-color: #f0f0f0;
             border-radius: 4px;
-            padding: 1px 5px;
-            font-size: 0.75rem;
-            line-height: 1.1;
+            padding: 1px 3px;
+            font-size: 0.7rem;
+            line-height: 1;
             border: 1px solid #ccc;
             text-align: left;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
+            display: block;
             width: 100%;
-            height: 100%;
             box-sizing: border-box;
             overflow: hidden;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .event-pill.csea, .event-pill.la-fed { 
@@ -1327,7 +1327,7 @@
                     const slotDiv = document.createElement('div');
                     slotDiv.className = 'time-slot';
                     slotDiv.innerHTML = `
-                        <div class="time-label">${formatTime(slot, false, true)}</div>
+                        <div class="time-label">${formatTime(slot, true)}</div>
                         <div class="check-box${isChecked ? ' checked' : ''}" onclick="togglePlannerCheck(this, '${dayStr}', 'check-slot-${slot}')"></div>
                         <div class="slot-content ${eventTitle ? '' : 'planner-edit'}" 
                              ${eventTitle ? '' : 'contenteditable="true"'} 
