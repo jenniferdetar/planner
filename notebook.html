@@ -1211,10 +1211,7 @@
         async function switchTab(category) {
             currentCategory = category;
             
-            // Apply width constraint for specific categories
-            const content = document.querySelector('.notepaper-content');
-            content.classList.remove('width-80');
-            
+            // Switch to specialized view if needed
             // Update page tabs - handle sub-pages by checking parent
             document.querySelectorAll('.page-tab').forEach(tab => {
                 const isMatch = tab.dataset.id === category || 
