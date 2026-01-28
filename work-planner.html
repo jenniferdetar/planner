@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work Planner - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -16,11 +16,13 @@
             --thu-bg: #f59e9e;
             --fri-bg: #f6d2a2;
             --sat-bg: #a2d9d9;
-            --border-color: #333;
+            --border-color: #e1dfdd;
             --text-color: #333;
             --header-blue: #00326b;
-            --sidebar-width: 250px;
-            --section-sidebar-width: 60px;
+            --sidebar-width: 60px;
+            --notes-sidebar-width: 240px;
+            --purple-btn: #7b2cbf;
+            --purple-hover: #5a189a;
         }
 
         body {
@@ -41,9 +43,9 @@
             background: #fff;
         }
 
-        /* Multi-level Sidebar */
+        /* Icon Sidebar */
         .section-sidebar {
-            width: var(--section-sidebar-width);
+            width: var(--sidebar-width);
             background: #1e3a63;
             display: flex;
             flex-direction: column;
@@ -69,15 +71,8 @@
             opacity: 0.7;
         }
 
-        .section-icon:hover {
+        .section-icon:hover, .section-icon.active {
             background: rgba(255,255,255,0.1);
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
-        .section-icon.active {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             opacity: 1;
         }
 
@@ -86,9 +81,46 @@
             margin-bottom: 20px;
             opacity: 0.5;
         }
-        .section-icon.logout-icon:hover {
-            opacity: 1;
-            color: #ffcdd2;
+
+        /* Notes Sidebar */
+        .notes-sidebar {
+            width: var(--notes-sidebar-width);
+            background: #fff;
+            border-right: 1px solid #e1dfdd;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #605e5c;
+            padding: 0 20px 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            color: #323130;
+            text-decoration: none;
+            font-size: 0.9rem;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .sidebar-link:hover {
+            background: #f3f2f1;
+        }
+
+        .sidebar-link.active {
+            background: #f3f2f1;
+            color: var(--header-blue);
+            font-weight: 600;
         }
 
         .notebook-main {
@@ -100,75 +132,98 @@
         }
 
         .notebook-page {
-            width: 80%;
+            width: 95%;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 10px 20px !important;
+            padding: 20px 40px !important;
             background: #fff;
             position: relative;
             box-sizing: border-box;
             min-height: 100%;
-            transition: width 0.3s ease;
+        }
+
+        .main-page-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 3rem;
+            color: #333;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .main-page-subtitle {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            color: #605e5c;
+            margin: 5px 0 15px;
+            font-weight: 400;
+        }
+
+        .header-hr {
+            border: 0;
+            border-top: 1px solid #e1dfdd;
+            margin: 0 0 25px;
         }
 
         .planner-header {
-            border-bottom: 1px solid #e1dfdd;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .date-range {
-            font-size: 0.85rem;
-            color: #605e5c;
+            font-size: 0.9rem;
+            color: #888;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
-        .nav-btn {
-            background: #fff;
-            border: 1px solid #e1dfdd;
-            padding: 8px 16px;
+        .nav-btn-purple {
+            background: var(--purple-btn);
+            color: #fff;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 6px;
             cursor: pointer;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.75rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 700;
-            border-radius: 4px;
-            transition: all 0.2s;
-            color: #323130;
-            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
         }
-        .nav-btn:hover { 
-            background: #f3f2f1;
-            border-color: #c8c6c4;
+
+        .nav-btn-purple:hover {
+            background: var(--purple-hover);
         }
 
         .top-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 10px;
+            gap: 20px;
+            margin-bottom: 25px;
         }
+
         .top-section {
             background: #fff;
             border: 1px solid #e1dfdd;
-            padding: 12px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
+
         .section-title {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            color: #605e5c;
-            margin-bottom: 8px;
+            color: #888;
+            margin-bottom: 12px;
             letter-spacing: 0.5px;
         }
+
         .editable-area {
-            min-height: 45px;
-            font-size: 1rem;
+            min-height: 80px;
+            font-size: 1.1rem;
             outline: none;
             font-family: 'Coming Soon', cursive;
+            color: #444;
         }
         
         .daily-columns {
@@ -176,9 +231,9 @@
             grid-template-columns: repeat(7, 1fr);
             gap: 0;
             border: 1px solid #e1dfdd;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
         }
         
         .day-col {
@@ -187,58 +242,66 @@
             flex-direction: column;
             background: #fff;
         }
+
         .day-col:last-child {
             border-right: none;
         }
         
         .day-header {
             text-align: center;
-            padding: 10px 5px;
+            padding: 12px 5px;
             font-weight: 700;
-            font-size: 0.8rem;
-            border-bottom: 2px solid rgba(0,0,0,0.05);
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
             color: #fff;
             font-family: 'Plus Jakarta Sans', sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
+            line-height: 1.4;
         }
+
         .time-slot {
-            height: 40px;
-            border-bottom: 1px dotted #ccc;
+            height: 42px;
+            border-bottom: 1px dotted #eee;
             display: flex;
             align-items: center;
-            padding: 2px 5px;
-            font-size: 0.65rem;
+            padding: 0 8px;
+            font-size: 0.7rem;
             position: relative;
             box-sizing: border-box;
         }
+
         .time-slot:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #fafafa;
         }
+
         .time-label {
-            width: 40px;
-            color: #888;
-            font-size: 0.55rem;
+            width: 35px;
+            color: #999;
+            font-size: 0.6rem;
             flex-shrink: 0;
-            white-space: nowrap;
         }
+
         .check-box {
-            width: 14px;
-            height: 14px;
+            width: 15px;
+            height: 15px;
             border: 1px solid #f59e9e;
             flex-shrink: 0;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 5px;
+            margin-right: 6px;
+            border-radius: 2px;
         }
+
         .check-box.checked::after {
             content: "✓";
             color: #f59e9e;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 900;
         }
+
         .slot-content {
             flex-grow: 1;
             outline: none;
@@ -247,69 +310,30 @@
             display: flex;
             align-items: center;
             overflow: hidden;
-            padding-left: 2px;
+            font-family: 'Coming Soon', cursive;
+            font-size: 0.85rem;
         }
+
         .event-pill {
             background-color: #f0f0f0;
             border-radius: 4px;
-            padding: 1px 3px;
-            font-size: 0.7rem;
-            line-height: 1;
-            border: 1px solid #ccc;
-            text-align: left;
-            display: block;
+            padding: 2px 4px;
+            font-size: 0.75rem;
+            border: 1px solid #ddd;
             width: 100%;
             box-sizing: border-box;
-            overflow: hidden;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
+
         .event-pill.csea, .event-pill.la-fed { 
             background-color: #00326b; 
             color: #ffca38; 
             border: 1px solid #ffca38; 
         }
-        .event-pill.due { 
-            background-color: #ff0000; 
-            color: #ffffff; 
-            border: none;
-        }
-        .event-pill.meeting { border-left: 5px solid #a2d9d9; }
-        .event-pill.pay-day {
-            background-color: #1b5e20; /* Deep Green */
-            color: #ffffff !important;
-            font-weight: 600;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 4px;
-            box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-        .event-pill.budget {
-            background-color: #408686;
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            border: none;
-            border-left: 10px solid #d4af37;
-            border-radius: 4px;
-        }
-        .nav-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .nav-btn {
-            background: white;
-            border: 1px solid var(--border-color);
-            padding: 5px 15px;
-            cursor: pointer;
-            font-family: 'Coming Soon', cursive;
-            text-decoration: none;
-            color: black;
-            border-radius: 15px;
-            font-size: 0.8rem;
-        }
-        /* Day Colors */
+
+        .event-pill.due { background-color: #ff0000; color: #fff; border: none; }
+        .event-pill.pay-day { background-color: #1b5e20; color: #fff; font-weight: 600; text-transform: uppercase; border: none; }
+        .event-pill.budget { background-color: #408686; color: white; font-weight: 600; text-transform: uppercase; border-left: 10px solid #d4af37; }
+
         .sun-header { background: var(--sun-bg); }
         .mon-header { background: var(--mon-bg); }
         .tue-header { background: var(--tue-bg); }
@@ -317,12 +341,11 @@
         .thu-header { background: var(--thu-bg); }
         .fri-header { background: var(--fri-bg); }
         .sat-header { background: var(--sat-bg); }
+
         .save-status {
-            font-size: 0.7rem;
-            color: #888;
-            height: 15px;
-            text-align: center;
-            margin-top: 5px;
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -338,47 +361,67 @@
             <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
         </aside>
 
+        <aside class="notes-sidebar">
+            <div class="sidebar-header">WORK NOTES</div>
+            <a href="notebook.html?category=Work-Planner" class="sidebar-link active">
+                <span style="font-size: 1.1rem;">🗓️</span> Work Planner
+            </a>
+            <a href="notebook.html?category=CSEA" class="sidebar-link">
+                <span style="font-size: 1.1rem;">📁</span> CSEA
+            </a>
+            <a href="notebook.html?category=HOA" class="sidebar-link">
+                <span style="font-size: 1.1rem;">🏠</span> HOA
+            </a>
+        </aside>
+
         <main class="notebook-main">
             <div class="notebook-page">
+                <h1 class="main-page-title">Work Planner 2025</h1>
+                <div id="full-date-subtitle" class="main-page-subtitle">Loading date...</div>
+                <hr class="header-hr">
+
                 <div class="planner-header">
-                    <div id="week-range" class="date-range">Loading...</div>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 30px; margin: 10px 0;">
-                        <button class="nav-btn" onclick="changeWeek(-1)">← PREV WEEK</button>
-                        <h2 style="margin: 0; color: var(--header-blue); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; letter-spacing: 1px;">WORK PLANNER</h2>
-                        <button class="nav-btn" onclick="changeWeek(1)">NEXT WEEK →</button>
+                    <div id="week-range" class="date-range">Loading range...</div>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 35px; margin: 15px 0;">
+                        <button class="nav-btn-purple" onclick="changeWeek(-1)">Prev Week</button>
+                        <h2 style="margin: 0; color: var(--header-blue); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 700; letter-spacing: 2px;">WORK PLANNER</h2>
+                        <button class="nav-btn-purple" onclick="changeWeek(1)">Next Week</button>
                     </div>
                     <div id="save-status" class="save-status">All changes saved</div>
                 </div>
-            <div class="top-grid">
-                <div class="top-section">
-                    <div class="section-title">Priority #1</div>
-                    <div class="editable-area" contenteditable="true" id="priority-1" data-field="priority-1"></div>
+
+                <div class="top-grid">
+                    <div class="top-section">
+                        <div class="section-title">Priority #1</div>
+                        <div class="editable-area" contenteditable="true" id="priority-1" data-field="priority-1"></div>
+                    </div>
+                    <div class="top-section">
+                        <div class="section-title">Priority #2</div>
+                        <div class="editable-area" contenteditable="true" id="priority-2" data-field="priority-2"></div>
+                    </div>
+                    <div class="top-section">
+                        <div class="section-title">Priority #3</div>
+                        <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3"></div>
+                    </div>
+                    <div class="top-section">
+                        <div class="section-title">One thing I'm looking forward to</div>
+                        <div class="editable-area" contenteditable="true" id="looking-forward" data-field="looking-forward"></div>
+                    </div>
+                    <div class="top-section">
+                        <div class="section-title">Someone I can encourage</div>
+                        <div class="editable-area" contenteditable="true" id="encourage" data-field="encourage"></div>
+                    </div>
+                    <div class="top-section">
+                        <div class="section-title">Something I'd like to read/listen to</div>
+                        <div class="editable-area" contenteditable="true" id="read-listen" data-field="read-listen"></div>
+                    </div>
                 </div>
-                <div class="top-section">
-                    <div class="section-title">Priority #2</div>
-                    <div class="editable-area" contenteditable="true" id="priority-2" data-field="priority-2"></div>
-                </div>
-                <div class="top-section">
-                    <div class="section-title">Priority #3</div>
-                    <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3"></div>
-                </div>
-                <div class="top-section">
-                    <div class="section-title">One thing I'm looking forward to</div>
-                    <div class="editable-area" contenteditable="true" id="looking-forward" data-field="looking-forward"></div>
-                </div>
-                <div class="top-section">
-                    <div class="section-title">Someone I can encourage</div>
-                    <div class="editable-area" contenteditable="true" id="encourage" data-field="encourage"></div>
-                </div>
-                <div class="top-section">
-                    <div class="section-title">Something I'd like to read/listen to</div>
-                    <div class="editable-area" contenteditable="true" id="read-listen" data-field="read-listen"></div>
+
+                <div id="planner-columns" class="daily-columns">
+                    <!-- Days will be injected here -->
                 </div>
             </div>
-            <div id="planner-columns" class="daily-columns">
-                <!-- Days will be injected here -->
-            </div>
-        </div>
+        </main>
     </div>
     <script>
         function parseLocalDate(dateStr) {
@@ -464,6 +507,14 @@
         async function renderPlanner() {
             const container = document.getElementById('planner-columns');
             container.innerHTML = 'Loading...';
+
+            // Set the subtitle date (e.g., Sunday, December 28, 2025)
+            const subtitleEl = document.getElementById('full-date-subtitle');
+            if (subtitleEl) {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                subtitleEl.innerText = currentStartDate.toLocaleDateString('en-US', options);
+            }
+
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
             const rangeStr = `${formatDateMMM(currentStartDate.toISOString().split('T')[0])} - ${formatDateMMM(weekEnd.toISOString().split('T')[0])}`.toUpperCase();
