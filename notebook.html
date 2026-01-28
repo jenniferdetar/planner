@@ -946,7 +946,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const displayDate = dateParam ? new Date(dateParam) : new Date(2025, 11, 28);
         const currentYear = displayDate.getFullYear();
         const fiscalYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
 

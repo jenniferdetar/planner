@@ -335,7 +335,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentDate = dateParam ? parseLocalDate(dateParam) : new Date();
+        let currentDate = dateParam ? parseLocalDate(dateParam) : parseLocalDate('2025-12-28');
         
         // Ensure currentDate is first of month for display purposes
         currentDate.setDate(1);
