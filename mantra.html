@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantra - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -13,61 +13,98 @@
             --mantra-green: #4f7942;
             --soft-bg: #fdfcf0;
             --border-color: #ddd;
+            --sidebar-width: 250px;
+            --section-sidebar-width: 60px;
         }
+
         body {
-            font-family: 'Coming Soon', cursive;
+            background-color: #f3f2f1;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
-        }
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+            height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .notebook-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        /* Multi-level Sidebar */
+        .section-sidebar {
+            width: var(--section-sidebar-width);
+            background: #1e3a63;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
             gap: 15px;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            align-items: center;
+            flex-shrink: 0;
+            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
         }
-        .nav-link {
-            text-decoration: none;
-            color: #ffca38;
-            font-weight: 600;
-            font-size: 0.9rem;
+
+        .section-icon {
+            width: 42px;
+            height: 42px;
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: #ffca38;
-            color: #00326b;
-        }
-        .container {
-            display: flex;
             justify-content: center;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            opacity: 0.7;
         }
+
+        .section-icon:hover {
+            background: rgba(255,255,255,0.1);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .section-icon.active {
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            opacity: 1;
+        }
+
+        .section-icon.logout-icon {
+            margin-top: auto;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .section-icon.logout-icon:hover {
+            opacity: 1;
+            color: #ffcdd2;
+        }
+
+        .notebook-main {
+            flex-grow: 1;
+            background: #fff;
+            overflow-y: auto;
+            position: relative;
+            scrollbar-width: thin;
+        }
+
         .notebook-page {
             width: 100%;
-            max-width: 1200px;
+            padding: 40px !important;
             background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            min-height: calc(100vh - 100px);
-            border-radius: 8px;
+            position: relative;
+            box-sizing: border-box;
+            min-height: 100%;
+            border-radius: 0;
             background-image: linear-gradient(#f1f1f1 1px, transparent 1px);
             background-size: 100% 30px;
-            position: relative;
         }
+
         .notebook-page::before {
             content: "";
             position: absolute;
@@ -77,13 +114,14 @@
             height: 100%;
             background-color: rgba(255, 0, 0, 0.1);
         }
+
         .page-title {
             color: var(--mantra-green);
             font-family: 'Indie Flower', cursive;
-            font-size: 3rem;
+            font-size: 3.5rem;
             text-align: center;
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             border-bottom: none;
         }
         .section-title {
@@ -209,75 +247,76 @@
     </style>
 </head>
 <body>
-    <header class="global-header">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="notebook.html" class="nav-link">Notebook</a>
-        <a href="financial.html" class="nav-link">Financial</a>
-        <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="planning.html" class="nav-link">Planning</a>
-        <a href="mantra.html" class="nav-link">Mantra</a>
-    </header>
+    <div class="notebook-container">
+        <aside class="section-sidebar">
+            <a href="index.html" class="section-icon" title="Home">🏠</a>
+            <a href="notebook.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
+            <a href="notebook.html?category=Goals" class="section-icon active" title="Personal">👤</a>
+            <a href="notebook.html?category=Intentions" class="section-icon" title="Planning">📅</a>
+            <a href="notebook.html?category=Budget" class="section-icon" title="Financial">💰</a>
+            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
+        </aside>
 
-    <div id="save-status" class="save-status">All changes saved</div>
+        <main class="notebook-main">
+            <div class="notebook-page">
+                <div class="floral-corner"></div>
+                <h1 class="page-title">Daily Mantras</h1>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <a href="notebook.html?category=Mantra" class="nav-link" style="display: inline-flex; border-color: var(--mantra-green); color: var(--mantra-green);">View Mantra Notebook</a>
+                </div>
 
-    <div class="container">
-        <div class="notebook-page">
-            <div class="floral-corner"></div>
-            <h1 class="page-title">Daily Mantras</h1>
-            <div style="text-align: center; margin-bottom: 20px;">
-                <a href="notebook.html?category=Mantra" class="nav-link" style="display: inline-flex; border-color: var(--mantra-green); color: var(--mantra-green);">View Mantra Notebook</a>
+                <div class="section-title" id="manifesto-title">Manifesto</div>
+                <script>
+                    const mUrlParams = new URLSearchParams(window.location.search);
+                    const mDateParam = mUrlParams.get('date');
+                    const mYear = mDateParam ? new Date(mDateParam).getFullYear() : new Date().getFullYear();
+                    document.getElementById('manifesto-title').innerText = `${mYear} Manifesto`;
+                </script>
+                <div class="manifesto-section">
+                    <div class="manifesto-item">
+                        <div class="checkbox-box"></div>
+                        <p class="manifesto-text">I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly. I will schedule solitude the way others schedule meetings, because if my calendar has no white space, something is out of alignment. Rest is not a reward for productivity; it is a responsibility I owe to my body, my mind, and my spirit.</p>
+                    </div>
+                    <div class="manifesto-item">
+                        <div class="checkbox-box"></div>
+                        <p class="manifesto-text">I lead without shrinking. I have earned my seat at the table, and when necessary, I am capable of building the table myself. I will speak when I know something and step forward when I am ready, not when I am pressured. Visibility does not require apology, and leadership does not require loudness. It requires clarity, consistency, and the courage to stand steady even when it would be easier to disappear.</p>
+                    </div>
+                    <div class="manifesto-item">
+                        <div class="checkbox-box"></div>
+                        <p class="manifesto-text">I build what grounds me. I value practical skills that feed people, calm homes, and create stability. There is dignity in old ways done well, and in returning to work that uses my hands and steadies my nervous system. When life feels chaotic, I come back to the tangible and the orderly. Creating structure is how I restore peace.</p>
+                    </div>
+                    <div class="manifesto-item">
+                        <div class="checkbox-box"></div>
+                        <p class="manifesto-text">I serve with boundaries. I help people who are willing to participate in their own growth, and I release the need to rescue, overextend, or prove my worth through exhaustion. My generosity is intentional, not reactive, and my compassion does not require self-abandonment. I am allowed to care deeply without carrying everything.</p>
+                    </div>
+                    <div class="manifesto-item">
+                        <div class="checkbox-box"></div>
+                        <p class="manifesto-text">I protect joy as a non-negotiable. Not every moment must be productive to be valuable. Some moments exist simply to be remembered—shared meals, laughter, road trips, quiet conversations, and ordinary days that become sacred because I was fully present. Joy is not a distraction from my purpose; it is evidence that I am living it.</p>
+                    </div>
+                    <div class="manifesto-item">
+                        <div class="checkbox-box"></div>
+                        <p class="manifesto-text">I trust the pace of my life. I am not late, not behind, and not missing anything meant for me. I am becoming. I will not rush what is meant to mature, and I will not carry what was never mine to hold. Consistency matters more than urgency, and faith steadies me when fear tries to speak louder.</p>
+                    </div>
+                    <div class="manifesto-item">
+                        <div class="checkbox-box"></div>
+                        <p class="manifesto-text">I am building a life where work is meaningful but not consuming, leadership is steady rather than frantic, service is impactful without being depleting, and home is calm instead of chaotic. My faith remains central, my values guide my choices, and my peace is protected on purpose. I move forward with intention, rooted rather than rushed, trusting that this way of living is not only sustainable—it is right.</p>
+                    </div>
+                </div>
+
+                <div class="section-title">Collection</div>
+                
+                <div class="input-group">
+                    <input type="text" id="new-mantra" class="mantra-input" placeholder="Enter a new mantra..." onkeypress="if(event.key==='Enter')handleAddMantra()">
+                    <button class="add-btn" onclick="handleAddMantra()">Add to Collection</button>
+                </div>
+
+                <div id="mantras-list" class="mantras-list">
+                    <!-- Mantras will load here -->
+                </div>
             </div>
-
-            <div class="section-title" id="manifesto-title">Manifesto</div>
-            <script>
-                const mUrlParams = new URLSearchParams(window.location.search);
-                const mDateParam = mUrlParams.get('date');
-                const mYear = mDateParam ? new Date(mDateParam).getFullYear() : new Date().getFullYear();
-                document.getElementById('manifesto-title').innerText = `${mYear} Manifesto`;
-            </script>
-            <div class="manifesto-section">
-                <div class="manifesto-item">
-                    <div class="checkbox-box"></div>
-                    <p class="manifesto-text">I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly. I will schedule solitude the way others schedule meetings, because if my calendar has no white space, something is out of alignment. Rest is not a reward for productivity; it is a responsibility I owe to my body, my mind, and my spirit.</p>
-                </div>
-                <div class="manifesto-item">
-                    <div class="checkbox-box"></div>
-                    <p class="manifesto-text">I lead without shrinking. I have earned my seat at the table, and when necessary, I am capable of building the table myself. I will speak when I know something and step forward when I am ready, not when I am pressured. Visibility does not require apology, and leadership does not require loudness. It requires clarity, consistency, and the courage to stand steady even when it would be easier to disappear.</p>
-                </div>
-                <div class="manifesto-item">
-                    <div class="checkbox-box"></div>
-                    <p class="manifesto-text">I build what grounds me. I value practical skills that feed people, calm homes, and create stability. There is dignity in old ways done well, and in returning to work that uses my hands and steadies my nervous system. When life feels chaotic, I come back to the tangible and the orderly. Creating structure is how I restore peace.</p>
-                </div>
-                <div class="manifesto-item">
-                    <div class="checkbox-box"></div>
-                    <p class="manifesto-text">I serve with boundaries. I help people who are willing to participate in their own growth, and I release the need to rescue, overextend, or prove my worth through exhaustion. My generosity is intentional, not reactive, and my compassion does not require self-abandonment. I am allowed to care deeply without carrying everything.</p>
-                </div>
-                <div class="manifesto-item">
-                    <div class="checkbox-box"></div>
-                    <p class="manifesto-text">I protect joy as a non-negotiable. Not every moment must be productive to be valuable. Some moments exist simply to be remembered—shared meals, laughter, road trips, quiet conversations, and ordinary days that become sacred because I was fully present. Joy is not a distraction from my purpose; it is evidence that I am living it.</p>
-                </div>
-                <div class="manifesto-item">
-                    <div class="checkbox-box"></div>
-                    <p class="manifesto-text">I trust the pace of my life. I am not late, not behind, and not missing anything meant for me. I am becoming. I will not rush what is meant to mature, and I will not carry what was never mine to hold. Consistency matters more than urgency, and faith steadies me when fear tries to speak louder.</p>
-                </div>
-                <div class="manifesto-item">
-                    <div class="checkbox-box"></div>
-                    <p class="manifesto-text">I am building a life where work is meaningful but not consuming, leadership is steady rather than frantic, service is impactful without being depleting, and home is calm instead of chaotic. My faith remains central, my values guide my choices, and my peace is protected on purpose. I move forward with intention, rooted rather than rushed, trusting that this way of living is not only sustainable—it is right.</p>
-                </div>
-            </div>
-
-            <div class="section-title">Collection</div>
-            
-            <div class="input-group">
-                <input type="text" id="new-mantra" class="mantra-input" placeholder="Enter a new mantra..." onkeypress="if(event.key==='Enter')handleAddMantra()">
-                <button class="add-btn" onclick="handleAddMantra()">Add to Collection</button>
-            </div>
-
-            <div id="mantras-list" class="mantras-list">
-                <!-- Mantras will load here -->
-            </div>
-        </div>
+        </main>
     </div>
+    <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
         const urlParams_main = new URLSearchParams(window.location.search);

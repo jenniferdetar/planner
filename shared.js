@@ -39,29 +39,6 @@ if (typeof window !== 'undefined' && !window.location.pathname.endsWith('login.h
     requireAuth();
 }
 
-function injectLogoutButton() {
-    const header = document.querySelector('.global-header');
-    if (header && !header.querySelector('.logout-link')) {
-        const logoutBtn = document.createElement('a');
-        logoutBtn.href = '#';
-        logoutBtn.className = 'nav-link logout-link';
-        logoutBtn.innerText = 'Logout';
-        logoutBtn.onclick = (e) => {
-            e.preventDefault();
-            logout();
-        };
-        header.appendChild(logoutBtn);
-    }
-}
-
-if (typeof window !== 'undefined') {
-    if (document.readyState === 'loading') {
-        window.addEventListener('DOMContentLoaded', injectLogoutButton);
-    } else {
-        injectLogoutButton();
-    }
-}
-
 // Planner Data Logic
 async function fetchPlannerData(startDate, days = 7) {
     const client = getSupabase();

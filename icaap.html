@@ -10,201 +10,274 @@
     <style>
         :root {
             --header-blue: #00326b;
-            --border-color: #333;
+            --border-color: #e1dfdd;
+            --section-sidebar-width: 60px;
         }
+        body {
+            background-color: #f3f2f1;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .notebook-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+            background: #fff;
+        }
+        /* Vertical Sidebar */
+        .section-sidebar {
+            width: var(--section-sidebar-width);
+            background: #1e3a63;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            gap: 15px;
+            flex-shrink: 0;
+            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
+        }
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            opacity: 0.7;
+        }
+        .section-icon:hover {
+            background: rgba(255,255,255,0.1);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        .section-icon.active {
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            opacity: 1;
+        }
+        .section-icon.logout-icon {
+            margin-top: auto;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .section-icon.logout-icon:hover {
+            opacity: 1;
+            color: #ffcdd2;
+        }
+
+        .notebook-main {
+            flex-grow: 1;
+            background: #fff;
+            overflow-y: auto;
+            position: relative;
+            scrollbar-width: thin;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px !important;
+            background: #fff;
+            box-sizing: border-box;
+            min-height: 100%;
+        }
+
+        .page-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem;
+            color: var(--header-blue);
+            margin: 0 0 15px 0;
+            letter-spacing: -0.01em;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .tracking-links-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f3f2f1;
+        }
+
         .tracking-pill {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background-color: #2d5a45;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
+            background-color: #f3f2f1;
+            color: #323130;
+            padding: 8px 16px;
+            border-radius: 4px;
             text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            transition: opacity 0.2s;
-            font-family: 'Coming Soon', cursive;
-            border: none;
-            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid #e1dfdd;
+            font-family: 'Segoe UI', sans-serif;
         }
         .tracking-pill:hover {
-            opacity: 0.9;
+            background-color: #edebe9;
+            border-color: #d2d0ce;
         }
-        body {
-            font-family: 'Coming Soon', cursive;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
+        .tracking-pill span {
+            font-size: 1.1rem;
         }
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            align-items: center;
-        }
-        .nav-link {
-            text-decoration: none;
-            color: #ffca38;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: #ffca38;
-            color: #00326b;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .notebook-page {
-            width: 100%; 
-            max-width: 1200px;
-            box-sizing: border-box;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            min-height: calc(100vh - 100px);
-        }
-        .page-title {
-            color: var(--header-blue);
-            border-bottom: 2px solid var(--header-blue);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-align: center;
-        }
+
         .notes-section {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 30px;
         }
+
         .input-group {
+            background: #fdfdfd;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e1dfdd;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
+
         textarea {
             width: 100%;
-            height: 100px;
+            height: 120px;
             font-family: 'Coming Soon', cursive;
             font-size: 1.1rem;
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 15px;
+            border: 1px solid #e1dfdd;
             border-radius: 4px;
-            line-height: 1.5;
+            line-height: 1.6;
             resize: vertical;
             box-sizing: border-box;
+            outline: none;
+            background: #fff;
         }
+
         .save-btn {
             align-self: flex-end;
-            padding: 8px 20px;
+            padding: 8px 25px;
             background-color: var(--header-blue);
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-family: 'Coming Soon', cursive;
-            font-size: 1rem;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
         }
+
         .save-btn:hover {
             opacity: 0.9;
         }
+
         .entries-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
+
         .note-entry {
             background: #fff;
-            border-left: 4px solid var(--header-blue);
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-radius: 0 4px 4px 0;
+            border: 1px solid #e1dfdd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             position: relative;
+            transition: box-shadow 0.2s;
         }
+        .note-entry:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        }
+
         .entry-header {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 8px;
+            font-size: 0.75rem;
+            color: #a19f9d;
+            margin-bottom: 12px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
         .entry-content {
             white-space: pre-wrap;
-            line-height: 1.4;
+            line-height: 1.6;
+            font-family: 'Coming Soon', cursive;
+            font-size: 1.1rem;
+            color: #333;
+            outline: none;
         }
+
         .delete-btn {
             cursor: pointer;
-            color: #cc0000;
-            opacity: 0.5;
+            color: #a4262c;
+            opacity: 0.6;
+            transition: opacity 0.2s;
         }
         .delete-btn:hover {
             opacity: 1;
         }
+
         .save-status {
-            font-size: 0.7rem;
-            color: #888;
+            font-size: 0.75rem;
+            color: #a19f9d;
             height: 15px;
             text-align: right;
-            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
-    <header class="global-header">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="csea.html" class="nav-link">Csea</a>
-        <a href="financial.html" class="nav-link">Financial</a>
-        <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="hoa.html" class="nav-link">Hoa</a>
-        <a href="icaap.html" class="nav-link">Icaap</a>
-        <a href="planning.html" class="nav-link">Planning</a>
-        <a href="mantra.html" class="nav-link">Mantra</a>
-    </header>
-    <div class="container">
-        <div class="notebook-page">
-            <h1 class="page-title">Icaap Notes</h1>
-            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
-                <a href="icaap-attendance.html" class="tracking-pill" style="background-color: #408686; margin-bottom: 0;">
-                    <span>👤</span> Attendance Tracking
-                </a>
-                <a href="icaap-tracking.html" class="tracking-pill" style="margin-bottom: 0;">
-                    <span>📅</span> Icaap Tracking Log
-                </a>
-            </div>
-            <div class="notes-section">
-                <div class="input-group">
-                    <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
-                    <button class="save-btn" onclick="handleAddNote()">Save Note</button>
-                    <div id="save-status" class="save-status">All changes saved</div>
+    <div class="notebook-container">
+        <aside class="section-sidebar">
+            <a href="index.html" class="section-icon" title="Home">🏠</a>
+            <a href="notebook.html?category=Work-Planner" class="section-icon active" title="Work">💼</a>
+            <a href="notebook.html?category=Goals" class="section-icon" title="Personal">👤</a>
+            <a href="notebook.html?category=Intentions" class="section-icon" title="Planning">📅</a>
+            <a href="notebook.html?category=Budget" class="section-icon" title="Financial">💰</a>
+            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
+        </aside>
+
+        <main class="notebook-main">
+            <div class="notebook-page">
+                <h1 class="page-title">Icaap Notes</h1>
+                <div class="tracking-links-container">
+                    <a href="icaap-attendance.html" class="tracking-pill">
+                        <span>👤</span> Attendance Tracking
+                    </a>
+                    <a href="icaap-tracking.html" class="tracking-pill">
+                        <span>📅</span> Icaap Tracking Log
+                    </a>
                 </div>
-                <div id="entries-list" class="entries-list">
-                    <!-- Entries will be loaded here -->
+                <div class="notes-section">
+                    <div class="input-group">
+                        <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div id="save-status" class="save-status">All changes saved</div>
+                            <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+                        </div>
+                    </div>
+                    <div id="entries-list" class="entries-list">
+                        <!-- Entries will be loaded here -->
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
     <script>
         const urlParams = new URLSearchParams(window.location.search);

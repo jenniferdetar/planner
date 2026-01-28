@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
+    <title>Work Planner - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -19,133 +19,186 @@
             --border-color: #333;
             --text-color: #333;
             --header-blue: #00326b;
-            --tan-bg: #fffcf0;
+            --sidebar-width: 250px;
+            --section-sidebar-width: 60px;
         }
+
         body {
-            font-family: 'Coming Soon', cursive;
+            background-color: #f3f2f1;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-            color: var(--text-color);
-        }
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+            height: 100vh;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
         }
-        .nav-link {
-            text-decoration: none;
-            color: #ffca38;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: #ffca38;
-            color: #00326b;
-        }
+
         .notebook-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        /* Multi-level Sidebar */
+        .section-sidebar {
+            width: var(--section-sidebar-width);
+            background: #1e3a63;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
+            padding-top: 20px;
+            gap: 15px;
+            flex-shrink: 0;
+            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
         }
+
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            opacity: 0.7;
+        }
+
+        .section-icon:hover {
+            background: rgba(255,255,255,0.1);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .section-icon.active {
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            opacity: 1;
+        }
+
+        .section-icon.logout-icon {
+            margin-top: auto;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .section-icon.logout-icon:hover {
+            opacity: 1;
+            color: #ffcdd2;
+        }
+
+        .notebook-main {
+            flex-grow: 1;
+            background: #fff;
+            overflow-y: auto;
+            position: relative;
+            scrollbar-width: thin;
+        }
+
         .notebook-page {
             width: 100%;
-            max-width: 1200px;
-            padding: 40px;
+            padding: 20px !important;
             background: #fff;
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            min-height: calc(100vh - 100px);
-            margin: 0 auto;
             box-sizing: border-box;
+            min-height: 100%;
         }
+
         .planner-header {
-            text-align: center;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 1px solid #e1dfdd;
             margin-bottom: 20px;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            text-align: center;
         }
+
         .date-range {
-            font-size: 0.8rem;
-            letter-spacing: 2px;
+            font-size: 0.85rem;
+            color: #605e5c;
             text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
         }
+
+        .nav-btn {
+            background: #fff;
+            border: 1px solid #e1dfdd;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 4px;
+            transition: all 0.2s;
+            color: #323130;
+            letter-spacing: 0.5px;
+        }
+        .nav-btn:hover { 
+            background: #f3f2f1;
+            border-color: #c8c6c4;
+        }
+
         .top-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
+            gap: 15px;
+            margin-bottom: 25px;
         }
         .top-section {
-            border: 1px solid #eee;
-            padding: 10px;
+            background: #fff;
+            border: 1px solid #e1dfdd;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .section-title {
             font-size: 0.7rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            background: #f9f9f9;
-            padding: 2px 5px;
-            margin-bottom: 5px;
-            border-bottom: 1px solid #ddd;
+            color: #605e5c;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
         }
         .editable-area {
-            min-height: 40px;
-            font-size: 0.9rem;
+            min-height: 45px;
+            font-size: 1rem;
             outline: none;
+            font-family: 'Coming Soon', cursive;
         }
+        
         .daily-columns {
             display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0;
+            border: 1px solid #e1dfdd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
-        @media (min-width: 900px) {
-            .daily-columns {
-                grid-template-columns: repeat(7, 1fr);
-                gap: 0;
-            }
-        }
+        
         .day-col {
-            border: 1px solid var(--border-color);
+            border-right: 1px solid #e1dfdd;
             display: flex;
             flex-direction: column;
-            border-left: none;
+            background: #fff;
         }
-        .day-col:first-child {
-            border-left: 1px solid var(--border-color);
+        .day-col:last-child {
+            border-right: none;
         }
+        
         .day-header {
             text-align: center;
-            padding: 5px;
-            font-weight: 600;
+            padding: 10px 5px;
+            font-weight: 700;
             font-size: 0.8rem;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid rgba(0,0,0,0.05);
             color: #fff;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: sticky;
-            top: 40px;
-            z-index: 10;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .time-slot {
             height: 40px;
@@ -271,25 +324,27 @@
     </style>
 </head>
 <body>
-    <header class="global-header">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="notebook.html" class="nav-link">Notebook</a>
-        <a href="financial.html" class="nav-link">Financial</a>
-        <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="planning.html" class="nav-link">Planning</a>
-        <a href="mantra.html" class="nav-link">Mantra</a>
-    </header>
     <div class="notebook-container">
-        <div class="notebook-page">
-            <div class="planner-header">
-                <div id="week-range" class="date-range">Loading...</div>
-                <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin: 5px 0;">
-                    <button class="nav-btn" onclick="changeWeek(-1)">Prev Week</button>
-                    <h2 style="margin: 0; color: var(--header-blue);">WORK PLANNER</h2>
-                    <button class="nav-btn" onclick="changeWeek(1)">Next Week</button>
+        <aside class="section-sidebar">
+            <a href="index.html" class="section-icon" title="Home">🏠</a>
+            <a href="notebook.html?category=Work-Planner" class="section-icon active" title="Work">💼</a>
+            <a href="notebook.html?category=Goals" class="section-icon" title="Personal">👤</a>
+            <a href="notebook.html?category=Intentions" class="section-icon" title="Planning">📅</a>
+            <a href="notebook.html?category=Budget" class="section-icon" title="Financial">💰</a>
+            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
+        </aside>
+
+        <main class="notebook-main">
+            <div class="notebook-page">
+                <div class="planner-header">
+                    <div id="week-range" class="date-range">Loading...</div>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 30px; margin: 10px 0;">
+                        <button class="nav-btn" onclick="changeWeek(-1)">← PREV WEEK</button>
+                        <h2 style="margin: 0; color: var(--header-blue); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; letter-spacing: 1px;">WORK PLANNER</h2>
+                        <button class="nav-btn" onclick="changeWeek(1)">NEXT WEEK →</button>
+                    </div>
+                    <div id="save-status" class="save-status">All changes saved</div>
                 </div>
-                <div id="save-status" class="save-status">All changes saved</div>
-            </div>
             <div class="top-grid">
                 <div class="top-section">
                     <div class="section-title">Priority #1</div>

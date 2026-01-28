@@ -27,36 +27,6 @@
             overflow: hidden;
         }
 
-        /* Global Header Styles */
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 1px solid #ddd;
-            z-index: 1000;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .nav-link {
-            text-decoration: none;
-            color: #ffca38;
-            font-weight: 600;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 12px;
-            border: 1px solid #ffca38;
-            border-radius: 15px;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: #ffca38;
-            color: #00326b;
-        }
-
         .notebook-container {
             display: flex;
             flex-grow: 1;
@@ -67,42 +37,47 @@
         /* Multi-level Sidebar */
         .section-sidebar {
             width: var(--section-sidebar-width);
-            background: #2b579a;
+            background: #1e3a63;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding-top: 20px;
             gap: 15px;
             flex-shrink: 0;
+            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
         }
 
         .section-icon {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 1.2rem;
-            transition: background 0.2s;
+            font-size: 1.3rem;
+            transition: all 0.2s ease;
             text-decoration: none;
+            opacity: 0.7;
         }
 
         .section-icon:hover {
             background: rgba(255,255,255,0.1);
+            opacity: 1;
+            transform: scale(1.05);
         }
 
         .section-icon.active {
-            background: rgba(255,255,255,0.2);
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            opacity: 1;
         }
 
         .section-icon.logout-icon {
             margin-top: auto;
             margin-bottom: 20px;
-            opacity: 0.7;
+            opacity: 0.5;
         }
         .section-icon.logout-icon:hover {
             opacity: 1;
@@ -111,41 +86,46 @@
 
         .pages-sidebar {
             width: var(--sidebar-width);
-            background: #f3f2f1;
-            border-right: 1px solid #ddd;
+            background: #fdfdfd;
+            border-right: 1px solid #e1dfdd;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
         }
 
         .sidebar-title {
-            padding: 15px 20px;
+            padding: 20px;
             font-weight: 700;
-            font-size: 0.9rem;
-            color: #333;
-            border-bottom: 1px solid #e1dfdd;
+            font-size: 0.8rem;
+            color: #605e5c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #edebe9;
         }
 
         .page-tab {
-            padding: 12px 20px;
+            padding: 14px 20px;
             cursor: pointer;
-            transition: all 0.1s;
-            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             color: #323130;
-            border-bottom: 1px solid #f3f2f1;
+            border-left: 3px solid transparent;
         }
 
         .page-tab:hover {
-            background: #edebe9;
+            background: #f3f2f1;
+            color: #000;
         }
 
         .page-tab.active {
             background: #fff;
-            box-shadow: -2px 0 0 var(--onenote-purple);
+            border-left: 3px solid #2b579a;
             font-weight: 600;
+            color: #2b579a;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
         }
 
         /* Notepaper Content Area */
@@ -159,7 +139,7 @@
 
         .notepaper {
             background-color: #fff;
-            padding: 20px 40px !important;
+            padding: 20px !important;
             min-height: 100%;
             line-height: var(--line-height);
             position: relative;
@@ -292,16 +272,25 @@
 
         .tracking-link {
             text-decoration: none;
-            color: var(--onenote-purple);
-            font-size: 0.85rem;
+            color: #605e5c;
+            font-size: 0.75rem;
             background: #f3f2f1;
-            padding: 2px 10px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
+            padding: 4px 12px;
+            border-radius: 15px;
+            border: 1px solid #e1dfdd;
+            transition: all 0.2s;
+            font-weight: 600;
         }
 
         .tracking-link:hover {
             background: #edebe9;
+            color: #323130;
+        }
+
+        .tracking-link.active {
+            background: #2b579a;
+            color: #fff;
+            border-color: #2b579a;
         }
 
     </style>
@@ -361,30 +350,37 @@
             width: 100%;
             overflow-x: auto;
             margin-top: 10px;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
         }
         .special-table {
             border-collapse: collapse;
             width: 100%;
-            font-family: 'Coming Soon', cursive;
-            font-size: 0.9rem;
-            line-height: var(--line-height);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.4;
         }
         .special-table th, .special-table td {
-            border: 1px solid #ddd;
-            padding: 0 8px;
-            height: var(--line-height);
+            border: 1px solid #eee;
+            padding: 10px 12px;
             text-align: center;
             box-sizing: border-box;
         }
         .special-table th {
-            background: #f3f2f1;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.75rem;
+            background: #f8f9fa;
             font-weight: 600;
-            color: #605e5c;
+            color: #323130;
             position: sticky;
             top: 0;
             z-index: 10;
+            border-bottom: 2px solid #e1dfdd;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .special-table td {
+            font-family: 'Coming Soon', cursive;
+            font-size: 0.95rem;
         }
         .special-table .text-left { text-align: left; }
         .special-table .sticky-col {
@@ -392,12 +388,18 @@
             left: 0;
             background: #fff;
             z-index: 5;
-            border-right: 2px solid #ddd;
+            border-right: 2px solid #e1dfdd;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
         }
-        .special-table tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+        .special-table tr:hover { background: #fdfdfd; }
+        .special-table tr:nth-child(even) { background: #fafafa; }
+        
         .special-table input, .special-table select {
             width: 100%;
             height: 100%;
+            border: none;
             border: none;
             background: transparent;
             font-family: inherit;
@@ -774,8 +776,6 @@
                     { id: 'Work-Planner', name: 'Work Planner', icon: '🗓️' },
                     { id: 'CSEA', name: 'CSEA', icon: '📒' },
                     { id: 'iCAAP', name: 'iCAAP', icon: '📋' },
-                    { id: 'ICAAP-Tracking', name: 'iCAAP Tracking', icon: '📈' },
-                    { id: 'ICAAP-Attendance', name: 'iCAAP Attendance', icon: '👥' },
                     { id: 'HOA', name: 'HOA', icon: '🏠' }
                 ]
             },
@@ -783,25 +783,26 @@
                 title: 'Personal Notes',
                 icon: '👤',
                 pages: [
+                    { id: 'Personal-Planner', name: 'Personal Planner', icon: '🗓️' },
                     { id: 'Goals', name: 'Goals', icon: '🎯' },
-                    { id: 'Mantra', name: 'Mantra', icon: '✨' },
-                    { id: 'Personal-Planner', name: 'Personal Planner', icon: '🗓️' }
+                    { id: 'Mantra', name: 'Mantra', icon: '✨' }
                 ]
             },
             planning: {
                 title: 'Planning Notes',
                 icon: '📅',
                 pages: [
-                    { id: 'Intentions', name: 'Intentions & Dreams', icon: '💭' },
-                    { id: 'Monthly-Review', name: 'Monthly Review', icon: '📊' }
+                    { id: 'Monthly-Review', name: 'Monthly Review', icon: '📊' },
+                    { id: 'Intentions', name: 'Intentions & Dreams', icon: '💭' }
                 ]
             },
             financial: {
                 title: 'Financial Notes',
                 icon: '💰',
                 pages: [
-                    { id: 'Financial-Review', name: 'Financial Review', icon: '💸' },
-                    { id: 'Budget', name: 'Budget Planning', icon: '🏦' }
+                    { id: 'Budget', name: 'Budget Planning', icon: '🏦' },
+                    { id: 'Check-Breakdown', name: 'Check Breakdown', icon: '📊' },
+                    { id: 'Financial-Review', name: 'Financial Review', icon: '💸' }
                 ]
             }
         };
@@ -995,9 +996,11 @@
         async function switchTab(category) {
             currentCategory = category;
             
-            // Update page tabs
+            // Update page tabs - handle sub-pages by checking parent
             document.querySelectorAll('.page-tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.id === category);
+                const isMatch = tab.dataset.id === category || 
+                               (category.startsWith('ICAAP-') && tab.dataset.id === 'iCAAP');
+                tab.classList.toggle('active', isMatch);
             });
 
             // Find page name
@@ -1010,13 +1013,24 @@
                 }
             }
 
+            // Fallback for sub-pages not in sidebar
+            if (category === 'ICAAP-Tracking') pageName = 'iCAAP Tracking Log';
+            if (category === 'ICAAP-Attendance') pageName = 'Attendance Tracking';
+
             const yearStr = (category.toLowerCase().includes('icaap')) ? `${fiscalYear}-${fiscalYear + 1}` : currentYear;
             pageTitle.innerText = `${pageName} ${yearStr}`;
 
             // Handle Hybrid Rendering
-            const isSpecial = ['Work-Planner', 'Personal-Planner', 'ICAAP-Tracking', 'ICAAP-Attendance', 'Budget', 'Monthly-Review'].includes(category);
+            const isSpecial = ['Work-Planner', 'Personal-Planner', 'ICAAP-Tracking', 'ICAAP-Attendance', 'Budget', 'Monthly-Review', 'Check-Breakdown', 'Intentions', 'Mantra', 'Goals'].includes(category);
             document.getElementById('standard-notes-view').style.display = isSpecial ? 'none' : 'block';
             document.getElementById('special-content-view').style.display = isSpecial ? 'block' : 'none';
+
+            // Show contextual links for iCAAP family
+            if (category === 'iCAAP' || category.startsWith('ICAAP-')) {
+                renderIcaapLinks();
+            } else {
+                categoryLinks.style.display = 'none';
+            }
 
             if (category === 'Work-Planner') {
                 await renderWorkPlanner();
@@ -1028,16 +1042,21 @@
                 await renderIcaapAttendance();
             } else if (category === 'Budget') {
                 await renderBudget();
+            } else if (category === 'Check-Breakdown') {
+                await renderCheckBreakdown();
+            } else if (category === 'Intentions') {
+                await renderIntentions();
+            } else if (category === 'Mantra') {
+                await renderMantra();
+            } else if (category === 'Goals') {
+                await renderGoals();
             } else if (category === 'Monthly-Review') {
                 await renderMonthlyReview();
             } else {
                 await loadEntries();
                 if (category === 'CSEA') {
                     await renderCseaLog();
-                } else if (category === 'iCAAP') {
-                    renderIcaapLinks();
                 } else {
-                    categoryLinks.style.display = 'none';
                     const existingLog = document.getElementById('csea-log-container');
                     if (existingLog) existingLog.remove();
                 }
@@ -1046,9 +1065,11 @@
 
         function renderIcaapLinks() {
             categoryLinks.style.display = 'flex';
+            const dateStr = displayDate.toISOString().split('T')[0];
             categoryLinks.innerHTML = `
-                <a href="notebook.html?category=ICAAP-Attendance&date=${displayDate.toISOString().split('T')[0]}" class="tracking-link">👤 Attendance Tracking</a>
-                <a href="notebook.html?category=ICAAP-Tracking&date=${displayDate.toISOString().split('T')[0]}" class="tracking-link">📈 iCAAP Tracking Log</a>
+                <a href="notebook.html?category=iCAAP&date=${dateStr}" class="tracking-link ${currentCategory === 'iCAAP' ? 'active' : ''}">📝 iCAAP Notes</a>
+                <a href="notebook.html?category=ICAAP-Attendance&date=${dateStr}" class="tracking-link ${currentCategory === 'ICAAP-Attendance' ? 'active' : ''}">👤 Attendance Tracking</a>
+                <a href="notebook.html?category=ICAAP-Tracking&date=${dateStr}" class="tracking-link ${currentCategory === 'ICAAP-Tracking' ? 'active' : ''}">📈 iCAAP Tracking Log</a>
             `;
         }
 

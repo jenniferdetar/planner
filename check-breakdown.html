@@ -11,133 +11,172 @@
         :root {
             --header-blue: #00326b;
             --sheet-green: #1b5e20;
-            --border-color: #ccc;
-            --text-color: #333;
-            --csea-yellow: #ffca38;
+            --border-color: #e1dfdd;
+            --section-sidebar-width: 60px;
         }
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f3f2f1;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
-            color: var(--text-color);
-        }
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+            height: 100vh;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
         }
-        .nav-link {
-            text-decoration: none;
-            color: #ffca38;
-            font-weight: 600;
-            font-size: 0.9rem;
+        .notebook-container {
             display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
-            transition: all 0.2s ease;
-        }
-        .nav-link:hover {
-            background-color: #ffca38;
-            color: #00326b;
-        }
-        .spreadsheet-container {
-            width: 100%;
-            overflow-x: auto;
+            flex-grow: 1;
+            overflow: hidden;
             background: #fff;
-            margin-top: 20px;
         }
-        .container {
+        /* Vertical Sidebar */
+        .section-sidebar {
+            width: var(--section-sidebar-width);
+            background: #1e3a63;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            gap: 15px;
+            flex-shrink: 0;
+            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
+        }
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            opacity: 0.7;
+        }
+        .section-icon:hover {
+            background: rgba(255,255,255,0.1);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        .section-icon.active {
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            opacity: 1;
+        }
+        .section-icon.logout-icon {
+            margin-top: auto;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .section-icon.logout-icon:hover {
+            opacity: 1;
+            color: #ffcdd2;
+        }
+
+        .notebook-main {
+            flex-grow: 1;
+            background: #fff;
+            overflow-y: auto;
+            position: relative;
+            scrollbar-width: thin;
         }
         .notebook-page {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px !important;
             background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            min-height: calc(100vh - 100px);
-            border-radius: 8px;
-            position: relative;
+            box-sizing: border-box;
+            min-height: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e1dfdd;
+            padding-bottom: 20px;
         }
         .page-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem;
             color: var(--header-blue);
-            font-size: 2.5rem;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--header-blue);
-            padding-bottom: 10px;
+            margin: 0 0 15px 0;
+            letter-spacing: -0.01em;
+            font-weight: 700;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+            margin-top: 20px;
+            position: relative;
         }
         .sheet-table {
             border-collapse: collapse;
             width: 100%;
-            font-size: 13px;
+            font-size: 0.85rem;
         }
         .sheet-table th, .sheet-table td {
-            border: 1px solid var(--border-color);
-            padding: 4px 8px;
-            min-width: 100px;
-        }
-        .header-row {
-            background-color: var(--sheet-green);
-            color: #ffffff;
+            border: 1px solid #eee;
+            padding: 8px 12px;
         }
         .header-row th {
+            background-color: #f8f9fa;
+            color: #323130;
             font-weight: 600;
-            text-align: center;
-            height: 30px;
+            font-family: 'Segoe UI', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            border-bottom: 2px solid #e1dfdd;
             position: sticky;
-            top: 40px;
+            top: 0;
             z-index: 10;
-            color: #ffffff;
+            text-align: center;
         }
         .account-col {
+            font-weight: 600;
+            text-align: left !important;
+            min-width: 250px;
             position: sticky;
             left: 0;
             background-color: #fff;
-            z-index: 5;
-            min-width: 250px;
-            text-align: left;
-            font-weight: 500;
+            z-index: 15;
+            border-right: 2px solid #e1dfdd !important;
+            font-family: 'Segoe UI', sans-serif;
         }
         .header-row .account-col {
-            background-color: var(--sheet-green);
-            z-index: 15;
-            top: 40px;
+            background-color: #f8f9fa;
+            z-index: 20;
         }
         .data-cell {
             text-align: right;
             outline: none;
             font-family: monospace;
+            font-size: 0.95rem;
+            color: #333;
         }
         .data-cell:focus {
-            background-color: #e8f0fe;
-            box-shadow: inset 0 0 0 2px #1a73e8;
+            background-color: #fffde7;
+            box-shadow: inset 0 0 0 2px var(--header-blue);
         }
         .sheet-table tbody tr:nth-child(even) {
-            background-color: #f8f9fa;
+            background-color: #fafafa;
         }
         .sheet-table tbody tr:nth-child(even) .account-col {
-            background-color: #f8f9fa;
+            background-color: #fafafa;
         }
         .left-over-row {
-            background-color: #f1f3f4 !important;
-            font-weight: 600;
+            background-color: #f3f2f1 !important;
+            font-weight: 700;
+        }
+        .left-over-row .account-col {
+            background-color: #f3f2f1 !important;
         }
         .save-status {
             position: fixed;
@@ -151,117 +190,104 @@
             color: #666;
             z-index: 2000;
         }
-        .sheet-title-bar {
-            background: #f1f3f4;
-            padding: 8px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid #ccc;
-        }
-        .sheet-icon {
-            color: var(--sheet-green);
-            font-size: 24px;
-        }
-        .sheet-name {
-            font-weight: 500;
-            font-size: 18px;
-        }
     </style>
 </head>
 <body>
-    <header class="global-header">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="notebook.html" class="nav-link">Notebook</a>
-        <a href="financial.html" class="nav-link">Financial</a>
-        <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="planning.html" class="nav-link">Planning</a>
-        <a href="mantra.html" class="nav-link">Mantra</a>
-    </header>
+    <div class="notebook-container">
+        <aside class="section-sidebar">
+            <a href="index.html" class="section-icon" title="Home">🏠</a>
+            <a href="notebook.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
+            <a href="notebook.html?category=Goals" class="section-icon" title="Personal">👤</a>
+            <a href="notebook.html?category=Intentions" class="section-icon" title="Planning">📅</a>
+            <a href="notebook.html?category=Budget" class="section-icon active" title="Financial">💰</a>
+            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
+        </aside>
 
-    <div id="save-status" class="save-status">All changes saved</div>
+        <main class="notebook-main">
+            <div class="notebook-page">
+                <div class="page-header">
+                    <h1 class="page-title">Check Breakdown</h1>
+                </div>
 
-    <div class="container">
-        <div class="notebook-page">
-            <h1 class="page-title">Check Breakdown</h1>
-            
-            <div class="spreadsheet-container">
-                <table class="sheet-table">
-            <thead>
-                <tr class="header-row">
-                    <th class="account-col">Account</th>
-                    <script>
-                        const urlParamsDates = new URLSearchParams(window.location.search);
-                        const dateParamDates = urlParamsDates.get('date');
-                        let baseDateDates = dateParamDates ? new Date(dateParamDates) : new Date();
-                        if (isNaN(baseDateDates.getTime())) baseDateDates = new Date();
-                        
-                        // Set to 1st of month
-                        baseDateDates.setDate(1);
-                        
-                        const dates = [];
-                        for (let i = 0; i < 10; i++) {
-                            const d1 = new Date(baseDateDates);
-                            d1.setMonth(baseDateDates.getMonth() + i);
-                            d1.setDate(5);
-                            dates.push(`${d1.getMonth() + 1}/${d1.getDate()}/${d1.getFullYear()}`);
-                            
-                            const d2 = new Date(baseDateDates);
-                            d2.setMonth(baseDateDates.getMonth() + i);
-                            d2.setDate(20);
-                            dates.push(`${d2.getMonth() + 1}/${d2.getDate()}/${d2.getFullYear()}`);
-                        }
-                        dates.forEach(d => document.write(`<th>${d}</th>`));
-                    </script>
-                </tr>
-            </thead>
-            <tbody id="sheet-body">
-                <script>
-                    const accounts = [
-                        "Currently in Checking",
-                        "Jennifer's Check",
-                        "Tithe",
-                        "ADT",
-                        "Amazon - Necessities",
-                        "Auto Maintenance",
-                        "Blow",
-                        "Ana",
-                        "DWP",
-                        "Gas",
-                        "Groceries",
-                        "Hair (Expensive)",
-                        "Hair (Cheap)",
-                        "HSA",
-                        "Jennifer's Student Loans - NelNet",
-                        "Jennifer's Student Loans - Salli...",
-                        "Laundry",
-                        "Mercury Auto Insurance",
-                        "Orkin",
-                        "Schools First Loan",
-                        "Spectrum",
-                        "Summer Saver",
-                        "Tahoe Registration",
-                        "Trailblazer Registration",
-                        "Verizon",
-                        "Left Over"
-                    ];
+                <div class="table-container">
+                    <table class="sheet-table">
+                        <thead>
+                            <tr class="header-row">
+                                <th class="account-col">Account</th>
+                                <script>
+                                    const urlParamsDates = new URLSearchParams(window.location.search);
+                                    const dateParamDates = urlParamsDates.get('date');
+                                    let baseDateDates = dateParamDates ? new Date(dateParamDates) : new Date();
+                                    if (isNaN(baseDateDates.getTime())) baseDateDates = new Date();
+                                    
+                                    // Set to 1st of month
+                                    baseDateDates.setDate(1);
+                                    
+                                    const dates = [];
+                                    for (let i = 0; i < 10; i++) {
+                                        const d1 = new Date(baseDateDates);
+                                        d1.setMonth(baseDateDates.getMonth() + i);
+                                        d1.setDate(5);
+                                        dates.push(`${d1.getMonth() + 1}/${d1.getDate()}/${d1.getFullYear()}`);
+                                        
+                                        const d2 = new Date(baseDateDates);
+                                        d2.setMonth(baseDateDates.getMonth() + i);
+                                        d2.setDate(20);
+                                        dates.push(`${d2.getMonth() + 1}/${d2.getDate()}/${d2.getFullYear()}`);
+                                    }
+                                    dates.forEach(d => document.write(`<th>${d}</th>`));
+                                </script>
+                            </tr>
+                        </thead>
+                        <tbody id="sheet-body">
+                            <script>
+                                const accounts = [
+                                    "Currently in Checking",
+                                    "Jennifer's Check",
+                                    "Tithe",
+                                    "ADT",
+                                    "Amazon - Necessities",
+                                    "Auto Maintenance",
+                                    "Blow",
+                                    "Ana",
+                                    "DWP",
+                                    "Gas",
+                                    "Groceries",
+                                    "Hair (Expensive)",
+                                    "Hair (Cheap)",
+                                    "HSA",
+                                    "Jennifer's Student Loans - NelNet",
+                                    "Jennifer's Student Loans - Salli...",
+                                    "Laundry",
+                                    "Mercury Auto Insurance",
+                                    "Orkin",
+                                    "Schools First Loan",
+                                    "Spectrum",
+                                    "Summer Saver",
+                                    "Tahoe Registration",
+                                    "Trailblazer Registration",
+                                    "Verizon",
+                                    "Left Over"
+                                ];
 
-                    accounts.forEach((acc, rowIndex) => {
-                        const isLeftOver = acc === "Left Over";
-                        document.write(`<tr class="${isLeftOver ? 'left-over-row' : ''}">`);
-                        document.write(`<td class="account-col">${acc}</td>`);
-                        dates.forEach((date, colIndex) => {
-                            const fieldId = `grid-${rowIndex}-${colIndex}`;
-                            document.write(`<td class="data-cell" contenteditable="true" data-field="${fieldId}" data-row="${rowIndex}" data-col="${colIndex}"></td>`);
-                        });
-                        document.write(`</tr>`);
-                    });
-                </script>
-            </tbody>
-        </table>
+                                accounts.forEach((acc, rowIndex) => {
+                                    const isLeftOver = acc === "Left Over";
+                                    document.write(`<tr class="${isLeftOver ? 'left-over-row' : ''}">`);
+                                    document.write(`<td class="account-col">${acc}</td>`);
+                                    dates.forEach((date, colIndex) => {
+                                        const fieldId = `grid-${rowIndex}-${colIndex}`;
+                                        document.write(`<td class="data-cell" contenteditable="true" data-field="${fieldId}" data-row="${rowIndex}" data-col="${colIndex}"></td>`);
+                                    });
+                                    document.write(`</tr>`);
+                                });
+                            </script>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
+    <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {

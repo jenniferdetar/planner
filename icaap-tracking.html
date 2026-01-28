@@ -11,139 +11,204 @@
         :root {
             --header-blue: #00326b;
             --table-green: #1b5e20;
-            --border-color: #333;
+            --border-color: #e1dfdd;
+            --section-sidebar-width: 60px;
         }
         body {
-            font-family: 'Coming Soon', cursive;
+            background-color: #f3f2f1;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-        .global-header {
-            background: #00326b;
-            padding: 5px 20px;
+        .notebook-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+            background: #fff;
+        }
+        /* Vertical Sidebar */
+        .section-sidebar {
+            width: var(--section-sidebar-width);
+            background: #1e3a63;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            gap: 15px;
+            flex-shrink: 0;
+            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
+        }
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            opacity: 0.7;
+        }
+        .section-icon:hover {
+            background: rgba(255,255,255,0.1);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        .section-icon.active {
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            opacity: 1;
+        }
+        .section-icon.logout-icon {
+            margin-top: auto;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .section-icon.logout-icon:hover {
+            opacity: 1;
+            color: #ffcdd2;
+        }
+
+        .notebook-main {
+            flex-grow: 1;
+            background: #fff;
+            overflow-y: auto;
+            position: relative;
+            scrollbar-width: thin;
+        }
+        .notebook-page {
+            width: 100%;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 40px !important;
+            background: #fff;
+            box-sizing: border-box;
+            min-height: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e1dfdd;
+            padding-bottom: 20px;
+        }
+        .page-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem;
+            color: var(--header-blue);
+            margin: 0 0 15px 0;
+            letter-spacing: -0.01em;
+            font-weight: 700;
+        }
+
+        .tracking-links-container {
             display: flex;
             justify-content: center;
             gap: 15px;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            align-items: center;
+            margin-top: 20px;
         }
-        .nav-link {
+        .tracking-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f3f2f1;
+            color: #323130;
+            padding: 8px 16px;
+            border-radius: 4px;
             text-decoration: none;
-            color: #ffca38;
+            font-size: 0.85rem;
             font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 15px;
-            border: 2px solid #ffca38;
-            border-radius: 20px;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
+            border: 1px solid #e1dfdd;
+            font-family: 'Segoe UI', sans-serif;
         }
-        .container {
-            padding: 10px;
+        .tracking-pill:hover {
+            background-color: #edebe9;
+            border-color: #d2d0ce;
+        }
+        .tracking-pill span {
+            font-size: 1.1rem;
+        }
+
+        .table-container {
             width: 100%;
-            box-sizing: border-box;
             overflow-x: auto;
-        }
-        .notebook-page {
-            background: #fff;
-            padding: 10px 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            min-width: max-content;
-            min-height: calc(100vh - 100px);
-        }
-        .page-header {
-            text-align: center;
-            margin-bottom: 0;
-            position: sticky;
-            top: 40px; /* global-header height */
-            background: #fff;
-            padding: 10px 0;
-            z-index: 100;
-        }
-        .page-title {
-            color: var(--header-blue);
-            font-size: 1.5rem;
-            margin: 0;
-            letter-spacing: 2px;
-            text-transform: capitalize;
-            border-bottom: none;
-            padding-bottom: 0;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+            margin-top: 20px;
+            position: relative;
         }
         .tracking-table {
             border-collapse: collapse;
             width: 100%;
-            font-size: 11px;
-            border: 1px solid var(--border-color);
+            font-size: 0.8rem;
         }
         .tracking-table th, .tracking-table td {
-            border: 1px solid var(--border-color);
+            border: 1px solid #eee;
             padding: 8px;
             text-align: center;
         }
-        .tracking-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
+        .header-row th {
+            background-color: #f8f9fa;
+            color: #323130;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.7rem;
+            border-bottom: 2px solid #e1dfdd;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
-        .header-row {
-            background-color: var(--table-green);
-            color: white;
-        }
-        .month-header {
-            min-width: 150px;
+        .sub-header th {
+            background-color: #fafafa;
+            position: sticky;
+            top: 35px; /* Adjust based on header height */
+            z-index: 10;
+            font-size: 0.65rem;
+            color: #605e5c;
         }
         .employee-col {
             font-weight: 600;
-            text-align: left;
-            min-width: 150px;
+            text-align: left !important;
+            min-width: 180px;
             position: sticky;
             left: 0;
-            border-right: 2px solid var(--border-color);
-            z-index: 5;
-            background-color: inherit;
-        }
-        .tracking-table tbody tr:nth-child(odd) .employee-col {
             background-color: #fff;
+            z-index: 15;
+            border-right: 2px solid #e1dfdd !important;
+            font-family: 'Segoe UI', sans-serif;
         }
-        .tracking-table tbody tr:nth-child(even) .employee-col {
-            background-color: #f9f9f9;
+        .header-row .employee-col, .sub-header .employee-col {
+            background-color: #f8f9fa;
+            z-index: 20;
         }
-        .tracking-table thead th {
-            position: sticky;
-            top: 105px; /* global-header + page-header height */
-            z-index: 110;
+        .total-col {
+            background-color: #f8f9fa;
+            font-weight: 700;
+            border-left: 2px solid #e1dfdd !important;
         }
-        .header-row .employee-col {
-            background-color: var(--table-green);
-            z-index: 120;
-            top: 105px;
-        }
-        .sub-header th {
-            position: sticky;
-            top: 139px; /* adjusted for two rows of header */
-            z-index: 110;
-        }
-        .sub-header .employee-col {
-            top: 139px;
-            z-index: 120;
-        }
-        .sub-header {
-            font-size: 9px;
-            background-color: #e8f5e9;
-        }
+        
         .editable-cell {
             outline: none;
             min-height: 20px;
             background-color: #fff;
+            font-family: 'Coming Soon', cursive;
+            font-size: 0.9rem;
         }
         .editable-cell:focus {
             background-color: #fffde7;
             box-shadow: inset 0 0 0 2px var(--header-blue);
         }
+        
         .save-status {
             position: fixed;
             bottom: 20px;
@@ -159,72 +224,78 @@
     </style>
 </head>
 <body>
-    <header class="global-header">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="notebook.html" class="nav-link">Notebook</a>
-        <a href="financial.html" class="nav-link">Financial</a>
-        <a href="personal-goals.html" class="nav-link">Goals</a>
-        <a href="planning.html" class="nav-link">Planning</a>
-        <a href="mantra.html" class="nav-link">Mantra</a>
-    </header>
-    <div id="save-status" class="save-status">All changes saved</div>
-    <div class="container">
-        <div class="notebook-page">
-            <div class="page-header">
-                <h1 class="page-title">Icaap Tracking Log</h1>
-                <div style="margin-top: 5px; display: flex; justify-content: center; gap: 10px;">
-                    <a href="icaap.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue); display: inline-flex;">
-                        <span>📝</span> Icaap Notes
-                    </a>
-                    <a href="icaap-attendance.html" class="nav-link" style="color: var(--header-blue); border-color: var(--header-blue); display: inline-flex;">
-                        <span>👤</span> Attendance Tracking
-                    </a>
+    <div class="notebook-container">
+        <aside class="section-sidebar">
+            <a href="index.html" class="section-icon" title="Home">🏠</a>
+            <a href="notebook.html?category=Work-Planner" class="section-icon active" title="Work">💼</a>
+            <a href="notebook.html?category=Goals" class="section-icon" title="Personal">👤</a>
+            <a href="notebook.html?category=Intentions" class="section-icon" title="Planning">📅</a>
+            <a href="notebook.html?category=Budget" class="section-icon" title="Financial">💰</a>
+            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
+        </aside>
+
+        <main class="notebook-main">
+            <div class="notebook-page">
+                <div class="page-header">
+                    <h1 class="page-title">Icaap Tracking Log</h1>
+                    <div class="tracking-links-container">
+                        <a href="icaap.html" class="tracking-pill">
+                            <span>📝</span> Icaap Notes
+                        </a>
+                        <a href="icaap-attendance.html" class="tracking-pill">
+                            <span>👤</span> Attendance Tracking
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="tracking-table">
+                        <thead>
+                            <tr class="header-row">
+                                <script>
+                                    const urlParams = new URLSearchParams(window.location.search);
+                                    const dateParam = urlParams.get('date');
+                                    let baseDate = dateParam ? new Date(dateParam) : new Date();
+                                    if (isNaN(baseDate.getTime())) baseDate = new Date();
+                                    
+                                    // Determine fiscal year start (July)
+                                    let startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
+                                    
+                                    const months = [];
+                                    const monthNames = [
+                                        'July', 'August', 'September', 'October', 
+                                        'November', 'December', 'January', 'February', 
+                                        'March', 'April', 'May', 'June'
+                                    ];
+                                    
+                                    for (let i = 0; i < 12; i++) {
+                                        const year = i < 6 ? startYear : startYear + 1;
+                                        months.push(`${monthNames[i]} ${year}`);
+                                    }
+
+                                    document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
+                                    months.forEach(month => {
+                                        document.write(`<th colspan="3">${month}</th>`);
+                                    });
+                                    document.write(`<th rowspan="2" class="total-col">Total Hours</th>`);
+                                </script>
+                            </tr>
+                            <tr class="sub-header">
+                                <script>
+                                    months.forEach(month => {
+                                        document.write(`<th>Paylog Sub.</th><th>Hours</th><th>Approval</th>`);
+                                    });
+                                </script>
+                            </tr>
+                        </thead>
+                        <tbody id="tracking-body">
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <table class="tracking-table">
-                <thead>
-                    <tr class="header-row">
-                        <script>
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const dateParam = urlParams.get('date');
-                            let baseDate = dateParam ? new Date(dateParam) : new Date();
-                            if (isNaN(baseDate.getTime())) baseDate = new Date();
-                            
-                            // Determine fiscal year start (July)
-                            let startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
-                            
-                            const months = [];
-                            const monthNames = [
-                                'July', 'August', 'September', 'October', 
-                                'November', 'December', 'January', 'February', 
-                                'March', 'April', 'May', 'June'
-                            ];
-                            
-                            for (let i = 0; i < 12; i++) {
-                                const year = i < 6 ? startYear : startYear + 1;
-                                months.push(`${monthNames[i]} ${year}`);
-                            }
-
-                            document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
-                            months.forEach(month => {
-                                document.write(`<th colspan="3" class="month-header">${month}</th>`);
-                            });
-                            document.write(`<th rowspan="2" style="background-color: #1b5e20; color: white;">Total Hours</th>`);
-                        </script>
-                    </tr>
-                    <tr class="sub-header">
-                        <script>
-                            months.forEach(month => {
-                                document.write(`<th>Paylog Sub.</th><th>Hours</th><th>Approval</th>`);
-                            });
-                        </script>
-                    </tr>
-                </thead>
-                <tbody id="tracking-body">
-                </tbody>
-            </table>
-        </div>
+        </main>
     </div>
+    <div id="save-status" class="save-status">All changes saved</div>
     <script>
         const employees = [
             "Adalid Sanchez Rodriguez", "Adan Saucedo", "Adrian Irvine", "Adriana Gomez",
