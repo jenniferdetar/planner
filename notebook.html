@@ -154,12 +154,8 @@
             font-size: 1.1rem;
             color: #333;
             width: 100%;
-            margin: 0 auto;
+            margin: 0;
             transition: width 0.3s ease;
-        }
-
-        .notepaper-content.width-80 {
-            width: 80%;
         }
 
         .page-header-container {
@@ -1217,11 +1213,7 @@
             
             // Apply width constraint for specific categories
             const content = document.querySelector('.notepaper-content');
-            if (category === 'Work-Planner') {
-                content.classList.add('width-80');
-            } else {
-                content.classList.remove('width-80');
-            }
+            content.classList.remove('width-80');
             
             // Update page tabs - handle sub-pages by checking parent
             document.querySelectorAll('.page-tab').forEach(tab => {
