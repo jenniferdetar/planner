@@ -263,7 +263,7 @@
         }
 
         .time-slot {
-            height: 42px;
+            height: 50px;
             border-bottom: 1px dotted #eee;
             display: flex;
             align-items: center;
@@ -311,19 +311,28 @@
             height: 100%;
             display: flex;
             align-items: center;
-            overflow: hidden;
+            justify-content: center;
+            overflow: visible;
             font-family: 'Homemade Apple', cursive;
             font-size: 10pt;
+            line-height: 1.1;
         }
 
         .event-pill {
             background-color: #f0f0f0;
             border-radius: 4px;
             padding: 2px 4px;
-            font-size: 10pt;
+            font-size: 8.5pt;
             border: 1px solid #ddd;
             width: 100%;
             box-sizing: border-box;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
         }
 
         .event-pill.csea, .event-pill.la-fed { 
@@ -475,6 +484,12 @@
         function getEventForSlot(dayEvents, timeSlot, dayIndex) {
             const [h, m] = timeSlot.split(':').map(Number);
             const slotTotalMinutes = h * 60 + m;
+            
+            // Current Date Helper
+            const currentDay = new Date(currentStartDate);
+            currentDay.setDate(currentDay.getDate() + dayIndex);
+            const dateStr = currentDay.toISOString().split('T')[0];
+
             // 1. Check for database events with an explicit time
             const exactMatch = dayEvents.find(e => {
                 if (!e.time) return false;
@@ -482,7 +497,24 @@
                 return (eh * 60 + em) === slotTotalMinutes;
             });
             if (exactMatch) return exactMatch.title;
+
             // 2. Specific logic rules (Fallbacks or duration-based)
+            
+            // LA 500 Negotiations Prep: Tue Jan 27, 2026, 2:00 PM - 3:30 PM
+            if (dateStr === '2026-01-27') {
+                if (slotTotalMinutes >= (14 * 60) && slotTotalMinutes < (15 * 60 + 30)) return 'LA 500 Negotiations Prep';
+            }
+
+            // CSEA Reopener Negotiations: Wed Jan 28, 2026, 12:30 PM - 4:30 PM
+            if (dateStr === '2026-01-28') {
+                if (slotTotalMinutes >= (12 * 60 + 30) && slotTotalMinutes < (16 * 60 + 30)) return 'CSEA Reopener Negotiations';
+            }
+
+            // CSEA Reopener Negotiations: Feb 06, 2026, 9:30 AM - 4:30 PM
+            if (dateStr === '2026-02-06') {
+                if (slotTotalMinutes >= (9 * 60 + 30) && slotTotalMinutes < (16 * 60 + 30)) return 'CSEA Reopener Negotiations';
+            }
+
             // Rule: Chapter (5:30 - 7:30)
             const chapterEvent = dayEvents.find(e => e.title.toUpperCase().includes('CHAPTER'));
             if (chapterEvent) {

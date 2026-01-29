@@ -233,7 +233,7 @@ function formatTime(timeStr, compact = false, showSpace = false) {
 
 function getEventClass(title) {
     const lowerTitle = title.toLowerCase();
-    if (lowerTitle.includes('csea')) return 'event-pill csea';
+    if (lowerTitle.includes('csea') || lowerTitle.includes('negotiations') || lowerTitle.includes('la 500')) return 'event-pill csea';
     if (lowerTitle.includes('la fed')) return 'event-pill la-fed';
     if (lowerTitle.includes('due')) return 'event-pill due';
     if (lowerTitle.includes('meeting')) return 'event-pill meeting';
