@@ -14,12 +14,20 @@ async function probe() {
         console.log('work_planner_edits SUCCESS! Data:', data1);
     }
 
-    console.log('\nProbing planner_data...');
-    const { data: data2, error: error2 } = await supabase.from('planner_data').select('*').limit(1);
+    console.log('\nProbing calendar_by_date...');
+    const { data: data2, error: error2 } = await supabase.from('calendar_by_date').select('*').limit(5);
     if (error2) {
-        console.error('planner_data error:', error2.message);
+        console.error('calendar_by_date error:', error2.message);
     } else {
-        console.log('planner_data SUCCESS! Data:', data2);
+        console.log('calendar_by_date SUCCESS! Data:', data2);
+    }
+
+    console.log('\nProbing category_entries...');
+    const { data: data3, error: error3 } = await supabase.from('category_entries').select('*').limit(1);
+    if (error3) {
+        console.error('category_entries error:', error3.message);
+    } else {
+        console.log('category_entries SUCCESS! Data:', data3);
     }
 }
 

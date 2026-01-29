@@ -371,8 +371,8 @@ async function deleteInteraction(id) {
 async function fetchCseaMembers() {
     const client = getSupabase();
     if (!client) return [];
-    const { data } = await client.from('csea_members').select('*').order('name');
-    return (data || []).map(m => ({ ...m, name: toTitleCase(m.name) }));
+    const { data } = await client.from('csea_members').select('*').order('full_name');
+    return (data || []).map(m => ({ ...m, name: toTitleCase(m.full_name) }));
 }
 
 async function fetchHoursWorked(year) {
