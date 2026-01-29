@@ -635,27 +635,27 @@
             flex-grow: 1;
             outline: none;
             word-break: break-word;
-            height: 100%;
+            min-height: 100%;
             display: flex;
             align-items: center;
-            overflow: hidden;
+            overflow: visible;
             padding-left: 2px;
         }
 
         .event-pill {
             background-color: #f0f0f0;
             border-radius: 4px;
-            padding: 1px 3px;
+            padding: 2px 4px;
             font-size: 10pt;
-            line-height: 1;
+            line-height: 1.1;
             border: 1px solid #ccc;
             text-align: left;
             display: block;
             width: 100%;
             box-sizing: border-box;
-            overflow: hidden;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            white-space: normal;
         }
 
         .event-pill.csea, .event-pill.la-fed { 
@@ -1030,8 +1030,20 @@
                 fetchCseaMembers(),
                 fetchFinancialBills()
             ]);
-            employees = empData.map(m => m.full_name || m.name);
-            financialBills = billData;
+            
+            // Merge DB members with defaults
+            const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
+            empData.forEach(m => {
+                const name = m.full_name || m.name;
+                if (name) nameSet.add(toTitleCase(name));
+            });
+            employees = [...nameSet].sort();
+
+            // Merge DB bills with defaults (keyed by item name to avoid duplicates)
+            const billMap = new Map();
+            DEFAULT_BILLS.forEach(b => billMap.set(b.item, b));
+            billData.forEach(b => billMap.set(b.item, b));
+            financialBills = [...billMap.values()].sort((a, b) => a.id - b.id);
         }
 
         let currentSection = 'work';
@@ -1641,6 +1653,21 @@
             const container = document.getElementById('special-content-view');
             const PERSISTENCE_KEY = `icaap-tracking-data-${fiscalYear}`;
             
+            // Data Loading
+            const [hoursData, approvalData, paylogData] = await Promise.all([
+                fetchHoursWorked(fiscalYear),
+                fetchApprovalDates(fiscalYear),
+                fetchPaylogSubmissions(fiscalYear)
+            ]);
+
+            // Discover all unique names from both employees list and DB records
+            const nameSet = new Set(employees.map(toTitleCase));
+            hoursData.forEach(r => { if (r.name) nameSet.add(toTitleCase(r.name)); });
+            approvalData.forEach(r => { if (r.Name) nameSet.add(toTitleCase(r.Name)); });
+            paylogData.forEach(r => { if (r.name) nameSet.add(toTitleCase(r.name)); });
+            
+            const currentEmployees = [...nameSet].sort();
+
             container.innerHTML = `
                 <div class="special-table-container">
                     <table class="special-table">
@@ -1660,7 +1687,7 @@
             `;
 
             const tbody = document.getElementById('tracking-table-body');
-            employees.forEach((emp, eIdx) => {
+            currentEmployees.forEach((emp, eIdx) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `<td class="sticky-col text-left">${emp}</td>`;
                 monthNames.forEach((month, mIdx) => {
@@ -1672,13 +1699,6 @@
                 tr.innerHTML += `<td class="total-hours-cell" id="total-${eIdx}"></td>`;
                 tbody.appendChild(tr);
             });
-
-            // Data Loading
-            const [hoursData, approvalData, paylogData] = await Promise.all([
-                fetchHoursWorked(fiscalYear),
-                fetchApprovalDates(fiscalYear),
-                fetchPaylogSubmissions(fiscalYear)
-            ]);
 
             const hoursMap = {}; hoursData.forEach(r => hoursMap[r.name.toLowerCase()] = r);
             const approvalMap = {}; approvalData.forEach(r => approvalMap[r.Name.toLowerCase()] = r);
@@ -1701,7 +1721,7 @@
             });
 
             // Calculate Totals
-            employees.forEach((emp, eIdx) => calculateEmployeeTotal(eIdx));
+            currentEmployees.forEach((emp, eIdx) => calculateEmployeeTotal(eIdx));
         }
 
         async function handleTrackingSave(cell) {

@@ -1,6 +1,111 @@
 const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
 
+const DEFAULT_EMPLOYEES = [
+    "Adalid Sanchez Rodriguez", "Adan Saucedo", "Adrian Irvine", "Adriana Gomez",
+    "Adriana Ojeda", "Agnes Lewis", "Alberto Solorzano", "Alexander Aston",
+    "Alexis Contreras", "Alice Hilal", "Alicia Cerna", "Aline Millan",
+    "Alyson Han", "Amber Mastroianni", "Amber Trudgeon", "Amber Wilton",
+    "Ameel Noos", "Amparo Martin", "Ana Guevara", "Ancelmo Ramos",
+    "Andrea Chagoya", "Andrea Douglas", "Andreina Morales", "Angel Gamino",
+    "Angela Lopez", "Anna Quezada", "Anthony Bernard", "Anthony Morales",
+    "Anthony Zarate", "Antoinette Matiga", "Araksya Manukyan", "Avia Greene-Vanburen",
+    "Aya Shigenaga", "Baharak Saadat Beheshti", "Barbara Stoliker", "Barry Blisten",
+    "Beatris Segura", "Bennett Winter", "Bernice Grewell-Godinez", "Beverly Junio-Magee",
+    "Bienvenido Pineda", "Brigette Pena", "Carmen Fuentes", "Cassondra Holt Hightower",
+    "Cecille Basilio", "Charles Izuakor", "Cherie Lebron", "Chevon Booker",
+    "Chinedu Ezeh", "Christa Mcmullin", "Christina Clark", "Christina Silva",
+    "Christina Sithole", "Christine Choi", "Christopher Linares", "Claire Daigle",
+    "Claudia Franco", "Connie Gracia-Barraza", "Crystal Cohen", "Crystal Mendez",
+    "Crystal Rivera", "Cynthia Barrilleaux", "Cynthia Bitterman", "Cynthia Timm",
+    "D.M. Grant", "Dalese Hardin", "Dana Fikes", "Daniel Saldana",
+    "Danielle O'Connor", "David Hadjichristodoulou", "Dawn Sebastian", "Dawnise Francisco",
+    "Deanna Baldwin", "Debora Wechsler", "Deborah Francois", "Diana Olivas",
+    "Dominique Harris", "Dora Marquez", "Douglas Klaif", "Douglas Reisgen",
+    "Dulce Bacon", "Eberardo Rodriguez", "Edith Braswell-Grant", "Edith Janec",
+    "Efren Rodriguez", "Eileen Alcorn", "Eimi Miller", "Elisabeth Mullins Medina",
+    "Elizabeth Chavez", "Elizabeth Elizalde", "Elizabeth Romero", "Emilee Velazco Franco",
+    "Emily Wassler", "Emir Gonzalez", "Enas Makar", "Eric Hopson",
+    "Erica Pan", "Erica Sanchez", "Erika Paz", "Erin Mettlen",
+    "Ester Yang", "Evelyn Mcfarlane", "Farhad Mahmud", "Frances Morales",
+    "Freshta Sidiqi", "Gavriela Trujillo", "Gene Dean", "Genesis Aguirre",
+    "Gina Go", "Gladys Barbosa", "Glenda Tamay", "Guillermo Diaz",
+    "Gustavo Lopez", "Hamilton Gernon-Wyatt", "Hector Martinez", "Hina Ahmad",
+    "Ida Quijada", "Iliana Quintero", "Indira Ortiz", "Irma Griffiths",
+    "Irma Salas", "Irma Torres", "Isidro Castillo", "Ivy Grace Thorne",
+    "Jacqueline Cruz", "Jacqueline Palacios", "Jakeisha Sanders", "Jamall Farr",
+    "Janet Frnzyan", "Janet Ledesma", "Jasmin Segovia", "Javier Ponce Garcia",
+    "Jeanine Flier", "Jeanne Garcia-Armstrong", "Jeen Yu", "Jehisol Urbina",
+    "Jennifer Lopez", "Jennifer Washington", "Jenny Peterson", "Jereme Stark",
+    "Jhun De Guzman", "Jiabei Li", "Jittima Bouillot", "John Kuykendall",
+    "Jordan Baldry", "Jordan Gonzalez", "Jorge Torres", "Jose Alvarenga",
+    "Jose Hernandez", "Jose Romero", "Joseph Thomas", "Joseph Zeccola",
+    "Joshua Griffiths", "Joy Kasper", "Juan Catalan", "Juan Pina",
+    "Julia Calamandrei", "Julian Mendez", "Julianne Fassett", "Julie Ann Resurreccion",
+    "Julie Sornberger", "Karen Caruso", "Karen Siercke Noriega", "Karina Maravilla",
+    "Karsina Gaither", "Kelsie Hogen", "Kelvin Means", "Kerry Shimizu",
+    "Kevin Seegan", "Kimberly Rabas", "Kionna Hawkins", "Kristalyn Smith",
+    "Kristine Adams", "Kristy Beaudry", "La Tresha Glasco", "Ladan Dejam",
+    "Lailani Joy Gonzaga", "Lanette Black", "Laura Incelli", "Laveda Harris",
+    "Lawrence Ramos", "Leslie Anderson", "Leslie Black", "Leslie Perez",
+    "Leslie Zamora", "Leticia Gudino", "Leticia Martinez", "Liberty Amos",
+    "Lila Rosas Madrigal", "Liliana Amezcua", "Liliana Jauregui-George", "Liliana Martinez",
+    "Lilit Akilian", "Linda Hoang", "Linda Santana", "Linda Taylor",
+    "Lisa Darbidian", "Lisa Harvey", "Lisa Marks", "Louise Cummings",
+    "Luciano Latini", "Lucrecia Yescas Luna", "Ma Joanna Razon", "Ma Teresa Aki",
+    "Maeli Montecinos", "Maikai Finnell", "Malika Ferrell", "Malina Rios",
+    "Mandana Saidi", "Maria Aldave Cabrera", "Maria Hernandez", "Maria Pinto",
+    "Maria Zamora", "Marianne Valencia", "Marie Bennett", "Marissa Gilmore",
+    "Marites Felicilda", "Mark Todd", "Marla Pizzuto", "Marlene Yu",
+    "Marta Martin", "Mary Jane Opoku", "Matthew Miller", "Mayra Alcantar",
+    "Mayra Rodarte-Nava", "Melanie Ronning", "Melinda Duran", "Michael Juarez",
+    "Michelle Lopez", "Miguel Agredano", "Miisha Davis", "Miriam Oguejiofor",
+    "Nancy Madrid", "Naomi Kaidin", "Nayeli Meza Amaral", "Neta Markusfeld",
+    "Nicole Douglass", "Nicoli Ueda", "Nora Watanabe", "Nune Mc Combs",
+    "Oscar Montenegro", "Palma Scirone", "Paola Martinez", "Patricia Castillo",
+    "Patricia Chavez", "Patrick Navas", "Paula Dominguez", "Paulette Duarte",
+    "Paulette Shelley", "Pedro Aguilar", "Praveen Ray", "Ralph Bravo",
+    "Rana Khan", "Raquel Huerta", "Rebeca Chaidez", "Rene Gaudet",
+    "Rhory Rebellon", "Richard Lee", "Rick Swanson", "Robert Jones",
+    "Robert Moose", "Robin Aaron", "Rodolfo Gutierrez", "Rosalina Pacheco",
+    "Rosalyn Lee", "Rosanna Davisson", "Rosemarie Fagfoomsintu", "Ross Kramer",
+    "Ruth Rendon", "Ryan Boyes", "Sabrina Sheikh", "Sabrina Sullivan",
+    "Sallyann Tejeda", "Salvador Magana-Arriola", "Sandra Canela", "Sandra Hernandez",
+    "Sandra Meredith", "Sandra Mijarez", "Sandra Valdivia", "Sandy Estrada",
+    "Sandy Walker", "Sara Goico Alcantar", "Scott Cody", "Senisa Austin",
+    "Shannon Moultrie", "Shannon Sayer", "Sharon Maculada", "Shawn Hall",
+    "Sherita Rogers", "Sheveeta Jackson", "Silvia Ramos", "Silvia Sanchez",
+    "Sofia Manzo-Reyes", "Sofia Vasserman", "Stacey Byham", "Stacey Williams",
+    "Staci Holmes", "Stacy Orosco", "Stephanie Harlow", "Stephen Maccarone",
+    "Steven Vitela", "Suhjung Ko", "Susan Deloach", "Susan Nolan",
+    "Susana Mislang", "Susana Santa Cruz", "Susanna Garcia", "Tacy Schull",
+    "Tamryn Wilkins", "Tanya Acosta", "Tarah Bagadiong-Trice", "Tatianika Montalbo",
+    "Tiffanie Griffin", "Tiffany Vojkovich", "Toby Sperber", "Tonya Boyd",
+    "Tonya Thompson", "Troy Poe", "Valerie De La Rosa", "Valerie Hoggard",
+    "Vanessa Sandoval", "Veganush Frnzyan", "Veronica Arevalo", "Veronica Rodriguez Sifontes",
+    "Veronica Viramontes", "Victor Castaneda", "Victoria Maldonado", "Wendy Jasso",
+    "Wendy Marrero", "Wendy Mora", "Xiaowei Wei", "Yasmin Lilly",
+    "Yesenia Duran", "Yesenia Enriquez", "Yolanda Hashimoto", "Young Choy",
+    "Yuriko Jung", "Zarui Grigoryan", "Zina Dixon"
+];
+
+const DEFAULT_BILLS = [
+    { id: 1, cat: 'Auto', item: 'Auto Maintenance', amt: '$100', class: 'row-auto' },
+    { id: 2, cat: 'Auto', item: 'Mercury Auto Insurance', amt: '$388', class: 'row-auto' },
+    { id: 3, cat: 'Auto', item: 'Tahoe Registration', amt: '$15', class: 'row-auto' },
+    { id: 4, cat: 'Bill', item: 'Edison', amt: '$150', class: 'row-bill' },
+    { id: 5, cat: 'Bill', item: 'Gas Company', amt: '$50', class: 'row-bill' },
+    { id: 6, cat: 'Bill', item: 'Spectrum', amt: '$85', class: 'row-bill' },
+    { id: 7, cat: 'Bill', item: 'Water/Trash', amt: '$120', class: 'row-bill' },
+    { id: 8, cat: 'Cash', item: 'Blow Cash Jennifer', amt: '$200', class: 'row-cash' },
+    { id: 9, cat: 'Cash', item: 'Blow Cash Stephen', amt: '$200', class: 'row-cash' },
+    { id: 10, cat: 'CC', item: 'Amazon Visa', amt: '$500', class: 'row-cc' },
+    { id: 11, cat: 'CC', item: 'Citibank Visa', amt: '$300', class: 'row-cc' },
+    { id: 12, cat: 'CC', item: 'Southwest Visa', amt: '$200', class: 'row-cc' },
+    { id: 13, cat: 'Housing', item: 'Mortgage', amt: '$2,500', class: 'row-housing' },
+    { id: 14, cat: 'Savings', item: 'Emergency Fund', amt: '$500', class: 'row-savings' }
+];
+
 let supabaseClient;
 function getSupabase() {
     if (supabaseClient) return supabaseClient;
@@ -114,26 +219,36 @@ async function savePlannerData(date, fieldId, content) {
 // Calendar Events Logic
 async function fetchCalendarEvents(startDate, days = 7) {
     const client = getSupabase();
-    if (!client) {
-        console.error('Supabase client not initialized');
-        return [];
-    }
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + (days - 1));
     const startStr = startDate instanceof Date ? startDate.toISOString().split('T')[0] : startDate;
     const endStr = endDate.toISOString().split('T')[0];
 
-    const { data, error } = await client
-        .from('calendar_by_date')
-        .select('*')
-        .gte('date', startStr)
-        .lte('date', endStr);
-
-    if (error) {
-        console.error('Error fetching calendar events:', error);
-        return [];
+    let dbEvents = [];
+    if (client) {
+        const { data, error } = await client
+            .from('calendar_by_date')
+            .select('*')
+            .gte('date', startStr)
+            .lte('date', endStr);
+        if (!error) dbEvents = data || [];
     }
-    return data || [];
+
+    const hardcodedEvents = getCalendarEvents().filter(e => e.date >= startStr && e.date <= endStr);
+    
+    // Merge events, prioritizing DB events if there's a title/time collision? 
+    // For now, just combine them.
+    return [...dbEvents, ...hardcodedEvents];
+}
+
+function getCalendarEvents() {
+    return [
+        { date: '2026-01-26', time: '17:30', title: 'Chapter 500 Monthly', duration: 120 },
+        { date: '2026-01-26', time: '19:00', title: 'LA Fed', duration: 60 },
+        { date: '2026-01-27', time: '14:00', title: 'LA 500 Negotiations Prep', duration: 90 },
+        { date: '2026-01-28', time: '12:30', title: 'CSEA Reopener Negotiations', duration: 240 },
+        { date: '2026-02-06', time: '09:30', title: 'CSEA Reopener Negotiations', duration: 420 }
+    ];
 }
 
 // Notes Logic
@@ -635,7 +750,12 @@ async function updateFinancialBill(id, field, value) {
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
+    const today = new Date().toISOString().split('T')[0];
+    
     if (dateParam) {
         updateNavigationLinks(dateParam);
+    } else {
+        // If no date, update links with today's date
+        updateNavigationLinks(today);
     }
 });

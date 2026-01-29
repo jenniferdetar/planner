@@ -282,7 +282,14 @@
             });
 
             // Fetch Bills
-            const bills = await fetchFinancialBills();
+            const billData = await fetchFinancialBills();
+            
+            // Merge DB bills with defaults
+            const billMap = new Map();
+            DEFAULT_BILLS.forEach(b => billMap.set(b.item, b));
+            billData.forEach(b => billMap.set(b.item, b));
+            const bills = [...billMap.values()].sort((a, b) => a.id - b.id);
+
             accounts = [
                 "Currently in Checking",
                 "Jennifer's Check",
