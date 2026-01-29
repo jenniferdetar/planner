@@ -16,10 +16,10 @@
         .left-page, .right-page { flex: 1; background: var(--paper-color); padding: 25px; overflow-y: auto; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.05); }
         .left-page { border-radius: 5px 0 0 5px; border-right: 1px solid #ddd; }
         .right-page { border-radius: 0 5px 5px 0; border-left: 1px solid #ddd; }
-        .tabs-container { position: absolute; right: -45px; top: 50px; display: flex; flex-direction: column; gap: 5px; z-index: 100; }
-        .tab { width: 80px; padding: 12px 10px; background: #eee; color: #555; font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 0 8px 8px 0; cursor: pointer; transition: all 0.2s; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); border: 1px solid #ccc; border-left: none; writing-mode: vertical-rl; text-orientation: mixed; }
+        .tabs-container { position: absolute; right: -85px; top: 50px; display: flex; flex-direction: column; gap: 5px; z-index: 100; }
+        .tab { width: 120px; padding: 15px 10px; background: #eee; color: #555; font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 0 8px 8px 0; cursor: pointer; transition: all 0.2s; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); border: 1px solid #ccc; border-left: none; text-align: center; }
         .tab:hover { padding-left: 15px; background: #f5f5f5; }
-        .tab.active { background: #fff; color: var(--binder-leather); padding-left: 20px; width: 90px; border-color: var(--binder-leather); }
+        .tab.active { background: #fff; color: var(--binder-leather); padding-left: 20px; width: 130px; border-color: var(--binder-leather); box-shadow: -2px 2px 10px rgba(0,0,0,0.1); }
         .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #4a3427; margin-bottom: 5px; border-bottom: 2px solid #4a3427; padding-bottom: 5px; text-align: center; }
         .page-meta { font-size: 8pt; color: #888; text-align: center; margin-bottom: 15px; font-style: italic; }
         .handwriting, textarea, .editable-cell, .slot-content, .editable-area { font-family: 'Coming Soon', cursive; font-size: 1.1rem; color: #2c3e50; }
@@ -30,7 +30,7 @@
         .special-table th { background: #f8f9fa; font-weight: 700; position: sticky; top: 0; z-index: 10; font-size: 9pt; text-transform: uppercase; }
         .special-table .sticky-col { position: sticky; left: 0; background: #fff; z-index: 5; border-right: 2px solid #eee; }
         .text-left { text-align: left !important; }
-        .daily-columns { display: grid; gap: 0; border: 1px solid #eee; border-radius: 5px; overflow: hidden; }
+        .daily-columns { display: grid; gap: 0; border: 1px solid #eee; border-radius: 5px; overflow: hidden; margin-top: 10px; }
         .day-col { border-right: 1px solid #eee; display: flex; flex-direction: column; background: #fff; }
         .day-header { text-align: center; padding: 5px; font-weight: 700; font-size: 8pt; color: #fff; text-transform: uppercase; }
         .sun-header { background: #f59e9e; } .mon-header { background: #ffca38; } .tue-header { background: #a2d9d9; }
@@ -41,9 +41,15 @@
         .check-box.checked { background: #4a3427; position: relative; }
         .check-box.checked::after { content: '✓'; color: #fff; font-size: 10px; position: absolute; top: -1px; left: 2px; }
         .slot-content { flex-grow: 1; outline: none; min-height: 100%; display: flex; align-items: center; padding-left: 2px; }
-        .event-pill { font-size: 8pt; padding: 2px 4px; border-radius: 4px; margin-bottom: 1px; display: block; width: 100%; }
+        .event-pill { font-size: 8pt; padding: 2px 4px; border-radius: 4px; margin-bottom: 1px; display: block; width: 100%; color: white; font-weight: bold; }
+        .event-pill.csea { background: #003366; }
+        .event-pill.la-fed { background: #CC0000; }
         .logout-btn { position: absolute; bottom: 20px; left: 20px; font-size: 8pt; color: #fff; cursor: pointer; opacity: 0.6; z-index: 100; }
         .logout-btn:hover { opacity: 1; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); border: 1px solid #eee; margin-top: 10px; }
+        .calendar-header { background: #f8f9fa; padding: 5px; font-weight: 700; font-size: 8pt; text-align: center; border: 0.5px solid #eee; }
+        .calendar-day { min-height: 60px; padding: 5px; border: 0.5px solid #eee; background: #fff; }
+        .event-link { font-size: 7pt; padding: 2px; margin-bottom: 2px; border-radius: 3px; background: #e3f2fd; color: #1976d2; }
     </style>
 </head>
 <body>
@@ -86,6 +92,7 @@
         const monthNames = ['July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'];
 
         async function refreshGlobalData() {
+            if (typeof fetchCseaMembers !== 'function') return;
             const [empData, billData] = await Promise.all([ fetchCseaMembers(), fetchFinancialBills() ]);
             const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
             empData.forEach(m => { const name = m.full_name || m.name; if (name) nameSet.add(toTitleCase(name)); });
@@ -204,6 +211,17 @@
             container.appendChild(dayCol);
         }
 
+        function getEventForSlot(events, slot, dayIndex) {
+            const [h, m] = slot.split(':').map(Number);
+            const slotMinutes = h * 60 + m;
+            const event = events.find(e => {
+                const [eh, em] = e.time.split(':').map(Number);
+                const eventStart = eh * 60 + em;
+                return slotMinutes >= eventStart && slotMinutes < eventStart + (e.duration || 30);
+            });
+            return event ? event.title : null;
+        }
+
         async function renderCalendar(container) {
             const month = displayDate.getMonth(); const year = displayDate.getFullYear();
             const firstDay = new Date(year, month, 1); const lastDay = new Date(year, month + 1, 0);
@@ -215,7 +233,7 @@
         }
 
         function renderPlannerLinks(container) {
-            container.innerHTML = `<div class="page-title">PLANNER DIRECTORY</div><div class="page-meta">\${displayDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div><div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;"><div class="tab home active" style="width: 100%; border-radius: 8px; padding: 25px; border: 1px solid #ccc; cursor: pointer; height: auto; display: block; text-align: center; writing-mode: horizontal-tb;" onclick="renderWorkPlannerView()">💼 OPEN WORK PLANNER</div><div class="tab active" style="width: 100%; border-radius: 8px; padding: 25px; border: 1px solid #ccc; cursor: pointer; height: auto; display: block; text-align: center; writing-mode: horizontal-tb;" onclick="renderPersonalPlannerView()">👤 OPEN PERSONAL PLANNER</div><div class="handwriting" style="margin-top: 40px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">"Success is the sum of small efforts, repeated day in and day out."</div></div>`;
+            container.innerHTML = `<div class="page-title">PLANNER DIRECTORY</div><div class="page-meta">\${displayDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div><div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;"><div class="tab home active" style="width: 100%; border-radius: 8px; padding: 25px; border: 1px solid #ccc; cursor: pointer; height: auto; display: block; text-align: center;" onclick="renderWorkPlannerView()">💼 OPEN WORK PLANNER</div><div class="tab active" style="width: 100%; border-radius: 8px; padding: 25px; border: 1px solid #ccc; cursor: pointer; height: auto; display: block; text-align: center;" onclick="renderPersonalPlannerView()">👤 OPEN PERSONAL PLANNER</div><div class="handwriting" style="margin-top: 40px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">"Success is the sum of small efforts, repeated day in and day out."</div></div>`;
         }
 
         async function renderNotes(container) {
@@ -232,34 +250,28 @@
                 const cols = container.querySelector('#personal-cols-left');
                 for (let i = 0; i < 3; i++) renderPersonalDay(cols, i, displayDate, plannerData, dayNames, dayClasses);
             } else {
-                container.innerHTML = `<div class="page-title">PERSONAL PLANNER - WED-SAT</div><div class="enjoy-banner" style="margin-bottom: 15px;">🏠 ❤ ENJOY YOUR FAMILY ❤ 🏠</div><div id="personal-cols-right" class="daily-columns" style="grid-template-columns: repeat(4, 1fr);"></div>`;
+                container.innerHTML = `<div class="page-title">PERSONAL PLANNER - WED-SAT</div><div class="enjoy-banner" style="margin-bottom: 15px; text-align:center; font-weight:bold; color:#4a3427;">🏠 ❤ ENJOY YOUR FAMILY ❤ 🏠</div><div id="personal-cols-right" class="daily-columns" style="grid-template-columns: repeat(4, 1fr);"></div>`;
                 const cols = container.querySelector('#personal-cols-right');
                 for (let i = 3; i < 7; i++) renderPersonalDay(cols, i, displayDate, plannerData, dayNames, dayClasses);
             }
             container.querySelectorAll('.planner-edit').forEach(el => { el.oninput = (e) => handlePlannerInput(e.target); });
-            container.querySelectorAll('.mini-day-box').forEach(box => { const { field, date } = box.dataset; if (plannerData.some(d => d.date === date && d.field_id === field && d.content === 'true')) box.classList.add('checked'); });
         }
 
         function renderPersonalDay(container, i, startDate, plannerData, dayNames, dayClasses) {
             const d = new Date(startDate); d.setDate(d.getDate() + i); const ds = d.toISOString().split('T')[0];
             const col = document.createElement('div'); col.className = 'day-col';
-            col.innerHTML = `<div class="day-header \${dayClasses[i]}">\${dayNames[i].substring(0,3).toUpperCase()} \${formatDateMMM(ds).toUpperCase()}</div><div style="padding: 5px;"><div class="section-title" style="font-size: 7pt;">Focus</div><div class="planner-edit handwriting" contenteditable="true" data-field="focus" data-date="\${ds}" style="min-height: 40px; border-bottom: 1px solid #eee; margin-bottom: 5px;">\${plannerData.find(d => d.date === ds && d.field_id === 'focus')?.content || ''}</div><div class="section-title" style="font-size: 7pt;">Notes</div><div class="planner-edit handwriting" contenteditable="true" data-field="notes" data-date="\${ds}" style="min-height: 250px; font-size: 0.9rem;">\${plannerData.find(d => d.date === ds && d.field_id === 'notes')?.content || ''}</div></div>`;
+            col.innerHTML = `<div class="day-header \${dayClasses[i]}-header">\${dayNames[i].substring(0,3).toUpperCase()} \${formatDateMMM(ds).toUpperCase()}</div><div style="padding: 5px;"><div style="font-size: 7pt; font-weight:bold;">Focus</div><div class="planner-edit handwriting" contenteditable="true" data-field="focus" data-date="\${ds}" style="min-height: 40px; border-bottom: 1px solid #eee; margin-bottom: 5px;">\${plannerData.find(d => d.date === ds && d.field_id === 'focus')?.content || ''}</div><div style="font-size: 7pt; font-weight:bold;">Notes</div><div class="planner-edit handwriting" contenteditable="true" data-field="notes" data-date="\${ds}" style="min-height: 250px; font-size: 0.9rem;">\${plannerData.find(d => d.date === ds && d.field_id === 'notes')?.content || ''}</div></div>`;
             container.appendChild(col);
         }
 
         function renderHabitSection(title, habits) {
-            return `<div class="habit-section" style="padding: 5px; border: 1px solid #eee; border-radius: 5px;"><div class="section-title" style="font-size: 8pt; margin-bottom: 5px;">\${title}</div>\${habits.map(h => \`<div class="habit-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;"><span style="font-size: 7pt; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60px;">\${h}</span><div style="display: flex; gap: 2px;">\${[0,1,2,3,4,5,6].map(d => { const date = new Date(displayDate); date.setDate(date.getDate() - date.getDay() + d); const ds = date.toISOString().split('T')[0]; return \`<div class="mini-day-box" data-field="habit-\${h}" data-date="\${ds}" onclick="toggleHabitCheck(this)"></div>\`; }).join('')}</div></div>\`).join('')}</div>`;
+            return `<div style="padding: 5px; border: 1px solid #eee; border-radius: 5px;"><div style="font-size: 8pt; margin-bottom: 5px; font-weight:bold; text-align:center;">\${title}</div>\${habits.map(h => \`<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;"><span style="font-size: 7pt; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60px;">\${h}</span><div style="display: flex; gap: 2px;">\${[0,1,2,3,4,5,6].map(d => { const date = new Date(displayDate); date.setDate(date.getDate() - date.getDay() + d); const ds = date.toISOString().split('T')[0]; return \`<div class="mini-day-box" style="width:8px; height:8px; border:1px solid #ccc; cursor:pointer;" data-field="habit-\${h}" data-date="\${ds}" onclick="toggleHabitCheck(this)"></div>\`; }).join('')}</div></div>\`).join('')}</div>`;
         }
 
         async function renderCseaLog(container) {
-            container.innerHTML = `<div class="page-title">MEMBER INTERACTION LOG</div><div class="special-table-container"><table class="log-table"><thead><tr><th>Date</th><th>Member</th><th>Location</th><th>Discussion</th><th>Outcome</th><th></th></tr></thead><tbody id="interaction-log-body"></tbody><tfoot><tr class="log-input-row"><td><input type="date" id="log-date" class="log-input" style="font-size: 8pt;"></td><td><input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list" style="font-size: 8pt;"></td><td><input type="text" id="log-location" class="log-input" placeholder="Loc" list="schools-list" style="font-size: 8pt;"></td><td><input type="text" id="log-discussion" class="log-input" placeholder="Issue" list="issues-list" style="font-size: 8pt;"></td><td><input type="text" id="log-outcome" class="log-input" placeholder="Result" style="font-size: 8pt;"></td><td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td></tr></tfoot></table></div><datalist id="members-list"></datalist><datalist id="schools-list"></datalist><datalist id="issues-list"></datalist>`;
+            container.innerHTML = `<div class="page-title">MEMBER INTERACTION LOG</div><div class="special-table-container"><table class="special-table"><thead><tr><th>Date</th><th>Member</th><th>Location</th><th>Discussion</th><th>Outcome</th><th></th></tr></thead><tbody id="interaction-log-body"></tbody><tfoot><tr><td><input type="date" id="log-date" style="width:100%; font-size:8pt;"></td><td><input type="text" id="log-member" placeholder="Name" style="width:100%; font-size:8pt;"></td><td><input type="text" id="log-location" placeholder="Loc" style="width:100%; font-size:8pt;"></td><td><input type="text" id="log-discussion" placeholder="Issue" style="width:100%; font-size:8pt;"></td><td><input type="text" id="log-outcome" placeholder="Result" style="width:100%; font-size:8pt;"></td><td><button onclick="handleAddInteraction()" style="font-size:8pt;">Add</button></td></tr></tfoot></table></div>`;
             const interactions = await fetchInteractions('CSEA'); const tbody = container.querySelector('#interaction-log-body');
-            interactions.forEach(inter => { const tr = document.createElement('tr'); tr.innerHTML = \`<td style="font-size: 8pt;">\${formatDateMMM(inter.date_spoke)}</td><td style="font-size: 8pt;">\${inter.member_name}</td><td style="font-size: 8pt;">\${inter.work_location}</td><td style="font-size: 8pt;" class="text-wrap-clamp">\${inter.discussion}</td><td style="font-size: 8pt;" class="text-wrap-clamp">\${inter.outcome || ''}</td><td><span class="delete-btn" onclick="handleDeleteInteraction(\${inter.id})">Del</span></td>\`; tbody.appendChild(tr); });
-            const [members, issues, schools] = await Promise.all([ fetchCseaMembers(), fetchCseaIssues(), fetchSchoolDirectory() ]);
-            container.querySelector('#members-list').innerHTML = members.map(m => \`<option value="\${m.name}">\`).join('');
-            container.querySelector('#issues-list').innerHTML = issues.map(i => \`<option value="\${i.issue_name}">\`).join('');
-            container.querySelector('#schools-list').innerHTML = schools.map(s => \`<option value="\${s.site_name}">\`).join('');
-            container.querySelector('#log-member').oninput = (e) => { const member = members.find(m => m.name === e.target.value); if (member) container.querySelector('#log-location').value = member.work_location; };
+            interactions.forEach(inter => { const tr = document.createElement('tr'); tr.innerHTML = \`<td style="font-size: 8pt;">\${formatDateMMM(inter.date_spoke)}</td><td style="font-size: 8pt;">\${inter.member_name}</td><td style="font-size: 8pt;">\${inter.work_location}</td><td style="font-size: 8pt;" class="text-wrap-clamp">\${inter.discussion}</td><td style="font-size: 8pt;" class="text-wrap-clamp">\${inter.outcome || ''}</td><td><button onclick="handleDeleteInteraction(\${inter.id})" style="font-size:7pt;">X</button></td>\`; tbody.appendChild(tr); });
         }
 
         async function handleAddInteraction() {
@@ -270,7 +282,7 @@
 
         async function handleDeleteInteraction(id) { if (confirm('Delete?')) { if (await deleteInteraction(id)) switchTab('CSEA'); } }
 
-        function toggleHabitCheck(el) { el.classList.toggle('checked'); const { field, date } = el.dataset; savePlannerData(displayDate.toISOString().split('T')[0], field, el.classList.contains('checked') ? 'true' : 'false'); }
+        function toggleHabitCheck(el) { el.classList.toggle('checked'); if (el.classList.contains('checked')) el.style.background = '#4a3427'; else el.style.background = 'transparent'; const { field, date } = el.dataset; savePlannerData(date, field, el.classList.contains('checked') ? 'true' : 'false'); }
 
         async function handleAttendanceSave(select) { await savePlannerData(\`icaap-attendance-data-\${fiscalYear}\`, select.dataset.field, select.value); }
 
@@ -285,11 +297,11 @@
 
         async function togglePlannerCheck(el, date, fieldId) { el.classList.toggle('checked'); await savePlannerData(date, fieldId, el.classList.contains('checked') ? 'true' : 'false'); }
 
-        function renderIcaapLinks(container) { container.innerHTML = \`<div class="page-title">ICAAP LOGS</div><div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;"><button class="save-btn" style="width: 100%; text-align: left; padding: 15px;" onclick="renderIcaapAttendanceView()">👤 Attendance Tracking</button><button class="save-btn" style="width: 100%; text-align: left; padding: 15px;" onclick="renderIcaapTrackingView()">📈 iCAAP Tracking Log</button></div>\`; }
-        function renderFinanceLinks(container) { container.innerHTML = \`<div class="page-title">FINANCIAL TOOLS</div><div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;"><button class="save-btn" style="width: 100%; text-align: left; padding: 15px;" onclick="renderCheckBreakdownView()">📊 Check Breakdown</button><button class="save-btn" style="width: 100%; text-align: left; padding: 15px;" onclick="renderFinancialReviewView()">💸 Financial Review</button></div>\`; }
+        function renderIcaapLinks(container) { container.innerHTML = \`<div class="page-title">ICAAP LOGS</div><div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;"><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapAttendanceView()">👤 Attendance Tracking</button><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapTrackingView()">📈 iCAAP Tracking Log</button></div>\`; }
+        function renderFinanceLinks(container) { container.innerHTML = \`<div class="page-title">FINANCIAL TOOLS</div><div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;"><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderCheckBreakdownView()">📊 Check Breakdown</button><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderFinancialReviewView()">💸 Financial Review</button></div>\`; }
 
         async function renderBudget(container) {
-            container.innerHTML = `<div class="page-title">BUDGET PLANNING ${currentYear}</div><div class="special-table-container"><table class="special-table bill-table"><thead><tr><th>Cat</th><th>Item</th><th>Amt</th>\${['J','F','M','A','M','J','J','A','S','O','N','D'].map(m => \`<th>\${m}</th>\`).join('')}</tr></thead><tbody id="budget-body"></tbody></table></div>`;
+            container.innerHTML = `<div class="page-title">BUDGET PLANNING ${currentYear}</div><div class="special-table-container"><table class="special-table"><thead><tr><th>Cat</th><th>Item</th><th>Amt</th>\${['J','F','M','A','M','J','J','A','S','O','N','D'].map(m => \`<th>\${m}</th>\`).join('')}</tr></thead><tbody id="budget-body"></tbody></table></div>`;
             const tbody = container.querySelector('#budget-body');
             financialBills.forEach(bill => { const tr = document.createElement('tr'); tr.innerHTML = \`<td>\${bill.cat}</td><td class="text-left">\${bill.item}</td><td>\${bill.amt}</td>\${Array(12).fill(0).map((_, i) => \`<td><div class="check-box" data-field="chk-\${bill.id}-\${i+1}" onclick="toggleBudgetCheck(this)"></div></td>\`).join('')}\`; tbody.appendChild(tr); });
             const data = await fetchPlannerData(\`\${currentYear}-financial\`, 366);
@@ -301,7 +313,7 @@
         async function loadEntries(container) {
             const dateStr = displayDate.toISOString().split('T')[0];
             const entries = await fetchEntries(currentCategory, dateStr);
-            container.innerHTML = entries.map(e => \`<div class="note-entry handwriting" style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">\${e.content}</div>\`).join('');
+            container.innerHTML = entries.map(e => \`<div class="handwriting" style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">\${e.content}</div>\`).join('');
         }
 
         async function handleAddNote() {
@@ -314,7 +326,7 @@
         async function renderIcaapAttendance(container) {
             const weekStart = new Date(displayDate); weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
             const weekdays = []; for (let i = 0; i < 5; i++) { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); }
-            container.innerHTML = \`<div class="page-title">ATTENDANCE</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button class="save-btn" onclick="changeAttendanceWeek(-1)">Prev</button><button class="save-btn" onclick="changeAttendanceWeek(1)">Next</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>\${weekdays.map(d => \`<th>\${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>\${formatDateMMM(d.toISOString().split('T')[0])}</th>\`).join('')}</tr></thead><tbody id="attn-body"></tbody></table></div>\`;
+            container.innerHTML = \`<div class="page-title">ATTENDANCE</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button onclick="changeAttendanceWeek(-1)">Prev</button><button onclick="changeAttendanceWeek(1)">Next</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>\${weekdays.map(d => \`<th>\${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>\${formatDateMMM(d.toISOString().split('T')[0])}</th>\`).join('')}</tr></thead><tbody id="attn-body"></tbody></table></div>\`;
             const tbody = container.querySelector('#attn-body');
             ["Bonnie Ratner", "Eberardo Rodriguez", "Maikai Finnell", "Patricia Pernin", "Rene Gaudet", "Steve Maccarone", "Zina Dixon"].forEach(emp => {
                 const tr = document.createElement('tr'); tr.innerHTML = \`<td class="sticky-col text-left">\${emp}</td>\${weekdays.map(d => \`<td><select class="attendance-select" data-field="attn-\${emp}-\${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)">\${attnOptions.map(o => \`<option value="\${o}">\${o}</option>\`).join('')}</select></td>\`).join('')}\`; tbody.appendChild(tr);
@@ -334,12 +346,13 @@
         }
 
         async function renderCheckBreakdown(container) {
-            container.innerHTML = \`<div class="page-title">CHECK BREAKDOWN</div><div class="special-table-container"><table class="special-table"><thead><tr id="check-header"><th class="sticky-col">Account</th></tr></thead><tbody id="check-body"><tr><td class="sticky-col text-left">Checking</td></tr><tr><td class="sticky-col text-left">Check</td></tr><tr><td class="sticky-col text-left">Tithe</td></tr><tr><td class="sticky-col text-left">Left Over</td></tr></tbody></table></div>\`;
+            container.innerHTML = \`<div class="page-title">CHECK BREAKDOWN</div><div class="special-table-container"><table class="special-table"><thead><tr id="check-header"><th class="sticky-col">Account</th></tr></thead><tbody id="check-body"><tr><td class="sticky-col text-left">Checking</td></tr><tr><td class="sticky-col text-left">Jennifer Check</td></tr><tr><td class="sticky-col text-left">Tithe</td></tr><tr><td class="sticky-col text-left">Left Over</td></tr></tbody></table></div>\`;
             const header = container.querySelector('#check-header'); const tbody = container.querySelector('#check-body');
-            for (let i = 0; i < 24; i++) {
-                const th = document.createElement('th'); th.innerText = \`Pay \${i+1}\`; header.appendChild(th);
+            const payDates = ['1/5/2026', '1/20/2026', '2/5/2026', '2/20/2026', '3/5/2026', '3/20/2026', '4/5/2026', '4/20/2026', '5/5/2026', '5/20/2026', '6/5/2026', '6/20/2026'];
+            payDates.forEach((pd, i) => {
+                const th = document.createElement('th'); th.innerText = pd; header.appendChild(th);
                 tbody.querySelectorAll('tr').forEach((tr, ri) => { const td = document.createElement('td'); td.contentEditable = true; td.className = 'editable-cell'; td.dataset.field = \`chk-\${i}-\${ri}\`; td.oninput = (e) => handleModuleEdit(e.target, \`check-breakdown-\${currentYear}\`); tr.appendChild(td); });
-            }
+            });
             const data = await fetchPlannerData(\`check-breakdown-\${currentYear}\`, 100);
             data.forEach(item => { const el = container.querySelector(\`[data-field="\${item.field_id}"]\`); if (el) el.innerText = item.content; });
         }
@@ -347,7 +360,7 @@
         async function handleModuleEdit(el, pk) { const fieldId = el.dataset.field || el.id; const content = el.innerText || el.value; clearTimeout(saveTimeout); saveTimeout = setTimeout(() => { savePlannerData(pk, fieldId, content); }, 1000); }
 
         async function renderFinancialReview(container) {
-            container.innerHTML = \`<div class="page-title">FINANCIAL REVIEW</div><div class="review-grid">\${['Goals', 'Expenses', 'Savings'].map(t => \`<div class="review-box"><div class="box-title">\${t}</div><textarea class="handwriting module-edit" data-field="fin-\${t.toLowerCase()}" oninput="handleModuleEdit(this, 'fin-review-\${currentYear}')" style="width: 100%; min-height: 100px; border: none; background: transparent;"></textarea></div>\`).join('')}</div>\`;
+            container.innerHTML = \`<div class="page-title">FINANCIAL REVIEW</div><div style="display:grid; grid-template-columns:1fr; gap:10px;">\${['Goals', 'Expenses', 'Savings'].map(t => \`<div style="border:1px solid #eee; padding:10px;"><div style="font-weight:bold; font-size:9pt; margin-bottom:5px;">\${t}</div><textarea class="handwriting" data-field="fin-\${t.toLowerCase()}" oninput="handleModuleEdit(this, 'fin-review-\${currentYear}')" style="width: 100%; min-height: 80px; border: none; background: transparent; resize:none;"></textarea></div>\`).join('')}</div>\`;
             const data = await fetchPlannerData(\`fin-review-\${currentYear}\`, 10);
             data.forEach(item => { const el = container.querySelector(\`[data-field="\${item.field_id}"]\`); if (el) el.value = item.content; });
         }
