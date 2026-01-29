@@ -612,9 +612,12 @@
             }
         }
         // Initialize
-        loadEntries();
-        loadInteractions();
-        populateDatalists();
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEntries();
+            loadInteractions();
+            populateDatalists();
+            updateNavigationLinks(dateParam || new Date());
+        });
     </script>
 </body>
 </html>

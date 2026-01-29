@@ -324,81 +324,8 @@
         <div id="calendar-grid" class="calendar-grid">
             <!-- Calendar will be injected here -->
         </div>
-
-        <div class="planner-sections">
-            <div class="planner-container work-planner-mini">
-                <h2 class="section-subtitle">Work Planner - This Week</h2>
-                <div id="work-planner-content" class="mini-planner-grid">
-                    <!-- Work planner summary injected here -->
-                </div>
-            </div>
-            
-            <div class="planner-container personal-planner-mini">
-                <h2 class="section-subtitle">Personal Planner - Today</h2>
-                <div id="personal-planner-content" class="mini-planner-grid">
-                    <!-- Personal planner summary injected here -->
-                </div>
-            </div>
-        </div>
         </div>
     </div>
-
-    <style>
-        .planner-sections {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px dashed #eee;
-        }
-
-        .section-subtitle {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1rem;
-            color: var(--header-blue);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-
-        .mini-planner-grid {
-            font-size: 0.8rem;
-            line-height: 1.4;
-        }
-
-        .planner-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 6px;
-            padding: 4px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-
-        .planner-item:hover {
-            background: #f9f9f9;
-        }
-
-        .planner-time {
-            color: #888;
-            font-size: 0.7rem;
-            min-width: 45px;
-            font-weight: 600;
-        }
-
-        .planner-text {
-            flex-grow: 1;
-        }
-
-        .planner-check {
-            color: #f59e9e;
-            font-weight: bold;
-        }
-    </style>
 
     <script>
         function parseLocalDate(dateStr) {
@@ -409,7 +336,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentDate = dateParam ? parseLocalDate(dateParam) : parseLocalDate('2025-12-28');
+        let currentDate = dateParam ? parseLocalDate(dateParam) : new Date();
         
         // Ensure currentDate is first of month for display purposes
         currentDate.setDate(1);
@@ -492,124 +419,8 @@
                     container.appendChild(pill);
                 }
             });
-
-            // Render mini planners
-            const today = new Date();
-            const focusDate = (today.getFullYear() === year && today.getMonth() === month) ? today : new Date(year, month, 1);
-            await Promise.all([
-                renderWorkPlannerMini(focusDate),
-                renderPersonalPlannerMini(focusDate)
-            ]);
         }
 
-        async function renderWorkPlannerMini(startDate) {
-            const container = document.getElementById('work-planner-content');
-            container.innerHTML = 'Loading...';
-
-            // Find start of week (Sunday)
-            const sun = new Date(startDate);
-            sun.setDate(sun.getDate() - sun.getDay());
-            const sunStr = sun.toISOString().split('T')[0];
-
-            const plannerData = await fetchPlannerData(sun, 7);
-            const events = await fetchCalendarEvents(sun, 7);
-
-            if (!plannerData.length && !events.length) {
-                container.innerHTML = 'No work plans for this week.';
-                return;
-            }
-
-            container.innerHTML = '';
-            
-            // Show top priorities and some key slots
-            const priorities = plannerData.filter(d => d.field_id.startsWith('priority-'));
-            priorities.forEach(p => {
-                if (!p.content.trim()) return;
-                const div = document.createElement('div');
-                div.className = 'planner-item';
-                div.innerHTML = `<span class="planner-check">★</span> <span class="planner-text"><strong>${p.field_id.replace('priority-', 'P')}:</strong> ${p.content}</span>`;
-                container.appendChild(div);
-            });
-
-            // Show today's specific slots if any
-            const todayStr = startDate.toISOString().split('T')[0];
-            const todayPlans = plannerData.filter(d => d.date === todayStr && d.field_id.startsWith('slot-') && d.content.trim());
-            
-            if (todayPlans.length) {
-                const header = document.createElement('div');
-                header.style.fontWeight = 'bold';
-                header.style.marginTop = '10px';
-                header.innerText = `Today's Slots (${formatDateMMM(todayStr)}):`;
-                container.appendChild(header);
-
-                todayPlans.forEach(p => {
-                    const time = p.field_id.replace('slot-', '');
-                    const div = document.createElement('div');
-                    div.className = 'planner-item';
-                    div.innerHTML = `<span class="planner-time">${formatTime(time, true)}</span> <span class="planner-text">${p.content}</span>`;
-                    container.appendChild(div);
-                });
-            }
-        }
-
-        async function renderPersonalPlannerMini(date) {
-            const container = document.getElementById('personal-planner-content');
-            container.innerHTML = 'Loading...';
-
-            const dateStr = date.toISOString().split('T')[0];
-            const [events, plannerData] = await Promise.all([
-                fetchCalendarEvents(date, 1),
-                fetchPlannerData(date, 1)
-            ]);
-
-            container.innerHTML = '';
-
-            const focus = plannerData.find(d => d.field_id === 'focus');
-            if (focus && focus.content.trim()) {
-                const div = document.createElement('div');
-                div.className = 'planner-item';
-                div.innerHTML = `<span class="planner-check">🎯</span> <span class="planner-text"><strong>Focus:</strong> ${focus.content}</span>`;
-                container.appendChild(div);
-            }
-
-            const categories = [
-                { id: 'home', icon: '🏠' },
-                { id: 'self', icon: '👤' },
-                { id: 'shop', icon: '🛒' },
-                { id: 'meal', icon: '🍽️' }
-            ];
-
-            categories.forEach(cat => {
-                const data = plannerData.find(d => d.field_id === cat.id);
-                if (data && data.content.trim()) {
-                    const div = document.createElement('div');
-                    div.className = 'planner-item';
-                    div.innerHTML = `<span class="planner-check">${cat.icon}</span> <span class="planner-text">${data.content}</span>`;
-                    container.appendChild(div);
-                }
-            });
-
-            const tasks = plannerData.filter(d => d.field_id.startsWith('task-') && !d.field_id.startsWith('check-') && d.content.trim());
-            if (tasks.length) {
-                const header = document.createElement('div');
-                header.style.fontWeight = 'bold';
-                header.style.marginTop = '10px';
-                header.innerText = 'Tasks:';
-                container.appendChild(header);
-
-                tasks.forEach(t => {
-                    const isChecked = plannerData.some(d => d.field_id === `check-${t.field_id}` && d.content === 'true');
-                    const div = document.createElement('div');
-                    div.className = 'planner-item';
-                    div.innerHTML = `<span class="planner-check">${isChecked ? '✓' : '☐'}</span> <span class="planner-text">${t.content}</span>`;
-                    container.appendChild(div);
-                });
-            }
-
-            if (container.innerHTML === '') {
-                container.innerHTML = `No personal plans for ${formatDateMMM(dateStr)}.`;
-            }
-        }
         function changeMonth(delta) {
             currentDate.setMonth(currentDate.getMonth() + delta);
             const dateStr = currentDate.toISOString().split('T')[0];

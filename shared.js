@@ -581,7 +581,7 @@ function updateNavigationLinks(date) {
         'personal-planner.html': 'Personal-Planner'
     };
 
-    document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill, a.tracking-link').forEach(link => {
+    document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill, a.tracking-link, a.section-icon').forEach(link => {
         const href = link.getAttribute('href');
         if (href) {
             let base = href.split('?')[0];
@@ -599,6 +599,36 @@ function updateNavigationLinks(date) {
             }
         }
     });
+}
+
+async function fetchFinancialBills() {
+    const client = getSupabase();
+    if (!client) return [];
+    const { data, error } = await client.from('financial_bills').select('*').order('id');
+    if (error) {
+        console.error('Error fetching financial bills:', error);
+        return [];
+    }
+    return data || [];
+}
+
+async function updateFinancialBill(id, field, value) {
+    const client = getSupabase();
+    if (!client) return false;
+    
+    const updateData = {};
+    updateData[field] = value;
+    
+    const { error } = await client
+        .from('financial_bills')
+        .update(updateData)
+        .eq('id', id);
+        
+    if (error) {
+        console.error('Error updating financial bill:', error);
+        return false;
+    }
+    return true;
 }
 
 // Global initialization if needed

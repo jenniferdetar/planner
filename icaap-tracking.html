@@ -577,7 +577,10 @@
                 status.innerText = success ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            updateNavigationLinks(baseDate);
+        });
     </script>
 </body>
 </html>

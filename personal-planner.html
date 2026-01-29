@@ -472,47 +472,21 @@
         }
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentStartDate = dateParam ? parseLocalDate(dateParam) : parseLocalDate('2025-12-28');
+        let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date();
         // Adjust to Sunday of the week
         const startDay = currentStartDate.getDay();
         currentStartDate.setDate(currentStartDate.getDate() - startDay);
-        const billAmounts = {
-            "Auto Maintenance": "$100.00",
-            "Mercury Auto Insurance": "$388.00",
-            "Tahoe Registration": "$15.00",
-            "Trailblazer Registration": "$28.00",
-            "DWP": "$100.00",
-            "Jeff's Credit Cards": "$500.00",
-            "Jennifer's Student Loans - Sallie Mae": "$500.00",
-            "Sallie Mae": "$500.00",
-            "Schools First Loan": "$142.00",
-            "Jennifer's Student Loans - NelNet": "$600.00",
-            "NelNet": "$600.00",
-            "Ana": "$320.00",
-            "Gas": "$600.00",
-            "Laundry": "$80.00",
-            "Groceries": "$600.00",
-            "ADT": "$53.00",
-            "Amazon - Necessities": "$100.00",
-            "Amazon": "$100.00",
-            "Hair (Expensive)": "$110.00",
-            "Orkin": "$50.00",
-            "Hair (Cheap)": "$50.00",
-            "HELOC": "$357.00",
-            "Hoa": "$520.00",
-            "Mortgage": "$2,025.00",
-            "Spectrum": "$197.00",
-            "Verizon": "$283.00",
-            "Blow": "$200.00",
-            "HSA": "$200.00",
-            "Summer Saver": "$400.00",
-            "Tahoe's Major Repairs": "$200.00",
-            "Vacation": "$125.00",
-            "Schools First Credit Card": "$100.00",
-            "Paramount+": "$12.99",
-            "Taxes": "$TBD"
-        };
+        
+        let billAmounts = {};
         let saveTimeout = null;
+
+        async function loadBillAmounts() {
+            const bills = await fetchFinancialBills();
+            billAmounts = {};
+            bills.forEach(bill => {
+                billAmounts[bill.item] = bill.amt;
+            });
+        }
         async function handleSavePlannerData(date, fieldId, content) {
             const saveStatus = document.getElementById('save-status');
             saveStatus.innerText = 'Saving...';
@@ -543,6 +517,9 @@
         async function renderSpread() {
             const container = document.getElementById('days-container');
             container.innerHTML = 'Loading...';
+            
+            await loadBillAmounts();
+
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
             const startStr = currentStartDate.toISOString().split('T')[0];

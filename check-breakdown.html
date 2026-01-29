@@ -241,47 +241,6 @@
                             </tr>
                         </thead>
                         <tbody id="sheet-body">
-                            <script>
-                                const accounts = [
-                                    "Currently in Checking",
-                                    "Jennifer's Check",
-                                    "Tithe",
-                                    "ADT",
-                                    "Amazon - Necessities",
-                                    "Auto Maintenance",
-                                    "Blow",
-                                    "Ana",
-                                    "DWP",
-                                    "Gas",
-                                    "Groceries",
-                                    "Hair (Expensive)",
-                                    "Hair (Cheap)",
-                                    "HSA",
-                                    "Jennifer's Student Loans - NelNet",
-                                    "Jennifer's Student Loans - Salli...",
-                                    "Laundry",
-                                    "Mercury Auto Insurance",
-                                    "Orkin",
-                                    "Schools First Loan",
-                                    "Spectrum",
-                                    "Summer Saver",
-                                    "Tahoe Registration",
-                                    "Trailblazer Registration",
-                                    "Verizon",
-                                    "Left Over"
-                                ];
-
-                                accounts.forEach((acc, rowIndex) => {
-                                    const isLeftOver = acc === "Left Over";
-                                    document.write(`<tr class="${isLeftOver ? 'left-over-row' : ''}">`);
-                                    document.write(`<td class="account-col">${acc}</td>`);
-                                    dates.forEach((date, colIndex) => {
-                                        const fieldId = `grid-${rowIndex}-${colIndex}`;
-                                        document.write(`<td class="data-cell" contenteditable="true" data-field="${fieldId}" data-row="${rowIndex}" data-col="${colIndex}"></td>`);
-                                    });
-                                    document.write(`</tr>`);
-                                });
-                            </script>
                         </tbody>
                     </table>
                 </div>
@@ -291,14 +250,64 @@
     <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Load Data using shared.js logic
-            // We use a year-specific key for the spreadsheet
-            const urlParamsInit = new URLSearchParams(window.location.search);
-            const dateParamInit = urlParamsInit.get('date');
-            const yearInit = dateParamInit ? new Date(dateParamInit).getFullYear() : new Date().getFullYear();
-            const PERSISTENCE_KEY = `check-breakdown-${yearInit}`;
+        let accounts = [];
+        let dates = [];
+
+        async function init() {
+            // Setup Dates
+            const urlParamsDates = new URLSearchParams(window.location.search);
+            const dateParamDates = urlParamsDates.get('date');
+            let baseDateDates = dateParamDates ? new Date(dateParamDates) : new Date();
+            if (isNaN(baseDateDates.getTime())) baseDateDates = new Date();
+            baseDateDates.setDate(1);
             
+            for (let i = 0; i < 10; i++) {
+                const d1 = new Date(baseDateDates);
+                d1.setMonth(baseDateDates.getMonth() + i);
+                d1.setDate(5);
+                dates.push(`${d1.getMonth() + 1}/${d1.getDate()}/${d1.getFullYear()}`);
+                
+                const d2 = new Date(baseDateDates);
+                d2.setMonth(baseDateDates.getMonth() + i);
+                d2.setDate(20);
+                dates.push(`${d2.getMonth() + 1}/${d2.getDate()}/${d2.getFullYear()}`);
+            }
+
+            const headerRow = document.querySelector('.header-row');
+            dates.forEach(d => {
+                const th = document.createElement('th');
+                th.innerText = d;
+                headerRow.appendChild(th);
+            });
+
+            // Fetch Bills
+            const bills = await fetchFinancialBills();
+            accounts = [
+                "Currently in Checking",
+                "Jennifer's Check",
+                "Tithe",
+                ...bills.map(b => b.item),
+                "Left Over"
+            ];
+
+            const tbody = document.getElementById('sheet-body');
+            accounts.forEach((acc, rowIndex) => {
+                const isLeftOver = acc === "Left Over";
+                const tr = document.createElement('tr');
+                if (isLeftOver) tr.className = 'left-over-row';
+                
+                let html = `<td class="account-col">${acc}</td>`;
+                dates.forEach((date, colIndex) => {
+                    const fieldId = `grid-${rowIndex}-${colIndex}`;
+                    html += `<td class="data-cell" contenteditable="true" data-field="${fieldId}" data-row="${rowIndex}" data-col="${colIndex}"></td>`;
+                });
+                tr.innerHTML = html;
+                tbody.appendChild(tr);
+            });
+
+            // Load Data
+            const yearInit = dateParamDates ? new Date(dateParamDates).getFullYear() : new Date().getFullYear();
+            const PERSISTENCE_KEY = `check-breakdown-${yearInit}`;
             const data = await fetchPlannerData(PERSISTENCE_KEY, 1);
             data.forEach(item => {
                 const el = document.querySelector(`[data-field="${item.field_id}"]`);
@@ -306,15 +315,17 @@
             });
 
             // Setup Auto-save and Calculation
+            const leftOverRowIndex = accounts.length - 1;
             document.querySelectorAll('.data-cell').forEach(cell => {
                 const rowIndex = parseInt(cell.dataset.row);
-                if (rowIndex === 25 || rowIndex === 2) {
+                // Jennifer's Check is row 1, Tithe is row 2, Left Over is last row
+                if (rowIndex === leftOverRowIndex || rowIndex === 2) {
                     cell.contentEditable = "false";
                 }
 
                 cell.addEventListener('input', () => {
                     saveWithDebounce(PERSISTENCE_KEY, cell.dataset.field, cell.innerText);
-                    if (rowIndex !== 25) {
+                    if (rowIndex !== leftOverRowIndex) {
                         calculateColumn(parseInt(cell.dataset.col));
                     }
                 });
@@ -324,7 +335,7 @@
             for (let i = 0; i < dates.length; i++) {
                 calculateColumn(i);
             }
-        });
+        }
 
         function parseAmount(text) {
             if (!text) return 0;
@@ -340,15 +351,16 @@
             let income = 0;
             let expenses = 0;
             let jennifersCheck = 0;
+            const leftOverRowIndex = accounts.length - 1;
 
-            // First pass to get Jennifer's Check
-            const checkCell = rows[1].querySelector(`[data-col="${colIndex}"]`);
+            // Row 1 is Jennifer's Check
+            const checkCell = rows[1]?.querySelector(`[data-col="${colIndex}"]`);
             if (checkCell) {
                 jennifersCheck = parseAmount(checkCell.innerText);
             }
 
-            // Calculate and set Tithe (10% rounded up)
-            const titheCell = rows[2].querySelector(`[data-col="${colIndex}"]`);
+            // Row 2 is Tithe (10% rounded up)
+            const titheCell = rows[2]?.querySelector(`[data-col="${colIndex}"]`);
             if (titheCell) {
                 const titheAmount = Math.ceil(jennifersCheck * 0.1);
                 titheCell.innerText = formatAmount(titheAmount);
@@ -358,13 +370,13 @@
                 const cell = row.querySelector(`[data-col="${colIndex}"]`);
                 if (!cell) return;
                 
-                if (rowIndex === 25) {
+                if (rowIndex === leftOverRowIndex) {
                     cell.innerText = formatAmount(income - expenses);
                 } else {
                     const val = parseAmount(cell.innerText);
                     if (rowIndex === 0 || rowIndex === 1) {
                         income += val;
-                    } else if (rowIndex >= 2 && rowIndex <= 24) {
+                    } else if (rowIndex >= 2 && rowIndex < leftOverRowIndex) {
                         expenses += val;
                     }
                 }
@@ -373,17 +385,20 @@
 
         let debounceTimer;
         function saveWithDebounce(date, field, content) {
-            document.getElementById('save-status').innerText = 'Saving...';
+            const statusEl = document.getElementById('save-status');
+            statusEl.innerText = 'Saving...';
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(async () => {
                 const success = await savePlannerData(date, field, content);
                 if (success) {
-                    document.getElementById('save-status').innerText = 'All changes saved';
+                    statusEl.innerText = 'All changes saved';
                 } else {
-                    document.getElementById('save-status').innerText = 'Error saving';
+                    statusEl.innerText = 'Error saving';
                 }
             }, 1000);
         }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

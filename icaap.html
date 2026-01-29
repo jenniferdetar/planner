@@ -366,7 +366,10 @@
             }
         }
         // Initialize
-        loadEntries();
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEntries();
+            updateNavigationLinks(displayDate);
+        });
     </script>
 </body>
 </html>
