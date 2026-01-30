@@ -146,13 +146,14 @@
         .day-header.not { background-color: #605e5c; }
 
         .calendar-day {
-            min-height: 140px;
+            height: 140px;
             padding: 8px;
             position: relative;
             background-color: var(--content-bg);
             display: flex;
             flex-direction: column;
             gap: 4px;
+            overflow: hidden;
         }
 
         .day-number {
