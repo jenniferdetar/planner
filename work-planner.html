@@ -625,12 +625,25 @@
                 container.appendChild(dayCol);
             }
         }
-        function changeWeek(delta) {
-            currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
-            const dateStr = currentStartDate.toISOString().split('T')[0];
-            const newUrl = window.location.pathname + '?date=' + dateStr;
-            window.history.pushState({ date: dateStr }, '', newUrl);
-            renderPlanner();
+        async function changeWeek(delta) {
+            const container = document.querySelector('.notebook-main');
+            if (container) {
+                container.classList.remove('flip-in');
+                container.classList.add('flip-out');
+                await new Promise(r => setTimeout(r, 600));
+                
+                currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
+                const dateStr = currentStartDate.toISOString().split('T')[0];
+                const newUrl = window.location.pathname + '?date=' + dateStr;
+                window.history.pushState({ date: dateStr }, '', newUrl);
+                await renderPlanner();
+                
+                container.classList.remove('flip-out');
+                container.classList.add('flip-in');
+            } else {
+                currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
+                renderPlanner();
+            }
         }
         window.onpopstate = function(event) {
             const date = event.state ? event.state.date : dateParam;

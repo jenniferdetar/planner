@@ -208,16 +208,18 @@ function animateAndNavigate(event, url) {
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes flip-in {
-            0% { transform: perspective(1500px) rotateY(90deg); opacity: 0; }
-            100% { transform: perspective(1500px) rotateY(0deg); opacity: 1; }
+            0% { transform: perspective(2000px) rotateY(90deg); opacity: 0; }
+            100% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
         }
         @keyframes flip-out {
-            0% { transform: perspective(1500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(1500px) rotateY(-90deg); opacity: 0; }
+            0% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
+            100% { transform: perspective(2000px) rotateY(-90deg); opacity: 0; }
         }
-        .main-container, .main-content, .notebook-main, .content-pane, .app-container {
-            transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
-            transform-origin: left center;
+        .main-container, .main-content, .notebook-main, .content-pane, .app-container, .planner-container {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s linear;
+            transform-origin: center center;
+            backface-visibility: hidden;
+            perspective: 2000px;
         }
         .flip-in {
             animation: flip-in 0.6s ease-out forwards !important;
@@ -233,7 +235,8 @@ function animateAndNavigate(event, url) {
                           document.querySelector('.main-container') || 
                           document.querySelector('.main-content') || 
                           document.querySelector('.notebook-main') ||
-                          document.querySelector('.app-container');
+                          document.querySelector('.app-container') ||
+                          document.querySelector('.planner-container');
         if (container) {
             container.classList.add('flip-in');
         }
@@ -244,16 +247,18 @@ function animateAndNavigate(event, url) {
         if (link && link.href && !link.target && !link.getAttribute('onclick') && 
             link.hostname === window.location.hostname && !link.href.includes('#')) {
             
-            const isTab = link.classList.contains('section-icon') || 
+            // Check if it's a navigation element
+            const isNav = link.closest('.sidebar') || 
+                          link.closest('.tabs') || 
+                          link.closest('.navigation') ||
+                          link.closest('.nav-buttons') ||
+                          link.classList.contains('section-icon') || 
                           link.classList.contains('nav-btn') || 
                           link.classList.contains('sidebar-link') ||
                           link.classList.contains('tab') ||
-                          link.classList.contains('tracking-pill') ||
-                          link.classList.contains('tracking-link-pill') ||
-                          link.classList.contains('nav-btn-purple') ||
                           link.classList.contains('pill');
             
-            if (isTab) {
+            if (isNav) {
                 animateAndNavigate(e, link.href);
             }
         }
