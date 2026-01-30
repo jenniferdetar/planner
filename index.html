@@ -240,7 +240,7 @@
                 </div>
             </div>
             <div class="view-pane" id="right-pane-links">
-                <!-- Links will be injected here -->
+                <!-- Data will be injected here -->
             </div>
         </div>
 
@@ -265,19 +265,9 @@
             
             document.getElementById('current-month-display').innerText = `${monthName} ${year}`;
             
-            // Render Planner Links in Right Pane
-            const dateStr = currentDate.toISOString().split('T')[0];
+            // Render Monthly Focus in Right Pane
             const rightPane = document.getElementById('right-pane-links');
-            rightPane.innerHTML = `
-                <div class="page-title" style="font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 20px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Quick Links</div>
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <a href="planner.html?category=Personal-Planner&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">👤 Personal Planner</a>
-                    <a href="planner.html?category=Work-Planner&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">💼 Work Planner</a>
-                    <a href="planner.html?category=Budget&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">💰 Financial Planner</a>
-                    <a href="planner.html?category=Monthly-Review&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">📅 Monthly Review</a>
-                    <a href="planner.html?category=CSEA&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">📁 CSEA Hub</a>
-                </div>
-            `;
+            await renderMonthlyFocus(rightPane);
 
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -346,6 +336,35 @@
                     container.appendChild(pill);
                 }
             });
+        }
+
+        async function renderMonthlyFocus(container) {
+            const dateStr = currentDate.toISOString().split('T')[0];
+            container.innerHTML = `
+                <div class="page-title" style="font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 20px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Monthly Focus</div>
+                <div class="new-note-area" style="margin-bottom: 20px;">
+                    <textarea id="new-monthly-focus" class="handwriting" placeholder="Add monthly goals or focus items..." style="width: 100%; min-height: 100px; border: 1px solid #eee; padding: 10px; border-radius: 4px; background: transparent; resize: none;"></textarea>
+                    <button class="nav-btn" onclick="handleAddMonthlyFocus()" style="margin-top: 10px; width: 100%;">Add Entry</button>
+                </div>
+                <div id="monthly-entries-list" class="handwriting" style="padding: 10px; line-height: 1.6;"></div>
+            `;
+            await loadMonthlyEntries(container.querySelector('#monthly-entries-list'));
+        }
+
+        async function loadMonthlyEntries(container) {
+            const dateStr = currentDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
+            const entries = await fetchEntries('Home-Monthly-Focus', dateStr);
+            container.innerHTML = entries.map(e => `<div style="margin-bottom: 10px; border-bottom: 1px dotted #eee; padding-bottom: 5px;">• ${e.content}</div>`).join('');
+        }
+
+        async function handleAddMonthlyFocus() {
+            const content = document.getElementById('new-monthly-focus').value;
+            if (!content) return;
+            const dateStr = currentDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
+            if (await saveEntry('Home-Monthly-Focus', dateStr, content)) {
+                document.getElementById('new-monthly-focus').value = '';
+                await renderCalendar();
+            }
         }
 
         async function changeMonth(delta) {

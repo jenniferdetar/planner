@@ -230,12 +230,17 @@
         
         .daily-columns {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 0;
             border: 1px solid #e1dfdd;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            margin-top: 20px;
+        }
+
+        .daily-columns.four-col {
+            grid-template-columns: repeat(4, 1fr);
         }
         
         .day-col {
@@ -383,13 +388,12 @@
                     </div>
                 </div>
 
-                <div class="sidebar-header">WORK NOTES</div>
-                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                    <a href="planner.html?category=Work-Planner" class="nav-btn" style="text-align: left;" onclick="animateAndNavigate(event, this.href)">🗓️ Work Planner</a>
-                    <a href="planner.html?category=CSEA" class="nav-btn" style="text-align: left;" onclick="animateAndNavigate(event, this.href)">📁 CSEA</a>
-                    <a href="planner.html?category=HOA" class="nav-btn" style="text-align: left;" onclick="animateAndNavigate(event, this.href)">🏠 HOA</a>
-                </div>
+
                 
+                <div id="days-left" class="daily-columns">
+                    <!-- First 3 days -->
+                </div>
+
                 <div id="save-status" class="save-status">All changes saved</div>
             </div>
             <div class="view-pane">
@@ -401,8 +405,8 @@
                         <button class="nav-btn-purple" onclick="changeWeek(1)">Next</button>
                     </div>
                 </div>
-                <div id="planner-columns" class="daily-columns">
-                    <!-- Days will be injected here -->
+                <div id="days-right" class="daily-columns four-col">
+                    <!-- Remaining 4 days -->
                 </div>
             </div>
         </div>
@@ -512,8 +516,10 @@
             return null;
         }
         async function renderPlanner() {
-            const container = document.getElementById('planner-columns');
-            container.innerHTML = 'Loading...';
+            const leftContainer = document.getElementById('days-left');
+            const rightContainer = document.getElementById('days-right');
+            leftContainer.innerHTML = 'Loading...';
+            rightContainer.innerHTML = '';
 
             // Set the subtitle date (e.g., Sunday, December 28, 2025)
             const subtitleEl = document.getElementById('full-date-subtitle');
@@ -549,7 +555,8 @@
                     }
                 }
             });
-            container.innerHTML = '';
+            leftContainer.innerHTML = '';
+            rightContainer.innerHTML = '';
             for (let i = 0; i < 7; i++) {
                 const dayDate = new Date(currentStartDate);
                 dayDate.setDate(dayDate.getDate() + i);
@@ -595,7 +602,11 @@
                     slotDiv.appendChild(content);
                     dayCol.appendChild(slotDiv);
                 });
-                container.appendChild(dayCol);
+                if (i < 3) {
+                    leftContainer.appendChild(dayCol);
+                } else {
+                    rightContainer.appendChild(dayCol);
+                }
             }
         }
         async function changeWeek(delta) {

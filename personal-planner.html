@@ -332,10 +332,46 @@
                         <button class="nav-btn" onclick="changeWeek(1)">NEXT →</button>
                     </div>
                 </div>
+
+                <div class="habit-grid">
+                    <div class="habit-section">
+                        <div class="habit-title">Weekly Habits</div>
+                        <div class="mini-week-row">
+                            <div class="habit-label">Exercise</div>
+                            <div class="mini-week-days">
+                                <div class="mini-day-box sun"></div>
+                                <div class="mini-day-box mon"></div>
+                                <div class="mini-day-box tue"></div>
+                                <div class="mini-day-box wed"></div>
+                                <div class="mini-day-box thu"></div>
+                                <div class="mini-day-box fri"></div>
+                                <div class="mini-day-box sat"></div>
+                            </div>
+                        </div>
+                        <div class="mini-week-row">
+                            <div class="habit-label">Vitamins</div>
+                            <div class="mini-week-days">
+                                <div class="mini-day-box sun"></div>
+                                <div class="mini-day-box mon"></div>
+                                <div class="mini-day-box tue"></div>
+                                <div class="mini-day-box wed"></div>
+                                <div class="mini-day-box thu"></div>
+                                <div class="mini-day-box fri"></div>
+                                <div class="mini-day-box sat"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="days-left">
+                    <!-- First 3 days -->
+                </div>
+
+
             </div>
             <div class="view-pane">
-                <div id="days-container">
-                    <!-- Days will load here -->
+                <div id="days-right">
+                    <!-- Remaining 4 days -->
                 </div>
             </div>
         </div>
@@ -391,8 +427,10 @@
             handleSavePlannerData(date, fieldId, content);
         }
         async function renderSpread() {
-            const container = document.getElementById('days-container');
-            container.innerHTML = 'Loading...';
+            const leftContainer = document.getElementById('days-left');
+            const rightContainer = document.getElementById('days-right');
+            leftContainer.innerHTML = 'Loading...';
+            rightContainer.innerHTML = '';
             
             await loadBillAmounts();
 
@@ -431,7 +469,8 @@
                     }
                 });
             });
-            container.innerHTML = '';
+            leftContainer.innerHTML = '';
+            rightContainer.innerHTML = '';
             for (let i = 0; i < 7; i++) {
                 const dayDate = new Date(currentStartDate);
                 dayDate.setDate(dayDate.getDate() + i);
@@ -546,7 +585,11 @@
                         </div>
                     </div>
                 `;
-                container.innerHTML += dayHtml;
+                if (i < 3) {
+                    leftContainer.innerHTML += dayHtml;
+                } else {
+                    rightContainer.innerHTML += dayHtml;
+                }
             }
         }
         function toggleEventBox(e, date, fieldId) {

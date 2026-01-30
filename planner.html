@@ -47,15 +47,15 @@
             Home: { title: 'Home Page', leftView: 'Calendar', rightView: 'PlannerLinks' },
             'Work-Planner': { title: 'Work Planner', leftView: 'WorkPlannerLeft', rightView: 'WorkPlannerRight' },
             'Personal-Planner': { title: 'Personal Planner', leftView: 'PersonalPlannerLeft', rightView: 'PersonalPlannerRight' },
-            HOA: { title: 'HOA Notes', leftView: 'Notes', rightView: 'Empty' },
-            CSEA: { title: 'CSEA Hub', leftView: 'Notes', rightView: 'InteractionLog' },
-            iCAAP: { title: 'iCAAP Tracking', leftView: 'Notes', rightView: 'iCAAPLinks' },
-            'ICAAP-Attendance': { title: 'Attendance Tracking', leftView: 'Attendance', rightView: 'Empty' },
-            'ICAAP-Tracking': { title: 'iCAAP Tracking Log', leftView: 'TrackingLog', rightView: 'Empty' },
+            HOA: { title: 'HOA Notes', leftView: 'NotesLeft', rightView: 'NotesRight' },
+            CSEA: { title: 'CSEA Hub', leftView: 'NotesLeft', rightView: 'InteractionLog' },
+            iCAAP: { title: 'iCAAP Tracking', leftView: 'NotesLeft', rightView: 'iCAAPLinks' },
+            'ICAAP-Attendance': { title: 'Attendance Tracking', leftView: 'Attendance', rightView: 'NotesRight' },
+            'ICAAP-Tracking': { title: 'iCAAP Tracking Log', leftView: 'TrackingLog', rightView: 'NotesRight' },
             Finance: { title: 'Financial Planning', leftView: 'Budget', rightView: 'FinanceLinks' },
-            'Check-Breakdown': { title: 'Check Breakdown', leftView: 'CheckBreakdown', rightView: 'Empty' },
-            'Monthly-Review': { title: 'Financial Review', leftView: 'FinancialReview', rightView: 'Empty' },
-            Planning: { title: 'Planning & Review', leftView: 'Notes', rightView: 'Empty' }
+            'Check-Breakdown': { title: 'Check Breakdown', leftView: 'CheckBreakdown', rightView: 'NotesRight' },
+            'Monthly-Review': { title: 'Financial Review', leftView: 'FinancialReview', rightView: 'NotesRight' },
+            Planning: { title: 'Planning & Review', leftView: 'NotesLeft', rightView: 'NotesRight' }
         };
 
         let employees = [];
@@ -132,7 +132,7 @@
             container.innerHTML = '';
             if (viewType === 'Calendar') await renderCalendar(container);
             else if (viewType === 'PlannerLinks') renderPlannerLinks(container);
-            else if (viewType === 'Notes') await renderNotes(container);
+            else if (viewType.startsWith('Notes')) await renderNotes(container, viewType === 'NotesLeft' ? 'left' : 'right');
             else if (viewType === 'InteractionLog') await renderCseaLog(container);
             else if (viewType === 'iCAAPLinks') renderIcaapLinks(container);
             else if (viewType === 'Budget') await renderBudget(container);
@@ -218,9 +218,9 @@
             container.innerHTML = `<div class="page-title">PLANNER DIRECTORY</div><div class="page-meta">\${displayDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div><div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;"><div class="tab home active" style="width: 100%; border-radius: 8px; padding: 25px; border: 1px solid #ccc; cursor: pointer; height: auto; display: block; text-align: center;" onclick="renderWorkPlannerView()">💼 OPEN WORK PLANNER</div><div class="tab active" style="width: 100%; border-radius: 8px; padding: 25px; border: 1px solid #ccc; cursor: pointer; height: auto; display: block; text-align: center;" onclick="renderPersonalPlannerView()">👤 OPEN PERSONAL PLANNER</div><div class="handwriting" style="margin-top: 40px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">"Success is the sum of small efforts, repeated day in and day out."</div></div>`;
         }
 
-        async function renderNotes(container) {
-            container.innerHTML = `<div class="page-title">\${currentCategory.toUpperCase()} NOTES</div><div class="page-meta">\${displayDate.toLocaleDateString()}</div><div class="new-note-area"><textarea id="new-note-content" class="handwriting" placeholder="Start typing your notes here..." style="width: 100%; min-height: 200px; border: none; outline: none; background: transparent; resize: none;"></textarea><div style="display: flex; justify-content: space-between; align-items: center;"><button class="save-btn" onclick="handleAddNote()">Add Entry</button><div id="save-status" class="save-status">All changes saved</div></div></div><div id="entries-list" style="margin-top: 20px;"></div>`;
-            await loadEntries(container.querySelector('#entries-list'));
+        async function renderNotes(container, side) {
+            container.innerHTML = `<div class="page-title">\${currentCategory.toUpperCase()} NOTES (\${side.toUpperCase()})</div><div class="page-meta">\${displayDate.toLocaleDateString()}</div><div class="new-note-area"><textarea id="new-note-content-\${side}" class="handwriting" placeholder="Start typing your notes here..." style="width: 100%; min-height: 200px; border: none; outline: none; background: transparent; resize: none;"></textarea><div style="display: flex; justify-content: space-between; align-items: center;"><button class="save-btn" onclick="handleAddNote('\${side}')">Add Entry</button><div id="save-status-\${side}" class="save-status">All changes saved</div></div></div><div id="entries-list-\${side}" style="margin-top: 20px;"></div>`;
+            await loadEntries(container.querySelector(`#entries-list-\${side}`), side);
         }
 
         async function renderPersonalPlanner(container, side) {
@@ -292,17 +292,17 @@
 
         function toggleBudgetCheck(el) { el.classList.toggle('checked'); savePlannerData(\`\${currentYear}-financial\`, el.dataset.field, el.classList.contains('checked') ? 'true' : 'false'); }
 
-        async function loadEntries(container) {
+        async function loadEntries(container, side) {
             const dateStr = displayDate.toISOString().split('T')[0];
-            const entries = await fetchEntries(currentCategory, dateStr);
+            const entries = await fetchEntries(`\${currentCategory}-\${side}`, dateStr);
             container.innerHTML = entries.map(e => \`<div class="handwriting" style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">\${e.content}</div>\`).join('');
         }
 
-        async function handleAddNote() {
-            const content = document.getElementById('new-note-content').value;
+        async function handleAddNote(side) {
+            const content = document.getElementById(`new-note-content-\${side}`).value;
             if (!content) return;
             const dateStr = displayDate.toISOString().split('T')[0];
-            if (await saveEntry(currentCategory, dateStr, content)) { document.getElementById('new-note-content').value = ''; switchTab(currentCategory); }
+            if (await saveEntry(`\${currentCategory}-\${side}`, dateStr, content)) { document.getElementById(`new-note-content-\${side}`).value = ''; switchTab(currentCategory); }
         }
 
         async function renderIcaapAttendance(container) {

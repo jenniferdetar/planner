@@ -249,6 +249,40 @@ function animateAndNavigate(event, url) {
             background: var(--sidebar-bg);
             padding: 5px;
             overflow: hidden;
+            position: relative;
+        }
+        .main-content::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 40px;
+            height: 100%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, 
+                rgba(0,0,0,0.2) 0%, 
+                rgba(255,255,255,0.1) 50%, 
+                rgba(0,0,0,0.2) 100%);
+            pointer-events: none;
+            z-index: 10;
+        }
+        .main-content::before {
+            content: '○○○○○○○○○○○○○○○○';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            color: #555;
+            font-size: 24px;
+            z-index: 11;
+            letter-spacing: 5px;
+            writing-mode: vertical-rl;
+            pointer-events: none;
+            opacity: 0.5;
         }
         .view-pane {
             flex: 1;
@@ -261,7 +295,7 @@ function animateAndNavigate(event, url) {
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .tabs-sidebar {
-            width: 120px;
+            width: 100px;
             background: var(--sidebar-bg);
             display: flex;
             flex-direction: column;
@@ -271,12 +305,12 @@ function animateAndNavigate(event, url) {
             border-left: 1px solid #333;
         }
         .tab {
-            padding: 25px 10px;
+            padding: 20px 5px;
             color: #aaa;
-            font-size: 10pt;
+            font-size: 9pt;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             cursor: pointer;
             transition: all 0.2s;
             writing-mode: vertical-rl;
@@ -336,9 +370,9 @@ function animateAndNavigate(event, url) {
                 <div class="tab ${isIndex ? 'active' : ''}" onclick="animateAndNavigate(event, 'index.html')">HOME</div>
                 <div class="tab ${category === 'HOA' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=HOA')">HOA</div>
                 <div class="tab ${category === 'CSEA' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=CSEA')">CSEA</div>
-                <div class="tab ${category === 'iCAAP' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=iCAAP')">ICAAP</div>
-                <div class="tab ${category === 'Finance' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=Finance')">FINANCE</div>
-                <div class="tab ${category === 'Planning' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=Planning')">PLAN</div>
+                <div class="tab ${category === 'iCAAP' || category === 'ICAAP' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=iCAAP')">ICAAP</div>
+                <div class="tab ${category === 'Finance' || category === 'FINANCE' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=Finance')">FINANCE</div>
+                <div class="tab ${category === 'Planning' || category === 'PLAN' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=Planning')">PLAN</div>
                 <div class="logout-btn" onclick="animateAndNavigate(event, 'index.html')">🏠 Home</div>
                 <div class="logout-btn" onclick="logout()">🚪 Logout</div>
             `;
@@ -442,6 +476,22 @@ function getCalendarEvents() {
 }
 
 // Notes Logic
+async function fetchEntries(category, date) {
+    const client = getSupabase();
+    if (!client) return [];
+    let query = client.from('category_entries').select('*').eq('category', category);
+    if (date) query = query.eq('date_key', date);
+    const { data, error } = await query.order('created_at', { ascending: false });
+    return error ? [] : (data || []);
+}
+
+async function saveEntry(category, date, content) {
+    const client = getSupabase();
+    if (!client || !content.trim()) return null;
+    const { data, error } = await client.from('category_entries').insert({ category, content, date_key: date }).select().single();
+    return error ? null : data;
+}
+
 async function fetchCategoryEntries(category) {
     const client = getSupabase();
     if (!client) return [];
