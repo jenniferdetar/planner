@@ -328,18 +328,10 @@ function animateAndNavigate(event, url, direction = 'next') {
             background: var(--sidebar-bg);
             padding: 0;
             overflow-y: auto;
-        }
-        .notebook-spread {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            gap: 0;
-            padding: 5px;
-            box-sizing: border-box;
-            min-height: 100%;
             position: relative;
+            min-height: 100%;
         }
-        .notebook-spread::after {
+        .main-content::after {
             content: '';
             position: absolute;
             top: 0;
@@ -354,7 +346,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             pointer-events: none;
             z-index: 10;
         }
-        .notebook-spread::before {
+        .main-content::before {
             content: '○○○○○○○○○○○○○○○○';
             position: absolute;
             top: 0;
@@ -372,6 +364,16 @@ function animateAndNavigate(event, url, direction = 'next') {
             pointer-events: none;
             opacity: 0.5;
             text-align: center;
+        }
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            gap: 0;
+            padding: 5px;
+            box-sizing: border-box;
+            min-height: 100%;
+            position: relative;
         }
         .view-pane {
             flex: 1;
@@ -397,7 +399,8 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .tab {
             padding: 20px 5px;
-            color: var(--tab-color, #aaa);
+            color: #fff;
+            background: var(--tab-color, #444);
             font-size: 9pt;
             font-weight: 700;
             text-transform: uppercase;
@@ -410,15 +413,17 @@ function animateAndNavigate(event, url, direction = 'next') {
             border-left: 4px solid transparent;
             text-decoration: none;
             display: block;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
         .tab:hover {
-            color: #fff;
-            background: #333;
+            filter: brightness(1.2);
+            padding-left: 8px;
         }
         .tab.active {
-            background: var(--content-bg);
-            color: var(--tab-color, var(--accent-color));
-            border-left: 4px solid var(--tab-color, var(--accent-color));
+            background: var(--tab-color, var(--accent-color));
+            color: #fff;
+            border-left: 6px solid #fff;
+            box-shadow: -4px 0 10px rgba(0,0,0,0.2);
         }
         .logout-btn {
             padding: 15px;
