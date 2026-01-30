@@ -160,10 +160,18 @@
 
         .calendar-grid {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
             border-top: 2px solid var(--border-color);
             border-left: 2px solid var(--border-color);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .calendar-grid-left {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .calendar-grid-right {
+            grid-template-columns: repeat(4, 1fr);
+            border-left: none;
         }
 
         .day-header {
@@ -176,9 +184,6 @@
             color: #fff;
             letter-spacing: 1px;
             font-size: 10pt;
-            position: sticky;
-            top: 40px;
-            z-index: 10;
         }
 
         .day-header.sun { background-color: var(--sun-bg); }
@@ -188,6 +193,7 @@
         .day-header.thu { background-color: var(--thu-bg); }
         .day-header.fri { background-color: var(--fri-bg); }
         .day-header.sat { background-color: var(--sat-bg); }
+        .day-header.not { background-color: #888; }
 
         .calendar-day {
             min-height: 100px;
@@ -235,12 +241,17 @@
                     <button class="nav-btn" onclick="changeMonth(1)">Next</button>
                 </div>
 
-                <div id="calendar-grid" class="calendar-grid">
-                    <!-- Calendar will be injected here -->
+                <div id="calendar-grid-left" class="calendar-grid calendar-grid-left">
+                    <!-- Sun-Wed will be injected here -->
                 </div>
             </div>
-            <div class="view-pane" id="right-pane-links">
-                <!-- Data will be injected here -->
+            <div class="view-pane" id="right-pane-container">
+                <div id="calendar-grid-right" class="calendar-grid calendar-grid-right">
+                    <!-- Thu-Sat will be injected here -->
+                </div>
+                <div id="monthly-focus-container" style="margin-top: 20px;">
+                    <!-- Monthly focus content -->
+                </div>
             </div>
         </div>
 
@@ -266,61 +277,80 @@
             document.getElementById('current-month-display').innerText = `${monthName} ${year}`;
             
             // Render Monthly Focus in Right Pane
-            const rightPane = document.getElementById('right-pane-links');
-            await renderMonthlyFocus(rightPane);
+            const focusContainer = document.getElementById('monthly-focus-container');
+            await renderMonthlyFocus(focusContainer);
 
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = '';
+            const gridLeft = document.getElementById('calendar-grid-left');
+            const gridRight = document.getElementById('calendar-grid-right');
+            gridLeft.innerHTML = '';
+            gridRight.innerHTML = '';
 
             // Day Headers
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Notes'];
             days.forEach((day, index) => {
                 const header = document.createElement('div');
                 header.className = `day-header ${day.toLowerCase().substring(0, 3)}`;
                 header.innerText = day;
-                grid.appendChild(header);
+                if (index < 4) {
+                    gridLeft.appendChild(header);
+                } else {
+                    gridRight.appendChild(header);
+                }
             });
 
-            // Empty slots for previous month
-            for (let i = 0; i < firstDayOfMonth; i++) {
-                const empty = document.createElement('div');
-                empty.className = 'calendar-day empty-day';
-                grid.appendChild(empty);
-            }
+            const totalSlots = firstDayOfMonth + daysInMonth;
+            const totalRows = Math.ceil(totalSlots / 7);
 
-            // Days of the month
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                
-                const dayDiv = document.createElement('div');
-                dayDiv.className = 'calendar-day';
-                
-                const dayNum = document.createElement('div');
-                dayNum.className = 'day-number';
-                dayNum.style.cursor = 'pointer';
-                dayNum.title = 'View week in Work Planner';
-                dayNum.onclick = () => window.location.href = `planner.html?category=Work-Planner&date=${dateKey}`;
-                dayNum.innerText = i;
-                dayDiv.appendChild(dayNum);
+            for (let row = 0; row < totalRows; row++) {
+                // Render 7 days + 1 Notes slot
+                for (let col = 0; col < 8; col++) {
+                    const targetGrid = (col < 4) ? gridLeft : gridRight;
+                    
+                    if (col === 7) {
+                        // This is the Notes column on the far right
+                        const notesCell = document.createElement('div');
+                        notesCell.className = 'calendar-day notes-cell';
+                        notesCell.style.backgroundColor = '#fdfdfd';
+                        targetGrid.appendChild(notesCell);
+                        continue;
+                    }
 
-                const eventContainer = document.createElement('div');
-                eventContainer.className = 'event-container';
-                eventContainer.id = `events-${dateKey}`;
-                dayDiv.appendChild(eventContainer);
+                    const index = row * 7 + col;
+                    
+                    if (index < firstDayOfMonth || index >= totalSlots) {
+                        const empty = document.createElement('div');
+                        empty.className = 'calendar-day empty-day';
+                        targetGrid.appendChild(empty);
+                    } else {
+                        const i = index - firstDayOfMonth + 1;
+                        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                        
+                        const dayDiv = document.createElement('div');
+                        dayDiv.className = 'calendar-day';
+                        
+                        const dayNum = document.createElement('div');
+                        dayNum.className = 'day-number';
+                        dayNum.style.cursor = 'pointer';
+                        dayNum.title = 'View week in Work Planner';
+                        dayNum.onclick = () => window.location.href = `planner.html?category=Work-Planner&date=${dateKey}`;
+                        dayNum.innerText = i;
+                        dayDiv.appendChild(dayNum);
 
-                grid.appendChild(dayDiv);
+                        const eventContainer = document.createElement('div');
+                        eventContainer.className = 'event-container';
+                        eventContainer.id = `events-${dateKey}`;
+                        dayDiv.appendChild(eventContainer);
+
+                        targetGrid.appendChild(dayDiv);
+                    }
+                }
             }
 
             // Fetch and render Supabase events
             let events = await fetchCalendarEvents(new Date(year, month, 1), daysInMonth);
             
-            // Filter out specific events if needed
-            events = events.filter(event => {
-                return true;
-            });
-
             events.forEach(event => {
                 const container = document.getElementById(`events-${event.date}`);
                 if (container) {
