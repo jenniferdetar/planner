@@ -328,13 +328,12 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .main-content::after {
             content: '';
-            position: sticky;
+            position: absolute;
             top: 0;
+            bottom: 0;
             left: 50%;
             width: 40px;
-            height: 100vh;
             transform: translateX(-50%);
-            margin-bottom: -100vh;
             background: linear-gradient(90deg, 
                 rgba(0,0,0,0.2) 0%, 
                 rgba(255,255,255,0.1) 50%, 
@@ -344,11 +343,11 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .main-content::before {
             content: '○○○○○○○○○○○○○○○○';
-            position: sticky;
+            position: absolute;
             top: 0;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
@@ -368,6 +367,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             gap: 0;
             padding: 5px;
             box-sizing: border-box;
+            min-height: 100%;
         }
         .view-pane {
             flex: 1;
