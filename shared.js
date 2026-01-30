@@ -191,14 +191,14 @@ async function fetchPlannerData(startDate, days = 7) {
 // Global Animation Helper
 function animateAndNavigate(event, url, direction = 'next') {
     if (event) event.preventDefault();
-    const container = document.getElementById('main-content-container') || 
-                      document.querySelector('.main-content') || 
-                      document.querySelector('.notebook-main') ||
-                      document.querySelector('.planner-container');
     
-    if (container) {
-        container.classList.remove('flip-in-next', 'flip-in-prev');
-        container.classList.add(`flip-out-${direction}`);
+    // Target specific panes for half-page turn
+    const panes = document.querySelectorAll('.view-pane');
+    const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
+    
+    if (targetPane) {
+        targetPane.classList.remove('flip-in-next', 'flip-in-prev');
+        targetPane.classList.add(`flip-out-${direction}`);
         setTimeout(() => {
             window.location.href = url;
         }, 600);
@@ -217,7 +217,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         @keyframes flip-out-next {
             0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2500px) rotateY(-90deg); opacity: 0; }
+            100% { transform: perspective(2500px) rotateY(-180deg); opacity: 0; }
         }
         @keyframes flip-in-prev {
             0% { transform: perspective(2500px) rotateY(-90deg); opacity: 0; }
@@ -225,28 +225,32 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         @keyframes flip-out-prev {
             0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2500px) rotateY(90deg); opacity: 0; }
+            100% { transform: perspective(2500px) rotateY(180deg); opacity: 0; }
         }
 
-        .main-container, .main-content, .notebook-main, .content-pane, .planner-container {
+        .view-pane {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s linear;
-            transform-origin: center left;
             backface-visibility: hidden;
             perspective: 2500px;
         }
+
         .flip-in-next {
             animation: flip-in-next 0.6s ease-out forwards !important;
+            transform-origin: left center !important;
         }
         .flip-out-next {
             animation: flip-out-next 0.6s ease-in forwards !important;
-            transform-origin: center left;
+            transform-origin: left center !important;
+            z-index: 20;
         }
         .flip-in-prev {
             animation: flip-in-prev 0.6s ease-out forwards !important;
+            transform-origin: right center !important;
         }
         .flip-out-prev {
             animation: flip-out-prev 0.6s ease-in forwards !important;
-            transform-origin: center right;
+            transform-origin: right center !important;
+            z-index: 20;
         }
 
         /* Global Planner Layout Styles */
@@ -504,11 +508,13 @@ function animateAndNavigate(event, url, direction = 'next') {
                 appMain.appendChild(sidebar);
             }
 
-            const container = document.getElementById('main-content-container') || 
-                              document.querySelector('.main-container') || 
-                              document.querySelector('.main-content');
-            if (container) {
-                container.classList.add('flip-in-next');
+            // 4. Initial Flip-In Animation
+            const panes = document.querySelectorAll('.view-pane');
+            if (panes.length > 0) {
+                // Determine if we should flip in from next or prev? 
+                // By default 'next' (flipping forward)
+                panes[0].classList.add('flip-in-prev');
+                panes[panes.length - 1].classList.add('flip-in-next');
             }
         }
     });
