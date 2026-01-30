@@ -3,71 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notebook - Home Planner</title>
+    <title>Planner - Home Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        :root { --binder-leather: #4a3427; --paper-color: #fdfdfd; }
-        body { background-color: #2b1d14; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .binder-shell { display: flex; width: 98vw; height: 96vh; background: var(--binder-leather); background-image: radial-gradient(circle at 2px 2px, rgba(0,0,0,0.15) 1px, transparent 0), linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 50%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.05) 75%, transparent 75%, transparent); background-size: 4px 4px, 20px 20px; border-radius: 20px; padding: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.3); position: relative; margin: 2vh auto; border: 4px solid #3d2b21; }
-        .spine { width: 60px; background: linear-gradient(to right, #3d2b21, #5d4335, #3d2b21); position: relative; display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 40px 0; z-index: 10; }
-        .ring { width: 45px; height: 12px; background: linear-gradient(to bottom, #d1d5db, #9ca3af, #d1d5db); border-radius: 6px; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .left-page, .right-page { flex: 1; background: var(--paper-color); padding: 25px; overflow-y: auto; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.05); }
-        .left-page { border-radius: 5px 0 0 5px; border-right: 1px solid #ddd; }
-        .right-page { border-radius: 0 5px 5px 0; border-left: 1px solid #ddd; }
-        .tabs-container { position: absolute; right: -45px; top: 50px; display: flex; flex-direction: column; gap: 5px; z-index: 100; }
-        .tab { width: 80px; padding: 12px 10px; background: #eee; color: #555; font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 0 8px 8px 0; cursor: pointer; transition: all 0.2s; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); border: 1px solid #ccc; border-left: none; writing-mode: vertical-rl; text-orientation: mixed; }
-        .tab:hover { padding-left: 15px; background: #f5f5f5; }
-        .tab.active { background: #fff; color: var(--binder-leather); padding-left: 20px; width: 90px; border-color: var(--binder-leather); }
-        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #4a3427; margin-bottom: 5px; border-bottom: 2px solid #4a3427; padding-bottom: 5px; text-align: center; }
+        :root { --app-bg: #1a1a1a; --sidebar-bg: #262626; --content-bg: #fdfdfd; --accent-color: #4a3427; --text-color: #333; }
+        body { background-color: var(--app-bg); margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; color: var(--text-color); }
+        .app-container { display: flex; width: 100vw; height: 100vh; position: relative; }
+        .main-content { flex: 1; display: flex; gap: 0; background: var(--sidebar-bg); padding: 5px; overflow: hidden; }
+        .view-pane { flex: 1; background: var(--content-bg); margin: 2px; padding: 20px; overflow-y: auto; position: relative; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .tabs-sidebar { width: 120px; background: var(--sidebar-bg); display: flex; flex-direction: column; gap: 2px; padding: 10px 0; z-index: 100; border-left: 1px solid #333; }
+        .tab { padding: 25px 10px; color: #aaa; font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; writing-mode: vertical-rl; text-orientation: mixed; text-align: center; border-left: 4px solid transparent; }
+        .tab:hover { color: #fff; background: #333; }
+        .tab.active { background: var(--content-bg); color: var(--accent-color); border-left: 4px solid var(--accent-color); }
+        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 5px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center; }
         .page-meta { font-size: 8pt; color: #888; text-align: center; margin-bottom: 15px; font-style: italic; }
         .handwriting, textarea, .editable-cell, .slot-content, .editable-area { font-family: 'Coming Soon', cursive; font-size: 1.1rem; color: #2c3e50; }
-        .text-wrap-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; max-height: 2.4em; }
+        .text-wrap-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; max-height: 2.4em; word-break: break-word; }
         .special-table-container { width: 100%; overflow-x: auto; margin-top: 10px; }
-        .special-table { border-collapse: collapse; width: 100%; font-size: 10pt; }
-        .special-table th, .special-table td { border: 1px solid #eee; padding: 5px; text-align: center; }
+        .special-table { border-collapse: collapse; width: 100%; font-size: 10pt; table-layout: fixed; }
+        .special-table th, .special-table td { border: 1px solid #eee; padding: 5px; text-align: center; overflow: hidden; text-overflow: ellipsis; }
         .special-table th { background: #f8f9fa; font-weight: 700; position: sticky; top: 0; z-index: 10; font-size: 9pt; text-transform: uppercase; }
-        .special-table .sticky-col { position: sticky; left: 0; background: #fff; z-index: 5; border-right: 2px solid #eee; }
-        .text-left { text-align: left !important; }
-        .daily-columns { display: grid; gap: 0; border: 1px solid #eee; border-radius: 5px; overflow: hidden; margin-top: 10px; }
-        .day-col { border-right: 1px solid #eee; display: flex; flex-direction: column; background: #fff; }
-        .day-header { text-align: center; padding: 5px; font-weight: 700; font-size: 8pt; color: #fff; text-transform: uppercase; }
+        .daily-columns { display: grid; gap: 2px; background: #eee; border-radius: 4px; overflow: hidden; margin-top: 10px; flex: 1; }
+        .day-col { display: flex; flex-direction: column; background: #fff; min-width: 0; }
+        .day-header { text-align: center; padding: 8px; font-weight: 700; font-size: 8pt; color: #fff; text-transform: uppercase; }
         .sun-header { background: #f59e9e; } .mon-header { background: #ffca38; } .tue-header { background: #a2d9d9; }
         .wed-header { background: #5d9cec; } .thu-header { background: #f59e9e; } .fri-header { background: #ffca38; } .sat-header { background: #a2d9d9; }
-        .time-slot { height: 35px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; padding: 2px 5px; font-size: 8pt; }
-        .time-label { width: 25px; color: #888; font-size: 7pt; flex-shrink: 0; }
-        .check-box { width: 14px; height: 14px; border: 1px solid #ccc; flex-shrink: 0; cursor: pointer; margin-right: 5px; }
-        .check-box.checked { background: #4a3427; position: relative; }
+        .time-slot { height: 35px; border-bottom: 1px dotted #eee; display: flex; align-items: center; padding: 2px 5px; font-size: 8pt; }
+        .time-label { width: 35px; color: #888; font-size: 7pt; flex-shrink: 0; }
+        .check-box { width: 14px; height: 14px; border: 1px solid #ccc; flex-shrink: 0; cursor: pointer; margin-right: 5px; border-radius: 2px; }
+        .check-box.checked { background: var(--accent-color); position: relative; border-color: var(--accent-color); }
         .check-box.checked::after { content: '✓'; color: #fff; font-size: 10px; position: absolute; top: -1px; left: 2px; }
-        .slot-content { flex-grow: 1; outline: none; min-height: 100%; display: flex; align-items: center; padding-left: 2px; }
-        .event-pill { font-size: 8pt; padding: 2px 4px; border-radius: 4px; margin-bottom: 1px; display: block; width: 100%; color: white; font-weight: bold; }
-        .event-pill.csea { background: #003366; }
-        .event-pill.la-fed { background: #CC0000; }
-        .logout-btn { position: absolute; bottom: 20px; left: 20px; font-size: 8pt; color: #fff; cursor: pointer; opacity: 0.6; z-index: 100; }
-        .logout-btn:hover { opacity: 1; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); border: 1px solid #eee; margin-top: 10px; }
+        .slot-content { flex-grow: 1; outline: none; min-height: 100%; display: flex; align-items: center; padding-left: 2px; overflow: hidden; }
+        .logout-btn { padding: 15px; font-size: 8pt; color: #666; cursor: pointer; text-align: center; margin-top: auto; border-top: 1px solid #333; }
+        .logout-btn:hover { color: #fff; background: #c0392b; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); border: 1px solid #eee; margin-top: 10px; flex: 1; }
         .calendar-header { background: #f8f9fa; padding: 5px; font-weight: 700; font-size: 8pt; text-align: center; border: 0.5px solid #eee; }
-        .calendar-day { min-height: 60px; padding: 5px; border: 0.5px solid #eee; background: #fff; }
-        .event-link { font-size: 7pt; padding: 2px; margin-bottom: 2px; border-radius: 3px; background: #e3f2fd; color: #1976d2; }
+        .calendar-day { min-height: 80px; padding: 5px; border: 0.5px solid #eee; background: #fff; }
     </style>
 </head>
 <body>
-    <div class="binder-shell">
-        <div class="left-page" id="left-page-content"></div>
-        <div class="spine">
-            <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+    <div class="app-container">
+        <div class="main-content" id="main-content-container">
+            <div class="view-pane" id="left-pane-content"></div>
+            <div class="view-pane" id="right-pane-content"></div>
         </div>
-        <div class="right-page" id="right-page-content"></div>
-        <div class="tabs-container">
+        <div class="tabs-sidebar">
             <div class="tab active" onclick="switchTab('Home')">Home</div>
             <div class="tab" onclick="switchTab('HOA')">HOA</div>
             <div class="tab" onclick="switchTab('CSEA')">CSEA</div>
             <div class="tab" onclick="switchTab('iCAAP')">iCAAP</div>
             <div class="tab" onclick="switchTab('Finance')">Finance</div>
             <div class="tab" onclick="switchTab('Planning')">Plan</div>
+            <div class="logout-btn" onclick="animateAndNavigate(event, 'index.html')">🏠 Home</div>
+            <div class="logout-btn" onclick="logout()">🚪 Logout</div>
         </div>
-        <div class="logout-btn" onclick="logout()">🚪 Logout</div>
     </div>
 
     <script>
@@ -104,8 +95,8 @@
         }
 
         let currentCategory = 'Home';
-        const leftPage = document.getElementById('left-page-content');
-        const rightPage = document.getElementById('right-page-content');
+        const leftPage = document.getElementById('left-pane-content');
+        const rightPage = document.getElementById('right-pane-content');
         let saveTimeout = null;
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
@@ -132,9 +123,16 @@
         });
 
         async function switchTab(tabId) {
+            const container = document.getElementById('main-content-container');
+            if (container.classList.contains('flip-in')) {
+                container.classList.remove('flip-in');
+                container.classList.add('flip-out');
+                await new Promise(resolve => setTimeout(resolve, 600));
+            }
+
             currentCategory = tabId;
             const dateStr = displayDate.toISOString().split('T')[0];
-            const newUrl = `notebook.html?category=${tabId}&date=${dateStr}`;
+            const newUrl = `planner.html?category=${tabId}&date=${dateStr}`;
             window.history.pushState({ category: tabId, date: dateStr }, '', newUrl);
             document.querySelectorAll('.tab').forEach(t => {
                 t.classList.toggle('active', t.innerText.toLowerCase() === tabId.toLowerCase() || (t.innerText === 'Plan' && tabId === 'Planning'));
@@ -144,6 +142,9 @@
             rightPage.innerHTML = '';
             await renderView(config.leftView, leftPage);
             await renderView(config.rightView, rightPage);
+
+            container.classList.remove('flip-out');
+            container.classList.add('flip-in');
         }
 
         async function renderView(viewType, container) {

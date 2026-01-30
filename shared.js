@@ -183,6 +183,83 @@ async function fetchPlannerData(startDate, days = 7) {
     }));
 }
 
+// Global Animation Helper
+function animateAndNavigate(event, url) {
+    if (event) event.preventDefault();
+    const container = document.getElementById('main-content-container') || 
+                      document.querySelector('.main-container') || 
+                      document.querySelector('.main-content') || 
+                      document.querySelector('.notebook-main') ||
+                      document.querySelector('.app-container');
+    
+    if (container) {
+        container.classList.remove('flip-in');
+        container.classList.add('flip-out');
+        setTimeout(() => {
+            window.location.href = url;
+        }, 600);
+    } else {
+        window.location.href = url;
+    }
+}
+
+// Inject Flip Styles & Handle Auto-Navigation
+(function() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes flip-in {
+            0% { transform: perspective(1500px) rotateY(90deg); opacity: 0; }
+            100% { transform: perspective(1500px) rotateY(0deg); opacity: 1; }
+        }
+        @keyframes flip-out {
+            0% { transform: perspective(1500px) rotateY(0deg); opacity: 1; }
+            100% { transform: perspective(1500px) rotateY(-90deg); opacity: 0; }
+        }
+        .main-container, .main-content, .notebook-main, .content-pane, .app-container {
+            transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+            transform-origin: left center;
+        }
+        .flip-in {
+            animation: flip-in 0.6s ease-out forwards !important;
+        }
+        .flip-out {
+            animation: flip-out 0.6s ease-in forwards !important;
+        }
+    `;
+    document.head.appendChild(style);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('main-content-container') || 
+                          document.querySelector('.main-container') || 
+                          document.querySelector('.main-content') || 
+                          document.querySelector('.notebook-main') ||
+                          document.querySelector('.app-container');
+        if (container) {
+            container.classList.add('flip-in');
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link && link.href && !link.target && !link.getAttribute('onclick') && 
+            link.hostname === window.location.hostname && !link.href.includes('#')) {
+            
+            const isTab = link.classList.contains('section-icon') || 
+                          link.classList.contains('nav-btn') || 
+                          link.classList.contains('sidebar-link') ||
+                          link.classList.contains('tab') ||
+                          link.classList.contains('tracking-pill') ||
+                          link.classList.contains('tracking-link-pill') ||
+                          link.classList.contains('nav-btn-purple') ||
+                          link.classList.contains('pill');
+            
+            if (isTab) {
+                animateAndNavigate(e, link.href);
+            }
+        }
+    });
+})();
+
 async function savePlannerData(date, fieldId, content) {
     const client = getSupabase();
     if (!client) return false;
@@ -667,7 +744,7 @@ function updateNavigationLinks(date) {
         'index.html',
         'work-planner.html',
         'personal-planner.html',
-        'notebook.html',
+        'planner.html',
         'csea.html',
         'financial.html',
         'hoa.html',
@@ -704,11 +781,11 @@ function updateNavigationLinks(date) {
             let params = new URLSearchParams(href.split('?')[1] || '');
             
             if (categoryMapping[base]) {
-                targetUrl = 'notebook.html';
+                targetUrl = 'planner.html';
                 params.set('category', categoryMapping[base]);
             }
             
-            if (internalPages.includes(base) || base === 'notebook.html') {
+            if (internalPages.includes(base) || base === 'planner.html') {
                 params.set('date', dateStr);
                 link.href = `${targetUrl}?${params.toString()}`;
             }

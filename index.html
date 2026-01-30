@@ -34,7 +34,7 @@
             overflow: hidden;
         }
 
-        .notebook-container {
+        .app-container {
             display: flex;
             flex-grow: 1;
             overflow: hidden;
@@ -97,7 +97,7 @@
             box-sizing: border-box;
         }
 
-        .notebook-page {
+        .content-pane {
             width: 100%;
             max-width: 1200px;
             padding: 10px 20px;
@@ -302,24 +302,24 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
+    <div class="app-container">
         <aside class="section-sidebar">
             <a href="index.html" class="section-icon active" title="Home">🏠</a>
-            <a href="notebook.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
-            <a href="notebook.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
-            <a href="notebook.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
-            <a href="notebook.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="notebook.html?category=Budget" class="section-icon" title="Financial">💰</a>
+            <a href="planner.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
+            <a href="planner.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
+            <a href="planner.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
+            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
+            <a href="planner.html?category=Budget" class="section-icon" title="Financial">💰</a>
             <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
         </aside>
 
-        <div class="main-container">
-        <div class="notebook-page">
+        <div class="main-container" id="main-content-container">
+        <div class="content-pane">
         <div class="header-controls">
             <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
-            <a href="notebook.html?category=Personal-Planner" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
+            <a href="planner.html?category=Personal-Planner" class="nav-btn" style="text-decoration: none; display: inline-block;">Personal Planner</a>
             <h1 id="current-month-display" class="month-title">Loading...</h1>
-            <a href="notebook.html?category=Work-Planner" class="nav-btn" style="text-decoration: none; display: inline-block;">Work Planner</a>
+            <a href="planner.html?category=Work-Planner" class="nav-btn" style="text-decoration: none; display: inline-block;">Work Planner</a>
             <button class="nav-btn" onclick="changeMonth(1)">Next</button>
         </div>
 
@@ -388,7 +388,7 @@
                 dayNum.className = 'day-number';
                 dayNum.style.cursor = 'pointer';
                 dayNum.title = 'View week in Work Planner';
-                dayNum.onclick = () => window.location.href = `notebook.html?category=Work-Planner&date=${dateKey}`;
+                dayNum.onclick = () => window.location.href = `planner.html?category=Work-Planner&date=${dateKey}`;
                 dayNum.innerText = i;
                 dayDiv.appendChild(dayNum);
 
