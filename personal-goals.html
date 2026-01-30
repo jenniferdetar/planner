@@ -15,8 +15,6 @@
             --light-blue: #e1f5fe;
             --light-pink: #fce4ec;
             --light-tan: #fff9c4;
-            --sidebar-width: 250px;
-            --section-sidebar-width: 60px;
         }
 
         body {
@@ -28,71 +26,6 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-        }
-
-        .notebook-container {
-            display: flex;
-            flex-grow: 1;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        /* Multi-level Sidebar */
-        .section-sidebar {
-            width: var(--section-sidebar-width);
-            background: #1e3a63;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            gap: 15px;
-            flex-shrink: 0;
-            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
-        }
-
-        .section-icon {
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 10pt;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-
-        .section-icon:hover {
-            background: rgba(255,255,255,0.1);
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
-        .section-icon.active {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            opacity: 1;
-        }
-
-        .section-icon.logout-icon {
-            margin-top: auto;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        .section-icon.logout-icon:hover {
-            opacity: 1;
-            color: #ffcdd2;
-        }
-
-        .notebook-main {
-            flex-grow: 1;
-            background: #fff;
-            overflow-y: auto;
-            position: relative;
-            scrollbar-width: thin;
         }
 
         .notebook-page {
@@ -124,18 +57,12 @@
             font-size: 10pt;
             line-height: 1.5;
             color: #555;
-            max-width: 800px;
             margin: 0 auto;
-        }
-        .goals-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 20px;
         }
         .goal-box {
             display: flex;
             flex-direction: column;
+            margin-bottom: 20px;
         }
         .goal-header {
             text-align: center;
@@ -164,7 +91,7 @@
             font-family: 'Coming Soon', cursive;
         }
         .total-section {
-            margin-top: 40px;
+            margin-top: 20px;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -184,180 +111,103 @@
             font-family: 'Coming Soon', cursive;
             font-size: 1.1rem;
         }
-        .save-status {
-            text-align: right;
+        .save-status-inline {
             font-size: 10pt;
             color: #888;
             margin-top: 10px;
         }
-        @media (max-width: 900px) {
-            .goals-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 600px) {
-            .goals-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon active" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <main class="notebook-main">
-            <div id="save-status" class="save-status" style="position: absolute; top: 20px; right: 20px;">All changes saved</div>
-            <div class="notebook-page">
-                <div class="page-header">
-                    <div class="trophy-icon">🏆</div>
-                    <h1 class="page-title" id="goals-title">My Personal Goals</h1>
-                    <div style="margin-top: 15px;">
-                        <a href="planner.html?category=Goals" class="nav-btn">View Goals Notebook</a>
+    <div class="app-container">
+        <div class="main-content" id="main-content-container">
+            <div class="notebook-spread">
+                <div class="view-pane">
+                    <div class="page-header">
+                        <h1 class="page-title" id="goals-title">My Personal Goals</h1>
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+                            <a href="planning.html" class="nav-btn">Intentions & Dreams</a>
+                            <a href="monthly-review.html" class="nav-btn">Monthly Review</a>
+                        </div>
+                        <p class="intro-text">
+                            What one thing do you want to be intentional about this year? Determine one way to clearly define success.
+                        </p>
                     </div>
-                    <script>
-                        const gUrlParams = new URLSearchParams(window.location.search);
-                        const gDateParam = gUrlParams.get('date');
-                        const gYear = gDateParam ? new Date(gDateParam).getFullYear() : new Date().getFullYear();
-                        document.getElementById('goals-title').innerText = `Personal Goals ${gYear}`;
-                    </script>
-                    <p class="intro-text">
-                        What one thing do you want to be intentional about this year? Decide what you want to track, and determine one way to clearly define success.
-                    </p>
-                </div>
 
-            <div class="goals-grid">
-                <!-- Row 1: Blue -->
-                <div class="goal-box">
-                    <div class="goal-header blue">Physical</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-1">Lose 50 lbs</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-2">Exercise more (start with walking)</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-6"></div></div>
+                    <div class="goal-box">
+                        <div class="goal-header blue">Physical</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-phys-4"></div></div>
+                    </div>
+                    <div class="goal-box">
+                        <div class="goal-header blue">Mental</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-4"></div></div>
+                    </div>
+                    <div class="goal-box">
+                        <div class="goal-header blue">Relational</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-4"></div></div>
+                    </div>
+                    <div class="goal-box">
+                        <div class="goal-header pink">Self-Care</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-4"></div></div>
+                    </div>
                 </div>
-                <div class="goal-box">
-                    <div class="goal-header blue">Mental</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-1">Journal at least 3x a week</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-2">Attend church more often</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-ment-6"></div></div>
-                </div>
-                <div class="goal-box">
-                    <div class="goal-header blue">Relational</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-1">Have one outing w/Jeff monthly</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-2">Attend church more often</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-rel-6"></div></div>
-                </div>
+                <div class="view-pane">
+                    <div class="goal-box">
+                        <div class="goal-header pink">Hobbies</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-4"></div></div>
+                    </div>
+                    <div class="goal-box">
+                        <div class="goal-header pink">Home</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-4"></div></div>
+                    </div>
+                    <div class="goal-box">
+                        <div class="goal-header blue">Career</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-4"></div></div>
+                    </div>
+                    <div class="goal-box">
+                        <div class="goal-header blue">Financial</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-4"></div></div>
+                    </div>
+                    <div class="goal-box">
+                        <div class="goal-header blue">Organizational</div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-1"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-2"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-3"></div></div>
+                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-4"></div></div>
+                    </div>
 
-                <!-- Row 2: Pink -->
-                <div class="goal-box">
-                    <div class="goal-header pink">Self-Care</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-1">Get nails done</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-2">Make more home made meals</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-sc-6"></div></div>
-                </div>
-                <div class="goal-box">
-                    <div class="goal-header pink">Hobbies</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-1"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-2"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-hob-6"></div></div>
-                </div>
-                <div class="goal-box">
-                    <div class="goal-header pink">Home</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-1">Can meals</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-2">Save up for a freeze dryer</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-home-6"></div></div>
-                </div>
+                    <div class="total-section">
+                        <div class="total-label">Total:</div>
+                        <div class="total-box"><div class="editable-area" contenteditable="true" data-field="goal-total"></div></div>
+                    </div>
 
-                <!-- Row 3: Blue -->
-                <div class="goal-box">
-                    <div class="goal-header blue">Career</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-1">Promote, if possible</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-2">get side gigs to leave LAUSD</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-car-6"></div></div>
-                </div>
-                <div class="goal-box">
-                    <div class="goal-header blue">Financial</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-1">Help Jeff with Disability</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-2">Fully Funded Emergency Fund</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-3">Make more home made meals</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-fin-6"></div></div>
-                </div>
-                <div class="goal-box">
-                    <div class="goal-header blue">Organizational</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-1">De-clutter the living room</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-2">Clean up the office</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-3">Donate what's not being used</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-org-6"></div></div>
-                </div>
-
-                <!-- Row 4: Tan -->
-                <div class="goal-box">
-                    <div class="goal-header tan">Screen Time</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-1">Keep to commute/work only</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-2"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-st-6"></div></div>
-                </div>
-                <div class="goal-box">
-                    <div class="goal-header tan">Learn</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-1">Complete coding course strong</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-2">Complete MBA</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-3"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-4"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-5"></div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-lrn-6"></div></div>
-                </div>
-                <div class="goal-box">
-                    <div class="goal-header tan">Csea</div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-1">Build relationships/Network</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-2">Talk to more members</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-3">Re-elected for MB Committee</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-4">Represent more members</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-5">Find ways to grow meetings</div></div>
-                    <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="goal-csea-6"></div></div>
+                    <div id="save-status" class="save-status-inline" style="text-align: right; margin-top: 20px;">All changes saved</div>
                 </div>
             </div>
-
-            <div class="total-section">
-                <div class="total-label">Total:</div>
-                <div class="total-box"><div class="editable-area" contenteditable="true" data-field="goal-total"></div></div>
-            </div>
-
-            <div id="save-status" class="save-status">All changes saved</div>
         </div>
     </div>
 
@@ -367,6 +217,8 @@
         const currentYear = dateParam ? new Date(dateParam).getFullYear() : new Date().getFullYear();
         const PERSISTENCE_KEY = `personal-goals-${currentYear}`;
         let saveTimeout = null;
+
+        document.getElementById('goals-title').innerText = `Personal Goals ${currentYear}`;
 
         async function init() {
             // Load saved data
@@ -386,11 +238,7 @@
                     clearTimeout(saveTimeout);
                     saveTimeout = setTimeout(async () => {
                         const success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
-                        if (success) {
-                            document.getElementById('save-status').innerText = 'All changes saved';
-                        } else {
-                            document.getElementById('save-status').innerText = 'Error saving';
-                        }
+                        document.getElementById('save-status').innerText = success ? 'All changes saved' : 'Error saving';
                     }, 1000);
                 });
             });

@@ -10,6 +10,9 @@
     <style>
         :root { --soft-bg: #fdfcf0; }
         body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; color: var(--text-color); }
+        #main-content-container { flex-direction: column !important; overflow-y: auto !important; padding: 0 !important; display: flex !important; flex: 1; }
+        .notebook-spread { display: flex; flex: 1; width: 100%; }
+        .view-pane { flex: 1; background: #fff; margin: 0 !important; padding: 20px !important; overflow-y: visible !important; position: relative; border-radius: 0 !important; box-shadow: none !important; height: auto !important; }
         .handwriting, textarea, .editable-cell, .slot-content, .editable-area { font-family: 'Coming Soon', cursive; font-size: 1.1rem; color: #2c3e50; }
         .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 5px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center; }
         .page-meta { font-size: 8pt; color: #888; text-align: center; margin-bottom: 15px; font-style: italic; }
@@ -37,8 +40,10 @@
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="view-pane" id="left-pane-content"></div>
-            <div class="view-pane" id="right-pane-content"></div>
+            <div class="notebook-spread">
+                <div class="view-pane" id="left-pane-content"></div>
+                <div class="view-pane" id="right-pane-content"></div>
+            </div>
         </div>
     </div>
 
@@ -216,7 +221,21 @@
         }
 
         function renderPlannerLinks(container) {
-            container.innerHTML = `<div class="page-title">PLANNER DIRECTORY</div><div class="page-meta">\${displayDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div><div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;"><div class="tab home active" style="width: 100%; border-radius: 8px; padding: 25px; border: 1px solid #ccc; cursor: pointer; height: auto; display: block; text-align: center;" onclick="renderWorkPlannerView()">💼 OPEN WORK PLANNER</div><div class="tab active" style="width: 100%; border-radius: 8px; padding: 25px; border: 1px solid #ccc; cursor: pointer; height: auto; display: block; text-align: center;" onclick="renderPersonalPlannerView()">👤 OPEN PERSONAL PLANNER</div><div class="handwriting" style="margin-top: 40px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">"Success is the sum of small efforts, repeated day in and day out."</div></div>`;
+            container.innerHTML = `
+                <div style="background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 100%;">
+                    <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 25px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Quick Links</div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='planner.html?category=Personal-Planner'"><span>👤</span> Personal Planner</button>
+                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='planner.html?category=Work-Planner'"><span>💼</span> Work Planner</button>
+                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='financial.html'"><span>💰</span> Financial Planner</button>
+                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='monthly-review.html'"><span>📅</span> Monthly Review</button>
+                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='planner.html?category=CSEA'"><span>📁</span> CSEA Hub</button>
+                    </div>
+                    <div class="handwriting" style="margin-top: 50px; text-align: center; border-top: 1px solid #eee; padding-top: 30px; opacity: 0.7;">
+                        "Success is the sum of small efforts, repeated day in and day out."
+                    </div>
+                </div>
+            `;
         }
 
         async function renderNotes(container, side) {

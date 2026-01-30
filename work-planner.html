@@ -33,15 +33,37 @@
             font-size: 10pt;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
 
         .notebook-container {
             display: flex;
             flex-grow: 1;
-            overflow: hidden;
             background: #fff;
+            overflow: hidden;
+        }
+
+        #main-content-container {
+            display: flex !important;
+            flex-direction: column !important;
+            flex-grow: 1 !important;
+            overflow-y: auto !important;
+            padding: 0 !important;
+        }
+
+        .notebook-spread {
+            display: flex;
+            width: 100%;
+            flex: 1;
+        }
+
+        .view-pane {
+            flex: 1;
+            background: #fff;
+            padding: 20px !important;
+            overflow-y: visible !important;
+            position: relative;
+            min-height: 100%;
         }
 
         /* Icon Sidebar */
@@ -132,6 +154,31 @@
             scrollbar-width: thin;
         }
 
+        #main-content-container {
+            flex-direction: column !important;
+            overflow-y: auto !important;
+            padding: 0 !important;
+            display: flex !important;
+        }
+
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        .view-pane {
+            flex: 1;
+            background: var(--content-bg);
+            margin: 0 !important;
+            padding: 20px !important;
+            overflow-y: visible !important;
+            position: relative;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            height: auto !important;
+        }
+
         .notebook-page {
             width: 100%;
             margin: 0;
@@ -140,6 +187,18 @@
             position: relative;
             box-sizing: border-box;
             min-height: 100%;
+        }
+
+        .work-header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            width: 100%;
+            background: var(--sidebar-bg);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 30;
         }
 
         .main-page-title {
@@ -368,45 +427,47 @@
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="view-pane">
-                <h1 class="main-page-title">Work Planner 2026</h1>
-                <div id="full-date-subtitle" class="main-page-subtitle">Loading date...</div>
-                <hr class="header-hr">
+            <div class="work-header-container">
+                <h1 class="main-page-title" style="margin-bottom: 5px;">Work Planner 2026</h1>
+                <div id="full-date-subtitle" class="main-page-subtitle" style="margin-bottom: 15px;">Loading date...</div>
                 
-                <div class="top-grid">
-                    <div class="top-section">
-                        <div class="section-title">Priority #1</div>
-                        <div class="editable-area" contenteditable="true" id="priority-1" data-field="priority-1"></div>
-                    </div>
-                    <div class="top-section">
-                        <div class="section-title">Priority #2</div>
-                        <div class="editable-area" contenteditable="true" id="priority-2" data-field="priority-2"></div>
-                    </div>
-                    <div class="top-section">
-                        <div class="section-title">Priority #3</div>
-                        <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3"></div>
-                    </div>
-                </div>
-
-
-                
-                <div id="days-left" class="daily-columns">
-                    <!-- First 3 days -->
-                </div>
-
-                <div id="save-status" class="save-status">All changes saved</div>
-            </div>
-            <div class="view-pane">
-                <div class="planner-header">
+                <div class="planner-header" style="margin-bottom: 0;">
                     <div id="week-range" class="date-range">Loading range...</div>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 35px; margin: 15px 0;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 35px; margin-top: 10px;">
                         <button class="nav-btn-purple" onclick="changeWeek(-1)">Prev</button>
                         <h2 style="margin: 0; color: var(--header-blue); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 2px;">SCHEDULE</h2>
                         <button class="nav-btn-purple" onclick="changeWeek(1)">Next</button>
                     </div>
                 </div>
-                <div id="days-right" class="daily-columns four-col">
-                    <!-- Remaining 4 days -->
+            </div>
+
+            <div class="notebook-spread">
+                <div class="view-pane">
+                    <div class="top-grid">
+                        <div class="top-section">
+                            <div class="section-title">Priority #1</div>
+                            <div class="editable-area" contenteditable="true" id="priority-1" data-field="priority-1"></div>
+                        </div>
+                        <div class="top-section">
+                            <div class="section-title">Priority #2</div>
+                            <div class="editable-area" contenteditable="true" id="priority-2" data-field="priority-2"></div>
+                        </div>
+                        <div class="top-section">
+                            <div class="section-title">Priority #3</div>
+                            <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3"></div>
+                        </div>
+                    </div>
+
+                    <div id="days-left" class="daily-columns">
+                        <!-- First 3 days -->
+                    </div>
+
+                    <div id="save-status" class="save-status">All changes saved</div>
+                </div>
+                <div class="view-pane">
+                    <div id="days-right" class="daily-columns four-col">
+                        <!-- Remaining 4 days -->
+                    </div>
                 </div>
             </div>
         </div>

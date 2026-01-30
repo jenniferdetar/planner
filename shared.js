@@ -259,20 +259,21 @@ function animateAndNavigate(event, url, direction = 'next') {
         .main-content {
             flex: 1;
             display: flex;
-            gap: 0;
+            flex-direction: column;
             background: var(--sidebar-bg);
-            padding: 5px;
-            overflow: hidden;
+            padding: 0;
+            overflow-y: auto;
             position: relative;
         }
         .main-content::after {
             content: '';
-            position: absolute;
+            position: sticky;
             top: 0;
             left: 50%;
             width: 40px;
-            height: 100%;
+            height: 100vh;
             transform: translateX(-50%);
+            margin-bottom: -100vh;
             background: linear-gradient(90deg, 
                 rgba(0,0,0,0.2) 0%, 
                 rgba(255,255,255,0.1) 50%, 
@@ -282,11 +283,11 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .main-content::before {
             content: '○○○○○○○○○○○○○○○○';
-            position: absolute;
+            position: sticky;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            height: 100%;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
@@ -297,16 +298,27 @@ function animateAndNavigate(event, url, direction = 'next') {
             writing-mode: vertical-rl;
             pointer-events: none;
             opacity: 0.5;
+            text-align: center;
+        }
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            gap: 0;
+            padding: 5px;
+            box-sizing: border-box;
         }
         .view-pane {
             flex: 1;
             background: var(--content-bg);
             margin: 2px;
             padding: 20px;
-            overflow-y: auto;
+            overflow-y: visible;
             position: relative;
             border-radius: 4px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            height: auto;
+            min-height: 100%;
         }
         .tabs-sidebar {
             width: 100px;
@@ -380,13 +392,19 @@ function animateAndNavigate(event, url, direction = 'next') {
             const category = urlParams.get('category') || '';
             const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
             
+            const isHOA = window.location.pathname.endsWith('hoa.html') || category === 'HOA';
+            const isCSEA = window.location.pathname.endsWith('csea.html') || category === 'CSEA';
+            const isICAAP = window.location.pathname.endsWith('icaap.html') || category === 'iCAAP' || category === 'ICAAP';
+            const isFinance = window.location.pathname.endsWith('financial.html') || category === 'Finance' || category === 'FINANCE' || category === 'Budget';
+            const isPlan = window.location.pathname.endsWith('planning.html') || category === 'Planning' || category === 'PLAN';
+            
             sidebar.innerHTML = `
                 <div class="tab ${isIndex ? 'active' : ''}" onclick="animateAndNavigate(event, 'index.html')">HOME</div>
-                <div class="tab ${category === 'HOA' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=HOA')">HOA</div>
-                <div class="tab ${category === 'CSEA' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=CSEA')">CSEA</div>
-                <div class="tab ${category === 'iCAAP' || category === 'ICAAP' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=iCAAP')">ICAAP</div>
-                <div class="tab ${category === 'Finance' || category === 'FINANCE' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=Finance')">FINANCE</div>
-                <div class="tab ${category === 'Planning' || category === 'PLAN' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=Planning')">PLAN</div>
+                <div class="tab ${isHOA ? 'active' : ''}" onclick="animateAndNavigate(event, 'hoa.html')">HOA</div>
+                <div class="tab ${isCSEA ? 'active' : ''}" onclick="animateAndNavigate(event, 'csea.html')">CSEA</div>
+                <div class="tab ${isICAAP ? 'active' : ''}" onclick="animateAndNavigate(event, 'icaap.html')">ICAAP</div>
+                <div class="tab ${isFinance ? 'active' : ''}" onclick="animateAndNavigate(event, 'financial.html')">FINANCE</div>
+                <div class="tab ${isPlan ? 'active' : ''}" onclick="animateAndNavigate(event, 'planning.html')">PLAN</div>
                 <div class="logout-btn" onclick="animateAndNavigate(event, 'index.html')">🏠 Home</div>
                 <div class="logout-btn" onclick="logout()">🚪 Logout</div>
             `;

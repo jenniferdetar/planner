@@ -204,43 +204,36 @@
             opacity: 1;
         }
 
-        .save-status {
+        .save-status-inline {
             font-size: 10pt;
             color: #a19f9d;
             height: 15px;
-            text-align: right;
         }
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon active" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <main class="notebook-main">
-            <div class="notebook-page">
-                <h1 class="page-title">Hoa Notes</h1>
-                <div class="notes-section">
-                    <div class="input-group">
-                        <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div id="save-status" class="save-status">All changes saved</div>
-                            <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+    <div class="app-container">
+        <div class="main-content" id="main-content-container">
+            <div class="notebook-spread">
+                <div class="view-pane">
+                    <h1 class="page-title">Hoa Notes</h1>
+                    <div class="notes-section">
+                        <div class="input-group">
+                            <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div id="save-status" class="save-status-inline">All changes saved</div>
+                                <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="view-pane">
                     <div id="entries-list" class="entries-list">
                         <!-- Entries will be loaded here -->
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
     <script>
         const urlParams = new URLSearchParams(window.location.search);

@@ -38,38 +38,43 @@
             background: var(--content-bg);
             margin: 0 !important;
             padding: 20px !important;
-            overflow-y: auto;
+            overflow-y: visible !important;
             position: relative;
             border-radius: 0 !important;
             box-shadow: none !important;
+            height: auto !important;
         }
 
-        .view-pane:first-child {
-            padding-right: 25px !important; /* Extra room for ring divider */
+        #main-content-container {
+            flex-direction: column !important;
+            overflow-y: auto !important;
+            padding: 0 !important;
+            display: flex !important;
         }
 
-        .view-pane:last-child {
-            padding-left: 25px !important; /* Extra room for ring divider */
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
         }
 
         .header-controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
-            gap: 15px;
+            padding: 20px 0;
+            gap: 40px;
+            width: 100%;
+            background: var(--sidebar-bg);
             position: relative;
-            z-index: 20;
+            z-index: 30;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
-        /* Center the title across the whole spread */
         .header-controls h1 {
-            position: absolute;
-            left: 100%;
-            transform: translateX(-50%);
-            white-space: nowrap;
             margin: 0;
             pointer-events: none;
+            white-space: nowrap;
         }
 
         .month-title {
@@ -298,23 +303,25 @@
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="view-pane">
-                <div class="header-controls">
-                    <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
-                    <h1 id="current-month-display" class="month-title">Loading...</h1>
-                    <button class="nav-btn" onclick="changeMonth(1)">Next</button>
-                </div>
-
-                <div id="calendar-grid-left" class="calendar-grid calendar-grid-left">
-                    <!-- Sun-Wed will be injected here -->
-                </div>
+            <div class="header-controls">
+                <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
+                <h1 id="current-month-display" class="month-title">Loading...</h1>
+                <button class="nav-btn" onclick="changeMonth(1)">Next</button>
             </div>
-            <div class="view-pane" id="right-pane-container">
-                <div id="calendar-grid-right" class="calendar-grid calendar-grid-right">
-                    <!-- Thu-Sat will be injected here -->
+
+            <div class="notebook-spread">
+                <div class="view-pane">
+                    <div id="calendar-grid-left" class="calendar-grid calendar-grid-left">
+                        <!-- Sun-Wed will be injected here -->
+                    </div>
                 </div>
-                <div id="monthly-focus-container" style="margin-top: 20px;">
-                    <!-- Monthly focus content -->
+                <div class="view-pane" id="right-pane-container">
+                    <div id="calendar-grid-right" class="calendar-grid calendar-grid-right">
+                        <!-- Thu-Sat will be injected here -->
+                    </div>
+                    <div id="monthly-focus-container" style="margin-top: 20px;">
+                        <!-- Monthly focus content -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -434,11 +441,26 @@
 
         async function renderMonthlyFocus(container) {
             container.innerHTML = `
-                <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 15px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: left;">Monthly Focus</div>
-                <div id="monthly-entries-list" class="handwriting" style="min-height: 100px; margin-bottom: 20px; line-height: 1.8;"></div>
-                <div class="new-note-area" style="border-top: 1px solid #eee; pt-15px;">
-                    <textarea id="new-monthly-focus" class="handwriting" placeholder="Add a new goal..." style="width: 100%; min-height: 60px; border: 1px solid #eee; padding: 8px; border-radius: 4px; background: #fafafa; resize: none; margin-top: 15px;"></textarea>
-                    <button class="nav-btn" onclick="handleAddMonthlyFocus()" style="margin-top: 10px; width: 100%; padding: 10px;">Add Entry</button>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                    <div style="background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                        <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 15px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Quick Links</div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="nav-btn" onclick="window.location.href='planner.html?category=Personal-Planner'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>👤</span> Personal Planner</button>
+                            <button class="nav-btn" onclick="window.location.href='planner.html?category=Work-Planner'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>💼</span> Work Planner</button>
+                            <button class="nav-btn" onclick="window.location.href='financial.html'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>💰</span> Financial Planner</button>
+                            <button class="nav-btn" onclick="window.location.href='monthly-review.html'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>📅</span> Monthly Review</button>
+                            <button class="nav-btn" onclick="window.location.href='planner.html?category=CSEA'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>📁</span> CSEA Hub</button>
+                        </div>
+                    </div>
+
+                    <div style="background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                        <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 15px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: left;">Monthly Focus</div>
+                        <div id="monthly-entries-list" class="handwriting" style="min-height: 100px; margin-bottom: 20px; line-height: 1.8;"></div>
+                        <div class="new-note-area" style="border-top: 1px solid #eee; padding-top: 15px;">
+                            <textarea id="new-monthly-focus" class="handwriting" placeholder="Add a new goal..." style="width: 100%; min-height: 60px; border: 1px solid #eee; padding: 8px; border-radius: 4px; background: #fafafa; resize: none;"></textarea>
+                            <button class="nav-btn" onclick="handleAddMonthlyFocus()" style="margin-top: 10px; width: 100%; padding: 10px;">Add Entry</button>
+                        </div>
+                    </div>
                 </div>
             `;
             await loadMonthlyEntries(container.querySelector('#monthly-entries-list'));

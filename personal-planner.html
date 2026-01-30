@@ -30,7 +30,6 @@
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
 
@@ -99,6 +98,30 @@
             scrollbar-width: thin;
         }
 
+        #main-content-container {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 !important;
+            overflow-y: auto !important;
+            padding: 0 !important;
+        }
+
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        .view-pane {
+            flex: 1;
+            background: #fff;
+            margin: 0 !important;
+            padding: 20px !important;
+            overflow-y: visible !important;
+            position: relative;
+            height: auto !important;
+        }
+
         .notebook-page {
             width: 100%;
             padding: 10px 20px !important;
@@ -118,9 +141,16 @@
         }
 
         .planner-header {
-            border-bottom: 1px solid #e1dfdd;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            width: 100%;
+            background: var(--sidebar-bg);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 30;
+            margin-bottom: 0 !important;
         }
 
         /* Mini Week Habit Styles */
@@ -320,58 +350,58 @@
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="view-pane">
-                <div class="planner-header">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div id="week-header-left" style="font-size: 10pt; color: #605e5c; font-family: 'Segoe UI', sans-serif; text-transform: uppercase; letter-spacing: 1.5px;">Loading...</div>
-                        <div id="save-status" class="save-status">All changes saved</div>
-                    </div>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 30px; margin-top: 10px;">
-                        <button class="nav-btn" onclick="changeWeek(-1)">← PREV</button>
-                        <h2 style="margin: 0; color: var(--header-blue); font-size: 10pt; letter-spacing: 3px;">PERSONAL PLANNER</h2>
-                        <button class="nav-btn" onclick="changeWeek(1)">NEXT →</button>
-                    </div>
+            <div class="planner-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 90%; max-width: 1200px;">
+                    <div id="week-header-left" style="font-size: 10pt; color: #605e5c; font-family: 'Segoe UI', sans-serif; text-transform: uppercase; letter-spacing: 1.5px;">Loading...</div>
+                    <div id="save-status" class="save-status">All changes saved</div>
                 </div>
-
-                <div class="habit-grid">
-                    <div class="habit-section">
-                        <div class="habit-title">Weekly Habits</div>
-                        <div class="mini-week-row">
-                            <div class="habit-label">Exercise</div>
-                            <div class="mini-week-days">
-                                <div class="mini-day-box sun"></div>
-                                <div class="mini-day-box mon"></div>
-                                <div class="mini-day-box tue"></div>
-                                <div class="mini-day-box wed"></div>
-                                <div class="mini-day-box thu"></div>
-                                <div class="mini-day-box fri"></div>
-                                <div class="mini-day-box sat"></div>
-                            </div>
-                        </div>
-                        <div class="mini-week-row">
-                            <div class="habit-label">Vitamins</div>
-                            <div class="mini-week-days">
-                                <div class="mini-day-box sun"></div>
-                                <div class="mini-day-box mon"></div>
-                                <div class="mini-day-box tue"></div>
-                                <div class="mini-day-box wed"></div>
-                                <div class="mini-day-box thu"></div>
-                                <div class="mini-day-box fri"></div>
-                                <div class="mini-day-box sat"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 30px; margin-top: 10px;">
+                    <button class="nav-btn" onclick="changeWeek(-1)">← PREV</button>
+                    <h2 style="margin: 0; color: var(--header-blue); font-size: 10pt; letter-spacing: 3px;">PERSONAL PLANNER</h2>
+                    <button class="nav-btn" onclick="changeWeek(1)">NEXT →</button>
                 </div>
-
-                <div id="days-left">
-                    <!-- First 3 days -->
-                </div>
-
-
             </div>
-            <div class="view-pane">
-                <div id="days-right">
-                    <!-- Remaining 4 days -->
+
+            <div class="notebook-spread">
+                <div class="view-pane">
+                    <div class="habit-grid">
+                        <div class="habit-section">
+                            <div class="habit-title">Weekly Habits</div>
+                            <div class="mini-week-row">
+                                <div class="habit-label">Exercise</div>
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div>
+                                    <div class="mini-day-box mon"></div>
+                                    <div class="mini-day-box tue"></div>
+                                    <div class="mini-day-box wed"></div>
+                                    <div class="mini-day-box thu"></div>
+                                    <div class="mini-day-box fri"></div>
+                                    <div class="mini-day-box sat"></div>
+                                </div>
+                            </div>
+                            <div class="mini-week-row">
+                                <div class="habit-label">Vitamins</div>
+                                <div class="mini-week-days">
+                                    <div class="mini-day-box sun"></div>
+                                    <div class="mini-day-box mon"></div>
+                                    <div class="mini-day-box tue"></div>
+                                    <div class="mini-day-box wed"></div>
+                                    <div class="mini-day-box thu"></div>
+                                    <div class="mini-day-box fri"></div>
+                                    <div class="mini-day-box sat"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="days-left">
+                        <!-- First 3 days -->
+                    </div>
+                </div>
+                <div class="view-pane">
+                    <div id="days-right">
+                        <!-- Remaining 4 days -->
+                    </div>
                 </div>
             </div>
         </div>

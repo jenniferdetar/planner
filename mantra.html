@@ -24,15 +24,38 @@
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
 
         .notebook-container {
             display: flex;
             flex-grow: 1;
-            overflow: hidden;
             background: #fff;
+            overflow: hidden;
+        }
+
+        #main-content-container {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 !important;
+            overflow-y: auto !important;
+            padding: 0 !important;
+        }
+
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        .view-pane {
+            flex: 1;
+            background: #fff;
+            margin: 0 !important;
+            padding: 20px !important;
+            overflow-y: visible !important;
+            position: relative;
+            height: auto !important;
         }
 
         /* Multi-level Sidebar */
@@ -255,21 +278,22 @@
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="view-pane">
-                <div class="floral-corner"></div>
-                <h1 class="page-title">Daily Mantras</h1>
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <a href="planner.html?category=Mantra" class="nav-link" style="display: inline-flex; border-color: var(--mantra-green); color: var(--mantra-green);">View Mantra Notebook</a>
-                </div>
+            <div class="notebook-spread">
+                <div class="view-pane">
+                    <div class="floral-corner"></div>
+                    <h1 class="page-title">Daily Mantras</h1>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <a href="planner.html?category=Mantra" class="nav-link" style="display: inline-flex; border-color: var(--mantra-green); color: var(--mantra-green);">View Mantra Notebook</a>
+                    </div>
 
-                <div class="section-title" id="manifesto-title">Manifesto</div>
-                <script>
-                    const mUrlParams = new URLSearchParams(window.location.search);
-                    const mDateParam = mUrlParams.get('date');
-                    const mYear = mDateParam ? new Date(mDateParam).getFullYear() : new Date().getFullYear();
-                    document.getElementById('manifesto-title').innerText = `${mYear} Manifesto`;
-                </script>
-                <div class="manifesto-section">
+                    <div class="section-title" id="manifesto-title">Manifesto</div>
+                    <script>
+                        const mUrlParams = new URLSearchParams(window.location.search);
+                        const mDateParam = mUrlParams.get('date');
+                        const mYear = mDateParam ? new Date(mDateParam).getFullYear() : new Date().getFullYear();
+                        document.getElementById('manifesto-title').innerText = `${mYear} Manifesto`;
+                    </script>
+                    <div class="manifesto-section">
                     <div class="manifesto-item">
                         <div class="checkbox-box"></div>
                         <p class="manifesto-text">I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly.</p>
@@ -310,6 +334,7 @@
 
                 <div id="mantras-list" class="mantras-list" style="padding-left: 0;">
                     <!-- Mantras will load here -->
+                </div>
                 </div>
             </div>
         </div>

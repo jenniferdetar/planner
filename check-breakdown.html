@@ -21,7 +21,6 @@
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
         .notebook-container {
@@ -29,6 +28,27 @@
             flex-grow: 1;
             overflow: hidden;
             background: #fff;
+        }
+        #main-content-container {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 !important;
+            overflow-y: auto !important;
+            padding: 0 !important;
+        }
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+        .view-pane {
+            flex: 1;
+            background: #fff;
+            margin: 0 !important;
+            padding: 20px !important;
+            overflow-y: visible !important;
+            position: relative;
+            height: auto !important;
         }
         /* Vertical Sidebar */
         .section-sidebar {
@@ -194,59 +214,27 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon active" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <main class="notebook-main">
-            <div class="notebook-page">
-                <div class="page-header">
-                    <h1 class="page-title">Check Breakdown</h1>
-                </div>
-
-                <div class="table-container">
-                    <table class="sheet-table">
-                        <thead>
-                            <tr class="header-row">
-                                <th class="account-col">Account</th>
-                                <script>
-                                    const urlParamsDates = new URLSearchParams(window.location.search);
-                                    const dateParamDates = urlParamsDates.get('date');
-                                    let baseDateDates = dateParamDates ? new Date(dateParamDates) : new Date();
-                                    if (isNaN(baseDateDates.getTime())) baseDateDates = new Date();
-                                    
-                                    // Set to 1st of month
-                                    baseDateDates.setDate(1);
-                                    
-                                    const dates = [];
-                                    for (let i = 0; i < 10; i++) {
-                                        const d1 = new Date(baseDateDates);
-                                        d1.setMonth(baseDateDates.getMonth() + i);
-                                        d1.setDate(5);
-                                        dates.push(`${d1.getMonth() + 1}/${d1.getDate()}/${d1.getFullYear()}`);
-                                        
-                                        const d2 = new Date(baseDateDates);
-                                        d2.setMonth(baseDateDates.getMonth() + i);
-                                        d2.setDate(20);
-                                        dates.push(`${d2.getMonth() + 1}/${d2.getDate()}/${d2.getFullYear()}`);
-                                    }
-                                    dates.forEach(d => document.write(`<th>${d}</th>`));
-                                </script>
-                            </tr>
-                        </thead>
-                        <tbody id="sheet-body">
-                        </tbody>
-                    </table>
+    <div class="app-container">
+        <div class="main-content" id="main-content-container">
+            <div class="notebook-spread">
+                <div class="view-pane" style="flex: 1.5;">
+                    <div class="page-header">
+                        <h1 class="page-title">Check Breakdown</h1>
+                    </div>
+                    <div class="table-container">
+                        <table class="sheet-table">
+                            <thead>
+                                <tr class="header-row">
+                                    <th class="account-col">Account</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sheet-body">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
     <div id="save-status" class="save-status">All changes saved</div>
 

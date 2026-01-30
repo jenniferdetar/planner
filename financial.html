@@ -28,15 +28,38 @@
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
 
         .notebook-container {
             display: flex;
             flex-grow: 1;
-            overflow: hidden;
             background: #fff;
+            overflow: hidden;
+        }
+
+        #main-content-container {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 !important;
+            overflow-y: auto !important;
+            padding: 0 !important;
+        }
+
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        .view-pane {
+            flex: 1;
+            background: #fff;
+            margin: 0 !important;
+            padding: 20px !important;
+            overflow-y: visible !important;
+            position: relative;
+            height: auto !important;
         }
 
         /* Multi-level Sidebar */
@@ -242,14 +265,7 @@
         .cb-n { background-color: #ffccff; }
         .cb-d { background-color: #ffcce6; }
 
-        .save-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #fff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        .save-status-inline {
             font-size: 10pt;
             color: #666;
         }
@@ -270,53 +286,55 @@
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="view-pane">
-                <div class="schedule-header">
-                    <h1 class="page-title">Bill Payment Schedule</h1>
-                    <p class="subtitle">Keep track of your bill payments by listing recurring expenses. Check them off the list below as you pay your bills each month.</p>
-                    <div style="margin: 20px 0;">
-                        <a href="check-breakdown.html" class="nav-btn">Check Breakdown View</a>
+            <div class="notebook-spread">
+                <div class="view-pane">
+                    <div class="schedule-header">
+                        <h1 class="page-title">Bill Payment Schedule</h1>
+                        <p class="subtitle">Keep track of your bill payments by listing recurring expenses. Check them off the list below as you pay your bills each month.</p>
+                        <div style="margin: 20px 0;">
+                            <a href="check-breakdown.html" class="nav-btn">Check Breakdown View</a>
+                        </div>
+                    </div>
+                    <div style="padding: 20px; font-family: 'Coming Soon', cursive; line-height: 1.6;">
+                        <h3>Financial Goals</h3>
+                        <ul style="list-style-type: '→ '; padding-left: 20px;">
+                            <li>Review subscriptions monthly</li>
+                            <li>Pay down high-interest debt</li>
+                            <li>Save 10% for emergencies</li>
+                        </ul>
                     </div>
                 </div>
-                <div style="padding: 20px; font-family: 'Coming Soon', cursive; line-height: 1.6;">
-                    <h3>Financial Goals</h3>
-                    <ul style="list-style-type: '→ '; padding-left: 20px;">
-                        <li>Review subscriptions monthly</li>
-                        <li>Pay down high-interest debt</li>
-                        <li>Save 10% for emergencies</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="view-pane">
-                <div class="bill-table-container">
-                    <table class="bill-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 80px;">Cat</th>
-                                <th style="width: 150px;">Item</th>
-                                <th style="width: 60px;">Amt</th>
-                                <th class="month-col">J</th>
-                                <th class="month-col">F</th>
-                                <th class="month-col">M</th>
-                                <th class="month-col">A</th>
-                                <th class="month-col">M</th>
-                                <th class="month-col">J</th>
-                                <th class="month-col">J</th>
-                                <th class="month-col">A</th>
-                                <th class="month-col">S</th>
-                                <th class="month-col">O</th>
-                                <th class="month-col">N</th>
-                                <th class="month-col">D</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bill-body">
-                        </tbody>
-                    </table>
+                <div class="view-pane">
+                    <div class="bill-table-container">
+                        <table class="bill-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">Cat</th>
+                                    <th style="width: 150px;">Item</th>
+                                    <th style="width: 60px;">Amt</th>
+                                    <th class="month-col">J</th>
+                                    <th class="month-col">F</th>
+                                    <th class="month-col">M</th>
+                                    <th class="month-col">A</th>
+                                    <th class="month-col">M</th>
+                                    <th class="month-col">J</th>
+                                    <th class="month-col">J</th>
+                                    <th class="month-col">A</th>
+                                    <th class="month-col">S</th>
+                                    <th class="month-col">O</th>
+                                    <th class="month-col">N</th>
+                                    <th class="month-col">D</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bill-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="save-status" class="save-status-inline" style="margin-top: 20px; text-align: right;">All changes saved</div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
         let saveTimeout;
