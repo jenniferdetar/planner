@@ -244,19 +244,9 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon active" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <main class="notebook-main">
-            <div class="notebook-page">
+    <div class="app-container">
+        <div class="main-content" id="main-content-container">
+            <div class="view-pane">
                 <h1 class="page-title">Icaap Notes</h1>
                 <div class="tracking-links-container">
                     <a href="icaap-attendance.html" class="tracking-pill">
@@ -274,12 +264,14 @@
                             <button class="save-btn" onclick="handleAddNote()">Save Note</button>
                         </div>
                     </div>
-                    <div id="entries-list" class="entries-list">
-                        <!-- Entries will be loaded here -->
-                    </div>
                 </div>
             </div>
-        </main>
+            <div class="view-pane">
+                <div id="entries-list" class="entries-list">
+                    <!-- Entries will be loaded here -->
+                </div>
+            </div>
+        </div>
     </div>
     <script>
         const urlParams = new URLSearchParams(window.location.search);

@@ -227,6 +227,87 @@ function animateAndNavigate(event, url) {
         .flip-out {
             animation: flip-out 0.6s ease-in forwards !important;
         }
+
+        /* Global Planner Layout Styles */
+        :root {
+            --app-bg: #1a1a1a;
+            --sidebar-bg: #262626;
+            --content-bg: #fdfdfd;
+            --accent-color: #4a3427;
+        }
+        .app-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: var(--app-bg);
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            gap: 0;
+            background: var(--sidebar-bg);
+            padding: 5px;
+            overflow: hidden;
+        }
+        .view-pane {
+            flex: 1;
+            background: var(--content-bg);
+            margin: 2px;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .tabs-sidebar {
+            width: 120px;
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 10px 0;
+            z-index: 100;
+            border-left: 1px solid #333;
+        }
+        .tab {
+            padding: 25px 10px;
+            color: #aaa;
+            font-size: 10pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            text-align: center;
+            border-left: 4px solid transparent;
+            text-decoration: none;
+            display: block;
+        }
+        .tab:hover {
+            color: #fff;
+            background: #333;
+        }
+        .tab.active {
+            background: var(--content-bg);
+            color: var(--accent-color);
+            border-left: 4px solid var(--accent-color);
+        }
+        .logout-btn {
+            padding: 15px;
+            font-size: 8pt;
+            color: #666;
+            cursor: pointer;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid #333;
+        }
+        .logout-btn:hover {
+            color: #fff;
+            background: #c0392b;
+        }
     `;
     document.head.appendChild(style);
 
@@ -239,6 +320,33 @@ function animateAndNavigate(event, url) {
                           document.querySelector('.planner-container');
         if (container) {
             container.classList.add('flip-in');
+        }
+
+        // Auto-initialize Navigation Sidebar if app-container exists
+        const appContainer = document.querySelector('.app-container') || document.querySelector('.notebook-container');
+        if (appContainer && !document.querySelector('.tabs-sidebar')) {
+            const sidebar = document.createElement('div');
+            sidebar.className = 'tabs-sidebar';
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category') || '';
+            const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+            
+            sidebar.innerHTML = `
+                <div class="tab ${isIndex ? 'active' : ''}" onclick="animateAndNavigate(event, 'index.html')">HOME</div>
+                <div class="tab ${category === 'HOA' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=HOA')">HOA</div>
+                <div class="tab ${category === 'CSEA' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=CSEA')">CSEA</div>
+                <div class="tab ${category === 'iCAAP' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=iCAAP')">ICAAP</div>
+                <div class="tab ${category === 'Finance' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=Finance')">FINANCE</div>
+                <div class="tab ${category === 'Planning' ? 'active' : ''}" onclick="animateAndNavigate(event, 'planner.html?category=Planning')">PLAN</div>
+                <div class="logout-btn" onclick="animateAndNavigate(event, 'index.html')">🏠 Home</div>
+                <div class="logout-btn" onclick="logout()">🚪 Logout</div>
+            `;
+            appContainer.appendChild(sidebar);
+
+            // If we found a sidebar, ensure we remove any old sidebars
+            const oldSidebar = document.querySelector('.section-sidebar');
+            if (oldSidebar) oldSidebar.remove();
         }
     });
 

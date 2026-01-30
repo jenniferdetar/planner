@@ -10,11 +10,6 @@
     <script src="shared.js"></script>
     <style>
         :root { 
-            --app-bg: #1a1a1a; 
-            --sidebar-bg: #262626; 
-            --content-bg: #fdfdfd; 
-            --accent-color: #4a3427; 
-            --text-color: #333;
             --sun-bg: #f59e9e;
             --mon-bg: #f6d2a2;
             --tue-bg: #a2d9d9;
@@ -27,7 +22,6 @@
         }
 
         body {
-            background-color: var(--app-bg);
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -35,86 +29,6 @@
             display: flex;
             overflow: hidden;
             color: var(--text-color);
-        }
-
-        .app-container {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            gap: 0;
-            background: var(--sidebar-bg);
-            padding: 5px;
-            overflow: hidden;
-        }
-
-        .view-pane {
-            flex: 1;
-            background: var(--content-bg);
-            margin: 2px;
-            padding: 20px;
-            overflow-y: auto;
-            position: relative;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .tabs-sidebar {
-            width: 120px;
-            background: var(--sidebar-bg);
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            padding: 10px 0;
-            z-index: 100;
-            border-left: 1px solid #333;
-        }
-
-        .tab {
-            padding: 25px 10px;
-            color: #aaa;
-            font-size: 10pt;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.2s;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            text-align: center;
-            border-left: 4px solid transparent;
-            text-decoration: none;
-        }
-
-        .tab:hover {
-            color: #fff;
-            background: #333;
-        }
-
-        .tab.active {
-            background: var(--content-bg);
-            color: var(--accent-color);
-            border-left: 4px solid var(--accent-color);
-        }
-
-        .logout-btn {
-            padding: 15px;
-            font-size: 8pt;
-            color: #666;
-            cursor: pointer;
-            text-align: center;
-            margin-top: auto;
-            border-top: 1px solid #333;
-        }
-
-        .logout-btn:hover {
-            color: #fff;
-            background: #c0392b;
         }
 
         .header-controls {
@@ -325,21 +239,10 @@
                     <!-- Calendar will be injected here -->
                 </div>
             </div>
-            <div class="view-pane" id="right-pane-links" style="max-width: 300px; flex: none;">
+            <div class="view-pane" id="right-pane-links">
                 <!-- Links will be injected here -->
             </div>
         </div>
-
-        <div class="tabs-sidebar">
-            <a href="index.html" class="tab active">Home</a>
-            <a href="planner.html?category=HOA" class="tab">HOA</a>
-            <a href="planner.html?category=CSEA" class="tab">CSEA</a>
-            <a href="planner.html?category=iCAAP" class="tab">iCAAP</a>
-            <a href="planner.html?category=Finance" class="tab">Finance</a>
-            <a href="planner.html?category=Planning" class="tab">Plan</a>
-            <div class="logout-btn" onclick="logout()">🚪 Logout</div>
-        </div>
-    </div>
 
     <script>
         function parseLocalDate(dateStr) {
@@ -368,11 +271,11 @@
             rightPane.innerHTML = `
                 <div class="page-title" style="font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 20px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Quick Links</div>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <a href="planner.html?category=Personal-Planner&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;">👤 Personal Planner</a>
-                    <a href="planner.html?category=Work-Planner&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;">💼 Work Planner</a>
-                    <a href="planner.html?category=Budget&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;">💰 Financial Planner</a>
-                    <a href="planner.html?category=Monthly-Review&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;">📅 Monthly Review</a>
-                    <a href="planner.html?category=CSEA&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;">📁 CSEA Hub</a>
+                    <a href="planner.html?category=Personal-Planner&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">👤 Personal Planner</a>
+                    <a href="planner.html?category=Work-Planner&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">💼 Work Planner</a>
+                    <a href="planner.html?category=Budget&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">💰 Financial Planner</a>
+                    <a href="planner.html?category=Monthly-Review&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">📅 Monthly Review</a>
+                    <a href="planner.html?category=CSEA&date=${dateStr}" class="nav-btn" style="text-align: center; padding: 15px;" onclick="animateAndNavigate(event, this.href)">📁 CSEA Hub</a>
                 </div>
             `;
 

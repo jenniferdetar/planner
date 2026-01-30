@@ -253,19 +253,9 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon active" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <main class="notebook-main">
-            <div class="notebook-page">
+    <div class="app-container">
+        <div class="main-content" id="main-content-container">
+            <div class="view-pane">
                 <div class="floral-corner"></div>
                 <h1 class="page-title">Daily Mantras</h1>
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -282,46 +272,47 @@
                 <div class="manifesto-section">
                     <div class="manifesto-item">
                         <div class="checkbox-box"></div>
-                        <p class="manifesto-text">I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly. I will schedule solitude the way others schedule meetings, because if my calendar has no white space, something is out of alignment. Rest is not a reward for productivity; it is a responsibility I owe to my body, my mind, and my spirit.</p>
+                        <p class="manifesto-text">I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly.</p>
                     </div>
                     <div class="manifesto-item">
                         <div class="checkbox-box"></div>
-                        <p class="manifesto-text">I lead without shrinking. I have earned my seat at the table, and when necessary, I am capable of building the table myself. I will speak when I know something and step forward when I am ready, not when I am pressured. Visibility does not require apology, and leadership does not require loudness. It requires clarity, consistency, and the courage to stand steady even when it would be easier to disappear.</p>
+                        <p class="manifesto-text">I lead without shrinking. I have earned my seat at the table, and when necessary, I am capable of building the table myself.</p>
                     </div>
                     <div class="manifesto-item">
                         <div class="checkbox-box"></div>
-                        <p class="manifesto-text">I build what grounds me. I value practical skills that feed people, calm homes, and create stability. There is dignity in old ways done well, and in returning to work that uses my hands and steadies my nervous system. When life feels chaotic, I come back to the tangible and the orderly. Creating structure is how I restore peace.</p>
+                        <p class="manifesto-text">I build what grounds me. I value practical skills that feed people, calm homes, and create stability.</p>
                     </div>
                     <div class="manifesto-item">
                         <div class="checkbox-box"></div>
-                        <p class="manifesto-text">I serve with boundaries. I help people who are willing to participate in their own growth, and I release the need to rescue, overextend, or prove my worth through exhaustion. My generosity is intentional, not reactive, and my compassion does not require self-abandonment. I am allowed to care deeply without carrying everything.</p>
+                        <p class="manifesto-text">I serve with boundaries. I help people who are willing to participate in their own growth.</p>
                     </div>
                     <div class="manifesto-item">
                         <div class="checkbox-box"></div>
-                        <p class="manifesto-text">I protect joy as a non-negotiable. Not every moment must be productive to be valuable. Some moments exist simply to be remembered—shared meals, laughter, road trips, quiet conversations, and ordinary days that become sacred because I was fully present. Joy is not a distraction from my purpose; it is evidence that I am living it.</p>
+                        <p class="manifesto-text">I protect joy as a non-negotiable. Not every moment must be productive to be valuable.</p>
                     </div>
                     <div class="manifesto-item">
                         <div class="checkbox-box"></div>
-                        <p class="manifesto-text">I trust the pace of my life. I am not late, not behind, and not missing anything meant for me. I am becoming. I will not rush what is meant to mature, and I will not carry what was never mine to hold. Consistency matters more than urgency, and faith steadies me when fear tries to speak louder.</p>
+                        <p class="manifesto-text">I trust the pace of my life. I am not late, not behind, and not missing anything meant for me.</p>
                     </div>
                     <div class="manifesto-item">
                         <div class="checkbox-box"></div>
-                        <p class="manifesto-text">I am building a life where work is meaningful but not consuming, leadership is steady rather than frantic, service is impactful without being depleting, and home is calm instead of chaotic. My faith remains central, my values guide my choices, and my peace is protected on purpose. I move forward with intention, rooted rather than rushed, trusting that this way of living is not only sustainable—it is right.</p>
+                        <p class="manifesto-text">I am building a life where work is meaningful but not consuming, leadership is steady rather than frantic, service is impactful without being depleting, and home is calm instead of chaotic.</p>
                     </div>
                 </div>
-
+            </div>
+            <div class="view-pane">
                 <div class="section-title">Collection</div>
                 
-                <div class="input-group">
+                <div class="input-group" style="padding-left: 0;">
                     <input type="text" id="new-mantra" class="mantra-input" placeholder="Enter a new mantra..." onkeypress="if(event.key==='Enter')handleAddMantra()">
                     <button class="add-btn" onclick="handleAddMantra()">Add to Collection</button>
                 </div>
 
-                <div id="mantras-list" class="mantras-list">
+                <div id="mantras-list" class="mantras-list" style="padding-left: 0;">
                     <!-- Mantras will load here -->
                 </div>
             </div>
-        </main>
+        </div>
     </div>
     <div id="save-status" class="save-status">All changes saved</div>
 

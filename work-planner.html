@@ -361,46 +361,13 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon active" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <aside class="notes-sidebar">
-            <div class="sidebar-header">WORK NOTES</div>
-            <a href="planner.html?category=Work-Planner" class="sidebar-link active">
-                <span style="font-size: 1.1rem;">🗓️</span> Work Planner
-            </a>
-            <a href="planner.html?category=CSEA" class="sidebar-link">
-                <span style="font-size: 1.1rem;">📁</span> CSEA
-            </a>
-            <a href="planner.html?category=HOA" class="sidebar-link">
-                <span style="font-size: 1.1rem;">🏠</span> HOA
-            </a>
-        </aside>
-
-        <main class="notebook-main">
-            <div class="notebook-page">
+    <div class="app-container">
+        <div class="main-content" id="main-content-container">
+            <div class="view-pane">
                 <h1 class="main-page-title">Work Planner 2026</h1>
                 <div id="full-date-subtitle" class="main-page-subtitle">Loading date...</div>
                 <hr class="header-hr">
-
-                <div class="planner-header">
-                    <div id="week-range" class="date-range">Loading range...</div>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 35px; margin: 15px 0;">
-                        <button class="nav-btn-purple" onclick="changeWeek(-1)">Prev Week</button>
-                        <h2 style="margin: 0; color: var(--header-blue); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 700; letter-spacing: 2px;">WORK PLANNER</h2>
-                        <button class="nav-btn-purple" onclick="changeWeek(1)">Next Week</button>
-                    </div>
-                    <div id="save-status" class="save-status">All changes saved</div>
-                </div>
-
+                
                 <div class="top-grid">
                     <div class="top-section">
                         <div class="section-title">Priority #1</div>
@@ -414,25 +381,31 @@
                         <div class="section-title">Priority #3</div>
                         <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3"></div>
                     </div>
-                    <div class="top-section">
-                        <div class="section-title">One thing I'm looking forward to</div>
-                        <div class="editable-area" contenteditable="true" id="looking-forward" data-field="looking-forward"></div>
-                    </div>
-                    <div class="top-section">
-                        <div class="section-title">Someone I can encourage</div>
-                        <div class="editable-area" contenteditable="true" id="encourage" data-field="encourage"></div>
-                    </div>
-                    <div class="top-section">
-                        <div class="section-title">Something I'd like to read/listen to</div>
-                        <div class="editable-area" contenteditable="true" id="read-listen" data-field="read-listen"></div>
-                    </div>
                 </div>
 
+                <div class="sidebar-header">WORK NOTES</div>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                    <a href="planner.html?category=Work-Planner" class="nav-btn" style="text-align: left;" onclick="animateAndNavigate(event, this.href)">🗓️ Work Planner</a>
+                    <a href="planner.html?category=CSEA" class="nav-btn" style="text-align: left;" onclick="animateAndNavigate(event, this.href)">📁 CSEA</a>
+                    <a href="planner.html?category=HOA" class="nav-btn" style="text-align: left;" onclick="animateAndNavigate(event, this.href)">🏠 HOA</a>
+                </div>
+                
+                <div id="save-status" class="save-status">All changes saved</div>
+            </div>
+            <div class="view-pane">
+                <div class="planner-header">
+                    <div id="week-range" class="date-range">Loading range...</div>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 35px; margin: 15px 0;">
+                        <button class="nav-btn-purple" onclick="changeWeek(-1)">Prev</button>
+                        <h2 style="margin: 0; color: var(--header-blue); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 2px;">SCHEDULE</h2>
+                        <button class="nav-btn-purple" onclick="changeWeek(1)">Next</button>
+                    </div>
+                </div>
                 <div id="planner-columns" class="daily-columns">
                     <!-- Days will be injected here -->
                 </div>
             </div>
-        </main>
+        </div>
     </div>
     <script>
         function parseLocalDate(dateStr) {

@@ -268,19 +268,9 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon active" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <main class="notebook-main">
-            <div class="notebook-page">
+    <div class="app-container">
+        <div class="main-content" id="main-content-container">
+            <div class="view-pane">
                 <div class="schedule-header">
                     <h1 class="page-title">Bill Payment Schedule</h1>
                     <p class="subtitle">Keep track of your bill payments by listing recurring expenses. Check them off the list below as you pay your bills each month.</p>
@@ -288,33 +278,45 @@
                         <a href="check-breakdown.html" class="nav-btn">Check Breakdown View</a>
                     </div>
                 </div>
-
+                <div style="padding: 20px; font-family: 'Coming Soon', cursive; line-height: 1.6;">
+                    <h3>Financial Goals</h3>
+                    <ul style="list-style-type: '→ '; padding-left: 20px;">
+                        <li>Review subscriptions monthly</li>
+                        <li>Pay down high-interest debt</li>
+                        <li>Save 10% for emergencies</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="view-pane">
                 <div class="bill-table-container">
                     <table class="bill-table">
-                <thead>
-                    <tr>
-                        <th style="width: 100px;">Category</th>
-                        <th style="width: 200px;">Item</th>
-                        <th style="width: 80px;">Amount</th>
-                        <th class="month-col">J</th>
-                        <th class="month-col">F</th>
-                        <th class="month-col">M</th>
-                        <th class="month-col">A</th>
-                        <th class="month-col">M</th>
-                        <th class="month-col">J</th>
-                        <th class="month-col">J</th>
-                        <th class="month-col">A</th>
-                        <th class="month-col">S</th>
-                        <th class="month-col">O</th>
-                        <th class="month-col">N</th>
-                        <th class="month-col">D</th>
-                    </tr>
-                </thead>
-                <tbody id="bill-body">
-                </tbody>
-            </table>
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Cat</th>
+                                <th style="width: 150px;">Item</th>
+                                <th style="width: 60px;">Amt</th>
+                                <th class="month-col">J</th>
+                                <th class="month-col">F</th>
+                                <th class="month-col">M</th>
+                                <th class="month-col">A</th>
+                                <th class="month-col">M</th>
+                                <th class="month-col">J</th>
+                                <th class="month-col">J</th>
+                                <th class="month-col">A</th>
+                                <th class="month-col">S</th>
+                                <th class="month-col">O</th>
+                                <th class="month-col">N</th>
+                                <th class="month-col">D</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bill-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+    <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
         let saveTimeout;
