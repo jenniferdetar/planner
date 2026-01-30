@@ -11,105 +11,17 @@
     <style>
         * { box-sizing: border-box; }
         :root { 
-            --sun-bg: #f59e9e;
-            --mon-bg: #f6d2a2;
-            --tue-bg: #a2d9d9;
-            --wed-bg: #5a8ca0;
-            --thu-bg: #f59e9e;
-            --fri-bg: #f6d2a2;
-            --sat-bg: #a2d9d9;
-            --border-color: #333;
+            --sun-bg: #ff5252;
+            --mon-bg: #fb8c00;
+            --tue-bg: #00acc1;
+            --wed-bg: #3949ab;
+            --thu-bg: #e91e63;
+            --fri-bg: #fdd835;
+            --sat-bg: #00897b;
+            --border-color: #2f4f4f;
             --header-blue: #00326b;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-            color: var(--text-color);
-        }
-
-        /* Adjust view-panes to meet at the spine */
-        .view-pane {
-            flex: 1;
-            background: var(--content-bg);
-            margin: 0 !important;
-            padding: 20px !important;
-            overflow-y: visible !important;
-            position: relative;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-            height: auto !important;
-        }
-
-        #main-content-container {
-            flex-direction: column !important;
-            overflow-y: auto !important;
-            padding: 0 !important;
-            display: flex !important;
-        }
-
-        .notebook-spread {
-            display: flex;
-            flex: 1;
-            width: 100%;
-        }
-
-        .header-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px 0;
-            gap: 40px;
-            width: 100%;
-            background: var(--sidebar-bg);
-            position: relative;
-            z-index: 30;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .header-controls h1 {
-            margin: 0;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
-        .month-title {
-            font-size: 14pt;
-            letter-spacing: 5px;
-            color: var(--accent-color);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 5px;
-        }
-
-        .nav-btn {
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 6px 15px;
-            cursor: pointer;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 600;
-            font-size: 9pt;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: all 0.1s ease;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .nav-btn:hover {
-            background: #f8f8f8;
-            transform: translateY(-1px);
-        }
-
-
-        
         /* Specific pill colors based on keywords */
         .event-pill.csea, .event-pill.la-fed { 
             background-color: #00326b; 
@@ -303,12 +215,6 @@
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="header-controls">
-                <button class="nav-btn" onclick="changeMonth(-1)">Prev</button>
-                <h1 id="current-month-display" class="month-title">Loading...</h1>
-                <button class="nav-btn" onclick="changeMonth(1)">Next</button>
-            </div>
-
             <div class="notebook-spread">
                 <div class="view-pane">
                     <div id="calendar-grid-left" class="calendar-grid calendar-grid-left">
@@ -345,7 +251,7 @@
             const month = currentDate.getMonth();
             const monthName = currentDate.toLocaleString('default', { month: 'long' });
             
-            document.getElementById('current-month-display').innerText = `${monthName} ${year}`;
+            setGlobalHeaderTitle(`${monthName} ${year}`);
             
             // Render Monthly Focus in Right Pane
             const focusContainer = document.getElementById('monthly-focus-container');
@@ -442,17 +348,6 @@
         async function renderMonthlyFocus(container) {
             container.innerHTML = `
                 <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
-                    <div style="background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                        <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 15px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Quick Links</div>
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <button class="nav-btn" onclick="window.location.href='planner.html?category=Personal-Planner'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>👤</span> Personal Planner</button>
-                            <button class="nav-btn" onclick="window.location.href='planner.html?category=Work-Planner'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>💼</span> Work Planner</button>
-                            <button class="nav-btn" onclick="window.location.href='financial.html'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>💰</span> Financial Planner</button>
-                            <button class="nav-btn" onclick="window.location.href='monthly-review.html'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>📅</span> Monthly Review</button>
-                            <button class="nav-btn" onclick="window.location.href='planner.html?category=CSEA'" style="text-align: left; padding: 12px; display: flex; align-items: center; gap: 10px; background: #fff; width: 100%;"><span>📁</span> CSEA Hub</button>
-                        </div>
-                    </div>
-
                     <div style="background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
                         <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 15px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: left;">Monthly Focus</div>
                         <div id="monthly-entries-list" class="handwriting" style="min-height: 100px; margin-bottom: 20px; line-height: 1.8;"></div>

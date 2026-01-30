@@ -139,6 +139,11 @@ async function logout() {
     }
 }
 
+function setGlobalHeaderTitle(title) {
+    const el = document.getElementById('global-header-title');
+    if (el) el.innerText = title;
+}
+
 // Global Auth Check
 if (typeof window !== 'undefined' && !window.location.pathname.endsWith('login.html')) {
     requireAuth();
@@ -207,39 +212,41 @@ function animateAndNavigate(event, url, direction = 'next') {
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes flip-in-next {
-            0% { transform: perspective(2000px) rotateY(180deg); opacity: 0; }
-            100% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
+            0% { transform: perspective(2500px) rotateY(90deg); opacity: 0; }
+            100% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
         }
         @keyframes flip-out-next {
-            0% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2000px) rotateY(-180deg); opacity: 0; }
+            0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
+            100% { transform: perspective(2500px) rotateY(-90deg); opacity: 0; }
         }
         @keyframes flip-in-prev {
-            0% { transform: perspective(2000px) rotateY(-180deg); opacity: 0; }
-            100% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
+            0% { transform: perspective(2500px) rotateY(-90deg); opacity: 0; }
+            100% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
         }
         @keyframes flip-out-prev {
-            0% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2000px) rotateY(180deg); opacity: 0; }
+            0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
+            100% { transform: perspective(2500px) rotateY(90deg); opacity: 0; }
         }
 
         .main-container, .main-content, .notebook-main, .content-pane, .planner-container {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s linear;
-            transform-origin: center center;
+            transform-origin: center left;
             backface-visibility: hidden;
-            perspective: 2000px;
+            perspective: 2500px;
         }
         .flip-in-next {
             animation: flip-in-next 0.6s ease-out forwards !important;
         }
         .flip-out-next {
             animation: flip-out-next 0.6s ease-in forwards !important;
+            transform-origin: center left;
         }
         .flip-in-prev {
             animation: flip-in-prev 0.6s ease-out forwards !important;
         }
         .flip-out-prev {
             animation: flip-out-prev 0.6s ease-in forwards !important;
+            transform-origin: center right;
         }
 
         /* Global Planner Layout Styles */
@@ -248,13 +255,67 @@ function animateAndNavigate(event, url, direction = 'next') {
             --sidebar-bg: #262626;
             --content-bg: #fdfdfd;
             --accent-color: #4a3427;
+            --sun-bg: #ff5252;
+            --mon-bg: #fb8c00;
+            --tue-bg: #00acc1;
+            --wed-bg: #3949ab;
+            --thu-bg: #e91e63;
+            --fri-bg: #fdd835;
+            --sat-bg: #00897b;
+            --border-color: #2f4f4f;
         }
         .app-container {
             display: flex;
+            flex-direction: column;
             width: 100vw;
             height: 100vh;
             position: relative;
             background: var(--app-bg);
+            overflow: hidden;
+        }
+        .app-main {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        .header-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4px 0;
+            gap: 20px;
+            width: 100%;
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            z-index: 1000;
+            flex-shrink: 0;
+        }
+        .header-title {
+            font-size: 10pt;
+            letter-spacing: 4px;
+            color: #fff;
+            margin: 0;
+            text-transform: uppercase;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+        }
+        .nav-btn-header {
+            background: transparent;
+            border: 1px solid #444;
+            color: #aaa;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 8pt;
+            border-radius: 4px;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .nav-btn-header:hover {
+            border-color: #666;
+            color: #fff;
+            background: rgba(255,255,255,0.05);
         }
         .main-content {
             flex: 1;
@@ -312,7 +373,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             flex: 1;
             background: var(--content-bg);
             margin: 2px;
-            padding: 20px;
+            padding: 10px 20px;
             overflow-y: visible;
             position: relative;
             border-radius: 4px;
@@ -372,47 +433,83 @@ function animateAndNavigate(event, url, direction = 'next') {
     document.head.appendChild(style);
 
     document.addEventListener('DOMContentLoaded', () => {
-        const container = document.getElementById('main-content-container') || 
-                          document.querySelector('.main-container') || 
-                          document.querySelector('.main-content') || 
-                          document.querySelector('.notebook-main') ||
-                          document.querySelector('.app-container') ||
-                          document.querySelector('.planner-container');
-        if (container) {
-            container.classList.add('flip-in-next');
-        }
-
-        // Auto-initialize Navigation Sidebar if app-container exists
         const appContainer = document.querySelector('.app-container') || document.querySelector('.notebook-container');
-        if (appContainer && !document.querySelector('.tabs-sidebar')) {
-            const sidebar = document.createElement('div');
-            sidebar.className = 'tabs-sidebar';
-            
-            const urlParams = new URLSearchParams(window.location.search);
-            const category = urlParams.get('category') || '';
-            const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
-            
-            const isHOA = window.location.pathname.endsWith('hoa.html') || category === 'HOA';
-            const isCSEA = window.location.pathname.endsWith('csea.html') || category === 'CSEA';
-            const isICAAP = window.location.pathname.endsWith('icaap.html') || category === 'iCAAP' || category === 'ICAAP';
-            const isFinance = window.location.pathname.endsWith('financial.html') || category === 'Finance' || category === 'FINANCE' || category === 'Budget';
-            const isPlan = window.location.pathname.endsWith('planning.html') || category === 'Planning' || category === 'PLAN';
-            
-            sidebar.innerHTML = `
-                <div class="tab ${isIndex ? 'active' : ''}" onclick="animateAndNavigate(event, 'index.html')">HOME</div>
-                <div class="tab ${isHOA ? 'active' : ''}" onclick="animateAndNavigate(event, 'hoa.html')">HOA</div>
-                <div class="tab ${isCSEA ? 'active' : ''}" onclick="animateAndNavigate(event, 'csea.html')">CSEA</div>
-                <div class="tab ${isICAAP ? 'active' : ''}" onclick="animateAndNavigate(event, 'icaap.html')">ICAAP</div>
-                <div class="tab ${isFinance ? 'active' : ''}" onclick="animateAndNavigate(event, 'financial.html')">FINANCE</div>
-                <div class="tab ${isPlan ? 'active' : ''}" onclick="animateAndNavigate(event, 'planning.html')">PLAN</div>
-                <div class="logout-btn" onclick="animateAndNavigate(event, 'index.html')">🏠 Home</div>
-                <div class="logout-btn" onclick="logout()">🚪 Logout</div>
-            `;
-            appContainer.appendChild(sidebar);
+        
+        if (appContainer) {
+            // 1. Inject Global Header
+            if (!document.querySelector('.header-controls')) {
+                const header = document.createElement('div');
+                header.className = 'header-controls';
+                header.innerHTML = `
+                    <button class="nav-btn-header" onclick="if(window.changeWeek) changeWeek(-1); else if(window.changeMonth) changeMonth(-1);">Prev</button>
+                    <h1 class="header-title" id="global-header-title"></h1>
+                    <button class="nav-btn-header" onclick="if(window.changeWeek) changeWeek(1); else if(window.changeMonth) changeMonth(1);">Next</button>
+                `;
+                appContainer.prepend(header);
+            }
 
-            // If we found a sidebar, ensure we remove any old sidebars
-            const oldSidebar = document.querySelector('.section-sidebar');
-            if (oldSidebar) oldSidebar.remove();
+            // 2. Wrap Main Content + Sidebar in app-main for flex layout
+            let appMain = document.querySelector('.app-main');
+            if (!appMain) {
+                appMain = document.createElement('div');
+                appMain.className = 'app-main';
+                
+                // Move existing children (except header) into app-main
+                const children = Array.from(appContainer.childNodes).filter(node => 
+                    node.nodeType === 1 && !node.classList.contains('header-controls')
+                );
+                children.forEach(child => appMain.appendChild(child));
+                appContainer.appendChild(appMain);
+            }
+
+            // 3. Auto-initialize Navigation Sidebar if it doesn't exist
+            if (!document.querySelector('.tabs-sidebar')) {
+                const sidebar = document.createElement('div');
+                sidebar.className = 'tabs-sidebar';
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const category = urlParams.get('category') || '';
+                const path = window.location.pathname;
+                
+                const isIndex = path.endsWith('index.html') || path === '/';
+                const isHOA = path.endsWith('hoa.html') || category === 'HOA';
+                const isCSEA = path.endsWith('csea.html') || category === 'CSEA';
+                const isICAAP = path.endsWith('icaap.html') || category.toUpperCase() === 'ICAAP';
+                const isFinance = path.endsWith('financial.html') || ['FINANCE', 'BUDGET'].includes(category.toUpperCase());
+                const isPlan = path.endsWith('planning.html') || ['PLANNING', 'PLAN'].includes(category.toUpperCase());
+                
+                const sections = [
+                    { name: 'HOME', url: 'index.html', active: isIndex },
+                    { name: 'HOA', url: 'hoa.html', active: isHOA },
+                    { name: 'CSEA', url: 'csea.html', active: isCSEA },
+                    { name: 'ICAAP', url: 'icaap.html', active: isICAAP },
+                    { name: 'FINANCE', url: 'financial.html', active: isFinance },
+                    { name: 'PLAN', url: 'planning.html', active: isPlan }
+                ];
+
+                const activeIndex = sections.findIndex(s => s.active);
+                
+                let html = '';
+                sections.forEach((s, i) => {
+                    const direction = i > activeIndex ? 'next' : 'prev';
+                    html += `<div class="tab ${s.active ? 'active' : ''}" onclick="animateAndNavigate(event, '${s.url}', '${direction}')">${s.name}</div>`;
+                });
+                
+                html += `
+                    <div class="logout-btn" onclick="animateAndNavigate(event, 'index.html', 'prev')">🏠 Home</div>
+                    <div class="logout-btn" onclick="logout()">🚪 Logout</div>
+                `;
+                
+                sidebar.innerHTML = html;
+                appMain.appendChild(sidebar);
+            }
+
+            const container = document.getElementById('main-content-container') || 
+                              document.querySelector('.main-container') || 
+                              document.querySelector('.main-content');
+            if (container) {
+                container.classList.add('flip-in-next');
+            }
         }
     });
 

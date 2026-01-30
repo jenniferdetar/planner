@@ -13,75 +13,8 @@
             --border-color: #e1dfdd;
             --section-sidebar-width: 60px;
         }
-        body {
-            background-color: #f3f2f1;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .notebook-container {
-            display: flex;
-            flex-grow: 1;
-            overflow: hidden;
-            background: #fff;
-        }
-        /* Vertical Sidebar */
-        .section-sidebar {
-            width: var(--section-sidebar-width);
-            background: #1e3a63;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            gap: 15px;
-            flex-shrink: 0;
-            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
-        }
-        .section-icon {
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 10pt;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-        .section-icon:hover {
-            background: rgba(255,255,255,0.1);
-            opacity: 1;
-            transform: scale(1.05);
-        }
-        .section-icon.active {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            opacity: 1;
-        }
-        .section-icon.logout-icon {
-            margin-top: auto;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        .section-icon.logout-icon:hover {
-            opacity: 1;
-            color: #ffcdd2;
-        }
+        /* CSEA Specific Styles */
 
-        .notebook-main {
-            flex-grow: 1;
-            background: #fff;
-            overflow-y: auto;
-            position: relative;
-            scrollbar-width: thin;
-        }
         .notebook-page {
             width: 100%;
             max-width: 1400px;
@@ -306,7 +239,6 @@
         <div class="main-content" id="main-content-container">
             <div class="notebook-spread">
                 <div class="view-pane">
-                    <h1 class="page-title">Csea Notes</h1>
                     <div class="notes-section">
                         <div class="input-group">
                             <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
@@ -399,7 +331,7 @@
         let saveTimeout = null;
 
         // Update Title
-        document.querySelector('.page-title').innerText = `Csea Notes ${currentYear}`;
+        setGlobalHeaderTitle(`CSEA NOTES ${currentYear}`);
         document.querySelector('.interaction-log-header').innerText = `Member Interaction Log ${currentYear}`;
 
         // Reference Data

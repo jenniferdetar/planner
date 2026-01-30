@@ -9,14 +9,14 @@
     <script src="shared.js"></script>
     <style>
         :root {
-            --sun-bg: #f59e9e;
-            --mon-bg: #f6d2a2;
-            --tue-bg: #a2d9d9;
-            --wed-bg: #5a8ca0;
-            --thu-bg: #f59e9e;
-            --fri-bg: #f6d2a2;
-            --sat-bg: #a2d9d9;
-            --border-color: #e1dfdd;
+            --sun-bg: #ff5252;
+            --mon-bg: #fb8c00;
+            --tue-bg: #00acc1;
+            --wed-bg: #3949ab;
+            --thu-bg: #e91e63;
+            --fri-bg: #fdd835;
+            --sat-bg: #00897b;
+            --border-color: #2f4f4f;
             --text-color: #333;
             --header-blue: #00326b;
             --sidebar-width: 60px;
@@ -25,85 +25,7 @@
             --purple-hover: #5a189a;
         }
 
-        body {
-            background-color: #f3f2f1;
-            margin: 0;
-            padding: 0;
-            font-family: 'Homemade Apple', cursive;
-            font-size: 10pt;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-        }
-
-        .notebook-container {
-            display: flex;
-            flex-grow: 1;
-            background: #fff;
-            overflow: hidden;
-        }
-
-        #main-content-container {
-            display: flex !important;
-            flex-direction: column !important;
-            flex-grow: 1 !important;
-            overflow-y: auto !important;
-            padding: 0 !important;
-        }
-
-        .notebook-spread {
-            display: flex;
-            width: 100%;
-            flex: 1;
-        }
-
-        .view-pane {
-            flex: 1;
-            background: #fff;
-            padding: 20px !important;
-            overflow-y: visible !important;
-            position: relative;
-            min-height: 100%;
-        }
-
-        /* Icon Sidebar */
-        .section-sidebar {
-            width: var(--sidebar-width);
-            background: #1e3a63;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            gap: 15px;
-            flex-shrink: 0;
-            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
-        }
-
-        .section-icon {
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 10pt;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-
-        .section-icon:hover, .section-icon.active {
-            background: rgba(255,255,255,0.1);
-            opacity: 1;
-        }
-
-        .section-icon.logout-icon {
-            margin-top: auto;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
+        /* Work Specific Styles */
 
         /* Notes Sidebar */
         .notes-sidebar {
@@ -427,20 +349,6 @@
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="work-header-container">
-                <h1 class="main-page-title" style="margin-bottom: 5px;">Work Planner 2026</h1>
-                <div id="full-date-subtitle" class="main-page-subtitle" style="margin-bottom: 15px;">Loading date...</div>
-                
-                <div class="planner-header" style="margin-bottom: 0;">
-                    <div id="week-range" class="date-range">Loading range...</div>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 35px; margin-top: 10px;">
-                        <button class="nav-btn-purple" onclick="changeWeek(-1)">Prev</button>
-                        <h2 style="margin: 0; color: var(--header-blue); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 2px;">SCHEDULE</h2>
-                        <button class="nav-btn-purple" onclick="changeWeek(1)">Next</button>
-                    </div>
-                </div>
-            </div>
-
             <div class="notebook-spread">
                 <div class="view-pane">
                     <div class="top-grid">
@@ -582,17 +490,12 @@
             leftContainer.innerHTML = 'Loading...';
             rightContainer.innerHTML = '';
 
-            // Set the subtitle date (e.g., Sunday, December 28, 2025)
-            const subtitleEl = document.getElementById('full-date-subtitle');
-            if (subtitleEl) {
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                subtitleEl.innerText = currentStartDate.toLocaleDateString('en-US', options);
-            }
-
+            // Set global header
             const weekEnd = new Date(currentStartDate);
             weekEnd.setDate(weekEnd.getDate() + 6);
             const rangeStr = `${formatDateMMM(currentStartDate.toISOString().split('T')[0])} - ${formatDateMMM(weekEnd.toISOString().split('T')[0])}`.toUpperCase();
-            document.getElementById('week-range').innerText = rangeStr;
+            setGlobalHeaderTitle(`WORK PLANNER | ${rangeStr}`);
+
             updateNavigationLinks(currentStartDate);
             // Clear top priorities
             document.querySelectorAll('.editable-area').forEach(el => {

@@ -10,7 +10,7 @@
     <style>
         :root {
             --header-blue: #00326b;
-            --border-color: #333;
+            --border-color: #2f4f4f;
             --sidebar-width: 250px;
             --section-sidebar-width: 60px;
             --row-auto: #2d8a2d;
@@ -21,36 +21,7 @@
             --row-savings: #7a4da3;
         }
 
-        body {
-            background-color: #f3f2f1;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-        }
-
-        .notebook-container {
-            display: flex;
-            flex-grow: 1;
-            background: #fff;
-            overflow: hidden;
-        }
-
-        #main-content-container {
-            display: flex !important;
-            flex-direction: column !important;
-            flex: 1 !important;
-            overflow-y: auto !important;
-            padding: 0 !important;
-        }
-
-        .notebook-spread {
-            display: flex;
-            flex: 1;
-            width: 100%;
-        }
+        /* Financial Specific Styles */
 
         .view-pane {
             flex: 1;
@@ -289,7 +260,6 @@
             <div class="notebook-spread">
                 <div class="view-pane">
                     <div class="schedule-header">
-                        <h1 class="page-title">Bill Payment Schedule</h1>
                         <p class="subtitle">Keep track of your bill payments by listing recurring expenses. Check them off the list below as you pay your bills each month.</p>
                         <div style="margin: 20px 0;">
                             <a href="check-breakdown.html" class="nav-btn">Check Breakdown View</a>
@@ -344,6 +314,7 @@
         const PLANNING_DATE = `${currentYear}-financial`;
 
         async function init() {
+            setGlobalHeaderTitle(`FINANCE ${currentYear}`);
             const [bills, budgetData] = await Promise.all([
                 fetchFinancialBills(),
                 fetchPlannerData(PLANNING_DATE, 366)

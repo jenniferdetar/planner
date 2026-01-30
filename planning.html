@@ -10,97 +10,14 @@
     <style>
         :root {
             --header-blue: #00326b;
-            --border-color: #333;
+            --border-color: #2f4f4f;
             --tan-bg: #fffcf0;
             --text-color: #333;
             --sidebar-width: 250px;
             --section-sidebar-width: 60px;
         }
 
-        body {
-            background-color: #f3f2f1;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .notebook-container {
-            display: flex;
-            flex-grow: 1;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        /* Multi-level Sidebar */
-        .section-sidebar {
-            width: var(--section-sidebar-width);
-            background: #1e3a63;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            gap: 15px;
-            flex-shrink: 0;
-            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
-        }
-
-        .section-icon {
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 10pt;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-
-        .section-icon:hover {
-            background: rgba(255,255,255,0.1);
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
-        .section-icon.active {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            opacity: 1;
-        }
-
-        .section-icon.logout-icon {
-            margin-top: auto;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        .section-icon.logout-icon:hover {
-            opacity: 1;
-            color: #ffcdd2;
-        }
-
-        .notebook-main {
-            flex-grow: 1;
-            background: #fff;
-            overflow-y: auto;
-            position: relative;
-            scrollbar-width: thin;
-        }
-
-        .notebook-page {
-            width: 100%;
-            padding: 10px 20px !important;
-            background: #fff;
-            position: relative;
-            box-sizing: border-box;
-            min-height: 100%;
-        }
+        /* Planning Specific Styles */
 
         .page-header {
             text-align: center;
@@ -356,6 +273,7 @@
         let saveTimeout = null;
 
         async function init() {
+            setGlobalHeaderTitle(`PLANNING ${currentYear}`);
             // Load saved data
             const data = await fetchPlannerData(PERSISTENCE_KEY, 1);
             data.forEach(item => {
