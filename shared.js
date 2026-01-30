@@ -288,7 +288,8 @@ function animateAndNavigate(event, url, direction = 'next') {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0;
+            padding: 2px 0;
+            height: 24px;
             gap: 20px;
             width: 100%;
             background: #1a1a1a;
@@ -327,9 +328,20 @@ function animateAndNavigate(event, url, direction = 'next') {
             flex-direction: column;
             background: var(--sidebar-bg);
             padding: 0;
-            overflow-y: auto;
+            overflow: hidden; /* Prevent scrolling on container to keep spine fixed */
             position: relative;
             min-height: 100%;
+        }
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            position: relative;
+            gap: 0;
+            padding: 5px;
+            box-sizing: border-box;
         }
         .main-content::after {
             content: '';
@@ -337,17 +349,18 @@ function animateAndNavigate(event, url, direction = 'next') {
             top: 0;
             bottom: 0;
             left: 50%;
-            width: 40px;
+            width: 60px;
             transform: translateX(-50%);
             background: linear-gradient(90deg, 
-                rgba(0,0,0,0.2) 0%, 
+                rgba(0,0,0,0.4) 0%, 
                 rgba(255,255,255,0.1) 50%, 
-                rgba(0,0,0,0.2) 100%);
+                rgba(0,0,0,0.4) 100%);
             pointer-events: none;
-            z-index: 10;
+            z-index: 100;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
         }
         .main-content::before {
-            content: '○○○○○○○○○○○○○○○○';
+            content: '○○○○○○○○○○○○○○○○○○○○○○○○';
             position: absolute;
             top: 0;
             bottom: 0;
@@ -356,24 +369,14 @@ function animateAndNavigate(event, url, direction = 'next') {
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            color: #555;
-            font-size: 24px;
-            z-index: 11;
-            letter-spacing: 5px;
+            color: #888;
+            font-size: 30px;
+            z-index: 101;
+            letter-spacing: 2px;
             writing-mode: vertical-rl;
             pointer-events: none;
-            opacity: 0.5;
-            text-align: center;
-        }
-        .notebook-spread {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            gap: 0;
-            padding: 5px;
-            box-sizing: border-box;
-            min-height: 100%;
-            position: relative;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            padding: 10px 0;
         }
         .view-pane {
             flex: 1;
@@ -399,7 +402,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .tab {
             padding: 20px 5px;
-            color: #fff;
+            color: var(--tab-text-color, #fff);
             background: var(--tab-color, #444);
             font-size: 9pt;
             font-weight: 700;
@@ -488,12 +491,12 @@ function animateAndNavigate(event, url, direction = 'next') {
                 const isPlan = path.endsWith('planning.html') || ['PLANNING', 'PLAN'].includes(category.toUpperCase());
                 
                 const sections = [
-                    { name: 'HOME', url: 'index.html', active: isIndex, color: '#fff' },
-                    { name: 'HOA', url: 'hoa.html', active: isHOA, color: '#fb8c00' },
-                    { name: 'CSEA', url: 'csea.html', active: isCSEA, color: '#00acc1' },
-                    { name: 'ICAAP', url: 'icaap.html', active: isICAAP, color: '#e91e63' },
-                    { name: 'FINANCE', url: 'financial.html', active: isFinance, color: '#4caf50' },
-                    { name: 'PLAN', url: 'planning.html', active: isPlan, color: '#9c27b0' }
+                    { name: 'HOME', url: 'index.html', active: isIndex, color: '#333', textColor: '#fff' },
+                    { name: 'HOA', url: 'hoa.html', active: isHOA, color: '#d35400', textColor: '#fff' },
+                    { name: 'CSEA', url: 'csea.html', active: isCSEA, color: '#008ba3', textColor: '#ffca38' },
+                    { name: 'ICAAP', url: 'icaap.html', active: isICAAP, color: '#c2185b', textColor: '#fff' },
+                    { name: 'FINANCE', url: 'financial.html', active: isFinance, color: '#2e7d32', textColor: '#fff' },
+                    { name: 'PLAN', url: 'planning.html', active: isPlan, color: '#7b1fa2', textColor: '#fdd835' }
                 ];
 
                 const activeIndex = sections.findIndex(s => s.active);
@@ -501,7 +504,7 @@ function animateAndNavigate(event, url, direction = 'next') {
                 let html = '';
                 sections.forEach((s, i) => {
                     const direction = i > activeIndex ? 'next' : 'prev';
-                    html += `<div class="tab ${s.active ? 'active' : ''}" style="--tab-color: ${s.color}" onclick="animateAndNavigate(event, '${s.url}', '${direction}')">${s.name}</div>`;
+                    html += `<div class="tab ${s.active ? 'active' : ''}" style="--tab-color: ${s.color}; --tab-text-color: ${s.textColor}" onclick="animateAndNavigate(event, '${s.url}', '${direction}')">${s.name}</div>`;
                 });
                 
                 html += `
