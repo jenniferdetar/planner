@@ -146,14 +146,13 @@
         .day-header.not { background-color: #605e5c; }
 
         .calendar-day {
-            height: 140px;
+            min-height: 140px;
             padding: 8px;
             position: relative;
             background-color: var(--content-bg);
             display: flex;
             flex-direction: column;
             gap: 4px;
-            overflow: hidden;
         }
 
         .day-number {
@@ -343,6 +342,19 @@
                     pill.innerText = displayTitle;
                     container.appendChild(pill);
                 }
+            });
+
+            // Sync cell heights to the largest one
+            requestAnimationFrame(() => {
+                const allCells = document.querySelectorAll('.calendar-day');
+                let maxHeight = 140;
+                allCells.forEach(cell => {
+                    cell.style.height = 'auto'; // Reset to measure
+                    if (cell.offsetHeight > maxHeight) maxHeight = cell.offsetHeight;
+                });
+                allCells.forEach(cell => {
+                    cell.style.height = maxHeight + 'px';
+                });
             });
         }
 

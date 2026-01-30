@@ -324,9 +324,18 @@ function animateAndNavigate(event, url, direction = 'next') {
             background: var(--sidebar-bg);
             padding: 0;
             overflow-y: auto;
+        }
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            gap: 0;
+            padding: 5px;
+            box-sizing: border-box;
+            min-height: 100%;
             position: relative;
         }
-        .main-content::after {
+        .notebook-spread::after {
             content: '';
             position: absolute;
             top: 0;
@@ -341,7 +350,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             pointer-events: none;
             z-index: 10;
         }
-        .main-content::before {
+        .notebook-spread::before {
             content: '○○○○○○○○○○○○○○○○';
             position: absolute;
             top: 0;
@@ -359,15 +368,6 @@ function animateAndNavigate(event, url, direction = 'next') {
             pointer-events: none;
             opacity: 0.5;
             text-align: center;
-        }
-        .notebook-spread {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            gap: 0;
-            padding: 5px;
-            box-sizing: border-box;
-            min-height: 100%;
         }
         .view-pane {
             flex: 1;
