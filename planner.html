@@ -105,9 +105,10 @@
 
         async function switchTab(tabId) {
             const container = document.getElementById('main-content-container');
-            if (container.classList.contains('flip-in')) {
-                container.classList.remove('flip-in');
-                container.classList.add('flip-out');
+            const direction = 'next'; // Sidebar navigation is usually "forward"
+            if (container.classList.contains('flip-in-next') || container.classList.contains('flip-in-prev')) {
+                container.classList.remove('flip-in-next', 'flip-in-prev');
+                container.classList.add(`flip-out-${direction}`);
                 await new Promise(resolve => setTimeout(resolve, 600));
             }
 
@@ -124,8 +125,8 @@
             await renderView(config.leftView, leftPage);
             await renderView(config.rightView, rightPage);
 
-            container.classList.remove('flip-out');
-            container.classList.add('flip-in');
+            container.classList.remove(`flip-out-${direction}`);
+            container.classList.add(`flip-in-${direction}`);
         }
 
         async function renderView(viewType, container) {

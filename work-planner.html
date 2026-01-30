@@ -611,9 +611,10 @@
         }
         async function changeWeek(delta) {
             const container = document.querySelector('.notebook-main');
+            const direction = delta > 0 ? 'next' : 'prev';
             if (container) {
-                container.classList.remove('flip-in');
-                container.classList.add('flip-out');
+                container.classList.remove('flip-in-next', 'flip-in-prev');
+                container.classList.add(`flip-out-${direction}`);
                 await new Promise(r => setTimeout(r, 600));
                 
                 currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
@@ -622,8 +623,8 @@
                 window.history.pushState({ date: dateStr }, '', newUrl);
                 await renderPlanner();
                 
-                container.classList.remove('flip-out');
-                container.classList.add('flip-in');
+                container.classList.remove(`flip-out-${direction}`);
+                container.classList.add(`flip-in-${direction}`);
             } else {
                 currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
                 renderPlanner();

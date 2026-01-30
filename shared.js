@@ -184,17 +184,16 @@ async function fetchPlannerData(startDate, days = 7) {
 }
 
 // Global Animation Helper
-function animateAndNavigate(event, url) {
+function animateAndNavigate(event, url, direction = 'next') {
     if (event) event.preventDefault();
     const container = document.getElementById('main-content-container') || 
-                      document.querySelector('.main-container') || 
                       document.querySelector('.main-content') || 
                       document.querySelector('.notebook-main') ||
-                      document.querySelector('.app-container');
+                      document.querySelector('.planner-container');
     
     if (container) {
-        container.classList.remove('flip-in');
-        container.classList.add('flip-out');
+        container.classList.remove('flip-in-next', 'flip-in-prev');
+        container.classList.add(`flip-out-${direction}`);
         setTimeout(() => {
             window.location.href = url;
         }, 600);
@@ -207,25 +206,40 @@ function animateAndNavigate(event, url) {
 (function() {
     const style = document.createElement('style');
     style.innerHTML = `
-        @keyframes flip-in {
-            0% { transform: perspective(2000px) rotateY(90deg); opacity: 0; }
+        @keyframes flip-in-next {
+            0% { transform: perspective(2000px) rotateY(180deg); opacity: 0; }
             100% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
         }
-        @keyframes flip-out {
+        @keyframes flip-out-next {
             0% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2000px) rotateY(-90deg); opacity: 0; }
+            100% { transform: perspective(2000px) rotateY(-180deg); opacity: 0; }
         }
-        .main-container, .main-content, .notebook-main, .content-pane, .app-container, .planner-container {
+        @keyframes flip-in-prev {
+            0% { transform: perspective(2000px) rotateY(-180deg); opacity: 0; }
+            100% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
+        }
+        @keyframes flip-out-prev {
+            0% { transform: perspective(2000px) rotateY(0deg); opacity: 1; }
+            100% { transform: perspective(2000px) rotateY(180deg); opacity: 0; }
+        }
+
+        .main-container, .main-content, .notebook-main, .content-pane, .planner-container {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s linear;
             transform-origin: center center;
             backface-visibility: hidden;
             perspective: 2000px;
         }
-        .flip-in {
-            animation: flip-in 0.6s ease-out forwards !important;
+        .flip-in-next {
+            animation: flip-in-next 0.6s ease-out forwards !important;
         }
-        .flip-out {
-            animation: flip-out 0.6s ease-in forwards !important;
+        .flip-out-next {
+            animation: flip-out-next 0.6s ease-in forwards !important;
+        }
+        .flip-in-prev {
+            animation: flip-in-prev 0.6s ease-out forwards !important;
+        }
+        .flip-out-prev {
+            animation: flip-out-prev 0.6s ease-in forwards !important;
         }
 
         /* Global Planner Layout Styles */
@@ -353,7 +367,7 @@ function animateAndNavigate(event, url) {
                           document.querySelector('.app-container') ||
                           document.querySelector('.planner-container');
         if (container) {
-            container.classList.add('flip-in');
+            container.classList.add('flip-in-next');
         }
 
         // Auto-initialize Navigation Sidebar if app-container exists

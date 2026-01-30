@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
+        * { box-sizing: border-box; }
         :root { 
             --sun-bg: #f59e9e;
             --mon-bg: #f6d2a2;
@@ -31,19 +32,50 @@
             color: var(--text-color);
         }
 
+        /* Adjust view-panes to meet at the spine */
+        .view-pane {
+            flex: 1;
+            background: var(--content-bg);
+            margin: 0 !important;
+            padding: 20px !important;
+            overflow-y: auto;
+            position: relative;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .view-pane:first-child {
+            padding-right: 25px !important; /* Extra room for ring divider */
+        }
+
+        .view-pane:last-child {
+            padding-left: 25px !important; /* Extra room for ring divider */
+        }
+
         .header-controls {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 20px;
             gap: 15px;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Center the title across the whole spread */
+        .header-controls h1 {
+            position: absolute;
+            left: 100%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            margin: 0;
+            pointer-events: none;
         }
 
         .month-title {
-            font-size: 12pt;
-            letter-spacing: 3px;
+            font-size: 14pt;
+            letter-spacing: 5px;
             color: var(--accent-color);
-            margin: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 700;
             text-transform: uppercase;
@@ -163,27 +195,28 @@
             border-top: 2px solid var(--border-color);
             border-left: 2px solid var(--border-color);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background-color: var(--border-color); /* This creates uniform grid lines */
+            gap: 2px;
         }
 
         .calendar-grid-left {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
         }
 
         .calendar-grid-right {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             border-left: none;
         }
 
         .day-header {
             text-align: center;
-            padding: 5px;
+            padding: 8px 5px;
             text-transform: uppercase;
-            font-weight: 600;
-            border-right: 2px solid var(--border-color);
-            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
             color: #fff;
             letter-spacing: 1px;
             font-size: 10pt;
+            background-color: var(--content-bg); /* Reset bg for text readability */
         }
 
         .day-header.sun { background-color: var(--sun-bg); }
@@ -193,41 +226,72 @@
         .day-header.thu { background-color: var(--thu-bg); }
         .day-header.fri { background-color: var(--fri-bg); }
         .day-header.sat { background-color: var(--sat-bg); }
-        .day-header.not { background-color: #888; }
+        .day-header.not { background-color: #605e5c; }
 
         .calendar-day {
-            min-height: 100px;
-            border-right: 2px solid var(--border-color);
-            border-bottom: 2px solid var(--border-color);
-            padding: 5px;
+            min-height: 140px;
+            padding: 8px;
             position: relative;
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+            background-color: var(--content-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .day-number {
-            font-size: 10pt;
-            font-weight: 600;
-            margin-bottom: 5px;
+            font-size: 11pt;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 2px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         .event-container {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
+            overflow: hidden;
         }
 
         .event-pill {
             background-color: #f0f0f0;
             border-radius: 4px;
-            padding: 1px 3px;
-            font-size: 10pt;
-            line-height: 1.2;
+            padding: 3px 6px;
+            font-size: 9pt;
+            line-height: 1.1;
             border: 1px solid #ccc;
-            text-align: left;
+            text-align: center;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            display: block;
+            width: 100%;
         }
 
         .empty-day {
-            background-color: #f9f9f9;
+            background-color: #f5f5f5;
+        }
+
+        .notes-cell {
+            background-color: #fafafa;
+            background-image: linear-gradient(#e1dfdd 1px, transparent 1px);
+            background-size: 100% 25px;
+            border-style: solid;
+            border-color: var(--border-color);
+        }
+
+        #monthly-focus-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #e1dfdd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .handwriting {
+            font-family: 'Coming Soon', cursive;
+            font-size: 11pt;
+            color: #4a3427;
         }
     </style>
 </head>
@@ -369,14 +433,13 @@
         }
 
         async function renderMonthlyFocus(container) {
-            const dateStr = currentDate.toISOString().split('T')[0];
             container.innerHTML = `
-                <div class="page-title" style="font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 20px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Monthly Focus</div>
-                <div class="new-note-area" style="margin-bottom: 20px;">
-                    <textarea id="new-monthly-focus" class="handwriting" placeholder="Add monthly goals or focus items..." style="width: 100%; min-height: 100px; border: 1px solid #eee; padding: 10px; border-radius: 4px; background: transparent; resize: none;"></textarea>
-                    <button class="nav-btn" onclick="handleAddMonthlyFocus()" style="margin-top: 10px; width: 100%;">Add Entry</button>
+                <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 15px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: left;">Monthly Focus</div>
+                <div id="monthly-entries-list" class="handwriting" style="min-height: 100px; margin-bottom: 20px; line-height: 1.8;"></div>
+                <div class="new-note-area" style="border-top: 1px solid #eee; pt-15px;">
+                    <textarea id="new-monthly-focus" class="handwriting" placeholder="Add a new goal..." style="width: 100%; min-height: 60px; border: 1px solid #eee; padding: 8px; border-radius: 4px; background: #fafafa; resize: none; margin-top: 15px;"></textarea>
+                    <button class="nav-btn" onclick="handleAddMonthlyFocus()" style="margin-top: 10px; width: 100%; padding: 10px;">Add Entry</button>
                 </div>
-                <div id="monthly-entries-list" class="handwriting" style="padding: 10px; line-height: 1.6;"></div>
             `;
             await loadMonthlyEntries(container.querySelector('#monthly-entries-list'));
         }
@@ -399,9 +462,10 @@
 
         async function changeMonth(delta) {
             const container = document.getElementById('main-content-container');
+            const direction = delta > 0 ? 'next' : 'prev';
             if (container) {
-                container.classList.remove('flip-in');
-                container.classList.add('flip-out');
+                container.classList.remove('flip-in-next', 'flip-in-prev');
+                container.classList.add(`flip-out-${direction}`);
                 await new Promise(r => setTimeout(r, 600));
                 
                 currentDate.setMonth(currentDate.getMonth() + delta);
@@ -410,8 +474,8 @@
                 window.history.pushState({ date: dateStr }, '', newUrl);
                 await renderCalendar();
                 
-                container.classList.remove('flip-out');
-                container.classList.add('flip-in');
+                container.classList.remove(`flip-out-${direction}`);
+                container.classList.add(`flip-in-${direction}`);
             } else {
                 currentDate.setMonth(currentDate.getMonth() + delta);
                 const dateStr = currentDate.toISOString().split('T')[0];
