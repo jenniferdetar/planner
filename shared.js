@@ -284,7 +284,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 4px 0;
+            padding: 0;
             gap: 20px;
             width: 100%;
             background: #1a1a1a;
@@ -305,7 +305,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             background: transparent;
             border: 1px solid #444;
             color: #aaa;
-            padding: 4px 12px;
+            padding: 2px 8px;
             cursor: pointer;
             font-size: 8pt;
             border-radius: 4px;
@@ -393,7 +393,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .tab {
             padding: 20px 5px;
-            color: #aaa;
+            color: var(--tab-color, #aaa);
             font-size: 9pt;
             font-weight: 700;
             text-transform: uppercase;
@@ -413,8 +413,8 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .tab.active {
             background: var(--content-bg);
-            color: var(--accent-color);
-            border-left: 4px solid var(--accent-color);
+            color: var(--tab-color, var(--accent-color));
+            border-left: 4px solid var(--tab-color, var(--accent-color));
         }
         .logout-btn {
             padding: 15px;
@@ -479,12 +479,12 @@ function animateAndNavigate(event, url, direction = 'next') {
                 const isPlan = path.endsWith('planning.html') || ['PLANNING', 'PLAN'].includes(category.toUpperCase());
                 
                 const sections = [
-                    { name: 'HOME', url: 'index.html', active: isIndex },
-                    { name: 'HOA', url: 'hoa.html', active: isHOA },
-                    { name: 'CSEA', url: 'csea.html', active: isCSEA },
-                    { name: 'ICAAP', url: 'icaap.html', active: isICAAP },
-                    { name: 'FINANCE', url: 'financial.html', active: isFinance },
-                    { name: 'PLAN', url: 'planning.html', active: isPlan }
+                    { name: 'HOME', url: 'index.html', active: isIndex, color: '#fff' },
+                    { name: 'HOA', url: 'hoa.html', active: isHOA, color: '#fb8c00' },
+                    { name: 'CSEA', url: 'csea.html', active: isCSEA, color: '#00acc1' },
+                    { name: 'ICAAP', url: 'icaap.html', active: isICAAP, color: '#e91e63' },
+                    { name: 'FINANCE', url: 'financial.html', active: isFinance, color: '#4caf50' },
+                    { name: 'PLAN', url: 'planning.html', active: isPlan, color: '#9c27b0' }
                 ];
 
                 const activeIndex = sections.findIndex(s => s.active);
@@ -492,7 +492,7 @@ function animateAndNavigate(event, url, direction = 'next') {
                 let html = '';
                 sections.forEach((s, i) => {
                     const direction = i > activeIndex ? 'next' : 'prev';
-                    html += `<div class="tab ${s.active ? 'active' : ''}" onclick="animateAndNavigate(event, '${s.url}', '${direction}')">${s.name}</div>`;
+                    html += `<div class="tab ${s.active ? 'active' : ''}" style="--tab-color: ${s.color}" onclick="animateAndNavigate(event, '${s.url}', '${direction}')">${s.name}</div>`;
                 });
                 
                 html += `
