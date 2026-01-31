@@ -56,7 +56,7 @@
             CSEA: { title: 'CSEA Hub', leftView: 'NotesLeft', rightView: 'InteractionLog' },
             iCAAP: { title: 'iCAAP Tracking', leftView: 'NotesLeft', rightView: 'iCAAPLinks' },
             'ICAAP-Attendance': { title: 'Attendance Tracking', leftView: 'Attendance', rightView: 'NotesRight' },
-            'ICAAP-Tracking': { title: 'iCAAP Tracking Log', leftView: 'TrackingLog', rightView: 'NotesRight' },
+            'ICAAP-Tracking': { title: 'iCAAP Tracking Log', leftView: 'TrackingLog1', rightView: 'TrackingLog2' },
             Finance: { title: 'Financial Planning', leftView: 'Budget', rightView: 'FinanceLinks' },
             'Check-Breakdown': { title: 'Check Breakdown', leftView: 'CheckBreakdown', rightView: 'NotesRight' },
             'Monthly-Review': { title: 'Financial Review', leftView: 'FinancialReview', rightView: 'NotesRight' },
@@ -71,14 +71,39 @@
 
         async function refreshGlobalData() {
             if (typeof fetchCseaMembers !== 'function') return;
-            const [empData, billData] = await Promise.all([ fetchCseaMembers(), fetchFinancialBills() ]);
+            const [empData, billData, trackingNames] = await Promise.all([ 
+                fetchCseaMembers(), 
+                fetchFinancialBills(),
+                fetchAllTrackingNames(fiscalYear)
+            ]);
+            
             const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
             empData.forEach(m => { const name = m.full_name || m.name; if (name) nameSet.add(toTitleCase(name)); });
+            trackingNames.forEach(name => nameSet.add(toTitleCase(name)));
+            
             employees = [...nameSet].sort();
             const billMap = new Map();
             DEFAULT_BILLS.forEach(b => billMap.set(b.item, b));
             billData.forEach(b => billMap.set(b.item, b));
             financialBills = [...billMap.values()].sort((a, b) => a.id - b.id);
+        }
+
+        async function renderMonthlyFocus(container) {
+            container.innerHTML = `
+                <div class="page-title">MONTHLY FOCUS</div>
+                <div style="margin-top: 20px;">
+                    <div style="border: 1px solid #eee; padding: 15px; border-radius: 8px;">
+                        <div style="font-weight: 700; font-size: 10pt; margin-bottom: 10px; color: var(--accent-color);">KEY GOALS</div>
+                        <textarea class="handwriting" data-field="monthly-goals" oninput="handleModuleEdit(this, 'monthly-focus-${displayDate.getFullYear()}-${displayDate.getMonth()+1}')" style="width: 100%; min-height: 150px; border: none; background: transparent; resize: none;"></textarea>
+                    </div>
+                    <div style="margin-top: 20px; border: 1px solid #eee; padding: 15px; border-radius: 8px;">
+                        <div style="font-weight: 700; font-size: 10pt; margin-bottom: 10px; color: var(--accent-color);">NOTES & REFLECTIONS</div>
+                        <textarea class="handwriting" data-field="monthly-notes" oninput="handleModuleEdit(this, 'monthly-focus-${displayDate.getFullYear()}-${displayDate.getMonth()+1}')" style="width: 100%; min-height: 200px; border: none; background: transparent; resize: none;"></textarea>
+                    </div>
+                </div>
+            `;
+            const data = await fetchPlannerData(`monthly-focus-${displayDate.getFullYear()}-${displayDate.getMonth()+1}`, 10);
+            data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.value = item.content; });
         }
 
         let currentCategory = 'Home';
@@ -150,7 +175,8 @@
             else if (viewType === 'PersonalPlannerLeft') await renderPersonalPlanner(container, 'left');
             else if (viewType === 'PersonalPlannerRight') await renderPersonalPlanner(container, 'right');
             else if (viewType === 'Attendance') await renderIcaapAttendance(container);
-            else if (viewType === 'TrackingLog') await renderIcaapTracking(container);
+            else if (viewType === 'TrackingLog1') await renderIcaapTracking(container, 0, 6);
+            else if (viewType === 'TrackingLog2') await renderIcaapTracking(container, 6, 12);
             else if (viewType === 'CheckBreakdown') await renderCheckBreakdown(container);
             else if (viewType === 'FinancialReview') await renderFinancialReview(container);
             else if (viewType === 'Empty') container.innerHTML = '<div class="handwriting" style="opacity: 0.1; text-align: center; margin-top: 50%;">Notes & Thoughts</div>';
@@ -369,14 +395,20 @@
             data.forEach(item => { const el = container.querySelector(\`[data-field="\${item.field_id}"]\`); if (el) el.value = item.content; });
         }
 
-        async function renderIcaapTracking(container) {
-            container.innerHTML = \`<div class="page-title">ICAAP TRACKING</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 1200px;"><thead><tr><th class="sticky-col">Name</th>\${monthNames.map(m => \`<th colspan="3">\${m}</th>\`).join('')}</tr></thead><tbody id="track-body"></tbody></table></div>\`;
-            const tbody = container.querySelector('#track-body');
+        async function renderIcaapTracking(container, startMonth = 0, endMonth = 12) {
+            const displayedMonths = monthNames.slice(startMonth, endMonth);
+            container.innerHTML = `<div class="page-title">ICAAP TRACKING (${startMonth === 0 ? 'JUL-DEC' : 'JAN-JUN'})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 100%;"><thead><tr><th class="sticky-col" style="width: 150px;">Name</th>${displayedMonths.map(m => `<th colspan="3">${m}</th>`).join('')}</tr><tr><th class="sticky-col"></th>${displayedMonths.map(() => `<th>Log</th><th>Hrs</th><th>Appr</th>`).join('')}</tr></thead><tbody id="track-body-${startMonth}"></tbody></table></div>`;
+            const tbody = container.querySelector(`#track-body-${startMonth}`);
             employees.forEach((emp, ei) => {
-                const tr = document.createElement('tr'); tr.innerHTML = \`<td class="sticky-col text-left">\${emp}</td>\${monthNames.map((m, mi) => \`<td contenteditable="true" class="editable-cell" data-field="m\${mi}-\${ei}-paylog" oninput="handleTrackingSave(this)"></td><td contenteditable="true" class="editable-cell" data-field="m\${mi}-\${ei}-hours" oninput="handleTrackingSave(this)"></td><td contenteditable="true" class="editable-cell" data-field="m\${mi}-\${ei}-appr" oninput="handleTrackingSave(this)"></td>\`).join('')}\`; tbody.appendChild(tr);
+                const tr = document.createElement('tr'); 
+                let cellsHtml = `<td class="sticky-col text-left" style="font-size: 8pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${emp}</td>`;
+                for (let mi = startMonth; mi < endMonth; mi++) {
+                    cellsHtml += `<td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-paylog" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-hours" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-appr" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`;
+                }
+                tr.innerHTML = cellsHtml; tbody.appendChild(tr);
             });
-            const data = await fetchPlannerData(\`icaap-tracking-data-\${fiscalYear}\`, 366);
-            data.forEach(item => { const el = container.querySelector(\`[data-field="\${item.field_id}"]\`); if (el) el.innerText = item.content; });
+            const data = await fetchPlannerData(`icaap-tracking-data-${fiscalYear}`, 366);
+            data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.innerText = item.content; });
         }
 
         async function renderCheckBreakdown(container) {
