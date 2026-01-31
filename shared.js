@@ -349,7 +349,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             top: 0;
             bottom: 0;
             left: 50%;
-            width: 60px;
+            width: 40px;
             transform: translateX(-50%);
             background: linear-gradient(90deg, 
                 rgba(0,0,0,0.4) 0%, 
@@ -360,7 +360,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
         }
         .main-content::before {
-            content: '○○○○○○○○○○○○○○○○○○○○○○○○';
+            content: '○○○○○○';
             position: absolute;
             top: 0;
             bottom: 0;
@@ -376,7 +376,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             writing-mode: vertical-rl;
             pointer-events: none;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            padding: 10px 0;
+            padding: 40px 0;
         }
         .view-pane {
             flex: 1;
