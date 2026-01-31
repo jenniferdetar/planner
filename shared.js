@@ -440,17 +440,18 @@ function animateAndNavigate(event, url, direction = 'next') {
             border-left: 1px solid #333;
         }
         .tab {
-            padding: 15px 0;
-            height: 140px;
+            padding: 10px 0;
+            height: 130px;
             color: var(--tab-text-color, #fff);
             background: var(--tab-color, #444);
             font-size: 10pt;
-            font-weight: 800;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             writing-mode: vertical-rl;
+            text-orientation: upright;
             text-align: center;
             border-left: none;
             text-decoration: none;
@@ -458,9 +459,10 @@ function animateAndNavigate(event, url, direction = 'next') {
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            box-shadow: -3px 0 6px rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            box-shadow: inset 2px 0 5px rgba(255,255,255,0.1), -3px 0 6px rgba(0,0,0,0.3);
             position: relative;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
         .tab.active {
             background: var(--tab-color, var(--accent-color));
@@ -468,22 +470,30 @@ function animateAndNavigate(event, url, direction = 'next') {
             width: 85px;
             margin-left: -20px;
             z-index: 101;
-            border-radius: 10px 0 0 10px;
-            box-shadow: -10px 0 20px rgba(0,0,0,0.4);
-            font-size: 11pt;
+            border-radius: 12px 0 0 12px;
+            box-shadow: -12px 0 25px rgba(0,0,0,0.5);
+            font-size: 10.5pt;
         }
         .logout-btn {
-            padding: 15px;
-            font-size: 8pt;
-            color: #666;
+            padding: 20px 0;
+            font-size: 9pt;
+            color: #888;
             cursor: pointer;
             text-align: center;
             margin-top: auto;
             border-top: 1px solid #333;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
         .logout-btn:hover {
             color: #fff;
-            background: #c0392b;
+            background: #222;
         }
     `;
     document.head.appendChild(style);
@@ -569,7 +579,10 @@ function animateAndNavigate(event, url, direction = 'next') {
                 });
                 
                 html += `
-                    <div class="logout-btn" onclick="logout()">🚪 Logout</div>
+                    <div class="logout-btn" onclick="logout()">
+                        <span style="font-size: 20pt; margin-bottom: 5px;">🚪</span>
+                        <span>Logout</span>
+                    </div>
                 `;
                 
                 sidebar.innerHTML = html;
