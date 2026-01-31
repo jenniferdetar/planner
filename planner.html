@@ -70,39 +70,47 @@
         const monthNames = ['July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'];
 
         async function refreshGlobalData() {
-            if (typeof fetchCseaMembers !== 'function') return;
-            const [empData, billData, trackingNames] = await Promise.all([ 
-                fetchCseaMembers(), 
-                fetchFinancialBills(),
-                fetchAllTrackingNames(fiscalYear)
-            ]);
-            
-            const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
-            empData.forEach(m => { const name = m.full_name || m.name; if (name) nameSet.add(toTitleCase(name)); });
-            trackingNames.forEach(name => nameSet.add(toTitleCase(name)));
-            
-            employees = [...nameSet].sort();
-            const billMap = new Map();
-            DEFAULT_BILLS.forEach(b => billMap.set(b.item, b));
-            billData.forEach(b => billMap.set(b.item, b));
-            financialBills = [...billMap.values()].sort((a, b) => a.id - b.id);
+            try {
+                if (typeof fetchCseaMembers !== 'function') return;
+                const [empData, billData, trackingNames] = await Promise.all([ 
+                    fetchCseaMembers().catch(e => { console.error(e); return []; }), 
+                    fetchFinancialBills().catch(e => { console.error(e); return []; }),
+                    fetchAllTrackingNames(fiscalYear).catch(e => { console.error(e); return []; })
+                ]);
+                
+                const nameSet = new Set((typeof DEFAULT_EMPLOYEES !== 'undefined' ? DEFAULT_EMPLOYEES : []).map(toTitleCase));
+                if (empData) empData.forEach(m => { const name = m.full_name || m.name; if (name) nameSet.add(toTitleCase(name)); });
+                if (trackingNames) trackingNames.forEach(name => nameSet.add(toTitleCase(name)));
+                
+                employees = [...nameSet].sort();
+                const billMap = new Map();
+                if (typeof DEFAULT_BILLS !== 'undefined') DEFAULT_BILLS.forEach(b => billMap.set(b.item, b));
+                if (billData) billData.forEach(b => billMap.set(b.item, b));
+                financialBills = [...billMap.values()].sort((a, b) => (a.id || 0) - (b.id || 0));
+            } catch (err) {
+                console.error('Error in refreshGlobalData:', err);
+            }
         }
 
         async function renderMonthlyFocus(container) {
+            const isYearly = currentCategory === 'Goals';
+            const key = isYearly ? `yearly-goals-${displayDate.getFullYear()}` : `monthly-focus-${displayDate.getFullYear()}-${displayDate.getMonth()+1}`;
+            const title = isYearly ? 'YEARLY GOALS & DREAMS' : 'MONTHLY FOCUS';
+            
             container.innerHTML = `
-                <div class="page-title">MONTHLY FOCUS</div>
+                <div class="page-title">${title}</div>
                 <div style="margin-top: 20px;">
                     <div style="border: 1px solid #eee; padding: 15px; border-radius: 8px;">
-                        <div style="font-weight: 700; font-size: 10pt; margin-bottom: 10px; color: var(--accent-color);">KEY GOALS</div>
-                        <textarea class="handwriting" data-field="monthly-goals" oninput="handleModuleEdit(this, 'monthly-focus-${displayDate.getFullYear()}-${displayDate.getMonth()+1}')" style="width: 100%; min-height: 150px; border: none; background: transparent; resize: none;"></textarea>
+                        <div style="font-weight: 700; font-size: 10pt; margin-bottom: 10px; color: var(--accent-color);">${isYearly ? 'CORE GOALS' : 'KEY GOALS'}</div>
+                        <textarea class="handwriting" data-field="goals" oninput="handleModuleEdit(this, '${key}')" style="width: 100%; min-height: 150px; border: none; background: transparent; resize: none;"></textarea>
                     </div>
                     <div style="margin-top: 20px; border: 1px solid #eee; padding: 15px; border-radius: 8px;">
-                        <div style="font-weight: 700; font-size: 10pt; margin-bottom: 10px; color: var(--accent-color);">NOTES & REFLECTIONS</div>
-                        <textarea class="handwriting" data-field="monthly-notes" oninput="handleModuleEdit(this, 'monthly-focus-${displayDate.getFullYear()}-${displayDate.getMonth()+1}')" style="width: 100%; min-height: 200px; border: none; background: transparent; resize: none;"></textarea>
+                        <div style="font-weight: 700; font-size: 10pt; margin-bottom: 10px; color: var(--accent-color);">${isYearly ? 'DREAMS & INTENTIONS' : 'NOTES & REFLECTIONS'}</div>
+                        <textarea class="handwriting" data-field="reflections" oninput="handleModuleEdit(this, '${key}')" style="width: 100%; min-height: 200px; border: none; background: transparent; resize: none;"></textarea>
                     </div>
                 </div>
             `;
-            const data = await fetchPlannerData(`monthly-focus-${displayDate.getFullYear()}-${displayDate.getMonth()+1}`, 10);
+            const data = await fetchPlannerData(key, 10);
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.value = item.content; });
         }
 
@@ -135,51 +143,70 @@
         });
 
         async function switchTab(tabId) {
-            const container = document.getElementById('main-content-container');
-            const direction = 'next'; // Sidebar navigation is usually "forward"
-            if (container.classList.contains('flip-in-next') || container.classList.contains('flip-in-prev')) {
-                container.classList.remove('flip-in-next', 'flip-in-prev');
-                container.classList.add(`flip-out-${direction}`);
-                await new Promise(resolve => setTimeout(resolve, 600));
+            try {
+                const container = document.getElementById('main-content-container');
+                const direction = 'next'; // Sidebar navigation is usually "forward"
+                if (container.classList.contains('flip-in-next') || container.classList.contains('flip-in-prev')) {
+                    container.classList.remove('flip-in-next', 'flip-in-prev');
+                    container.classList.add(`flip-out-${direction}`);
+                    await new Promise(resolve => setTimeout(resolve, 600));
+                }
+
+                currentCategory = tabId;
+                const dateStr = displayDate.toISOString().split('T')[0];
+                const newUrl = `planner.html?category=${tabId}&date=${dateStr}`;
+                window.history.pushState({ category: tabId, date: dateStr }, '', newUrl);
+                document.querySelectorAll('.tab').forEach(t => {
+                    const text = t.innerText.toLowerCase();
+                    t.classList.toggle('active', 
+                        text === tabId.toLowerCase() || 
+                        (text === 'plan' && (tabId === 'Planning' || tabId === 'Goals' || tabId.startsWith('ICAAP'))) ||
+                        (text === 'finance' && (tabId === 'Finance' || tabId === 'Check-Breakdown' || tabId === 'Monthly-Review'))
+                    );
+                });
+                const config = sections[tabId];
+                if (!config) {
+                    console.error('No config found for category:', tabId);
+                    return;
+                }
+                leftPage.innerHTML = '<div class="handwriting" style="text-align: center; margin-top: 50%;">Loading...</div>';
+                rightPage.innerHTML = '';
+                await renderView(config.leftView, leftPage);
+                await renderView(config.rightView, rightPage);
+
+                container.classList.remove(`flip-out-${direction}`);
+                container.classList.add(`flip-in-${direction}`);
+            } catch (err) {
+                console.error('Error switching tab:', err);
+                leftPage.innerHTML = `<div class="handwriting" style="padding: 20px; color: red;">Error: ${err.message}</div>`;
             }
-
-            currentCategory = tabId;
-            const dateStr = displayDate.toISOString().split('T')[0];
-            const newUrl = `planner.html?category=${tabId}&date=${dateStr}`;
-            window.history.pushState({ category: tabId, date: dateStr }, '', newUrl);
-            document.querySelectorAll('.tab').forEach(t => {
-                t.classList.toggle('active', t.innerText.toLowerCase() === tabId.toLowerCase() || (t.innerText === 'Plan' && tabId === 'Planning'));
-            });
-            const config = sections[tabId];
-            leftPage.innerHTML = '<div class="handwriting" style="text-align: center; margin-top: 50%;">Loading...</div>';
-            rightPage.innerHTML = '';
-            await renderView(config.leftView, leftPage);
-            await renderView(config.rightView, rightPage);
-
-            container.classList.remove(`flip-out-${direction}`);
-            container.classList.add(`flip-in-${direction}`);
         }
 
         async function renderView(viewType, container) {
-            container.innerHTML = '';
-            if (viewType === 'Calendar') await renderCalendar(container);
-            else if (viewType === 'PlannerLinks') renderPlannerLinks(container);
-            else if (viewType === 'MonthlyFocus') await renderMonthlyFocus(container);
-            else if (viewType.startsWith('Notes')) await renderNotes(container, viewType === 'NotesLeft' ? 'left' : 'right');
-            else if (viewType === 'InteractionLog') await renderCseaLog(container);
-            else if (viewType === 'iCAAPLinks') renderIcaapLinks(container);
-            else if (viewType === 'Budget') await renderBudget(container);
-            else if (viewType === 'FinanceLinks') renderFinanceLinks(container);
-            else if (viewType === 'WorkPlannerLeft') await renderWorkPlanner(container, 'left');
-            else if (viewType === 'WorkPlannerRight') await renderWorkPlanner(container, 'right');
-            else if (viewType === 'PersonalPlannerLeft') await renderPersonalPlanner(container, 'left');
-            else if (viewType === 'PersonalPlannerRight') await renderPersonalPlanner(container, 'right');
-            else if (viewType === 'Attendance') await renderIcaapAttendance(container);
-            else if (viewType === 'TrackingLog1') await renderIcaapTracking(container, 0, 6);
-            else if (viewType === 'TrackingLog2') await renderIcaapTracking(container, 6, 12);
-            else if (viewType === 'CheckBreakdown') await renderCheckBreakdown(container);
-            else if (viewType === 'FinancialReview') await renderFinancialReview(container);
-            else if (viewType === 'Empty') container.innerHTML = '<div class="handwriting" style="opacity: 0.1; text-align: center; margin-top: 50%;">Notes & Thoughts</div>';
+            try {
+                container.innerHTML = '';
+                if (viewType === 'Calendar') await renderCalendar(container);
+                else if (viewType === 'PlannerLinks') renderPlannerLinks(container);
+                else if (viewType === 'MonthlyFocus') await renderMonthlyFocus(container);
+                else if (viewType.startsWith('Notes')) await renderNotes(container, viewType === 'NotesLeft' ? 'left' : 'right');
+                else if (viewType === 'InteractionLog') await renderCseaLog(container);
+                else if (viewType === 'iCAAPLinks') renderIcaapLinks(container);
+                else if (viewType === 'Budget') await renderBudget(container);
+                else if (viewType === 'FinanceLinks') renderFinanceLinks(container);
+                else if (viewType === 'WorkPlannerLeft') await renderWorkPlanner(container, 'left');
+                else if (viewType === 'WorkPlannerRight') await renderWorkPlanner(container, 'right');
+                else if (viewType === 'PersonalPlannerLeft') await renderPersonalPlanner(container, 'left');
+                else if (viewType === 'PersonalPlannerRight') await renderPersonalPlanner(container, 'right');
+                else if (viewType === 'Attendance') await renderIcaapAttendance(container);
+                else if (viewType === 'TrackingLog1') await renderIcaapTracking(container, 0, 6);
+                else if (viewType === 'TrackingLog2') await renderIcaapTracking(container, 6, 12);
+                else if (viewType === 'CheckBreakdown') await renderCheckBreakdown(container);
+                else if (viewType === 'FinancialReview') await renderFinancialReview(container);
+                else if (viewType === 'Empty') container.innerHTML = '<div class="handwriting" style="opacity: 0.1; text-align: center; margin-top: 50%;">Notes & Thoughts</div>';
+            } catch (err) {
+                console.error(`Error rendering view ${viewType}:`, err);
+                container.innerHTML = `<div class="handwriting" style="padding: 20px; color: red;">Error: ${err.message}</div>`;
+            }
         }
 
         function renderWorkPlannerView() { switchTab('WorkPlanner'); }
@@ -264,36 +291,6 @@
                     </div>
                 </div>
             `;
-        }
-
-        async function renderMonthlyFocus(container) {
-            container.innerHTML = `
-                <div style="background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 100%;">
-                    <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 25px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Monthly Focus</div>
-                    <div id="monthly-entries-list" class="handwriting" style="min-height: 100px; margin-bottom: 20px; line-height: 1.8;"></div>
-                    <div class="new-note-area" style="border-top: 1px solid #eee; padding-top: 15px;">
-                        <textarea id="new-monthly-focus" class="handwriting" placeholder="Add a new goal..." style="width: 100%; min-height: 80px; border: 1px solid #eee; padding: 8px; border-radius: 4px; background: #fafafa; resize: none;"></textarea>
-                        <button class="save-btn" onclick="handleAddMonthlyFocus()" style="margin-top: 10px; width: 100%; padding: 10px;">Add Entry</button>
-                    </div>
-                </div>
-            `;
-            await loadMonthlyEntries(container.querySelector('#monthly-entries-list'));
-        }
-
-        async function loadMonthlyEntries(container) {
-            const dateStr = displayDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
-            const entries = await fetchEntries(`${currentCategory}-Monthly-Focus`, dateStr);
-            container.innerHTML = entries.map(e => `<div style="margin-bottom: 10px; border-bottom: 1px dotted #eee; padding-bottom: 5px;">• ${e.content}</div>`).join('');
-        }
-
-        async function handleAddMonthlyFocus() {
-            const content = document.getElementById('new-monthly-focus').value;
-            if (!content) return;
-            const dateStr = displayDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
-            if (await saveEntry(`${currentCategory}-Monthly-Focus`, dateStr, content)) {
-                document.getElementById('new-monthly-focus').value = '';
-                await renderView(sections[currentCategory].rightView, rightPage);
-            }
         }
 
         async function renderNotes(container, side) {

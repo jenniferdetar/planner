@@ -448,7 +448,6 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .tab:hover {
             filter: brightness(1.2);
-            padding-left: 8px;
         }
         .tab.active {
             background: var(--tab-color, var(--accent-color));
@@ -959,9 +958,11 @@ async function fetchPaylogSubmissions(year) {
 }
 
 async function fetchAllTrackingNames(year) {
-    const hours = await fetchHoursWorked(year);
-    const approvals = await fetchApprovalDates(year);
-    const paylogs = await fetchPaylogSubmissions(year);
+    const [hours, approvals, paylogs] = await Promise.all([
+        fetchHoursWorked(year).catch(() => []),
+        fetchApprovalDates(year).catch(() => []),
+        fetchPaylogSubmissions(year).catch(() => [])
+    ]);
     
     const names = new Set();
     hours.forEach(r => { if (r.name) names.add(toTitleCase(r.name)); });
