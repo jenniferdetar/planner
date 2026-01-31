@@ -94,7 +94,10 @@
         .slot-content { flex-grow: 1; outline: none; min-height: 100%; display: flex; align-items: center; padding-left: 2px; overflow: hidden; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); border: 1px solid #eee; margin-top: 10px; flex: 1; }
         .calendar-header { background: #f8f9fa; padding: 5px; font-weight: 700; font-size: 8pt; text-align: center; border: 0.5px solid #eee; }
-        .calendar-day { min-height: 80px; padding: 5px; border: 0.5px solid #eee; background: #fff; }
+        .calendar-day { min-height: 80px; padding: 4px; border: 0.5px solid #eee; background: #fff; display: flex; flex-direction: column; gap: 2px; }
+        .day-number { font-size: 9pt; font-weight: 700; color: #333; margin-bottom: 1px; }
+        .event-container { display: flex; flex-direction: column; gap: 2px; overflow-y: auto; flex: 1; }
+        .event-link { font-size: 7.5pt; line-height: 1.1; padding: 2px 4px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 3px; text-align: center; }
     </style>
 </head>
 <body>
@@ -263,52 +266,6 @@
         }
 
         async function renderView(viewType, container) {
-<<<<<<< HEAD
-            try {
-                container.innerHTML = '';
-                if (viewType === 'Calendar') await renderCalendar(container);
-                else if (viewType === 'PlannerLinks') renderPlannerLinks(container);
-                else if (viewType === 'MonthlyFocus') await renderMonthlyFocus(container);
-                else if (viewType.startsWith('Notes')) await renderNotes(container, viewType === 'NotesLeft' ? 'left' : 'right');
-                else if (viewType === 'InteractionLog') await renderCseaLog(container);
-                else if (viewType === 'iCAAPLinks') renderIcaapLinks(container);
-                else if (viewType === 'Budget') await renderBudget(container);
-                else if (viewType === 'FinanceLinks') renderFinanceLinks(container);
-                else if (viewType === 'WorkPlannerLeft') await renderWorkPlanner(container, 'left');
-                else if (viewType === 'WorkPlannerRight') await renderWorkPlanner(container, 'right');
-                else if (viewType === 'PersonalPlannerLeft') await renderPersonalPlanner(container, 'left');
-                else if (viewType === 'PersonalPlannerRight') await renderPersonalPlanner(container, 'right');
-                else if (viewType === 'Attendance') await renderIcaapAttendance(container);
-                else if (viewType === 'TrackingLog1') await renderIcaapTracking(container, 0, 6);
-                else if (viewType === 'TrackingLog2') await renderIcaapTracking(container, 6, 12);
-                else if (viewType === 'CheckBreakdown') await renderCheckBreakdown(container);
-                else if (viewType === 'FinancialReview') await renderFinancialReview(container);
-                else if (viewType === 'Empty') container.innerHTML = '<div class="handwriting" style="opacity: 0.1; text-align: center; margin-top: 50%;">Notes & Thoughts</div>';
-            } catch (err) {
-                console.error(`Error rendering view ${viewType}:`, err);
-                container.innerHTML = `<div class="handwriting" style="padding: 20px; color: red;">Error: ${err.message}</div>`;
-            }
-=======
-            container.innerHTML = '';
-            if (viewType === 'Calendar') await renderCalendar(container);
-            else if (viewType === 'MonthlyFocus') await renderMonthlyFocus(container);
-            else if (viewType.startsWith('Notes')) await renderNotes(container, viewType === 'NotesLeft' ? 'left' : 'right');
-            else if (viewType === 'InteractionLog') await renderCseaLog(container);
-            else if (viewType === 'iCAAPLinks') renderIcaapLinks(container);
-            else if (viewType === 'Budget') await renderBudget(container);
-            else if (viewType === 'FinanceLinks') renderFinanceLinks(container);
-            else if (viewType === 'WorkPlannerLeft') await renderWorkPlanner(container, 'left');
-            else if (viewType === 'WorkPlannerRight') await renderWorkPlanner(container, 'right');
-            else if (viewType === 'PersonalPlannerLeft') await renderPersonalPlanner(container, 'left');
-            else if (viewType === 'PersonalPlannerRight') await renderPersonalPlanner(container, 'right');
-            else if (viewType === 'AttendanceLeft') await renderIcaapAttendance(container, 'left');
-            else if (viewType === 'AttendanceRight') await renderIcaapAttendance(container, 'right');
-            else if (viewType === 'TrackingLogLeft') await renderIcaapTracking(container, 'left');
-            else if (viewType === 'TrackingLogRight') await renderIcaapTracking(container, 'right');
-            else if (viewType === 'CheckBreakdown') await renderCheckBreakdown(container);
-            else if (viewType === 'FinancialReview') await renderFinancialReview(container);
-            else if (viewType === 'Empty') container.innerHTML = '<div class="handwriting" style="opacity: 0.1; text-align: center; margin-top: 50%;">Notes & Thoughts</div>';
->>>>>>> a6f2de3 (feat: add notebook binder UI with spine/rings and refactor navigation to use planner.html with query params)
         }
 
         function renderWorkPlannerView() { switchTab('WorkPlanner'); }
@@ -492,56 +449,28 @@
 
         async function renderIcaapAttendance(container, side) {
             const weekStart = new Date(displayDate); weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
-<<<<<<< HEAD
-            const weekdays = []; for (let i = 0; i < 5; i++) { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); }
-            container.innerHTML = `<div class="page-title">ATTENDANCE</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button onclick="changeAttendanceWeek(-1)">Prev</button><button onclick="changeAttendanceWeek(1)">Next</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>${weekdays.map(d => `<th>${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>${formatDateMMM(d.toISOString().split('T')[0])}</th>`).join('')}</tr></thead><tbody id="attn-body"></tbody></table></div>`;
-            const tbody = container.querySelector('#attn-body');
+            const daysToRender = side === 'left' ? [0, 1, 2] : [3, 4];
+            const weekdays = []; daysToRender.forEach(i => { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); });
+            container.innerHTML = `<div class="page-title">ATTENDANCE (${side.toUpperCase()})</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button onclick="changeAttendanceWeek(-1)">Prev Week</button><button onclick="changeAttendanceWeek(1)">Next Week</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>${weekdays.map(d => `<th>${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>${formatDateMMM(d.toISOString().split('T')[0])}</th>`).join('')}</tr></thead><tbody id="attn-body-${side}"></tbody></table></div>`;
+            const tbody = container.querySelector(`#attn-body-${side}`);
             employees.forEach(emp => {
                 const tr = document.createElement('tr'); 
                 tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;">${emp}</td>${weekdays.map(d => `<td><select class="attendance-select" data-field="attn-${emp}-${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)" style="font-size: 8pt; width: 100%;">${attnOptions.map(o => `<option value="${o}">${o}</option>`).join('')}</select></td>`).join('')}`; 
                 tbody.appendChild(tr);
-=======
-            const daysToRender = side === 'left' ? [0, 1, 2] : [3, 4];
-            const weekdays = []; daysToRender.forEach(i => { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); });
-            container.innerHTML = \`<div class="page-title">ATTENDANCE (\${side.toUpperCase()})</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button onclick="changeAttendanceWeek(-1)">Prev Week</button><button onclick="changeAttendanceWeek(1)">Next Week</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>\${weekdays.map(d => \`<th>\${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>\${formatDateMMM(d.toISOString().split('T')[0])}</th>\`).join('')}</tr></thead><tbody id="attn-body-\${side}"></tbody></table></div>\`;
-            const tbody = container.querySelector(\`#attn-body-\${side}\`);
-            ["Bonnie Ratner", "Eberardo Rodriguez", "Maikai Finnell", "Patricia Pernin", "Rene Gaudet", "Steve Maccarone", "Zina Dixon"].forEach(emp => {
-                const tr = document.createElement('tr'); tr.innerHTML = \`<td class="sticky-col text-left">\${emp}</td>\${weekdays.map(d => \`<td><select class="attendance-select" data-field="attn-\${emp}-\${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)">\${attnOptions.map(o => \`<option value="\${o}">\${o}</option>\`).join('')}</select></td>\`).join('')}\`; tbody.appendChild(tr);
->>>>>>> a6f2de3 (feat: add notebook binder UI with spine/rings and refactor navigation to use planner.html with query params)
             });
             const data = await fetchPlannerData(`icaap-attendance-data-${fiscalYear}`, 366);
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.value = item.content; });
         }
 
-<<<<<<< HEAD
-        async function renderIcaapTracking(container, startMonth = 0, endMonth = 12) {
-            const displayedMonths = monthNames.slice(startMonth, endMonth);
-            const isRightPage = startMonth > 0;
-            
-            let headerHtml = `<th class="sticky-col" style="width: 150px;">Name</th>${displayedMonths.map(m => `<th colspan="3">${m}</th>`).join('')}`;
-            if (isRightPage) headerHtml += `<th rowspan="2">Total</th>`;
-            
-            container.innerHTML = `<div class="page-title">ICAAP TRACKING (${startMonth === 0 ? 'JUL-DEC' : 'JAN-JUN'})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 100%;"><thead><tr>${headerHtml}</tr><tr><th class="sticky-col"></th>${displayedMonths.map(() => `<th>Log</th><th>Hrs</th><th>Appr</th>`).join('')}</tr></thead><tbody id="track-body-${startMonth}"></tbody></table></div>`;
-            const tbody = container.querySelector(`#track-body-${startMonth}`);
-            employees.forEach((emp, ei) => {
-                const tr = document.createElement('tr'); 
-                let cellsHtml = `<td class="sticky-col text-left" style="font-size: 8pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${emp}</td>`;
-                for (let mi = startMonth; mi < endMonth; mi++) {
-                    cellsHtml += `<td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-paylog" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-hours" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-appr" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`;
-                }
-                if (isRightPage) {
-                    cellsHtml += `<td contenteditable="true" class="editable-cell" data-field="total-${ei}" oninput="handleTrackingSave(this)" style="font-size: 8pt; font-weight: bold;"></td>`;
-                }
-                tr.innerHTML = cellsHtml; tbody.appendChild(tr);
-=======
         async function renderIcaapTracking(container, side) {
             const monthsToRender = side === 'left' ? monthNames.slice(0, 6) : monthNames.slice(6);
             const startIdx = side === 'left' ? 0 : 6;
-            container.innerHTML = \`<div class="page-title">ICAAP TRACKING (\${side.toUpperCase()})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 600px;"><thead><tr><th class="sticky-col">Name</th>\${monthsToRender.map(m => \`<th colspan="3">\${m}</th>\`).join('')}</tr><tr><th class="sticky-col"></th>\${monthsToRender.map(() => \`<th>Pay</th><th>Hrs</th><th>Appr</th>\`).join('')}</tr></thead><tbody id="track-body-\${side}"></tbody></table></div>\`;
-            const tbody = container.querySelector(\`#track-body-\${side}\`);
+            container.innerHTML = `<div class="page-title">ICAAP TRACKING (${side.toUpperCase()})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 600px;"><thead><tr><th class="sticky-col">Name</th>${monthsToRender.map(m => `<th colspan="3">${m}</th>`).join('')}</tr><tr><th class="sticky-col"></th>${monthsToRender.map(() => `<th>Pay</th><th>Hrs</th><th>Appr</th>`).join('')}</tr></thead><tbody id="track-body-${side}"></tbody></table></div>`;
+            const tbody = container.querySelector(`#track-body-${side}`);
             employees.forEach((emp, ei) => {
-                const tr = document.createElement('tr'); tr.innerHTML = \`<td class="sticky-col text-left">\${emp}</td>\${monthsToRender.map((m, mi) => \`<td contenteditable="true" class="editable-cell" data-field="m\${mi + startIdx}-\${ei}-paylog" oninput="handleTrackingSave(this)"></td><td contenteditable="true" class="editable-cell" data-field="m\${mi + startIdx}-\${ei}-hours" oninput="handleTrackingSave(this)"></td><td contenteditable="true" class="editable-cell" data-field="m\${mi + startIdx}-\${ei}-appr" oninput="handleTrackingSave(this)"></td>\`).join('')}\`; tbody.appendChild(tr);
->>>>>>> a6f2de3 (feat: add notebook binder UI with spine/rings and refactor navigation to use planner.html with query params)
+                const tr = document.createElement('tr'); 
+                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${emp}</td>${monthsToRender.map((m, mi) => `<td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-paylog" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-hours" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-appr" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`).join('')}`; 
+                tbody.appendChild(tr);
             });
             const data = await fetchPlannerData(`icaap-tracking-data-${fiscalYear}`, 366);
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.innerText = item.content; });
