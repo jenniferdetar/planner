@@ -212,7 +212,7 @@ function animateAndNavigate(event, url, direction = 'next') {
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes flip-in-next {
-            0% { transform: perspective(2500px) rotateY(90deg); opacity: 0; }
+            0% { transform: perspective(2500px) rotateY(180deg); opacity: 0; }
             100% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
         }
         @keyframes flip-out-next {
@@ -220,7 +220,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             100% { transform: perspective(2500px) rotateY(-180deg); opacity: 0; }
         }
         @keyframes flip-in-prev {
-            0% { transform: perspective(2500px) rotateY(-90deg); opacity: 0; }
+            0% { transform: perspective(2500px) rotateY(-180deg); opacity: 0; }
             100% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
         }
         @keyframes flip-out-prev {
@@ -232,24 +232,25 @@ function animateAndNavigate(event, url, direction = 'next') {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s linear;
             backface-visibility: hidden;
             perspective: 2500px;
+            transform-style: preserve-3d;
         }
 
         .flip-in-next {
-            animation: flip-in-next 0.6s ease-out forwards !important;
-            transform-origin: left center !important;
+            animation: flip-in-next 0.7s ease-out forwards !important;
+            transform-origin: 100% 50% !important; /* Right edge of left page */
         }
         .flip-out-next {
-            animation: flip-out-next 0.6s ease-in forwards !important;
-            transform-origin: left center !important;
+            animation: flip-out-next 0.7s ease-in forwards !important;
+            transform-origin: 0% 50% !important; /* Left edge of right page */
             z-index: 20;
         }
         .flip-in-prev {
-            animation: flip-in-prev 0.6s ease-out forwards !important;
-            transform-origin: right center !important;
+            animation: flip-in-prev 0.7s ease-out forwards !important;
+            transform-origin: 0% 50% !important; /* Left edge of right page */
         }
         .flip-out-prev {
-            animation: flip-out-prev 0.6s ease-in forwards !important;
-            transform-origin: right center !important;
+            animation: flip-out-prev 0.7s ease-in forwards !important;
+            transform-origin: 100% 50% !important; /* Right edge of left page */
             z-index: 20;
         }
 
@@ -575,14 +576,29 @@ function animateAndNavigate(event, url, direction = 'next') {
                 appMain.appendChild(sidebar);
             }
 
-            // 4. Initial Animation (Disabled to prevent tilt issues)
+            // 4. Initial Animation
             const panes = document.querySelectorAll('.view-pane');
             if (panes.length > 0) {
-                // By default, just ensure they are visible without transform
-                panes.forEach(p => {
-                    p.style.transform = 'none';
-                    p.style.opacity = '1';
-                });
+                const urlParams = new URLSearchParams(window.location.search);
+                const isNav = document.referrer && document.referrer.includes(window.location.hostname);
+                
+                if (isNav) {
+                    // We arrived via internal navigation, so show the flip-in
+                    // Logic: If we came from a 'next' nav, the new left page should flip in.
+                    // If we came from a 'prev' nav, the new right page should flip in.
+                    // This is handled by animateAndNavigate adding classes, but since we are on a new page,
+                    // we can't easily know the direction unless we pass it.
+                    // For now, let's just make sure they are anchored correctly.
+                    panes.forEach(p => {
+                        p.style.transform = 'none';
+                        p.style.opacity = '1';
+                    });
+                } else {
+                    panes.forEach(p => {
+                        p.style.transform = 'none';
+                        p.style.opacity = '1';
+                    });
+                }
             }
         }
     });
