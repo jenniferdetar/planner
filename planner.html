@@ -30,15 +30,26 @@
         .page-meta { font-size: 8pt; color: #888; text-align: center; margin-bottom: 15px; font-style: italic; }
         .text-wrap-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; max-height: 2.4em; word-break: break-word; }
         .special-table-container { width: 100%; overflow-x: auto; margin-top: 10px; }
-        .special-table { border-collapse: collapse; width: 100%; font-size: 8pt; table-layout: fixed; }
-        .special-table th, .special-table td { border: 1px solid #eee; padding: 2px 3px; text-align: center; white-space: normal; word-break: break-word; vertical-align: middle; }
+        .special-table { border-collapse: collapse; width: 100%; font-size: 8pt; table-layout: auto; }
+        .special-table th, .special-table td { border: 1px solid #eee; padding: 2px 3px; text-align: center; vertical-align: middle; }
         .special-table th { background: #f8f9fa; font-weight: 700; position: sticky; top: 0; z-index: 10; font-size: 8pt; text-transform: uppercase; }
         .text-left { text-align: left !important; }
         
-        /* Specific column widths for Budget */
-        .special-table th:nth-child(1), .special-table td:nth-child(1) { width: 45px; } /* Cat */
-        .special-table th:nth-child(2), .special-table td:nth-child(2) { width: auto; white-space: nowrap; } /* Item */
-        .special-table th:nth-child(3), .special-table td:nth-child(3) { width: 40px; } /* Amt */
+        /* Column adjustments for auto layout */
+        .special-table .clamp-wrapper {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.1;
+            max-height: 2.2em;
+            word-break: break-word;
+            margin: 0 auto;
+        }
+        .special-table .text-left .clamp-wrapper {
+            margin: 0;
+        }
         
         /* Category specific colors */
         .cat-auto { color: #27ae60; }
@@ -362,7 +373,7 @@
         async function renderCseaLog(container) {
             container.innerHTML = `<div class="page-title">MEMBER INTERACTION LOG</div><div class="special-table-container"><table class="special-table"><thead><tr><th>Date</th><th>Member</th><th>Location</th><th>Discussion</th><th>Outcome</th><th></th></tr></thead><tbody id="interaction-log-body"></tbody><tfoot><tr><td><input type="date" id="log-date" style="width:100%; font-size:8pt;"></td><td><input type="text" id="log-member" placeholder="Name" style="width:100%; font-size:8pt;"></td><td><input type="text" id="log-location" placeholder="Loc" style="width:100%; font-size:8pt;"></td><td><input type="text" id="log-discussion" placeholder="Issue" style="width:100%; font-size:8pt;"></td><td><input type="text" id="log-outcome" placeholder="Result" style="width:100%; font-size:8pt;"></td><td><button onclick="handleAddInteraction()" style="font-size:8pt;">Add</button></td></tr></tfoot></table></div>`;
             const interactions = await fetchInteractions('CSEA'); const tbody = container.querySelector('#interaction-log-body');
-            interactions.forEach(inter => { const tr = document.createElement('tr'); tr.innerHTML = `<td style="font-size: 8pt;">${formatDateMMM(inter.date_spoke)}</td><td style="font-size: 8pt;">${inter.member_name}</td><td style="font-size: 8pt;">${inter.work_location}</td><td style="font-size: 8pt;" class="text-wrap-clamp">${inter.discussion}</td><td style="font-size: 8pt;" class="text-wrap-clamp">${inter.outcome || ''}</td><td><button onclick="handleDeleteInteraction(${inter.id})" style="font-size:7pt;">X</button></td>`; tbody.appendChild(tr); });
+            interactions.forEach(inter => { const tr = document.createElement('tr'); tr.innerHTML = `<td style="font-size: 8pt;"><div class="clamp-wrapper">${formatDateMMM(inter.date_spoke)}</div></td><td style="font-size: 8pt;"><div class="clamp-wrapper">${inter.member_name}</div></td><td style="font-size: 8pt;"><div class="clamp-wrapper">${inter.work_location}</div></td><td style="font-size: 8pt;" class="text-left"><div class="clamp-wrapper">${inter.discussion}</div></td><td style="font-size: 8pt;" class="text-left"><div class="clamp-wrapper">${inter.outcome || ''}</div></td><td><button onclick="handleDeleteInteraction(${inter.id})" style="font-size:7pt;">X</button></td>`; tbody.appendChild(tr); });
         }
 
         async function handleAddInteraction() {
@@ -403,7 +414,7 @@
                 const tr = document.createElement('tr'); 
                 tr.className = bill.class || '';
                 const monthCells = months.map((_, i) => `<td><div class="check-box" data-field="chk-${bill.id}-${startMonth + i}" onclick="toggleBudgetCheck(this)"></div></td>`).join('');
-                tr.innerHTML = `<td class="handwriting">${bill.cat}</td><td class="text-left handwriting">${bill.item}</td><td class="handwriting">${bill.amt}</td>${monthCells}`; 
+                tr.innerHTML = `<td class="handwriting"><div class="clamp-wrapper">${bill.cat}</div></td><td class="text-left handwriting"><div class="clamp-wrapper">${bill.item}</div></td><td class="handwriting"><div class="clamp-wrapper">${bill.amt}</div></td>${monthCells}`; 
                 tbody.appendChild(tr); 
             });
             
@@ -434,7 +445,7 @@
             const tbody = container.querySelector(`#attn-body-${side}`);
             employees.forEach(emp => {
                 const tr = document.createElement('tr'); 
-                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;">${emp}</td>${weekdays.map(d => `<td><select class="attendance-select" data-field="attn-${emp}-${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)" style="font-size: 8pt; width: 100%;">${attnOptions.map(o => `<option value="${o}">${o}</option>`).join('')}</select></td>`).join('')}`; 
+                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;"><div class="clamp-wrapper">${emp}</div></td>${weekdays.map(d => `<td><select class="attendance-select" data-field="attn-${emp}-${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)" style="font-size: 8pt; width: 100%;">${attnOptions.map(o => `<option value="${o}">${o}</option>`).join('')}</select></td>`).join('')}`; 
                 tbody.appendChild(tr);
             });
             const data = await fetchPlannerData(`icaap-attendance-data-${fiscalYear}`, 366);
@@ -448,7 +459,7 @@
             const tbody = container.querySelector(`#track-body-${side}`);
             employees.forEach((emp, ei) => {
                 const tr = document.createElement('tr'); 
-                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${emp}</td>${monthsToRender.map((m, mi) => `<td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-paylog" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-hours" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-appr" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`).join('')}`; 
+                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;"><div class="clamp-wrapper">${emp}</div></td>${monthsToRender.map((m, mi) => `<td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-paylog" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-hours" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-appr" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`).join('')}`; 
                 tbody.appendChild(tr);
             });
             const data = await fetchPlannerData(`icaap-tracking-data-${fiscalYear}`, 366);
