@@ -349,12 +349,12 @@ function animateAndNavigate(event, url, direction = 'next') {
             top: 0;
             bottom: 0;
             left: 50%;
-            width: 30px;
+            width: 32px;
             transform: translateX(-50%);
             background: linear-gradient(90deg, 
-                rgba(0,0,0,0.2) 0%, 
-                rgba(255,255,255,0.3) 50%, 
-                rgba(0,0,0,0.2) 100%);
+                rgba(0,0,0,0.1) 0%, 
+                rgba(255,255,255,0.4) 50%, 
+                rgba(0,0,0,0.1) 100%);
             pointer-events: none;
             z-index: 100;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
@@ -370,21 +370,35 @@ function animateAndNavigate(event, url, direction = 'next') {
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
-            width: 30px;
+            width: 40px;
             z-index: 101;
             pointer-events: none;
-            padding: 30px 0;
+            padding: 40px 0;
         }
         .ring {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
+            width: 26px;
+            height: 26px;
+            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #e0e0e0 40%, #a0a0a0 100%);
             border-radius: 50%;
-            background: #eee;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.8);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.4), inset -1px -1px 2px rgba(255,255,255,0.8);
             position: relative;
+            z-index: 102;
+            border: 1px solid #999;
+        }
+        .ring::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -18px;
+            right: -18px;
+            height: 10px;
+            background: linear-gradient(180deg, #c0c0c0 0%, #f0f0f0 30%, #c0c0c0 100%);
+            transform: translateY(-50%);
+            z-index: -1;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         .ring::after {
             content: '';
@@ -392,31 +406,31 @@ function animateAndNavigate(event, url, direction = 'next') {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 14px;
-            height: 2px;
-            background: #888;
-            border-radius: 1px;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle at 50% 50%, #777 0%, #aaa 100%);
+            border-radius: 50%;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.4);
         }
         .view-pane {
             flex: 1;
             background: var(--content-bg);
-            margin: 2px;
+            margin: 0;
             padding: 20px 30px;
             overflow-y: auto;
             position: relative;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: none;
             min-height: 100%;
         }
         .view-pane:first-child {
-            padding-right: 60px;
+            padding-right: 50px;
         }
         .view-pane:last-child {
-            padding-left: 60px;
+            padding-left: 50px;
         }
         .tabs-sidebar {
-            width: 60px;
-            background: var(--sidebar-bg);
+            width: 65px;
+            background: #1a1a1a;
             display: flex;
             flex-direction: column;
             gap: 0;
@@ -425,16 +439,16 @@ function animateAndNavigate(event, url, direction = 'next') {
             border-left: 1px solid #333;
         }
         .tab {
-            padding: 10px 0;
-            height: 120px;
+            padding: 15px 0;
+            height: 140px;
             color: var(--tab-text-color, #fff);
             background: var(--tab-color, #444);
-            font-size: 14pt;
-            font-weight: 700;
+            font-size: 16pt;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             writing-mode: vertical-rl;
             text-orientation: upright;
             text-align: center;
@@ -445,17 +459,17 @@ function animateAndNavigate(event, url, direction = 'next') {
             justify-content: center;
             box-sizing: border-box;
             border-bottom: 1px solid rgba(0,0,0,0.1);
-            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            box-shadow: -3px 0 6px rgba(0,0,0,0.2);
+            position: relative;
         }
         .tab.active {
             background: var(--tab-color, var(--accent-color));
             color: var(--tab-text-color, #fff);
-            border-left: none;
-            box-shadow: -10px 0 15px rgba(0,0,0,0.3);
-            width: 70px;
-            margin-left: -10px;
+            width: 85px;
+            margin-left: -20px;
             z-index: 101;
-            border-radius: 5px 0 0 5px;
+            border-radius: 10px 0 0 10px;
+            box-shadow: -10px 0 20px rgba(0,0,0,0.4);
         }
         .logout-btn {
             padding: 15px;
@@ -512,7 +526,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             if (mainContent && !document.querySelector('.binder-rings')) {
                 const ringsContainer = document.createElement('div');
                 ringsContainer.className = 'binder-rings';
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 8; i++) {
                     const ring = document.createElement('div');
                     ring.className = 'ring';
                     ringsContainer.appendChild(ring);
