@@ -443,14 +443,13 @@ function animateAndNavigate(event, url, direction = 'next') {
             height: 140px;
             color: var(--tab-text-color, #fff);
             background: var(--tab-color, #444);
-            font-size: 16pt;
+            font-size: 10pt;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             writing-mode: vertical-rl;
-            text-orientation: upright;
             text-align: center;
             border-left: none;
             text-decoration: none;
@@ -470,6 +469,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             z-index: 101;
             border-radius: 10px 0 0 10px;
             box-shadow: -10px 0 20px rgba(0,0,0,0.4);
+            font-size: 11pt;
         }
         .logout-btn {
             padding: 15px;
