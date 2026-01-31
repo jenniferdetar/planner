@@ -13,46 +13,6 @@
             --sheet-green: #1b5e20;
             --border-color: #e1dfdd;
         }
-        body {
-            background-color: #f3f2f1;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-        }
-        .app-container {
-            display: flex;
-            flex: 1;
-            height: 100vh;
-            overflow: hidden;
-        }
-        #main-content-container {
-            display: flex !important;
-            flex-direction: column !important;
-            flex: 1 !important;
-            overflow: hidden !important;
-            padding: 0 !important;
-            position: relative;
-        }
-        .notebook-spread {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-        .view-pane {
-            flex: 1;
-            background: #fff;
-            margin: 0;
-            padding: 20px 40px;
-            overflow-y: auto;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
         .page-header {
             text-align: center;
             margin-bottom: 10px;
@@ -138,41 +98,13 @@
             color: #666;
             z-index: 2000;
         }
-        .nav-controls {
-            position: absolute;
-            top: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-            pointer-events: none;
-            z-index: 1000;
-        }
-        .nav-btn {
-            background: var(--header-blue);
-            color: #fff;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 8pt;
-            pointer-events: auto;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-        .nav-btn:hover { opacity: 1; }
-        .nav-btn:disabled { background: #ccc; cursor: default; }
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
-            <div class="nav-controls">
-                <button id="prev-page" class="nav-btn">← Previous Months</button>
-                <button id="next-page" class="nav-btn">Next Months →</button>
-            </div>
             <div class="notebook-spread">
-                <div class="view-pane" id="left-pane">
+                <div class="view-pane">
                     <div class="page-header"><h1 class="page-title" id="left-title">JULY - AUGUST 2025</h1></div>
                     <div class="table-container">
                         <table class="sheet-table">
@@ -181,7 +113,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="view-pane" id="right-pane">
+                <div class="view-pane">
                     <div class="page-header"><h1 class="page-title" id="right-title">SEPTEMBER - OCTOBER 2025</h1></div>
                     <div class="table-container">
                         <table class="sheet-table">
@@ -202,6 +134,7 @@
         const PERSISTENCE_KEY = "check-breakdown-2025-2026";
 
         async function init() {
+            setGlobalHeaderTitle("CHECK BREAKDOWN");
             // Setup Dates for Fiscal Year July 2025 - June 2026
             const startDate = new Date(2025, 6, 1); // July 1, 2025
             for (let i = 0; i < 12; i++) {
@@ -233,8 +166,21 @@
             const savedData = await fetchPlannerData(PERSISTENCE_KEY, 1000);
             renderCurrentSpread(savedData);
 
-            document.getElementById('prev-page').onclick = () => { if (currentSpread > 0) { currentSpread--; renderCurrentSpread(savedData); } };
-            document.getElementById('next-page').onclick = () => { if (currentSpread < 2) { currentSpread++; renderCurrentSpread(savedData); } };
+            window.changeMonth = (dir) => {
+                const direction = dir > 0 ? 'next' : 'prev';
+                if ((dir > 0 && currentSpread < 2) || (dir < 0 && currentSpread > 0)) {
+                    const panes = document.querySelectorAll('.view-pane');
+                    const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
+                    if (targetPane) {
+                        targetPane.classList.add(`flip-out-${direction}`);
+                        setTimeout(() => {
+                            currentSpread += dir;
+                            targetPane.classList.remove(`flip-out-${direction}`);
+                            renderCurrentSpread(savedData);
+                        }, 800);
+                    }
+                }
+            };
         }
 
         function renderCurrentSpread(savedData) {
@@ -255,9 +201,6 @@
 
             renderPage('left', leftDates, savedData, leftStart);
             renderPage('right', rightDates, savedData, leftStart + 4);
-
-            document.getElementById('prev-page').disabled = currentSpread === 0;
-            document.getElementById('next-page').disabled = currentSpread === 2;
         }
 
         function renderPage(side, dates, savedData, globalColOffset) {

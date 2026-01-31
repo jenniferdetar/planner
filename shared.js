@@ -309,6 +309,10 @@ function animateAndNavigate(event, url, direction = 'next') {
             box-sizing: border-box;
             perspective: 3000px;
             transform-style: preserve-3d;
+            border: 15px solid #2f4f4f;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background: #fff;
         }
         .main-content::after {
             content: '';
@@ -391,7 +395,9 @@ function animateAndNavigate(event, url, direction = 'next') {
             backface-visibility: hidden;
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            z-index: 1;
         }
+        /* Anchor flips to the center spine */
         .view-pane:first-child {
             padding-right: 50px;
             transform-origin: 100% 50%; /* Right edge (spine) */
@@ -416,8 +422,23 @@ function animateAndNavigate(event, url, direction = 'next') {
             animation: flip-out-prev 0.8s ease-in forwards !important;
             z-index: 20;
         }
+        .inner-spine {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 40px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, 
+                rgba(0,0,0,0.05) 0%, 
+                rgba(255,255,255,0.2) 50%, 
+                rgba(0,0,0,0.05) 100%);
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
         .tabs-sidebar {
-            width: 65px;
+            width: 70px;
             background: #1a1a1a;
             display: flex;
             flex-direction: column;
@@ -428,7 +449,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         .tab {
             padding: 10px 0;
-            height: 130px;
+            height: 120px;
             color: var(--tab-text-color, #fff);
             background: var(--tab-color, #444);
             font-size: 10pt;
@@ -437,8 +458,9 @@ function animateAndNavigate(event, url, direction = 'next') {
             letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Rotate typography 90 degrees right */
             writing-mode: vertical-rl;
-            text-orientation: upright;
+            text-orientation: sideways;
             text-align: center;
             border-left: none;
             text-decoration: none;
@@ -454,7 +476,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         .tab.active {
             background: var(--tab-color, var(--accent-color));
             color: var(--tab-text-color, #fff);
-            width: 85px;
+            width: 90px;
             margin-left: -20px;
             z-index: 101;
             border-radius: 12px 0 0 12px;
@@ -504,6 +526,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             // 2. Wrap Main Content + Sidebar in app-main for flex layout
             let appMain = document.querySelector('.app-main');
             let mainContent = document.querySelector('.main-content');
+            let spread = document.querySelector('.notebook-spread');
             
             if (!appMain) {
                 appMain = document.createElement('div');
@@ -516,11 +539,12 @@ function animateAndNavigate(event, url, direction = 'next') {
                 children.forEach(child => appMain.appendChild(child));
                 appContainer.appendChild(appMain);
                 
-                // Re-find mainContent if it was moved
+                // Re-find mainContent and spread if they were moved
                 mainContent = document.querySelector('.main-content');
+                spread = document.querySelector('.notebook-spread');
             }
 
-            // 2b. Inject Binder Rings
+            // 2b. Inject Binder Rings and Inner Spine
             if (mainContent && !document.querySelector('.binder-rings')) {
                 const ringsContainer = document.createElement('div');
                 ringsContainer.className = 'binder-rings';
@@ -530,6 +554,12 @@ function animateAndNavigate(event, url, direction = 'next') {
                     ringsContainer.appendChild(ring);
                 }
                 mainContent.appendChild(ringsContainer);
+            }
+
+            if (spread && !document.querySelector('.inner-spine')) {
+                const spine = document.createElement('div');
+                spine.className = 'inner-spine';
+                spread.appendChild(spine);
             }
 
             // 3. Auto-initialize Navigation Sidebar if it doesn't exist

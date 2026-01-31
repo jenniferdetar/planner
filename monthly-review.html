@@ -12,16 +12,6 @@
             --header-blue: #00326b;
             --border-color: #e1dfdd;
         }
-        body {
-            background-color: #f3f2f1;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
         .review-header {
             text-align: center;
             margin-bottom: 10px;
@@ -103,6 +93,18 @@
             line-height: 1.4;
             color: #333;
         }
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 2px 12px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            font-size: 10pt;
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -176,14 +178,19 @@
             });
             
             data.forEach(item => {
-                if (item.date_key === dateKey) {
-                    const el = document.getElementById(item.slot_key);
-                    if (el) el.innerText = item.value;
+                if (item.date === dateKey) {
+                    const el = document.getElementById(item.field_id);
+                    if (el) el.innerText = item.content;
                 }
             });
         }
 
-        function handleMonthChange() {
+        function handleMonthChange(dir = 0) {
+            if (dir !== 0) {
+                const [year, month] = monthPicker.value.split('-').map(Number);
+                const d = new Date(year, month - 1 + dir, 1);
+                monthPicker.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+            }
             const dateStr = `${monthPicker.value}-01`;
             const newUrl = window.location.pathname + '?date=' + dateStr;
             window.history.pushState({ date: dateStr }, '', newUrl);
@@ -206,12 +213,26 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            setGlobalHeaderTitle("MONTHLY REVIEW");
             loadReviewData();
             updateNavigationLinks(`${monthPicker.value}-01`);
             
             document.querySelectorAll('.editable-area').forEach(el => {
                 el.addEventListener('input', handleInput);
             });
+
+            window.changeMonth = (dir) => {
+                const direction = dir > 0 ? 'next' : 'prev';
+                const panes = document.querySelectorAll('.view-pane');
+                const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
+                if (targetPane) {
+                    targetPane.classList.add(`flip-out-${direction}`);
+                    setTimeout(() => {
+                        handleMonthChange(dir);
+                        targetPane.classList.remove(`flip-out-${direction}`);
+                    }, 800);
+                }
+            };
         });
 
         window.onpopstate = (event) => {
