@@ -387,8 +387,9 @@
             
             financialBills.forEach(bill => { 
                 const tr = document.createElement('tr'); 
+                tr.className = bill.class || '';
                 const monthCells = months.map((_, i) => `<td><div class="check-box" data-field="chk-${bill.id}-${startMonth + i}" onclick="toggleBudgetCheck(this)"></div></td>`).join('');
-                tr.innerHTML = `<td>${bill.cat}</td><td class="text-left">${bill.item}</td><td>${bill.amt}</td>${monthCells}`; 
+                tr.innerHTML = `<td class="handwriting">${bill.cat}</td><td class="text-left handwriting">${bill.item}</td><td class="handwriting">${bill.amt}</td>${monthCells}`; 
                 tbody.appendChild(tr); 
             });
             

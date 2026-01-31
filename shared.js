@@ -93,17 +93,29 @@ const DEFAULT_BILLS = [
     { id: 1, cat: 'Auto', item: 'Auto Maintenance', amt: '$100', class: 'row-auto' },
     { id: 2, cat: 'Auto', item: 'Mercury Auto Insurance', amt: '$388', class: 'row-auto' },
     { id: 3, cat: 'Auto', item: 'Tahoe Registration', amt: '$15', class: 'row-auto' },
-    { id: 4, cat: 'Bill', item: 'Edison', amt: '$150', class: 'row-bill' },
-    { id: 5, cat: 'Bill', item: 'Gas Company', amt: '$50', class: 'row-bill' },
-    { id: 6, cat: 'Bill', item: 'Spectrum', amt: '$85', class: 'row-bill' },
-    { id: 7, cat: 'Bill', item: 'Water/Trash', amt: '$120', class: 'row-bill' },
-    { id: 8, cat: 'Cash', item: 'Blow Cash Jennifer', amt: '$200', class: 'row-cash' },
-    { id: 9, cat: 'Cash', item: 'Blow Cash Stephen', amt: '$200', class: 'row-cash' },
-    { id: 10, cat: 'CC', item: 'Amazon Visa', amt: '$500', class: 'row-cc' },
-    { id: 11, cat: 'CC', item: 'Citibank Visa', amt: '$300', class: 'row-cc' },
-    { id: 12, cat: 'CC', item: 'Southwest Visa', amt: '$200', class: 'row-cc' },
-    { id: 13, cat: 'Housing', item: 'Mortgage', amt: '$2,500', class: 'row-housing' },
-    { id: 14, cat: 'Savings', item: 'Emergency Fund', amt: '$500', class: 'row-savings' }
+    { id: 4, cat: 'Auto', item: 'Trailblazer Registration', amt: '$28', class: 'row-auto' },
+    { id: 5, cat: 'Bill Pay', item: 'DWP', amt: '$100', class: 'row-billpay' },
+    { id: 6, cat: 'Bill Pay', item: "Jeff's Credit Cards", amt: '$500', class: 'row-billpay' },
+    { id: 7, cat: 'Bill Pay', item: "Jennifer's Student Loans", amt: '$150', class: 'row-billpay' },
+    { id: 8, cat: 'Bill Pay', item: 'Schools First Loan', amt: '$142', class: 'row-billpay' },
+    { id: 9, cat: 'Cash', item: 'Cleaning Lady', amt: '$320', class: 'row-cash' },
+    { id: 10, cat: 'Cash', item: 'Gas', amt: '$600', class: 'row-cash' },
+    { id: 11, cat: 'Cash', item: 'Laundry', amt: '$80', class: 'row-cash' },
+    { id: 12, cat: 'Credit Card', item: 'ADT', amt: '$53', class: 'row-cc' },
+    { id: 13, cat: 'Credit Card', item: 'Amazon', amt: '$100', class: 'row-cc' },
+    { id: 14, cat: 'Credit Card', item: 'Groceries', amt: '$600', class: 'row-cc' },
+    { id: 15, cat: 'Credit Card', item: 'Hair', amt: '$110', class: 'row-cc' },
+    { id: 16, cat: 'Credit Card', item: 'Orkin', amt: '$50', class: 'row-cc' },
+    { id: 17, cat: 'Housing', item: 'HELOC', amt: '$357', class: 'row-housing' },
+    { id: 18, cat: 'Housing', item: 'HOA', amt: '$520', class: 'row-housing' },
+    { id: 19, cat: 'Housing', item: 'Mortgage', amt: '$2,250', class: 'row-housing' },
+    { id: 20, cat: 'Housing', item: 'Spectrum', amt: '$197', class: 'row-housing' },
+    { id: 21, cat: 'Housing', item: 'Verizon', amt: '$283', class: 'row-housing' },
+    { id: 22, cat: 'Savings', item: 'Blow', amt: '$200', class: 'row-savings' },
+    { id: 23, cat: 'Savings', item: 'HSA', amt: '$200', class: 'row-savings' },
+    { id: 24, cat: 'Savings', item: 'Summer Saver', amt: '$400', class: 'row-savings' },
+    { id: 25, cat: 'Savings', item: "Tahoe's Major Repairs", amt: '$200', class: 'row-savings' },
+    { id: 26, cat: 'Savings', item: 'Vacation', amt: '$125', class: 'row-savings' }
 ];
 
 let supabaseClient;
@@ -504,6 +516,14 @@ function animateAndNavigate(event, url, direction = 'next') {
             color: #fff;
             background: #222;
         }
+
+        /* Budget Category Row Colors */
+        .special-table tr.row-auto { color: #4caf50 !important; }
+        .special-table tr.row-billpay { color: #2196f3 !important; }
+        .special-table tr.row-cash { color: #e91e63 !important; }
+        .special-table tr.row-cc { color: #ff9800 !important; }
+        .special-table tr.row-housing { color: #795548 !important; }
+        .special-table tr.row-savings { color: #9c27b0 !important; }
     `;
     document.head.appendChild(style);
 
