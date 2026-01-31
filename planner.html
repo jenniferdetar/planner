@@ -388,10 +388,12 @@
             const weekdays = []; for (let i = 0; i < 5; i++) { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); }
             container.innerHTML = \`<div class="page-title">ATTENDANCE</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button onclick="changeAttendanceWeek(-1)">Prev</button><button onclick="changeAttendanceWeek(1)">Next</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>\${weekdays.map(d => \`<th>\${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>\${formatDateMMM(d.toISOString().split('T')[0])}</th>\`).join('')}</tr></thead><tbody id="attn-body"></tbody></table></div>\`;
             const tbody = container.querySelector('#attn-body');
-            ["Bonnie Ratner", "Eberardo Rodriguez", "Maikai Finnell", "Patricia Pernin", "Rene Gaudet", "Steve Maccarone", "Zina Dixon"].forEach(emp => {
-                const tr = document.createElement('tr'); tr.innerHTML = \`<td class="sticky-col text-left">\${emp}</td>\${weekdays.map(d => \`<td><select class="attendance-select" data-field="attn-\${emp}-\${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)">\${attnOptions.map(o => \`<option value="\${o}">\${o}</option>\`).join('')}</select></td>\`).join('')}\`; tbody.appendChild(tr);
+            employees.forEach(emp => {
+                const tr = document.createElement('tr'); 
+                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;">${emp}</td>${weekdays.map(d => `<td><select class="attendance-select" data-field="attn-${emp}-${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)" style="font-size: 8pt; width: 100%;">${attnOptions.map(o => `<option value="${o}">${o}</option>`).join('')}</select></td>`).join('')}`; 
+                tbody.appendChild(tr);
             });
-            const data = await fetchPlannerData(\`icaap-attendance-data-\${fiscalYear}\`, 366);
+            const data = await fetchPlannerData(`icaap-attendance-data-${fiscalYear}`, 366);
             data.forEach(item => { const el = container.querySelector(\`[data-field="\${item.field_id}"]\`); if (el) el.value = item.content; });
         }
 
