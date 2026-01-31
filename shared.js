@@ -528,19 +528,19 @@ function animateAndNavigate(event, url, direction = 'next') {
                 const path = window.location.pathname;
                 
                 const isIndex = path.endsWith('index.html') || path === '/';
-                const isHOA = path.endsWith('hoa.html') || category === 'HOA';
-                const isCSEA = path.endsWith('csea.html') || category === 'CSEA';
-                const isICAAP = path.endsWith('icaap.html') || category.toUpperCase() === 'ICAAP';
-                const isFinance = path.endsWith('financial.html') || ['FINANCE', 'BUDGET'].includes(category.toUpperCase());
-                const isPlan = path.endsWith('planning.html') || ['PLANNING', 'PLAN'].includes(category.toUpperCase());
+                const isHOA = category === 'HOA';
+                const isCSEA = category === 'CSEA';
+                const isICAAP = category.startsWith('ICAAP');
+                const isFinance = ['Finance', 'Check-Breakdown', 'Monthly-Review'].includes(category);
+                const isPlan = category === 'Planning';
                 
                 const sections = [
                     { name: 'HOME', url: 'index.html', active: isIndex, color: '#ffffff', textColor: '#000000' },
-                    { name: 'HOA', url: 'hoa.html', active: isHOA, color: '#ff9800', textColor: '#000000' },
-                    { name: 'CSEA', url: 'csea.html', active: isCSEA, color: '#00326b', textColor: '#ffca38' },
-                    { name: 'ICAAP', url: 'icaap.html', active: isICAAP, color: '#c2185b', textColor: '#ffffff' },
-                    { name: 'FINANCE', url: 'financial.html', active: isFinance, color: '#1b5e20', textColor: '#ffffff' },
-                    { name: 'PLAN', url: 'planning.html', active: isPlan, color: '#4a148c', textColor: '#ffff00' }
+                    { name: 'HOA', url: 'planner.html?category=HOA', active: isHOA, color: '#ceabb5', textColor: '#000000' },
+                    { name: 'CSEA', url: 'planner.html?category=CSEA', active: isCSEA, color: '#602537', textColor: '#ffffff' },
+                    { name: 'ICAAP', url: 'planner.html?category=ICAAP-Tracking', active: isICAAP, color: '#1b2c3c', textColor: '#ffffff' },
+                    { name: 'FINANCE', url: 'planner.html?category=Finance', active: isFinance, color: '#464f51', textColor: '#ffffff' },
+                    { name: 'PLAN', url: 'planner.html?category=Planning', active: isPlan, color: '#a8b4b7', textColor: '#000000' }
                 ];
 
                 const activeIndex = sections.findIndex(s => s.active);

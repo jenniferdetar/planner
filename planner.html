@@ -11,8 +11,53 @@
         :root { --soft-bg: #fdfcf0; }
         body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; color: var(--text-color); }
         #main-content-container { flex-direction: column !important; overflow-y: auto !important; padding: 0 !important; display: flex !important; flex: 1; }
-        .notebook-spread { display: flex; flex: 1; width: 100%; }
-        .view-pane { flex: 1; background: #fff; margin: 0; position: relative; border-radius: 0; box-shadow: none; height: auto !important; }
+        .notebook-spread { 
+            display: flex; 
+            flex: 1; 
+            width: 100%; 
+            border: 20px solid #2f4f4f; 
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background: #fff;
+            position: relative;
+            z-index: 1;
+        }
+        /* Center Binder Spine */
+        .spine {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #e0e0e0, #ffffff 50%, #e0e0e0);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px 0;
+        }
+        .ring {
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, #ddd, #888);
+            border-radius: 50%;
+            box-shadow: inset 1px 1px 2px rgba(255,255,255,0.8), 2px 2px 5px rgba(0,0,0,0.3);
+        }
+        .view-pane { 
+            flex: 1; 
+            background: #fff; 
+            margin: 0 !important; 
+            padding: 20px !important; 
+            overflow-y: auto !important; 
+            position: relative; 
+            border-radius: 0 !important; 
+            box-shadow: none !important; 
+            height: 100vh;
+            scrollbar-width: thin;
+        }
         .handwriting, textarea, .editable-cell, .slot-content, .editable-area { font-family: 'Coming Soon', cursive; font-size: 1.1rem; color: #2c3e50; }
         .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 5px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center; }
         .page-meta { font-size: 8pt; color: #888; text-align: center; margin-bottom: 15px; font-style: italic; }
@@ -41,6 +86,12 @@
     <div class="app-container">
         <div class="main-content" id="main-content-container">
             <div class="notebook-spread">
+                <div class="spine">
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                </div>
                 <div class="view-pane" id="left-pane-content"></div>
                 <div class="view-pane" id="right-pane-content"></div>
             </div>
@@ -55,8 +106,8 @@
             HOA: { title: 'HOA Notes', leftView: 'NotesLeft', rightView: 'NotesRight' },
             CSEA: { title: 'CSEA Hub', leftView: 'NotesLeft', rightView: 'InteractionLog' },
             iCAAP: { title: 'iCAAP Tracking', leftView: 'NotesLeft', rightView: 'iCAAPLinks' },
-            'ICAAP-Attendance': { title: 'Attendance Tracking', leftView: 'Attendance', rightView: 'NotesRight' },
-            'ICAAP-Tracking': { title: 'iCAAP Tracking Log', leftView: 'TrackingLog1', rightView: 'TrackingLog2' },
+            'ICAAP-Attendance': { title: 'Attendance Tracking', leftView: 'AttendanceLeft', rightView: 'AttendanceRight' },
+            'ICAAP-Tracking': { title: 'iCAAP Tracking Log', leftView: 'TrackingLogLeft', rightView: 'TrackingLogRight' },
             Finance: { title: 'Financial Planning', leftView: 'Budget', rightView: 'FinanceLinks' },
             'Check-Breakdown': { title: 'Check Breakdown', leftView: 'CheckBreakdown', rightView: 'NotesRight' },
             'Monthly-Review': { title: 'Financial Review', leftView: 'FinancialReview', rightView: 'NotesRight' },
@@ -197,6 +248,7 @@
         }
 
         async function renderView(viewType, container) {
+<<<<<<< HEAD
             try {
                 container.innerHTML = '';
                 if (viewType === 'Calendar') await renderCalendar(container);
@@ -221,6 +273,27 @@
                 console.error(`Error rendering view ${viewType}:`, err);
                 container.innerHTML = `<div class="handwriting" style="padding: 20px; color: red;">Error: ${err.message}</div>`;
             }
+=======
+            container.innerHTML = '';
+            if (viewType === 'Calendar') await renderCalendar(container);
+            else if (viewType === 'MonthlyFocus') await renderMonthlyFocus(container);
+            else if (viewType.startsWith('Notes')) await renderNotes(container, viewType === 'NotesLeft' ? 'left' : 'right');
+            else if (viewType === 'InteractionLog') await renderCseaLog(container);
+            else if (viewType === 'iCAAPLinks') renderIcaapLinks(container);
+            else if (viewType === 'Budget') await renderBudget(container);
+            else if (viewType === 'FinanceLinks') renderFinanceLinks(container);
+            else if (viewType === 'WorkPlannerLeft') await renderWorkPlanner(container, 'left');
+            else if (viewType === 'WorkPlannerRight') await renderWorkPlanner(container, 'right');
+            else if (viewType === 'PersonalPlannerLeft') await renderPersonalPlanner(container, 'left');
+            else if (viewType === 'PersonalPlannerRight') await renderPersonalPlanner(container, 'right');
+            else if (viewType === 'AttendanceLeft') await renderIcaapAttendance(container, 'left');
+            else if (viewType === 'AttendanceRight') await renderIcaapAttendance(container, 'right');
+            else if (viewType === 'TrackingLogLeft') await renderIcaapTracking(container, 'left');
+            else if (viewType === 'TrackingLogRight') await renderIcaapTracking(container, 'right');
+            else if (viewType === 'CheckBreakdown') await renderCheckBreakdown(container);
+            else if (viewType === 'FinancialReview') await renderFinancialReview(container);
+            else if (viewType === 'Empty') container.innerHTML = '<div class="handwriting" style="opacity: 0.1; text-align: center; margin-top: 50%;">Notes & Thoughts</div>';
+>>>>>>> a6f2de3 (feat: add notebook binder UI with spine/rings and refactor navigation to use planner.html with query params)
         }
 
         function renderWorkPlannerView() { switchTab('WorkPlanner'); }
@@ -289,22 +362,30 @@
             events.forEach(e => { const dc = container.querySelector('#events-' + e.date); if (dc) { const p = document.createElement('div'); p.className = 'event-link text-wrap-clamp'; p.innerText = e.title; dc.appendChild(p); } });
         }
 
-        function renderPlannerLinks(container) {
+        async function renderMonthlyFocus(container) {
+            const dateStr = displayDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
             container.innerHTML = `
                 <div style="background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 100%;">
-                    <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 25px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Quick Links</div>
-                    <div style="display: flex; flex-direction: column; gap: 15px;">
-                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='planner.html?category=Personal-Planner'"><span>👤</span> Personal Planner</button>
-                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='planner.html?category=Work-Planner'"><span>💼</span> Work Planner</button>
-                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='financial.html'"><span>💰</span> Financial Planner</button>
-                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='monthly-review.html'"><span>📅</span> Monthly Review</button>
-                        <button class="tab active" style="text-align: left; padding: 20px; display: flex; align-items: center; gap: 15px; background: #fff; width: 100%; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; font-size: 10pt;" onclick="window.location.href='planner.html?category=CSEA'"><span>📁</span> CSEA Hub</button>
-                    </div>
-                    <div class="handwriting" style="margin-top: 50px; text-align: center; border-top: 1px solid #eee; padding-top: 30px; opacity: 0.7;">
-                        "Success is the sum of small efforts, repeated day in and day out."
+                    <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 25px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center;">Monthly Focus</div>
+                    <div id="monthly-entries-list" class="handwriting" style="min-height: 100px; margin-bottom: 20px; line-height: 1.8;"></div>
+                    <div class="new-note-area" style="border-top: 1px solid #eee; padding-top: 15px;">
+                        <textarea id="new-monthly-focus" class="handwriting" placeholder="Add a new goal..." style="width: 100%; min-height: 60px; border: 1px solid #eee; padding: 8px; border-radius: 4px; background: #fafafa; resize: none;"></textarea>
+                        <button class="save-btn" onclick="handleAddMonthlyFocus()" style="margin-top: 10px; width: 100%; padding: 10px;">Add Entry</button>
                     </div>
                 </div>
             `;
+            const list = container.querySelector('#monthly-entries-list');
+            const entries = await fetchEntries('Home-Monthly-Focus', dateStr);
+            list.innerHTML = entries.map(e => `<div style="margin-bottom: 10px; border-bottom: 1px dotted #eee; padding-bottom: 5px;">• ${e.content}</div>`).join('');
+        }
+
+        async function handleAddMonthlyFocus() {
+            const content = document.getElementById('new-monthly-focus').value;
+            if (!content) return;
+            const dateStr = displayDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
+            if (await saveEntry('Home-Monthly-Focus', dateStr, content)) {
+                switchTab(currentCategory);
+            }
         }
 
         async function renderNotes(container, side) {
@@ -394,8 +475,9 @@
             if (await saveEntry(`${currentCategory}-${side}`, dateStr, content)) { document.getElementById(`new-note-content-${side}`).value = ''; switchTab(currentCategory); }
         }
 
-        async function renderIcaapAttendance(container) {
+        async function renderIcaapAttendance(container, side) {
             const weekStart = new Date(displayDate); weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
+<<<<<<< HEAD
             const weekdays = []; for (let i = 0; i < 5; i++) { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); }
             container.innerHTML = `<div class="page-title">ATTENDANCE</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button onclick="changeAttendanceWeek(-1)">Prev</button><button onclick="changeAttendanceWeek(1)">Next</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>${weekdays.map(d => `<th>${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>${formatDateMMM(d.toISOString().split('T')[0])}</th>`).join('')}</tr></thead><tbody id="attn-body"></tbody></table></div>`;
             const tbody = container.querySelector('#attn-body');
@@ -403,11 +485,20 @@
                 const tr = document.createElement('tr'); 
                 tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;">${emp}</td>${weekdays.map(d => `<td><select class="attendance-select" data-field="attn-${emp}-${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)" style="font-size: 8pt; width: 100%;">${attnOptions.map(o => `<option value="${o}">${o}</option>`).join('')}</select></td>`).join('')}`; 
                 tbody.appendChild(tr);
+=======
+            const daysToRender = side === 'left' ? [0, 1, 2] : [3, 4];
+            const weekdays = []; daysToRender.forEach(i => { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); });
+            container.innerHTML = \`<div class="page-title">ATTENDANCE (\${side.toUpperCase()})</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button onclick="changeAttendanceWeek(-1)">Prev Week</button><button onclick="changeAttendanceWeek(1)">Next Week</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>\${weekdays.map(d => \`<th>\${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>\${formatDateMMM(d.toISOString().split('T')[0])}</th>\`).join('')}</tr></thead><tbody id="attn-body-\${side}"></tbody></table></div>\`;
+            const tbody = container.querySelector(\`#attn-body-\${side}\`);
+            ["Bonnie Ratner", "Eberardo Rodriguez", "Maikai Finnell", "Patricia Pernin", "Rene Gaudet", "Steve Maccarone", "Zina Dixon"].forEach(emp => {
+                const tr = document.createElement('tr'); tr.innerHTML = \`<td class="sticky-col text-left">\${emp}</td>\${weekdays.map(d => \`<td><select class="attendance-select" data-field="attn-\${emp}-\${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)">\${attnOptions.map(o => \`<option value="\${o}">\${o}</option>\`).join('')}</select></td>\`).join('')}\`; tbody.appendChild(tr);
+>>>>>>> a6f2de3 (feat: add notebook binder UI with spine/rings and refactor navigation to use planner.html with query params)
             });
             const data = await fetchPlannerData(`icaap-attendance-data-${fiscalYear}`, 366);
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.value = item.content; });
         }
 
+<<<<<<< HEAD
         async function renderIcaapTracking(container, startMonth = 0, endMonth = 12) {
             const displayedMonths = monthNames.slice(startMonth, endMonth);
             const isRightPage = startMonth > 0;
@@ -427,6 +518,15 @@
                     cellsHtml += `<td contenteditable="true" class="editable-cell" data-field="total-${ei}" oninput="handleTrackingSave(this)" style="font-size: 8pt; font-weight: bold;"></td>`;
                 }
                 tr.innerHTML = cellsHtml; tbody.appendChild(tr);
+=======
+        async function renderIcaapTracking(container, side) {
+            const monthsToRender = side === 'left' ? monthNames.slice(0, 6) : monthNames.slice(6);
+            const startIdx = side === 'left' ? 0 : 6;
+            container.innerHTML = \`<div class="page-title">ICAAP TRACKING (\${side.toUpperCase()})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 600px;"><thead><tr><th class="sticky-col">Name</th>\${monthsToRender.map(m => \`<th colspan="3">\${m}</th>\`).join('')}</tr><tr><th class="sticky-col"></th>\${monthsToRender.map(() => \`<th>Pay</th><th>Hrs</th><th>Appr</th>\`).join('')}</tr></thead><tbody id="track-body-\${side}"></tbody></table></div>\`;
+            const tbody = container.querySelector(\`#track-body-\${side}\`);
+            employees.forEach((emp, ei) => {
+                const tr = document.createElement('tr'); tr.innerHTML = \`<td class="sticky-col text-left">\${emp}</td>\${monthsToRender.map((m, mi) => \`<td contenteditable="true" class="editable-cell" data-field="m\${mi + startIdx}-\${ei}-paylog" oninput="handleTrackingSave(this)"></td><td contenteditable="true" class="editable-cell" data-field="m\${mi + startIdx}-\${ei}-hours" oninput="handleTrackingSave(this)"></td><td contenteditable="true" class="editable-cell" data-field="m\${mi + startIdx}-\${ei}-appr" oninput="handleTrackingSave(this)"></td>\`).join('')}\`; tbody.appendChild(tr);
+>>>>>>> a6f2de3 (feat: add notebook binder UI with spine/rings and refactor navigation to use planner.html with query params)
             });
             const data = await fetchPlannerData(`icaap-tracking-data-${fiscalYear}`, 366);
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.innerText = item.content; });
