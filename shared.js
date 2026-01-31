@@ -419,19 +419,19 @@ function animateAndNavigate(event, url, direction = 'next') {
             transform-origin: 0% 50%; /* Left edge (spine) */
         }
         @keyframes flip-out-next {
-            0% { transform: rotateY(0deg); opacity: 1; }
-            100% { transform: rotateY(-180deg); opacity: 0; }
+            0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
+            100% { transform: perspective(2500px) rotateY(-180deg); opacity: 0; }
         }
         @keyframes flip-out-prev {
-            0% { transform: rotateY(0deg); opacity: 1; }
-            100% { transform: rotateY(180deg); opacity: 0; }
+            0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
+            100% { transform: perspective(2500px) rotateY(180deg); opacity: 0; }
         }
         .flip-out-next {
-            animation: flip-out-next 0.8s ease-in forwards !important;
+            animation: flip-out-next 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards !important;
             z-index: 20;
         }
         .flip-out-prev {
-            animation: flip-out-prev 0.8s ease-in forwards !important;
+            animation: flip-out-prev 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards !important;
             z-index: 20;
         }
         .inner-spine {
@@ -493,7 +493,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             z-index: 101;
             border-radius: 12px 0 0 12px;
             box-shadow: -12px 0 25px rgba(0,0,0,0.5);
-            font-size: 10.5pt;
+            font-size: 10pt;
         }
         .logout-btn {
             padding: 20px 0;
@@ -518,12 +518,12 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
 
         /* Budget Category Row Colors */
-        .special-table tr.row-auto { color: #4caf50 !important; }
-        .special-table tr.row-billpay { color: #2196f3 !important; }
-        .special-table tr.row-cash { color: #e91e63 !important; }
-        .special-table tr.row-cc { color: #ff9800 !important; }
-        .special-table tr.row-housing { color: #795548 !important; }
-        .special-table tr.row-savings { color: #9c27b0 !important; }
+        .special-table tr.row-auto { color: #27ae60 !important; }
+        .special-table tr.row-billpay { color: #2980b9 !important; }
+        .special-table tr.row-cash { color: #8e44ad !important; }
+        .special-table tr.row-cc { color: #e67e22 !important; }
+        .special-table tr.row-housing { color: #c0392b !important; }
+        .special-table tr.row-savings { color: #16a085 !important; }
     `;
     document.head.appendChild(style);
 
