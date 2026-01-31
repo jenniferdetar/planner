@@ -415,23 +415,24 @@ function animateAndNavigate(event, url, direction = 'next') {
             padding-left: 60px;
         }
         .tabs-sidebar {
-            width: 100px;
+            width: 60px;
             background: var(--sidebar-bg);
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            padding: 10px 0;
+            gap: 0;
+            padding: 0;
             z-index: 100;
             border-left: 1px solid #333;
         }
         .tab {
-            padding: 20px 5px;
+            padding: 0;
+            height: 120px;
             color: var(--tab-text-color, #fff);
             background: var(--tab-color, #444);
-            font-size: 11pt;
+            font-size: 10pt;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.2s;
             writing-mode: vertical-rl;
@@ -442,8 +443,8 @@ function animateAndNavigate(event, url, direction = 'next') {
             display: flex;
             align-items: center;
             justify-content: center;
-            border-bottom: 1px solid rgba(0,0,0,0.2);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+            box-sizing: border-box;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
         .tab:hover {
             filter: brightness(1.2);
@@ -535,6 +536,7 @@ function animateAndNavigate(event, url, direction = 'next') {
                 const isPlan = path.endsWith('planning.html') || ['PLANNING', 'PLAN'].includes(category.toUpperCase());
                 
                 const sections = [
+                    { name: 'HOME', url: 'index.html', active: isIndex, color: '#ffffff', textColor: '#000000' },
                     { name: 'HOA', url: 'hoa.html', active: isHOA, color: '#ff9800', textColor: '#000000' },
                     { name: 'CSEA', url: 'csea.html', active: isCSEA, color: '#00326b', textColor: '#ffca38' },
                     { name: 'ICAAP', url: 'icaap.html', active: isICAAP, color: '#c2185b', textColor: '#ffffff' },
