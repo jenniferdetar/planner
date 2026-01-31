@@ -201,7 +201,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         targetPane.classList.add(`flip-out-${direction}`);
         setTimeout(() => {
             window.location.href = url;
-        }, 600);
+        }, 800);
     } else {
         window.location.href = url;
     }
@@ -211,47 +211,11 @@ function animateAndNavigate(event, url, direction = 'next') {
 (function() {
     const style = document.createElement('style');
     style.innerHTML = `
-        @keyframes flip-in-next {
-            0% { transform: perspective(2500px) rotateY(180deg); opacity: 0; }
-            100% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
-        }
-        @keyframes flip-out-next {
-            0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2500px) rotateY(-180deg); opacity: 0; }
-        }
-        @keyframes flip-in-prev {
-            0% { transform: perspective(2500px) rotateY(-180deg); opacity: 0; }
-            100% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
-        }
-        @keyframes flip-out-prev {
-            0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2500px) rotateY(180deg); opacity: 0; }
-        }
-
         .view-pane {
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s linear;
             backface-visibility: hidden;
             perspective: 2500px;
             transform-style: preserve-3d;
-        }
-
-        .flip-in-next {
-            animation: flip-in-next 0.7s ease-out forwards !important;
-            transform-origin: 100% 50% !important; /* Right edge of left page */
-        }
-        .flip-out-next {
-            animation: flip-out-next 0.7s ease-in forwards !important;
-            transform-origin: 0% 50% !important; /* Left edge of right page */
-            z-index: 20;
-        }
-        .flip-in-prev {
-            animation: flip-in-prev 0.7s ease-out forwards !important;
-            transform-origin: 0% 50% !important; /* Left edge of right page */
-        }
-        .flip-out-prev {
-            animation: flip-out-prev 0.7s ease-in forwards !important;
-            transform-origin: 100% 50% !important; /* Right edge of left page */
-            z-index: 20;
         }
 
         /* Global Planner Layout Styles */
@@ -338,11 +302,13 @@ function animateAndNavigate(event, url, direction = 'next') {
             flex: 1;
             width: 100%;
             height: 100%;
-            overflow-y: auto;
+            overflow: hidden;
             position: relative;
             gap: 0;
-            padding: 5px;
+            padding: 0;
             box-sizing: border-box;
+            perspective: 3000px;
+            transform-style: preserve-3d;
         }
         .main-content::after {
             content: '';
@@ -422,12 +388,33 @@ function animateAndNavigate(event, url, direction = 'next') {
             position: relative;
             box-shadow: none;
             min-height: 100%;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
         }
         .view-pane:first-child {
             padding-right: 50px;
+            transform-origin: 100% 50%; /* Right edge (spine) */
         }
         .view-pane:last-child {
             padding-left: 50px;
+            transform-origin: 0% 50%; /* Left edge (spine) */
+        }
+        @keyframes flip-out-next {
+            0% { transform: rotateY(0deg); opacity: 1; }
+            100% { transform: rotateY(-180deg); opacity: 0; }
+        }
+        @keyframes flip-out-prev {
+            0% { transform: rotateY(0deg); opacity: 1; }
+            100% { transform: rotateY(180deg); opacity: 0; }
+        }
+        .flip-out-next {
+            animation: flip-out-next 0.8s ease-in forwards !important;
+            z-index: 20;
+        }
+        .flip-out-prev {
+            animation: flip-out-prev 0.8s ease-in forwards !important;
+            z-index: 20;
         }
         .tabs-sidebar {
             width: 65px;
