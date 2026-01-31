@@ -108,7 +108,9 @@
             CSEA: { title: 'CSEA Hub', leftView: 'NotesLeft', rightView: 'InteractionLog' },
             iCAAP: { title: 'iCAAP Tracking', leftView: 'NotesLeft', rightView: 'iCAAPLinks' },
             'ICAAP-Attendance': { title: 'Attendance Tracking', leftView: 'AttendanceLeft', rightView: 'AttendanceRight' },
-            'ICAAP-Tracking': { title: 'iCAAP Tracking Log', leftView: 'TrackingLogLeft', rightView: 'TrackingLogRight' },
+            'ICAAP-Paylog': { title: 'iCAAP Paylog Submissions', leftView: 'TrackingPaylogLeft', rightView: 'TrackingPaylogRight' },
+            'ICAAP-Hours': { title: 'iCAAP Hours Worked', leftView: 'TrackingHoursLeft', rightView: 'TrackingHoursRight' },
+            'ICAAP-Approval': { title: 'iCAAP Approval Dates', leftView: 'TrackingApprovalLeft', rightView: 'TrackingApprovalRight' },
             Finance: { title: 'Financial Planning', leftView: 'BudgetLeft', rightView: 'BudgetRight' },
             'Check-Breakdown': { title: 'Check Breakdown', leftView: 'CheckBreakdown', rightView: 'NotesRight' },
             'Monthly-Review': { title: 'Financial Review', leftView: 'FinancialReview', rightView: 'NotesRight' },
@@ -264,8 +266,12 @@
                 case 'InteractionLog': await renderCseaLog(container); break;
                 case 'AttendanceLeft': await renderIcaapAttendance(container, 'left'); break;
                 case 'AttendanceRight': await renderIcaapAttendance(container, 'right'); break;
-                case 'TrackingLogLeft': await renderIcaapTracking(container, 'left'); break;
-                case 'TrackingLogRight': await renderIcaapTracking(container, 'right'); break;
+                case 'TrackingPaylogLeft': await renderIcaapTracking(container, 'left', 'paylog'); break;
+                case 'TrackingPaylogRight': await renderIcaapTracking(container, 'right', 'paylog'); break;
+                case 'TrackingHoursLeft': await renderIcaapTracking(container, 'left', 'hours'); break;
+                case 'TrackingHoursRight': await renderIcaapTracking(container, 'right', 'hours'); break;
+                case 'TrackingApprovalLeft': await renderIcaapTracking(container, 'left', 'appr'); break;
+                case 'TrackingApprovalRight': await renderIcaapTracking(container, 'right', 'appr'); break;
                 case 'CheckBreakdown': await renderCheckBreakdown(container); break;
                 case 'FinancialReview': await renderFinancialReview(container); break;
                 case 'BudgetLeft': await renderBudget(container, 'left'); break;
@@ -278,7 +284,9 @@
         function renderWorkPlannerView() { switchTab('WorkPlanner'); }
         function renderPersonalPlannerView() { switchTab('PersonalPlanner'); }
         function renderIcaapAttendanceView() { switchTab('ICAAP-Attendance'); }
-        function renderIcaapTrackingView() { switchTab('ICAAP-Tracking'); }
+        function renderIcaapPaylogView() { switchTab('ICAAP-Paylog'); }
+        function renderIcaapHoursView() { switchTab('ICAAP-Hours'); }
+        function renderIcaapApprovalView() { switchTab('ICAAP-Approval'); }
         function renderCheckBreakdownView() { switchTab('Check-Breakdown'); }
         function renderFinancialReviewView() { switchTab('Monthly-Review'); }
 
@@ -402,7 +410,16 @@
 
         async function togglePlannerCheck(el, date, fieldId) { el.classList.toggle('checked'); await savePlannerData(date, fieldId, el.classList.contains('checked') ? 'true' : 'false'); }
 
-        function renderIcaapLinks(container) { container.innerHTML = `<div class="page-title">ICAAP LOGS</div><div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;"><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapAttendanceView()">👤 Attendance Tracking</button><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapTrackingView()">📈 iCAAP Tracking Log</button></div>`; }
+        function renderIcaapLinks(container) { 
+            container.innerHTML = `
+                <div class="page-title">ICAAP LOGS</div>
+                <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
+                    <button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapAttendanceView()">👤 Attendance Tracking</button>
+                    <button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapPaylogView()">📈 Paylog Submission</button>
+                    <button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapHoursView()">⏰ Hours Worked</button>
+                    <button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapApprovalView()">✅ Approval Date</button>
+                </div>`; 
+        }
         function renderFinanceLinks(container) { container.innerHTML = `<div class="page-title">FINANCIAL TOOLS</div><div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;"><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderCheckBreakdownView()">📊 Check Breakdown</button><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderFinancialReviewView()">💸 Financial Review</button></div>`; }
 
         async function renderBudget(container, side = 'left') {
@@ -455,14 +472,17 @@
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.value = item.content; });
         }
 
-        async function renderIcaapTracking(container, side) {
+        async function renderIcaapTracking(container, side, type = 'paylog') {
             const monthsToRender = side === 'left' ? monthNames.slice(0, 6) : monthNames.slice(6);
             const startIdx = side === 'left' ? 0 : 6;
-            container.innerHTML = `<div class="page-title">ICAAP TRACKING (${side.toUpperCase()})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 600px;"><thead><tr><th class="sticky-col">Name</th>${monthsToRender.map(m => `<th colspan="3">${m}</th>`).join('')}</tr><tr><th class="sticky-col"></th>${monthsToRender.map(() => `<th>Pay</th><th>Hrs</th><th>Appr</th>`).join('')}</tr></thead><tbody id="track-body-${side}"></tbody></table></div>`;
+            const typeLabels = { 'paylog': 'Paylog Sub', 'hours': 'Hours Worked', 'appr': 'Approval Date' };
+            const typeTitle = typeLabels[type] || 'Tracking';
+            
+            container.innerHTML = `<div class="page-title">${typeTitle.toUpperCase()} (${side.toUpperCase()})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 600px;"><thead><tr><th class="sticky-col">Name</th>${monthsToRender.map(m => `<th>${m}</th>`).join('')}</tr></thead><tbody id="track-body-${side}"></tbody></table></div>`;
             const tbody = container.querySelector(`#track-body-${side}`);
             employees.forEach((emp, ei) => {
                 const tr = document.createElement('tr'); 
-                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;"><div class="clamp-wrapper">${emp}</div></td>${monthsToRender.map((m, mi) => `<td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-paylog" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-hours" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-appr" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`).join('')}`; 
+                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;"><div class="clamp-wrapper">${emp}</div></td>${monthsToRender.map((m, mi) => `<td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-${type}" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`).join('')}`; 
                 tbody.appendChild(tr);
             });
             const data = await fetchPlannerData(`icaap-tracking-data-${fiscalYear}`, 366);
