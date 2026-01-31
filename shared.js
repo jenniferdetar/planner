@@ -360,7 +360,9 @@ function animateAndNavigate(event, url, direction = 'next') {
             box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
         }
         .main-content::before {
-            content: '○○○○○○';
+            display: none; /* Removed pseudo-element implementation */
+        }
+        .binder-rings {
             position: absolute;
             top: 0;
             bottom: 0;
@@ -369,26 +371,47 @@ function animateAndNavigate(event, url, direction = 'next') {
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            color: #888;
-            font-size: 30px;
+            align-items: center;
+            width: 40px;
             z-index: 101;
-            letter-spacing: 2px;
-            writing-mode: vertical-rl;
             pointer-events: none;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             padding: 40px 0;
+        }
+        .ring {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #888;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.5), inset 1px 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .ring::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.2), transparent);
         }
         .view-pane {
             flex: 1;
             background: var(--content-bg);
             margin: 2px;
-            padding: 10px 20px;
-            overflow-y: visible;
+            padding: 15px 25px;
+            overflow-y: auto;
             position: relative;
             border-radius: 4px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            height: auto;
             min-height: 100%;
+        }
+        .view-pane:first-child {
+            padding-right: 45px;
+        }
+        .view-pane:last-child {
+            padding-left: 45px;
         }
         .tabs-sidebar {
             width: 100px;
@@ -465,6 +488,8 @@ function animateAndNavigate(event, url, direction = 'next') {
 
             // 2. Wrap Main Content + Sidebar in app-main for flex layout
             let appMain = document.querySelector('.app-main');
+            let mainContent = document.querySelector('.main-content');
+            
             if (!appMain) {
                 appMain = document.createElement('div');
                 appMain.className = 'app-main';
@@ -475,6 +500,21 @@ function animateAndNavigate(event, url, direction = 'next') {
                 );
                 children.forEach(child => appMain.appendChild(child));
                 appContainer.appendChild(appMain);
+                
+                // Re-find mainContent if it was moved
+                mainContent = document.querySelector('.main-content');
+            }
+
+            // 2b. Inject Binder Rings
+            if (mainContent && !document.querySelector('.binder-rings')) {
+                const ringsContainer = document.createElement('div');
+                ringsContainer.className = 'binder-rings';
+                for (let i = 0; i < 6; i++) {
+                    const ring = document.createElement('div');
+                    ring.className = 'ring';
+                    ringsContainer.appendChild(ring);
+                }
+                mainContent.appendChild(ringsContainer);
             }
 
             // 3. Auto-initialize Navigation Sidebar if it doesn't exist

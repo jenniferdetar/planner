@@ -196,15 +196,6 @@
             border-color: var(--border-color);
         }
 
-        #monthly-focus-container {
-            margin-top: 30px;
-            padding: 20px;
-            background: #fff;
-            border: 1px solid #e1dfdd;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
         .handwriting {
             font-family: 'Coming Soon', cursive;
             font-size: 11pt;
@@ -224,9 +215,6 @@
                 <div class="view-pane" id="right-pane-container">
                     <div id="calendar-grid-right" class="calendar-grid calendar-grid-right">
                         <!-- Thu-Sat will be injected here -->
-                    </div>
-                    <div id="monthly-focus-container" style="margin-top: 20px;">
-                        <!-- Monthly focus content -->
                     </div>
                 </div>
             </div>
@@ -253,10 +241,6 @@
             
             setGlobalHeaderTitle(`${monthName} ${year}`);
             
-            // Render Monthly Focus in Right Pane
-            const focusContainer = document.getElementById('monthly-focus-container');
-            await renderMonthlyFocus(focusContainer);
-
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const gridLeft = document.getElementById('calendar-grid-left');
@@ -356,38 +340,6 @@
                     cell.style.height = maxHeight + 'px';
                 });
             });
-        }
-
-        async function renderMonthlyFocus(container) {
-            container.innerHTML = `
-                <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
-                    <div style="background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                        <div style="font-size: 11pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 15px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: left;">Monthly Focus</div>
-                        <div id="monthly-entries-list" class="handwriting" style="min-height: 100px; margin-bottom: 20px; line-height: 1.8;"></div>
-                        <div class="new-note-area" style="border-top: 1px solid #eee; padding-top: 15px;">
-                            <textarea id="new-monthly-focus" class="handwriting" placeholder="Add a new goal..." style="width: 100%; min-height: 60px; border: 1px solid #eee; padding: 8px; border-radius: 4px; background: #fafafa; resize: none;"></textarea>
-                            <button class="nav-btn" onclick="handleAddMonthlyFocus()" style="margin-top: 10px; width: 100%; padding: 10px;">Add Entry</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            await loadMonthlyEntries(container.querySelector('#monthly-entries-list'));
-        }
-
-        async function loadMonthlyEntries(container) {
-            const dateStr = currentDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
-            const entries = await fetchEntries('Home-Monthly-Focus', dateStr);
-            container.innerHTML = entries.map(e => `<div style="margin-bottom: 10px; border-bottom: 1px dotted #eee; padding-bottom: 5px;">• ${e.content}</div>`).join('');
-        }
-
-        async function handleAddMonthlyFocus() {
-            const content = document.getElementById('new-monthly-focus').value;
-            if (!content) return;
-            const dateStr = currentDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
-            if (await saveEntry('Home-Monthly-Focus', dateStr, content)) {
-                document.getElementById('new-monthly-focus').value = '';
-                await renderCalendar();
-            }
         }
 
         async function changeMonth(delta) {
