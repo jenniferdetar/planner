@@ -349,15 +349,15 @@ function animateAndNavigate(event, url, direction = 'next') {
             top: 0;
             bottom: 0;
             left: 50%;
-            width: 40px;
+            width: 30px;
             transform: translateX(-50%);
             background: linear-gradient(90deg, 
-                rgba(0,0,0,0.4) 0%, 
-                rgba(255,255,255,0.1) 50%, 
-                rgba(0,0,0,0.4) 100%);
+                rgba(0,0,0,0.2) 0%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(0,0,0,0.2) 100%);
             pointer-events: none;
             z-index: 100;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
         .main-content::before {
             display: none; /* Removed pseudo-element implementation */
@@ -370,20 +370,20 @@ function animateAndNavigate(event, url, direction = 'next') {
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
-            width: 40px;
+            width: 30px;
             z-index: 101;
             pointer-events: none;
-            padding: 40px 0;
+            padding: 30px 0;
         }
         .ring {
-            width: 24px;
-            height: 24px;
-            border: 3px solid #888;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
             border-radius: 50%;
-            background: transparent;
-            box-shadow: 1px 1px 2px rgba(0,0,0,0.5), inset 1px 1px 2px rgba(0,0,0,0.3);
+            background: #eee;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.8);
             position: relative;
         }
         .ring::after {
@@ -392,15 +392,16 @@ function animateAndNavigate(event, url, direction = 'next') {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.2), transparent);
+            width: 14px;
+            height: 2px;
+            background: #888;
+            border-radius: 1px;
         }
         .view-pane {
             flex: 1;
             background: var(--content-bg);
             margin: 2px;
-            padding: 15px 25px;
+            padding: 20px 30px;
             overflow-y: auto;
             position: relative;
             border-radius: 4px;
@@ -408,10 +409,10 @@ function animateAndNavigate(event, url, direction = 'next') {
             min-height: 100%;
         }
         .view-pane:first-child {
-            padding-right: 45px;
+            padding-right: 60px;
         }
         .view-pane:last-child {
-            padding-left: 45px;
+            padding-left: 60px;
         }
         .tabs-sidebar {
             width: 100px;
@@ -534,7 +535,6 @@ function animateAndNavigate(event, url, direction = 'next') {
                 const isPlan = path.endsWith('planning.html') || ['PLANNING', 'PLAN'].includes(category.toUpperCase());
                 
                 const sections = [
-                    { name: 'HOME', url: 'index.html', active: isIndex, color: '#ffffff', textColor: '#000000' },
                     { name: 'HOA', url: 'hoa.html', active: isHOA, color: '#ff9800', textColor: '#000000' },
                     { name: 'CSEA', url: 'csea.html', active: isCSEA, color: '#00326b', textColor: '#ffca38' },
                     { name: 'ICAAP', url: 'icaap.html', active: isICAAP, color: '#c2185b', textColor: '#ffffff' },
@@ -551,7 +551,6 @@ function animateAndNavigate(event, url, direction = 'next') {
                 });
                 
                 html += `
-                    <div class="logout-btn" onclick="animateAndNavigate(event, 'index.html', 'prev')">🏠 Home</div>
                     <div class="logout-btn" onclick="logout()">🚪 Logout</div>
                 `;
                 
@@ -559,13 +558,14 @@ function animateAndNavigate(event, url, direction = 'next') {
                 appMain.appendChild(sidebar);
             }
 
-            // 4. Initial Flip-In Animation
+            // 4. Initial Animation (Disabled to prevent tilt issues)
             const panes = document.querySelectorAll('.view-pane');
             if (panes.length > 0) {
-                // Determine if we should flip in from next or prev? 
-                // By default 'next' (flipping forward)
-                panes[0].classList.add('flip-in-prev');
-                panes[panes.length - 1].classList.add('flip-in-next');
+                // By default, just ensure they are visible without transform
+                panes.forEach(p => {
+                    p.style.transform = 'none';
+                    p.style.opacity = '1';
+                });
             }
         }
     });

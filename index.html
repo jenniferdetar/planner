@@ -146,7 +146,7 @@
         .day-header.not { background-color: #605e5c; }
 
         .calendar-day {
-            min-height: 140px;
+            min-height: 120px;
             padding: 8px;
             position: relative;
             background-color: var(--content-bg);
@@ -194,6 +194,8 @@
             background-size: 100% 25px;
             border-style: solid;
             border-color: var(--border-color);
+            outline: none;
+            overflow-y: auto;
         }
 
         .handwriting {
@@ -234,6 +236,8 @@
         // Ensure currentDate is first of month for display purposes
         currentDate.setDate(1);
 
+        let saveTimeout = null;
+
         async function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -272,8 +276,12 @@
                     if (col === 7) {
                         // This is the Notes column on the far right
                         const notesCell = document.createElement('div');
-                        notesCell.className = 'calendar-day notes-cell';
-                        notesCell.style.backgroundColor = '#fdfdfd';
+                        notesCell.className = 'calendar-day notes-cell handwriting';
+                        notesCell.contentEditable = true;
+                        const fieldId = `notes-row-${row}`;
+                        notesCell.dataset.field = fieldId;
+                        notesCell.id = fieldId;
+                        notesCell.oninput = (e) => handleNoteInput(e.target);
                         targetGrid.appendChild(notesCell);
                         continue;
                     }
@@ -310,7 +318,12 @@
             }
 
             // Fetch and render Supabase events
-            let events = await fetchCalendarEvents(new Date(year, month, 1), daysInMonth);
+            const monthStart = new Date(year, month, 1);
+            const monthStartStr = monthStart.toISOString().split('T')[0];
+            const [events, noteData] = await Promise.all([
+                fetchCalendarEvents(monthStart, daysInMonth),
+                fetchPlannerData(`calendar-notes-${year}-${month + 1}`, 31)
+            ]);
             
             events.forEach(event => {
                 const container = document.getElementById(`events-${event.date}`);
@@ -328,10 +341,16 @@
                 }
             });
 
+            // Render saved notes
+            noteData.forEach(item => {
+                const el = document.getElementById(item.field_id);
+                if (el) el.innerText = item.content;
+            });
+
             // Sync cell heights to the largest one
             requestAnimationFrame(() => {
                 const allCells = document.querySelectorAll('.calendar-day');
-                let maxHeight = 140;
+                let maxHeight = 120;
                 allCells.forEach(cell => {
                     cell.style.height = 'auto'; // Reset to measure
                     if (cell.offsetHeight > maxHeight) maxHeight = cell.offsetHeight;
@@ -340,6 +359,19 @@
                     cell.style.height = maxHeight + 'px';
                 });
             });
+        }
+
+        function handleNoteInput(el) {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const pk = `calendar-notes-${year}-${month + 1}`;
+            const fieldId = el.id;
+            const content = el.innerText;
+            
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                await savePlannerData(pk, fieldId, content);
+            }, 1000);
         }
 
         async function changeMonth(delta) {

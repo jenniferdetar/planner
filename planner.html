@@ -12,7 +12,7 @@
         body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; color: var(--text-color); }
         #main-content-container { flex-direction: column !important; overflow-y: auto !important; padding: 0 !important; display: flex !important; flex: 1; }
         .notebook-spread { display: flex; flex: 1; width: 100%; }
-        .view-pane { flex: 1; background: #fff; margin: 0 !important; padding: 20px !important; overflow-y: visible !important; position: relative; border-radius: 0 !important; box-shadow: none !important; height: auto !important; }
+        .view-pane { flex: 1; background: #fff; margin: 0; position: relative; border-radius: 0; box-shadow: none; height: auto !important; }
         .handwriting, textarea, .editable-cell, .slot-content, .editable-area { font-family: 'Coming Soon', cursive; font-size: 1.1rem; color: #2c3e50; }
         .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 5px; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; text-align: center; }
         .page-meta { font-size: 8pt; color: #888; text-align: center; margin-bottom: 15px; font-style: italic; }
@@ -60,6 +60,7 @@
             Finance: { title: 'Financial Planning', leftView: 'Budget', rightView: 'FinanceLinks' },
             'Check-Breakdown': { title: 'Check Breakdown', leftView: 'CheckBreakdown', rightView: 'NotesRight' },
             'Monthly-Review': { title: 'Financial Review', leftView: 'FinancialReview', rightView: 'NotesRight' },
+            Goals: { title: 'Yearly Goals', leftView: 'NotesLeft', rightView: 'MonthlyFocus' },
             Planning: { title: 'Planning & Review', leftView: 'NotesLeft', rightView: 'NotesRight' }
         };
 
@@ -255,7 +256,7 @@
 
         async function loadMonthlyEntries(container) {
             const dateStr = displayDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
-            const entries = await fetchEntries('Home-Monthly-Focus', dateStr);
+            const entries = await fetchEntries(`${currentCategory}-Monthly-Focus`, dateStr);
             container.innerHTML = entries.map(e => `<div style="margin-bottom: 10px; border-bottom: 1px dotted #eee; padding-bottom: 5px;">• ${e.content}</div>`).join('');
         }
 
@@ -263,7 +264,7 @@
             const content = document.getElementById('new-monthly-focus').value;
             if (!content) return;
             const dateStr = displayDate.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
-            if (await saveEntry('Home-Monthly-Focus', dateStr, content)) {
+            if (await saveEntry(`${currentCategory}-Monthly-Focus`, dateStr, content)) {
                 document.getElementById('new-monthly-focus').value = '';
                 await renderView(sections[currentCategory].rightView, rightPage);
             }

@@ -6,9 +6,11 @@ A single-page static planner for January 2026 served as plain HTML/CSS/vanilla J
 
 - **Personal Planner**: Monthly calendar for January 2026 with integrated static events (bills, holidays, paydays) and dynamic data from Supabase.
 - **Work Planner**: Sunday-start weekly view with priorities, checklists, and a timed grid (5am–8pm).
+- **Notebook Layout**: Refined binder layout with a **40px center binding** and **6 rings** distributed evenly for a realistic notebook aesthetic.
+- **Goals & Monthly Focus**: Migrated "Monthly Focus" feature to the planner, including a new **Yearly Goals** section with category-specific focus entries.
 - **Financial Tracking**: 
   - **Bill Payment Schedule**: Recurring expense tracker with monthly checkboxes.
-  - **Check Breakdown**: Spreadsheet-style view for paycheck allocations and tithe calculations.
+  - **Check Breakdown**: Refactored dual-pane notebook layout with **pagination** and fiscal year tracking starting from **July 1, 2025**.
 - **Specialized Logs**:
   - **Csea/LA Fed**: Meeting notes and interaction logs for union activities.
   - **Icaap Tracking**: Tracking log for paylog submissions, hours, and approvals across multiple employees.
@@ -41,8 +43,10 @@ The project is a static site and does not require a build step or package manage
 
 ## Project Structure
 
-- `index.html`: Main entry point and dashboard.
-- `shared.js`: Common logic for Supabase interactions, date formatting, and navigation.
-- `financial.html`, `check-breakdown.html`: Financial management tools.
-- `csea.html`, `icaap.html`, `icaap-tracking.html`: Specialized activity logs.
+- `index.html`: Main entry point and monthly dashboard.
+- `planner.html`: Centralized planner interface for Work, Personal, and specialized sections.
+- `shared.js`: Common logic for Supabase interactions, date formatting, navigation, and binder layout injection.
+- `check-breakdown.html`: Refactored paginated spreadsheet for paycheck allocations.
+- `financial.html`, `monthly-review.html`: Financial management and review tools.
+- `csea.html`, `icaap-tracking.html`, `icaap-attendance.html`: Specialized activity and union logs.
 - `vercel.json`: Vercel configuration for static hosting.

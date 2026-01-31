@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check Breakdown Spreadsheet - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&family=Coming+Soon&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -12,148 +12,84 @@
             --header-blue: #00326b;
             --sheet-green: #1b5e20;
             --border-color: #e1dfdd;
-            --section-sidebar-width: 60px;
         }
         body {
             background-color: #f3f2f1;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             height: 100vh;
             display: flex;
             overflow: hidden;
         }
-        .notebook-container {
+        .app-container {
             display: flex;
-            flex-grow: 1;
+            flex: 1;
+            height: 100vh;
             overflow: hidden;
-            background: #fff;
         }
         #main-content-container {
             display: flex !important;
             flex-direction: column !important;
             flex: 1 !important;
-            overflow-y: auto !important;
+            overflow: hidden !important;
             padding: 0 !important;
+            position: relative;
         }
         .notebook-spread {
             display: flex;
             flex: 1;
             width: 100%;
+            height: 100%;
+            position: relative;
         }
         .view-pane {
             flex: 1;
             background: #fff;
-            margin: 0 !important;
-            padding: 20px !important;
-            overflow-y: visible !important;
-            position: relative;
-            height: auto !important;
-        }
-        /* Vertical Sidebar */
-        .section-sidebar {
-            width: var(--section-sidebar-width);
-            background: #1e3a63;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            gap: 15px;
-            flex-shrink: 0;
-            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
-        }
-        .section-icon {
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 10pt;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-        .section-icon:hover {
-            background: rgba(255,255,255,0.1);
-            opacity: 1;
-            transform: scale(1.05);
-        }
-        .section-icon.active {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            opacity: 1;
-        }
-        .section-icon.logout-icon {
-            margin-top: auto;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        .section-icon.logout-icon:hover {
-            opacity: 1;
-            color: #ffcdd2;
-        }
-
-        .notebook-main {
-            flex-grow: 1;
-            background: #fff;
+            margin: 0;
+            padding: 20px 40px;
             overflow-y: auto;
             position: relative;
-            scrollbar-width: thin;
+            display: flex;
+            flex-direction: column;
         }
-        .notebook-page {
-            width: 100%;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 10px 20px !important;
-            background: #fff;
-            box-sizing: border-box;
-            min-height: 100%;
-        }
-
         .page-header {
             text-align: center;
             margin-bottom: 10px;
             border-bottom: 1px solid #e1dfdd;
-            padding-bottom: 10px;
+            padding-bottom: 5px;
+            flex-shrink: 0;
         }
         .page-title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 10pt;
             color: var(--header-blue);
-            margin: 0 0 10px 0;
+            margin: 0;
             letter-spacing: 3px;
             font-weight: 700;
             text-transform: uppercase;
         }
-
         .table-container {
             width: 100%;
             overflow-x: auto;
             border: 1px solid #e1dfdd;
             border-radius: 4px;
-            margin-top: 20px;
-            position: relative;
+            flex: 1;
         }
         .sheet-table {
             border-collapse: collapse;
             width: 100%;
-            font-size: 10pt;
+            font-size: 8pt;
         }
         .sheet-table th, .sheet-table td {
             border: 1px solid #eee;
-            padding: 5px 8px;
+            padding: 4px 6px;
         }
         .header-row th {
             background-color: #f8f9fa;
             color: #323130;
             font-weight: 600;
-            font-family: 'Segoe UI', sans-serif;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 10pt;
+            font-size: 7pt;
             border-bottom: 2px solid #e1dfdd;
             position: sticky;
             top: 0;
@@ -163,73 +99,94 @@
         .account-col {
             font-weight: 600;
             text-align: left !important;
-            min-width: 250px;
+            min-width: 120px;
+            max-width: 120px;
             position: sticky;
             left: 0;
             background-color: #fff;
             z-index: 15;
             border-right: 2px solid #e1dfdd !important;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .header-row .account-col {
-            background-color: #f8f9fa;
-            z-index: 20;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .data-cell {
             text-align: right;
             outline: none;
-            font-family: monospace;
-            font-size: 10pt;
+            font-family: 'Coming Soon', cursive;
+            font-size: 9pt;
             color: #333;
+            min-width: 60px;
         }
         .data-cell:focus {
             background-color: #fffde7;
             box-shadow: inset 0 0 0 2px var(--header-blue);
         }
-        .sheet-table tbody tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-        .sheet-table tbody tr:nth-child(even) .account-col {
-            background-color: #fafafa;
-        }
         .left-over-row {
             background-color: #f3f2f1 !important;
             font-weight: 700;
         }
-        .left-over-row .account-col {
-            background-color: #f3f2f1 !important;
-        }
         .save-status {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            right: 120px;
             background: rgba(255, 255, 255, 0.9);
             padding: 5px 15px;
             border-radius: 20px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 10pt;
+            font-size: 8pt;
             color: #666;
             z-index: 2000;
         }
+        .nav-controls {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .nav-btn {
+            background: var(--header-blue);
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 8pt;
+            pointer-events: auto;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .nav-btn:hover { opacity: 1; }
+        .nav-btn:disabled { background: #ccc; cursor: default; }
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="main-content" id="main-content-container">
+            <div class="nav-controls">
+                <button id="prev-page" class="nav-btn">← Previous Months</button>
+                <button id="next-page" class="nav-btn">Next Months →</button>
+            </div>
             <div class="notebook-spread">
-                <div class="view-pane" style="flex: 1.5;">
-                    <div class="page-header">
-                        <h1 class="page-title">Check Breakdown</h1>
-                    </div>
+                <div class="view-pane" id="left-pane">
+                    <div class="page-header"><h1 class="page-title" id="left-title">JULY - AUGUST 2025</h1></div>
                     <div class="table-container">
                         <table class="sheet-table">
-                            <thead>
-                                <tr class="header-row">
-                                    <th class="account-col">Account</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sheet-body">
-                            </tbody>
+                            <thead><tr class="header-row" id="left-head"><th class="account-col">Account</th></tr></thead>
+                            <tbody id="left-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="view-pane" id="right-pane">
+                    <div class="page-header"><h1 class="page-title" id="right-title">SEPTEMBER - OCTOBER 2025</h1></div>
+                    <div class="table-container">
+                        <table class="sheet-table">
+                            <thead><tr class="header-row" id="right-head"><th class="account-col">Account</th></tr></thead>
+                            <tbody id="right-body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -240,39 +197,26 @@
 
     <script>
         let accounts = [];
-        let dates = [];
+        let allDates = [];
+        let currentSpread = 0; // 0: Jul-Oct, 1: Nov-Feb, 2: Mar-Jun
+        const PERSISTENCE_KEY = "check-breakdown-2025-2026";
 
         async function init() {
-            // Setup Dates
-            const urlParamsDates = new URLSearchParams(window.location.search);
-            const dateParamDates = urlParamsDates.get('date');
-            let baseDateDates = dateParamDates ? new Date(dateParamDates) : new Date();
-            if (isNaN(baseDateDates.getTime())) baseDateDates = new Date();
-            baseDateDates.setDate(1);
-            
-            for (let i = 0; i < 10; i++) {
-                const d1 = new Date(baseDateDates);
-                d1.setMonth(baseDateDates.getMonth() + i);
-                d1.setDate(5);
-                dates.push(`${d1.getMonth() + 1}/${d1.getDate()}/${d1.getFullYear()}`);
+            // Setup Dates for Fiscal Year July 2025 - June 2026
+            const startDate = new Date(2025, 6, 1); // July 1, 2025
+            for (let i = 0; i < 12; i++) {
+                const m = new Date(startDate);
+                m.setMonth(startDate.getMonth() + i);
                 
-                const d2 = new Date(baseDateDates);
-                d2.setMonth(baseDateDates.getMonth() + i);
-                d2.setDate(20);
-                dates.push(`${d2.getMonth() + 1}/${d2.getDate()}/${d2.getFullYear()}`);
+                const d5 = new Date(m); d5.setDate(5);
+                allDates.push({ date: d5, label: `${d5.getMonth() + 1}/5/${d5.getFullYear()}` });
+                
+                const d20 = new Date(m); d20.setDate(20);
+                allDates.push({ date: d20, label: `${d20.getMonth() + 1}/20/${d20.getFullYear()}` });
             }
-
-            const headerRow = document.querySelector('.header-row');
-            dates.forEach(d => {
-                const th = document.createElement('th');
-                th.innerText = d;
-                headerRow.appendChild(th);
-            });
 
             // Fetch Bills
             const billData = await fetchFinancialBills();
-            
-            // Merge DB bills with defaults
             const billMap = new Map();
             DEFAULT_BILLS.forEach(b => billMap.set(b.item, b));
             billData.forEach(b => billMap.set(b.item, b));
@@ -286,51 +230,74 @@
                 "Left Over"
             ];
 
-            const tbody = document.getElementById('sheet-body');
+            const savedData = await fetchPlannerData(PERSISTENCE_KEY, 1000);
+            renderCurrentSpread(savedData);
+
+            document.getElementById('prev-page').onclick = () => { if (currentSpread > 0) { currentSpread--; renderCurrentSpread(savedData); } };
+            document.getElementById('next-page').onclick = () => { if (currentSpread < 2) { currentSpread++; renderCurrentSpread(savedData); } };
+        }
+
+        function renderCurrentSpread(savedData) {
+            // Spread 0: Months 0,1,2,3 (Indices 0-7 in allDates)
+            // Spread 1: Months 4,5,6,7 (Indices 8-15)
+            // Spread 2: Months 8,9,10,11 (Indices 16-23)
+            const leftStart = currentSpread * 8;
+            const leftDates = allDates.slice(leftStart, leftStart + 4);
+            const rightDates = allDates.slice(leftStart + 4, leftStart + 8);
+
+            const leftMonths = [...new Set(leftDates.map(d => d.date.toLocaleString('default', { month: 'long' })))].join(' - ');
+            const rightMonths = [...new Set(rightDates.map(d => d.date.toLocaleString('default', { month: 'long' })))].join(' - ');
+            const year = leftDates[0].date.getFullYear();
+            const rightYear = rightDates[0].date.getFullYear();
+
+            document.getElementById('left-title').innerText = `${leftMonths.toUpperCase()} ${year}`;
+            document.getElementById('right-title').innerText = `${rightMonths.toUpperCase()} ${rightYear}`;
+
+            renderPage('left', leftDates, savedData, leftStart);
+            renderPage('right', rightDates, savedData, leftStart + 4);
+
+            document.getElementById('prev-page').disabled = currentSpread === 0;
+            document.getElementById('next-page').disabled = currentSpread === 2;
+        }
+
+        function renderPage(side, dates, savedData, globalColOffset) {
+            const head = document.getElementById(`${side}-head`);
+            const body = document.getElementById(`${side}-body`);
+            head.innerHTML = '<th class="account-col">Account</th>';
+            body.innerHTML = '';
+
+            dates.forEach(d => {
+                const th = document.createElement('th');
+                th.innerText = d.label;
+                head.appendChild(th);
+            });
+
             accounts.forEach((acc, rowIndex) => {
                 const isLeftOver = acc === "Left Over";
+                const isTithe = acc === "Tithe";
                 const tr = document.createElement('tr');
                 if (isLeftOver) tr.className = 'left-over-row';
                 
-                let html = `<td class="account-col">${acc}</td>`;
-                dates.forEach((date, colIndex) => {
-                    const fieldId = `grid-${rowIndex}-${colIndex}`;
-                    html += `<td class="data-cell" contenteditable="true" data-field="${fieldId}" data-row="${rowIndex}" data-col="${colIndex}"></td>`;
+                let html = `<td class="account-col" title="${acc}">${acc}</td>`;
+                dates.forEach((date, localColIndex) => {
+                    const globalColIndex = globalColOffset + localColIndex;
+                    const fieldId = `grid-${rowIndex}-${globalColIndex}`;
+                    const content = savedData.find(d => d.field_id === fieldId)?.content || '';
+                    html += `<td class="data-cell" ${isLeftOver || isTithe ? '' : 'contenteditable="true"'} data-field="${fieldId}" data-row="${rowIndex}" data-col="${globalColIndex}">${content}</td>`;
                 });
                 tr.innerHTML = html;
-                tbody.appendChild(tr);
+                body.appendChild(tr);
             });
 
-            // Load Data
-            const yearInit = dateParamDates ? new Date(dateParamDates).getFullYear() : new Date().getFullYear();
-            const PERSISTENCE_KEY = `check-breakdown-${yearInit}`;
-            const data = await fetchPlannerData(PERSISTENCE_KEY, 1);
-            data.forEach(item => {
-                const el = document.querySelector(`[data-field="${item.field_id}"]`);
-                if (el) el.innerText = item.content;
-            });
-
-            // Setup Auto-save and Calculation
-            const leftOverRowIndex = accounts.length - 1;
-            document.querySelectorAll('.data-cell').forEach(cell => {
-                const rowIndex = parseInt(cell.dataset.row);
-                // Jennifer's Check is row 1, Tithe is row 2, Left Over is last row
-                if (rowIndex === leftOverRowIndex || rowIndex === 2) {
-                    cell.contentEditable = "false";
-                }
-
-                cell.addEventListener('input', () => {
+            // Re-attach listeners and calculate
+            body.querySelectorAll('.data-cell[contenteditable="true"]').forEach(cell => {
+                cell.oninput = () => {
                     saveWithDebounce(PERSISTENCE_KEY, cell.dataset.field, cell.innerText);
-                    if (rowIndex !== leftOverRowIndex) {
-                        calculateColumn(parseInt(cell.dataset.col));
-                    }
-                });
+                    calculateAll(globalColOffset, globalColOffset + dates.length);
+                };
             });
 
-            // Initial calculation
-            for (let i = 0; i < dates.length; i++) {
-                calculateColumn(i);
-            }
+            calculateAll(globalColOffset, globalColOffset + dates.length);
         }
 
         function parseAmount(text) {
@@ -342,55 +309,45 @@
             return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
-        function calculateColumn(colIndex) {
-            const rows = document.querySelectorAll('#sheet-body tr');
-            let income = 0;
-            let expenses = 0;
-            let jennifersCheck = 0;
-            const leftOverRowIndex = accounts.length - 1;
+        function calculateAll(startCol, endCol) {
+            for (let c = startCol; c < endCol; c++) {
+                const cells = document.querySelectorAll(`[data-col="${c}"]`);
+                let income = 0;
+                let expenses = 0;
+                let jennifersCheck = 0;
+                const leftOverRowIndex = accounts.length - 1;
 
-            // Row 1 is Jennifer's Check
-            const checkCell = rows[1]?.querySelector(`[data-col="${colIndex}"]`);
-            if (checkCell) {
-                jennifersCheck = parseAmount(checkCell.innerText);
-            }
-
-            // Row 2 is Tithe (10% rounded up)
-            const titheCell = rows[2]?.querySelector(`[data-col="${colIndex}"]`);
-            if (titheCell) {
-                const titheAmount = Math.ceil(jennifersCheck * 0.1);
-                titheCell.innerText = formatAmount(titheAmount);
-            }
-
-            rows.forEach((row, rowIndex) => {
-                const cell = row.querySelector(`[data-col="${colIndex}"]`);
-                if (!cell) return;
-                
-                if (rowIndex === leftOverRowIndex) {
-                    cell.innerText = formatAmount(income - expenses);
-                } else {
-                    const val = parseAmount(cell.innerText);
-                    if (rowIndex === 0 || rowIndex === 1) {
-                        income += val;
-                    } else if (rowIndex >= 2 && rowIndex < leftOverRowIndex) {
-                        expenses += val;
+                cells.forEach(cell => {
+                    const rowIndex = parseInt(cell.dataset.row);
+                    if (rowIndex === 1) jennifersCheck = parseAmount(cell.innerText);
+                    
+                    if (rowIndex === 2) {
+                        const titheAmount = Math.ceil(jennifersCheck * 0.1);
+                        cell.innerText = formatAmount(titheAmount);
                     }
-                }
-            });
+                });
+
+                cells.forEach(cell => {
+                    const rowIndex = parseInt(cell.dataset.row);
+                    const val = parseAmount(cell.innerText);
+                    if (rowIndex === 0 || rowIndex === 1) income += val;
+                    else if (rowIndex >= 2 && rowIndex < leftOverRowIndex) expenses += val;
+                    
+                    if (rowIndex === leftOverRowIndex) {
+                        cell.innerText = formatAmount(income - expenses);
+                    }
+                });
+            }
         }
 
         let debounceTimer;
-        function saveWithDebounce(date, field, content) {
+        function saveWithDebounce(pk, field, content) {
             const statusEl = document.getElementById('save-status');
             statusEl.innerText = 'Saving...';
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(async () => {
-                const success = await savePlannerData(date, field, content);
-                if (success) {
-                    statusEl.innerText = 'All changes saved';
-                } else {
-                    statusEl.innerText = 'Error saving';
-                }
+                const success = await savePlannerData(pk, field, content);
+                statusEl.innerText = success ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
 
