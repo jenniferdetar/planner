@@ -425,35 +425,37 @@ function animateAndNavigate(event, url, direction = 'next') {
             border-left: 1px solid #333;
         }
         .tab {
-            padding: 0;
+            padding: 10px 0;
             height: 120px;
             color: var(--tab-text-color, #fff);
             background: var(--tab-color, #444);
-            font-size: 10pt;
-            font-weight: 800;
+            font-size: 14pt;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.2s;
             writing-mode: vertical-rl;
-            text-orientation: mixed;
+            text-orientation: upright;
             text-align: center;
-            border-left: 4px solid transparent;
+            border-left: none;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
             border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-        .tab:hover {
-            filter: brightness(1.2);
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
         }
         .tab.active {
             background: var(--tab-color, var(--accent-color));
             color: var(--tab-text-color, #fff);
-            border-left: 6px solid #fff;
-            box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+            border-left: none;
+            box-shadow: -10px 0 15px rgba(0,0,0,0.3);
+            width: 70px;
+            margin-left: -10px;
+            z-index: 101;
+            border-radius: 5px 0 0 5px;
         }
         .logout-btn {
             padding: 15px;
