@@ -81,7 +81,7 @@
             iCAAP: { title: 'iCAAP Tracking', leftView: 'NotesLeft', rightView: 'iCAAPLinks' },
             'ICAAP-Attendance': { title: 'Attendance Tracking', leftView: 'AttendanceLeft', rightView: 'AttendanceRight' },
             'ICAAP-Tracking': { title: 'iCAAP Tracking Log', leftView: 'TrackingLogLeft', rightView: 'TrackingLogRight' },
-            Finance: { title: 'Financial Planning', leftView: 'Budget', rightView: 'FinanceLinks' },
+            Finance: { title: 'Financial Planning', leftView: 'BudgetLeft', rightView: 'BudgetRight' },
             'Check-Breakdown': { title: 'Check Breakdown', leftView: 'CheckBreakdown', rightView: 'NotesRight' },
             'Monthly-Review': { title: 'Financial Review', leftView: 'FinancialReview', rightView: 'NotesRight' },
             Goals: { title: 'Yearly Goals', leftView: 'NotesLeft', rightView: 'MonthlyFocus' },
@@ -240,7 +240,9 @@
                 case 'TrackingLogRight': await renderIcaapTracking(container, 'right'); break;
                 case 'CheckBreakdown': await renderCheckBreakdown(container); break;
                 case 'FinancialReview': await renderFinancialReview(container); break;
-                case 'Budget': await renderBudget(container); break;
+                case 'BudgetLeft': await renderBudget(container, 'left'); break;
+                case 'BudgetRight': await renderBudget(container, 'right'); break;
+                case 'FinanceLinks': await renderFinanceLinks(container); break;
                 default: container.innerHTML = `<div style="padding:20px;">View ${viewType} not implemented</div>`;
             }
         }
@@ -375,10 +377,21 @@
         function renderIcaapLinks(container) { container.innerHTML = `<div class="page-title">ICAAP LOGS</div><div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;"><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapAttendanceView()">👤 Attendance Tracking</button><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderIcaapTrackingView()">📈 iCAAP Tracking Log</button></div>`; }
         function renderFinanceLinks(container) { container.innerHTML = `<div class="page-title">FINANCIAL TOOLS</div><div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;"><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderCheckBreakdownView()">📊 Check Breakdown</button><button class="tab active" style="width: 100%; border-radius: 8px; padding: 15px; border: 1px solid #ccc; cursor: pointer;" onclick="renderFinancialReviewView()">💸 Financial Review</button></div>`; }
 
-        async function renderBudget(container) {
-            container.innerHTML = `<div class="page-title">BUDGET PLANNING ${currentYear}</div><div class="special-table-container"><table class="special-table"><thead><tr><th>Cat</th><th>Item</th><th>Amt</th>${['J','F','M','A','M','J','J','A','S','O','N','D'].map(m => `<th>${m}</th>`).join('')}</tr></thead><tbody id="budget-body"></tbody></table></div>`;
-            const tbody = container.querySelector('#budget-body');
-            financialBills.forEach(bill => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${bill.cat}</td><td class="text-left">${bill.item}</td><td>${bill.amt}</td>${Array(12).fill(0).map((_, i) => `<td><div class="check-box" data-field="chk-${bill.id}-${i+1}" onclick="toggleBudgetCheck(this)"></div></td>`).join('')}`; tbody.appendChild(tr); });
+        async function renderBudget(container, side = 'left') {
+            const months = side === 'left' ? ['J','F','M','A','M','J'] : ['J','A','S','O','N','D'];
+            const startMonth = side === 'left' ? 1 : 7;
+            const headerHtml = `<th>Cat</th><th>Item</th><th>Amt</th>${months.map(m => `<th>${m}</th>`).join('')}`;
+            
+            container.innerHTML = `<div class="page-title">BUDGET PLANNING ${currentYear} (${side.toUpperCase()})</div><div class="special-table-container"><table class="special-table"><thead><tr>${headerHtml}</tr></thead><tbody id="budget-body-${side}"></tbody></table></div>`;
+            const tbody = container.querySelector(`#budget-body-${side}`);
+            
+            financialBills.forEach(bill => { 
+                const tr = document.createElement('tr'); 
+                const monthCells = months.map((_, i) => `<td><div class="check-box" data-field="chk-${bill.id}-${startMonth + i}" onclick="toggleBudgetCheck(this)"></div></td>`).join('');
+                tr.innerHTML = `<td>${bill.cat}</td><td class="text-left">${bill.item}</td><td>${bill.amt}</td>${monthCells}`; 
+                tbody.appendChild(tr); 
+            });
+            
             const data = await fetchPlannerData(`${currentYear}-financial`, 366);
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el && item.content === 'true') el.classList.add('checked'); });
         }
