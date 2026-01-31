@@ -64,7 +64,10 @@
             Planning: { title: 'Planning & Review', leftView: 'NotesLeft', rightView: 'NotesRight' }
         };
 
-        let employees = [];
+        let employees = (typeof DEFAULT_EMPLOYEES !== 'undefined' ? DEFAULT_EMPLOYEES : [
+            "Bonnie Ratner", "Eberardo Rodriguez", "Maikai Finnell", "Patricia Pernin",
+            "Rene Gaudet", "Steve Maccarone", "Zina Dixon"
+        ]);
         let financialBills = [];
         const attnOptions = ["", "Cochren", "Beaudry", "Illness", "Kin Care", "Personal Necessity", "Vacation", "Bereavement"];
         const monthNames = ['July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'];
@@ -78,7 +81,13 @@
                     fetchAllTrackingNames(fiscalYear).catch(e => { console.error(e); return []; })
                 ]);
                 
-                const nameSet = new Set((typeof DEFAULT_EMPLOYEES !== 'undefined' ? DEFAULT_EMPLOYEES : []).map(toTitleCase));
+                // Initialize nameSet with DEFAULT_EMPLOYEES or the hardcoded list
+                const baseList = (typeof DEFAULT_EMPLOYEES !== 'undefined' ? DEFAULT_EMPLOYEES : [
+                    "Bonnie Ratner", "Eberardo Rodriguez", "Maikai Finnell", "Patricia Pernin",
+                    "Rene Gaudet", "Steve Maccarone", "Zina Dixon"
+                ]);
+                const nameSet = new Set(baseList.map(toTitleCase));
+                
                 if (empData) empData.forEach(m => { const name = m.full_name || m.name; if (name) nameSet.add(toTitleCase(name)); });
                 if (trackingNames) trackingNames.forEach(name => nameSet.add(toTitleCase(name)));
                 
@@ -87,6 +96,11 @@
                 if (typeof DEFAULT_BILLS !== 'undefined') DEFAULT_BILLS.forEach(b => billMap.set(b.item, b));
                 if (billData) billData.forEach(b => billMap.set(b.item, b));
                 financialBills = [...billMap.values()].sort((a, b) => (a.id || 0) - (b.id || 0));
+                
+                // Refresh views if we are on a page that uses employees
+                if (currentCategory === 'ICAAP-Tracking' || currentCategory === 'ICAAP-Attendance') {
+                    switchTab(currentCategory);
+                }
             } catch (err) {
                 console.error('Error in refreshGlobalData:', err);
             }
@@ -396,13 +410,21 @@
 
         async function renderIcaapTracking(container, startMonth = 0, endMonth = 12) {
             const displayedMonths = monthNames.slice(startMonth, endMonth);
-            container.innerHTML = `<div class="page-title">ICAAP TRACKING (${startMonth === 0 ? 'JUL-DEC' : 'JAN-JUN'})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 100%;"><thead><tr><th class="sticky-col" style="width: 150px;">Name</th>${displayedMonths.map(m => `<th colspan="3">${m}</th>`).join('')}</tr><tr><th class="sticky-col"></th>${displayedMonths.map(() => `<th>Log</th><th>Hrs</th><th>Appr</th>`).join('')}</tr></thead><tbody id="track-body-${startMonth}"></tbody></table></div>`;
+            const isRightPage = startMonth > 0;
+            
+            let headerHtml = `<th class="sticky-col" style="width: 150px;">Name</th>${displayedMonths.map(m => `<th colspan="3">${m}</th>`).join('')}`;
+            if (isRightPage) headerHtml += `<th rowspan="2">Total</th>`;
+            
+            container.innerHTML = `<div class="page-title">ICAAP TRACKING (${startMonth === 0 ? 'JUL-DEC' : 'JAN-JUN'})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 100%;"><thead><tr>${headerHtml}</tr><tr><th class="sticky-col"></th>${displayedMonths.map(() => `<th>Log</th><th>Hrs</th><th>Appr</th>`).join('')}</tr></thead><tbody id="track-body-${startMonth}"></tbody></table></div>`;
             const tbody = container.querySelector(`#track-body-${startMonth}`);
             employees.forEach((emp, ei) => {
                 const tr = document.createElement('tr'); 
                 let cellsHtml = `<td class="sticky-col text-left" style="font-size: 8pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${emp}</td>`;
                 for (let mi = startMonth; mi < endMonth; mi++) {
                     cellsHtml += `<td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-paylog" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-hours" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td><td contenteditable="true" class="editable-cell" data-field="m${mi}-${ei}-appr" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`;
+                }
+                if (isRightPage) {
+                    cellsHtml += `<td contenteditable="true" class="editable-cell" data-field="total-${ei}" oninput="handleTrackingSave(this)" style="font-size: 8pt; font-weight: bold;"></td>`;
                 }
                 tr.innerHTML = cellsHtml; tbody.appendChild(tr);
             });
