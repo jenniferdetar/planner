@@ -1,3 +1,4 @@
 {
-  "alias": "personal-ops-hub.vercel.app"
+  "alias": "personal-ops-hub.vercel.app",
+  "cleanUrls": true
 }
