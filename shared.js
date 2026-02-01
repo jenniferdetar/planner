@@ -162,6 +162,20 @@ if (typeof window !== 'undefined' && !window.location.pathname.endsWith('login.h
 }
 
 // Planner Data Logic
+function formatTimestamp() {
+    const now = new Date();
+    const date = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' });
+    const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    return `[${date} ${time}]`;
+}
+
+function ensureTimestamp(content) {
+    if (!content || !content.trim()) return content;
+    const tsRegex = /^\[\d{2}\/\d{2}\/\d{2}\s\d{2}:\d{2}\s[AP]M\]/;
+    if (tsRegex.test(content.trim())) return content;
+    return `${formatTimestamp()} ${content}`;
+}
+
 async function fetchPlannerData(startDate, days = 7) {
     const client = getSupabase();
     if (!client) {
@@ -680,8 +694,15 @@ async function savePlannerData(date, fieldId, content) {
     const client = getSupabase();
     if (!client) return false;
 
+    // Apply timestamp for text entries, skip for numeric/empty/checkmarks
+    let finalValue = content;
+    const isNumeric = !isNaN(parseFloat(content)) && isFinite(content);
+    const isCheckmark = content === 'true' || content === 'false';
+    if (content && content.trim() && !isNumeric && !isCheckmark) {
+        finalValue = ensureTimestamp(content);
+    }
+
     // Manual upsert: delete existing then insert
-    // Since we don't have a unique constraint, this prevents duplicates
     try {
         await client
             .from('work_planner_edits')
@@ -694,7 +715,7 @@ async function savePlannerData(date, fieldId, content) {
             .insert({ 
                 date_key: date, 
                 slot_key: fieldId, 
-                value: content,
+                value: finalValue,
                 updated_at: new Date().toISOString()
             });
 
@@ -755,7 +776,8 @@ async function fetchEntries(category, date) {
 async function saveEntry(category, date, content) {
     const client = getSupabase();
     if (!client || !content.trim()) return null;
-    const { data, error } = await client.from('category_entries').insert({ category, content, date_key: date }).select().single();
+    const finalContent = ensureTimestamp(content);
+    const { data, error } = await client.from('category_entries').insert({ category, content: finalContent, date_key: date }).select().single();
     return error ? null : data;
 }
 
@@ -778,9 +800,10 @@ async function fetchCategoryEntries(category) {
 async function saveCategoryEntry(category, content) {
     const client = getSupabase();
     if (!client || !content.trim()) return null;
+    const finalContent = ensureTimestamp(content);
     const { data, error } = await client
         .from('category_entries')
-        .insert({ category, content })
+        .insert({ category, content: finalContent })
         .select()
         .single();
     
@@ -795,9 +818,10 @@ async function saveCategoryEntry(category, content) {
 async function updateCategoryEntry(id, content) {
     const client = getSupabase();
     if (!client) return false;
+    const finalContent = ensureTimestamp(content);
     const { error } = await client
         .from('category_entries')
-        .update({ content, updated_at: new Date().toISOString() })
+        .update({ content: finalContent, updated_at: new Date().toISOString() })
         .eq('id', id);
     
     if (error) {
@@ -943,7 +967,11 @@ async function saveInteraction(category, interaction) {
     
     Object.keys(interaction).forEach(key => {
         if (knownFields.includes(key)) {
-            baseInteraction[key] = interaction[key];
+            let val = interaction[key];
+            if (key === 'discussion' && val && val.trim()) {
+                val = ensureTimestamp(val);
+            }
+            baseInteraction[key] = val;
         } else {
             extraFields[key] = interaction[key];
         }

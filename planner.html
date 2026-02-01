@@ -644,8 +644,6 @@
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.value = item.content; });
         }
 
-        async function handleModuleEdit(el, pk) { const fieldId = el.dataset.field || el.id; const content = el.innerText || el.value; clearTimeout(saveTimeout); saveTimeout = setTimeout(() => { savePlannerData(pk, fieldId, content); }, 1000); }
-
         // Initial load
         document.addEventListener('DOMContentLoaded', () => {
             const cat = urlParams.get('category') || 'Home';
