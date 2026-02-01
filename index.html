@@ -148,7 +148,7 @@
         .day-header.not { background-color: #605e5c; }
 
         .calendar-day {
-            flex: 1;
+            height: 140px;
             padding: 3px;
             position: relative;
             background-color: var(--content-bg);
@@ -157,6 +157,7 @@
             gap: 1px;
             min-height: 0;
             overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .day-number {
@@ -184,6 +185,7 @@
             line-height: 1.1;
             border: 1px solid #ccc;
             text-align: center;
+            white-space: pre-wrap;
             word-wrap: break-word;
             overflow-wrap: break-word;
             display: block;
@@ -275,9 +277,9 @@
             const totalSlots = firstDayOfMonth + daysInMonth;
             const totalRows = Math.ceil(totalSlots / 7);
             
-            gridLeft.style.gridTemplateRows = `auto repeat(${totalRows}, 1fr)`;
+            gridLeft.style.gridTemplateRows = `auto repeat(${totalRows}, 140px)`;
             gridLeft.style.gridTemplateColumns = 'repeat(4, 1fr)';
-            gridRight.style.gridTemplateRows = `auto repeat(${totalRows}, 1fr)`;
+            gridRight.style.gridTemplateRows = `auto repeat(${totalRows}, 140px)`;
             gridRight.style.gridTemplateColumns = 'repeat(4, 1fr)';
 
             for (let row = 0; row < totalRows; row++) {

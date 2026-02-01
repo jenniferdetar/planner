@@ -594,7 +594,7 @@ function animateAndNavigate(event, url, direction = 'next') {
                 const isIndex = path.endsWith('index.html') || path === '/';
                 const isHOA = category === 'HOA';
                 const isCSEA = category === 'CSEA';
-                const isICAAP = category.startsWith('ICAAP');
+                const isICAAP = category.toLowerCase().startsWith('icaap');
                 const isFinance = ['Finance', 'Check-Breakdown', 'Monthly-Review'].includes(category);
                 const isPlan = category === 'Planning';
                 
@@ -602,7 +602,7 @@ function animateAndNavigate(event, url, direction = 'next') {
                     { name: 'HOME', url: 'index.html', active: isIndex, color: '#ffffff', textColor: '#000000' },
                     { name: 'HOA', url: 'planner.html?category=HOA', active: isHOA, color: '#ceabb5', textColor: '#000000' },
                     { name: 'CSEA', url: 'planner.html?category=CSEA', active: isCSEA, color: '#602537', textColor: '#ffffff' },
-                    { name: 'ICAAP', url: 'planner.html?category=ICAAP-Tracking', active: isICAAP, color: '#1b2c3c', textColor: '#ffffff' },
+                    { name: 'ICAAP', url: 'icaap.html', active: isICAAP, color: '#1b2c3c', textColor: '#ffffff' },
                     { name: 'FINANCE', url: 'planner.html?category=Finance', active: isFinance, color: '#464f51', textColor: '#ffffff' },
                     { name: 'PLAN', url: 'planner.html?category=Planning', active: isPlan, color: '#a8b4b7', textColor: '#000000' }
                 ];
@@ -738,8 +738,6 @@ function getCalendarEvents() {
     return [
         { date: '2026-01-26', time: '17:30', title: 'Chapter 500 Monthly', duration: 120 },
         { date: '2026-01-26', time: '19:00', title: 'LA Fed', duration: 60 },
-        { date: '2026-01-27', time: '14:00', title: 'LA 500 Negotiations Prep', duration: 90 },
-        { date: '2026-01-28', time: '12:30', title: 'CSEA Reopener Negotiations', duration: 240 },
         { date: '2026-02-06', time: '09:30', title: 'CSEA Reopener Negotiations', duration: 420 }
     ];
 }
@@ -1197,7 +1195,6 @@ function updateNavigationLinks(date) {
         'monthly-review.html': 'Monthly-Review',
         'icaap-tracking.html': 'ICAAP-Tracking',
         'icaap-attendance.html': 'ICAAP-Attendance',
-        'icaap.html': 'iCAAP',
         'csea.html': 'CSEA',
         'hoa.html': 'HOA',
         'mantra.html': 'Mantra',

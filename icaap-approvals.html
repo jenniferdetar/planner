@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hours Approved - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --header-blue: #00326b;
+            --border-color: #e1dfdd;
+            --section-sidebar-width: 60px;
+        }
+        body {
+            background-color: #f3f2f1;
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', -apple-system, sans-serif;
+            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; }
+        .section-sidebar { width: var(--section-sidebar-width); background: #1e3a63; display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 15px; flex-shrink: 0; }
+        .section-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; color: #fff; border-radius: 10px; cursor: pointer; font-size: 10pt; transition: all 0.2s ease; text-decoration: none; opacity: 0.7; }
+        .section-icon:hover { background: rgba(255,255,255,0.1); opacity: 1; }
+        .section-icon.active { background: rgba(255,255,255,0.15); opacity: 1; }
+        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; scrollbar-width: thin; }
+        .notebook-page { width: 100%; margin: 0 auto; padding: 10px 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
+        .page-header { text-align: center; margin-bottom: 10px; border-bottom: 1px solid #e1dfdd; padding-bottom: 10px; }
+        .page-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10pt; color: var(--header-blue); margin: 0 0 15px 0; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; }
+        .table-container { width: 100%; overflow-x: auto; border: 1px solid #e1dfdd; border-radius: 4px; margin-top: 20px; position: relative; }
+        .tracking-table { border-collapse: collapse; width: 100%; font-size: 9pt; }
+        .tracking-table th, .tracking-table td { border: 1px solid #eee; padding: 0 6px; text-align: center; height: 35px; }
+        .header-row th { background-color: #f8f9fa; color: #323130; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #e1dfdd; }
+        .employee-col { font-weight: 600; text-align: left !important; min-width: 180px; position: sticky; left: 0; background-color: #fff; z-index: 15; border-right: 2px solid #e1dfdd !important; }
+        .header-row .employee-col { background-color: #f8f9fa; z-index: 20; }
+        .editable-cell { outline: none; min-height: 20px; background-color: #fff; font-family: 'Coming Soon', cursive; font-size: 8.5pt; }
+        .editable-cell:focus { background-color: #fffde7; box-shadow: inset 0 0 0 2px var(--header-blue); }
+        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; z-index: 2000; }
+        .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--header-blue); text-decoration: none; font-size: 9pt; font-weight: 600; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="notebook-container">
+        <main class="notebook-main">
+            <div class="notebook-page">
+                <div class="page-header">
+                    <a href="icaap.html" class="back-link">← Back to ICAAP Hub</a>
+                    <h1 class="page-title">Approval Dates Tracking</h1>
+                </div>
+
+                <div class="table-container">
+                    <table class="tracking-table">
+                        <thead>
+                            <tr class="header-row" id="header-row">
+                                <!-- Months will be injected here -->
+                            </tr>
+                        </thead>
+                        <tbody id="tracking-body">
+                            <!-- Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="save-status" class="save-status">All changes saved</div>
+
+    <script>
+        const monthNames = ['July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'];
+        const urlParams = new URLSearchParams(window.location.search);
+        let baseDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date();
+        if (isNaN(baseDate.getTime())) baseDate = new Date();
+        const startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
+        let saveTimeout;
+
+        async function init() {
+            const approvalData = await fetchApprovalDates(startYear);
+            const nameSet = new Set(DEFAULT_EMPLOYEES);
+            approvalData.forEach(r => { if (r.Name) nameSet.add(r.Name); });
+            const employees = [...nameSet].sort();
+
+            const headerRow = document.getElementById('header-row');
+            headerRow.innerHTML = `<th class="employee-col">Employee Name</th>` + 
+                monthNames.map((m, i) => `<th>${m} ${i < 6 ? startYear : startYear + 1}</th>`).join('');
+
+            const tbody = document.getElementById('tracking-body');
+            tbody.innerHTML = '';
+
+            const approvalMap = {};
+            approvalData.forEach(row => { if (row.Name) approvalMap[row.Name.toLowerCase()] = row; });
+
+            employees.forEach((emp, eIdx) => {
+                const tr = document.createElement('tr');
+                let rowHtml = `<td class="employee-col">${emp}</td>`;
+                monthNames.forEach((m, mIdx) => {
+                    const monthKey = m.substring(0, 3); // Capitalized for approval_dates as per shared.js line 1060 logic
+                    const empLower = emp.toLowerCase();
+                    const dbVal = approvalMap[empLower] ? approvalMap[empLower][monthKey] : '';
+                    rowHtml += `<td class="editable-cell" contenteditable="true" data-name="${emp}" data-month="${m}">${dbVal || ''}</td>`;
+                });
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
+
+            document.querySelectorAll('.editable-cell').forEach(cell => {
+                cell.oninput = (e) => handleSave(e.target);
+            });
+        }
+
+        async function handleSave(cell) {
+            const status = document.getElementById('save-status');
+            status.innerText = 'Saving...';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                const name = cell.dataset.name;
+                const month = cell.dataset.month;
+                const value = cell.innerText;
+                const success = await saveTrackingData('approval_dates', name, month, value, startYear);
+                status.innerText = success ? 'All changes saved' : 'Error saving';
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
