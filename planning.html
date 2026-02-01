@@ -318,8 +318,15 @@
                     document.getElementById('save-status').innerText = 'Unsaved changes';
                     clearTimeout(saveTimeout);
                     saveTimeout = setTimeout(async () => {
-                        const success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
-                        document.getElementById('save-status').innerText = success ? 'All changes saved' : 'Error saving';
+                        const savedValue = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                        if (savedValue) {
+                            document.getElementById('save-status').innerText = 'All changes saved';
+                            if (savedValue !== content) {
+                                el.innerText = savedValue;
+                            }
+                        } else {
+                            document.getElementById('save-status').innerText = 'Error saving';
+                        }
                     }, 1000);
                 });
             });

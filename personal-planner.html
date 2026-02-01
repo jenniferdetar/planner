@@ -304,11 +304,25 @@
         async function handleSavePlannerData(date, fieldId, content) {
             const saveStatus = document.getElementById('save-status');
             saveStatus.innerText = 'Saving...';
-            const success = await savePlannerData(date, fieldId, content);
-            if (!success) {
-                saveStatus.innerText = 'Error saving';
-            } else {
+            const savedValue = await savePlannerData(date, fieldId, content);
+            if (savedValue) {
                 saveStatus.innerText = 'All changes saved';
+                if (savedValue !== content) {
+                    const el = document.querySelector(`[data-field="${fieldId}"][data-date="${date}"]`) || 
+                               document.querySelector(`[data-field="${fieldId}"]`);
+                    if (el) {
+                        // For daily tasks, we need to extract the text part
+                        if (fieldId.startsWith('daily-task-')) {
+                            const cleanText = savedValue.replace('[x]', '').replace('[ ]', '');
+                            el.innerText = cleanText;
+                        } else {
+                            if (el.innerText !== undefined) el.innerText = savedValue;
+                            else el.value = savedValue;
+                        }
+                    }
+                }
+            } else {
+                saveStatus.innerText = 'Error saving';
             }
         }
         function handleInput(e) {

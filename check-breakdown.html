@@ -289,8 +289,19 @@
             statusEl.innerText = 'Saving...';
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(async () => {
-                const success = await savePlannerData(pk, field, content);
-                statusEl.innerText = success ? 'All changes saved' : 'Error saving';
+                const savedValue = await savePlannerData(pk, field, content);
+                if (savedValue) {
+                    statusEl.innerText = 'All changes saved';
+                    if (savedValue !== content) {
+                        const el = document.querySelector(`[data-field="${field}"]`);
+                        if (el) {
+                            if (el.innerText !== undefined) el.innerText = savedValue;
+                            else el.value = savedValue;
+                        }
+                    }
+                } else {
+                    statusEl.innerText = 'Error saving';
+                }
             }, 1000);
         }
 

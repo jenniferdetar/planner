@@ -207,8 +207,15 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 saveStatus.innerText = 'Saving...';
-                const success = await savePlannerData(date, fieldId, content);
-                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
+                const savedValue = await savePlannerData(date, fieldId, content);
+                if (savedValue) {
+                    saveStatus.innerText = 'All changes saved';
+                    if (savedValue !== content) {
+                        el.innerText = savedValue;
+                    }
+                } else {
+                    saveStatus.innerText = 'Error saving';
+                }
             }, 1000);
         }
 

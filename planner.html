@@ -15,15 +15,13 @@
             flex: 1; 
             background: #fff; 
             margin: 0 !important; 
-            padding: 15px !important; 
+            padding: 15px; 
             overflow-y: auto !important; 
             position: relative; 
             border-radius: 0 !important; 
             box-shadow: none !important; 
             height: 100%;
             scrollbar-width: thin;
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
         }
         #left-pane-content { padding-right: 55px !important; }
         #right-pane-content { padding-left: 55px !important; }
@@ -244,10 +242,13 @@
         async function switchTab(tabId) {
             try {
                 const panes = document.querySelectorAll('.view-pane');
-                const direction = 'next'; // Sidebar navigation is usually "forward"
-                const targetPane = panes[panes.length - 1]; // Target right page for forward flip
+                const sectionKeys = Object.keys(sections);
+                const oldIndex = sectionKeys.indexOf(currentCategory);
+                const newIndex = sectionKeys.indexOf(tabId);
+                const direction = newIndex >= oldIndex ? 'next' : 'prev';
+                const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
                 
-                if (targetPane && (targetPane.classList.contains('flip-in-next') || targetPane.classList.contains('flip-in-prev'))) {
+                if (targetPane) {
                     targetPane.classList.remove('flip-in-next', 'flip-in-prev');
                     targetPane.classList.add(`flip-out-${direction}`);
                     await new Promise(resolve => setTimeout(resolve, 600));
@@ -433,7 +434,20 @@
 
         async function handleAttendanceSave(select) { await savePlannerData(`icaap-attendance-data-${fiscalYear}`, select.dataset.field, select.value); }
 
-        async function handleTrackingSave(el) { const fieldId = el.dataset.field; const content = el.innerText; clearTimeout(saveTimeout); saveTimeout = setTimeout(() => { savePlannerData(`icaap-tracking-data-${fiscalYear}`, fieldId, content); }, 1000); }
+        async function handleTrackingSave(el) {
+            const name = el.dataset.name;
+            const month = el.dataset.month;
+            const type = el.dataset.type;
+            const value = el.innerText;
+            
+            const tableMap = { 'paylog': 'paylog_submission', 'hours': 'hours_worked', 'appr': 'approval_dates' };
+            const tableName = tableMap[type];
+            
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                await saveTrackingData(tableName, name, month, value, fiscalYear);
+            }, 1000);
+        }
 
         async function changeAttendanceWeek(delta) { displayDate.setDate(displayDate.getDate() + (delta * 7)); switchTab('iCAAPAttendance'); }
 
@@ -466,16 +480,43 @@
         async function renderBudget(container, side = 'left') {
             const months = side === 'left' ? ['J','F','M','A','M','J'] : ['J','A','S','O','N','D'];
             const startMonth = side === 'left' ? 1 : 7;
+            const titleSide = side === 'left' ? '(LEFT)' : '(RIGHT)';
             const headerHtml = `<th>Cat</th><th>Item</th><th>Amt</th>${months.map(m => `<th>${m}</th>`).join('')}`;
             
-            container.innerHTML = `<div class="page-title">BUDGET PLANNING ${currentYear} (${side.toUpperCase()})</div><div class="special-table-container"><table class="special-table"><thead><tr>${headerHtml}</tr></thead><tbody id="budget-body-${side}"></tbody></table></div>`;
+            // Adjust specialized container padding to avoid spine overlap
+            const paddingStyle = side === 'left' ? 'padding-right: 40px;' : 'padding-left: 40px;';
+
+            container.innerHTML = `
+                <div class="page-title">BUDGET PLANNING ${currentYear} ${titleSide}</div>
+                <div class="special-table-container" style="${paddingStyle}">
+                    <table class="special-table" style="width: 100%; table-layout: fixed;">
+                        <thead><tr>${headerHtml}</tr></thead>
+                        <tbody id="budget-body-${side}"></tbody>
+                    </table>
+                </div>`;
             const tbody = container.querySelector(`#budget-body-${side}`);
             
+            // Color variations for categories
+            const catColors = {
+                'Auto': '#fdf2f2',
+                'Bill Pay': '#f2f9f2',
+                'Cash': '#f2f2f9',
+                'Credit Card': '#fff9f2',
+                'Housing': '#f9f2f9',
+                'Savings': '#f2f9f9'
+            };
+
             financialBills.forEach(bill => { 
                 const tr = document.createElement('tr'); 
-                tr.className = bill.class || '';
+                const bgColor = catColors[bill.cat] || 'transparent';
+                tr.style.backgroundColor = bgColor;
+                
                 const monthCells = months.map((_, i) => `<td><div class="check-box" data-field="chk-${bill.id}-${startMonth + i}" onclick="toggleBudgetCheck(this)"></div></td>`).join('');
-                tr.innerHTML = `<td class="handwriting"><div class="clamp-wrapper">${bill.cat}</div></td><td class="text-left handwriting"><div class="clamp-wrapper">${bill.item}</div></td><td class="handwriting"><div class="clamp-wrapper">${bill.amt}</div></td>${monthCells}`; 
+                tr.innerHTML = `
+                    <td class="handwriting" style="font-size: 8pt; vertical-align: middle;"><div style="word-wrap: break-word;">${bill.cat}</div></td>
+                    <td class="text-left handwriting" style="font-size: 8pt; vertical-align: middle;"><div style="word-wrap: break-word;">${bill.item}</div></td>
+                    <td class="handwriting" style="font-size: 8pt; vertical-align: middle;"><div>${bill.amt}</div></td>
+                    ${monthCells}`; 
                 tbody.appendChild(tr); 
             });
             
@@ -502,11 +543,36 @@
             const weekStart = new Date(displayDate); weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
             const daysToRender = side === 'left' ? [0, 1, 2] : [3, 4];
             const weekdays = []; daysToRender.forEach(i => { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); });
-            container.innerHTML = `<div class="page-title">ATTENDANCE (${side.toUpperCase()})</div><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;"><button onclick="changeAttendanceWeek(-1)">Prev Week</button><button onclick="changeAttendanceWeek(1)">Next Week</button></div><div class="special-table-container"><table class="special-table"><thead><tr><th class="sticky-col">Name</th>${weekdays.map(d => `<th>${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>${formatDateMMM(d.toISOString().split('T')[0])}</th>`).join('')}</tr></thead><tbody id="attn-body-${side}"></tbody></table></div>`;
+            
+            // Adjust specialized container padding to avoid spine overlap
+            const paddingStyle = side === 'left' ? 'padding-right: 40px;' : 'padding-left: 40px;';
+
+            container.innerHTML = `
+                <div class="page-title">ATTENDANCE (${side.toUpperCase()})</div>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                    <button onclick="changeAttendanceWeek(-1)">Prev Week</button>
+                    <button onclick="changeAttendanceWeek(1)">Next Week</button>
+                </div>
+                <div class="special-table-container" style="${paddingStyle}">
+                    <table class="special-table" style="width: 100%; table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="width: 100px; font-size: 7pt;" class="sticky-col">Name</th>
+                                ${weekdays.map(d => `<th style="font-size: 7pt;">${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>${formatDateMMM(d.toISOString().split('T')[0])}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody id="attn-body-${side}"></tbody>
+                    </table>
+                </div>`;
+
             const tbody = container.querySelector(`#attn-body-${side}`);
             employees.forEach(emp => {
                 const tr = document.createElement('tr'); 
-                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;"><div class="clamp-wrapper">${emp}</div></td>${weekdays.map(d => `<td><select class="attendance-select" data-field="attn-${emp}-${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)" style="font-size: 8pt; width: 100%;">${attnOptions.map(o => `<option value="${o}">${o}</option>`).join('')}</select></td>`).join('')}`; 
+                tr.innerHTML = `
+                    <td class="sticky-col text-left" style="font-size: 8pt; line-height: 1.1; vertical-align: middle;">
+                        <div style="word-wrap: break-word; max-width: 100px; white-space: normal;">${emp}</div>
+                    </td>
+                    ${weekdays.map(d => `<td><select class="attendance-select" data-field="attn-${emp}-${d.toISOString().split('T')[0]}" onchange="handleAttendanceSave(this)" style="font-size: 8pt; width: 100%;">${attnOptions.map(o => `<option value="${o}">${o}</option>`).join('')}</select></td>`).join('')}`; 
                 tbody.appendChild(tr);
             });
             const data = await fetchPlannerData(`icaap-attendance-data-${fiscalYear}`, 366);
@@ -515,19 +581,70 @@
 
         async function renderIcaapTracking(container, side, type = 'paylog') {
             const monthsToRender = side === 'left' ? monthNames.slice(0, 6) : monthNames.slice(6);
-            const startIdx = side === 'left' ? 0 : 6;
-            const typeLabels = { 'paylog': 'Paylog Sub', 'hours': 'Hours Worked', 'appr': 'Approval Date' };
+            const typeLabels = { 'paylog': 'Paylog Submissions', 'hours': 'Hours Worked', 'appr': 'Approval Dates' };
             const typeTitle = typeLabels[type] || 'Tracking';
             
-            container.innerHTML = `<div class="page-title">${typeTitle.toUpperCase()} (${side.toUpperCase()})</div><div class="special-table-container" style="overflow: auto;"><table class="special-table" style="min-width: 600px;"><thead><tr><th class="sticky-col">Name</th>${monthsToRender.map(m => `<th>${m}</th>`).join('')}</tr></thead><tbody id="track-body-${side}"></tbody></table></div>`;
-            const tbody = container.querySelector(`#track-body-${side}`);
-            employees.forEach((emp, ei) => {
+            // Adjust specialized container padding to avoid spine overlap
+            const paddingStyle = side === 'left' ? 'padding-right: 40px;' : 'padding-left: 40px;';
+
+            container.innerHTML = `
+                <div class="page-title">${typeTitle.toUpperCase()} (${side.toUpperCase()})</div>
+                <div class="special-table-container" style="overflow: auto; ${paddingStyle}">
+                    <table class="special-table" style="width: 100%; table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="width: 100px; font-size: 7pt;" class="sticky-col">Name</th>
+                                ${monthsToRender.map(m => `<th style="font-size: 7pt;">${m.substring(0,3)}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody id="track-body-${side}-${type}"></tbody>
+                    </table>
+                </div>`;
+
+            const tbody = container.querySelector(`#track-body-${side}-${type}`);
+            
+            // Fetch specialized data
+            let data = [];
+            if (type === 'paylog') data = await fetchPaylogSubmissions(fiscalYear);
+            else if (type === 'hours') data = await fetchHoursWorked(fiscalYear);
+            else if (type === 'appr') data = await fetchApprovalDates(fiscalYear);
+
+            // Merge with current employees list to ensure all are shown
+            const nameMap = new Map();
+            employees.forEach(name => nameMap.set(name, {}));
+            if (data) {
+                data.forEach(item => {
+                    const name = toTitleCase(item.name || item.Name || '');
+                    if (name) {
+                        const existing = nameMap.get(name) || {};
+                        nameMap.set(name, { ...existing, ...item });
+                    }
+                });
+            }
+
+            const sortedNames = [...nameMap.keys()].sort();
+
+            sortedNames.forEach((name) => {
+                const item = nameMap.get(name);
                 const tr = document.createElement('tr'); 
-                tr.innerHTML = `<td class="sticky-col text-left" style="font-size: 8pt;"><div class="clamp-wrapper">${emp}</div></td>${monthsToRender.map((m, mi) => `<td contenteditable="true" class="editable-cell" data-field="m${mi + startIdx}-${ei}-${type}" oninput="handleTrackingSave(this)" style="font-size: 8pt;"></td>`).join('')}`; 
+                
+                // Name cell with wrapping support and small font
+                let nameHtml = `<td class="sticky-col text-left" style="font-size: 8pt; line-height: 1.1; vertical-align: middle;">
+                                    <div style="word-wrap: break-word; max-width: 100px; white-space: normal;">${name}</div>
+                                </td>`;
+                
+                const monthCells = monthsToRender.map((m) => {
+                    const col = m.toLowerCase().substring(0, 3);
+                    const val = item[col] || '';
+                    return `<td contenteditable="true" class="editable-cell handwriting" 
+                                data-name="${name}" data-month="${m}" data-type="${type}"
+                                oninput="handleTrackingSave(this)" 
+                                style="font-size: 8pt; min-width: 30px; height: 30px; vertical-align: middle;">${val}</td>`;
+                }).join('');
+                
+                tr.innerHTML = nameHtml + monthCells;
                 tbody.appendChild(tr);
             });
-            const data = await fetchPlannerData(`icaap-tracking-data-${fiscalYear}`, 366);
-            data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.innerText = item.content; });
         }
 
         async function renderIcaapNotesLeft(container) {
@@ -609,11 +726,20 @@
         async function handleEditIcaapNote(e, id) {
             const statusEl = document.getElementById('icaap-save-status');
             if (statusEl) statusEl.innerText = 'Unsaved changes';
+            const el = e.target;
+            const content = el.innerText;
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 if (statusEl) statusEl.innerText = 'Saving...';
-                const success = await updateCategoryEntry(id, e.target.innerText);
-                if (statusEl) statusEl.innerText = success ? 'All changes saved' : 'Error saving';
+                const savedValue = await updateCategoryEntry(id, content);
+                if (savedValue) {
+                    if (statusEl) statusEl.innerText = 'All changes saved';
+                    if (savedValue !== content) {
+                        el.innerText = savedValue;
+                    }
+                } else {
+                    if (statusEl) statusEl.innerText = 'Error saving';
+                }
             }, 1000);
         }
 
@@ -636,7 +762,18 @@
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el) el.innerText = item.content; });
         }
 
-        async function handleModuleEdit(el, pk) { const fieldId = el.dataset.field || el.id; const content = el.innerText || el.value; clearTimeout(saveTimeout); saveTimeout = setTimeout(() => { savePlannerData(pk, fieldId, content); }, 1000); }
+        async function handleModuleEdit(el, pk) {
+            const fieldId = el.dataset.field || el.id;
+            const content = el.innerText || el.value;
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                const savedValue = await savePlannerData(pk, fieldId, content);
+                if (savedValue && savedValue !== content) {
+                    if (el.innerText !== undefined) el.innerText = savedValue;
+                    else el.value = savedValue;
+                }
+            }, 1000);
+        }
 
         async function renderFinancialReview(container) {
             container.innerHTML = `<div class="page-title">FINANCIAL REVIEW</div><div style="display:grid; grid-template-columns:1fr; gap:10px;">${['Goals', 'Expenses', 'Savings'].map(t => `<div style="border:1px solid #eee; padding:10px;"><div style="font-weight:bold; font-size:9pt; margin-bottom:5px;">${t}</div><textarea class="handwriting" data-field="fin-${t.toLowerCase()}" oninput="handleModuleEdit(this, 'fin-review-${currentYear}')" style="width: 100%; min-height: 80px; border: none; background: transparent; resize:none;"></textarea></div>`).join('')}</div>`;

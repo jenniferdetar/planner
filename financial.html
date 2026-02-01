@@ -295,8 +295,19 @@
             
             if (immediate) {
                 status.innerText = 'Saving...';
-                const success = await savePlannerData(PLANNING_DATE, fieldId, content);
-                status.innerText = success ? 'All changes saved' : 'Error saving';
+                const savedValue = await savePlannerData(PLANNING_DATE, fieldId, content);
+                if (savedValue) {
+                    status.innerText = 'All changes saved';
+                    if (savedValue !== content) {
+                        const el = document.querySelector(`[data-field="${fieldId}"]`);
+                        if (el) {
+                            if (el.innerText !== undefined) el.innerText = savedValue;
+                            else el.value = savedValue;
+                        }
+                    }
+                } else {
+                    status.innerText = 'Error saving';
+                }
                 return;
             }
 
@@ -304,8 +315,19 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
-                const success = await savePlannerData(PLANNING_DATE, fieldId, content);
-                status.innerText = success ? 'All changes saved' : 'Error saving';
+                const savedValue = await savePlannerData(PLANNING_DATE, fieldId, content);
+                if (savedValue) {
+                    status.innerText = 'All changes saved';
+                    if (savedValue !== content) {
+                        const el = document.querySelector(`[data-field="${fieldId}"]`);
+                        if (el) {
+                            if (el.innerText !== undefined) el.innerText = savedValue;
+                            else el.value = savedValue;
+                        }
+                    }
+                } else {
+                    status.innerText = 'Error saving';
+                }
             }, 1000);
         }
 

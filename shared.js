@@ -425,12 +425,12 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
         /* Anchor flips to the center spine */
         .view-pane:first-child {
-            padding-right: 50px;
-            transform-origin: 100% 50%; /* Right edge (spine) */
+            padding-right: 50px !important;
+            transform-origin: 100% 50% !important; /* Right edge (spine) */
         }
         .view-pane:last-child {
-            padding-left: 50px;
-            transform-origin: 0% 50%; /* Left edge (spine) */
+            padding-left: 50px !important;
+            transform-origin: 0% 50% !important; /* Left edge (spine) */
         }
         @keyframes flip-out-next {
             0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
@@ -456,12 +456,12 @@ function animateAndNavigate(event, url, direction = 'next') {
             width: 40px;
             transform: translateX(-50%);
             background: linear-gradient(90deg, 
-                rgba(0,0,0,0.05) 0%, 
-                rgba(255,255,255,0.2) 50%, 
-                rgba(0,0,0,0.05) 100%);
+                rgba(0,0,0,0.1) 0%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(0,0,0,0.1) 100%);
             z-index: 10;
             pointer-events: none;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
         .tabs-sidebar {
             width: 70px;
@@ -478,10 +478,10 @@ function animateAndNavigate(event, url, direction = 'next') {
             height: 120px;
             color: var(--tab-text-color, #fff);
             background: var(--tab-color, #444);
-            font-size: 10pt;
-            font-weight: 900;
+            font-size: 10pt !important;
+            font-weight: 700 !important;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             /* Rotate typography 90 degrees right */
@@ -507,7 +507,8 @@ function animateAndNavigate(event, url, direction = 'next') {
             z-index: 101;
             border-radius: 12px 0 0 12px;
             box-shadow: -12px 0 25px rgba(0,0,0,0.5);
-            font-size: 10pt;
+            font-size: 10pt !important;
+            font-weight: 800 !important;
         }
         .logout-btn {
             padding: 20px 0;
@@ -721,12 +722,12 @@ async function savePlannerData(date, fieldId, content) {
 
         if (error) {
             console.error('Save error:', error);
-            return false;
+            return null;
         }
-        return true;
+        return finalValue;
     } catch (err) {
         console.error('Unexpected save error:', err);
-        return false;
+        return null;
     }
 }
 
@@ -826,9 +827,9 @@ async function updateCategoryEntry(id, content) {
     
     if (error) {
         console.error('Error updating entry:', error);
-        return false;
+        return null;
     }
-    return true;
+    return finalContent;
 }
 
 function formatDate(dateStr) {
@@ -966,14 +967,15 @@ async function saveInteraction(category, interaction) {
     const baseInteraction = { category };
     
     Object.keys(interaction).forEach(key => {
+        let val = interaction[key];
+        if ((key === 'discussion' || key === 'outcome') && val && typeof val === 'string' && val.trim()) {
+            val = ensureTimestamp(val);
+        }
+
         if (knownFields.includes(key)) {
-            let val = interaction[key];
-            if (key === 'discussion' && val && val.trim()) {
-                val = ensureTimestamp(val);
-            }
             baseInteraction[key] = val;
         } else {
-            extraFields[key] = interaction[key];
+            extraFields[key] = val;
         }
     });
     

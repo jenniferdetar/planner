@@ -371,7 +371,10 @@
             
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                await savePlannerData(pk, fieldId, content);
+                const savedValue = await savePlannerData(pk, fieldId, content);
+                if (savedValue && savedValue !== content) {
+                    el.innerText = savedValue;
+                }
             }, 1000);
         }
 

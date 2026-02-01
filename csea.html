@@ -394,17 +394,33 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 saveStatus.innerText = 'Saving...';
-                const success = await savePlannerData(PERSISTENCE_KEY, 'draft', newNoteContent.value);
-                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
+                const savedValue = await savePlannerData(PERSISTENCE_KEY, 'draft', newNoteContent.value);
+                if (savedValue) {
+                    saveStatus.innerText = 'All changes saved';
+                    if (savedValue !== newNoteContent.value) {
+                        newNoteContent.value = savedValue;
+                    }
+                } else {
+                    saveStatus.innerText = 'Error saving';
+                }
             }, 1000);
         }
         function handleEditNote(e, id) {
             saveStatus.innerText = 'Unsaved changes';
+            const el = e.target;
+            const content = el.innerText;
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 saveStatus.innerText = 'Saving...';
-                const success = await updateCategoryEntry(id, e.target.innerText);
-                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
+                const savedValue = await updateCategoryEntry(id, content);
+                if (savedValue) {
+                    saveStatus.innerText = 'All changes saved';
+                    if (savedValue !== content) {
+                        el.innerText = savedValue;
+                    }
+                } else {
+                    saveStatus.innerText = 'Error saving';
+                }
             }, 1000);
         }
         async function handleAddNote() {

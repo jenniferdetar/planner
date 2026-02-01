@@ -372,7 +372,10 @@
             input.addEventListener('input', () => {
                 clearTimeout(draftTimeout);
                 draftTimeout = setTimeout(async () => {
-                    await savePlannerData(DRAFT_KEY, 'draft', input.value);
+                    const savedValue = await savePlannerData(DRAFT_KEY, 'draft', input.value);
+                    if (savedValue && savedValue !== input.value) {
+                        input.value = savedValue;
+                    }
                 }, 1000);
             });
         }
@@ -428,8 +431,15 @@
                 const status = document.getElementById('save-status');
                 status.innerText = 'Saving...';
                 editTimeout = setTimeout(async () => {
-                    const success = await updateCategoryEntry(entry.id, textEl.innerText);
-                    status.innerText = success ? 'All changes saved' : 'Error saving';
+                    const savedValue = await updateCategoryEntry(entry.id, textEl.innerText);
+                    if (savedValue) {
+                        status.innerText = 'All changes saved';
+                        if (savedValue !== textEl.innerText) {
+                            textEl.innerText = savedValue;
+                        }
+                    } else {
+                        status.innerText = 'Error saving';
+                    }
                 }, 1000);
             });
 
