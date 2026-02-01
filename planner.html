@@ -484,12 +484,12 @@
             const headerHtml = `<th>Cat</th><th>Item</th><th>Amt</th>${months.map(m => `<th>${m}</th>`).join('')}`;
             
             // Adjust specialized container padding to avoid spine overlap
-            const paddingStyle = side === 'left' ? 'padding-right: 40px;' : 'padding-left: 40px;';
+            const paddingStyle = side === 'left' ? 'padding-right: 10px;' : 'padding-left: 10px;';
 
             container.innerHTML = `
                 <div class="page-title">BUDGET PLANNING ${currentYear} ${titleSide}</div>
                 <div class="special-table-container" style="${paddingStyle}">
-                    <table class="special-table" style="width: 100%; table-layout: fixed;">
+                    <table class="special-table" style="width: 100%; table-layout: auto;">
                         <thead><tr>${headerHtml}</tr></thead>
                         <tbody id="budget-body-${side}"></tbody>
                     </table>
@@ -545,7 +545,7 @@
             const weekdays = []; daysToRender.forEach(i => { const d = new Date(weekStart); d.setDate(d.getDate() + i); weekdays.push(d); });
             
             // Adjust specialized container padding to avoid spine overlap
-            const paddingStyle = side === 'left' ? 'padding-right: 40px;' : 'padding-left: 40px;';
+            const paddingStyle = side === 'left' ? 'padding-right: 10px;' : 'padding-left: 10px;';
 
             container.innerHTML = `
                 <div class="page-title">ATTENDANCE (${side.toUpperCase()})</div>
@@ -554,10 +554,10 @@
                     <button onclick="changeAttendanceWeek(1)">Next Week</button>
                 </div>
                 <div class="special-table-container" style="${paddingStyle}">
-                    <table class="special-table" style="width: 100%; table-layout: fixed;">
+                    <table class="special-table" style="width: 100%; table-layout: auto;">
                         <thead>
                             <tr>
-                                <th style="width: 100px; font-size: 7pt;" class="sticky-col">Name</th>
+                                <th style="min-width: 100px; font-size: 7pt;" class="sticky-col">Name</th>
                                 ${weekdays.map(d => `<th style="font-size: 7pt;">${d.toLocaleDateString('en-US', { weekday: 'short' })}<br>${formatDateMMM(d.toISOString().split('T')[0])}</th>`).join('')}
                             </tr>
                         </thead>
@@ -585,15 +585,15 @@
             const typeTitle = typeLabels[type] || 'Tracking';
             
             // Adjust specialized container padding to avoid spine overlap
-            const paddingStyle = side === 'left' ? 'padding-right: 40px;' : 'padding-left: 40px;';
+            const paddingStyle = side === 'left' ? 'padding-right: 10px;' : 'padding-left: 10px;';
 
             container.innerHTML = `
                 <div class="page-title">${typeTitle.toUpperCase()} (${side.toUpperCase()})</div>
                 <div class="special-table-container" style="overflow: auto; ${paddingStyle}">
-                    <table class="special-table" style="width: 100%; table-layout: fixed;">
+                    <table class="special-table" style="width: 100%; table-layout: auto;">
                         <thead>
                             <tr>
-                                <th style="width: 100px; font-size: 7pt;" class="sticky-col">Name</th>
+                                <th style="min-width: 100px; font-size: 7pt;" class="sticky-col">Name</th>
                                 ${monthsToRender.map(m => `<th style="font-size: 7pt;">${m.substring(0,3)}</th>`).join('')}
                             </tr>
                         </thead>
