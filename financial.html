@@ -175,53 +175,51 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="main-content" id="main-content-container">
-            <div class="notebook-spread">
-                <div class="view-pane">
-                    <div class="schedule-header">
-                        <p class="subtitle">Keep track of your bill payments by listing recurring expenses. Check them off the list below as you pay your bills each month.</p>
-                        <div style="margin: 20px 0;">
-                            <a href="check-breakdown.html" class="nav-btn">Check Breakdown View</a>
-                        </div>
-                    </div>
-                    <div style="padding: 20px; font-family: 'Coming Soon', cursive; line-height: 1.6;">
-                        <h3>Financial Goals</h3>
-                        <ul style="list-style-type: '→ '; padding-left: 20px;">
-                            <li>Review subscriptions monthly</li>
-                            <li>Pay down high-interest debt</li>
-                            <li>Save 10% for emergencies</li>
-                        </ul>
+    <div style="padding: 20px;">
+        <div style="display: grid; grid-template-columns: 300px 1fr; gap: 30px;">
+            <div>
+                <div class="schedule-header">
+                    <p class="subtitle">Keep track of your bill payments by listing recurring expenses. Check them off the list below as you pay your bills each month.</p>
+                    <div style="margin: 20px 0;">
+                        <a href="check-breakdown.html" class="nav-btn">Check Breakdown View</a>
                     </div>
                 </div>
-                <div class="view-pane">
-                    <div class="bill-table-container">
-                        <table class="bill-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 80px;">Cat</th>
-                                    <th style="width: 150px;">Item</th>
-                                    <th style="width: 60px;">Amt</th>
-                                    <th class="month-col">J</th>
-                                    <th class="month-col">F</th>
-                                    <th class="month-col">M</th>
-                                    <th class="month-col">A</th>
-                                    <th class="month-col">M</th>
-                                    <th class="month-col">J</th>
-                                    <th class="month-col">J</th>
-                                    <th class="month-col">A</th>
-                                    <th class="month-col">S</th>
-                                    <th class="month-col">O</th>
-                                    <th class="month-col">N</th>
-                                    <th class="month-col">D</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bill-body">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="save-status" class="save-status-inline" style="margin-top: 20px; text-align: right;">All changes saved</div>
+                <div style="padding: 20px; font-family: 'Coming Soon', cursive; line-height: 1.6; background: #fff; border: 1px solid #eee; border-radius: 8px;">
+                    <h3 style="margin-top: 0;">Financial Goals</h3>
+                    <ul style="list-style-type: '→ '; padding-left: 20px;">
+                        <li>Review subscriptions monthly</li>
+                        <li>Pay down high-interest debt</li>
+                        <li>Save 10% for emergencies</li>
+                    </ul>
                 </div>
+            </div>
+            <div>
+                <div class="bill-table-container">
+                    <table class="bill-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Cat</th>
+                                <th style="width: 150px;">Item</th>
+                                <th style="width: 60px;">Amt</th>
+                                <th class="month-col">J</th>
+                                <th class="month-col">F</th>
+                                <th class="month-col">M</th>
+                                <th class="month-col">A</th>
+                                <th class="month-col">M</th>
+                                <th class="month-col">J</th>
+                                <th class="month-col">J</th>
+                                <th class="month-col">A</th>
+                                <th class="month-col">S</th>
+                                <th class="month-col">O</th>
+                                <th class="month-col">N</th>
+                                <th class="month-col">D</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bill-body">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="save-status" class="save-status-inline" style="margin-top: 20px; text-align: right;">All changes saved</div>
             </div>
         </div>
     </div>

@@ -107,35 +107,34 @@
             opacity: 0.8;
         }
 
+        .calendar-container {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+        }
+
         .calendar-grid {
             display: grid;
-            border-top: 2px solid var(--border-color);
-            border-left: 2px solid var(--border-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background-color: var(--border-color); /* This creates uniform grid lines */
-            gap: 2px;
-            flex: 1; /* Make it fill the available space */
+            grid-template-columns: repeat(7, 1fr);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background-color: #fff;
+            gap: 0;
+            flex: 1;
             min-height: 0;
-        }
-
-        .calendar-grid-left {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
-
-        .calendar-grid-right {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            border-left: none;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         .day-header {
             text-align: center;
-            padding: 8px 5px;
+            padding: 12px 5px;
             text-transform: uppercase;
             font-weight: 700;
             color: #fff;
             letter-spacing: 1px;
-            font-size: 10pt;
-            background-color: var(--content-bg); /* Reset bg for text readability */
+            font-size: 9pt;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .day-header.sun { background-color: var(--sun-bg); }
@@ -145,19 +144,23 @@
         .day-header.thu { background-color: var(--thu-bg); }
         .day-header.fri { background-color: var(--fri-bg); }
         .day-header.sat { background-color: var(--sat-bg); }
-        .day-header.not { background-color: #605e5c; }
 
         .calendar-day {
-            height: 140px;
-            padding: 3px;
+            height: 120px;
+            padding: 8px;
             position: relative;
-            background-color: var(--content-bg);
+            background-color: #fff;
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 4px;
             min-height: 0;
             overflow: hidden;
-            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .calendar-day:nth-child(7n) {
+            border-right: none;
         }
 
         .day-number {
@@ -215,21 +218,11 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="main-content" id="main-content-container">
-            <div class="notebook-spread">
-                <div class="view-pane">
-                    <div id="calendar-grid-left" class="calendar-grid calendar-grid-left">
-                        <!-- Sun-Wed will be injected here -->
-                    </div>
-                </div>
-                <div class="view-pane" id="right-pane-container">
-                    <div id="calendar-grid-right" class="calendar-grid calendar-grid-right">
-                        <!-- Thu-Sat will be injected here -->
-                    </div>
-                </div>
-            </div>
+    <div class="calendar-container">
+        <div id="calendar-grid" class="calendar-grid">
+            <!-- Days will be injected here -->
         </div>
+    </div>
 
     <script>
         function parseLocalDate(dateStr) {
@@ -256,87 +249,57 @@
             
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const gridLeft = document.getElementById('calendar-grid-left');
-            const gridRight = document.getElementById('calendar-grid-right');
-            gridLeft.innerHTML = '';
-            gridRight.innerHTML = '';
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
 
             // Day Headers
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Notes'];
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             days.forEach((day, index) => {
                 const header = document.createElement('div');
                 header.className = `day-header ${day.toLowerCase().substring(0, 3)}`;
                 header.innerText = day;
-                if (index < 4) {
-                    gridLeft.appendChild(header);
-                } else {
-                    gridRight.appendChild(header);
-                }
+                grid.appendChild(header);
             });
 
             const totalSlots = firstDayOfMonth + daysInMonth;
             const totalRows = Math.ceil(totalSlots / 7);
             
-            gridLeft.style.gridTemplateRows = `auto repeat(${totalRows}, 140px)`;
-            gridLeft.style.gridTemplateColumns = 'repeat(4, 1fr)';
-            gridRight.style.gridTemplateRows = `auto repeat(${totalRows}, 140px)`;
-            gridRight.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            grid.style.gridTemplateRows = `auto repeat(${totalRows}, 120px)`;
 
-            for (let row = 0; row < totalRows; row++) {
-                // Render 7 days + 1 Notes slot
-                for (let col = 0; col < 8; col++) {
-                    const targetGrid = (col < 4) ? gridLeft : gridRight;
+            for (let index = 0; index < totalRows * 7; index++) {
+                if (index < firstDayOfMonth || index >= totalSlots) {
+                    const empty = document.createElement('div');
+                    empty.className = 'calendar-day empty-day';
+                    grid.appendChild(empty);
+                } else {
+                    const i = index - firstDayOfMonth + 1;
+                    const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                     
-                    if (col === 7) {
-                        // This is the Notes column on the far right
-                        const notesCell = document.createElement('div');
-                        notesCell.className = 'calendar-day notes-cell handwriting';
-                        notesCell.contentEditable = true;
-                        const fieldId = `notes-row-${row}`;
-                        notesCell.dataset.field = fieldId;
-                        notesCell.id = fieldId;
-                        notesCell.oninput = (e) => handleNoteInput(e.target);
-                        targetGrid.appendChild(notesCell);
-                        continue;
-                    }
-
-                    const index = row * 7 + col;
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'calendar-day';
                     
-                    if (index < firstDayOfMonth || index >= totalSlots) {
-                        const empty = document.createElement('div');
-                        empty.className = 'calendar-day empty-day';
-                        targetGrid.appendChild(empty);
-                    } else {
-                        const i = index - firstDayOfMonth + 1;
-                        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                        
-                        const dayDiv = document.createElement('div');
-                        dayDiv.className = 'calendar-day';
-                        
-                        const dayNum = document.createElement('div');
-                        dayNum.className = 'day-number';
-                        dayNum.style.cursor = 'pointer';
-                        dayNum.title = 'View week in Work Planner';
-                        dayNum.onclick = () => window.location.href = `planner.html?category=Work-Planner&date=${dateKey}`;
-                        dayNum.innerText = i;
-                        dayDiv.appendChild(dayNum);
+                    const dayNum = document.createElement('div');
+                    dayNum.className = 'day-number';
+                    dayNum.style.cursor = 'pointer';
+                    dayNum.title = 'View week in Work Planner';
+                    dayNum.onclick = () => window.location.href = `planner.html?category=Work-Planner&date=${dateKey}`;
+                    dayNum.innerText = i;
+                    dayDiv.appendChild(dayNum);
 
-                        const eventContainer = document.createElement('div');
-                        eventContainer.className = 'event-container';
-                        eventContainer.id = `events-${dateKey}`;
-                        dayDiv.appendChild(eventContainer);
+                    const eventContainer = document.createElement('div');
+                    eventContainer.className = 'event-container';
+                    eventContainer.id = `events-${dateKey}`;
+                    dayDiv.appendChild(eventContainer);
 
-                        targetGrid.appendChild(dayDiv);
-                    }
+                    grid.appendChild(dayDiv);
                 }
             }
 
             // Fetch and render Supabase events
             const monthStart = new Date(year, month, 1);
             const monthStartStr = monthStart.toISOString().split('T')[0];
-            const [events, noteData] = await Promise.all([
-                fetchCalendarEvents(monthStart, daysInMonth),
-                fetchPlannerData(`calendar-notes-${year}-${month + 1}`, 31)
+            const [events] = await Promise.all([
+                fetchCalendarEvents(monthStart, daysInMonth)
             ]);
             
             events.forEach(event => {
@@ -354,85 +317,21 @@
                     container.appendChild(pill);
                 }
             });
-
-            // Render saved notes
-            noteData.forEach(item => {
-                const el = document.getElementById(item.field_id);
-                if (el) el.innerText = item.content;
-            });
         }
 
-        function handleNoteInput(el) {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const pk = `calendar-notes-${year}-${month + 1}`;
-            const fieldId = el.id;
-            const content = el.innerText;
-            
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(async () => {
-                const savedValue = await savePlannerData(pk, fieldId, content);
-                if (savedValue && savedValue !== content) {
-                    el.innerText = savedValue;
-                }
-            }, 1000);
-        }
-
-        async function changeMonth(delta) {
-            const panes = document.querySelectorAll('.view-pane');
-            const direction = delta > 0 ? 'next' : 'prev';
-            const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
-            
-            if (targetPane) {
-                targetPane.classList.remove('flip-in-next', 'flip-in-prev');
-                targetPane.classList.add(`flip-out-${direction}`);
-                await new Promise(r => setTimeout(r, 800));
-                
-                currentDate.setMonth(currentDate.getMonth() + delta);
-                const dateStr = currentDate.toISOString().split('T')[0];
-                const newUrl = window.location.pathname + '?date=' + dateStr;
-                window.history.pushState({ date: dateStr }, '', newUrl);
-                await renderCalendar();
-                
-                targetPane.classList.remove(`flip-out-${direction}`);
-            } else {
-                currentDate.setMonth(currentDate.getMonth() + delta);
-                const dateStr = currentDate.toISOString().split('T')[0];
-                const newUrl = window.location.pathname + '?date=' + dateStr;
-                window.history.pushState({ date: dateStr }, '', newUrl);
-                renderCalendar();
-            }
-        }
+        window.changeMonth = async function(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            const dateStr = currentDate.toISOString().split('T')[0];
+            const newUrl = window.location.pathname + '?date=' + dateStr;
+            window.history.pushState({ date: dateStr }, '', newUrl);
+            await renderCalendar();
+        };
 
         window.onpopstate = function(event) {
             const date = event.state ? event.state.date : dateParam;
             currentDate = date ? new Date(date) : new Date();
             currentDate.setDate(1);
             renderCalendar();
-        };
-
-        // Initial render
-        window.changeMonth = (dir) => {
-            const direction = dir > 0 ? 'next' : 'prev';
-            const panes = document.querySelectorAll('.view-pane');
-            const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
-            if (targetPane) {
-                targetPane.classList.add(`flip-out-${direction}`);
-                setTimeout(() => {
-                    currentDate.setMonth(currentDate.getMonth() + dir);
-                    const newUrl = window.location.pathname + '?date=' + currentDate.toISOString().split('T')[0];
-                    window.history.pushState({ date: currentDate.toISOString() }, '', newUrl);
-                    renderCalendar();
-                    targetPane.classList.remove(`flip-out-${direction}`);
-                }, 800);
-            }
-        };
-
-        window.onpopstate = (event) => {
-            if (event.state && event.state.date) {
-                currentDate = new Date(event.state.date);
-                renderCalendar();
-            }
         };
 
         document.addEventListener('DOMContentLoaded', renderCalendar);

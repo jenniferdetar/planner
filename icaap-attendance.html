@@ -228,49 +228,35 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon active" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <main class="notebook-main">
-            <div class="notebook-page">
-                <div class="page-header">
-                    <h1 class="page-title">Icaap Attendance Tracking</h1>
-                    <div id="week-nav" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
-                        <button class="nav-btn" onclick="changeWeek(-1)">← PREVIOUS WEEK</button>
-                        <div id="date-range-display" class="date-range-display">Loading...</div>
-                        <button class="nav-btn" onclick="changeWeek(1)">NEXT WEEK →</button>
-                    </div>
-                    <div class="tracking-links-container">
-                        <a href="planner.html?category=iCAAP" class="tracking-link-pill">
-                            <span>📝</span> Icaap Notes
-                        </a>
-                        <a href="planner.html?category=ICAAP-Tracking" class="tracking-link-pill">
-                            <span>📅</span> Icaap Tracking Log
-                        </a>
-                    </div>
-                    <div id="save-status" class="save-status">All changes saved</div>
-                </div>
-                
-                <div class="table-container">
-                    <table class="tracking-table">
-                        <thead id="table-head">
-                            <!-- Headings will be injected here -->
-                        </thead>
-                        <tbody id="tracking-body">
-                            <!-- Rows will be injected here -->
-                        </tbody>
-                    </table>
-                </div>
+    <div style="padding: 20px;">
+        <div class="page-header">
+            <h1 class="page-title">Icaap Attendance Tracking</h1>
+            <div id="week-nav" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+                <button class="nav-btn" onclick="changeWeek(-1)">← PREVIOUS WEEK</button>
+                <div id="date-range-display" class="date-range-display">Loading...</div>
+                <button class="nav-btn" onclick="changeWeek(1)">NEXT WEEK →</button>
             </div>
-        </main>
+            <div class="tracking-links-container">
+                <a href="icaap.html" class="tracking-link-pill">
+                    <span>📝</span> Icaap Notes
+                </a>
+                <a href="icaap-tracking.html" class="tracking-link-pill">
+                    <span>📅</span> Icaap Tracking Log
+                </a>
+            </div>
+            <div id="save-status" class="save-status">All changes saved</div>
+        </div>
+        
+        <div class="table-container">
+            <table class="tracking-table">
+                <thead id="table-head">
+                    <!-- Headings will be injected here -->
+                </thead>
+                <tbody id="tracking-body">
+                    <!-- Rows will be injected here -->
+                </tbody>
+            </table>
+        </div>
     </div>
     <script>
         const employees = [

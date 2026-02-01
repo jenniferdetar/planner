@@ -203,26 +203,20 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="main-content" id="main-content-container">
-            <div class="notebook-spread">
-                <div class="view-pane">
-                    <h1 class="page-title">Hoa Notes</h1>
-                    <div class="notes-section">
-                        <div class="input-group">
-                            <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div id="save-status" class="save-status-inline">All changes saved</div>
-                                <button class="save-btn" onclick="handleAddNote()">Save Note</button>
-                            </div>
-                        </div>
+    <div style="padding: 20px;">
+        <h1 class="page-title">Hoa Notes</h1>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <div class="notes-section">
+                <div class="input-group">
+                    <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div id="save-status" class="save-status-inline">All changes saved</div>
+                        <button class="save-btn" onclick="handleAddNote()">Save Note</button>
                     </div>
                 </div>
-                <div class="view-pane">
-                    <div id="entries-list" class="entries-list">
-                        <!-- Entries will be loaded here -->
-                    </div>
-                </div>
+            </div>
+            <div id="entries-list" class="entries-list">
+                <!-- Entries will be loaded here -->
             </div>
         </div>
     </div>

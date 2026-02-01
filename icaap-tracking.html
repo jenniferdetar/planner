@@ -226,77 +226,63 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="section-sidebar">
-            <a href="index.html" class="section-icon" title="Home">🏠</a>
-            <a href="planner.html?category=Work-Planner" class="section-icon" title="Work">💼</a>
-            <a href="planner.html?category=iCAAP" class="section-icon active" title="iCAAP">📋</a>
-            <a href="planner.html?category=Personal-Planner" class="section-icon" title="Personal">👤</a>
-            <a href="planner.html?category=Monthly-Review" class="section-icon" title="Planning">📅</a>
-            <a href="planner.html?category=Budget" class="section-icon" title="Financial">💰</a>
-            <div class="section-icon logout-icon" onclick="logout()" title="Logout">🚪</div>
-        </aside>
-
-        <main class="notebook-main">
-            <div class="notebook-page">
-                <div class="page-header">
-                    <h1 class="page-title">Icaap Tracking Log</h1>
-                    <div class="tracking-links-container">
-                        <a href="planner.html?category=iCAAP" class="tracking-pill">
-                            <span>📝</span> Icaap Notes
-                        </a>
-                        <a href="planner.html?category=ICAAP-Attendance" class="tracking-pill">
-                            <span>👤</span> Attendance Tracking
-                        </a>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <table class="tracking-table">
-                        <thead>
-                            <tr class="header-row">
-                                <script>
-                                    const urlParams = new URLSearchParams(window.location.search);
-                                    const dateParam = urlParams.get('date');
-                                    let baseDate = dateParam ? new Date(dateParam) : new Date();
-                                    if (isNaN(baseDate.getTime())) baseDate = new Date();
-                                    
-                                    // Determine fiscal year start (July)
-                                    let startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
-                                    
-                                    const months = [];
-                                    const monthNames = [
-                                        'July', 'August', 'September', 'October', 
-                                        'November', 'December', 'January', 'February', 
-                                        'March', 'April', 'May', 'June'
-                                    ];
-                                    
-                                    for (let i = 0; i < 12; i++) {
-                                        const year = i < 6 ? startYear : startYear + 1;
-                                        months.push(`${monthNames[i]} ${year}`);
-                                    }
-
-                                    document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
-                                    months.forEach(month => {
-                                        document.write(`<th colspan="3">${month}</th>`);
-                                    });
-                                    document.write(`<th rowspan="2" class="total-col">Total Hours</th>`);
-                                </script>
-                            </tr>
-                            <tr class="sub-header">
-                                <script>
-                                    months.forEach(month => {
-                                        document.write(`<th>Paylog Sub.</th><th>Hours</th><th>Approval</th>`);
-                                    });
-                                </script>
-                            </tr>
-                        </thead>
-                        <tbody id="tracking-body">
-                        </tbody>
-                    </table>
-                </div>
+    <div style="padding: 20px;">
+        <div class="page-header">
+            <h1 class="page-title">Icaap Tracking Log</h1>
+            <div class="tracking-links-container">
+                <a href="icaap.html" class="tracking-pill">
+                    <span>📝</span> Icaap Notes
+                </a>
+                <a href="icaap-attendance.html" class="tracking-pill">
+                    <span>👤</span> Attendance Tracking
+                </a>
             </div>
-        </main>
+        </div>
+
+        <div class="table-container">
+            <table class="tracking-table">
+                <thead>
+                    <tr class="header-row">
+                        <script>
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const dateParam = urlParams.get('date');
+                            let baseDate = dateParam ? new Date(dateParam) : new Date();
+                            if (isNaN(baseDate.getTime())) baseDate = new Date();
+                            
+                            // Determine fiscal year start (July)
+                            let startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
+                            
+                            const months = [];
+                            const monthNames = [
+                                'July', 'August', 'September', 'October', 
+                                'November', 'December', 'January', 'February', 
+                                'March', 'April', 'May', 'June'
+                            ];
+                            
+                            for (let i = 0; i < 12; i++) {
+                                const year = i < 6 ? startYear : startYear + 1;
+                                months.push(`${monthNames[i]} ${year}`);
+                            }
+
+                            document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
+                            months.forEach(month => {
+                                document.write(`<th colspan="3">${month}</th>`);
+                            });
+                            document.write(`<th rowspan="2" class="total-col">Total Hours</th>`);
+                        </script>
+                    </tr>
+                    <tr class="sub-header">
+                        <script>
+                            months.forEach(month => {
+                                document.write(`<th>Paylog Sub.</th><th>Hours</th><th>Approval</th>`);
+                            });
+                        </script>
+                    </tr>
+                </thead>
+                <tbody id="tracking-body">
+                </tbody>
+            </table>
+        </div>
     </div>
     <div id="save-status" class="save-status">All changes saved</div>
     <script>

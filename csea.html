@@ -235,84 +235,78 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="main-content" id="main-content-container">
-            <div class="notebook-spread">
-                <div class="view-pane">
-                    <div class="notes-section">
-                        <div class="input-group">
-                            <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div id="save-status" class="save-status-inline">All changes saved</div>
-                                <button class="save-btn" onclick="handleAddNote()">Save Note</button>
-                            </div>
-                        </div>
-                        <div id="entries-list" class="entries-list">
-                            <!-- Entries will be loaded here -->
-                        </div>
+    <div style="padding: 20px;">
+        <div style="display: grid; grid-template-columns: 350px 1fr; gap: 30px;">
+            <div class="notes-section">
+                <div class="input-group">
+                    <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div id="save-status" class="save-status-inline">All changes saved</div>
+                        <button class="save-btn" onclick="handleAddNote()">Save Note</button>
                     </div>
                 </div>
-                <div class="view-pane">
-                    <div class="log-section" style="margin-top: 0; border-top: none; padding-top: 0;">
-                        <h2 class="interaction-log-header">Member Interaction Log</h2>
-                        <div class="log-table-container">
-                            <table class="log-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20px;"></th>
-                                        <th>Date Spoke</th>
-                                        <th>Member Name</th>
-                                        <th>Type</th>
-                                        <th>Member Number</th>
-                                        <th>Site/Location</th>
-                                        <th>Discussion/Concern</th>
-                                        <th>Involved/Action</th>
-                                        <th>Union/Labor Rep</th>
-                                        <th>Outcome</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="interaction-log-body">
-                                    <!-- Existing interactions -->
-                                </tbody>
-                                <tfoot>
-                                    <tr class="log-input-row">
-                                        <td></td>
-                                        <td><input type="date" id="log-date" class="log-input"></td>
-                                        <td>
-                                            <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
-                                            <datalist id="members-list"></datalist>
-                                        </td>
-                                        <td>
-                                            <select id="log-type" class="log-input">
-                                                <option value="Auto">Auto-Detect</option>
-                                                <option value="Grievance">Grievance</option>
-                                                <option value="Inquiry">Inquiry</option>
-                                            </select>
-                                        </td>
-                                        <td><input type="text" id="log-number" class="log-input" placeholder="Number"></td>
-                                        <td>
-                                            <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
-                                            <datalist id="schools-list"></datalist>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="log-discussion" class="log-input" placeholder="Discussion" list="issues-list">
-                                            <datalist id="issues-list"></datalist>
-                                        </td>
-                                        <td><input type="text" id="log-who" class="log-input" placeholder="Who involved"></td>
-                                        <td>
-                                            <div style="display: flex; flex-direction: column; gap: 2px;">
-                                                <input type="text" id="log-contact" class="log-input" placeholder="Union Rep" list="stewards-list">
-                                                <input type="text" id="log-labor-rep" class="log-input" placeholder="Labor Rep">
-                                            </div>
-                                        </td>
-                                        <td><input type="text" id="log-outcome" class="log-input" placeholder="Outcome"></td>
-                                        <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
+                <div id="entries-list" class="entries-list">
+                    <!-- Entries will be loaded here -->
+                </div>
+            </div>
+            <div class="log-section" style="margin-top: 0; border-top: none; padding-top: 0; overflow-x: auto;">
+                <h2 class="interaction-log-header">Member Interaction Log</h2>
+                <div class="log-table-container">
+                    <table class="log-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20px;"></th>
+                                <th>Date Spoke</th>
+                                <th>Member Name</th>
+                                <th>Type</th>
+                                <th>Member Number</th>
+                                <th>Site/Location</th>
+                                <th>Discussion/Concern</th>
+                                <th>Involved/Action</th>
+                                <th>Union/Labor Rep</th>
+                                <th>Outcome</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="interaction-log-body">
+                            <!-- Existing interactions -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="log-input-row">
+                                <td></td>
+                                <td><input type="date" id="log-date" class="log-input"></td>
+                                <td>
+                                    <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
+                                    <datalist id="members-list"></datalist>
+                                </td>
+                                <td>
+                                    <select id="log-type" class="log-input">
+                                        <option value="Auto">Auto-Detect</option>
+                                        <option value="Grievance">Grievance</option>
+                                        <option value="Inquiry">Inquiry</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" id="log-number" class="log-input" placeholder="Number"></td>
+                                <td>
+                                    <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
+                                    <datalist id="schools-list"></datalist>
+                                </td>
+                                <td>
+                                    <input type="text" id="log-discussion" class="log-input" placeholder="Discussion" list="issues-list">
+                                    <datalist id="issues-list"></datalist>
+                                </td>
+                                <td><input type="text" id="log-who" class="log-input" placeholder="Who involved"></td>
+                                <td>
+                                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                                        <input type="text" id="log-contact" class="log-input" placeholder="Union Rep" list="stewards-list">
+                                        <input type="text" id="log-labor-rep" class="log-input" placeholder="Labor Rep">
+                                    </div>
+                                </td>
+                                <td><input type="text" id="log-outcome" class="log-input" placeholder="Outcome"></td>
+                                <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>

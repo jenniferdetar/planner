@@ -347,38 +347,27 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="main-content" id="main-content-container">
-            <div class="notebook-spread">
-                <div class="view-pane">
-                    <div class="top-grid">
-                        <div class="top-section">
-                            <div class="section-title">Priority #1</div>
-                            <div class="editable-area" contenteditable="true" id="priority-1" data-field="priority-1"></div>
-                        </div>
-                        <div class="top-section">
-                            <div class="section-title">Priority #2</div>
-                            <div class="editable-area" contenteditable="true" id="priority-2" data-field="priority-2"></div>
-                        </div>
-                        <div class="top-section">
-                            <div class="section-title">Priority #3</div>
-                            <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3"></div>
-                        </div>
-                    </div>
-
-                    <div id="days-left" class="daily-columns">
-                        <!-- First 3 days -->
-                    </div>
-
-                    <div id="save-status" class="save-status">All changes saved</div>
-                </div>
-                <div class="view-pane">
-                    <div id="days-right" class="daily-columns four-col">
-                        <!-- Remaining 4 days -->
-                    </div>
-                </div>
+    <div style="padding: 20px;">
+        <div class="top-grid">
+            <div class="top-section">
+                <div class="section-title">Priority #1</div>
+                <div class="editable-area" contenteditable="true" id="priority-1" data-field="priority-1"></div>
+            </div>
+            <div class="top-section">
+                <div class="section-title">Priority #2</div>
+                <div class="editable-area" contenteditable="true" id="priority-2" data-field="priority-2"></div>
+            </div>
+            <div class="top-section">
+                <div class="section-title">Priority #3</div>
+                <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3"></div>
             </div>
         </div>
+
+        <div id="planner-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <!-- Days will be injected here -->
+        </div>
+
+        <div id="save-status" class="save-status">All changes saved</div>
     </div>
     <script>
         function parseLocalDate(dateStr) {
@@ -494,10 +483,8 @@
             return null;
         }
         async function renderPlanner() {
-            const leftContainer = document.getElementById('days-left');
-            const rightContainer = document.getElementById('days-right');
-            leftContainer.innerHTML = 'Loading...';
-            rightContainer.innerHTML = '';
+            const gridContainer = document.getElementById('planner-grid');
+            gridContainer.innerHTML = 'Loading...';
 
             // Set global header
             const weekEnd = new Date(currentStartDate);
@@ -528,8 +515,7 @@
                     }
                 }
             });
-            leftContainer.innerHTML = '';
-            rightContainer.innerHTML = '';
+            gridContainer.innerHTML = '';
             for (let i = 0; i < 7; i++) {
                 const dayDate = new Date(currentStartDate);
                 dayDate.setDate(dayDate.getDate() + i);
@@ -537,6 +523,10 @@
                 let dayEvents = events.filter(e => e.date === dayStr);
                 const dayCol = document.createElement('div');
                 dayCol.className = 'day-col';
+                dayCol.style.border = '1px solid #e1dfdd';
+                dayCol.style.borderRadius = '12px';
+                dayCol.style.overflow = 'hidden';
+
                 const header = document.createElement('div');
                 header.className = `day-header ${dayClasses[i]}-header`;
                 header.innerHTML = `${dayNames[i].substring(0, 3).toUpperCase()}<br>${formatDateMMM(dayStr).toUpperCase()}`;
@@ -561,7 +551,7 @@
                     content.className = 'slot-content';
                     const eventTitle = getEventForSlot(dayEvents, slot, i);
                     if (eventTitle) {
-                        content.innerHTML = `<div class="${getEventClass(eventTitle)}">${eventTitle}</div>`;
+                        content.innerHTML = `<div class="event-pill ${getEventClass(eventTitle)}">${eventTitle}</div>`;
                     } else {
                         content.contentEditable = "true";
                         content.setAttribute('data-field', `slot-${slot}`);
@@ -575,11 +565,7 @@
                     slotDiv.appendChild(content);
                     dayCol.appendChild(slotDiv);
                 });
-                if (i < 3) {
-                    leftContainer.appendChild(dayCol);
-                } else {
-                    rightContainer.appendChild(dayCol);
-                }
+                gridContainer.appendChild(dayCol);
             }
         }
         async function changeWeek(delta) {

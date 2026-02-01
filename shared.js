@@ -217,477 +217,206 @@ async function fetchPlannerData(startDate, days = 7) {
 // Global Animation Helper
 function animateAndNavigate(event, url, direction = 'next') {
     if (event) event.preventDefault();
-    
-    // Target specific panes for half-page turn
-    const panes = document.querySelectorAll('.view-pane');
-    const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
-    
-    if (targetPane) {
-        targetPane.classList.remove('flip-in-next', 'flip-in-prev');
-        targetPane.classList.add(`flip-out-${direction}`);
-        setTimeout(() => {
-            window.location.href = url;
-        }, 800);
-    } else {
-        window.location.href = url;
-    }
+    window.location.href = url;
 }
 
-// Inject Flip Styles & Handle Auto-Navigation
+// Modern Dashboard Layout & Navigation System
 (function() {
     const style = document.createElement('style');
     style.innerHTML = `
-        .view-pane {
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s linear;
-            backface-visibility: hidden;
-            perspective: 2500px;
-            transform-style: preserve-3d;
+        :root {
+            --sidebar-width: 120px;
+            --header-height: 50px;
+            --primary-navy: #00326b;
+            --accent-gold: #c5a059;
+            --bg-light: #f5f7fa;
+            --text-dark: #333;
+            --border-color: #d1d1d1;
         }
 
-        /* Global Planner Layout Styles */
-        :root {
-            --app-bg: #1a1a1a;
-            --sidebar-bg: #262626;
-            --content-bg: #fdfdfd;
-            --accent-color: #4a3427;
-            --sun-bg: #ff5252;
-            --mon-bg: #fb8c00;
-            --tue-bg: #00acc1;
-            --wed-bg: #3949ab;
-            --thu-bg: #e91e63;
-            --fri-bg: #fdd835;
-            --sat-bg: #00897b;
-            --border-color: #2f4f4f;
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-light);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
-        .app-container {
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Sidebar - Right Side */
+        .dashboard-sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary-navy);
             display: flex;
             flex-direction: column;
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            background: var(--app-bg);
-            overflow: hidden;
+            padding: 20px 0;
+            gap: 10px;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            order: 2; /* Move to right side */
         }
-        .app-main {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-        .header-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2px 0;
-            height: 24px;
-            gap: 20px;
-            width: 100%;
-            background: #1a1a1a;
-            border-bottom: 1px solid #333;
-            z-index: 1000;
-            flex-shrink: 0;
-        }
-        .header-title {
-            font-size: 10pt;
-            letter-spacing: 4px;
-            color: #fff;
-            margin: 0;
+
+        .sidebar-item {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            padding: 15px 10px;
+            text-align: center;
+            font-size: 8.5pt;
+            font-weight: 600;
             text-transform: uppercase;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 700;
-        }
-        .nav-btn-header {
-            background: transparent;
-            border: 1px solid #444;
-            color: #aaa;
-            padding: 2px 8px;
-            cursor: pointer;
-            font-size: 8pt;
-            border-radius: 4px;
-            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.2s;
+            border-left: 4px solid transparent;
         }
-        .nav-btn-header:hover {
-            border-color: #666;
+
+        .sidebar-item:hover {
             color: #fff;
             background: rgba(255,255,255,0.05);
         }
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--sidebar-bg);
-            padding: 0;
-            overflow: hidden; /* Prevent scrolling on container to keep spine fixed */
-            position: relative;
-            min-height: 100%;
-        }
-        .notebook-spread {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            position: relative;
-            gap: 0;
-            padding: 0;
-            box-sizing: border-box;
-            perspective: 3000px;
-            transform-style: preserve-3d;
-            border: 15px solid #2f4f4f;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3);
-            border-radius: 10px;
-            background: #fff;
-        }
-        .main-content::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 32px;
-            transform: translateX(-50%);
-            background: linear-gradient(90deg, 
-                rgba(0,0,0,0.1) 0%, 
-                rgba(255,255,255,0.4) 50%, 
-                rgba(0,0,0,0.1) 100%);
-            pointer-events: none;
-            z-index: 100;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
-        }
-        .main-content::before {
-            display: none; /* Removed pseudo-element implementation */
-        }
-        .binder-rings {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            width: 40px;
-            z-index: 101;
-            pointer-events: none;
-            padding: 40px 0;
-        }
-        .ring {
-            width: 26px;
-            height: 26px;
-            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #e0e0e0 40%, #a0a0a0 100%);
-            border-radius: 50%;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.4), inset -1px -1px 2px rgba(255,255,255,0.8);
-            position: relative;
-            z-index: 102;
-            border: 1px solid #999;
-        }
-        .ring::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -18px;
-            right: -18px;
-            height: 10px;
-            background: linear-gradient(180deg, #c0c0c0 0%, #f0f0f0 30%, #c0c0c0 100%);
-            transform: translateY(-50%);
-            z-index: -1;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-        .ring::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 10px;
-            height: 10px;
-            background: radial-gradient(circle at 50% 50%, #777 0%, #aaa 100%);
-            border-radius: 50%;
-            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.4);
-        }
-        .view-pane {
-            flex: 1;
-            background: var(--content-bg);
-            margin: 0;
-            padding: 20px 30px;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: none;
-            min-height: 100%;
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
-            z-index: 1;
-        }
-        /* Anchor flips to the center spine */
-        .view-pane:first-child {
-            padding-right: 50px !important;
-            transform-origin: 100% 50% !important; /* Right edge (spine) */
-        }
-        .view-pane:last-child {
-            padding-left: 50px !important;
-            transform-origin: 0% 50% !important; /* Left edge (spine) */
-        }
-        @keyframes flip-out-next {
-            0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2500px) rotateY(-180deg); opacity: 0; }
-        }
-        @keyframes flip-out-prev {
-            0% { transform: perspective(2500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(2500px) rotateY(180deg); opacity: 0; }
-        }
-        .flip-out-next {
-            animation: flip-out-next 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards !important;
-            z-index: 20;
-        }
-        .flip-out-prev {
-            animation: flip-out-prev 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards !important;
-            z-index: 20;
-        }
-        .inner-spine {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 40px;
-            transform: translateX(-50%);
-            background: linear-gradient(90deg, 
-                rgba(0,0,0,0.1) 0%, 
-                rgba(255,255,255,0.3) 50%, 
-                rgba(0,0,0,0.1) 100%);
-            z-index: 10;
-            pointer-events: none;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
-        }
-        .tabs-sidebar {
-            width: 70px;
-            background: #1a1a1a;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            padding: 0;
-            z-index: 100;
-            border-left: 1px solid #333;
-        }
-        .tab {
-            padding: 10px 0;
-            height: 120px;
-            color: var(--tab-text-color, #fff);
-            background: var(--tab-color, #444);
-            font-size: 10pt !important;
-            font-weight: 700 !important;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            /* Rotate typography 90 degrees right */
-            writing-mode: vertical-rl;
-            text-orientation: sideways;
-            text-align: center;
-            border-left: none;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            border-bottom: 1px solid rgba(0,0,0,0.2);
-            box-shadow: inset 2px 0 5px rgba(255,255,255,0.1), -3px 0 6px rgba(0,0,0,0.3);
-            position: relative;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .tab.active {
-            background: var(--tab-color, var(--accent-color));
-            color: var(--tab-text-color, #fff);
-            width: 90px;
-            margin-left: -20px;
-            z-index: 101;
-            border-radius: 12px 0 0 12px;
-            box-shadow: -12px 0 25px rgba(0,0,0,0.5);
-            font-size: 10pt !important;
-            font-weight: 800 !important;
-        }
-        .logout-btn {
-            padding: 20px 0;
-            font-size: 9pt;
-            color: #888;
-            cursor: pointer;
-            text-align: center;
-            margin-top: auto;
-            border-top: 1px solid #333;
-            background: #1a1a1a;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .logout-btn:hover {
+
+        .sidebar-item.active {
             color: #fff;
-            background: #222;
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--accent-gold);
         }
 
-        /* Budget Category Row Colors */
-        .special-table tr.row-auto { color: #27ae60 !important; }
-        .special-table tr.row-billpay { color: #2980b9 !important; }
-        .special-table tr.row-cash { color: #8e44ad !important; }
-        .special-table tr.row-cc { color: #e67e22 !important; }
-        .special-table tr.row-housing { color: #c0392b !important; }
-        .special-table tr.row-savings { color: #16a085 !important; }
+        /* Main Content Area */
+        .dashboard-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            order: 1;
+        }
+
+        .dashboard-header {
+            height: var(--header-height);
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-title {
+            font-size: 14pt;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .header-nav-btn {
+            background: #f0f0f0;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 9pt;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.2s;
+        }
+
+        .header-nav-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .dashboard-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: var(--bg-light);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .dashboard-sidebar { width: 70px; }
+            .sidebar-item { font-size: 7pt; padding: 10px 5px; }
+        }
     `;
     document.head.appendChild(style);
 
+    // Dynamic Header Title Helper
+    window.setGlobalHeaderTitle = function(title) {
+        const titleEl = document.querySelector('.header-title');
+        if (titleEl) titleEl.innerText = title;
+    };
+
+    // Initialize Dashboard Wrapper
     document.addEventListener('DOMContentLoaded', () => {
-        const appContainer = document.querySelector('.app-container') || document.querySelector('.notebook-container');
-        
-        if (appContainer) {
-            // 1. Inject Global Header
-            if (!document.querySelector('.header-controls')) {
-                const header = document.createElement('div');
-                header.className = 'header-controls';
-                header.innerHTML = `
-                    <button class="nav-btn-header" onclick="if(window.changeWeek) changeWeek(-1); else if(window.changeMonth) changeMonth(-1);">Prev</button>
-                    <h1 class="header-title" id="global-header-title"></h1>
-                    <button class="nav-btn-header" onclick="if(window.changeWeek) changeWeek(1); else if(window.changeMonth) changeMonth(1);">Next</button>
-                `;
-                appContainer.prepend(header);
-            }
+        const bodyContent = document.body.innerHTML;
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateStr = urlParams.get('date') || new Date().toISOString().split('T')[0];
+        const category = urlParams.get('category');
 
-            // 2. Wrap Main Content + Sidebar in app-main for flex layout
-            let appMain = document.querySelector('.app-main');
-            let mainContent = document.querySelector('.main-content');
-            let spread = document.querySelector('.notebook-spread');
-            
-            if (!appMain) {
-                appMain = document.createElement('div');
-                appMain.className = 'app-main';
-                
-                // Move existing children (except header) into app-main
-                const children = Array.from(appContainer.childNodes).filter(node => 
-                    node.nodeType === 1 && !node.classList.contains('header-controls')
-                );
-                children.forEach(child => appMain.appendChild(child));
-                appContainer.appendChild(appMain);
-                
-                // Re-find mainContent and spread if they were moved
-                mainContent = document.querySelector('.main-content');
-                spread = document.querySelector('.notebook-spread');
-            }
+        // Create Navigation Links
+        const navItems = [
+            { label: 'Home', path: 'index.html', icon: '🏠' },
+            { label: 'HOA', path: 'planner.html?category=HOA', cat: 'HOA' },
+            { label: 'CSEA', path: 'planner.html?category=CSEA', cat: 'CSEA' },
+            { label: 'ICAAP', path: 'icaap.html', cat: 'ICAAP' },
+            { label: 'Finance', path: 'planner.html?category=Budget', cat: 'Budget' },
+            { label: 'Planning', path: 'planner.html?category=Intentions', cat: 'Intentions' }
+        ];
 
-            // 2b. Inject Binder Rings and Inner Spine
-            if (mainContent && !document.querySelector('.binder-rings')) {
-                const ringsContainer = document.createElement('div');
-                ringsContainer.className = 'binder-rings';
-                for (let i = 0; i < 8; i++) {
-                    const ring = document.createElement('div');
-                    ring.className = 'ring';
-                    ringsContainer.appendChild(ring);
-                }
-                mainContent.appendChild(ringsContainer);
-            }
+        const sidebarHtml = navItems.map(item => {
+            const isActive = currentPath === item.path.split('?')[0] && (!item.cat || category === item.cat);
+            return `<a href="${item.path}" class="sidebar-item ${isActive ? 'active' : ''}">${item.label}</a>`;
+        }).join('');
 
-            if (spread && !document.querySelector('.inner-spine')) {
-                const spine = document.createElement('div');
-                spine.className = 'inner-spine';
-                spread.appendChild(spine);
-            }
-
-            // 3. Auto-initialize Navigation Sidebar if it doesn't exist
-            if (!document.querySelector('.tabs-sidebar')) {
-                const sidebar = document.createElement('div');
-                sidebar.className = 'tabs-sidebar';
-                
-                const urlParams = new URLSearchParams(window.location.search);
-                const category = urlParams.get('category') || '';
-                const path = window.location.pathname;
-                
-                const isIndex = path.endsWith('index.html') || path === '/';
-                const isHOA = category === 'HOA';
-                const isCSEA = category === 'CSEA';
-                const isICAAP = category.toLowerCase().startsWith('icaap');
-                const isFinance = ['Finance', 'Check-Breakdown', 'Monthly-Review'].includes(category);
-                const isPlan = category === 'Planning';
-                
-                const sections = [
-                    { name: 'HOME', url: 'index.html', active: isIndex, color: '#ffffff', textColor: '#000000' },
-                    { name: 'HOA', url: 'planner.html?category=HOA', active: isHOA, color: '#ceabb5', textColor: '#000000' },
-                    { name: 'CSEA', url: 'planner.html?category=CSEA', active: isCSEA, color: '#602537', textColor: '#ffffff' },
-                    { name: 'ICAAP', url: 'icaap.html', active: isICAAP, color: '#1b2c3c', textColor: '#ffffff' },
-                    { name: 'FINANCE', url: 'planner.html?category=Finance', active: isFinance, color: '#464f51', textColor: '#ffffff' },
-                    { name: 'PLAN', url: 'planner.html?category=Planning', active: isPlan, color: '#a8b4b7', textColor: '#000000' }
-                ];
-
-                const activeIndex = sections.findIndex(s => s.active);
-                
-                let html = '';
-                sections.forEach((s, i) => {
-                    const direction = i > activeIndex ? 'next' : 'prev';
-                    html += `<div class="tab ${s.active ? 'active' : ''}" style="--tab-color: ${s.color}; --tab-text-color: ${s.textColor}" onclick="animateAndNavigate(event, '${s.url}', '${direction}')">${s.name}</div>`;
-                });
-                
-                html += `
-                    <div class="logout-btn" onclick="logout()">
-                        <span style="font-size: 20pt; margin-bottom: 5px;">🚪</span>
-                        <span>Logout</span>
+        document.body.innerHTML = `
+            <div class="dashboard-container">
+                <main class="dashboard-main">
+                    <header class="dashboard-header">
+                        <div class="header-left">
+                            <h1 class="header-title">PLANNER 2026</h1>
+                            <button class="header-nav-btn" onclick="window.location.href='index.html?date=${dateStr}'">Today</button>
+                        </div>
+                        <div class="header-right">
+                            <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                        </div>
+                    </header>
+                    <div class="dashboard-body">
+                        ${bodyContent}
                     </div>
-                `;
-                
-                sidebar.innerHTML = html;
-                appMain.appendChild(sidebar);
-            }
+                </main>
+                <aside class="dashboard-sidebar">
+                    ${sidebarHtml}
+                    <div style="flex-grow: 1;"></div>
+                    <a href="logout.html" class="sidebar-item" style="opacity: 0.6;">Logout</a>
+                </aside>
+            </div>
+        `;
 
-            // 4. Initial Animation
-            const panes = document.querySelectorAll('.view-pane');
-            if (panes.length > 0) {
-                const urlParams = new URLSearchParams(window.location.search);
-                const isNav = document.referrer && document.referrer.includes(window.location.hostname);
-                
-                if (isNav) {
-                    // We arrived via internal navigation, so show the flip-in
-                    // Logic: If we came from a 'next' nav, the new left page should flip in.
-                    // If we came from a 'prev' nav, the new right page should flip in.
-                    // This is handled by animateAndNavigate adding classes, but since we are on a new page,
-                    // we can't easily know the direction unless we pass it.
-                    // For now, let's just make sure they are anchored correctly.
-                    panes.forEach(p => {
-                        p.style.transform = 'none';
-                        p.style.opacity = '1';
-                    });
-                } else {
-                    panes.forEach(p => {
-                        p.style.transform = 'none';
-                        p.style.opacity = '1';
-                    });
-                }
-            }
+        // Handle Date Picker
+        const datePicker = document.getElementById('global-date-picker');
+        if (datePicker) {
+            datePicker.addEventListener('change', (e) => {
+                const newDate = e.target.value;
+                const params = new URLSearchParams(window.location.search);
+                params.set('date', newDate);
+                window.location.href = `${window.location.pathname}?${params.toString()}`;
+            });
         }
-    });
 
-    document.addEventListener('click', (e) => {
-        const link = e.target.closest('a');
-        if (link && link.href && !link.target && !link.getAttribute('onclick') && 
-            link.hostname === window.location.hostname && !link.href.includes('#')) {
-            
-            // Check if it's a navigation element
-            const isNav = link.closest('.sidebar') || 
-                          link.closest('.tabs') || 
-                          link.closest('.navigation') ||
-                          link.closest('.nav-buttons') ||
-                          link.classList.contains('section-icon') || 
-                          link.classList.contains('nav-btn') || 
-                          link.classList.contains('sidebar-link') ||
-                          link.classList.contains('tab') ||
-                          link.classList.contains('pill');
-            
-            if (isNav) {
-                animateAndNavigate(e, link.href);
-            }
-        }
+        // Update all links to preserve date
+        updateNavigationLinks(dateStr);
     });
 })();
 
