@@ -134,9 +134,10 @@ async function requireAuth() {
     if (!client) return;
 
     const { data: { session } } = await client.auth.getSession();
+    const isLoginPage = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('/login');
     if (!session) {
         // If on login.html, don't redirect
-        if (!window.location.pathname.endsWith('login.html')) {
+        if (!isLoginPage) {
             window.location.href = 'login.html';
         }
     }
@@ -157,8 +158,11 @@ function setGlobalHeaderTitle(title) {
 }
 
 // Global Auth Check
-if (typeof window !== 'undefined' && !window.location.pathname.endsWith('login.html')) {
-    requireAuth();
+if (typeof window !== 'undefined') {
+    const isLoginPage = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('/login');
+    if (!isLoginPage) {
+        requireAuth();
+    }
 }
 
 // Planner Data Logic
@@ -399,7 +403,7 @@ function animateAndNavigate(event, url, direction = 'next') {
                 <aside class="dashboard-sidebar">
                     ${sidebarHtml}
                     <div style="flex-grow: 1;"></div>
-                    <a href="logout.html" class="sidebar-item" style="opacity: 0.6;">Logout</a>
+                    <a href="#" onclick="logout(); return false;" class="sidebar-item" style="opacity: 0.6;">Logout</a>
                 </aside>
             </div>
         `;
