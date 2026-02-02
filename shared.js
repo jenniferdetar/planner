@@ -236,7 +236,7 @@ function animateAndNavigate(event, url, direction = 'next') {
     style.innerHTML = `
         :root {
             --sidebar-width: 120px;
-            --header-height: 50px;
+            --header-height: 35px;
             --primary-navy: #00326b;
             --accent-gold: #c5a059;
             --bg-light: #f5f7fa;
@@ -278,7 +278,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             text-decoration: none;
             padding: 15px 10px;
             text-align: center;
-            font-size: 8.5pt;
+            font-size: 9pt;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -325,7 +325,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
 
         .header-title {
-            font-size: 14pt;
+            font-size: 9pt;
             font-weight: 700;
             color: var(--primary-navy);
             margin: 0;
@@ -352,15 +352,17 @@ function animateAndNavigate(event, url, direction = 'next') {
 
         .dashboard-body {
             flex: 1;
-            overflow-y: auto;
-            padding: 30px;
+            overflow: hidden;
+            padding: 0;
             background: var(--bg-light);
+            display: flex;
+            flex-direction: column;
         }
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .dashboard-sidebar { width: 70px; }
-            .sidebar-item { font-size: 7pt; padding: 10px 5px; }
+            .sidebar-item { font-size: 9pt; padding: 10px 5px; }
         }
     `;
     document.head.appendChild(style);
@@ -375,7 +377,7 @@ function animateAndNavigate(event, url, direction = 'next') {
     document.addEventListener('DOMContentLoaded', () => {
         if (checkIsLoginPage()) return;
 
-        const bodyContent = document.body.innerHTML;
+        const existingNodes = Array.from(document.body.childNodes);
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         const urlParams = new URLSearchParams(window.location.search);
         const dateStr = urlParams.get('date') || new Date().toISOString().split('T')[0];
@@ -384,11 +386,12 @@ function animateAndNavigate(event, url, direction = 'next') {
         // Create Navigation Links
         const navItems = [
             { label: 'Home', path: 'index.html', icon: '🏠' },
-            { label: 'HOA', path: 'planner.html?category=HOA', cat: 'HOA' },
+            { label: 'HOA', path: 'hoa.html', cat: 'HOA' },
             { label: 'CSEA', path: 'planner.html?category=CSEA', cat: 'CSEA' },
             { label: 'ICAAP', path: 'icaap.html', cat: 'ICAAP' },
-            { label: 'Finance', path: 'planner.html?category=Budget', cat: 'Budget' },
-            { label: 'Planning', path: 'planner.html?category=Intentions', cat: 'Intentions' }
+            { label: 'Finance', path: 'planner.html?category=Finance', cat: 'Finance' },
+            { label: 'Planning', path: 'planner.html?category=Planning', cat: 'Planning' },
+            { label: 'Mantra', path: 'planner.html?category=Mantra', cat: 'Mantra' }
         ];
 
         const sidebarHtml = navItems.map(item => {
@@ -396,29 +399,34 @@ function animateAndNavigate(event, url, direction = 'next') {
             return `<a href="${item.path}" class="sidebar-item ${isActive ? 'active' : ''}">${item.label}</a>`;
         }).join('');
 
-        document.body.innerHTML = `
-            <div class="dashboard-container">
-                <main class="dashboard-main">
-                    <header class="dashboard-header">
-                        <div class="header-left">
-                            <h1 class="header-title">PLANNER 2026</h1>
-                            <button class="header-nav-btn" onclick="window.location.href='index.html?date=${dateStr}'">Today</button>
-                        </div>
-                        <div class="header-right">
-                            <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
-                        </div>
-                    </header>
-                    <div class="dashboard-body">
-                        ${bodyContent}
+        const dashboard = document.createElement('div');
+        dashboard.className = 'dashboard-container';
+        dashboard.innerHTML = `
+            <main class="dashboard-main">
+                <header class="dashboard-header">
+                    <div class="header-left">
+                        <h1 class="header-title">PLANNER 2026</h1>
+                        <button class="header-nav-btn" onclick="window.location.href='index.html?date=${dateStr}'">Today</button>
                     </div>
-                </main>
-                <aside class="dashboard-sidebar">
-                    ${sidebarHtml}
-                    <div style="flex-grow: 1;"></div>
-                    <a href="#" onclick="logout(); return false;" class="sidebar-item" style="opacity: 0.6;">Logout</a>
-                </aside>
-            </div>
+                    <div class="header-right">
+                        <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                    </div>
+                </header>
+                <div class="dashboard-body">
+                </div>
+            </main>
+            <aside class="dashboard-sidebar">
+                ${sidebarHtml}
+                <div style="flex-grow: 1;"></div>
+                <a href="#" onclick="logout(); return false;" class="sidebar-item" style="opacity: 0.6;">Logout</a>
+            </aside>
         `;
+
+        const dashboardBody = dashboard.querySelector('.dashboard-body');
+        existingNodes.forEach(node => dashboardBody.appendChild(node));
+        
+        document.body.innerHTML = '';
+        document.body.appendChild(dashboard);
 
         // Handle Date Picker
         const datePicker = document.getElementById('global-date-picker');
@@ -801,12 +809,12 @@ async function fetchApprovalDates(year) {
 async function fetchPaylogSubmissions(year) {
     const client = getSupabase();
     if (!client) return [];
-    let query = client.from('paylog_submission').select('*');
+    let query = client.from('paylog submission').select('*');
     if (year) query = query.eq('fiscal_year', year);
     const { data, error } = await query;
     if (error) {
         // Fallback if table doesn't exist yet
-        console.warn('paylog_submission table not found, using empty data');
+        console.warn('paylog submission table not found, using empty data');
         return [];
     }
     return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
@@ -831,15 +839,15 @@ async function saveTrackingData(table, name, month, value, year) {
     const client = getSupabase();
     if (!client) return false;
     
-    // Normalize month: lowercase for hours_worked and paylog_submission, Capitalized for others
-    let col = (table === 'hours_worked' || table === 'paylog_submission') ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
+    // Normalize month: lowercase for hours_worked and paylog submission, Capitalized for others
+    let col = (table === 'hours_worked' || table === 'paylog submission') ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
     
     // Override for 'total' column in hours_worked
     if (table === 'hours_worked' && month.toLowerCase() === 'total') {
         col = 'total';
     }
     
-    const nameCol = (table === 'hours_worked' || table === 'paylog_submission') ? 'name' : 'Name';
+    const nameCol = (table === 'hours_worked' || table === 'paylog submission') ? 'name' : 'Name';
     
     // 1. Try exact match first
     let query = client.from(table).select('*').eq(nameCol, name);
@@ -974,7 +982,7 @@ function updateNavigationLinks(date) {
         'hoa.html': 'HOA',
         'mantra.html': 'Mantra',
         'personal-goals.html': 'Goals',
-        'planning.html': 'Intentions',
+        'planning.html': 'Planning',
         'work-planner.html': 'Work-Planner',
         'personal-planner.html': 'Personal-Planner'
     };
