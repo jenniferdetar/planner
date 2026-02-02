@@ -4,66 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hoa - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
         :root {
             --header-blue: #00326b;
             --border-color: #e1dfdd;
-            --section-sidebar-width: 60px;
+            --section-sidebar-width: 220px;
+            --sidebar-dark: #2b2d31;
         }
         /* HOA Specific Styles */
         .notebook-container {
             display: flex;
-            flex-grow: 1;
-            overflow: hidden;
+            height: 100%;
+            width: 100%;
             background: #fff;
+            overflow: hidden;
         }
-        /* Vertical Sidebar */
+        /* Vertical Sub-Sidebar */
         .section-sidebar {
             width: var(--section-sidebar-width);
-            background: #1e3a63;
+            background: var(--sidebar-dark);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            gap: 15px;
+            padding-top: 15px;
             flex-shrink: 0;
             box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
         }
-        .section-icon {
-            width: 42px;
-            height: 42px;
+        .section-link {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 10pt;
-            transition: all 0.2s ease;
+            padding: 10px 15px;
+            color: #b5bac1;
             text-decoration: none;
+            font-size: 9pt;
+            font-family: 'Coming Soon', cursive;
+            transition: all 0.2s ease;
+            gap: 12px;
+        }
+        .section-link:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+        .section-link.active {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+        .section-link svg {
+            width: 18px;
+            height: 18px;
             opacity: 0.7;
         }
-        .section-icon:hover {
-            background: rgba(255,255,255,0.1);
+        .section-link:hover svg, .section-link.active svg {
             opacity: 1;
-            transform: scale(1.05);
-        }
-        .section-icon.active {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            opacity: 1;
-        }
-        .section-icon.logout-icon {
-            margin-top: auto;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        .section-icon.logout-icon:hover {
-            opacity: 1;
-            color: #ffcdd2;
         }
 
         .notebook-main {
@@ -75,17 +69,14 @@
         }
         .notebook-page {
             width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px 20px !important;
-            background: #fff;
+            padding: 20px !important;
             box-sizing: border-box;
             min-height: 100%;
         }
 
         .page-title {
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             color: var(--header-blue);
             margin: 0 0 10px 0;
             letter-spacing: 3px;
@@ -116,7 +107,7 @@
             width: 100%;
             height: 120px;
             font-family: 'Coming Soon', cursive;
-            font-size: 1.1rem;
+            font-size: 9pt;
             padding: 15px;
             border: 1px solid #e1dfdd;
             border-radius: 4px;
@@ -137,7 +128,7 @@
             cursor: pointer;
             font-family: 'Coming Soon', cursive;
             font-weight: 600;
-            font-size: 10pt;
+            font-size: 9pt;
             transition: opacity 0.2s;
         }
 
@@ -145,10 +136,36 @@
             opacity: 0.9;
         }
 
+        body {
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 20px;
+            height: 100%;
+            box-sizing: border-box;
+            min-height: 0;
+        }
+        .notes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
+        }
         .entries-list {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
         }
 
         .note-entry {
@@ -167,7 +184,7 @@
         .entry-header {
             display: flex;
             justify-content: space-between;
-            font-size: 10pt;
+            font-size: 9pt;
             color: #a19f9d;
             margin-bottom: 12px;
             font-family: 'Coming Soon', cursive;
@@ -180,7 +197,7 @@
             white-space: pre-wrap;
             line-height: 1.6;
             font-family: 'Coming Soon', cursive;
-            font-size: 1.1rem;
+            font-size: 9pt;
             color: #333;
             outline: none;
         }
@@ -196,45 +213,134 @@
         }
 
         .save-status-inline {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #a19f9d;
             height: 15px;
         }
     </style>
 </head>
 <body>
-    <div style="padding: 20px;">
-        <h1 class="page-title">Hoa Notes</h1>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-            <div class="notes-section">
-                <div class="input-group">
-                    <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div id="save-status" class="save-status-inline">All changes saved</div>
-                        <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+    <div class="notebook-container">
+        <!-- HOA Sub-Navigation Sidebar -->
+        <div class="section-sidebar">
+            <a href="?section=open-items" class="section-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="3" y1="15" x2="21" y2="15"></line>
+                    <line x1="9" y1="3" x2="9" y2="21"></line>
+                    <line x1="15" y1="3" x2="15" y2="21"></line>
+                </svg>
+                <span>Open Items</span>
+            </a>
+            <a href="?section=financials" class="section-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Financials</span>
+            </a>
+            <a href="?section=incidents" class="section-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Incidents</span>
+            </a>
+            <a href="?section=insurance" class="section-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Insurance</span>
+            </a>
+            <a href="?section=legal" class="section-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Legal</span>
+            </a>
+            <a href="?section=maintenance" class="section-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Maintaince & Repairs</span>
+            </a>
+        </div>
+
+        <!-- Main Content Wrapper -->
+        <div class="notebook-main">
+            <div class="notebook-page">
+                <h1 class="page-title">Hoa Notes</h1>
+                <div class="notes-grid">
+                    <div class="notes-section">
+                        <div class="input-group">
+                            <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div id="save-status" class="save-status-inline">All changes saved</div>
+                                <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="entries-list" class="entries-list">
+                        <!-- Entries will be loaded here -->
                     </div>
                 </div>
-            </div>
-            <div id="entries-list" class="entries-list">
-                <!-- Entries will be loaded here -->
             </div>
         </div>
     </div>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
+        const section = urlParams.get('section') || 'open-items';
         const dateParam = urlParams.get('date');
         const displayDate = dateParam ? new Date(dateParam) : new Date();
         const currentYear = displayDate.getFullYear();
-        const CATEGORY = `HOA-${currentYear}`;
-        const PERSISTENCE_KEY = `draft-note-hoa-${currentYear}`;
         
+        // Dynamic Category based on section
+        const CATEGORY = section === 'open-items' ? `HOA-${currentYear}` : `HOA-${section}-${currentYear}`;
+        const PERSISTENCE_KEY = `draft-note-hoa-${section}-${currentYear}`;
+        
+        // Update Sidebar Active State
+        document.querySelectorAll('.section-link').forEach(link => {
+            if (link.getAttribute('href').includes(section)) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
         const saveStatus = document.getElementById('save-status');
         let saveTimeout = null;
 
         // Update Title
-        document.querySelector('.page-title').innerText = `Hoa Notes ${currentYear}`;
+        const sectionLabels = {
+            'open-items': 'Open Items',
+            'financials': 'Financials',
+            'incidents': 'Incidents',
+            'insurance': 'Insurance',
+            'legal': 'Legal',
+            'maintenance': 'Maintaince & Repairs'
+        };
+        document.querySelector('.page-title').innerText = `Hoa ${sectionLabels[section] || 'Notes'} ${currentYear}`;
 
         function createEntryElement(entry) {
             const div = document.createElement('div');
