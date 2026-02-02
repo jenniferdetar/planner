@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Planner - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Coming+Soon;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -26,7 +26,7 @@
         /* Modern Typography */
         h2 {
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             font-weight: 700;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -50,7 +50,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .habit-title {
-            font-size: 10pt;
+            font-size: 9pt;
             margin-bottom: 15px;
             font-weight: 700;
             text-transform: uppercase;
@@ -66,7 +66,7 @@
             margin-bottom: 10px;
         }
         .habit-label {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #323130;
             font-family: 'Coming Soon', cursive;
         }
@@ -106,7 +106,7 @@
         .mini-day-box.checked::after {
             content: "✓";
             color: white;
-            font-size: 11px;
+            font-size: 9pt;
             font-weight: bold;
         }
 
@@ -118,7 +118,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         .day-header {
-            font-size: 10pt;
+            font-size: 9pt;
             text-transform: uppercase;
             padding: 12px 20px;
             font-weight: 700;
@@ -157,8 +157,8 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 4px;
         }
-        .sidebar-icon { font-size: 10pt; width: 20px; }
-        .sidebar-line { flex-grow: 1; min-height: 20px; outline: none; font-family: 'Coming Soon', cursive; font-size: 1.1rem; }
+        .sidebar-icon { font-size: 9pt; width: 20px; }
+        .sidebar-line { flex-grow: 1; min-height: 20px; outline: none; font-family: 'Coming Soon', cursive; font-size: 9pt; }
 
         .task-line {
             display: flex;
@@ -180,16 +180,16 @@
         .check-box.checked::after {
             content: "✓";
             color: var(--header-blue);
-            font-size: 14px;
+            font-size: 9pt;
             font-weight: 600;
         }
-        .editable-task { flex-grow: 1; outline: none; font-family: 'Coming Soon', cursive; font-size: 1.1rem; }
+        .editable-task { flex-grow: 1; outline: none; font-family: 'Coming Soon', cursive; font-size: 9pt; }
 
         .enjoy-banner {
             background-color: var(--sun-bg);
             color: white;
             text-align: center;
-            font-size: 10pt;
+            font-size: 9pt;
             padding: 8px;
             margin: 20px 0;
             letter-spacing: 3px;
@@ -203,14 +203,14 @@
             padding: 6px 15px;
             cursor: pointer;
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             border-radius: 4px;
             transition: all 0.2s;
         }
         .nav-btn:hover { background: #f3f2f1; }
 
         .save-status {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #605e5c;
             font-family: 'Coming Soon', cursive;
         }
@@ -219,7 +219,7 @@
             background: #f3f2f1;
             border-radius: 4px;
             padding: 4px 10px;
-            font-size: 10pt;
+            font-size: 9pt;
             margin-bottom: 4px;
             border-left: 4px solid #ddd;
         }
@@ -229,41 +229,43 @@
     </style>
 </head>
 <body>
-    <div style="padding: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div style="padding: 10px; height: 100%; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
             <div id="save-status" class="save-status">All changes saved</div>
         </div>
-        <div class="habit-grid">
+        <div class="habit-grid" style="margin-bottom: 10px;">
             <div class="habit-section">
                 <div class="habit-title">Weekly Habits</div>
-                <div class="mini-week-row">
-                    <div class="habit-label">Exercise</div>
-                    <div class="mini-week-days">
-                        <div class="mini-day-box sun"></div>
-                        <div class="mini-day-box mon"></div>
-                        <div class="mini-day-box tue"></div>
-                        <div class="mini-day-box wed"></div>
-                        <div class="mini-day-box thu"></div>
-                        <div class="mini-day-box fri"></div>
-                        <div class="mini-day-box sat"></div>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div class="mini-week-row">
+                        <div class="habit-label">Exercise</div>
+                        <div class="mini-week-days">
+                            <div class="mini-day-box sun"></div>
+                            <div class="mini-day-box mon"></div>
+                            <div class="mini-day-box tue"></div>
+                            <div class="mini-day-box wed"></div>
+                            <div class="mini-day-box thu"></div>
+                            <div class="mini-day-box fri"></div>
+                            <div class="mini-day-box sat"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="mini-week-row">
-                    <div class="habit-label">Vitamins</div>
-                    <div class="mini-week-days">
-                        <div class="mini-day-box sun"></div>
-                        <div class="mini-day-box mon"></div>
-                        <div class="mini-day-box tue"></div>
-                        <div class="mini-day-box wed"></div>
-                        <div class="mini-day-box thu"></div>
-                        <div class="mini-day-box fri"></div>
-                        <div class="mini-day-box sat"></div>
+                    <div class="mini-week-row">
+                        <div class="habit-label">Vitamins</div>
+                        <div class="mini-week-days">
+                            <div class="mini-day-box sun"></div>
+                            <div class="mini-day-box mon"></div>
+                            <div class="mini-day-box tue"></div>
+                            <div class="mini-day-box wed"></div>
+                            <div class="mini-day-box thu"></div>
+                            <div class="mini-day-box fri"></div>
+                            <div class="mini-day-box sat"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="planner-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
+        <div id="planner-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; flex: 1; min-height: 0; overflow-y: auto;">
             <!-- Days will be injected here -->
         </div>
     </div>

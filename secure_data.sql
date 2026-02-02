@@ -13,7 +13,7 @@ DECLARE
         'csea_members',
         'hours_worked',
         'approval_dates',
-        'paylog_submission'
+        'paylog submission'
     ];
 BEGIN
     FOR t IN SELECT unnest(tables) LOOP

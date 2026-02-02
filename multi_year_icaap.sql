@@ -5,15 +5,15 @@
 -- 1. Add fiscal_year column
 ALTER TABLE "hours_worked" ADD COLUMN IF NOT EXISTS fiscal_year INTEGER DEFAULT 2025;
 ALTER TABLE "approval_dates" ADD COLUMN IF NOT EXISTS fiscal_year INTEGER DEFAULT 2025;
-ALTER TABLE "paylog_submission" ADD COLUMN IF NOT EXISTS fiscal_year INTEGER DEFAULT 2025;
+ALTER TABLE "paylog submission" ADD COLUMN IF NOT EXISTS fiscal_year INTEGER DEFAULT 2025;
 
 -- 2. Update constraints to allow the same name in different years
 -- We try to drop existing name-only unique constraints if they exist
 DO $$ 
 BEGIN 
-    -- paylog_submission
-    IF EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name='paylog_submission_name_key') THEN
-        ALTER TABLE "paylog_submission" DROP CONSTRAINT paylog_submission_name_key;
+    -- paylog submission
+    IF EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name='paylog submission_name_key') THEN
+        ALTER TABLE "paylog submission" DROP CONSTRAINT paylog submission_name_key;
     END IF;
     
     -- hours_worked
@@ -28,6 +28,6 @@ BEGIN
 END $$;
 
 -- 3. Add new composite unique constraints
-ALTER TABLE "paylog_submission" ADD CONSTRAINT paylog_submission_name_year_key UNIQUE (name, fiscal_year);
+ALTER TABLE "paylog submission" ADD CONSTRAINT paylog submission_name_year_key UNIQUE (name, fiscal_year);
 ALTER TABLE "hours_worked" ADD CONSTRAINT hours_worked_name_year_key UNIQUE (name, fiscal_year);
 ALTER TABLE "approval_dates" ADD CONSTRAINT approval_dates_name_year_key UNIQUE ("Name", fiscal_year);

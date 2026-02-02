@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planning - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Coming+Soon;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -29,66 +29,130 @@
         .page-title {
             color: #323130;
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             font-weight: 700;
             margin: 0;
             letter-spacing: 3px;
             text-transform: uppercase;
         }
         .intro-text {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #666;
             width: 100%;
             margin: 0 auto;
             line-height: 1.4;
             text-align: center;
         }
-        .top-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        body {
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .app-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .notebook-spread {
+            display: flex;
+            flex: 1;
+            width: 100%;
             gap: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
+            overflow: hidden;
+            min-height: 0;
+        }
+        .view-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 20px;
+            min-height: 0;
         }
         .section-box {
             background-color: var(--tan-bg);
-            padding: 20px;
+            padding: 10px 15px;
             border: 1px solid #eee;
             border-radius: 4px;
-        }
-        .section-prompt {
-            font-size: 10pt;
-            font-weight: 600;
             margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        .section-prompt span {
-            font-weight: normal;
         }
         .ruled-line {
             border-bottom: 1px solid #ddd;
-            margin-bottom: 8px;
-            min-height: 24px;
+            margin-bottom: 5px;
+            min-height: 20px;
             width: 100%;
             display: flex;
             align-items: center;
         }
-        .editable-area {
-            outline: none;
-            width: 100%;
-            font-size: 1.1rem;
-            font-family: 'Coming Soon', cursive;
+        .top-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .full-width-prompt {
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .dream-big-title {
+            font-size: 9pt;
+            font-weight: 600;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            border-bottom: 2px solid #333;
+            display: inline-block;
+        }
+        .dream-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid #ddd;
+            flex: 1;
+            min-height: 0;
+        }
+        .dream-box {
+            padding: 10px;
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+        .dream-box .editable-area {
+            flex: 1;
         }
         .checkbox-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+        .section-prompt {
+            font-size: 9pt;
+            font-weight: 600;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+        .section-prompt span {
+            font-weight: normal;
+        }
+        .editable-area {
+            outline: none;
+            width: 100%;
+            font-size: 9pt;
+            font-family: 'Coming Soon', cursive;
         }
         .checkbox-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 10pt;
+            font-size: 9pt;
             cursor: pointer;
         }
         .checkbox {
@@ -103,69 +167,34 @@
         }
         .checkbox.checked::after {
             content: "■";
-            font-size: 10px;
-        }
-        .full-width-prompt {
-            margin-top: 30px;
-            margin-bottom: 15px;
+            font-size: 9px;
         }
         .prompt-text {
-            font-size: 10pt;
+            font-size: 9pt;
             margin-bottom: 5px;
         }
-        .dream-big-title {
-            font-size: 10pt;
-            font-weight: 600;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #333;
-            display: inline-block;
-        }
-        .dream-big-title span {
-            font-weight: normal;
-            font-size: 10pt;
-        }
-        .dream-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-            border: 1px solid #ddd;
-        }
-        .dream-box {
-            padding: 15px;
-            border: 1px solid #ddd;
-            min-height: 100px;
-        }
         .dream-label {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #888;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             text-transform: uppercase;
         }
         .footer-prompts {
-            margin-top: 25px;
+            margin-top: 10px;
         }
         .footer-prompt-item {
             display: flex;
             align-items: baseline;
             gap: 10px;
-            font-size: 10pt;
-            margin-bottom: 10px;
-        }
-        .footer-prompt-item .ruled-line {
-            flex-grow: 1;
+            font-size: 9pt;
+            margin-bottom: 5px;
         }
         .save-status {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #888;
             height: 15px;
             text-align: center;
             margin-top: 5px;
-        }
-        .left-col, .right-col {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
         }
     </style>
 </head>

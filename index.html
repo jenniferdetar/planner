@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Planner</title>
     <!-- v2.2.0 -->
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -122,6 +122,7 @@
             width: 100%;
             height: 100%;
             padding: 0;
+            overflow-y: auto;
         }
 
         .calendar-grid {
@@ -134,11 +135,13 @@
             flex: 1;
             min-height: 0;
             border-radius: 8px;
+            height: auto;
+            min-height: 100%;
         }
 
         .day-header {
             text-align: center;
-            padding: 12px 5px;
+            padding: 2px 5px;
             text-transform: uppercase;
             font-weight: 700;
             color: #fff;
@@ -157,7 +160,6 @@
         .day-header.sat { background-color: var(--sat-bg); }
 
         .calendar-day {
-            min-height: 120px;
             padding: 8px;
             position: relative;
             background-color: #fff;
@@ -166,6 +168,7 @@
             gap: 4px;
             border-right: 1px solid #eee;
             border-bottom: 1px solid #eee;
+            overflow: hidden;
         }
 
         .calendar-day:nth-child(7n) {
@@ -221,7 +224,7 @@
 
         .handwriting {
             font-family: 'Coming Soon', cursive;
-            font-size: 11pt;
+            font-size: 9pt;
             color: #4a3427;
         }
     </style>
@@ -273,7 +276,7 @@
             const totalSlots = firstDayOfMonth + daysInMonth;
             const totalRows = Math.ceil(totalSlots / 7);
             
-            grid.style.gridTemplateRows = `auto repeat(${totalRows}, minmax(120px, auto))`;
+            grid.style.gridTemplateRows = `auto repeat(${totalRows}, 20%)`;
 
             for (let index = 0; index < totalRows * 7; index++) {
                 if (index < firstDayOfMonth || index >= totalSlots) {
@@ -291,7 +294,7 @@
                     dayNum.className = 'day-number';
                     dayNum.style.cursor = 'pointer';
                     dayNum.title = 'View week in Work Planner';
-                    dayNum.onclick = () => window.location.href = `planner.html?category=Work-Planner&date=${dateKey}`;
+                    dayNum.onclick = () => window.location.href = `work-planner.html?date=${dateKey}`;
                     dayNum.innerText = i;
                     dayDiv.appendChild(dayNum);
 

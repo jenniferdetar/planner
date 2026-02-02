@@ -10,13 +10,13 @@ async function runMigration() {
     console.log('--- STARTING PAYLOG MIGRATION ---');
     
     // Fetch data from both tables
-    console.log('Fetching data from "paylog_submission" (UUID)...');
-    const { data: uuidData, error: uuidError } = await supabase.from('paylog_submission').select('*');
+    console.log('Fetching data from "paylog submission" (UUID)...');
+    const { data: uuidData, error: uuidError } = await supabase.from('paylog submission').select('*');
     if (uuidError) {
         console.error('Error fetching uuidData:', uuidError);
         return;
     }
-    console.log(`Found ${uuidData.length} records in "paylog_submission".`);
+    console.log(`Found ${uuidData.length} records in "paylog submission".`);
 
     console.log('Fetching data from "paylog submission" (Numeric)...');
     const { data: numData, error: numError } = await supabase.from('paylog submission').select('*');

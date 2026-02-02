@@ -5,8 +5,8 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function debug() {
-    console.log('--- Fetching paylog_submission ---');
-    const { data: paylog, error: e1 } = await supabase.from('paylog_submission').select('*').limit(5);
+    console.log('--- Fetching paylog submission ---');
+    const { data: paylog, error: e1 } = await supabase.from('paylog submission').select('*').limit(5);
     console.log('Data:', paylog);
     if (e1) console.error('Error:', e1.message);
 

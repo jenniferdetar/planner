@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Personal Goals - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -30,64 +30,51 @@
 
         .notebook-page {
             width: 100%;
+            height: 100%;
             padding: 10px 20px !important;
             background: #fff;
             position: relative;
             box-sizing: border-box;
-            min-height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #e1dfdd;
-            padding-bottom: 10px;
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
         }
 
-        .page-title {
-            color: #323130;
-            font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
-            font-weight: 700;
-            margin: 0;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-        .intro-text {
-            font-size: 10pt;
-            line-height: 1.5;
-            color: #555;
-            margin: 0 auto;
-        }
         .goal-box {
             display: flex;
             flex-direction: column;
-            margin-bottom: 20px;
+            min-height: 0;
         }
+
         .goal-header {
             text-align: center;
-            padding: 8px;
-            font-size: 10pt;
+            padding: 5px;
+            font-size: 9pt;
             border: 1px solid #eee;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             font-weight: 600;
             text-transform: uppercase;
         }
-        .goal-header.blue { background-color: var(--light-blue); }
-        .goal-header.pink { background-color: var(--light-pink); }
-        .goal-header.tan { background-color: var(--light-tan); }
 
         .ruled-line {
             border-bottom: 1px solid #eee;
-            min-height: 28px;
+            flex: 1;
             display: flex;
             align-items: center;
             padding: 0 5px;
+            min-height: 20px;
         }
         .editable-area {
             width: 100%;
             outline: none;
-            font-size: 1.1rem;
+            font-size: 9pt;
             font-family: 'Coming Soon', cursive;
         }
         .total-section {
@@ -98,7 +85,7 @@
         }
         .total-label {
             font-weight: 600;
-            font-size: 10pt;
+            font-size: 9pt;
             text-transform: uppercase;
         }
         .total-box {
@@ -109,29 +96,55 @@
             align-items: center;
             padding: 0 10px;
             font-family: 'Coming Soon', cursive;
-            font-size: 1.1rem;
+            font-size: 9pt;
         }
         .save-status-inline {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #888;
             margin-top: 10px;
+        }
+        .goal-header.blue { background-color: var(--light-blue); }
+        .goal-header.pink { background-color: var(--light-pink); }
+        .goal-header.tan { background-color: var(--light-tan); }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #e1dfdd;
+            padding-bottom: 5px;
+        }
+
+        .page-title {
+            color: #323130;
+            font-family: 'Coming Soon', cursive;
+            font-size: 9pt;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .intro-text {
+            font-size: 9pt;
+            line-height: 1.2;
+            color: #555;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <div style="padding: 20px;">
+    <div class="notebook-page">
         <div class="page-header">
             <h1 class="page-title" id="goals-title">My Personal Goals</h1>
-            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 15px;">
+            <div style="margin-top: 10px; display: flex; justify-content: center; gap: 15px;">
                 <a href="planning.html" class="nav-btn">Intentions & Dreams</a>
                 <a href="monthly-review.html" class="nav-btn">Monthly Review</a>
             </div>
-            <p class="intro-text" style="max-width: 800px; margin: 10px auto;">
+            <p class="intro-text" style="margin: 5px auto;">
                 What one thing do you want to be intentional about this year? Determine one way to clearly define success.
             </p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+        <div class="goals-grid">
             <div>
                 <div class="goal-box">
                     <div class="goal-header blue">Physical</div>

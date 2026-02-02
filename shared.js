@@ -387,15 +387,16 @@ function animateAndNavigate(event, url, direction = 'next') {
         const navItems = [
             { label: 'Home', path: 'index.html', icon: '🏠' },
             { label: 'HOA', path: 'hoa.html', cat: 'HOA' },
-            { label: 'CSEA', path: 'planner.html?category=CSEA', cat: 'CSEA' },
+            { label: 'CSEA', path: 'csea.html', cat: 'CSEA' },
             { label: 'ICAAP', path: 'icaap.html', cat: 'ICAAP' },
-            { label: 'Finance', path: 'planner.html?category=Finance', cat: 'Finance' },
-            { label: 'Planning', path: 'planner.html?category=Planning', cat: 'Planning' },
-            { label: 'Mantra', path: 'planner.html?category=Mantra', cat: 'Mantra' }
+            { label: 'Finance', path: 'financial.html', cat: 'Finance' },
+            { label: 'Planning', path: 'planning.html', cat: 'Planning' },
+            { label: 'Mantra', path: 'mantra.html', cat: 'Mantra' }
         ];
 
         const sidebarHtml = navItems.map(item => {
-            const isActive = currentPath === item.path.split('?')[0] && (!item.cat || category === item.cat);
+            const itemPath = item.path.split('?')[0];
+            const isActive = currentPath === itemPath;
             return `<a href="${item.path}" class="sidebar-item ${isActive ? 'active' : ''}">${item.label}</a>`;
         }).join('');
 

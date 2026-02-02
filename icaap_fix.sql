@@ -1,6 +1,6 @@
 
 -- 1. Create Paylog_Submission table (lowercase to match shared.js)
-CREATE TABLE IF NOT EXISTS "paylog_submission" (
+CREATE TABLE IF NOT EXISTS "paylog submission" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT UNIQUE NOT NULL,
     jul TEXT DEFAULT '',
@@ -19,17 +19,17 @@ CREATE TABLE IF NOT EXISTS "paylog_submission" (
 );
 
 -- 2. Enable RLS on all iCAAP tables
-ALTER TABLE "paylog_submission" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "paylog submission" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "hours_worked" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "approval_dates" ENABLE ROW LEVEL SECURITY;
 
--- 3. Create public policies for paylog_submission
-DROP POLICY IF EXISTS "Allow public read paylog_submission" ON "paylog_submission";
-CREATE POLICY "Allow public read paylog_submission" ON "paylog_submission" FOR SELECT TO public USING (true);
-DROP POLICY IF EXISTS "Allow public insert paylog_submission" ON "paylog_submission";
-CREATE POLICY "Allow public insert paylog_submission" ON "paylog_submission" FOR INSERT TO public WITH CHECK (true);
-DROP POLICY IF EXISTS "Allow public update paylog_submission" ON "paylog_submission";
-CREATE POLICY "Allow public update paylog_submission" ON "paylog_submission" FOR UPDATE TO public USING (true) WITH CHECK (true);
+-- 3. Create public policies for paylog submission
+DROP POLICY IF EXISTS "Allow public read paylog submission" ON "paylog submission";
+CREATE POLICY "Allow public read paylog submission" ON "paylog submission" FOR SELECT TO public USING (true);
+DROP POLICY IF EXISTS "Allow public insert paylog submission" ON "paylog submission";
+CREATE POLICY "Allow public insert paylog submission" ON "paylog submission" FOR INSERT TO public WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow public update paylog submission" ON "paylog submission";
+CREATE POLICY "Allow public update paylog submission" ON "paylog submission" FOR UPDATE TO public USING (true) WITH CHECK (true);
 
 -- 4. Create public policies for hours_worked
 DROP POLICY IF EXISTS "Allow public read hours_worked" ON "hours_worked";

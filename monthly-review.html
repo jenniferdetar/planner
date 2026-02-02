@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monthly Review - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
@@ -20,7 +20,7 @@
         }
         .celebrate-text {
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: #605e5c;
@@ -29,7 +29,7 @@
         }
         .page-title {
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             color: var(--header-blue);
             margin: 0 0 10px 0;
             letter-spacing: 3px;
@@ -37,7 +37,7 @@
             text-transform: uppercase;
         }
         .intro-text {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #605e5c;
             margin: 0 auto 10px auto;
             line-height: 1.6;
@@ -50,7 +50,7 @@
         }
         .month-input {
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             padding: 8px 15px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
@@ -59,39 +59,70 @@
             color: #323130;
         }
         .save-status-inline {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #a19f9d;
             margin-top: 15px;
         }
 
+        body {
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .review-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 20px;
+            height: 100%;
+            box-sizing: border-box;
+            min-height: 0;
+        }
+        .review-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
+        }
+        .review-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 0;
+        }
         .review-box {
             background-color: #fff;
             border: 1px solid #e1dfdd;
             border-radius: 8px;
-            padding: 15px;
+            padding: 10px 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 5px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            flex: 1;
+            min-height: 0;
+        }
+        .editable-area {
+            flex: 1;
+            font-family: 'Coming Soon', cursive;
+            font-size: 9pt;
+            outline: none;
+            line-height: 1.4;
+            color: #333;
+            overflow-y: auto;
         }
         .box-title {
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             font-weight: 700;
             color: #323130;
             text-transform: uppercase;
             letter-spacing: 1px;
             border-bottom: 1px solid #f3f2f1;
-            padding-bottom: 8px;
-        }
-        .editable-area {
-            min-height: 80px;
-            font-family: 'Coming Soon', cursive;
-            font-size: 1.1rem;
-            outline: none;
-            line-height: 1.4;
-            color: #333;
+            padding-bottom: 5px;
         }
         .nav-btn {
             background: none;
@@ -99,7 +130,7 @@
             padding: 2px 12px;
             cursor: pointer;
             font-family: 'Coming Soon', cursive;
-            font-size: 10pt;
+            font-size: 9pt;
             border-radius: 12px;
             text-decoration: none;
             color: inherit;
@@ -108,13 +139,13 @@
     </style>
 </head>
 <body>
-    <div style="padding: 20px;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-            <div>
+    <div class="review-container">
+        <div class="review-grid">
+            <div class="review-column">
                 <div class="review-header">
                     <div class="celebrate-text">Celebrate Your Success</div>
                     <h1 class="page-title">Monthly Review</h1>
-                    <div style="margin-bottom: 15px; display: flex; justify-content: center; gap: 15px;">
+                    <div style="margin-bottom: 10px; display: flex; justify-content: center; gap: 15px;">
                         <a href="personal-goals.html" class="nav-btn">Personal Goals</a>
                         <a href="planning.html" class="nav-btn">Intentions & Dreams</a>
                     </div>
@@ -134,7 +165,7 @@
                     <div class="editable-area" contenteditable="true" id="review-different" data-field="review-different"></div>
                 </div>
             </div>
-            <div>
+            <div class="review-column">
                 <div class="review-box">
                     <div class="box-title">What did you do that was fun?</div>
                     <div class="editable-area" contenteditable="true" id="review-fun" data-field="review-fun"></div>
@@ -151,7 +182,7 @@
                     <div class="box-title">Looking forward to...</div>
                     <div class="editable-area" contenteditable="true" id="review-forward" data-field="review-forward"></div>
                 </div>
-                <div id="save-status" class="save-status-inline" style="text-align: right;">All changes saved</div>
+                <div id="save-status" class="save-status-inline" style="text-align: right; margin-top: 5px;">All changes saved</div>
             </div>
         </div>
     </div>
