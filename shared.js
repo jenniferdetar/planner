@@ -248,6 +248,9 @@ function animateAndNavigate(event, url, direction = 'next') {
             margin: 0;
             padding: 0;
             font-family: 'Coming Soon', cursive;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 13px;
             background: var(--bg-light);
             display: flex;
             height: 100vh;
@@ -278,7 +281,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             text-decoration: none;
             padding: 15px 10px;
             text-align: center;
-            font-size: 9pt;
+            font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -325,8 +328,8 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
 
         .header-title {
-            font-size: 9pt;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 600;
             color: var(--primary-navy);
             margin: 0;
             letter-spacing: 1px;
@@ -339,7 +342,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             padding: 6px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 9pt;
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-dark);
             transition: all 0.2s;
@@ -362,7 +365,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .dashboard-sidebar { width: 70px; }
-            .sidebar-item { font-size: 9pt; padding: 10px 5px; }
+            .sidebar-item { font-size: 12px; padding: 10px 5px; }
         }
     `;
     document.head.appendChild(style);
