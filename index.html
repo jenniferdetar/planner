@@ -107,6 +107,17 @@
             opacity: 0.8;
         }
 
+        body {
+            font-family: 'Coming Soon', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
         .calendar-container {
             width: 100%;
             height: 100%;
@@ -123,7 +134,6 @@
             flex: 1;
             min-height: 0;
             border-radius: 8px;
-            overflow: hidden;
         }
 
         .day-header {
@@ -135,6 +145,7 @@
             letter-spacing: 1px;
             font-size: 9pt;
             border-bottom: 1px solid var(--border-color);
+            font-family: 'Coming Soon', cursive;
         }
 
         .day-header.sun { background-color: var(--sun-bg); }
@@ -146,15 +157,13 @@
         .day-header.sat { background-color: var(--sat-bg); }
 
         .calendar-day {
-            height: 120px;
+            min-height: 120px;
             padding: 8px;
             position: relative;
             background-color: #fff;
             display: flex;
             flex-direction: column;
             gap: 4px;
-            min-height: 0;
-            overflow: hidden;
             border-right: 1px solid #eee;
             border-bottom: 1px solid #eee;
         }
@@ -168,7 +177,7 @@
             font-weight: 700;
             color: #333;
             margin-bottom: 0px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Coming Soon', cursive;
             line-height: 1;
         }
 
@@ -176,7 +185,6 @@
             display: flex;
             flex-direction: column;
             gap: 1px;
-            overflow-y: auto;
             flex: 1;
         }
 
@@ -194,6 +202,7 @@
             display: block;
             width: 100%;
             font-weight: 500;
+            font-family: 'Coming Soon', cursive;
         }
 
         .empty-day {
@@ -264,7 +273,7 @@
             const totalSlots = firstDayOfMonth + daysInMonth;
             const totalRows = Math.ceil(totalSlots / 7);
             
-            grid.style.gridTemplateRows = `auto repeat(${totalRows}, 120px)`;
+            grid.style.gridTemplateRows = `auto repeat(${totalRows}, minmax(120px, auto))`;
 
             for (let index = 0; index < totalRows * 7; index++) {
                 if (index < firstDayOfMonth || index >= totalSlots) {

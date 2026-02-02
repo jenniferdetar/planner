@@ -247,7 +247,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Coming Soon', cursive;
             background: var(--bg-light);
             display: flex;
             height: 100vh;
@@ -270,6 +270,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             gap: 10px;
             box-shadow: -2px 0 10px rgba(0,0,0,0.1);
             order: 2; /* Move to right side */
+            font-family: 'Coming Soon', cursive;
         }
 
         .sidebar-item {
@@ -283,6 +284,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             letter-spacing: 1px;
             transition: all 0.2s;
             border-left: 4px solid transparent;
+            font-family: 'Coming Soon', cursive;
         }
 
         .sidebar-item:hover {
@@ -328,6 +330,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             color: var(--primary-navy);
             margin: 0;
             letter-spacing: 1px;
+            font-family: 'Coming Soon', cursive;
         }
 
         .header-nav-btn {
@@ -340,6 +343,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             font-weight: 600;
             color: var(--text-dark);
             transition: all 0.2s;
+            font-family: 'Coming Soon', cursive;
         }
 
         .header-nav-btn:hover {
