@@ -129,12 +129,19 @@ function getSupabase() {
 }
 
 // Auth Logic
+function checkIsLoginPage() {
+    const path = window.location.pathname;
+    return path.endsWith('login.html') || 
+           path.endsWith('/login') || 
+           path === '/login/';
+}
+
 async function requireAuth() {
     const client = getSupabase();
     if (!client) return;
 
     const { data: { session } } = await client.auth.getSession();
-    const isLoginPage = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('/login');
+    const isLoginPage = checkIsLoginPage();
     if (!session) {
         // If on login.html, don't redirect
         if (!isLoginPage) {
@@ -159,8 +166,7 @@ function setGlobalHeaderTitle(title) {
 
 // Global Auth Check
 if (typeof window !== 'undefined') {
-    const isLoginPage = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('/login');
-    if (!isLoginPage) {
+    if (!checkIsLoginPage()) {
         requireAuth();
     }
 }
@@ -363,6 +369,8 @@ function animateAndNavigate(event, url, direction = 'next') {
 
     // Initialize Dashboard Wrapper
     document.addEventListener('DOMContentLoaded', () => {
+        if (checkIsLoginPage()) return;
+
         const bodyContent = document.body.innerHTML;
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         const urlParams = new URLSearchParams(window.location.search);
