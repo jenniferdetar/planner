@@ -235,137 +235,130 @@ function animateAndNavigate(event, url, direction = 'next') {
     const style = document.createElement('style');
     style.innerHTML = `
         :root {
-            --sidebar-width: 120px;
-            --header-height: 35px;
             --primary-navy: #00326b;
             --accent-gold: #c5a059;
             --bg-light: #f5f7fa;
             --text-dark: #333;
             --border-color: #d1d1d1;
+            --font-main: 'Coming Soon', cursive;
         }
 
-        body {
+        * {
+            box-sizing: border-box;
+            font-family: var(--font-main) !important;
+        }
+
+        body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Coming Soon', cursive;
-            font-weight: 600;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background: var(--bg-light);
             font-size: 12px;
             line-height: 13px;
-            background: var(--bg-light);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            font-weight: 600;
         }
 
         .dashboard-container {
             display: flex;
+            flex-direction: column;
             width: 100%;
             height: 100%;
         }
 
-        /* Sidebar - Right Side */
-        .dashboard-sidebar {
-            width: var(--sidebar-width);
-            background: var(--primary-navy);
+        .dashboard-header {
+            flex-shrink: 0;
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            padding: 20px 0;
-            gap: 10px;
-            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-            order: 2; /* Move to right side */
-            font-family: 'Coming Soon', cursive;
+            z-index: 100;
         }
 
-        .sidebar-item {
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 20px;
+            height: 40px;
+        }
+
+        .header-tabs {
+            display: flex;
+            background: var(--primary-navy);
+            padding: 0 10px;
+            gap: 2px;
+            height: 35px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .header-tabs::-webkit-scrollbar { display: none; }
+
+        .tab-item {
             color: rgba(255,255,255,0.7);
             text-decoration: none;
-            padding: 15px 10px;
-            text-align: center;
-            font-size: 12px;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.2s;
-            border-left: 4px solid transparent;
-            font-family: 'Coming Soon', cursive;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            height: 100%;
         }
 
-        .sidebar-item:hover {
+        .tab-item:hover {
             color: #fff;
             background: rgba(255,255,255,0.05);
         }
 
-        .sidebar-item.active {
+        .tab-item.active {
             color: #fff;
-            background: rgba(255,255,255,0.1);
-            border-left: 4px solid var(--accent-gold);
-        }
-
-        /* Main Content Area */
-        .dashboard-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            order: 1;
-        }
-
-        .dashboard-header {
-            height: var(--header-height);
-            background: #fff;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            z-index: 10;
+            border-bottom: 3px solid #fff;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .header-title {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: var(--primary-navy);
             margin: 0;
-            letter-spacing: 1px;
-            font-family: 'Coming Soon', cursive;
+            letter-spacing: 2px;
         }
 
         .header-nav-btn {
             background: #f0f0f0;
             border: 1px solid var(--border-color);
-            padding: 6px 12px;
+            padding: 3px 10px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-dark);
-            transition: all 0.2s;
-            font-family: 'Coming Soon', cursive;
         }
 
-        .header-nav-btn:hover {
-            background: #e0e0e0;
+        .dashboard-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
 
         .dashboard-body {
             flex: 1;
-            overflow: hidden;
+            overflow: auto;
             padding: 0;
-            background: var(--bg-light);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .dashboard-sidebar { width: 70px; }
-            .sidebar-item { font-size: 12px; padding: 10px 5px; }
+            background: #fff;
         }
     `;
     document.head.appendChild(style);
@@ -397,33 +390,35 @@ function animateAndNavigate(event, url, direction = 'next') {
             { label: 'Mantra', path: 'mantra.html', cat: 'Mantra' }
         ];
 
-        const sidebarHtml = navItems.map(item => {
+        const tabsHtml = navItems.map(item => {
             const itemPath = item.path.split('?')[0];
             const isActive = currentPath === itemPath;
-            return `<a href="${item.path}" class="sidebar-item ${isActive ? 'active' : ''}">${item.label}</a>`;
+            const link = item.path + (item.path.includes('?') ? '&' : '?') + `date=${dateStr}`;
+            return `<a href="${link}" class="tab-item ${isActive ? 'active' : ''}">${item.label}</a>`;
         }).join('');
 
         const dashboard = document.createElement('div');
         dashboard.className = 'dashboard-container';
         dashboard.innerHTML = `
-            <main class="dashboard-main">
-                <header class="dashboard-header">
+            <header class="dashboard-header">
+                <div class="header-top">
                     <div class="header-left">
                         <h1 class="header-title">PLANNER 2026</h1>
                         <button class="header-nav-btn" onclick="window.location.href='index.html?date=${dateStr}'">Today</button>
                     </div>
-                    <div class="header-right">
-                        <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                    <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+                        <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Coming Soon', cursive; font-size: 12px; font-weight: 600;">
+                        <a href="#" onclick="logout(); return false;" style="text-decoration: none; color: var(--primary-navy); font-size: 12px; font-weight: 600; text-transform: uppercase;">Logout</a>
                     </div>
-                </header>
+                </div>
+                <nav class="header-tabs">
+                    ${tabsHtml}
+                </nav>
+            </header>
+            <main class="dashboard-main">
                 <div class="dashboard-body">
                 </div>
             </main>
-            <aside class="dashboard-sidebar">
-                ${sidebarHtml}
-                <div style="flex-grow: 1;"></div>
-                <a href="#" onclick="logout(); return false;" class="sidebar-item" style="opacity: 0.6;">Logout</a>
-            </aside>
         `;
 
         const dashboardBody = dashboard.querySelector('.dashboard-body');
