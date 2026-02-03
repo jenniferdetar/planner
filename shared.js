@@ -171,8 +171,8 @@ function animateAndNavigate(event, url, direction = 'next') {
             width: 100vw;
             overflow: hidden;
             background: var(--bg-light);
-            font-size: 12px;
-            line-height: 13px;
+            font-size: 10pt;
+            line-height: 1.2;
             font-weight: 600;
         }
 
@@ -201,7 +201,7 @@ function animateAndNavigate(event, url, direction = 'next') {
 
         .sidebar-label {
             padding: 0 25px 10px;
-            font-size: 10px;
+            font-size: 10pt;
             font-weight: 700;
             color: #fff;
             letter-spacing: 2px;
@@ -216,7 +216,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             gap: 12px;
             color: #d1d1d1;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 10pt;
             font-weight: 600;
             transition: all 0.2s;
         }
@@ -246,17 +246,30 @@ function animateAndNavigate(event, url, direction = 'next') {
             border-bottom: 1px solid var(--border-color);
             padding: 10px 20px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            min-height: 80px;
             position: relative;
         }
 
-        .header-top {
-            width: 100%;
+        .header-left-controls {
+            position: absolute;
+            left: 20px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            gap: 15px;
+        }
+
+        .header-center {
+            text-align: center;
+        }
+
+        .header-right-controls {
+            position: absolute;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .header-title {
@@ -268,32 +281,21 @@ function animateAndNavigate(event, url, direction = 'next') {
             text-transform: uppercase;
         }
 
-        .header-controls {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-left-controls {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
         .header-nav-btn {
-            background: #f0f0f0;
+            background: #fff;
             border: 1px solid var(--border-color);
-            padding: 3px 10px;
+            padding: 6px 15px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 10pt;
             font-weight: 600;
             color: var(--text-dark);
+            transition: all 0.2s;
+        }
+
+        .header-nav-btn:hover {
+            background: #f8f9fa;
+            border-color: var(--primary-navy);
         }
 
         .dashboard-body {
@@ -391,7 +393,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         dashboard.className = 'dashboard-container';
         dashboard.innerHTML = `
             <aside class="dashboard-sidebar">
-                <div style="padding: 0 25px 30px; font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 2px;">PLANNER 2026</div>
+                <div style="padding: 0 25px 30px; font-size: 10pt; font-weight: 700; color: #fff; letter-spacing: 2px;">PLANNER 2026</div>
                 ${sidebarHtml}
             </aside>
             <main class="dashboard-main">
@@ -399,12 +401,12 @@ function animateAndNavigate(event, url, direction = 'next') {
                     <div class="header-left-controls">
                         <button class="header-nav-btn" onclick="window.location.href='index.html?date=${dateStr}'">Today</button>
                     </div>
-                    <div class="header-top">
+                    <div class="header-center">
                         <h1 class="header-title">PLANNER 2026</h1>
                     </div>
-                    <div class="header-controls">
-                        <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Coming Soon', cursive; font-size: 12px; font-weight: 600;">
-                        <a href="#" onclick="logout(); return false;" style="text-decoration: none; color: var(--primary-navy); font-size: 12px; font-weight: 600; text-transform: uppercase;">Logout</a>
+                    <div class="header-right-controls">
+                        <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Coming Soon', cursive; font-size: 10pt; font-weight: 600;">
+                        <a href="#" onclick="logout(); return false;" style="text-decoration: none; color: var(--primary-navy); font-size: 10pt; font-weight: 600; text-transform: uppercase;">Logout</a>
                     </div>
                 </header>
                 <div class="dashboard-body">
@@ -458,8 +460,6 @@ async function savePlannerData(date, fieldId, content) {
                 slot_key: fieldId, 
                 value: finalValue,
                 updated_at: new Date().toISOString()
-            }, { 
-                onConflict: 'date_key,slot_key' 
             });
 
         if (error) {
@@ -468,8 +468,7 @@ async function savePlannerData(date, fieldId, content) {
             await client
                 .from('work_planner_edits')
                 .delete()
-                .eq('date_key', date)
-                .eq('slot_key', fieldId);
+                .match({ date_key: date, slot_key: fieldId });
 
             const { error: insertError } = await client
                 .from('work_planner_edits')
@@ -522,6 +521,7 @@ function getCalendarEvents() {
         { date: '2026-01-26', time: '17:30', title: 'Chapter 500 Monthly', duration: 120 },
         { date: '2026-01-26', time: '19:00', title: 'LA Fed', duration: 60 },
         { date: '2026-02-06', time: '09:30', title: 'CSEA Reopener Negotiations', duration: 420 },
+        { date: '2026-02-07', time: '08:30', title: 'CSEA Officer Skills Training', duration: 450 },
         // WEN SweetAlmondMint & Pomegranate Auto-Delivery
         { date: '2026-04-01', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
         { date: '2026-05-31', title: 'A-D WEN SweetAlmondMint & Pomegranate' },

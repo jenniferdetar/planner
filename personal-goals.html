@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        .content-area { padding: 40px; width: 100%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; }
+        .content-area { padding: 40px; width: 100%; box-sizing: border-box; }
         
         .goals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 20px; }
         .goal-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: box-shadow 0.2s; }
@@ -18,13 +18,13 @@
         .editable-list { display: flex; flex-direction: column; gap: 15px; }
         .goal-item { display: flex; gap: 12px; align-items: flex-start; }
         .bullet { width: 8px; height: 8px; border-radius: 50%; background: #00326b; margin-top: 8px; flex-shrink: 0; }
-        .item-content { flex-grow: 1; font-family: 'Coming Soon', cursive; font-size: 12pt; color: #323130; outline: none; line-height: 1.5; border-bottom: 1px dashed transparent; }
+        .item-content { flex-grow: 1; font-family: 'Coming Soon', cursive; font-size: 10pt; color: #323130; outline: none; line-height: 1.5; border-bottom: 1px dashed transparent; }
         .item-content:focus { border-bottom-color: #00326b; }
         
         .vision-section { grid-column: 1 / -1; background: #fff; border: 1px solid #e1dfdd; border-radius: 12px; padding: 30px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .vision-text { font-family: 'Coming Soon', cursive; font-size: 13pt; line-height: 1.8; color: #323130; outline: none; min-height: 120px; white-space: pre-wrap; }
+        .vision-text { font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.8; color: #323130; outline: none; min-height: 120px; white-space: pre-wrap; }
 
-        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
+        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 10pt; color: #666; }
     </style>
 </head>
 <body>

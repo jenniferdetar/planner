@@ -14,22 +14,22 @@
         .content-area { padding: 20px; width: 100%; }
         
         .view-section { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .handwriting, textarea, .planner-edit { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #2c3e50; }
+        .handwriting, textarea, .planner-edit { font-family: 'Coming Soon', cursive; font-size: 10pt; color: #2c3e50; }
         
         .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 5px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
         
         .save-btn { padding: 8px 25px; background-color: var(--header-blue); color: white; border: none; border-radius: 4px; cursor: pointer; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 10pt; transition: opacity 0.2s; }
         .save-btn:hover { opacity: 0.9; }
-        .save-status { font-size: 9pt; color: #888; }
-        .delete-btn { cursor: pointer; color: #a4262c; font-size: 8pt; text-transform: uppercase; font-weight: 600; }
+        .save-status { font-size: 10pt; color: #888; }
+        .delete-btn { cursor: pointer; color: #a4262c; font-size: 10pt; text-transform: uppercase; font-weight: 600; }
 
         /* Table styles for log */
         .special-table-container { width: 100%; overflow-x: auto; margin-top: 10px; }
-        .special-table { border-collapse: collapse; width: 100%; font-size: 8pt; table-layout: auto; }
+        .special-table { border-collapse: collapse; width: 100%; font-size: 10pt; table-layout: auto; }
         .special-table th, .special-table td { border: 1px solid #eee; padding: 6px; text-align: left; vertical-align: top; }
-        .special-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 7pt; }
+        .special-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 10pt; }
         .log-input { width: 100%; border: 1px solid #eee; padding: 4px; font-family: 'Coming Soon', cursive; font-size: 10pt; border-radius: 4px; }
-        .add-log-btn { padding: 5px 15px; background-color: var(--header-blue); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 8pt; font-weight: 600; }
+        .add-log-btn { padding: 5px 15px; background-color: var(--header-blue); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 10pt; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -134,7 +134,7 @@
                 div.style.position = 'relative';
                 div.style.marginBottom = '20px';
                 div.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; font-size: 8pt; color: #888; margin-bottom: 5px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 10pt; color: #888; margin-bottom: 5px;">
                         <span>${new Date(entry.created_at).toLocaleDateString()}</span>
                         <span class="delete-btn" onclick="handleDeleteNote(${entry.id})">Delete</span>
                     </div>
