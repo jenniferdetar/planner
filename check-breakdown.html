@@ -3,333 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Breakdown Spreadsheet - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon;500;700&family=Coming+Soon&display=swap" rel="stylesheet">
+    <title>Check Breakdown - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        :root {
-            --header-blue: #00326b;
-            --sheet-green: #1b5e20;
-            --border-color: #e1dfdd;
-        }
-        .page-header {
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #e1dfdd;
-            padding-bottom: 5px;
-            flex-shrink: 0;
-        }
-        .page-title {
-            font-size: 12px;
-            color: var(--header-blue);
-            margin: 0;
-            letter-spacing: 3px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        body {
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .main-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 10px 20px;
-            height: 100%;
-            box-sizing: border-box;
-            min-height: 0;
-        }
-        .spreadsheet-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            flex: 1;
-            min-height: 0;
-        }
-        .table-column {
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
-        .table-container {
-            width: 100%;
-            overflow: auto;
-            border: 1px solid #e1dfdd;
-            border-radius: 4px;
-            flex: 1;
-            min-height: 0;
-        }
-        .sheet-table {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 12px;
-        }
-        .sheet-table th, .sheet-table td {
-            border: 1px solid #eee;
-            padding: 4px 6px;
-        }
-        .header-row th {
-            background-color: #f8f9fa;
-            color: #323130;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 12px;
-            border-bottom: 2px solid #e1dfdd;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            text-align: center;
-        }
-        .account-col {
-            font-weight: 600;
-            text-align: left !important;
-            min-width: 120px;
-            max-width: 120px;
-            position: sticky;
-            left: 0;
-            background-color: #fff;
-            z-index: 15;
-            border-right: 2px solid #e1dfdd !important;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .data-cell {
-            text-align: right;
-            outline: none;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            color: #333;
-            min-width: 60px;
-        }
-        .data-cell:focus {
-            background-color: #fffde7;
-            box-shadow: inset 0 0 0 2px var(--header-blue);
-        }
-        .left-over-row {
-            background-color: #f3f2f1 !important;
-            font-weight: 600;
-        }
-        .save-status {
-            position: fixed;
-            bottom: 20px;
-            right: 120px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 12px;
-            color: #666;
-            z-index: 2000;
-        }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; background: #f3f2f1; }
+        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; }
+        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
+        .notebook-page { width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
+        
+        .page-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #28a745; padding-bottom: 10px; }
+        .page-title { font-size: 14pt; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #28a745; margin: 0; }
+        
+        .breakdown-section { margin-bottom: 40px; }
+        .section-header { font-size: 9pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        
+        .input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .input-label { font-size: 9pt; font-weight: 600; color: #605e5c; }
+        .input-value { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #323130; outline: none; border-bottom: 1px dashed #ccc; min-width: 80px; text-align: right; }
+        .input-value:focus { border-bottom-color: #28a745; }
+
+        .total-row { border-top: 2px solid #eee; margin-top: 10px; padding-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: #323130; }
+        .net-total { color: #28a745; font-size: 14pt; }
+
+        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #28a745; text-decoration: none; font-size: 9pt; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="spreadsheet-grid">
-            <div class="table-column">
-                <div class="page-header"><h1 class="page-title" id="left-title">JULY - AUGUST 2025</h1></div>
-                <div class="table-container">
-                    <table class="sheet-table">
-                        <thead><tr class="header-row" id="left-head"><th class="account-col">Account</th></tr></thead>
-                        <tbody id="left-body"></tbody>
-                    </table>
+    <div class="notebook-container">
+        <main class="notebook-main">
+            <div class="notebook-page">
+                <a href="index.html" class="back-link">← Back to Main Planner</a>
+                <div class="page-header">
+                    <h1 class="page-title" id="page-title">Check Breakdown</h1>
+                </div>
+
+                <div class="grid-3">
+                    <div class="breakdown-section">
+                        <div class="section-header">Earnings</div>
+                        <div class="card">
+                            <div class="input-row">
+                                <span class="input-label">Gross Pay</span>
+                                <div class="input-value" contenteditable="true" id="gross-pay" oninput="handleUpdate()"></div>
+                            </div>
+                            <div class="input-row">
+                                <span class="input-label">Other/Bonus</span>
+                                <div class="input-value" contenteditable="true" id="other-pay" oninput="handleUpdate()"></div>
+                            </div>
+                            <div class="total-row">
+                                <span>Total Gross</span>
+                                <span id="total-gross">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-section">
+                        <div class="section-header">Deductions</div>
+                        <div class="card">
+                            <div class="input-row">
+                                <span class="input-label">Federal Tax</span>
+                                <div class="input-value" contenteditable="true" id="fed-tax" oninput="handleUpdate()"></div>
+                            </div>
+                            <div class="input-row">
+                                <span class="input-label">State Tax</span>
+                                <div class="input-value" contenteditable="true" id="state-tax" oninput="handleUpdate()"></div>
+                            </div>
+                            <div class="input-row">
+                                <span class="input-label">Health/Benefits</span>
+                                <div class="input-value" contenteditable="true" id="benefits" oninput="handleUpdate()"></div>
+                            </div>
+                            <div class="input-row">
+                                <span class="input-label">Retirement</span>
+                                <div class="input-value" contenteditable="true" id="retirement" oninput="handleUpdate()"></div>
+                            </div>
+                            <div class="total-row">
+                                <span>Total Ded.</span>
+                                <span id="total-deductions">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-section">
+                        <div class="section-header">Summary</div>
+                        <div class="card">
+                            <div class="input-row">
+                                <span class="input-label">Pay Period</span>
+                                <div class="input-value" contenteditable="true" id="pay-period" style="text-align: left; min-width: 120px;"></div>
+                            </div>
+                            <div class="input-row">
+                                <span class="input-label">Pay Date</span>
+                                <div class="input-value" contenteditable="true" id="pay-date" style="text-align: left; min-width: 120px;"></div>
+                            </div>
+                            <div class="total-row" style="border-top-color: #28a745; border-top-width: 3px;">
+                                <span>NET PAY</span>
+                                <span class="net-total" id="net-pay">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="table-column">
-                <div class="page-header"><h1 class="page-title" id="right-title">SEPTEMBER - OCTOBER 2025</h1></div>
-                <div class="table-container">
-                    <table class="sheet-table">
-                        <thead><tr class="header-row" id="right-head"><th class="account-col">Account</th></tr></thead>
-                        <tbody id="right-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
     <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
-        let accounts = [];
-        let allDates = [];
-        let currentSpread = 0; // 0: Jul-Oct, 1: Nov-Feb, 2: Mar-Jun
-        const PERSISTENCE_KEY = "check-breakdown-2025-2026";
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const PERSISTENCE_KEY = `check-breakdown-${displayDate.getFullYear()}-${displayDate.getMonth() + 1}`;
+        let saveTimeout;
 
         async function init() {
-            setGlobalHeaderTitle("CHECK BREAKDOWN");
-            // Setup Dates for Fiscal Year July 2025 - June 2026
-            const startDate = new Date(2025, 6, 1); // July 1, 2025
-            for (let i = 0; i < 12; i++) {
-                const m = new Date(startDate);
-                m.setMonth(startDate.getMonth() + i);
-                
-                const d5 = new Date(m); d5.setDate(5);
-                allDates.push({ date: d5, label: `${d5.getMonth() + 1}/5/${d5.getFullYear()}` });
-                
-                const d20 = new Date(m); d20.setDate(20);
-                allDates.push({ date: d20, label: `${d20.getMonth() + 1}/20/${d20.getFullYear()}` });
+            const data = await fetchPlannerData(PERSISTENCE_KEY);
+            data.forEach(d => {
+                const el = document.getElementById(d.field_id);
+                if (el) el.innerText = d.content;
+            });
+            handleUpdate(false);
+        }
+
+        function parseVal(id) {
+            const val = document.getElementById(id).innerText.replace(/[^0-9.]/g, '');
+            return parseFloat(val) || 0;
+        }
+
+        function formatCurrency(num) {
+            return '$' + num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function handleUpdate(shouldSave = true) {
+            const gross = parseVal('gross-pay') + parseVal('other-pay');
+            const ded = parseVal('fed-tax') + parseVal('state-tax') + parseVal('benefits') + parseVal('retirement');
+            const net = gross - ded;
+
+            document.getElementById('total-gross').innerText = formatCurrency(gross);
+            document.getElementById('total-deductions').innerText = formatCurrency(ded);
+            document.getElementById('net-pay').innerText = formatCurrency(net);
+
+            if (shouldSave) {
+                const status = document.getElementById('save-status');
+                status.innerText = 'Saving...';
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(async () => {
+                    const fields = ['gross-pay', 'other-pay', 'fed-tax', 'state-tax', 'benefits', 'retirement', 'pay-period', 'pay-date'];
+                    for (const f of fields) {
+                        await savePlannerData(PERSISTENCE_KEY, f, document.getElementById(f).innerText);
+                    }
+                    status.innerText = 'All changes saved';
+                }, 1000);
             }
-
-            // Fetch Bills
-            const billData = await fetchFinancialBills();
-            const billMap = new Map();
-            DEFAULT_BILLS.forEach(b => billMap.set(b.item, b));
-            billData.forEach(b => billMap.set(b.item, b));
-            const bills = [...billMap.values()].sort((a, b) => a.id - b.id);
-
-            accounts = [
-                "Currently in Checking",
-                "Jennifer's Check",
-                "Tithe",
-                ...bills.map(b => b.item),
-                "Left Over"
-            ];
-
-            const savedData = await fetchPlannerData(PERSISTENCE_KEY, 1000);
-            renderCurrentSpread(savedData);
-
-            window.changeMonth = (dir) => {
-                const direction = dir > 0 ? 'next' : 'prev';
-                if ((dir > 0 && currentSpread < 2) || (dir < 0 && currentSpread > 0)) {
-                    const panes = document.querySelectorAll('.view-pane');
-                    const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
-                    if (targetPane) {
-                        targetPane.classList.add(`flip-out-${direction}`);
-                        setTimeout(() => {
-                            currentSpread += dir;
-                            targetPane.classList.remove(`flip-out-${direction}`);
-                            renderCurrentSpread(savedData);
-                        }, 800);
-                    }
-                }
-            };
-        }
-
-        function renderCurrentSpread(savedData) {
-            // Spread 0: Months 0,1,2,3 (Indices 0-7 in allDates)
-            // Spread 1: Months 4,5,6,7 (Indices 8-15)
-            // Spread 2: Months 8,9,10,11 (Indices 16-23)
-            const leftStart = currentSpread * 8;
-            const leftDates = allDates.slice(leftStart, leftStart + 4);
-            const rightDates = allDates.slice(leftStart + 4, leftStart + 8);
-
-            const leftMonths = [...new Set(leftDates.map(d => d.date.toLocaleString('default', { month: 'long' })))].join(' - ');
-            const rightMonths = [...new Set(rightDates.map(d => d.date.toLocaleString('default', { month: 'long' })))].join(' - ');
-            const year = leftDates[0].date.getFullYear();
-            const rightYear = rightDates[0].date.getFullYear();
-
-            document.getElementById('left-title').innerText = `${leftMonths.toUpperCase()} ${year}`;
-            document.getElementById('right-title').innerText = `${rightMonths.toUpperCase()} ${rightYear}`;
-
-            renderPage('left', leftDates, savedData, leftStart);
-            renderPage('right', rightDates, savedData, leftStart + 4);
-        }
-
-        function renderPage(side, dates, savedData, globalColOffset) {
-            const head = document.getElementById(`${side}-head`);
-            const body = document.getElementById(`${side}-body`);
-            head.innerHTML = '<th class="account-col">Account</th>';
-            body.innerHTML = '';
-
-            dates.forEach(d => {
-                const th = document.createElement('th');
-                th.innerText = d.label;
-                head.appendChild(th);
-            });
-
-            accounts.forEach((acc, rowIndex) => {
-                const isLeftOver = acc === "Left Over";
-                const isTithe = acc === "Tithe";
-                const tr = document.createElement('tr');
-                if (isLeftOver) tr.className = 'left-over-row';
-                
-                let html = `<td class="account-col" title="${acc}">${acc}</td>`;
-                dates.forEach((date, localColIndex) => {
-                    const globalColIndex = globalColOffset + localColIndex;
-                    const fieldId = `grid-${rowIndex}-${globalColIndex}`;
-                    const content = savedData.find(d => d.field_id === fieldId)?.content || '';
-                    html += `<td class="data-cell" ${isLeftOver || isTithe ? '' : 'contenteditable="true"'} data-field="${fieldId}" data-row="${rowIndex}" data-col="${globalColIndex}">${content}</td>`;
-                });
-                tr.innerHTML = html;
-                body.appendChild(tr);
-            });
-
-            // Re-attach listeners and calculate
-            body.querySelectorAll('.data-cell[contenteditable="true"]').forEach(cell => {
-                cell.oninput = () => {
-                    saveWithDebounce(PERSISTENCE_KEY, cell.dataset.field, cell.innerText);
-                    calculateAll(globalColOffset, globalColOffset + dates.length);
-                };
-            });
-
-            calculateAll(globalColOffset, globalColOffset + dates.length);
-        }
-
-        function parseAmount(text) {
-            if (!text) return 0;
-            return parseFloat(text.replace(/[$,]/g, '')) || 0;
-        }
-
-        function formatAmount(amount) {
-            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function calculateAll(startCol, endCol) {
-            for (let c = startCol; c < endCol; c++) {
-                const cells = document.querySelectorAll(`[data-col="${c}"]`);
-                let income = 0;
-                let expenses = 0;
-                let jennifersCheck = 0;
-                const leftOverRowIndex = accounts.length - 1;
-
-                cells.forEach(cell => {
-                    const rowIndex = parseInt(cell.dataset.row);
-                    if (rowIndex === 1) jennifersCheck = parseAmount(cell.innerText);
-                    
-                    if (rowIndex === 2) {
-                        const titheAmount = Math.ceil(jennifersCheck * 0.1);
-                        cell.innerText = formatAmount(titheAmount);
-                    }
-                });
-
-                cells.forEach(cell => {
-                    const rowIndex = parseInt(cell.dataset.row);
-                    const val = parseAmount(cell.innerText);
-                    if (rowIndex === 0 || rowIndex === 1) income += val;
-                    else if (rowIndex >= 2 && rowIndex < leftOverRowIndex) expenses += val;
-                    
-                    if (rowIndex === leftOverRowIndex) {
-                        cell.innerText = formatAmount(income - expenses);
-                    }
-                });
-            }
-        }
-
-        let debounceTimer;
-        function saveWithDebounce(pk, field, content) {
-            const statusEl = document.getElementById('save-status');
-            statusEl.innerText = 'Saving...';
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(async () => {
-                const savedValue = await savePlannerData(pk, field, content);
-                if (savedValue) {
-                    statusEl.innerText = 'All changes saved';
-                    if (savedValue !== content) {
-                        const el = document.querySelector(`[data-field="${field}"]`);
-                        if (el) {
-                            if (el.innerText !== undefined) el.innerText = savedValue;
-                            else el.value = savedValue;
-                        }
-                    }
-                } else {
-                    statusEl.innerText = 'Error saving';
-                }
-            }, 1000);
         }
 
         document.addEventListener('DOMContentLoaded', init);

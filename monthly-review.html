@@ -8,274 +8,159 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        :root {
-            --header-blue: #00326b;
-            --border-color: #e1dfdd;
-        }
-        .review-header {
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #e1dfdd;
-            padding-bottom: 10px;
-        }
-        .celebrate-text {
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #605e5c;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        .page-title {
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            color: var(--header-blue);
-            margin: 0 0 10px 0;
-            letter-spacing: 3px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .intro-text {
-            font-size: 12px;
-            color: #605e5c;
-            margin: 0 auto 10px auto;
-            line-height: 13px;
-        }
-        .month-selector-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-        }
-        .month-input {
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            padding: 8px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            outline: none;
-            background: #fff;
-            color: #323130;
-        }
-        .save-status-inline {
-            font-size: 12px;
-            color: #a19f9d;
-            margin-top: 15px;
-        }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; background: #f3f2f1; }
+        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; }
+        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
+        .notebook-page { width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
+        
+        .page-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #5c2d91; padding-bottom: 10px; }
+        .page-title { font-size: 14pt; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #5c2d91; margin: 0; }
+        
+        .review-section { margin-bottom: 40px; }
+        .section-header { font-size: 9pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        
+        .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .review-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        
+        .review-input { font-family: 'Coming Soon', cursive; font-size: 12pt; line-height: 1.6; color: #323130; outline: none; min-height: 120px; white-space: pre-wrap; }
+        
+        .rating-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 8px 15px; background: #fdfdfd; border-radius: 4px; border: 1px solid #f3f2f1; }
+        .rating-label { font-size: 9pt; font-weight: 600; color: #605e5c; }
+        .rating-stars { display: flex; gap: 5px; }
+        .star { cursor: pointer; color: #e1dfdd; font-size: 14pt; transition: color 0.2s; }
+        .star.active { color: #ffb900; }
+        .star:hover { color: #ffb900; }
 
-        body {
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .review-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 10px 20px;
-            height: 100%;
-            box-sizing: border-box;
-            min-height: 0;
-        }
-        .review-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            flex: 1;
-            min-height: 0;
-        }
-        .review-column {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            min-height: 0;
-        }
-        .review-box {
-            background-color: #fff;
-            border: 1px solid #e1dfdd;
-            border-radius: 8px;
-            padding: 10px 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            flex: 1;
-            min-height: 0;
-        }
-        .editable-area {
-            flex: 1;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            outline: none;
-            line-height: 1.4;
-            color: #333;
-            overflow-y: auto;
-        }
-        .box-title {
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            color: #323130;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid #f3f2f1;
-            padding-bottom: 5px;
-        }
-        .nav-btn {
-            background: none;
-            border: 1px solid var(--border-color);
-            padding: 2px 12px;
-            cursor: pointer;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: inherit;
-            display: inline-block;
-        }
+        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #5c2d91; text-decoration: none; font-size: 9pt; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-    <div class="review-container">
-        <div class="review-grid">
-            <div class="review-column">
-                <div class="review-header">
-                    <div class="celebrate-text">Celebrate Your Success</div>
-                    <h1 class="page-title">Monthly Review</h1>
-                    <div style="margin-bottom: 10px; display: flex; justify-content: center; gap: 15px;">
-                        <a href="personal-goals.html" class="nav-btn">Personal Goals</a>
-                        <a href="planning.html" class="nav-btn">Intentions & Dreams</a>
-                    </div>
-                    <p class="intro-text">
-                        Reflect on the past month to identify your biggest successes and challenges.
-                    </p>
-                    <div class="month-selector-container">
-                        <input type="month" id="month-picker" class="month-input" onchange="handleMonthChange()">
+    <div class="notebook-container">
+        <main class="notebook-main">
+            <div class="notebook-page">
+                <a href="index.html" class="back-link">← Back to Main Planner</a>
+                <div class="page-header">
+                    <h1 class="page-title" id="page-title">Monthly Review</h1>
+                </div>
+
+                <div class="review-section">
+                    <div class="section-header">Monthly Pulse</div>
+                    <div class="review-grid">
+                        <div class="rating-row">
+                            <span class="rating-label">Overall Satisfaction</span>
+                            <div class="rating-stars" id="stars-satisfaction"></div>
+                        </div>
+                        <div class="rating-row">
+                            <span class="rating-label">Goal Progress</span>
+                            <div class="rating-stars" id="stars-progress"></div>
+                        </div>
+                        <div class="rating-row">
+                            <span class="rating-label">Energy Levels</span>
+                            <div class="rating-stars" id="stars-energy"></div>
+                        </div>
+                        <div class="rating-row">
+                            <span class="rating-label">Balance</span>
+                            <div class="rating-stars" id="stars-balance"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="review-box">
-                    <div class="box-title">What was your biggest win this month?</div>
-                    <div class="editable-area" contenteditable="true" id="review-win" data-field="review-win"></div>
-                </div>
-                <div class="review-box">
-                    <div class="box-title">What do you wish you'd done differently?</div>
-                    <div class="editable-area" contenteditable="true" id="review-different" data-field="review-different"></div>
+
+                <div class="review-grid">
+                    <div class="review-section">
+                        <div class="section-header">What went well?</div>
+                        <div class="review-card">
+                            <div class="review-input" contenteditable="true" id="went-well" oninput="handleSave('went-well', this.innerText)"></div>
+                        </div>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="section-header">Challenges & Obstacles</div>
+                        <div class="review-card">
+                            <div class="review-input" contenteditable="true" id="challenges" oninput="handleSave('challenges', this.innerText)"></div>
+                        </div>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="section-header">Key Learnings</div>
+                        <div class="review-card">
+                            <div class="review-input" contenteditable="true" id="learnings" oninput="handleSave('learnings', this.innerText)"></div>
+                        </div>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="section-header">Next Month's Focus</div>
+                        <div class="review-card">
+                            <div class="review-input" contenteditable="true" id="next-focus" oninput="handleSave('next-focus', this.innerText)"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="review-column">
-                <div class="review-box">
-                    <div class="box-title">What did you do that was fun?</div>
-                    <div class="editable-area" contenteditable="true" id="review-fun" data-field="review-fun"></div>
-                </div>
-                <div class="review-box">
-                    <div class="box-title">What change did you make to continue?</div>
-                    <div class="editable-area" contenteditable="true" id="review-change" data-field="review-change"></div>
-                </div>
-                <div class="review-box">
-                    <div class="box-title">What's your biggest goal for next month?</div>
-                    <div class="editable-area" contenteditable="true" id="review-goal" data-field="review-goal"></div>
-                </div>
-                <div class="review-box">
-                    <div class="box-title">Looking forward to...</div>
-                    <div class="editable-area" contenteditable="true" id="review-forward" data-field="review-forward"></div>
-                </div>
-                <div id="save-status" class="save-status-inline" style="text-align: right; margin-top: 5px;">All changes saved</div>
-            </div>
-        </div>
+        </main>
     </div>
+    <div id="save-status" class="save-status">All changes saved</div>
+
     <script>
-        const monthPicker = document.getElementById('month-picker');
-        const saveStatus = document.getElementById('save-status');
-        let saveTimeout = null;
-        
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentDate = dateParam ? new Date(dateParam) : new Date();
-        currentDate.setDate(1);
-        const monthStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-        monthPicker.value = monthStr;
+        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const monthYear = displayDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+        const PERSISTENCE_KEY = `monthly-review-${displayDate.getFullYear()}-${displayDate.getMonth() + 1}`;
+        let saveTimeout;
 
-        async function loadReviewData() {
-            const dateKey = `${monthPicker.value}-01`;
-            const data = await fetchPlannerData(dateKey, 31);
+        async function init() {
+            document.getElementById('page-title').innerText = `${monthYear} Review`;
             
-            document.querySelectorAll('.editable-area').forEach(el => {
-                el.innerText = '';
+            // Setup ratings
+            ['satisfaction', 'progress', 'energy', 'balance'].forEach(cat => {
+                const container = document.getElementById(`stars-${cat}`);
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.createElement('span');
+                    star.className = 'star';
+                    star.innerHTML = '★';
+                    star.onclick = () => handleRating(cat, i);
+                    container.appendChild(star);
+                }
             });
-            
-            data.forEach(item => {
-                if (item.date === dateKey) {
-                    const el = document.getElementById(item.field_id);
-                    if (el) el.innerText = item.content;
+
+            // Load data
+            const data = await fetchPlannerData(PERSISTENCE_KEY);
+            data.forEach(d => {
+                if (d.field_id.startsWith('rating-')) {
+                    const cat = d.field_id.replace('rating-', '');
+                    const val = parseInt(d.content);
+                    updateStars(cat, val);
+                } else {
+                    const el = document.getElementById(d.field_id);
+                    if (el) el.innerText = d.content;
                 }
             });
         }
 
-        function handleMonthChange(dir = 0) {
-            if (dir !== 0) {
-                const [year, month] = monthPicker.value.split('-').map(Number);
-                const d = new Date(year, month - 1 + dir, 1);
-                monthPicker.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-            }
-            const dateStr = `${monthPicker.value}-01`;
-            const newUrl = window.location.pathname + '?date=' + dateStr;
-            window.history.pushState({ date: dateStr }, '', newUrl);
-            loadReviewData();
-            updateNavigationLinks(dateStr);
+        function updateStars(cat, val) {
+            const container = document.getElementById(`stars-${cat}`);
+            const stars = container.querySelectorAll('.star');
+            stars.forEach((s, i) => {
+                s.classList.toggle('active', i < val);
+            });
         }
 
-        function handleInput(e) {
-            const el = e.target;
-            const fieldId = el.getAttribute('data-field');
-            const date = `${monthPicker.value}-01`;
-            const content = el.innerText;
-            saveStatus.innerText = 'Unsaved changes';
+        async function handleRating(cat, val) {
+            updateStars(cat, val);
+            await handleSave(`rating-${cat}`, val.toString());
+        }
+
+        async function handleSave(fieldId, content) {
+            const status = document.getElementById('save-status');
+            status.innerText = 'Saving...';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                saveStatus.innerText = 'Saving...';
-                const savedValue = await savePlannerData(date, fieldId, content);
-                if (savedValue) {
-                    saveStatus.innerText = 'All changes saved';
-                    if (savedValue !== content) {
-                        el.innerText = savedValue;
-                    }
-                } else {
-                    saveStatus.innerText = 'Error saving';
-                }
+                await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                status.innerText = 'All changes saved';
             }, 1000);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            setGlobalHeaderTitle("MONTHLY REVIEW");
-            loadReviewData();
-            updateNavigationLinks(`${monthPicker.value}-01`);
-            
-            document.querySelectorAll('.editable-area').forEach(el => {
-                el.addEventListener('input', handleInput);
-            });
-
-            window.changeMonth = (dir) => {
-                const direction = dir > 0 ? 'next' : 'prev';
-                const panes = document.querySelectorAll('.view-pane');
-                const targetPane = (direction === 'next') ? panes[panes.length - 1] : panes[0];
-                if (targetPane) {
-                    targetPane.classList.add(`flip-out-${direction}`);
-                    setTimeout(() => {
-                        handleMonthChange(dir);
-                        targetPane.classList.remove(`flip-out-${direction}`);
-                    }, 800);
-                }
-            };
-        });
-
-        window.onpopstate = (event) => {
-            if (event.state && event.state.date) {
-                const parts = event.state.date.split('-');
-                monthPicker.value = `${parts[0]}-${parts[1]}`;
-                loadReviewData();
-            }
-        };
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

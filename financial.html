@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&family=Coming+Soon;600&display=swap" rel="stylesheet">
+    <title>Finance - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
         :root {
-            --header-blue: #00326b;
-            --border-color: #2f4f4f;
             --row-auto: #2d8a2d;
             --row-bill: #00326b;
             --row-cash: #d14d9c;
@@ -18,92 +16,28 @@
             --row-housing: #a33b3b;
             --row-savings: #7a4da3;
         }
-
-        /* Financial Specific Styles */
-        .schedule-header {
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #e1dfdd;
-            padding-bottom: 10px;
-        }
-
-        .page-title {
-            color: #323130;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            margin: 0;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .subtitle {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        /* Modern Table Styles */
-        .bill-table-container {
-            width: 100%;
-            overflow-x: auto;
-            border: 1px solid #e1dfdd;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .bill-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-        }
-
-        .bill-table th {
-            background: #f8f9fa;
-            border-bottom: 2px solid #e1dfdd;
-            padding: 5px 8px;
-            font-weight: 600;
-            color: #323130;
-            text-align: left;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 12px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .bill-table td {
-            padding: 5px 8px;
-            border-bottom: 1px solid #f3f2f1;
-            color: #323130;
-        }
-        .bill-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .month-col {
-            width: 25px;
-            text-align: center;
-            padding: 4px 2px !important;
-        }
-        .row-auto { color: var(--row-auto); }
-        .row-bill { color: var(--row-bill); }
-        .row-cash { color: var(--row-cash); }
-        .row-cc { color: var(--row-cc); }
-        .row-housing { color: var(--row-housing); }
-        .row-savings { color: var(--row-savings); }
-
-        .category-pill {
-            display: inline-block;
-            padding: 2px 12px;
-            border-radius: 15px;
-            color: #fff !important;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            min-width: 80px;
-            text-align: center;
-        }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; background: #f8f9fa; }
+        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; }
+        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
+        .notebook-page { width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
+        
+        .view-section { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .handwriting, .planner-edit { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #2c3e50; }
+        
+        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 15px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
+        
+        /* Table Styles */
+        .bill-table-container { width: 100%; overflow-x: auto; margin-top: 10px; }
+        .bill-table { width: 100%; border-collapse: collapse; font-size: 9pt; table-layout: auto; }
+        .bill-table th, .bill-table td { border: 1px solid #eee; padding: 8px; text-align: left; vertical-align: middle; }
+        .bill-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 8pt; }
+        
+        .item-col { white-space: normal !important; min-width: 150px; }
+        .amt-col { width: 80px; }
+        .cat-col { width: 100px; }
+        .month-col { width: 35px; text-align: center !important; }
+        .category-pill { display: inline-block; padding: 2px 8px; border-radius: 12px; color: #fff; font-size: 7pt; font-weight: 700; text-transform: uppercase; min-width: 60px; text-align: center; }
+        
         .row-auto .category-pill { background-color: var(--row-auto); }
         .row-bill .category-pill { background-color: var(--row-bill); }
         .row-cash .category-pill { background-color: var(--row-cash); }
@@ -111,237 +45,141 @@
         .row-housing .category-pill { background-color: var(--row-housing); }
         .row-savings .category-pill { background-color: var(--row-savings); }
 
-        .editable-cell {
-            outline: none;
-            min-width: 50px;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-        }
-        .checkbox {
-            width: 18px;
-            height: 18px;
-            border: 1px solid #ddd;
-            display: inline-block;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 50%;
-        }
-        .checkbox.checked {
-            background-color: #333 !important;
-            position: relative;
-        }
-        .checkbox.checked::after {
-            content: '✓';
-            color: white;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 12px;
-        }
+        .checkbox { width: 18px; height: 18px; border: 1px solid #ddd; display: inline-block; cursor: pointer; border-radius: 50%; vertical-align: middle; }
+        .checkbox.checked { background-color: #333; position: relative; }
+        .checkbox.checked::after { content: '✓'; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 8pt; }
 
+        .save-status { font-size: 9pt; color: #888; text-align: right; margin-top: 10px; }
+        
         /* Monthly Colors */
-        .cb-j { background-color: #ffcccc; }
-        .cb-f { background-color: #ffe6cc; }
-        .cb-m { background-color: #ffffcc; }
-        .cb-a { background-color: #e6ffcc; }
-        .cb-ma { background-color: #ccffcc; }
-        .cb-jun { background-color: #ccffe6; }
-        .cb-jul { background-color: #ccffff; }
-        .cb-au { background-color: #cce6ff; }
-        .cb-s { background-color: #ccccff; }
-        .cb-o { background-color: #e6ccff; }
-        .cb-n { background-color: #ffccff; }
-        .cb-d { background-color: #ffcce6; }
+        .cb-1 { background-color: #ffcccc; } .cb-2 { background-color: #ffe6cc; }
+        .cb-3 { background-color: #ffffcc; } .cb-4 { background-color: #e6ffcc; }
+        .cb-5 { background-color: #ccffcc; } .cb-6 { background-color: #ccffe6; }
+        .cb-7 { background-color: #ccffff; } .cb-8 { background-color: #cce6ff; }
+        .cb-9 { background-color: #ccccff; } .cb-10 { background-color: #e6ccff; }
+        .cb-11 { background-color: #ffccff; } .cb-12 { background-color: #ffcce6; }
 
-        .save-status-inline {
-            font-size: 12px;
-            color: #666;
-        }
-        .nav-btn {
-            background: none;
-            border: 1px solid var(--border-color);
-            padding: 2px 12px;
-            cursor: pointer;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: inherit;
-            display: inline-block;
-        }
+        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .nav-pill { display: block; padding: 15px; background: #fff; border: 1px solid #eee; border-radius: 8px; text-decoration: none; color: #333; text-align: center; font-weight: 700; font-size: 9pt; text-transform: uppercase; transition: all 0.2s; }
+        .nav-pill:hover { border-color: var(--header-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-    <div style="padding: 20px;">
-        <div style="display: grid; grid-template-columns: 300px 1fr; gap: 30px;">
-            <div>
-                <div class="schedule-header">
-                    <p class="subtitle">Keep track of your bill payments by listing recurring expenses. Check them off the list below as you pay your bills each month.</p>
-                    <div style="margin: 20px 0;">
-                        <a href="check-breakdown.html" class="nav-btn">Check Breakdown View</a>
+    <div class="notebook-container">
+        <main class="notebook-main">
+            <div id="main-content" class="notebook-page">
+                <div class="nav-grid">
+                    <a href="check-breakdown.html" class="nav-pill">Check Breakdown</a>
+                    <a href="monthly-review.html" class="nav-pill">Monthly Review</a>
+                </div>
+
+                <div class="view-section">
+                    <div class="page-title">RECURRING BILLS & EXPENSES</div>
+                    <div class="bill-table-container">
+                        <table class="bill-table">
+                            <thead>
+                                <tr>
+                                    <th class="cat-col">Cat</th>
+                                    <th class="item-col">Item</th>
+                                    <th class="amt-col">Amt</th>
+                                    <th class="month-col">J</th><th class="month-col">F</th><th class="month-col">M</th>
+                                    <th class="month-col">A</th><th class="month-col">M</th><th class="month-col">J</th>
+                                    <th class="month-col">J</th><th class="month-col">A</th><th class="month-col">S</th>
+                                    <th class="month-col">O</th><th class="month-col">N</th><th class="month-col">D</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bill-body"></tbody>
+                        </table>
                     </div>
+                    <div id="save-status" class="save-status">All changes saved</div>
                 </div>
-                <div style="padding: 20px; font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600; line-height: 13px; background: #fff; border: 1px solid #eee; border-radius: 8px;">
-                    <h3 style="margin-top: 0;">Financial Goals</h3>
-                    <ul style="list-style-type: '→ '; padding-left: 20px;">
-                        <li>Review subscriptions monthly</li>
-                        <li>Pay down high-interest debt</li>
-                        <li>Save 10% for emergencies</li>
-                    </ul>
+
+                <div class="view-section handwriting">
+                    <div class="page-title">FINANCIAL GOALS & NOTES</div>
+                    <div id="financial-goals" class="planner-edit" contenteditable="true" oninput="handleGoalsInput()" style="min-height: 200px; outline: none;"></div>
                 </div>
             </div>
-            <div>
-                <div class="bill-table-container">
-                    <table class="bill-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 80px;">Cat</th>
-                                <th style="width: 150px;">Item</th>
-                                <th style="width: 60px;">Amt</th>
-                                <th class="month-col">J</th>
-                                <th class="month-col">F</th>
-                                <th class="month-col">M</th>
-                                <th class="month-col">A</th>
-                                <th class="month-col">M</th>
-                                <th class="month-col">J</th>
-                                <th class="month-col">J</th>
-                                <th class="month-col">A</th>
-                                <th class="month-col">S</th>
-                                <th class="month-col">O</th>
-                                <th class="month-col">N</th>
-                                <th class="month-col">D</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bill-body">
-                        </tbody>
-                    </table>
-                </div>
-                <div id="save-status" class="save-status-inline" style="margin-top: 20px; text-align: right;">All changes saved</div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script>
         let saveTimeout;
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const currentYear = dateParam ? new Date(dateParam).getFullYear() : new Date().getFullYear();
+        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const currentYear = displayDate.getFullYear();
         const PLANNING_DATE = `${currentYear}-financial`;
 
         async function init() {
-            setGlobalHeaderTitle(`FINANCE ${currentYear}`);
+            if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle(`FINANCE ${currentYear}`);
+            if (typeof updateNavigationLinks === 'function') updateNavigationLinks(displayDate);
+
             const [bills, budgetData] = await Promise.all([
                 fetchFinancialBills(),
-                fetchPlannerData(PLANNING_DATE, 366)
+                fetchPlannerData(PLANNING_DATE, 400)
             ]);
 
             const tbody = document.getElementById('bill-body');
-            tbody.innerHTML = '';
+            const goalsEl = document.getElementById('financial-goals');
+            
+            // Load goals
+            const goalsData = budgetData.find(d => d.field_id === 'financial-goals');
+            if (goalsData) goalsEl.innerText = goalsData.content;
 
+            tbody.innerHTML = '';
             bills.forEach(bill => {
                 const tr = document.createElement('tr');
                 tr.className = bill.class || 'row-bill';
                 
                 let html = `
-                    <td class="editable-cell" contenteditable="true" data-bill-id="${bill.id}" data-field="cat"><span class="category-pill">${bill.cat}</span></td>
-                    <td class="editable-cell" contenteditable="true" data-bill-id="${bill.id}" data-field="item">${bill.item}</td>
-                    <td class="editable-cell" contenteditable="true" data-bill-id="${bill.id}" data-field="amt">${bill.amt}</td>
+                    <td class="planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'cat', this.innerText)"><span class="category-pill">${bill.cat}</span></td>
+                    <td class="planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'item', this.innerText)">${bill.item}</td>
+                    <td class="planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'amt', this.innerText)">${bill.amt}</td>
                 `;
 
                 for (let m = 1; m <= 12; m++) {
                     const fieldId = `chk-${bill.id}-${m}`;
                     const isChecked = budgetData.some(d => d.field_id === fieldId && d.content === 'true');
-                    const monthClass = getMonthClass(m);
-                    html += `<td class="month-col"><div class="checkbox ${monthClass} ${isChecked ? 'checked' : ''}" data-field="${fieldId}"></div></td>`;
+                    html += `<td class="month-col"><div class="checkbox cb-${m} ${isChecked ? 'checked' : ''}" onclick="toggleCheck(this, '${fieldId}')"></div></td>`;
                 }
-
                 tr.innerHTML = html;
                 tbody.appendChild(tr);
             });
-
-            // Set up event listeners for checkboxes
-            tbody.querySelectorAll('.checkbox').forEach(cb => {
-                cb.addEventListener('click', () => {
-                    cb.classList.toggle('checked');
-                    const isChecked = cb.classList.contains('checked');
-                    const fieldId = cb.getAttribute('data-field');
-                    handleSave(fieldId, isChecked.toString(), true);
-                });
-            });
-
-            // Set up event listeners for editable cells
-            tbody.querySelectorAll('.editable-cell').forEach(cell => {
-                cell.addEventListener('input', () => {
-                    const billId = cell.getAttribute('data-bill-id');
-                    const field = cell.getAttribute('data-field');
-                    const content = cell.innerText;
-                    handleBillSave(billId, field, content);
-                });
-            });
         }
 
-        function getMonthClass(m) {
-            const classes = ['', 'cb-j', 'cb-f', 'cb-m', 'cb-a', 'cb-ma', 'cb-jun', 'cb-jul', 'cb-au', 'cb-s', 'cb-o', 'cb-n', 'cb-d'];
-            return classes[m];
-        }
-
-        async function handleSave(fieldId, content, immediate = false) {
+        async function toggleCheck(el, fieldId) {
+            el.classList.toggle('checked');
+            const isChecked = el.classList.contains('checked');
             const status = document.getElementById('save-status');
-            
-            if (immediate) {
-                status.innerText = 'Saving...';
-                const savedValue = await savePlannerData(PLANNING_DATE, fieldId, content);
-                if (savedValue) {
-                    status.innerText = 'All changes saved';
-                    if (savedValue !== content) {
-                        const el = document.querySelector(`[data-field="${fieldId}"]`);
-                        if (el) {
-                            if (el.innerText !== undefined) el.innerText = savedValue;
-                            else el.value = savedValue;
-                        }
-                    }
-                } else {
-                    status.innerText = 'Error saving';
-                }
-                return;
-            }
-
-            status.innerText = 'Unsaved changes';
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(async () => {
-                status.innerText = 'Saving...';
-                const savedValue = await savePlannerData(PLANNING_DATE, fieldId, content);
-                if (savedValue) {
-                    status.innerText = 'All changes saved';
-                    if (savedValue !== content) {
-                        const el = document.querySelector(`[data-field="${fieldId}"]`);
-                        if (el) {
-                            if (el.innerText !== undefined) el.innerText = savedValue;
-                            else el.value = savedValue;
-                        }
-                    }
-                } else {
-                    status.innerText = 'Error saving';
-                }
-            }, 1000);
+            status.innerText = 'Saving...';
+            await savePlannerData(PLANNING_DATE, fieldId, isChecked.toString());
+            status.innerText = 'All changes saved';
         }
 
-        async function handleBillSave(billId, field, content) {
+        function handleBillSave(billId, field, content) {
             const status = document.getElementById('save-status');
             status.innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
-                const success = await updateFinancialBill(billId, field, content);
-                status.innerText = success ? 'All changes saved' : 'Error saving';
+                await updateFinancialBill(billId, field, content);
+                status.innerText = 'All changes saved';
             }, 1000);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            init();
-            updateNavigationLinks(dateParam || new Date());
-        });
+        function handleGoalsInput() {
+            const status = document.getElementById('save-status');
+            const content = document.getElementById('financial-goals').innerText;
+            status.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                status.innerText = 'Saving...';
+                await savePlannerData(PLANNING_DATE, 'financial-goals', content);
+                status.innerText = 'All changes saved';
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

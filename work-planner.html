@@ -4,602 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work Planner - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Coming+Soon;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        :root {
-            --sun-bg: #ff5252;
-            --mon-bg: #fb8c00;
-            --tue-bg: #00acc1;
-            --wed-bg: #3949ab;
-            --thu-bg: #e91e63;
-            --fri-bg: #fdd835;
-            --sat-bg: #00897b;
-            --border-color: #2f4f4f;
-            --text-color: #333;
-            --header-blue: #00326b;
-            --sidebar-width: 60px;
-            --notes-sidebar-width: 240px;
-            --purple-btn: #7b2cbf;
-            --purple-hover: #5a189a;
-        }
-
-        /* Work Specific Styles */
-
-        /* Notes Sidebar */
-        .notes-sidebar {
-            width: var(--notes-sidebar-width);
-            background: #fff;
-            border-right: 1px solid #e1dfdd;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 0;
-            flex-shrink: 0;
-        }
-
-        .sidebar-header {
-            font-size: 12px;
-            font-weight: 600;
-            color: #605e5c;
-            padding: 0 20px 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            color: #323130;
-            text-decoration: none;
-            font-size: 12px;
-            gap: 12px;
-            transition: background 0.2s;
-        }
-
-        .sidebar-link:hover {
-            background: #f3f2f1;
-        }
-
-        .sidebar-link.active {
-            background: #f3f2f1;
-            color: var(--header-blue);
-            font-weight: 600;
-        }
-
-        .notebook-main {
-            flex-grow: 1;
-            background: #fff;
-            overflow-y: auto;
-            position: relative;
-            scrollbar-width: thin;
-        }
-
-        #main-content-container {
-            flex-direction: column !important;
-            overflow-y: auto !important;
-            padding: 0 !important;
-            display: flex !important;
-        }
-
-        .notebook-spread {
-            display: flex;
-            flex: 1;
-            width: 100%;
-        }
-
-        .view-pane {
-            flex: 1;
-            background: var(--content-bg);
-            margin: 0 !important;
-            padding: 20px !important;
-            overflow-y: visible !important;
-            position: relative;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-            height: auto !important;
-        }
-
-        .notebook-page {
-            width: 100%;
-            margin: 0;
-            padding: 20px 20px !important;
-            background: #fff;
-            position: relative;
-            box-sizing: border-box;
-            min-height: 100%;
-        }
-
-        .work-header-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-            width: 100%;
-            background: var(--sidebar-bg);
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 30;
-        }
-
-        .main-page-title {
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            color: #333;
-            margin: 0;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .main-page-subtitle {
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            color: #605e5c;
-            margin: 5px 0 15px;
-            font-weight: 600;
-        }
-
-        .header-hr {
-            border: 0;
-            border-top: 1px solid #e1dfdd;
-            margin: 0 0 25px;
-        }
-
-        .planner-header {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .date-range {
-            font-size: 12px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
-        }
-
-        .nav-btn-purple {
-            background: var(--purple-btn);
-            color: #fff;
-            border: none;
-            padding: 8px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-weight: 600;
-            font-size: 12px;
-            transition: background 0.2s;
-        }
-
-        .nav-btn-purple:hover {
-            background: var(--purple-hover);
-        }
-
-        .top-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .top-section {
-            background: #fff;
-            border: 1px solid #e1dfdd;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
-
-        .section-title {
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: #888;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        .editable-area {
-            min-height: 80px;
-            font-size: 12px;
-            outline: none;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            color: #444;
-        }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; background: #f3f2f1; }
         
-        .daily-columns {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0;
-            border: 1px solid #e1dfdd;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-            margin-top: 10px;
-            flex: 1;
-            min-height: 0;
-        }
-
-        .daily-columns.four-col {
-            grid-template-columns: repeat(4, 1fr);
-        }
+        .main-container { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; background: #fff; }
+        .header { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid #e1dfdd; flex-shrink: 0; }
+        .header-title { font-size: 12pt; font-weight: 700; color: #323130; text-transform: uppercase; letter-spacing: 1px; }
         
-        .day-col {
-            border-right: 1px solid #e1dfdd;
-            display: flex;
-            flex-direction: column;
-            background: #fff;
-        }
-
-        .day-col:last-child {
-            border-right: none;
-        }
+        .content-area { flex-grow: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 30px; }
         
-        .day-header {
-            text-align: center;
-            padding: 12px 5px;
-            font-weight: 600;
-            font-size: 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            color: #fff;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            line-height: 1.4;
-        }
+        .section-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .section-title { font-size: 10pt; font-weight: 700; color: #605e5c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; border-bottom: 1px solid #f3f2f1; padding-bottom: 10px; }
+        
+        .handwriting { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #2c3e50; line-height: 1.6; outline: none; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        
+        .todo-list { list-style: none; padding: 0; margin: 0; }
+        .todo-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f2f1; }
+        .checkbox { width: 18px; height: 18px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; }
+        .checkbox.checked { background: #00326b; border-color: #00326b; position: relative; }
+        .checkbox.checked::after { content: '✓'; color: #fff; font-size: 12px; position: absolute; top: -2px; left: 3px; }
 
-        .time-slot {
-            flex: 1;
-            min-height: 0;
-            border-bottom: 1px dotted #eee;
-            display: flex;
-            align-items: center;
-            padding: 0 8px;
-            font-size: 12px;
-            position: relative;
-            box-sizing: border-box;
-        }
-
-        .time-slot:nth-child(even) {
-            background-color: #fafafa;
-        }
-
-        .time-label {
-            width: 35px;
-            color: #999;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-
-        .check-box {
-            width: 15px;
-            height: 15px;
-            border: 1px solid #f59e9e;
-            flex-shrink: 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 6px;
-            border-radius: 2px;
-        }
-
-        .check-box.checked::after {
-            content: "✓";
-            color: #f59e9e;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .slot-content {
-            flex-grow: 1;
-            outline: none;
-            word-break: break-word;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: visible;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            line-height: 13px;
-        }
-
-        .event-pill {
-            background-color: #f0f0f0;
-            border-radius: 4px;
-            padding: 2px 4px;
-            font-size: 12px;
-            border: 1px solid #ddd;
-            width: 100%;
-            box-sizing: border-box;
-            white-space: normal;
-            text-align: center;
-            line-height: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 36px;
-        }
-
-        .event-pill.csea, .event-pill.la-fed { 
-            background-color: #00326b; 
-            color: #ffca38; 
-            border: 1px solid #ffca38; 
-        }
-
-        .event-pill.due { background-color: #ff0000; color: #fff; border: none; }
-        .event-pill.pay-day { background-color: #1b5e20; color: #fff; font-weight: 600; text-transform: uppercase; border: none; }
-        .event-pill.budget { background-color: #408686; color: white; font-weight: 600; text-transform: uppercase; border-left: 10px solid #d4af37; }
-
-        .sun-header { background: var(--sun-bg); }
-        .mon-header { background: var(--mon-bg); }
-        .tue-header { background: var(--tue-bg); }
-        .wed-header { background: var(--wed-bg); }
-        .thu-header { background: var(--thu-bg); }
-        .fri-header { background: var(--fri-bg); }
-        .sat-header { background: var(--sat-bg); }
-
-        .save-status {
-            font-size: 12px;
-            color: #aaa;
-            margin-top: 10px;
-        }
+        .time-grid { display: grid; grid-template-columns: 80px 1fr; border: 1px solid #eee; border-radius: 4px; }
+        .time-label { padding: 10px; background: #f8f9fa; border-bottom: 1px solid #eee; border-right: 1px solid #eee; font-size: 9pt; color: #888; text-align: right; }
+        .time-content { padding: 10px; border-bottom: 1px solid #eee; min-height: 40px; }
+        
+        .back-link { display: flex; align-items: center; gap: 8px; color: #00326b; text-decoration: none; font-size: 9pt; font-weight: 600; margin-bottom: 20px; }
+        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
     </style>
 </head>
 <body>
-    <div style="padding: 10px; height: 100%; display: flex; flex-direction: column; gap: 10px;">
-        <div class="top-grid" style="margin-bottom: 0;">
-            <div class="top-section">
-                <div class="section-title">Priority #1</div>
-                <div class="editable-area" contenteditable="true" id="priority-1" data-field="priority-1" style="min-height: 40px;"></div>
+    <div class="main-container">
+        <header class="header">
+            <div class="header-title" id="page-title-display">Work Planner - January 26, 2026</div>
+            <div class="header-controls">
+                <a href="index.html" class="back-link">← Dashboard</a>
             </div>
-            <div class="top-section">
-                <div class="section-title">Priority #2</div>
-                <div class="editable-area" contenteditable="true" id="priority-2" data-field="priority-2" style="min-height: 40px;"></div>
+        </header>
+
+        <div class="content-area">
+            <div class="grid-3">
+                <div class="section-card">
+                    <div class="section-title">Focus & Priorities</div>
+                    <div id="priorities" class="handwriting" contenteditable="true" oninput="handleInput('priorities')"></div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title">To-Do List</div>
+                    <div id="todo-list" class="handwriting" contenteditable="true" oninput="handleInput('todo-list')"></div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title">Reflection</div>
+                    <div id="reflection" class="handwriting" contenteditable="true" oninput="handleInput('reflection')"></div>
+                </div>
             </div>
-            <div class="top-section">
-                <div class="section-title">Priority #3</div>
-                <div class="editable-area" contenteditable="true" id="priority-3" data-field="priority-3" style="min-height: 40px;"></div>
+
+            <div class="section-card">
+                <div class="section-title">Daily Schedule</div>
+                <div id="schedule-grid" class="time-grid">
+                    <!-- Schedule injected here -->
+                </div>
             </div>
         </div>
-
-        <div id="planner-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; flex: 1; min-height: 0;">
-            <!-- Days will be injected here -->
-        </div>
-
-        <div id="save-status" class="save-status" style="margin-top: 0;">All changes saved</div>
     </div>
+    <div id="save-status" class="save-status">All changes saved</div>
+
     <script>
-        function parseLocalDate(dateStr) {
-            if (!dateStr) return null;
-            const [year, month, day] = dateStr.split('-').map(Number);
-            return new Date(year, month - 1, day);
-        }
         const urlParams = new URLSearchParams(window.location.search);
-        const dateParam = urlParams.get('date');
-        let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date();
-        // Adjust to Sunday of the week
-        const startDay = currentStartDate.getDay();
-        currentStartDate.setDate(currentStartDate.getDate() - startDay);
-        let saveTimeout = null;
-        async function handleSavePlannerData(date, fieldId, content) {
-            const saveStatus = document.getElementById('save-status');
-            saveStatus.innerText = 'Saving...';
-            const savedValue = await savePlannerData(date, fieldId, content);
-            if (savedValue) {
-                saveStatus.innerText = 'All changes saved';
-                if (savedValue !== content) {
-                    // Update UI if timestamp was prepended
-                    const el = document.querySelector(`[data-field="${fieldId}"][data-date="${date}"]`) || 
-                               document.querySelector(`[data-field="${fieldId}"]`);
-                    if (el) {
-                        if (el.innerText !== undefined) el.innerText = savedValue;
-                        else el.value = savedValue;
-                    }
-                }
-            } else {
-                saveStatus.innerText = 'Error saving';
+        const dateParam = urlParams.get('date') || '2026-01-26';
+        const displayDate = new Date(dateParam);
+        
+        document.getElementById('page-title-display').innerText = `Work Planner - ${displayDate.toLocaleDateString('default', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+
+        const PERSISTENCE_KEY = `work-planner-${dateParam}`;
+        let saveTimeout;
+
+        async function init() {
+            // Load data from Supabase
+            const data = await fetchPlannerData(PERSISTENCE_KEY);
+            if (data && data.length > 0) {
+                const contentMap = JSON.parse(data[0].content || '{}');
+                document.getElementById('priorities').innerText = contentMap.priorities || '';
+                document.getElementById('todo-list').innerText = contentMap.todo || '';
+                document.getElementById('reflection').innerText = contentMap.reflection || '';
+            }
+
+            // Render Schedule
+            const schedule = document.getElementById('schedule-grid');
+            for (let hour = 5; hour <= 20; hour++) {
+                const label = hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`;
+                schedule.innerHTML += `
+                    <div class="time-label">${label}</div>
+                    <div id="hour-${hour}" class="time-content handwriting" contenteditable="true" oninput="handleScheduleInput(${hour})"></div>
+                `;
             }
         }
-        function toggleEventBox(e, date, fieldId) {
-            const box = e.target;
-            box.classList.toggle('checked');
-            const isChecked = box.classList.contains('checked');
-            handleSavePlannerData(date, fieldId, isChecked ? 'true' : 'false');
-        }
-        function handleInput(e) {
-            const el = e.target;
-            const fieldId = el.getAttribute('data-field');
-            const date = el.getAttribute('data-date') || currentStartDate.toISOString().split('T')[0];
-            const content = el.innerText;
-            document.getElementById('save-status').innerText = 'Unsaved changes';
+
+        function handleInput(type) {
+            updateSaveStatus('Saving...');
             clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => handleSavePlannerData(date, fieldId, content), 1000);
+            saveTimeout = setTimeout(async () => {
+                const content = {
+                    priorities: document.getElementById('priorities').innerText,
+                    todo: document.getElementById('todo-list').innerText,
+                    reflection: document.getElementById('reflection').innerText
+                };
+                const success = await savePlannerData(PERSISTENCE_KEY, 'work-planner', JSON.stringify(content));
+                updateSaveStatus(success ? 'All changes saved' : 'Error saving');
+            }, 1000);
         }
-        function getTimeSlots() {
-            const slots = [];
-            for (let hour = 6; hour <= 21; hour++) {
-                slots.push(`${hour}:00`);
-                slots.push(`${hour}:30`);
-            }
-            slots.push(`22:00`);
-            return slots;
+
+        function updateSaveStatus(text) {
+            document.getElementById('save-status').innerText = text;
         }
-        function getEventForSlot(dayEvents, timeSlot, dayIndex) {
-            const [h, m] = timeSlot.split(':').map(Number);
-            const slotTotalMinutes = h * 60 + m;
-            
-            // Current Date Helper
-            const currentDay = new Date(currentStartDate);
-            currentDay.setDate(currentDay.getDate() + dayIndex);
-            const dateStr = currentDay.toISOString().split('T')[0];
 
-            // 1. Check for database events with an explicit time
-            const exactMatch = dayEvents.find(e => {
-                if (!e.time) return false;
-                const [eh, em] = e.time.split(':').map(Number);
-                return (eh * 60 + em) === slotTotalMinutes;
-            });
-            if (exactMatch) return exactMatch.title;
-
-            // 2. Specific logic rules (Fallbacks or duration-based)
-            
-            // LA 500 Negotiations Prep: Tue Jan 27, 2026, 2:00 PM - 3:30 PM
-            if (dateStr === '2026-01-27') {
-                if (slotTotalMinutes >= (14 * 60) && slotTotalMinutes < (15 * 60 + 30)) return 'LA 500 Negotiations Prep';
-            }
-
-            // CSEA Reopener Negotiations: Wed Jan 28, 2026, 12:30 PM - 4:30 PM
-            if (dateStr === '2026-01-28') {
-                if (slotTotalMinutes >= (12 * 60 + 30) && slotTotalMinutes < (16 * 60 + 30)) return 'CSEA Reopener Negotiations';
-            }
-
-            // CSEA Reopener Negotiations: Feb 06, 2026, 9:30 AM - 4:30 PM
-            if (dateStr === '2026-02-06') {
-                if (slotTotalMinutes >= (9 * 60 + 30) && slotTotalMinutes < (16 * 60 + 30)) return 'CSEA Reopener Negotiations';
-            }
-
-            // Rule: Chapter (5:30 - 7:30)
-            const chapterEvent = dayEvents.find(e => e.title.toUpperCase().includes('CHAPTER'));
-            if (chapterEvent) {
-                if (slotTotalMinutes >= (17 * 60 + 30) && slotTotalMinutes < (19 * 60 + 30)) return chapterEvent.title;
-            }
-            // Rule: Steward (4:00 - 5:00)
-            const stewardEvent = dayEvents.find(e => e.title.toUpperCase().includes('STEWARD'));
-            if (stewardEvent) {
-                if (slotTotalMinutes >= (16 * 60) && slotTotalMinutes < (17 * 60)) return stewardEvent.title;
-            }
-            // Rule: LA Fed (7:00 - 8:00)
-            const laFedEvent = dayEvents.find(e => e.title.toUpperCase().includes('LA FED'));
-            if (laFedEvent) {
-                if (slotTotalMinutes >= (19 * 60) && slotTotalMinutes < (20 * 60)) return laFedEvent.title;
-            }
-            // Rule: RPM (Hardcoded logic if not explicit in DB)
-            const rpmEvent = dayEvents.find(e => e.title.toUpperCase().includes('RPM'));
-            if (rpmEvent && !rpmEvent.time) {
-                const rpmStartMinutes = (dayIndex === 4) ? (17 * 60) : (17 * 60 + 30); // Thu 5:00, else 5:30
-                if (slotTotalMinutes === rpmStartMinutes) return rpmEvent.title;
-            }
-            return null;
-        }
-        async function renderPlanner() {
-            const gridContainer = document.getElementById('planner-grid');
-            gridContainer.innerHTML = 'Loading...';
-
-            // Set global header
-            const weekEnd = new Date(currentStartDate);
-            weekEnd.setDate(weekEnd.getDate() + 6);
-            const rangeStr = `${formatDateMMM(currentStartDate.toISOString().split('T')[0])} - ${formatDateMMM(weekEnd.toISOString().split('T')[0])}`.toUpperCase();
-            setGlobalHeaderTitle(`WORK PLANNER | ${rangeStr}`);
-
-            updateNavigationLinks(currentStartDate);
-            // Clear top priorities
-            document.querySelectorAll('.editable-area').forEach(el => {
-                el.innerText = '';
-                el.oninput = handleInput;
-            });
-            const timeSlots = getTimeSlots();
-            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const dayClasses = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-            const [events, plannerData] = await Promise.all([
-                fetchCalendarEvents(currentStartDate),
-                fetchPlannerData(currentStartDate)
-            ]);
-            // Fill top priorities from plannerData
-            const startStr = currentStartDate.toISOString().split('T')[0];
-            plannerData.forEach(item => {
-                if (item.date === startStr) {
-                    const el = document.querySelector(`[data-field="${item.field_id}"]`);
-                    if (el && !item.field_id.startsWith('slot-')) {
-                        el.innerText = item.content;
-                    }
-                }
-            });
-            gridContainer.innerHTML = '';
-            for (let i = 0; i < 7; i++) {
-                const dayDate = new Date(currentStartDate);
-                dayDate.setDate(dayDate.getDate() + i);
-                const dayStr = dayDate.toISOString().split('T')[0];
-                let dayEvents = events.filter(e => e.date === dayStr);
-                const dayCol = document.createElement('div');
-                dayCol.className = 'day-col';
-                dayCol.style.border = '1px solid #e1dfdd';
-                dayCol.style.borderRadius = '12px';
-                dayCol.style.overflow = 'hidden';
-
-                const header = document.createElement('div');
-                header.className = `day-header ${dayClasses[i]}-header`;
-                header.innerHTML = `${dayNames[i].substring(0, 3).toUpperCase()}<br>${formatDateMMM(dayStr).toUpperCase()}`;
-                dayCol.appendChild(header);
-                timeSlots.forEach(slot => {
-                    const slotDiv = document.createElement('div');
-                    slotDiv.className = 'time-slot';
-                    const label = document.createElement('div');
-                    label.className = 'time-label';
-                    label.innerText = formatTime(slot, true);
-                    slotDiv.appendChild(label);
-
-                    // Add Checkbox
-                    const checkId = `check-slot-${slot}`;
-                    const isChecked = plannerData.some(d => d.date === dayStr && d.field_id === checkId && d.content === 'true');
-                    const checkBox = document.createElement('div');
-                    checkBox.className = `check-box${isChecked ? ' checked' : ''}`;
-                    checkBox.onclick = (e) => toggleEventBox(e, dayStr, checkId);
-                    slotDiv.appendChild(checkBox);
-
-                    const content = document.createElement('div');
-                    content.className = 'slot-content';
-                    const eventTitle = getEventForSlot(dayEvents, slot, i);
-                    if (eventTitle) {
-                        content.innerHTML = `<div class="event-pill ${getEventClass(eventTitle)}">${eventTitle}</div>`;
-                    } else {
-                        content.contentEditable = "true";
-                        content.setAttribute('data-field', `slot-${slot}`);
-                        content.setAttribute('data-date', dayStr);
-                        content.oninput = handleInput;
-                        const saved = plannerData.find(d => d.date === dayStr && d.field_id === `slot-${slot}`);
-                        if (saved) {
-                            content.innerText = saved.content;
-                        }
-                    }
-                    slotDiv.appendChild(content);
-                    dayCol.appendChild(slotDiv);
-                });
-                gridContainer.appendChild(dayCol);
-            }
-        }
-        async function changeWeek(delta) {
-            const container = document.querySelector('.notebook-main');
-            const direction = delta > 0 ? 'next' : 'prev';
-            if (container) {
-                container.classList.remove('flip-in-next', 'flip-in-prev');
-                container.classList.add(`flip-out-${direction}`);
-                await new Promise(r => setTimeout(r, 600));
-                
-                currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
-                const dateStr = currentStartDate.toISOString().split('T')[0];
-                const newUrl = window.location.pathname + '?date=' + dateStr;
-                window.history.pushState({ date: dateStr }, '', newUrl);
-                await renderPlanner();
-                
-                container.classList.remove(`flip-out-${direction}`);
-                container.classList.add(`flip-in-${direction}`);
-            } else {
-                currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
-                renderPlanner();
-            }
-        }
-        window.onpopstate = function(event) {
-            const date = event.state ? event.state.date : dateParam;
-            currentStartDate = date ? new Date(date) : new Date();
-            const day = currentStartDate.getDay();
-            currentStartDate.setDate(currentStartDate.getDate() - day);
-            renderPlanner();
-        };
-        renderPlanner();
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

@@ -8,304 +8,44 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        :root {
-            --header-blue: #00326b;
-            --border-color: #e1dfdd;
-            --section-sidebar-width: 220px;
-            --sidebar-dark: #2b2d31;
-        }
-        /* HOA Specific Styles */
-        .notebook-container {
-            display: flex;
-            height: 100%;
-            width: 100%;
-            background: #fff;
-            overflow: hidden;
-        }
-        /* Vertical Sub-Sidebar */
-        .section-sidebar {
-            width: var(--section-sidebar-width);
-            background: var(--sidebar-dark);
-            display: flex;
-            flex-direction: column;
-            padding-top: 15px;
-            flex-shrink: 0;
-            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
-        }
-        .section-link {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            color: #b5bac1;
-            text-decoration: none;
-            font-size: 12px;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            transition: all 0.2s ease;
-            gap: 12px;
-        }
-        .section-link:hover {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-        }
-        .section-link.active {
-            color: #fff;
-            background: rgba(255,255,255,0.1);
-        }
-        .section-link svg {
-            width: 18px;
-            height: 18px;
-            opacity: 0.7;
-        }
-        .section-link:hover svg, .section-link.active svg {
-            opacity: 1;
-        }
-
-        .notebook-main {
-            flex-grow: 1;
-            background: #fff;
-            overflow-y: auto;
-            position: relative;
-            scrollbar-width: thin;
-        }
-        .notebook-page {
-            width: 100%;
-            padding: 20px !important;
-            box-sizing: border-box;
-            min-height: 100%;
-        }
-
-        .page-title {
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            color: var(--header-blue);
-            margin: 0 0 10px 0;
-            letter-spacing: 3px;
-            font-weight: 600;
-            border-bottom: 1px solid #e1dfdd;
-            padding-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .notes-section {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .input-group {
-            background: #fdfdfd;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #e1dfdd;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        textarea {
-            width: 100%;
-            height: 120px;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            padding: 15px;
-            border: 1px solid #e1dfdd;
-            border-radius: 4px;
-            line-height: 13px;
-            resize: vertical;
-            box-sizing: border-box;
-            outline: none;
-            background: #fff;
-        }
-
-        .save-btn {
-            align-self: flex-end;
-            padding: 8px 25px;
-            background-color: var(--header-blue);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-weight: 600;
-            font-size: 12px;
-            transition: opacity 0.2s;
-        }
-
-        .save-btn:hover {
-            opacity: 0.9;
-        }
-
-        body {
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .main-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 10px 20px;
-            height: 100%;
-            box-sizing: border-box;
-            min-height: 0;
-        }
-        .notes-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            flex: 1;
-            min-height: 0;
-        }
-        .entries-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            flex: 1;
-            overflow-y: auto;
-            min-height: 0;
-        }
-
-        .note-entry {
-            background: #fff;
-            border: 1px solid #e1dfdd;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            position: relative;
-            transition: box-shadow 0.2s;
-        }
-        .note-entry:hover {
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-        }
-
-        .entry-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #a19f9d;
-            margin-bottom: 12px;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .entry-content {
-            white-space: pre-wrap;
-            line-height: 13px;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            color: #333;
-            outline: none;
-        }
-
-        .delete-btn {
-            cursor: pointer;
-            color: #a4262c;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-        .delete-btn:hover {
-            opacity: 1;
-        }
-
-        .save-status-inline {
-            font-size: 12px;
-            color: #a19f9d;
-            height: 15px;
-        }
+        :root { --soft-bg: #fdfcf0; }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; background: #f8f9fa; }
+        
+        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; }
+        
+        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
+        .notebook-page { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
+        
+        .view-section { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .handwriting, textarea, .planner-edit { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #2c3e50; }
+        
+        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 5px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
+        
+        .save-btn { padding: 8px 25px; background-color: var(--header-blue); color: white; border: none; border-radius: 4px; cursor: pointer; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 10pt; transition: opacity 0.2s; }
+        .save-btn:hover { opacity: 0.9; }
+        .save-status { font-size: 9pt; color: #888; }
+        .delete-btn { cursor: pointer; color: #a4262c; font-size: 8pt; text-transform: uppercase; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="notebook-container">
-        <!-- HOA Sub-Navigation Sidebar -->
-        <div class="section-sidebar">
-            <a href="?section=open-items" class="section-link active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="3" y1="15" x2="21" y2="15"></line>
-                    <line x1="9" y1="3" x2="9" y2="21"></line>
-                    <line x1="15" y1="3" x2="15" y2="21"></line>
-                </svg>
-                <span>Open Items</span>
-            </a>
-            <a href="?section=financials" class="section-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-                <span>Financials</span>
-            </a>
-            <a href="?section=incidents" class="section-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-                <span>Incidents</span>
-            </a>
-            <a href="?section=insurance" class="section-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-                <span>Insurance</span>
-            </a>
-            <a href="?section=legal" class="section-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-                <span>Legal</span>
-            </a>
-            <a href="?section=maintenance" class="section-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-                <span>Maintenance & Repairs</span>
-            </a>
-        </div>
-
-        <!-- Main Content Wrapper -->
-        <div class="notebook-main">
-            <div class="notebook-page">
-                
-                <div class="notes-grid">
-                    <div class="notes-section">
-                        <div class="input-group">
-                            <textarea id="new-note-content" placeholder="Type a new note here..." oninput="handleDraftInput()"></textarea>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div id="save-status" class="save-status-inline">All changes saved</div>
-                                <button class="save-btn" onclick="handleAddNote()">Save Note</button>
-                            </div>
+        <main class="notebook-main">
+            <div id="main-content" class="notebook-page">
+                <div class="view-section">
+                    <div class="page-title" id="hoa-title">HOA NOTES</div>
+                    <div class="new-note-area">
+                        <textarea id="new-note-content" class="handwriting" placeholder="Start typing your HOA notes here..." oninput="handleNoteDraftInput()" style="width: 100%; min-height: 200px; border: none; outline: none; background: transparent; resize: none;"></textarea>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                            <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+                            <div id="save-status" class="save-status">All changes saved</div>
                         </div>
                     </div>
-                    <div id="entries-list" class="entries-list">
-                        <!-- Entries will be loaded here -->
-                    </div>
                 </div>
+                <div id="entries-list"></div>
             </div>
-        </div>
+        </main>
     </div>
+
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const section = urlParams.get('section') || 'open-items';
@@ -313,6 +53,8 @@
         setGlobalHeaderTitle(`HOA ${section.toUpperCase().replace("-", " ")} ${currentYear}`);
         const displayDate = dateParam ? new Date(dateParam) : new Date();
         const currentYear = displayDate.getFullYear();
+        const CATEGORY = `HOA-${currentYear}`;
+        const PERSISTENCE_KEY = `draft-note-${CATEGORY}`;
         
         // Dynamic Category based on section
         const CATEGORY = section === 'open-items' ? `HOA-${currentYear}` : `HOA-${section}-${currentYear}`;
@@ -332,35 +74,30 @@
         const saveStatus = document.getElementById('save-status');
         let saveTimeout = null;
 
-        // Update Title
-        const sectionLabels = {
-            'open-items': 'Open Items',
-            'financials': 'Financials',
-            'incidents': 'Incidents',
-            'insurance': 'Insurance',
-            'legal': 'Legal',
-            'maintenance': 'Maintenance & Repairs'
-        };
-        document.querySelector('.page-title').innerText = `Hoa ${sectionLabels[section] || 'Notes'} ${currentYear}`;
-
-        function createEntryElement(entry) {
-            const div = document.createElement('div');
-            div.className = 'note-entry';
-            div.id = `entry-${entry.id}`;
-            div.innerHTML = `
-                <div class="entry-header">
-                    <span>${formatDate(entry.created_at)}</span>
-                    <span class="delete-btn" onclick="handleDeleteNote(${entry.id})">Delete</span>
-                </div>
-                <div class="entry-content" contenteditable="true" oninput="handleEditNote(event, ${entry.id})">${entry.content}</div>
-            `;
-            return div;
+        // Initialize Global Sidebar/Header if available in shared.js
+        if (typeof setGlobalHeaderTitle === 'function') {
+            setGlobalHeaderTitle(`HOA NOTES ${currentYear}`);
         }
+        if (typeof updateNavigationLinks === 'function') {
+            updateNavigationLinks(displayDate);
+        }
+
         async function loadEntries() {
             const entries = await fetchCategoryEntries(CATEGORY);
             entriesList.innerHTML = '';
             entries.forEach(entry => {
-                entriesList.appendChild(createEntryElement(entry));
+                const div = document.createElement('div');
+                div.className = 'view-section handwriting';
+                div.style.position = 'relative';
+                div.style.marginBottom = '20px';
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; font-size: 8pt; color: #888; margin-bottom: 5px;">
+                        <span>${new Date(entry.created_at).toLocaleDateString()}</span>
+                        <span class="delete-btn" onclick="handleDeleteNote(${entry.id})">Delete</span>
+                    </div>
+                    <div class="planner-edit" contenteditable="true" oninput="handleEditNote(event, ${entry.id})" style="outline: none;">${entry.content}</div>
+                `;
+                entriesList.appendChild(div);
             });
 
             // Load draft
@@ -369,40 +106,28 @@
                 newNoteContent.value = draft[0].content;
             }
         }
-        function handleDraftInput() {
+
+        function handleNoteDraftInput() {
             saveStatus.innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 saveStatus.innerText = 'Saving...';
-                const savedValue = await savePlannerData(PERSISTENCE_KEY, 'draft', newNoteContent.value);
-                if (savedValue) {
-                    saveStatus.innerText = 'All changes saved';
-                    if (savedValue !== newNoteContent.value) {
-                        newNoteContent.value = savedValue;
-                    }
-                } else {
-                    saveStatus.innerText = 'Error saving';
-                }
+                const success = await savePlannerData(PERSISTENCE_KEY, 'draft', newNoteContent.value);
+                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
+
         function handleEditNote(e, id) {
             saveStatus.innerText = 'Unsaved changes';
-            const el = e.target;
-            const content = el.innerText;
+            const content = e.target.innerText;
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 saveStatus.innerText = 'Saving...';
-                const savedValue = await updateCategoryEntry(id, content);
-                if (savedValue) {
-                    saveStatus.innerText = 'All changes saved';
-                    if (savedValue !== content) {
-                        el.innerText = savedValue;
-                    }
-                } else {
-                    saveStatus.innerText = 'Error saving';
-                }
+                const success = await updateCategoryEntry(id, content);
+                saveStatus.innerText = success ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
+
         async function handleAddNote() {
             const content = newNoteContent.value;
             if (!content.trim()) return;
@@ -410,26 +135,24 @@
             const newEntry = await saveCategoryEntry(CATEGORY, content);
             if (newEntry) {
                 newNoteContent.value = '';
-                // Clear draft
                 await savePlannerData(PERSISTENCE_KEY, 'draft', '');
                 saveStatus.innerText = 'Saved';
-                entriesList.prepend(createEntryElement(newEntry));
-                setTimeout(() => { saveStatus.innerText = 'All changes saved'; }, 2000);
+                loadEntries(); // Reload to show new note at top
             } else {
                 saveStatus.innerText = 'Error saving';
             }
         }
+
         async function handleDeleteNote(id) {
             if (confirm('Are you sure you want to delete this note?')) {
                 const success = await deleteCategoryEntry(id);
                 if (success) {
-                    document.getElementById(`entry-${id}`).remove();
+                    loadEntries();
                 }
             }
         }
-        // Initialize
-        updateNavigationLinks(displayDate);
-        loadEntries();
+
+        document.addEventListener('DOMContentLoaded', loadEntries);
     </script>
 </body>
 </html>

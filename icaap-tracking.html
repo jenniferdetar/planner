@@ -4,478 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Icaap Tracking - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        :root {
-            --header-blue: #00326b;
-            --table-green: #1b5e20;
-            --border-color: #e1dfdd;
-            --section-sidebar-width: 60px;
-        }
-        body {
-            background-color: #f3f2f1;
-            margin: 0;
-            padding: 0;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .notebook-container {
-            display: flex;
-            flex-grow: 1;
-            overflow: hidden;
-            background: #fff;
-        }
-        /* Vertical Sidebar */
-        .section-sidebar {
-            width: var(--section-sidebar-width);
-            background: #1e3a63;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            gap: 15px;
-            flex-shrink: 0;
-            box-shadow: inset -1px 0 0 rgba(0,0,0,0.1);
-        }
-        .section-icon {
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-        .section-icon:hover {
-            background: rgba(255,255,255,0.1);
-            opacity: 1;
-            transform: scale(1.05);
-        }
-        .section-icon.active {
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            opacity: 1;
-        }
-        .section-icon.logout-icon {
-            margin-top: auto;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        .section-icon.logout-icon:hover {
-            opacity: 1;
-            color: #ffcdd2;
-        }
-
-        .notebook-main {
-            flex-grow: 1;
-            background: #fff;
-            overflow-y: auto;
-            position: relative;
-            scrollbar-width: thin;
-        }
-        .notebook-page {
-            width: 100%;
-            margin: 0 auto;
-            padding: 10px 20px !important;
-            background: #fff;
-            box-sizing: border-box;
-            min-height: 100%;
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #e1dfdd;
-            padding-bottom: 10px;
-        }
-        .page-title {
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-            color: var(--header-blue);
-            margin: 0 0 15px 0;
-            letter-spacing: 3px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .tracking-links-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .tracking-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: #f3f2f1;
-            color: #323130;
-            padding: 8px 16px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: 1px solid #e1dfdd;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-        }
-        .tracking-pill:hover {
-            background-color: #edebe9;
-            border-color: #d2d0ce;
-        }
-        .tracking-pill span {
-            font-size: 12px;
-        }
-
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-            border: 1px solid #e1dfdd;
-            border-radius: 4px;
-            margin-top: 20px;
-            position: relative;
-        }
-        .tracking-table {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 12px;
-        }
-        .tracking-table th, .tracking-table td {
-            border: 1px solid #eee;
-            padding: 5px 8px;
-            text-align: center;
-        }
-        .header-row th {
-            background-color: #f8f9fa;
-            color: #323130;
-            font-weight: 600;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 12px;
-            border-bottom: 2px solid #e1dfdd;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .sub-header th {
-            background-color: #fafafa;
-            position: sticky;
-            top: 35px; /* Adjust based on header height */
-            z-index: 10;
-            font-size: 12px;
-            color: #605e5c;
-        }
-        .employee-col {
-            font-weight: 600;
-            text-align: left !important;
-            min-width: 180px;
-            position: sticky;
-            left: 0;
-            background-color: #fff;
-            z-index: 15;
-            border-right: 2px solid #e1dfdd !important;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-        }
-        .header-row .employee-col, .sub-header .employee-col {
-            background-color: #f8f9fa;
-            z-index: 20;
-        }
-        .total-col {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            border-left: 2px solid #e1dfdd !important;
-            font-size: 12px;
-        }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; overflow: hidden; background: #f8f9fa; }
+        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; }
+        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
+        .notebook-page { width: 100%; max-width: 100%; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
         
-        .editable-cell {
-            outline: none;
-            min-height: 20px;
-            background-color: #fff;
-            font-family: 'Coming Soon', cursive; font-size: 12px; line-height: 13px; font-weight: 600;
-            font-size: 12px;
-        }
-        .editable-cell:focus {
-            background-color: #fffde7;
-            box-shadow: inset 0 0 0 2px var(--header-blue);
-        }
+        .view-section { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 20px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
         
-        .save-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 12px;
-            color: #666;
-            z-index: 2000;
-        }
+        .table-container { width: 100%; overflow-x: auto; margin-top: 10px; border: 1px solid #eee; border-radius: 4px; }
+        .tracking-table { border-collapse: collapse; width: 100%; font-size: 8pt; table-layout: fixed; }
+        .tracking-table th, .tracking-table td { border: 1px solid #eee; padding: 4px; text-align: center; height: 35px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .tracking-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 7pt; position: sticky; top: 0; z-index: 10; }
+        
+        .employee-col { text-align: left !important; font-weight: 700; min-width: 150px; position: sticky; left: 0; background: #fff; z-index: 5; border-right: 2px solid #eee !important; }
+        .header-row th.employee-col { background: #f8f9fa; z-index: 11; }
+        
+        .handwriting, .editable-cell { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #2c3e50; outline: none; }
+        .editable-cell:focus { background-color: #fffde7; }
+
+        .save-status { font-size: 9pt; color: #888; text-align: right; margin-top: 10px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--header-blue); text-decoration: none; font-size: 9pt; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; }
+        
+        .month-header { background: #f0f4f8 !important; border-bottom: 2px solid #d1d9e6 !important; }
+        .total-col { background: #f8f9fa; font-weight: 700; border-left: 2px solid #eee !important; }
     </style>
 </head>
 <body>
-    <div style="padding: 20px;">
-        
-        </div>
-
-        <div class="table-container">
-            <table class="tracking-table">
-                <thead>
-                    <tr class="header-row">
-                        <script>
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const dateParam = urlParams.get('date');
-                            let baseDate = dateParam ? new Date(dateParam) : new Date();
-                            if (isNaN(baseDate.getTime())) baseDate = new Date();
-                            
-                            // Determine fiscal year start (July)
-                            let startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
-                            
-                            const months = [];
-                            const monthNames = [
-                                'July', 'August', 'September', 'October', 
-                                'November', 'December', 'January', 'February', 
-                                'March', 'April', 'May', 'June'
-                            ];
-                            
-                            for (let i = 0; i < 12; i++) {
-                                const year = i < 6 ? startYear : startYear + 1;
-                                months.push(`${monthNames[i]} ${year}`);
-                            }
-
-                            document.write(`<th rowspan="2" class="employee-col">Employee Name</th>`);
-                            months.forEach(month => {
-                                document.write(`<th colspan="3">${month}</th>`);
-                            });
-                            document.write(`<th rowspan="2" class="total-col">Total Hours</th>`);
-                        </script>
-                    </tr>
-                    <tr class="sub-header">
-                        <script>
-                            months.forEach(month => {
-                                document.write(`<th>Paylog Sub.</th><th>Hours</th><th>Approval</th>`);
-                            });
-                        </script>
-                    </tr>
-                </thead>
-                <tbody id="tracking-body">
-                </tbody>
-            </table>
-        </div>
+    <div class="notebook-container">
+        <main class="notebook-main">
+            <div id="main-content" class="notebook-page">
+                <a href="icaap.html" class="back-link">← Back to ICAAP Hub</a>
+                <div class="view-section">
+                    <div class="page-title">MASTER TRACKING LOG</div>
+                    <div class="table-container">
+                        <table class="tracking-table">
+                            <thead>
+                                <tr class="header-row" id="header-row-1"></tr>
+                                <tr class="header-row" id="header-row-2"></tr>
+                            </thead>
+                            <tbody id="tracking-body"></tbody>
+                        </table>
+                    </div>
+                    <div id="save-status" class="save-status">All changes saved</div>
+                </div>
+            </div>
+        </main>
     </div>
-    <div id="save-status" class="save-status">All changes saved</div>
+
     <script>
-        const employees = DEFAULT_EMPLOYEES;
-        
-        // Context variables
-        const urlParams_main = new URLSearchParams(window.location.search);
-        const dateParam_main = urlParams_main.get('date');
-        let baseDate_main = dateParam_main ? new Date(dateParam_main) : new Date();
-        if (isNaN(baseDate_main.getTime())) baseDate_main = new Date();
-        const startYear = baseDate_main.getMonth() < 6 ? baseDate_main.getFullYear() - 1 : baseDate_main.getFullYear();
-        
+        const monthNames = ['July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'];
+        const urlParams = new URLSearchParams(window.location.search);
+        let baseDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date();
+        const startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
         const PERSISTENCE_KEY = `icaap-tracking-data-${startYear}`;
         let saveTimeout;
-        let allEmployees = [];
 
         async function init() {
-            setGlobalHeaderTitle("ICAAP MASTER TRACKING LOG");
-            // Load all tracking data in parallel with fiscal year context
-            const [hoursData, approvalData, paylogData] = await Promise.all([
+            if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle(`ICAAP MASTER LOG ${startYear}-${startYear+1}`);
+            
+            const [hours, approvals, paylogs, plannerData] = await Promise.all([
                 fetchHoursWorked(startYear),
                 fetchApprovalDates(startYear),
-                fetchPaylogSubmissions(startYear)
+                fetchPaylogSubmissions(startYear),
+                fetchPlannerData(PERSISTENCE_KEY, 1)
             ]);
 
-            // Load custom/placeholder data
-            const plannerData = await fetchPlannerData(PERSISTENCE_KEY, 1);
+            const nameSet = new Set(DEFAULT_EMPLOYEES);
+            [...hours, ...approvals, ...paylogs].forEach(r => { 
+                const n = r.name || r.Name;
+                if (n) nameSet.add(n); 
+            });
+            const employees = [...nameSet].sort();
+
+            const h1 = document.getElementById('header-row-1');
+            const h2 = document.getElementById('header-row-2');
             
-            // Extract all names from the fetched data
-            const dbNames = new Set();
-            hoursData.forEach(r => { if (r.name) dbNames.add(r.name); });
-            approvalData.forEach(r => { if (r.Name) dbNames.add(r.Name); });
-            paylogData.forEach(r => { if (r.name) dbNames.add(r.name); });
+            h1.innerHTML = `<th rowspan="2" class="employee-col">Employee Name</th>` + 
+                monthNames.map((m, i) => `<th colspan="3" class="month-header">${m.substring(0,3)} ${i < 6 ? startYear : startYear + 1}</th>`).join('') + 
+                `<th rowspan="2" class="total-col">Total</th>`;
+            
+            h2.innerHTML = monthNames.map(() => `<th>Sub.</th><th>Hrs</th><th>App.</th>`).join('');
 
-            // Merge hardcoded employees with any new names from DB
-            const nameSet = new Set(employees.map(toTitleCase));
-            dbNames.forEach(name => nameSet.add(toTitleCase(name)));
-            allEmployees = [...nameSet].sort();
-
-            // Re-render table rows if names changed or to ensure consistency
-            renderTableRows();
-
-            const hoursMap = {};
-            hoursData.forEach(row => {
-                if (row.name) hoursMap[row.name.toLowerCase()] = row;
-            });
-
-            const approvalMap = {};
-            approvalData.forEach(row => {
-                if (row.Name) approvalMap[row.Name.toLowerCase()] = row;
-            });
-
-            const paylogMap = {};
-            paylogData.forEach(row => {
-                if (row.name) paylogMap[row.name.toLowerCase()] = row;
-            });
-
-            // Populate custom data
-            plannerData.forEach(item => {
-                const el = document.querySelector(`[data-field="${item.field_id}"]`);
-                if (el) el.innerText = item.content;
-            });
-
-            // Populate real data
-            document.querySelectorAll('.editable-cell').forEach(cell => {
-                const fieldId = cell.dataset.field;
-                const parts = fieldId.split('-'); // icaap, mIdx/total, eIdx, type
-                
-                if (parts[1] === 'total') {
-                    const eIdx = parseInt(parts[2]);
-                    const empName = allEmployees[eIdx];
-                    if (!empName) return;
-                    const row = hoursMap[empName.toLowerCase()];
-                    if (row && row.total !== undefined && row.total !== null) {
-                        cell.innerText = row.total;
-                    }
-                } else if (parts.length === 4) {
-                    const mIdx = parseInt(parts[1]);
-                    const eIdx = parseInt(parts[2]);
-                    const type = parts[3];
-                    const empName = allEmployees[eIdx];
-                    if (!empName) return;
-                    const monthName = months[mIdx].split(' ')[0];
-                    const lowerEmpName = empName.toLowerCase();
-
-                    if (type === 'hours') {
-                        const row = hoursMap[lowerEmpName];
-                        if (row) {
-                            const val = row[monthName.toLowerCase().substring(0, 3)];
-                            if (val !== undefined && val !== null) cell.innerText = val;
-                        }
-                    } else if (type === 'approval') {
-                        const row = approvalMap[lowerEmpName];
-                        if (row) {
-                            const val = row[monthName.substring(0, 3)];
-                            if (val !== undefined && val !== null) cell.innerText = val;
-                        }
-                    } else if (type === 'paylog') {
-                        const row = paylogMap[lowerEmpName];
-                        if (row) {
-                            const val = row[monthName.toLowerCase().substring(0, 3)];
-                            if (val !== undefined && val !== null) cell.innerText = val;
-                        }
-                    }
-                }
-
-                cell.addEventListener('input', () => {
-                    handleSave(cell);
-                });
-            });
-
-            // Recalculate and display all totals in UI
-            allEmployees.forEach((emp, eIdx) => {
-                let total = 0;
-                months.forEach((month, mIdx) => {
-                    const hCell = document.querySelector(`[data-field="icaap-${mIdx}-${eIdx}-hours"]`);
-                    if (hCell) total += parseFloat(hCell.innerText) || 0;
-                });
-                const tCell = document.querySelector(`[data-field="icaap-total-${eIdx}"]`);
-                if (tCell) tCell.innerText = total || '';
-            });
-        }
-
-        function renderTableRows() {
             const tbody = document.getElementById('tracking-body');
-            tbody.innerHTML = '';
-            allEmployees.forEach((emp, eIdx) => {
+            const hoursMap = {}; hours.forEach(r => { if (r.name) hoursMap[r.name.toLowerCase()] = r; });
+            const appMap = {}; approvals.forEach(r => { if (r.Name) appMap[r.Name.toLowerCase()] = r; });
+            const payMap = {}; paylogs.forEach(r => { if (r.name) payMap[r.name.toLowerCase()] = r; });
+            const pMap = {}; plannerData.forEach(r => { pMap[r.field_id] = r.content; });
+
+            employees.forEach((emp, eIdx) => {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="employee-col">${emp}</td>`;
-                months.forEach((month, mIdx) => {
-                    ['paylog', 'hours', 'approval'].forEach(type => {
-                        const fieldId = `icaap-${mIdx}-${eIdx}-${type}`;
-                        tr.innerHTML += `<td class="editable-cell" contenteditable="true" data-field="${fieldId}"></td>`;
-                    });
+                let rowHtml = `<td class="employee-col">${emp}</td>`;
+                const empLower = emp.toLowerCase();
+
+                monthNames.forEach((m, mIdx) => {
+                    const mKey = m.toLowerCase().substring(0, 3);
+                    const appKey = m.substring(0, 3);
+                    
+                    const subVal = payMap[empLower] ? payMap[empLower][mKey] : '';
+                    const hrsVal = hoursMap[empLower] ? hoursMap[empLower][mKey] : '';
+                    const appVal = appMap[empLower] ? appMap[empLower][appKey] : '';
+
+                    rowHtml += `<td class="editable-cell" contenteditable="true" oninput="handleDBSave('paylog_submission', '${emp}', '${mKey}', this.innerText)">${subVal || ''}</td>`;
+                    rowHtml += `<td class="editable-cell" contenteditable="true" oninput="handleDBSave('hours_worked', '${emp}', '${mKey}', this.innerText)">${hrsVal || ''}</td>`;
+                    rowHtml += `<td class="editable-cell" contenteditable="true" oninput="handleDBSave('approval_dates', '${emp}', '${m}', this.innerText)">${appVal || ''}</td>`;
                 });
-                // Add Total Hours cell
-                const totalFieldId = `icaap-total-${eIdx}`;
-                tr.innerHTML += `<td class="editable-cell" contenteditable="false" data-field="${totalFieldId}" style="font-weight: 600; background-color: #f1f8e9;"></td>`;
+
+                const totalVal = hoursMap[empLower] ? hoursMap[empLower].total : '';
+                rowHtml += `<td class="editable-cell total-col" contenteditable="true" oninput="handleDBSave('hours_worked', '${emp}', 'total', this.innerText)">${totalVal || ''}</td>`;
+                
+                tr.innerHTML = rowHtml;
                 tbody.appendChild(tr);
             });
         }
 
-        async function updateTotalHours(eIdx) {
-            const empName = allEmployees[eIdx];
-            let total = 0;
-            months.forEach((month, mIdx) => {
-                const cell = document.querySelector(`[data-field="icaap-${mIdx}-${eIdx}-hours"]`);
-                if (cell) {
-                    const val = parseFloat(cell.innerText) || 0;
-                    total += val;
-                }
-            });
-            const totalCell = document.querySelector(`[data-field="icaap-total-${eIdx}"]`);
-            if (totalCell) {
-                totalCell.innerText = total || '';
-                await saveTrackingData('hours_worked', empName, 'total', total.toString(), startYear);
-            }
-        }
-
-        function handleSave(cell) {
-            const fieldId = cell.dataset.field;
-            const content = cell.innerText;
+        async function handleDBSave(table, name, month, value) {
             const status = document.getElementById('save-status');
             status.innerText = 'Unsaved changes';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
-                
-                const parts = fieldId.split('-');
-                let success = false;
-                
-                if (parts[1] === 'total') {
-                    const eIdx = parseInt(parts[2]);
-                    const empName = allEmployees[eIdx];
-                    success = await saveTrackingData('hours_worked', empName, 'total', content, startYear);
-                } else {
-                    const mIdx = parseInt(parts[1]);
-                    const eIdx = parseInt(parts[2]);
-                    const type = parts[3];
-                    const empName = allEmployees[eIdx];
-                    const monthName = months[mIdx].split(' ')[0];
-
-                    if (type === 'hours') {
-                        success = await saveTrackingData('hours_worked', empName, monthName, content, startYear);
-                        updateTotalHours(eIdx);
-                    } else if (type === 'approval') {
-                        success = await saveTrackingData('approval_dates', empName, monthName, content, startYear);
-                    } else if (type === 'paylog') {
-                        success = await saveTrackingData('paylog submission', empName, monthName, content, startYear);
-                        if (!success) {
-                            success = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
-                        }
-                    }
-                }
-                
-                status.innerText = success ? 'All changes saved' : 'Error saving';
+                await saveTrackingData(table, name, month, value, startYear);
+                status.innerText = 'All changes saved';
             }, 1000);
         }
-        document.addEventListener('DOMContentLoaded', () => {
-            init();
-            updateNavigationLinks(baseDate);
-        });
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
