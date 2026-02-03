@@ -623,8 +623,9 @@ function formatDate(dateStr) {
 
 function formatDateMMM(dateStr) {
     if (!dateStr) return '';
-    // Handle YYYY-MM-DD by splitting to avoid timezone shifts
-    const parts = dateStr.split('-');
+    // Handle ISO strings or YYYY-MM-DD by splitting to avoid timezone shifts
+    const datePart = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+    const parts = datePart.split('-');
     let date;
     if (parts.length === 3) {
         date = new Date(parts[0], parts[1] - 1, parts[2]);
