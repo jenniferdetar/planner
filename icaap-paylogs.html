@@ -87,9 +87,7 @@
             });
             
             const paylogData = await fetchPaylogSubmissions(startYear);
-            const nameSet = new Set(DEFAULT_EMPLOYEES);
-            paylogData.forEach(r => { if (r.name) nameSet.add(r.name); });
-            const employees = [...nameSet].sort();
+            const employees = DEFAULT_EMPLOYEES;
 
             const headerRow = document.getElementById('header-row');
             headerRow.innerHTML = `<th class="employee-col">Employee Name</th>` + 
@@ -118,7 +116,7 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
-                await saveTrackingData('paylog_submission', name, month, value, startYear);
+                await saveTrackingData('paylog submission', name, month, value, startYear);
                 status.innerText = 'All changes saved';
             }, 1000);
         }

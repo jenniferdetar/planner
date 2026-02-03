@@ -50,15 +50,13 @@
                     <a href="icaap-approvals.html" class="nav-button">Approval Dates</a>
                     <a href="icaap-attendance.html" class="nav-button">Attendance Tracking</a>
                 </div>
-
-                <a href="index.html" class="back-link">Back to Main Planner</a>
             </div>
         </main>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle('ICAAP HUB');
+            if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle('ICAAP');
             
             // Update Sidebar Active State
             const currentPath = window.location.pathname.split('/').pop() || 'icaap.html';

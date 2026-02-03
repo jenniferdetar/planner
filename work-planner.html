@@ -115,8 +115,8 @@
                     todo: document.getElementById('todo-list').innerText,
                     reflection: document.getElementById('reflection').innerText
                 };
-                const success = await savePlannerData(PERSISTENCE_KEY, 'work-planner', JSON.stringify(content));
-                updateSaveStatus(success ? 'All changes saved' : 'Error saving');
+                const result = await savePlannerData(PERSISTENCE_KEY, 'work-planner', JSON.stringify(content));
+                updateSaveStatus(result !== null ? 'All changes saved' : 'Error saving');
             }, 1000);
         }
 

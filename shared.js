@@ -2,91 +2,8 @@ const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
 
 const DEFAULT_EMPLOYEES = [
-    "Adalid Sanchez Rodriguez", "Adan Saucedo", "Adrian Irvine", "Adriana Gomez",
-    "Adriana Ojeda", "Agnes Lewis", "Alberto Solorzano", "Alexander Aston",
-    "Alexis Contreras", "Alice Hilal", "Alicia Cerna", "Aline Millan",
-    "Alyson Han", "Amber Mastroianni", "Amber Trudgeon", "Amber Wilton",
-    "Ameel Noos", "Amparo Martin", "Ana Guevara", "Ancelmo Ramos",
-    "Andrea Chagoya", "Andrea Douglas", "Andreina Morales", "Angel Gamino",
-    "Angela Lopez", "Anna Quezada", "Anthony Bernard", "Anthony Morales",
-    "Anthony Zarate", "Antoinette Matiga", "Araksya Manukyan", "Avia Greene-Vanburen",
-    "Aya Shigenaga", "Baharak Saadat Beheshti", "Barbara Stoliker", "Barry Blisten",
-    "Beatris Segura", "Bennett Winter", "Bernice Grewell-Godinez", "Beverly Junio-Magee",
-    "Bienvenido Pineda", "Brigette Pena", "Carmen Fuentes", "Cassondra Holt Hightower",
-    "Cecille Basilio", "Charles Izuakor", "Cherie Lebron", "Chevon Booker",
-    "Chinedu Ezeh", "Christa Mcmullin", "Christina Clark", "Christina Silva",
-    "Christina Sithole", "Christine Choi", "Christopher Linares", "Claire Daigle",
-    "Claudia Franco", "Connie Gracia-Barraza", "Crystal Cohen", "Crystal Mendez",
-    "Crystal Rivera", "Cynthia Barrilleaux", "Cynthia Bitterman", "Cynthia Timm",
-    "D.M. Grant", "Dalese Hardin", "Dana Fikes", "Daniel Saldana",
-    "Danielle O'Connor", "David Hadjichristodoulou", "Dawn Sebastian", "Dawnise Francisco",
-    "Deanna Baldwin", "Debora Wechsler", "Deborah Francois", "Diana Olivas",
-    "Dominique Harris", "Dora Marquez", "Douglas Klaif", "Douglas Reisgen",
-    "Dulce Bacon", "Eberardo Rodriguez", "Edith Braswell-Grant", "Edith Janec",
-    "Efren Rodriguez", "Eileen Alcorn", "Eimi Miller", "Elisabeth Mullins Medina",
-    "Elizabeth Chavez", "Elizabeth Elizalde", "Elizabeth Romero", "Emilee Velazco Franco",
-    "Emily Wassler", "Emir Gonzalez", "Enas Makar", "Eric Hopson",
-    "Erica Pan", "Erica Sanchez", "Erika Paz", "Erin Mettlen",
-    "Ester Yang", "Evelyn Mcfarlane", "Farhad Mahmud", "Frances Morales",
-    "Freshta Sidiqi", "Gavriela Trujillo", "Gene Dean", "Genesis Aguirre",
-    "Gina Go", "Gladys Barbosa", "Glenda Tamay", "Guillermo Diaz",
-    "Gustavo Lopez", "Hamilton Gernon-Wyatt", "Hector Martinez", "Hina Ahmad",
-    "Ida Quijada", "Iliana Quintero", "Indira Ortiz", "Irma Griffiths",
-    "Irma Salas", "Irma Torres", "Isidro Castillo", "Ivy Grace Thorne",
-    "Jacqueline Cruz", "Jacqueline Palacios", "Jakeisha Sanders", "Jamall Farr",
-    "Janet Frnzyan", "Janet Ledesma", "Jasmin Segovia", "Javier Ponce Garcia",
-    "Jeanine Flier", "Jeanne Garcia-Armstrong", "Jeen Yu", "Jehisol Urbina",
-    "Jennifer Lopez", "Jennifer Washington", "Jenny Peterson", "Jereme Stark",
-    "Jhun De Guzman", "Jiabei Li", "Jittima Bouillot", "John Kuykendall",
-    "Jordan Baldry", "Jordan Gonzalez", "Jorge Torres", "Jose Alvarenga",
-    "Jose Hernandez", "Jose Romero", "Joseph Thomas", "Joseph Zeccola",
-    "Joshua Griffiths", "Joy Kasper", "Juan Catalan", "Juan Pina",
-    "Julia Calamandrei", "Julian Mendez", "Julianne Fassett", "Julie Ann Resurreccion",
-    "Julie Sornberger", "Karen Caruso", "Karen Siercke Noriega", "Karina Maravilla",
-    "Karsina Gaither", "Kelsie Hogen", "Kelvin Means", "Kerry Shimizu",
-    "Kevin Seegan", "Kimberly Rabas", "Kionna Hawkins", "Kristalyn Smith",
-    "Kristine Adams", "Kristy Beaudry", "La Tresha Glasco", "Ladan Dejam",
-    "Lailani Joy Gonzaga", "Lanette Black", "Laura Incelli", "Laveda Harris",
-    "Lawrence Ramos", "Leslie Anderson", "Leslie Black", "Leslie Perez",
-    "Leslie Zamora", "Leticia Gudino", "Leticia Martinez", "Liberty Amos",
-    "Lila Rosas Madrigal", "Liliana Amezcua", "Liliana Jauregui-George", "Liliana Martinez",
-    "Lilit Akilian", "Linda Hoang", "Linda Santana", "Linda Taylor",
-    "Lisa Darbidian", "Lisa Harvey", "Lisa Marks", "Louise Cummings",
-    "Luciano Latini", "Lucrecia Yescas Luna", "Ma Joanna Razon", "Ma Teresa Aki",
-    "Maeli Montecinos", "Maikai Finnell", "Malika Ferrell", "Malina Rios",
-    "Mandana Saidi", "Maria Aldave Cabrera", "Maria Hernandez", "Maria Pinto",
-    "Maria Zamora", "Marianne Valencia", "Marie Bennett", "Marissa Gilmore",
-    "Marites Felicilda", "Mark Todd", "Marla Pizzuto", "Marlene Yu",
-    "Marta Martin", "Mary Jane Opoku", "Matthew Miller", "Mayra Alcantar",
-    "Mayra Rodarte-Nava", "Melanie Ronning", "Melinda Duran", "Michael Juarez",
-    "Michelle Lopez", "Miguel Agredano", "Miisha Davis", "Miriam Oguejiofor",
-    "Nancy Madrid", "Naomi Kaidin", "Nayeli Meza Amaral", "Neta Markusfeld",
-    "Nicole Douglass", "Nicoli Ueda", "Nora Watanabe", "Nune Mc Combs",
-    "Oscar Montenegro", "Palma Scirone", "Paola Martinez", "Patricia Castillo",
-    "Patricia Chavez", "Patrick Navas", "Paula Dominguez", "Paulette Duarte",
-    "Paulette Shelley", "Pedro Aguilar", "Praveen Ray", "Ralph Bravo",
-    "Rana Khan", "Raquel Huerta", "Rebeca Chaidez", "Rene Gaudet",
-    "Rhory Rebellon", "Richard Lee", "Rick Swanson", "Robert Jones",
-    "Robert Moose", "Robin Aaron", "Rodolfo Gutierrez", "Rosalina Pacheco",
-    "Rosalyn Lee", "Rosanna Davisson", "Rosemarie Fagfoomsintu", "Ross Kramer",
-    "Ruth Rendon", "Ryan Boyes", "Sabrina Sheikh", "Sabrina Sullivan",
-    "Sallyann Tejeda", "Salvador Magana-Arriola", "Sandra Canela", "Sandra Hernandez",
-    "Sandra Meredith", "Sandra Mijarez", "Sandra Valdivia", "Sandy Estrada",
-    "Sandy Walker", "Sara Goico Alcantar", "Scott Cody", "Senisa Austin",
-    "Shannon Moultrie", "Shannon Sayer", "Sharon Maculada", "Shawn Hall",
-    "Sherita Rogers", "Sheveeta Jackson", "Silvia Ramos", "Silvia Sanchez",
-    "Sofia Manzo-Reyes", "Sofia Vasserman", "Stacey Byham", "Stacey Williams",
-    "Staci Holmes", "Stacy Orosco", "Stephanie Harlow", "Stephen Maccarone",
-    "Steven Vitela", "Suhjung Ko", "Susan Deloach", "Susan Nolan",
-    "Susana Mislang", "Susana Santa Cruz", "Susanna Garcia", "Tacy Schull",
-    "Tamryn Wilkins", "Tanya Acosta", "Tarah Bagadiong-Trice", "Tatianika Montalbo",
-    "Tiffanie Griffin", "Tiffany Vojkovich", "Toby Sperber", "Tonya Boyd",
-    "Tonya Thompson", "Troy Poe", "Valerie De La Rosa", "Valerie Hoggard",
-    "Vanessa Sandoval", "Veganush Frnzyan", "Veronica Arevalo", "Veronica Rodriguez Sifontes",
-    "Veronica Viramontes", "Victor Castaneda", "Victoria Maldonado", "Wendy Jasso",
-    "Wendy Marrero", "Wendy Mora", "Xiaowei Wei", "Yasmin Lilly",
-    "Yesenia Duran", "Yesenia Enriquez", "Yolanda Hashimoto", "Young Choy",
-    "Yuriko Jung", "Zarui Grigoryan", "Zina Dixon"
+    "Bonnie Ratner", "Eberardo Rodriquez", "Maikai Finnel", "Patricia Pernin", 
+    "Rene Gaudet", "Stephen Maccarone", "Zina Dixon"
 ];
 
 const DEFAULT_BILLS = [
@@ -334,6 +251,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             color: var(--primary-navy);
             margin: 0;
             letter-spacing: 2px;
+            text-align: center;
         }
 
         .header-nav-btn {
@@ -457,26 +375,41 @@ async function savePlannerData(date, fieldId, content) {
         finalValue = ensureTimestamp(content);
     }
 
-    // Manual upsert: delete existing then insert
     try {
-        await client
-            .from('work_planner_edits')
-            .delete()
-            .eq('date_key', date)
-            .eq('slot_key', fieldId);
-
+        // Use upsert for atomic operation
         const { error } = await client
             .from('work_planner_edits')
-            .insert({ 
+            .upsert({ 
                 date_key: date, 
                 slot_key: fieldId, 
                 value: finalValue,
                 updated_at: new Date().toISOString()
+            }, { 
+                onConflict: 'date_key,slot_key' 
             });
 
         if (error) {
             console.error('Save error:', error);
-            return null;
+            // Fallback to delete/insert if upsert fails
+            await client
+                .from('work_planner_edits')
+                .delete()
+                .eq('date_key', date)
+                .eq('slot_key', fieldId);
+
+            const { error: insertError } = await client
+                .from('work_planner_edits')
+                .insert({ 
+                    date_key: date, 
+                    slot_key: fieldId, 
+                    value: finalValue,
+                    updated_at: new Date().toISOString()
+                });
+            
+            if (insertError) {
+                console.error('Insert fallback error:', insertError);
+                return null;
+            }
         }
         return finalValue;
     } catch (err) {
@@ -516,24 +449,24 @@ function getCalendarEvents() {
         { date: '2026-01-26', time: '19:00', title: 'LA Fed', duration: 60 },
         { date: '2026-02-06', time: '09:30', title: 'CSEA Reopener Negotiations', duration: 420 },
         // WEN SweetAlmondMint & Pomegranate Auto-Delivery
-        { date: '2026-04-01', title: 'WEN Auto-Delivery (Mint/Pom)' },
-        { date: '2026-05-31', title: 'WEN Auto-Delivery (Mint/Pom)' },
-        { date: '2026-07-30', title: 'WEN Auto-Delivery (Mint/Pom)' },
-        { date: '2026-09-28', title: 'WEN Auto-Delivery (Mint/Pom)' },
-        { date: '2026-11-27', title: 'WEN Auto-Delivery (Mint/Pom)' },
-        { date: '2027-01-26', title: 'WEN Auto-Delivery (Mint/Pom)' },
-        { date: '2027-03-27', title: 'WEN Auto-Delivery (Mint/Pom)' },
-        { date: '2027-05-26', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        { date: '2026-04-01', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
+        { date: '2026-05-31', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
+        { date: '2026-07-30', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
+        { date: '2026-09-28', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
+        { date: '2026-11-27', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
+        { date: '2027-01-26', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
+        { date: '2027-03-27', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
+        { date: '2027-05-26', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
         // WEN Replenishing Treatment Auto-Delivery
-        { date: '2026-02-17', title: 'WEN Auto-Delivery (Treatment)' },
-        { date: '2026-04-18', title: 'WEN Auto-Delivery (Treatment)' },
-        { date: '2026-06-17', title: 'WEN Auto-Delivery (Treatment)' },
-        { date: '2026-08-16', title: 'WEN Auto-Delivery (Treatment)' },
-        { date: '2026-10-15', title: 'WEN Auto-Delivery (Treatment)' },
-        { date: '2026-12-14', title: 'WEN Auto-Delivery (Treatment)' },
-        { date: '2027-02-12', title: 'WEN Auto-Delivery (Treatment)' },
-        { date: '2027-04-13', title: 'WEN Auto-Delivery (Treatment)' },
-        { date: '2027-06-12', title: 'WEN Auto-Delivery (Treatment)' }
+        { date: '2026-02-17', title: 'A-D WEN Replenishing Treatment' },
+        { date: '2026-04-18', title: 'A-D WEN Replenishing Treatment' },
+        { date: '2026-06-17', title: 'A-D WEN Replenishing Treatment' },
+        { date: '2026-08-16', title: 'A-D WEN Replenishing Treatment' },
+        { date: '2026-10-15', title: 'A-D WEN Replenishing Treatment' },
+        { date: '2026-12-14', title: 'A-D WEN Replenishing Treatment' },
+        { date: '2027-02-12', title: 'A-D WEN Replenishing Treatment' },
+        { date: '2027-04-13', title: 'A-D WEN Replenishing Treatment' },
+        { date: '2027-06-12', title: 'A-D WEN Replenishing Treatment' }
     ];
 }
 
@@ -623,16 +556,22 @@ function formatDate(dateStr) {
 
 function formatDateMMM(dateStr) {
     if (!dateStr) return '';
-    // Handle ISO strings or YYYY-MM-DD by splitting to avoid timezone shifts
-    const datePart = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
-    const parts = datePart.split('-');
     let date;
-    if (parts.length === 3) {
-        date = new Date(parts[0], parts[1] - 1, parts[2]);
+    if (dateStr instanceof Date) {
+        date = dateStr;
     } else {
-        date = new Date(dateStr);
+        // Handle ISO strings or YYYY-MM-DD by splitting to avoid timezone shifts
+        const datePart = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+        const parts = datePart.split('-');
+        if (parts.length === 3) {
+            date = new Date(parts[0], parts[1] - 1, parts[2]);
+        } else {
+            date = new Date(dateStr);
+        }
     }
     
+    if (isNaN(date.getTime())) return 'Invalid Date';
+
     return date.toLocaleDateString('en-US', {
         month: 'short',
         day: '2-digit',
@@ -861,24 +800,28 @@ async function saveTrackingData(table, name, month, value, year) {
     const client = getSupabase();
     if (!client) return false;
     
+    // Normalize table name if someone uses underscore
+    const actualTable = table === 'paylog_submission' ? 'paylog submission' : table;
+    const isPaylogOrHours = actualTable === 'hours_worked' || actualTable === 'paylog submission';
+    
     // Normalize month: lowercase for hours_worked and paylog submission, Capitalized for others
-    let col = (table === 'hours_worked' || table === 'paylog submission') ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
+    let col = isPaylogOrHours ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
     
     // Override for 'total' column in hours_worked
-    if (table === 'hours_worked' && month.toLowerCase() === 'total') {
+    if (actualTable === 'hours_worked' && month.toLowerCase() === 'total') {
         col = 'total';
     }
     
-    const nameCol = (table === 'hours_worked' || table === 'paylog submission') ? 'name' : 'Name';
+    const nameCol = isPaylogOrHours ? 'name' : 'Name';
     
     // 1. Try exact match first
-    let query = client.from(table).select('*').eq(nameCol, name);
+    let query = client.from(actualTable).select('*').eq(nameCol, name);
     if (year) query = query.eq('fiscal_year', year);
     let { data: existingData, error: fetchError } = await query;
 
     // 2. If no exact match, try case-insensitive match (using ilike)
     if (!fetchError && (!existingData || existingData.length === 0)) {
-        let ciQuery = client.from(table).select('*').ilike(nameCol, name);
+        let ciQuery = client.from(actualTable).select('*').ilike(nameCol, name);
         if (year) ciQuery = ciQuery.eq('fiscal_year', year);
         const { data: ciData, error: ciError } = await ciQuery;
         if (!ciError && ciData && ciData.length > 0) {
@@ -892,13 +835,13 @@ async function saveTrackingData(table, name, month, value, year) {
         const updateObj = { [col]: value };
         if (year) updateObj.fiscal_year = year;
         
-        let updateQuery = client.from(table).update(updateObj).eq(nameCol, dbName);
+        let updateQuery = client.from(actualTable).update(updateObj).eq(nameCol, dbName);
         if (year) updateQuery = updateQuery.eq('fiscal_year', year);
         
         const { error: updateError } = await updateQuery;
         
         if (updateError) {
-            console.error(`Error updating ${table}:`, updateError);
+            console.error(`Error updating ${actualTable}:`, updateError);
             return false;
         }
     } else {
@@ -907,11 +850,11 @@ async function saveTrackingData(table, name, month, value, year) {
         if (year) insertObj.fiscal_year = year;
         
         const { error: insertError } = await client
-            .from(table)
+            .from(actualTable)
             .insert(insertObj);
         
         if (insertError) {
-            console.error(`Error inserting into ${table}:`, insertError);
+            console.error(`Error inserting into ${actualTable}:`, insertError);
             return false;
         }
     }

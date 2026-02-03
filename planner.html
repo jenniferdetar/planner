@@ -372,6 +372,7 @@
             const [h, m] = slot.split(':').map(Number);
             const slotMinutes = h * 60 + m;
             const event = events.find(e => {
+                if (!e.time) return false;
                 const [eh, em] = e.time.split(':').map(Number);
                 const eventStart = eh * 60 + em;
                 return slotMinutes >= eventStart && slotMinutes < eventStart + (e.duration || 30);
@@ -431,8 +432,8 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 if (statusEl) statusEl.innerText = 'Saving...';
-                const success = await savePlannerData(`draft-note-${category}`, 'draft', content);
-                if (statusEl) statusEl.innerText = success ? 'All changes saved' : 'Error saving';
+                const result = await savePlannerData(`draft-note-${category}`, 'draft', content);
+                if (statusEl) statusEl.innerText = result !== null ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
 

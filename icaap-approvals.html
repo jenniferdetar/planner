@@ -87,9 +87,7 @@
             });
             
             const approvalData = await fetchApprovalDates(startYear);
-            const nameSet = new Set(DEFAULT_EMPLOYEES);
-            approvalData.forEach(r => { if (r.Name) nameSet.add(r.Name); });
-            const employees = [...nameSet].sort();
+            const employees = DEFAULT_EMPLOYEES;
 
             const headerRow = document.getElementById('header-row');
             headerRow.innerHTML = `<th class="employee-col">Employee Name</th>` + 

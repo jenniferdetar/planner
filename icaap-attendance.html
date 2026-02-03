@@ -77,19 +77,19 @@
     </div>
 
     <script>
-        const employees = [
-            "Bonnie Ratner",
-            "Eberardo Rodriguez",
-            "Maikai Finnell",
-            "Patricia Pernin",
-            "Rene Gaudet",
-            "Stephen Maccarone",
-            "Zina Dixon"
-        ];
+        const employees = DEFAULT_EMPLOYEES;
         const options = ["", "Cochren", "Beaudry", "Illness", "Kin Care", "Personal Necessity", "Vacation", "Bereavement"];
         
         const urlParams = new URLSearchParams(window.location.search);
-        let currentStartDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date();
+        const dateParam = urlParams.get('date');
+        let currentStartDate;
+        if (dateParam && dateParam.includes('-')) {
+            const [y, m, d] = dateParam.split('-').map(Number);
+            currentStartDate = new Date(y, m - 1, d);
+        } else {
+            currentStartDate = new Date();
+        }
+        if (isNaN(currentStartDate.getTime())) currentStartDate = new Date();
         
         // Adjust to Monday
         const day = currentStartDate.getDay();
@@ -102,6 +102,7 @@
         }
 
         async function init() {
+            if (isNaN(currentStartDate.getTime())) currentStartDate = new Date();
             if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle('ICAAP ATTENDANCE');
             
             // Update Sidebar Active State
@@ -161,8 +162,8 @@
         async function handleSave(fieldId, value) {
             const status = document.getElementById('save-status');
             status.innerText = 'Saving...';
-            const success = await savePlannerData(getPersistenceKey(), fieldId, value);
-            status.innerText = success ? 'All changes saved' : 'Error saving';
+            const result = await savePlannerData(getPersistenceKey(), fieldId, value);
+            status.innerText = result !== null ? 'All changes saved' : 'Error saving';
         }
 
         function changeWeek(delta) {

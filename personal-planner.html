@@ -294,7 +294,7 @@
             const saveStatus = document.getElementById('save-status');
             saveStatus.innerText = 'Saving...';
             const savedValue = await savePlannerData(date, fieldId, content);
-            if (savedValue) {
+            if (savedValue !== null) {
                 saveStatus.innerText = 'All changes saved';
                 if (savedValue !== content) {
                     const el = document.querySelector(`[data-field="${fieldId}"][data-date="${date}"]`) || 

@@ -87,9 +87,7 @@
             });
             
             const hoursData = await fetchHoursWorked(startYear);
-            const nameSet = new Set(DEFAULT_EMPLOYEES);
-            hoursData.forEach(r => { if (r.name) nameSet.add(r.name); });
-            const employees = [...nameSet].sort();
+            const employees = DEFAULT_EMPLOYEES;
 
             const headerRow = document.getElementById('header-row');
             headerRow.innerHTML = `<th class="employee-col">Employee Name</th>` + 
