@@ -277,9 +277,9 @@ function animateAndNavigate(event, url, direction = 'next') {
         }
 
         .header-top {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            justify-content: space-between;
             padding: 5px 20px;
             height: 40px;
         }
@@ -292,6 +292,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             height: 35px;
             overflow-x: auto;
             scrollbar-width: none;
+            justify-content: center;
         }
         .header-tabs::-webkit-scrollbar { display: none; }
 
@@ -404,10 +405,10 @@ function animateAndNavigate(event, url, direction = 'next') {
             <header class="dashboard-header">
                 <div class="header-top">
                     <div class="header-left">
-                        <h1 class="header-title">PLANNER 2026</h1>
                         <button class="header-nav-btn" onclick="window.location.href='index.html?date=${dateStr}'">Today</button>
                     </div>
-                    <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+                    <h1 class="header-title">PLANNER 2026</h1>
+                    <div class="header-right" style="display: flex; align-items: center; gap: 15px; justify-content: flex-end;">
                         <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Coming Soon', cursive; font-size: 12px; font-weight: 600;">
                         <a href="#" onclick="logout(); return false;" style="text-decoration: none; color: var(--primary-navy); font-size: 12px; font-weight: 600; text-transform: uppercase;">Logout</a>
                     </div>
