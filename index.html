@@ -27,7 +27,7 @@
 
         .content-area { flex-grow: 1; overflow-y: auto; padding: 40px; }
         
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: #e1dfdd; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; height: calc(100vh - 200px); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: 26px repeat(6, 1fr); gap: 1px; background: #e1dfdd; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; height: calc(100vh - 200px); }
         .day-header { padding: 4px; text-align: center; font-size: 8pt; font-weight: 700; text-transform: uppercase; color: #fff; height: 18px; line-height: 18px; border: 0.5px solid #eee; }
         .day-header.sun { background: #f59e9e; }
         .day-header.mon { background: #ffca38; }
@@ -102,7 +102,7 @@
             const grid = document.getElementById('calendar-grid');
             grid.innerHTML = '';
 
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const dayClasses = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             days.forEach((d, idx) => {
                 const header = document.createElement('div');

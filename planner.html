@@ -77,13 +77,20 @@
         .calendar-grid { 
             display: grid; 
             grid-template-columns: repeat(7, 1fr); 
+            grid-template-rows: 26px repeat(6, 1fr);
             border: 1px solid #eee; 
             margin-top: 10px; 
             flex: 1; 
             min-height: 0;
-            grid-template-rows: auto repeat(6, 20%);
         }
-        .calendar-header { background: #f8f9fa; padding: 2px; font-weight: 600; font-size: 12px; text-align: center; border: 0.5px solid #eee; }
+        .calendar-header { padding: 4px; font-weight: 600; font-size: 12px; text-align: center; border: 0.5px solid #eee; color: #fff; height: 18px; line-height: 18px; text-transform: uppercase; }
+        .calendar-header.sun { background: #f59e9e; }
+        .calendar-header.mon { background: #ffca38; }
+        .calendar-header.tue { background: #a2d9d9; }
+        .calendar-header.wed { background: #5d9cec; }
+        .calendar-header.thu { background: #f59e9e; }
+        .calendar-header.fri { background: #ffca38; }
+        .calendar-header.sat { background: #a2d9d9; }
         .calendar-day { 
             padding: 3px; 
             border: 0.5px solid #eee; 
@@ -377,7 +384,9 @@
             const firstDay = new Date(year, month, 1); const lastDay = new Date(year, month + 1, 0);
             const daysInMonth = lastDay.getDate(); const startingDay = firstDay.getDay();
             const monthName = displayDate.toLocaleString('default', { month: 'long' });
-            container.innerHTML = `<div class="page-title">${monthName.toUpperCase()} ${year}</div><div class="calendar-grid">${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => `<div class="calendar-header">${d}</div>`).join('')}${Array(startingDay).fill('').map(() => `<div class="calendar-day"></div>`).join('')}${Array(daysInMonth).fill(0).map((_, i) => { const d = i + 1; const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; return `<div class="calendar-day" style="cursor: pointer;" onclick="updateGlobalDate(new Date(${year}, ${month}, ${d}))"><div style="font-weight: 600; border-bottom: 1px solid #eee; margin-bottom: 5px; font-size: 12px;">${d}</div><div id="events-${dateStr}"></div></div>`; }).join('')}</div>`;
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dayClasses = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            container.innerHTML = `<div class="page-title">${monthName.toUpperCase()} ${year}</div><div class="calendar-grid">${dayNames.map((d, idx) => `<div class="calendar-header ${dayClasses[idx]}">${d}</div>`).join('')}${Array(startingDay).fill('').map(() => `<div class="calendar-day"></div>`).join('')}${Array(daysInMonth).fill(0).map((_, i) => { const d = i + 1; const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; return `<div class="calendar-day" style="cursor: pointer;" onclick="updateGlobalDate(new Date(${year}, ${month}, ${d}))"><div style="font-weight: 600; border-bottom: 1px solid #eee; margin-bottom: 5px; font-size: 12px;">${d}</div><div id="events-${dateStr}"></div></div>`; }).join('')}</div>`;
             const events = await fetchCalendarEvents(firstDay, daysInMonth);
             events.forEach(e => { const dc = container.querySelector('#events-' + e.date); if (dc) { const p = document.createElement('div'); p.className = 'event-link text-wrap-clamp'; p.innerText = e.title; dc.appendChild(p); } });
         }
