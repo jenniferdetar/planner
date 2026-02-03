@@ -513,7 +513,26 @@ function getCalendarEvents() {
     return [
         { date: '2026-01-26', time: '17:30', title: 'Chapter 500 Monthly', duration: 120 },
         { date: '2026-01-26', time: '19:00', title: 'LA Fed', duration: 60 },
-        { date: '2026-02-06', time: '09:30', title: 'CSEA Reopener Negotiations', duration: 420 }
+        { date: '2026-02-06', time: '09:30', title: 'CSEA Reopener Negotiations', duration: 420 },
+        // WEN SweetAlmondMint & Pomegranate Auto-Delivery
+        { date: '2026-04-01', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        { date: '2026-05-31', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        { date: '2026-07-30', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        { date: '2026-09-28', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        { date: '2026-11-27', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        { date: '2027-01-26', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        { date: '2027-03-27', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        { date: '2027-05-26', title: 'WEN Auto-Delivery (Mint/Pom)' },
+        // WEN Replenishing Treatment Auto-Delivery
+        { date: '2026-02-17', title: 'WEN Auto-Delivery (Treatment)' },
+        { date: '2026-04-18', title: 'WEN Auto-Delivery (Treatment)' },
+        { date: '2026-06-17', title: 'WEN Auto-Delivery (Treatment)' },
+        { date: '2026-08-16', title: 'WEN Auto-Delivery (Treatment)' },
+        { date: '2026-10-15', title: 'WEN Auto-Delivery (Treatment)' },
+        { date: '2026-12-14', title: 'WEN Auto-Delivery (Treatment)' },
+        { date: '2027-02-12', title: 'WEN Auto-Delivery (Treatment)' },
+        { date: '2027-04-13', title: 'WEN Auto-Delivery (Treatment)' },
+        { date: '2027-06-12', title: 'WEN Auto-Delivery (Treatment)' }
     ];
 }
 
@@ -639,6 +658,7 @@ function getEventClass(title) {
     if (lowerTitle.includes('meeting')) return 'event-pill meeting';
     if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
     if (lowerTitle.includes('budget')) return 'event-pill budget';
+    if (lowerTitle.includes('wen')) return 'event-pill wen';
     if (lowerTitle.includes('dwp')) return 'event-pill dwp';
     if (lowerTitle.includes('cutoff') || lowerTitle.includes('cut-off') || lowerTitle.includes('off-cycle')) return 'event-pill lausd';
     if (lowerTitle.includes('conference')) return 'event-pill conference';
@@ -987,17 +1007,12 @@ function updateNavigationLinks(date) {
         'personal-planner.html': 'Personal-Planner'
     };
 
-    document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill, a.tracking-link, a.section-icon').forEach(link => {
+    document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill, a.tracking-link, a.section-icon, a.section-link').forEach(link => {
         const href = link.getAttribute('href');
         if (href) {
             let base = href.split('?')[0];
             let targetUrl = base;
             let params = new URLSearchParams(href.split('?')[1] || '');
-            
-            if (categoryMapping[base]) {
-                targetUrl = 'planner.html';
-                params.set('category', categoryMapping[base]);
-            }
             
             if (internalPages.includes(base) || base === 'planner.html') {
                 params.set('date', dateStr);

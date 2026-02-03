@@ -17,7 +17,15 @@
             --row-savings: #7a4da3;
         }
         body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; display: flex; overflow: hidden; background: #f8f9fa; }
-        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; }
+        
+        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; height: 100%; }
+        
+        .notebook-sidebar { width: 220px; background: #252525; color: #d1d1d1; display: flex; flex-direction: column; flex-shrink: 0; padding: 20px 0; border-right: 1px solid #333; }
+        .sidebar-label { padding: 0 25px 15px; font-size: 11pt; font-weight: 700; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .section-link { padding: 10px 25px; display: flex; align-items: center; gap: 12px; color: #d1d1d1; text-decoration: none; font-size: 10pt; transition: all 0.2s; }
+        .section-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .section-link.active { background: rgba(255,255,255,0.1); color: #fff; border-right: 4px solid #fdd835; }
+
         .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
         .notebook-page { width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
         
@@ -58,21 +66,18 @@
         .cb-7 { background-color: #ccffff; } .cb-8 { background-color: #cce6ff; }
         .cb-9 { background-color: #ccccff; } .cb-10 { background-color: #e6ccff; }
         .cb-11 { background-color: #ffccff; } .cb-12 { background-color: #ffcce6; }
-
-        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .nav-pill { display: block; padding: 15px; background: #fff; border: 1px solid #eee; border-radius: 8px; text-decoration: none; color: #333; text-align: center; font-weight: 700; font-size: 9pt; text-transform: uppercase; transition: all 0.2s; }
-        .nav-pill:hover { border-color: var(--header-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
     <div class="notebook-container">
+        <aside class="notebook-sidebar">
+            <div class="sidebar-label">💰 FINANCE</div>
+            <a href="financial.html" class="section-link active">▦ Recurring Bills</a>
+            <a href="check-breakdown.html" class="section-link">📄 Check Breakdown</a>
+            <a href="monthly-review.html" class="section-link">📄 Monthly Review</a>
+        </aside>
         <main class="notebook-main">
             <div id="main-content" class="notebook-page">
-                <div class="nav-grid">
-                    <a href="check-breakdown.html" class="nav-pill">Check Breakdown</a>
-                    <a href="monthly-review.html" class="nav-pill">Monthly Review</a>
-                </div>
-
                 <div class="view-section">
                     <div class="page-title">RECURRING BILLS & EXPENSES</div>
                     <div class="bill-table-container">
