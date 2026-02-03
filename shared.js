@@ -179,70 +179,85 @@ function animateAndNavigate(event, url, direction = 'next') {
 
         .dashboard-container {
             display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .dashboard-sidebar {
+            width: 240px;
+            background: #252525;
+            color: #d1d1d1;
+            display: flex;
             flex-direction: column;
-            width: 100%;
-            height: 100%;
+            flex-shrink: 0;
+            padding: 20px 0;
+            border-right: 1px solid #333;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-label {
+            padding: 0 25px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+
+        .sidebar-link {
+            padding: 8px 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #d1d1d1;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .sidebar-link.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border-right: 4px solid var(--accent-gold);
+        }
+
+        .dashboard-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fff;
         }
 
         .dashboard-header {
             flex-shrink: 0;
             background: #fff;
             border-bottom: 1px solid var(--border-color);
+            padding: 10px 20px;
             display: flex;
             flex-direction: column;
-            z-index: 100;
+            align-items: center;
+            gap: 10px;
+            position: relative;
         }
 
         .header-top {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            padding: 5px 20px;
-            height: 40px;
-        }
-
-        .header-tabs {
+            width: 100%;
             display: flex;
-            background: var(--primary-navy);
-            padding: 0 10px;
-            gap: 2px;
-            height: 35px;
-            overflow-x: auto;
-            scrollbar-width: none;
             justify-content: center;
-        }
-        .header-tabs::-webkit-scrollbar { display: none; }
-
-        .tab-item {
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            padding: 0 15px;
-            display: flex;
             align-items: center;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-            height: 100%;
-        }
-
-        .tab-item:hover {
-            color: #fff;
-            background: rgba(255,255,255,0.05);
-        }
-
-        .tab-item.active {
-            color: #fff;
-            border-bottom: 3px solid #fff;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
         }
 
         .header-title {
@@ -250,8 +265,25 @@ function animateAndNavigate(event, url, direction = 'next') {
             font-weight: 700;
             color: var(--primary-navy);
             margin: 0;
-            letter-spacing: 2px;
-            text-align: center;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .header-controls {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-left-controls {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .header-nav-btn {
@@ -265,19 +297,12 @@ function animateAndNavigate(event, url, direction = 'next') {
             color: var(--text-dark);
         }
 
-        .dashboard-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
-
         .dashboard-body {
             flex: 1;
             overflow: auto;
             padding: 0;
             background: #fff;
+            width: 100%;
         }
     `;
     document.head.appendChild(style);
@@ -298,51 +323,101 @@ function animateAndNavigate(event, url, direction = 'next') {
         const dateStr = urlParams.get('date') || new Date().toISOString().split('T')[0];
         const category = urlParams.get('category');
 
-        // Create Navigation Links
-        const navItems = [
-            { label: 'Home', path: 'index.html', icon: '📅' },
-            { label: 'HOA', path: 'hoa.html', cat: 'HOA', icon: '🏠' },
-            { label: 'CSEA', path: 'csea.html', cat: 'CSEA', icon: '📋' },
-            { label: 'ICAAP', path: 'icaap.html', cat: 'ICAAP', icon: '📊' },
-            { label: 'Finance', path: 'financial.html', cat: 'Finance', icon: '💰' },
-            { label: 'Planning', path: 'planning.html', cat: 'Planning', icon: '🎯' },
-            { label: 'Mantra', path: 'mantra.html', cat: 'Mantra', icon: '✨' }
+        // Create Sidebar Navigation
+        const sidebarSections = [
+            {
+                label: 'Dashboard',
+                items: [{ label: 'Calendar View', path: 'index.html', icon: '📅' }]
+            },
+            {
+                label: 'Planning',
+                items: [
+                    { label: 'Yearly Focus', path: 'planning.html', icon: '🎯' },
+                    { label: 'Personal Goals', path: 'personal-goals.html', icon: '✨' },
+                    { label: 'Monthly Review', path: 'monthly-review.html', icon: '📄', params: { category: 'Planning' } }
+                ]
+            },
+            {
+                label: 'ICAAP',
+                items: [
+                    { label: 'Dashboard', path: 'icaap.html', icon: '📊' },
+                    { label: 'Paylog Submissions', path: 'icaap-paylogs.html', icon: '📄' },
+                    { label: 'Hours Worked', path: 'icaap-hours.html', icon: '📄' },
+                    { label: 'Approval Dates', path: 'icaap-approvals.html', icon: '📄' },
+                    { label: 'Attendance Tracking', path: 'icaap-attendance.html', icon: '📄' }
+                ]
+            },
+            {
+                label: 'Finance',
+                items: [
+                    { label: 'Recurring Bills', path: 'financial.html', icon: '💰' },
+                    { label: 'Check Breakdown', path: 'check-breakdown.html', icon: '📄' },
+                    { label: 'Monthly Review', path: 'monthly-review.html', icon: '📄', params: { category: 'Finance' } }
+                ]
+            },
+            {
+                label: 'Other',
+                items: [
+                    { label: 'HOA', path: 'hoa.html', icon: '🏠' },
+                    { label: 'CSEA', path: 'csea.html', icon: '📋' },
+                    { label: 'Mantra', path: 'mantra.html', icon: '✨' }
+                ]
+            }
         ];
 
-        const tabsHtml = navItems.map(item => {
-            const itemPath = item.path.split('?')[0];
-            const isActive = currentPath === itemPath;
-            const link = item.path + (item.path.includes('?') ? '&' : '?') + `date=${dateStr}`;
-            const iconHtml = item.icon ? `<span style="margin-right: 8px;">${item.icon}</span>` : '';
-            return `<a href="${link}" class="tab-item ${isActive ? 'active' : ''}">${iconHtml}${item.label}</a>`;
-        }).join('');
+        const sidebarHtml = sidebarSections.map(section => `
+            <div class="sidebar-section">
+                <div class="sidebar-label">${section.label}</div>
+                ${section.items.map(item => {
+                    const itemUrl = new URL(item.path, window.location.origin);
+                    itemUrl.searchParams.set('date', dateStr);
+                    if (item.params) {
+                        Object.keys(item.params).forEach(key => itemUrl.searchParams.set(key, item.params[key]));
+                    }
+                    
+                    const isActive = currentPath === item.path && 
+                                   (!item.params || Object.keys(item.params).every(k => urlParams.get(k) === item.params[k]));
+                    
+                    return `
+                        <a href="${itemUrl.pathname}${itemUrl.search}" class="sidebar-link ${isActive ? 'active' : ''}">
+                            <span class="sidebar-icon">${item.icon}</span>
+                            ${item.label}
+                        </a>
+                    `;
+                }).join('')}
+            </div>
+        `).join('');
 
         const dashboard = document.createElement('div');
         dashboard.className = 'dashboard-container';
         dashboard.innerHTML = `
-            <header class="dashboard-header">
-                <div class="header-top">
-                    <div class="header-left">
+            <aside class="dashboard-sidebar">
+                <div style="padding: 0 25px 30px; font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 2px;">PLANNER 2026</div>
+                ${sidebarHtml}
+            </aside>
+            <main class="dashboard-main">
+                <header class="dashboard-header">
+                    <div class="header-left-controls">
                         <button class="header-nav-btn" onclick="window.location.href='index.html?date=${dateStr}'">Today</button>
                     </div>
-                    <h1 class="header-title">PLANNER 2026</h1>
-                    <div class="header-right" style="display: flex; align-items: center; gap: 15px; justify-content: flex-end;">
+                    <div class="header-top">
+                        <h1 class="header-title">PLANNER 2026</h1>
+                    </div>
+                    <div class="header-controls">
                         <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Coming Soon', cursive; font-size: 12px; font-weight: 600;">
                         <a href="#" onclick="logout(); return false;" style="text-decoration: none; color: var(--primary-navy); font-size: 12px; font-weight: 600; text-transform: uppercase;">Logout</a>
                     </div>
-                </div>
-                <nav class="header-tabs">
-                    ${tabsHtml}
-                </nav>
-            </header>
-            <main class="dashboard-main">
+                </header>
                 <div class="dashboard-body">
                 </div>
             </main>
         `;
 
         const dashboardBody = dashboard.querySelector('.dashboard-body');
-        existingNodes.forEach(node => dashboardBody.appendChild(node));
+        existingNodes.forEach(node => {
+            if (node.nodeType === 1 && (node.tagName === 'STYLE' || node.tagName === 'SCRIPT')) return;
+            dashboardBody.appendChild(node);
+        });
         
         document.body.innerHTML = '';
         document.body.appendChild(dashboard);

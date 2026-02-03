@@ -8,65 +8,25 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; display: flex; overflow: hidden; background: #f8f9fa; }
-        
-        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; height: 100%; }
-        
-        .notebook-sidebar { width: 220px; background: #252525; color: #d1d1d1; display: flex; flex-direction: column; flex-shrink: 0; padding: 20px 0; border-right: 1px solid #333; }
-        .sidebar-label { padding: 0 25px 15px; font-size: 11pt; font-weight: 700; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .section-link { padding: 10px 25px; display: flex; align-items: center; gap: 12px; color: #d1d1d1; text-decoration: none; font-size: 10pt; transition: all 0.2s; }
-        .section-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .section-link.active { background: rgba(255,255,255,0.1); color: #fff; border-right: 4px solid #fdd835; }
-
-        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
-        .notebook-page { width: 100%; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: #fff; box-sizing: border-box; min-height: 100%; display: flex; flex-direction: column; align-items: center; }
-        
-        .page-title { font-size: 14pt; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 40px; border-bottom: 2px solid var(--header-blue); padding-bottom: 10px; width: 100%; text-align: center; }
-        
-        .nav-links { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; background: #fff; }
+        .content-area { padding: 40px 20px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .nav-links { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 800px; }
         .nav-button { display: flex; align-items: center; justify-content: center; padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 8px; text-decoration: none; color: #333; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .nav-button:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-color: var(--header-blue); color: var(--header-blue); }
-        
-        .back-link { margin-top: 40px; color: #888; text-decoration: none; font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .back-link:hover { color: var(--header-blue); }
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="notebook-sidebar">
-            <div class="sidebar-label">📊 ICAAP</div>
-            <a href="icaap.html" class="section-link active">🏠 Dashboard</a>
-            <a href="icaap-paylogs.html" class="section-link">📄 Paylog Submissions</a>
-            <a href="icaap-hours.html" class="section-link">📄 Hours Worked</a>
-            <a href="icaap-approvals.html" class="section-link">📄 Approval Dates</a>
-            <a href="icaap-attendance.html" class="section-link">📄 Attendance Tracking</a>
-        </aside>
-        <main class="notebook-main">
-            <div class="notebook-page">
-                
-                <div class="nav-links">
-                    <a href="icaap-paylogs.html" class="nav-button">Paylog Submissions</a>
-                    <a href="icaap-hours.html" class="nav-button">Hours Worked</a>
-                    <a href="icaap-approvals.html" class="nav-button">Approval Dates</a>
-                    <a href="icaap-attendance.html" class="nav-button">Attendance Tracking</a>
-                </div>
-            </div>
-        </main>
+    <div class="content-area">
+        <div class="nav-links">
+            <a href="icaap-paylogs.html" class="nav-button">Paylog Submissions</a>
+            <a href="icaap-hours.html" class="nav-button">Hours Worked</a>
+            <a href="icaap-approvals.html" class="nav-button">Approval Dates</a>
+            <a href="icaap-attendance.html" class="nav-button">Attendance Tracking</a>
+        </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle('ICAAP');
-            
-            // Update Sidebar Active State
-            const currentPath = window.location.pathname.split('/').pop() || 'icaap.html';
-            document.querySelectorAll('.section-link').forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
+            if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle('ICAAP TRACKING HUB');
         });
     </script>
 </body>

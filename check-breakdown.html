@@ -8,120 +8,92 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; display: flex; overflow: hidden; background: #f3f2f1; }
-        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; height: 100%; }
-        
-        .notebook-sidebar { width: 220px; background: #252525; color: #d1d1d1; display: flex; flex-direction: column; flex-shrink: 0; padding: 20px 0; border-right: 1px solid #333; }
-        .sidebar-label { padding: 0 25px 15px; font-size: 11pt; font-weight: 700; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .section-link { padding: 10px 25px; display: flex; align-items: center; gap: 12px; color: #d1d1d1; text-decoration: none; font-size: 10pt; transition: all 0.2s; }
-        .section-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .section-link.active { background: rgba(255,255,255,0.1); color: #fff; border-right: 4px solid #fdd835; }
-
-        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
-        .notebook-page { width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
-        
-        .page-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #28a745; padding-bottom: 10px; }
-        .page-title { font-size: 14pt; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #28a745; margin: 0; }
+        .content-area { padding: 40px; width: 100%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; }
         
         .breakdown-section { margin-bottom: 40px; }
-        .section-header { font-size: 9pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .section-header { font-size: 10pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
         
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         
         .input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
-        .input-label { font-size: 9pt; font-weight: 600; color: #605e5c; }
+        .input-label { font-size: 10pt; font-weight: 600; color: #605e5c; }
         .input-value { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #323130; outline: none; border-bottom: 1px dashed #ccc; min-width: 80px; text-align: right; }
-        .input-value:focus { border-bottom-color: #28a745; }
+        .input-value:focus { border-bottom-color: #28a745; background: #fafffa; }
 
-        .total-row { border-top: 2px solid #eee; margin-top: 10px; padding-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: #323130; }
-        .net-total { color: #28a745; font-size: 14pt; }
+        .total-row { border-top: 2px solid #eee; margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: 700; color: #323130; }
+        .net-total { color: #28a745; font-size: 16pt; }
 
-        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
-        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #28a745; text-decoration: none; font-size: 9pt; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; }
+        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="notebook-sidebar">
-            <div class="sidebar-label">💰 FINANCE</div>
-            <a href="financial.html" class="section-link">▦ Recurring Bills</a>
-            <a href="check-breakdown.html" class="section-link active">📄 Check Breakdown</a>
-            <a href="monthly-review.html" class="section-link">📄 Monthly Review</a>
-        </aside>
-        <main class="notebook-main">
-            <div class="notebook-page">
-                <div class="page-header">
-                    <h1 class="page-title" id="page-title">Check Breakdown</h1>
-                </div>
-
-                <div class="grid-3">
-                    <div class="breakdown-section">
-                        <div class="section-header">Earnings</div>
-                        <div class="card">
-                            <div class="input-row">
-                                <span class="input-label">Gross Pay</span>
-                                <div class="input-value" contenteditable="true" id="gross-pay" oninput="handleUpdate()"></div>
-                            </div>
-                            <div class="input-row">
-                                <span class="input-label">Other/Bonus</span>
-                                <div class="input-value" contenteditable="true" id="other-pay" oninput="handleUpdate()"></div>
-                            </div>
-                            <div class="total-row">
-                                <span>Total Gross</span>
-                                <span id="total-gross">$0.00</span>
-                            </div>
-                        </div>
+    <div class="content-area">
+        <div class="grid-3">
+            <div class="breakdown-section">
+                <div class="section-header">Earnings</div>
+                <div class="card">
+                    <div class="input-row">
+                        <span class="input-label">Gross Pay</span>
+                        <div class="input-value" contenteditable="true" id="gross-pay" oninput="handleUpdate()"></div>
                     </div>
-
-                    <div class="breakdown-section">
-                        <div class="section-header">Deductions</div>
-                        <div class="card">
-                            <div class="input-row">
-                                <span class="input-label">Federal Tax</span>
-                                <div class="input-value" contenteditable="true" id="fed-tax" oninput="handleUpdate()"></div>
-                            </div>
-                            <div class="input-row">
-                                <span class="input-label">State Tax</span>
-                                <div class="input-value" contenteditable="true" id="state-tax" oninput="handleUpdate()"></div>
-                            </div>
-                            <div class="input-row">
-                                <span class="input-label">Health/Benefits</span>
-                                <div class="input-value" contenteditable="true" id="benefits" oninput="handleUpdate()"></div>
-                            </div>
-                            <div class="input-row">
-                                <span class="input-label">Retirement</span>
-                                <div class="input-value" contenteditable="true" id="retirement" oninput="handleUpdate()"></div>
-                            </div>
-                            <div class="total-row">
-                                <span>Total Ded.</span>
-                                <span id="total-deductions">$0.00</span>
-                            </div>
-                        </div>
+                    <div class="input-row">
+                        <span class="input-label">Other/Bonus</span>
+                        <div class="input-value" contenteditable="true" id="other-pay" oninput="handleUpdate()"></div>
                     </div>
-
-                    <div class="breakdown-section">
-                        <div class="section-header">Summary</div>
-                        <div class="card">
-                            <div class="input-row">
-                                <span class="input-label">Pay Period</span>
-                                <div class="input-value" contenteditable="true" id="pay-period" style="text-align: left; min-width: 120px;"></div>
-                            </div>
-                            <div class="input-row">
-                                <span class="input-label">Pay Date</span>
-                                <div class="input-value" contenteditable="true" id="pay-date" style="text-align: left; min-width: 120px;"></div>
-                            </div>
-                            <div class="total-row" style="border-top-color: #28a745; border-top-width: 3px;">
-                                <span>NET PAY</span>
-                                <span class="net-total" id="net-pay">$0.00</span>
-                            </div>
-                        </div>
+                    <div class="total-row">
+                        <span>Total Gross</span>
+                        <span id="total-gross">$0.00</span>
                     </div>
                 </div>
             </div>
-        </main>
+
+            <div class="breakdown-section">
+                <div class="section-header">Deductions</div>
+                <div class="card">
+                    <div class="input-row">
+                        <span class="input-label">Federal Tax</span>
+                        <div class="input-value" contenteditable="true" id="fed-tax" oninput="handleUpdate()"></div>
+                    </div>
+                    <div class="input-row">
+                        <span class="input-label">State Tax</span>
+                        <div class="input-value" contenteditable="true" id="state-tax" oninput="handleUpdate()"></div>
+                    </div>
+                    <div class="input-row">
+                        <span class="input-label">Health/Benefits</span>
+                        <div class="input-value" contenteditable="true" id="benefits" oninput="handleUpdate()"></div>
+                    </div>
+                    <div class="input-row">
+                        <span class="input-label">Retirement</span>
+                        <div class="input-value" contenteditable="true" id="retirement" oninput="handleUpdate()"></div>
+                    </div>
+                    <div class="total-row">
+                        <span>Total Ded.</span>
+                        <span id="total-deductions">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="breakdown-section">
+                <div class="section-header">Summary</div>
+                <div class="card">
+                    <div class="input-row">
+                        <span class="input-label">Pay Period</span>
+                        <div class="input-value" contenteditable="true" id="pay-period" style="text-align: left; min-width: 120px;"></div>
+                    </div>
+                    <div class="input-row">
+                        <span class="input-label">Pay Date</span>
+                        <div class="input-value" contenteditable="true" id="pay-date" style="text-align: left; min-width: 120px;"></div>
+                    </div>
+                    <div class="total-row" style="border-top-color: #28a745; border-top-width: 3px;">
+                        <span>NET PAY</span>
+                        <span class="net-total" id="net-pay">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="save-status" class="save-status">All changes saved</div>
     </div>
-    <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -131,16 +103,22 @@
         let saveTimeout;
 
         async function init() {
+            setGlobalHeaderTitle(`CHECK BREAKDOWN | ${displayDate.toLocaleString('default', { month: 'long', year: 'numeric' }).toUpperCase()}`);
+            
             const data = await fetchPlannerData(PERSISTENCE_KEY);
-            data.forEach(d => {
-                const el = document.getElementById(d.field_id);
-                if (el) el.innerText = d.content;
-            });
+            if (data) {
+                data.forEach(d => {
+                    const el = document.getElementById(d.field_id);
+                    if (el) el.innerText = d.content;
+                });
+            }
             handleUpdate(false);
         }
 
         function parseVal(id) {
-            const val = document.getElementById(id).innerText.replace(/[^0-9.]/g, '');
+            const el = document.getElementById(id);
+            if (!el) return 0;
+            const val = el.innerText.replace(/[^0-9.]/g, '');
             return parseFloat(val) || 0;
         }
 
@@ -163,15 +141,21 @@
                 clearTimeout(saveTimeout);
                 saveTimeout = setTimeout(async () => {
                     const fields = ['gross-pay', 'other-pay', 'fed-tax', 'state-tax', 'benefits', 'retirement', 'pay-period', 'pay-date'];
+                    let allSuccess = true;
                     for (const f of fields) {
-                        await savePlannerData(PERSISTENCE_KEY, f, document.getElementById(f).innerText);
+                        const el = document.getElementById(f);
+                        if (el) {
+                            const result = await savePlannerData(PERSISTENCE_KEY, f, el.innerText);
+                            if (result === null) allSuccess = false;
+                        }
                     }
-                    status.innerText = 'All changes saved';
+                    status.innerText = allSuccess ? 'All changes saved' : 'Error saving';
                 }, 1000);
             }
         }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
+
 </body>
 </html>

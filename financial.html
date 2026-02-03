@@ -16,50 +16,30 @@
             --row-housing: #a33b3b;
             --row-savings: #7a4da3;
         }
-        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; display: flex; overflow: hidden; background: #f8f9fa; }
-        
-        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; height: 100%; }
-        
-        .notebook-sidebar { width: 220px; background: #252525; color: #d1d1d1; display: flex; flex-direction: column; flex-shrink: 0; padding: 20px 0; border-right: 1px solid #333; }
-        .sidebar-label { padding: 0 25px 15px; font-size: 11pt; font-weight: 700; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .section-link { padding: 10px 25px; display: flex; align-items: center; gap: 12px; color: #d1d1d1; text-decoration: none; font-size: 10pt; transition: all 0.2s; }
-        .section-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .section-link.active { background: rgba(255,255,255,0.1); color: #fff; border-right: 4px solid #fdd835; }
-
-        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
-        .notebook-page { width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
-        
-        .view-section { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; background: #fff; }
+        .content-area { padding: 20px; width: 100%; box-sizing: border-box; }
+        .view-section { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); width: 100%; box-sizing: border-box; }
         .handwriting, .planner-edit { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #2c3e50; }
-        
         .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 15px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
-        
-        /* Table Styles */
         .bill-table-container { width: 100%; overflow-x: auto; margin-top: 10px; }
         .bill-table { width: 100%; border-collapse: collapse; font-size: 9pt; table-layout: auto; }
         .bill-table th, .bill-table td { border: 1px solid #eee; padding: 8px; text-align: left; vertical-align: middle; }
         .bill-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 8pt; }
-        
         .item-col { white-space: normal !important; min-width: 150px; }
         .amt-col { width: 80px; }
         .cat-col { width: 100px; }
         .month-col { width: 35px; text-align: center !important; }
         .category-pill { display: inline-block; padding: 2px 8px; border-radius: 12px; color: #fff; font-size: 7pt; font-weight: 700; text-transform: uppercase; min-width: 60px; text-align: center; }
-        
         .row-auto .category-pill { background-color: var(--row-auto); }
         .row-bill .category-pill { background-color: var(--row-bill); }
         .row-cash .category-pill { background-color: var(--row-cash); }
         .row-cc .category-pill { background-color: var(--row-cc); }
         .row-housing .category-pill { background-color: var(--row-housing); }
         .row-savings .category-pill { background-color: var(--row-savings); }
-
         .checkbox { width: 18px; height: 18px; border: 1px solid #ddd; display: inline-block; cursor: pointer; border-radius: 50%; vertical-align: middle; }
         .checkbox.checked { background-color: #333; position: relative; }
         .checkbox.checked::after { content: '✓'; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 8pt; }
-
         .save-status { font-size: 9pt; color: #888; text-align: right; margin-top: 10px; }
-        
-        /* Monthly Colors */
         .cb-1 { background-color: #ffcccc; } .cb-2 { background-color: #ffe6cc; }
         .cb-3 { background-color: #ffffcc; } .cb-4 { background-color: #e6ffcc; }
         .cb-5 { background-color: #ccffcc; } .cb-6 { background-color: #ccffe6; }
@@ -69,42 +49,32 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="notebook-sidebar">
-            <div class="sidebar-label">💰 FINANCE</div>
-            <a href="financial.html" class="section-link active">▦ Recurring Bills</a>
-            <a href="check-breakdown.html" class="section-link">📄 Check Breakdown</a>
-            <a href="monthly-review.html" class="section-link">📄 Monthly Review</a>
-        </aside>
-        <main class="notebook-main">
-            <div id="main-content" class="notebook-page">
-                <div class="view-section">
-                    <div class="page-title">RECURRING BILLS & EXPENSES</div>
-                    <div class="bill-table-container">
-                        <table class="bill-table">
-                            <thead>
-                                <tr>
-                                    <th class="cat-col">Cat</th>
-                                    <th class="item-col">Item</th>
-                                    <th class="amt-col">Amt</th>
-                                    <th class="month-col">J</th><th class="month-col">F</th><th class="month-col">M</th>
-                                    <th class="month-col">A</th><th class="month-col">M</th><th class="month-col">J</th>
-                                    <th class="month-col">J</th><th class="month-col">A</th><th class="month-col">S</th>
-                                    <th class="month-col">O</th><th class="month-col">N</th><th class="month-col">D</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bill-body"></tbody>
-                        </table>
-                    </div>
-                    <div id="save-status" class="save-status">All changes saved</div>
-                </div>
-
-                <div class="view-section handwriting">
-                    <div class="page-title">FINANCIAL GOALS & NOTES</div>
-                    <div id="financial-goals" class="planner-edit" contenteditable="true" oninput="handleGoalsInput()" style="min-height: 200px; outline: none;"></div>
-                </div>
+    <div class="content-area">
+        <div class="view-section">
+            <div class="page-title">RECURRING BILLS & EXPENSES</div>
+            <div class="bill-table-container">
+                <table class="bill-table">
+                    <thead>
+                        <tr>
+                            <th class="cat-col">Cat</th>
+                            <th class="item-col">Item</th>
+                            <th class="amt-col">Amt</th>
+                            <th class="month-col">J</th><th class="month-col">F</th><th class="month-col">M</th>
+                            <th class="month-col">A</th><th class="month-col">M</th><th class="month-col">J</th>
+                            <th class="month-col">J</th><th class="month-col">A</th><th class="month-col">S</th>
+                            <th class="month-col">O</th><th class="month-col">N</th><th class="month-col">D</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bill-body"></tbody>
+                </table>
             </div>
-        </main>
+            <div id="save-status" class="save-status">All changes saved</div>
+        </div>
+
+        <div class="view-section handwriting">
+            <div class="page-title">FINANCIAL GOALS & NOTES</div>
+            <div id="financial-goals" class="planner-edit" contenteditable="true" oninput="handleGoalsInput()" style="min-height: 200px; outline: none;"></div>
+        </div>
     </div>
 
     <script>

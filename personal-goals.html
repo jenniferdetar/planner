@@ -8,83 +8,55 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; display: flex; overflow: hidden; background: #f3f2f1; }
-        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; height: 100%; }
+        .content-area { padding: 40px; width: 100%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; }
         
-        .notebook-sidebar { width: 220px; background: #252525; color: #d1d1d1; display: flex; flex-direction: column; flex-shrink: 0; padding: 20px 0; border-right: 1px solid #333; }
-        .sidebar-label { padding: 0 25px 15px; font-size: 11pt; font-weight: 700; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .section-link { padding: 10px 25px; display: flex; align-items: center; gap: 12px; color: #d1d1d1; text-decoration: none; font-size: 10pt; transition: all 0.2s; }
-        .section-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .section-link.active { background: rgba(255,255,255,0.1); color: #fff; border-right: 4px solid #fdd835; }
-
-        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
-        .notebook-page { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
+        .goals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 20px; }
+        .goal-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: box-shadow 0.2s; }
+        .goal-card:focus-within { box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+        .card-header { font-size: 10pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         
-        .page-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #00326b; padding-bottom: 10px; }
-        .page-title { font-size: 14pt; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #00326b; margin: 0; }
-        
-        .goals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 20px; }
-        .goal-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .card-header { font-size: 10pt; font-weight: 700; color: #605e5c; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .editable-list { display: flex; flex-direction: column; gap: 12px; }
-        .goal-item { display: flex; gap: 10px; align-items: flex-start; }
+        .editable-list { display: flex; flex-direction: column; gap: 15px; }
+        .goal-item { display: flex; gap: 12px; align-items: flex-start; }
         .bullet { width: 8px; height: 8px; border-radius: 50%; background: #00326b; margin-top: 8px; flex-shrink: 0; }
-        .item-content { flex-grow: 1; font-family: 'Coming Soon', cursive; font-size: 12pt; color: #323130; outline: none; line-height: 1.4; border-bottom: 1px dashed transparent; }
+        .item-content { flex-grow: 1; font-family: 'Coming Soon', cursive; font-size: 12pt; color: #323130; outline: none; line-height: 1.5; border-bottom: 1px dashed transparent; }
         .item-content:focus { border-bottom-color: #00326b; }
         
-        .vision-section { grid-column: 1 / -1; background: #fdfdfd; border: 1px solid #e1dfdd; border-radius: 8px; padding: 25px; margin-top: 20px; }
-        .vision-text { font-family: 'Coming Soon', cursive; font-size: 13pt; line-height: 1.8; color: #323130; outline: none; min-height: 100px; }
+        .vision-section { grid-column: 1 / -1; background: #fff; border: 1px solid #e1dfdd; border-radius: 12px; padding: 30px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .vision-text { font-family: 'Coming Soon', cursive; font-size: 13pt; line-height: 1.8; color: #323130; outline: none; min-height: 120px; white-space: pre-wrap; }
 
-        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
-        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #00326b; text-decoration: none; font-size: 9pt; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; }
+        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="notebook-sidebar">
-            <div class="sidebar-label">🎯 PLANNING</div>
-            <a href="planning.html" class="section-link">▦ Focus & Review</a>
-            <a href="personal-goals.html" class="section-link active">📄 Personal Goals</a>
-        </aside>
-        <main class="notebook-main">
-            <div class="notebook-page">
-                <div class="page-header">
-                    <h1 class="page-title" id="page-title">Personal Goals</h1>
-                </div>
-
-                <div class="goals-grid">
-                    <div class="goal-card">
-                        <div class="card-header">Health & Wellness</div>
-                        <div class="editable-list" id="list-health"></div>
-                    </div>
-
-                    <div class="goal-card">
-                        <div class="card-header">Personal Growth</div>
-                        <div class="editable-list" id="list-growth"></div>
-                    </div>
-
-                    <div class="goal-card">
-                        <div class="goal-card">
-                            <div class="card-header">Home & Family</div>
-                            <div class="editable-list" id="list-family"></div>
-                        </div>
-                    </div>
-
-                    <div class="goal-card">
-                        <div class="card-header">Adventure & Joy</div>
-                        <div class="editable-list" id="list-joy"></div>
-                    </div>
-
-                    <div class="vision-section">
-                        <div class="card-header">Annual Vision Statement</div>
-                        <div class="vision-text" contenteditable="true" id="vision-statement" oninput="handleSave('vision-statement', this.innerText)"></div>
-                    </div>
-                </div>
+    <div class="content-area">
+        <div class="goals-grid">
+            <div class="goal-card">
+                <div class="card-header">Health & Wellness</div>
+                <div class="editable-list" id="list-health"></div>
             </div>
-        </main>
+
+            <div class="goal-card">
+                <div class="card-header">Personal Growth</div>
+                <div class="editable-list" id="list-growth"></div>
+            </div>
+
+            <div class="goal-card">
+                <div class="card-header">Home & Family</div>
+                <div class="editable-list" id="list-family"></div>
+            </div>
+
+            <div class="goal-card">
+                <div class="card-header">Adventure & Joy</div>
+                <div class="editable-list" id="list-joy"></div>
+            </div>
+
+            <div class="vision-section">
+                <div class="card-header">Annual Vision Statement</div>
+                <div class="vision-text" contenteditable="true" id="vision-statement" oninput="handleSave('vision-statement', this.innerText)"></div>
+            </div>
+        </div>
+        <div id="save-status" class="save-status">All changes saved</div>
     </div>
-    <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -97,7 +69,7 @@
         const ITEMS_PER_CAT = 5;
 
         async function init() {
-            document.getElementById('page-title').innerText = `Personal Goals ${currentYear}`;
+            setGlobalHeaderTitle(`PERSONAL GOALS ${currentYear}`);
             
             // Generate list inputs
             CATEGORIES.forEach(cat => {
@@ -116,10 +88,12 @@
 
             // Load data
             const data = await fetchPlannerData(PERSISTENCE_KEY);
-            data.forEach(d => {
-                const el = document.getElementById(d.field_id);
-                if (el) el.innerText = d.content;
-            });
+            if (data) {
+                data.forEach(d => {
+                    const el = document.getElementById(d.field_id);
+                    if (el) el.innerText = d.content;
+                });
+            }
         }
 
         async function handleSave(fieldId, content) {
@@ -127,12 +101,13 @@
             status.innerText = 'Saving...';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                await savePlannerData(PERSISTENCE_KEY, fieldId, content);
-                status.innerText = 'All changes saved';
+                const result = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                status.innerText = result !== null ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
+
 </body>
 </html>

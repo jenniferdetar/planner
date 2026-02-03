@@ -9,18 +9,9 @@
     <script src="shared.js"></script>
     <style>
         :root { --soft-bg: #fdfcf0; }
-        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; display: flex; overflow: hidden; background: #f8f9fa; }
+        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; background: #fff; }
         
-        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; height: 100%; }
-        
-        .notebook-sidebar { width: 220px; background: #252525; color: #d1d1d1; display: flex; flex-direction: column; flex-shrink: 0; padding: 20px 0; border-right: 1px solid #333; }
-        .sidebar-label { padding: 0 25px 15px; font-size: 11pt; font-weight: 700; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .section-link { padding: 10px 25px; display: flex; align-items: center; gap: 12px; color: #d1d1d1; text-decoration: none; font-size: 10pt; transition: all 0.2s; }
-        .section-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .section-link.active { background: rgba(255,255,255,0.1); color: #fff; border-right: 4px solid #fdd835; }
-
-        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
-        .notebook-page { width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
+        .content-area { padding: 20px; width: 100%; }
         
         .view-section { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .handwriting, textarea, .planner-edit { font-family: 'Coming Soon', cursive; font-size: 12pt; color: #2c3e50; }
@@ -42,66 +33,57 @@
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="notebook-sidebar">
-            <div class="sidebar-label">📋 CSEA</div>
-            <a href="csea.html" class="section-link active">▦ General Notes</a>
-            <a href="csea.html#interactions" class="section-link">📄 Interactions</a>
-        </aside>
-        <main class="notebook-main">
-            <div id="main-content" class="notebook-page">
-                <div class="view-section">
-                    <div class="page-title">CSEA NOTES</div>
-                    <div class="new-note-area">
-                        <textarea id="new-note-content" class="handwriting" placeholder="Start typing CSEA notes..." oninput="handleNoteDraftInput()" style="width: 100%; min-height: 200px; border: none; outline: none; background: transparent; resize: none;"></textarea>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                            <button class="save-btn" onclick="handleAddNote()">Save Note</button>
-                            <div id="save-status" class="save-status">All changes saved</div>
-                        </div>
-                    </div>
+    <div class="content-area">
+        <div class="view-section">
+            <div class="page-title">CSEA NOTES</div>
+            <div class="new-note-area">
+                <textarea id="new-note-content" class="handwriting" placeholder="Start typing CSEA notes..." oninput="handleNoteDraftInput()" style="width: 100%; min-height: 200px; border: none; outline: none; background: transparent; resize: none;"></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                    <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+                    <div id="save-status" class="save-status">All changes saved</div>
                 </div>
-
-                <div class="view-section">
-                    <div class="page-title">MEMBER INTERACTION LOG</div>
-                    <div class="special-table-container">
-                        <table class="special-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Member</th>
-                                    <th>Location</th>
-                                    <th>Discussion</th>
-                                    <th>Outcome</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="interaction-log-body"></tbody>
-                            <tfoot>
-                                <tr style="background: #fffde7;">
-                                    <td><input type="date" id="log-date" class="log-input"></td>
-                                    <td>
-                                        <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
-                                        <datalist id="members-list"></datalist>
-                                    </td>
-                                    <td>
-                                        <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
-                                        <datalist id="schools-list"></datalist>
-                                    </td>
-                                    <td>
-                                        <input type="text" id="log-discussion" class="log-input" placeholder="Issue" list="issues-list">
-                                        <datalist id="issues-list"></datalist>
-                                    </td>
-                                    <td><input type="text" id="log-outcome" class="log-input" placeholder="Result"></td>
-                                    <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="entries-list"></div>
             </div>
-        </main>
+        </div>
+
+        <div class="view-section">
+            <div class="page-title">MEMBER INTERACTION LOG</div>
+            <div class="special-table-container">
+                <table class="special-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Member</th>
+                            <th>Location</th>
+                            <th>Discussion</th>
+                            <th>Outcome</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="interaction-log-body"></tbody>
+                    <tfoot>
+                        <tr style="background: #fffde7;">
+                            <td><input type="date" id="log-date" class="log-input"></td>
+                            <td>
+                                <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
+                                <datalist id="members-list"></datalist>
+                            </td>
+                            <td>
+                                <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
+                                <datalist id="schools-list"></datalist>
+                            </td>
+                            <td>
+                                <input type="text" id="log-discussion" class="log-input" placeholder="Issue" list="issues-list">
+                                <datalist id="issues-list"></datalist>
+                            </td>
+                            <td><input type="text" id="log-outcome" class="log-input" placeholder="Result"></td>
+                            <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div id="entries-list"></div>
     </div>
 
     <script>

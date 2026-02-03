@@ -8,18 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; display: flex; overflow: hidden; background: #f3f2f1; }
+        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; background: #fff; }
         
-        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; height: 100%; }
-        
-        .notebook-sidebar { width: 220px; background: #252525; color: #d1d1d1; display: flex; flex-direction: column; flex-shrink: 0; padding: 20px 0; border-right: 1px solid #333; }
-        .sidebar-label { padding: 0 25px 15px; font-size: 11pt; font-weight: 700; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .section-link { padding: 10px 25px; display: flex; align-items: center; gap: 12px; color: #d1d1d1; text-decoration: none; font-size: 10pt; transition: all 0.2s; }
-        .section-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .section-link.active { background: rgba(255,255,255,0.1); color: #fff; border-right: 4px solid #fdd835; }
-
-        .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
-        .notebook-page { width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
+        .content-area { padding: 20px; width: 100%; }
         
         .page-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #00326b; padding-bottom: 10px; }
         .page-title { font-size: 14pt; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #00326b; margin: 0; }
@@ -41,69 +32,59 @@
         .dream-card { background: #fffcf0; padding: 20px; border-radius: 8px; border: 1px solid #f0ead6; }
         .dream-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; color: #8b7355; margin-bottom: 10px; letter-spacing: 1px; }
 
-        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 9pt; color: #666; }
+        .save-status { font-size: 9pt; color: #888; text-align: right; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="notebook-container">
-        <aside class="notebook-sidebar">
-            <div class="sidebar-label">🎯 PLANNING</div>
-            <a href="planning.html" class="section-link active">▦ Yearly Focus</a>
-            <a href="personal-goals.html" class="section-link">📄 Personal Goals</a>
-            <a href="monthly-review.html" class="section-link">📄 Monthly Review</a>
-        </aside>
-        <main class="notebook-main">
-            <div class="notebook-page">
-                <div class="page-header">
-                    <h1 class="page-title" id="page-title">Planning</h1>
-                </div>
+    <div class="content-area">
+        <div class="page-header">
+            <h1 class="page-title" id="page-title">Planning</h1>
+        </div>
 
-                <div class="view-section">
-                    <div class="section-header">LOOKING FORWARD</div>
-                    <p style="font-size: 9pt; color: #666; margin-bottom: 20px;">What would you love for your work to look like each day? What fills you up?</p>
-                    <div class="handwriting">
-                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-1"></div></div>
-                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-2"></div></div>
-                        <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-3"></div></div>
-                    </div>
-                </div>
+        <div class="view-section">
+            <div class="section-header">LOOKING FORWARD</div>
+            <p style="font-size: 9pt; color: #666; margin-bottom: 20px;">What would you love for your work to look like each day? What fills you up?</p>
+            <div class="handwriting">
+                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-1"></div></div>
+                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-2"></div></div>
+                <div class="ruled-line"><div class="editable-area" contenteditable="true" data-field="look-forward-3"></div></div>
+            </div>
+        </div>
 
-                <div class="view-section">
-                    <div class="section-header">DO YOU LOVE IT WHEN YOU HAVE THE TIME TO BE...</div>
-                    <div class="checkbox-grid" id="love-grid"></div>
-                </div>
+        <div class="view-section">
+            <div class="section-header">DO YOU LOVE IT WHEN YOU HAVE THE TIME TO BE...</div>
+            <div class="checkbox-grid" id="love-grid"></div>
+        </div>
 
-                <div class="view-section">
-                    <div class="section-header">DREAM BIG | NEXT 12 MONTHS</div>
-                    <div class="dream-grid">
-                        <div class="dream-card">
-                            <div class="dream-label">Financially</div>
-                            <div class="handwriting editable-area" contenteditable="true" data-field="dream-financial" style="min-height: 80px;"></div>
-                        </div>
-                        <div class="dream-card">
-                            <div class="dream-label">Physically</div>
-                            <div class="handwriting editable-area" contenteditable="true" data-field="dream-physical" style="min-height: 80px;"></div>
-                        </div>
-                        <div class="dream-card">
-                            <div class="dream-label">Emotionally</div>
-                            <div class="handwriting editable-area" contenteditable="true" data-field="dream-emotional" style="min-height: 80px;"></div>
-                        </div>
-                        <div class="dream-card">
-                            <div class="dream-label">Spiritually</div>
-                            <div class="handwriting editable-area" contenteditable="true" data-field="dream-spiritual" style="min-height: 80px;"></div>
-                        </div>
-                    </div>
+        <div class="view-section">
+            <div class="section-header">DREAM BIG | NEXT 12 MONTHS</div>
+            <div class="dream-grid">
+                <div class="dream-card">
+                    <div class="dream-label">Financially</div>
+                    <div class="handwriting editable-area" contenteditable="true" data-field="dream-financial" style="min-height: 80px;"></div>
                 </div>
-
-                <div class="view-section">
-                    <div class="section-header">YEARLY FOCUS</div>
-                    <p style="font-size: 9pt; color: #666;">This year, more than anything else, I want to focus on:</p>
-                    <div class="handwriting ruled-line">
-                        <div class="editable-area" contenteditable="true" data-field="focus-this-year"></div>
-                    </div>
+                <div class="dream-card">
+                    <div class="dream-label">Physically</div>
+                    <div class="handwriting editable-area" contenteditable="true" data-field="dream-physical" style="min-height: 80px;"></div>
+                </div>
+                <div class="dream-card">
+                    <div class="dream-label">Emotionally</div>
+                    <div class="handwriting editable-area" contenteditable="true" data-field="dream-emotional" style="min-height: 80px;"></div>
+                </div>
+                <div class="dream-card">
+                    <div class="dream-label">Spiritually</div>
+                    <div class="handwriting editable-area" contenteditable="true" data-field="dream-spiritual" style="min-height: 80px;"></div>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <div class="view-section">
+            <div class="section-header">YEARLY FOCUS</div>
+            <p style="font-size: 9pt; color: #666;">This year, more than anything else, I want to focus on:</p>
+            <div class="handwriting ruled-line">
+                <div class="editable-area" contenteditable="true" data-field="focus-this-year"></div>
+            </div>
+        </div>
     </div>
     <div id="save-status" class="save-status">All changes saved</div>
 

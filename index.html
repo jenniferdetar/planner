@@ -8,19 +8,15 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; background: #fff; }
+        body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; background: #fff; }
         
-        .header { height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 20px; border-bottom: 1px solid #e1dfdd; flex-shrink: 0; background: #fff; gap: 10px; }
-        .header-title { font-size: 10pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; }
-        .month-nav { display: flex; align-items: center; gap: 40px; font-weight: 400; font-size: 18pt; color: #00326b; }
+        .month-nav-container { display: flex; align-items: center; justify-content: center; padding: 20px; gap: 40px; font-weight: 400; font-size: 18pt; color: #00326b; }
         .nav-arrow { cursor: pointer; padding: 5px 15px; color: #00326b; font-size: 18pt; user-select: none; transition: opacity 0.2s; }
         .nav-arrow:hover { opacity: 0.5; }
-        .btn-today-container { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); }
-        .btn-today { padding: 6px 20px; border: 1px solid #e1dfdd; border-radius: 4px; background: #fff; cursor: pointer; font-size: 9pt; font-weight: 600; }
 
-        .content-area { padding: 20px; }
+        .content-area { padding: 0 20px 20px; width: 100%; }
         
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: 26px repeat(6, 1fr); gap: 1px; background: #e1dfdd; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; min-height: calc(100vh - 160px); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: 26px repeat(6, 1fr); gap: 1px; background: #e1dfdd; border: 1px solid #e1dfdd; border-radius: 8px; overflow: hidden; min-height: calc(100vh - 180px); width: 100%; }
         .day-header { padding: 4px; text-align: center; font-size: 8pt; font-weight: 700; text-transform: uppercase; color: #fff; height: 18px; line-height: 18px; border: 0.5px solid #eee; }
         .day-header.sun { background: #f59e9e; }
         .day-header.mon { background: #ffca38; }
@@ -41,22 +37,14 @@
         .event-pill.budget { border-left-color: #ffb900; background: #fffdf6; }
         .event-pill.wen { border-left-color: #8e44ad; background: #f5eef8; }
         .event-pill.handwriting { font-family: 'Coming Soon', cursive; font-size: 10pt; background: transparent; border: none; padding: 0; color: #d4af37; }
-
-        .logout-btn { margin-top: auto; padding: 20px 25px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); text-decoration: none; font-size: 9pt; font-weight: 600; display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
 <body>
-    <header class="header" style="position: relative; width: 100%; text-align: center;">
-        <div class="btn-today-container">
-            <button class="btn-today" onclick="goToday()">Today</button>
-        </div>
-        <div class="header-title" id="global-header-title" style="width: 100%;">MONTHLY OVERVIEW</div>
-        <div class="month-nav" style="justify-content: center; width: 100%;">
-            <span class="nav-arrow" onclick="changeMonth(-1)">&lt;</span>
-            <span id="current-month-display">January 2026</span>
-            <span class="nav-arrow" onclick="changeMonth(1)">&gt;</span>
-        </div>
-    </header>
+    <div class="month-nav-container">
+        <span class="nav-arrow" onclick="changeMonth(-1)">&lt;</span>
+        <span id="current-month-display">January 2026</span>
+        <span class="nav-arrow" onclick="changeMonth(1)">&gt;</span>
+    </div>
 
     <div class="content-area">
         <div id="calendar-grid" class="calendar-grid">
