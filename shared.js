@@ -988,7 +988,6 @@ function updateNavigationLinks(date) {
         'planning.html',
         'monthly-review.html',
         'check-breakdown.html',
-        'icaap-tracking.html',
         'icaap-attendance.html',
         'mantra.html',
         'personal-goals.html'
@@ -997,7 +996,6 @@ function updateNavigationLinks(date) {
     const categoryMapping = {
         'financial.html': 'Budget',
         'monthly-review.html': 'Monthly-Review',
-        'icaap-tracking.html': 'ICAAP-Tracking',
         'icaap-attendance.html': 'ICAAP-Attendance',
         'csea.html': 'CSEA',
         'hoa.html': 'HOA',

@@ -13,7 +13,6 @@ A single-page static planner for January 2026 served as plain HTML/CSS/vanilla J
   - **Check Breakdown**: Refactored dual-pane notebook layout with **pagination** and fiscal year tracking starting from **July 1, 2025**.
 - **Specialized Logs**:
   - **Csea/LA Fed**: Meeting notes and interaction logs for union activities.
-  - **Icaap Tracking**: Tracking log for paylog submissions, hours, and approvals across multiple employees.
   - **Hoa & Planning**: Dedicated sections for home association and general planning.
 
 ## Tech Stack
@@ -48,5 +47,5 @@ The project is a static site and does not require a build step or package manage
 - `shared.js`: Common logic for Supabase interactions, date formatting, navigation, and binder layout injection.
 - `check-breakdown.html`: Refactored paginated spreadsheet for paycheck allocations.
 - `financial.html`, `monthly-review.html`: Financial management and review tools.
-- `csea.html`, `icaap-tracking.html`, `icaap-attendance.html`: Specialized activity and union logs.
+- `csea.html`, `icaap-attendance.html`: Specialized activity and union logs.
 - `vercel.json`: Vercel configuration for static hosting.
