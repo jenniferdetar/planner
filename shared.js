@@ -245,7 +245,7 @@ function animateAndNavigate(event, url, direction = 'next') {
 
         * {
             box-sizing: border-box;
-            font-family: var(--font-main) !important;
+            font-family: 'Coming Soon', cursive !important;
         }
 
         body, html {
