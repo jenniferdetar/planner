@@ -381,20 +381,21 @@ function animateAndNavigate(event, url, direction = 'next') {
 
         // Create Navigation Links
         const navItems = [
-            { label: 'Home', path: 'index.html', icon: '🏠' },
-            { label: 'HOA', path: 'hoa.html', cat: 'HOA' },
-            { label: 'CSEA', path: 'csea.html', cat: 'CSEA' },
-            { label: 'ICAAP', path: 'icaap.html', cat: 'ICAAP' },
-            { label: 'Finance', path: 'financial.html', cat: 'Finance' },
-            { label: 'Planning', path: 'planning.html', cat: 'Planning' },
-            { label: 'Mantra', path: 'mantra.html', cat: 'Mantra' }
+            { label: 'Home', path: 'index.html', icon: '📅' },
+            { label: 'HOA', path: 'hoa.html', cat: 'HOA', icon: '🏠' },
+            { label: 'CSEA', path: 'csea.html', cat: 'CSEA', icon: '📋' },
+            { label: 'ICAAP', path: 'icaap.html', cat: 'ICAAP', icon: '📊' },
+            { label: 'Finance', path: 'financial.html', cat: 'Finance', icon: '💰' },
+            { label: 'Planning', path: 'planning.html', cat: 'Planning', icon: '🎯' },
+            { label: 'Mantra', path: 'mantra.html', cat: 'Mantra', icon: '✨' }
         ];
 
         const tabsHtml = navItems.map(item => {
             const itemPath = item.path.split('?')[0];
             const isActive = currentPath === itemPath;
             const link = item.path + (item.path.includes('?') ? '&' : '?') + `date=${dateStr}`;
-            return `<a href="${link}" class="tab-item ${isActive ? 'active' : ''}">${item.label}</a>`;
+            const iconHtml = item.icon ? `<span style="margin-right: 8px;">${item.icon}</span>` : '';
+            return `<a href="${link}" class="tab-item ${isActive ? 'active' : ''}">${iconHtml}${item.label}</a>`;
         }).join('');
 
         const dashboard = document.createElement('div');

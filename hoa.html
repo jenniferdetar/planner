@@ -11,8 +11,14 @@
         :root { --soft-bg: #fdfcf0; }
         body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; height: 100vh; display: flex; overflow: hidden; background: #f8f9fa; }
         
-        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; }
+        .notebook-container { display: flex; flex-grow: 1; overflow: hidden; background: #fff; width: 100%; height: 100%; }
         
+        .notebook-sidebar { width: 220px; background: #252525; color: #d1d1d1; display: flex; flex-direction: column; flex-shrink: 0; padding: 20px 0; border-right: 1px solid #333; }
+        .sidebar-label { padding: 0 25px 15px; font-size: 11pt; font-weight: 700; color: #fff; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .section-link { padding: 10px 25px; display: flex; align-items: center; gap: 12px; color: #d1d1d1; text-decoration: none; font-size: 10pt; transition: all 0.2s; }
+        .section-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .section-link.active { background: rgba(255,255,255,0.1); color: #fff; border-right: 4px solid #fdd835; }
+
         .notebook-main { flex-grow: 1; background: #fff; overflow-y: auto; position: relative; scrollbar-width: thin; }
         .notebook-page { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; background: #fff; box-sizing: border-box; min-height: 100%; }
         
@@ -29,6 +35,15 @@
 </head>
 <body>
     <div class="notebook-container">
+        <aside class="notebook-sidebar">
+            <div class="sidebar-label">📄 HOA</div>
+            <a href="hoa.html?section=open-items" class="section-link">▦ Open Items</a>
+            <a href="hoa.html?section=financials" class="section-link">📄 Financials</a>
+            <a href="hoa.html?section=incidents" class="section-link">📄 Incidents</a>
+            <a href="hoa.html?section=insurance" class="section-link">📄 Insurance</a>
+            <a href="hoa.html?section=legal" class="section-link">📄 Legal</a>
+            <a href="hoa.html?section=maintenance" class="section-link">📄 Maintaince & Repairs</a>
+        </aside>
         <main class="notebook-main">
             <div id="main-content" class="notebook-page">
                 <div class="view-section">
@@ -50,19 +65,21 @@
         const urlParams = new URLSearchParams(window.location.search);
         const section = urlParams.get('section') || 'open-items';
         const dateParam = urlParams.get('date');
-        setGlobalHeaderTitle(`HOA ${section.toUpperCase().replace("-", " ")} ${currentYear}`);
         const displayDate = dateParam ? new Date(dateParam) : new Date();
         const currentYear = displayDate.getFullYear();
-        const CATEGORY = `HOA-${currentYear}`;
-        const PERSISTENCE_KEY = `draft-note-${CATEGORY}`;
         
         // Dynamic Category based on section
         const CATEGORY = section === 'open-items' ? `HOA-${currentYear}` : `HOA-${section}-${currentYear}`;
         const PERSISTENCE_KEY = `draft-note-hoa-${section}-${currentYear}`;
         
+        // Initialize Global Sidebar/Header if available in shared.js
+        if (typeof setGlobalHeaderTitle === 'function') {
+            setGlobalHeaderTitle(`HOA ${section.toUpperCase().replace("-", " ")} ${currentYear}`);
+        }
+
         // Update Sidebar Active State
         document.querySelectorAll('.section-link').forEach(link => {
-            if (link.getAttribute('href').includes(section)) {
+            if (link.getAttribute('href').includes(`section=${section}`)) {
                 link.classList.add('active');
             } else {
                 link.classList.remove('active');
@@ -74,10 +91,6 @@
         const saveStatus = document.getElementById('save-status');
         let saveTimeout = null;
 
-        // Initialize Global Sidebar/Header if available in shared.js
-        if (typeof setGlobalHeaderTitle === 'function') {
-            setGlobalHeaderTitle(`HOA NOTES ${currentYear}`);
-        }
         if (typeof updateNavigationLinks === 'function') {
             updateNavigationLinks(displayDate);
         }
