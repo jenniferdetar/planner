@@ -180,20 +180,64 @@ function animateAndNavigate(event, url, direction = 'next') {
             display: flex;
             width: 100vw;
             height: 100vh;
-            overflow: hidden !important;
+            overflow: hidden;
         }
 
         .dashboard-sidebar {
-            display: none !important;
+            width: 250px;
+            background: var(--primary-navy);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow-y: auto;
+            padding-top: 20px;
+        }
+
+        .sidebar-section {
+            padding: 10px 0;
+        }
+
+        .sidebar-label {
+            padding: 5px 25px;
+            font-size: 8pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 700;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 25px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 10pt;
+            transition: background 0.2s;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-link.active {
+            background: rgba(255,255,255,0.2);
+            border-left: 4px solid var(--accent-gold);
+            padding-left: 21px;
+        }
+
+        .sidebar-icon {
+            font-size: 12pt;
         }
 
         .dashboard-main {
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden !important;
+            overflow-y: auto;
             background: #fff;
-            width: 100vw !important;
         }
 
         .dashboard-header {
@@ -256,18 +300,15 @@ function animateAndNavigate(event, url, direction = 'next') {
 
         .dashboard-body {
             flex: 1;
-            overflow: hidden !important;
+            overflow: auto;
             padding: 0 !important;
             background: #fff;
-            width: 100vw !important;
         }
 
         .content-area {
             padding: 0 !important;
             margin: 0 !important;
-            width: 100vw !important;
             max-width: none !important;
-            overflow: hidden !important;
         }
     `;
     document.head.appendChild(style);

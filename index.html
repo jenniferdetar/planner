@@ -14,10 +14,20 @@
         .nav-arrow { cursor: pointer; padding: 5px 15px; color: #00326b; font-size: 14pt; user-select: none; transition: opacity 0.2s; }
         .nav-arrow:hover { opacity: 0.5; }
 
-        .content-area { padding: 0; width: 100%; overflow: hidden; }
+        .content-area { padding: 0; width: 100%; overflow: visible; }
         
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: 26px repeat(6, 1fr); gap: 1px; background: #e1dfdd; border: 1px solid #e1dfdd; border-radius: 0; overflow: hidden; height: calc(100vh - 120px); width: 100%; }
-        .day-header { padding: 4px; text-align: center; font-size: 8pt; font-weight: 700; text-transform: uppercase; color: #fff; height: 18px; line-height: 18px; border: 0.5px solid #eee; }
+        .calendar-grid { 
+            display: grid; 
+            grid-template-columns: repeat(7, 1fr); 
+            grid-auto-rows: 1fr; 
+            gap: 1px; 
+            background: #e1dfdd; 
+            border: 1px solid #e1dfdd; 
+            border-radius: 0; 
+            min-height: calc(100vh - 120px); 
+            width: 100%; 
+        }
+        .day-header { padding: 4px; text-align: center; font-size: 8pt; font-weight: 700; text-transform: uppercase; color: #fff; height: 26px; line-height: 26px; border: 0.5px solid #eee; }
         .day-header.sun { background: #f59e9e; }
         .day-header.mon { background: #ffca38; }
         .day-header.tue { background: #a2d9d9; }
@@ -25,12 +35,12 @@
         .day-header.thu { background: #f59e9e; }
         .day-header.fri { background: #ffca38; }
         .day-header.sat { background: #a2d9d9; }
-        .calendar-day { background: #fff; height: auto; padding: 10px; display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
+        .calendar-day { background: #fff; min-height: 120px; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
         .day-number { font-size: 10pt; font-weight: 700; color: #323130; margin-bottom: 5px; font-family: 'Coming Soon', cursive; }
-        .event-container { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; overflow: hidden; }
+        .event-container { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; }
         
         /* Event Pill Styles */
-        .event-pill { font-size: 10pt; padding: 2px 6px; border-radius: 4px; border-left: 4px solid #ccc; background: #f3f2f1; color: #323130; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Coming Soon', cursive; }
+        .event-pill { font-size: 10pt; padding: 2px 6px; border-radius: 4px; border-left: 4px solid #ccc; background: #f3f2f1; color: #323130; font-weight: 600; white-space: normal; word-break: break-word; font-family: 'Coming Soon', cursive; }
         .event-pill.csea { border-left-color: #00326b; background: #eef2f7; }
         .event-pill.la-fed { border-left-color: #00326b; background: #fdf3f0; }
         .event-pill.due { border-left-color: #d83b01; background: #fdf3f0; }
