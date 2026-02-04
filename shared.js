@@ -445,47 +445,48 @@ function animateAndNavigate(event, url, direction = 'next') {
 
 async function savePlannerData(date, fieldId, content) {
     const client = getSupabase();
-    if (!client) return false;
+    if (!client) return null;
 
     // Apply timestamp for text entries, skip for numeric/empty/checkmarks
     let finalValue = content;
-    const isNumeric = !isNaN(parseFloat(content)) && isFinite(content);
+    const isNumeric = content && !isNaN(parseFloat(content)) && isFinite(content);
     const isCheckmark = content === 'true' || content === 'false';
     if (content && content.trim() && !isNumeric && !isCheckmark) {
         finalValue = ensureTimestamp(content);
     }
 
     try {
-        // Use upsert for atomic operation
+        const payload = { 
+            date_key: date, 
+            slot_key: fieldId, 
+            value: finalValue
+        };
+
+        // Try upsert with onConflict if possible
         const { error } = await client
             .from('work_planner_edits')
-            .upsert({ 
-                date_key: date, 
-                slot_key: fieldId, 
-                value: finalValue,
-                updated_at: new Date().toISOString()
-            });
+            .upsert(payload, { onConflict: 'date_key,slot_key' });
 
         if (error) {
-            console.error('Save error:', error);
-            // Fallback to delete/insert if upsert fails
-            await client
-                .from('work_planner_edits')
-                .delete()
-                .match({ date_key: date, slot_key: fieldId });
-
-            const { error: insertError } = await client
-                .from('work_planner_edits')
-                .insert({ 
-                    date_key: date, 
-                    slot_key: fieldId, 
-                    value: finalValue,
-                    updated_at: new Date().toISOString()
-                });
+            console.warn('Upsert failed, trying manual update/insert:', error.message);
             
-            if (insertError) {
-                console.error('Insert fallback error:', insertError);
-                return null;
+            // Try update first
+            const { data: updateData, error: updateError } = await client
+                .from('work_planner_edits')
+                .update({ value: finalValue })
+                .match({ date_key: date, slot_key: fieldId })
+                .select();
+
+            if (updateError || !updateData || updateData.length === 0) {
+                // If update fails or matches nothing, try insert
+                const { error: insertError } = await client
+                    .from('work_planner_edits')
+                    .insert(payload);
+                
+                if (insertError) {
+                    console.error('Final insert fallback error:', insertError);
+                    return null;
+                }
             }
         }
         return finalValue;
@@ -614,7 +615,7 @@ async function updateCategoryEntry(id, content) {
     const finalContent = ensureTimestamp(content);
     const { error } = await client
         .from('category_entries')
-        .update({ content: finalContent, updated_at: new Date().toISOString() })
+        .update({ content: finalContent })
         .eq('id', id);
     
     if (error) {

@@ -4,85 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mantra - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Indie+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        .content-area { padding: 0 !important; width: 100vw; box-sizing: border-box; overflow: hidden !important; }
+        :root {
+            --paper-bg: #fff;
+            --line-color: #f0ede6;
+            --margin-line: #f6d2a2;
+            --text-color: #323130;
+        }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; }
         
-        .mantra-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; height: calc(100vh - 100px); overflow: hidden; }
-        @media (max-width: 1000px) { .mantra-grid { grid-template-columns: 1fr; } }
+        .content-area { 
+            padding: 60px 40px; 
+            width: 100vw; 
+            box-sizing: border-box; 
+            min-height: 100vh; 
+            background-color: var(--paper-bg);
+            background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
+            background-size: 100% 32px;
+            position: relative;
+            overflow-y: auto !important;
+        }
 
-        .section-header { font-size: 10pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        
-        .manifesto-item { display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start; cursor: pointer; padding: 10px; border-radius: 8px; transition: background 0.2s; }
-        .manifesto-item:hover { background: #fcf8f2; }
-        .checkbox { width: 24px; height: 24px; border: 2px solid #f6d2a2; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 14pt; color: #4f7942; flex-shrink: 0; margin-top: 2px; border-radius: 4px; }
-        .checkbox.checked::after { content: "✓"; }
-        .manifesto-text { font-size: 10pt; line-height: 1.7; color: #333; margin: 0; }
+        /* Floral Accent */
+        .floral-accent {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://www.transparentpng.com/download/flower/pink-flower-png-9.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-        .input-group { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; background: #fcfaf7; padding: 25px; border-radius: 12px; border: 1px solid #f0e6d6; }
-        .mantra-input { width: 100%; border: none; border-bottom: 2px solid #f0e6d6; font-family: 'Coming Soon', cursive; font-size: 10pt; padding: 10px 0; outline: none; background: transparent; transition: border-color 0.2s; }
-        .mantra-input:focus { border-bottom-color: #f6d2a2; }
-        .add-btn { background: #4f7942; color: #fff; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-size: 10pt; font-weight: 700; text-transform: uppercase; align-self: flex-end; transition: transform 0.1s, opacity 0.2s; }
-        .add-btn:active { transform: scale(0.98); }
-        .add-btn:hover { opacity: 0.9; }
+        .mantra-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
 
-        .mantras-list { display: flex; flex-direction: column; gap: 25px; }
-        .mantra-item { position: relative; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .mantra-content { font-family: 'Coming Soon', cursive; font-size: 10pt; color: #333; line-height: 1.6; outline: none; padding-right: 60px; }
-        .mantra-meta { font-size: 10pt; color: #aaa; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .delete-btn { position: absolute; right: 20px; top: 20px; color: #eee; cursor: pointer; font-size: 10pt; text-transform: uppercase; transition: color 0.2s; }
-        .mantra-item:hover .delete-btn { color: #ccc; }
-        .delete-btn:hover { color: #cc0000 !important; }
+        .mantra-item {
+            margin-bottom: 48px;
+            position: relative;
+            padding-left: 60px;
+        }
 
-        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 10pt; color: #666; }
+        /* The 3 gold bars on the left */
+        .mantra-bars {
+            position: absolute;
+            left: 0;
+            top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .bar {
+            width: 30px;
+            height: 4px;
+            background: #f6d2a2;
+            border-radius: 2px;
+        }
+
+        .mantra-text {
+            font-family: 'Coming Soon', cursive;
+            font-size: 11pt;
+            line-height: 32px;
+            color: var(--text-color);
+            outline: none;
+            white-space: pre-wrap;
+            min-height: 32px;
+        }
+
+        .save-status { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            background: rgba(255,255,255,0.9); 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            font-size: 10pt; 
+            color: #666; 
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
     <div class="content-area">
-        <div class="mantra-grid">
-            <div>
-                <div class="section-header" id="manifesto-title">Manifesto</div>
-                <div class="manifesto-section" id="manifesto-list">
-                    <div class="manifesto-item" onclick="toggleManifesto(0)">
-                        <div class="checkbox" id="check-0"></div>
-                        <p class="manifesto-text">I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly.</p>
-                    </div>
-                    <div class="manifesto-item" onclick="toggleManifesto(1)">
-                        <div class="checkbox" id="check-1"></div>
-                        <p class="manifesto-text">I lead without shrinking. I have earned my seat at the table, and when necessary, I am capable of building the table myself.</p>
-                    </div>
-                    <div class="manifesto-item" onclick="toggleManifesto(2)">
-                        <div class="checkbox" id="check-2"></div>
-                        <p class="manifesto-text">I build what grounds me. I value practical skills that feed people, calm homes, and create stability.</p>
-                    </div>
-                    <div class="manifesto-item" onclick="toggleManifesto(3)">
-                        <div class="checkbox" id="check-3"></div>
-                        <p class="manifesto-text">I serve with boundaries. I help people who are willing to participate in their own growth.</p>
-                    </div>
-                    <div class="manifesto-item" onclick="toggleManifesto(4)">
-                        <div class="checkbox" id="check-4"></div>
-                        <p class="manifesto-text">I protect joy as a non-negotiable. Not every moment must be productive to be valuable.</p>
-                    </div>
-                    <div class="manifesto-item" onclick="toggleManifesto(5)">
-                        <div class="checkbox" id="check-5"></div>
-                        <p class="manifesto-text">I trust the pace of my life. I am not late, not behind, and not missing anything meant for me.</p>
-                    </div>
-                    <div class="manifesto-item" onclick="toggleManifesto(6)">
-                        <div class="checkbox" id="check-6"></div>
-                        <p class="manifesto-text">I am building a life where work is meaningful but not consuming, leadership is steady rather than frantic, service is impactful without being depleting, and home is calm instead of chaotic.</p>
-                    </div>
-                </div>
+        <div class="floral-accent"></div>
+        <div class="mantra-container">
+            <div class="mantra-item">
+                <div class="mantra-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+                <div class="mantra-text" contenteditable="true" id="mantra-1"></div>
             </div>
 
-            <div>
-                <div class="section-header">Collection</div>
-                <div class="input-group">
-                    <input type="text" id="new-mantra" class="mantra-input" placeholder="Type a new mantra..." onkeypress="if(event.key==='Enter')handleAddMantra()">
-                    <button class="add-btn" onclick="handleAddMantra()">Add to Collection</button>
-                </div>
-                <div id="mantras-list" class="mantras-list"></div>
+            <div class="mantra-item">
+                <div class="mantra-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+                <div class="mantra-text" contenteditable="true" id="mantra-2"></div>
+            </div>
+
+            <div class="mantra-item">
+                <div class="mantra-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+                <div class="mantra-text" contenteditable="true" id="mantra-3"></div>
+            </div>
+
+            <div class="mantra-item">
+                <div class="mantra-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+                <div class="mantra-text" contenteditable="true" id="mantra-4"></div>
+            </div>
+
+            <div class="mantra-item">
+                <div class="mantra-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+                <div class="mantra-text" contenteditable="true" id="mantra-5"></div>
+            </div>
+
+            <div class="mantra-item">
+                <div class="mantra-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+                <div class="mantra-text" contenteditable="true" id="mantra-6"></div>
+            </div>
+
+            <div class="mantra-item">
+                <div class="mantra-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+                <div class="mantra-text" contenteditable="true" id="mantra-7"></div>
             </div>
         </div>
         <div id="save-status" class="save-status">All changes saved</div>
@@ -92,98 +142,49 @@
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
         const currentYear = dateParam ? new Date(dateParam).getFullYear() : new Date().getFullYear();
-        const CATEGORY = `Mantra-${currentYear}`;
         const PERSISTENCE_KEY = `mantra-data-${currentYear}`;
         let saveTimeout;
 
+        const DEFAULT_MANTRAS = [
+            "I am choosing depth over noise. I no longer confuse being needed with being called, and I understand that silence is not avoidance—it is where I hear God, my intuition, and my own wisdom most clearly. I will schedule solitude the way others schedule meetings, because if my calendar has no white space, something is out of alignment. Rest is not a reward for productivity; it is a responsibility I owe to my body, my mind, and my spirit.",
+            "I lead without shrinking. I have earned my seat at the table, and when necessary, I am capable of building the table myself. I will speak when I know something and step forward when I am ready, not when I am pressured. Visibility does not require apology, and leadership does not require loudness. It requires clarity, consistency, and the courage to stand steady even when it would be easier to disappear.",
+            "I build what grounds me. I value practical skills that feed people, calm homes, and create stability. There is dignity in old ways done well, and in returning to work that uses my hands and steadies my nervous system. When life feels chaotic, I come back to the tangible and the orderly. Creating structure is how I restore peace.",
+            "I serve with boundaries. I help people who are willing to participate in their own growth, and I release the need to rescue, overextend, or prove my worth through exhaustion. My generosity is intentional, not reactive, and my compassion does not require self-abandonment. I am allowed to care deeply without carrying everything.",
+            "I protect joy as a non-negotiable. Not every moment must be productive to be valuable. Some moments exist simply to be remembered—shared meals, laughter, road trips, quiet conversations, and ordinary days that become sacred because I was fully present. Joy is not a distraction from my purpose; it is evidence that I am living it.",
+            "I trust the pace of my life. I am not late, not behind, and not missing anything meant for me. I am becoming. I will not rush what is meant to mature, and I will not carry what was never mine to hold. Consistency matters more than urgency, and faith steadies me when fear tries to speak louder.",
+            "I am building a life where work is meaningful but not consuming, leadership is steady rather than frantic, service is impactful without being depleting, and home is calm instead of chaotic. My faith remains central, my values guide my choices, and my peace is protected on purpose. I move forward with intention, rooted rather than rushed, trusting that this way of living is not only sustainable—it is right."
+        ];
+
         async function init() {
-            setGlobalHeaderTitle(`${currentYear} MANTRAS`);
-            document.getElementById('manifesto-title').innerText = `${currentYear} Manifesto`;
+            if (typeof setGlobalHeaderTitle === 'function') {
+                setGlobalHeaderTitle(`${currentYear} MANTRAS`);
+            }
             
-            loadManifesto();
-            loadMantras();
-        }
-
-        async function loadManifesto() {
+            // Load data
             const data = await fetchPlannerData(PERSISTENCE_KEY);
-            if (data) {
-                data.forEach(d => {
-                    if(d.field_id.startsWith('manifesto-') && d.content === 'true') {
-                        const idx = d.field_id.split('-')[1];
-                        document.getElementById(`check-${idx}`)?.classList.add('checked');
-                    }
-                });
-            }
-        }
-
-        async function toggleManifesto(idx) {
-            const check = document.getElementById(`check-${idx}`);
-            check.classList.toggle('checked');
-            const isChecked = check.classList.contains('checked');
             
-            const status = document.getElementById('save-status');
-            status.innerText = 'Saving...';
-            const result = await savePlannerData(PERSISTENCE_KEY, `manifesto-${idx}`, isChecked.toString());
-            status.innerText = result !== null ? 'All changes saved' : 'Error saving';
-        }
-
-        async function loadMantras() {
-            const entries = await fetchCategoryEntries(CATEGORY);
-            const list = document.getElementById('mantras-list');
-            list.innerHTML = '';
-            if (entries) {
-                entries.forEach(e => {
-                    const div = document.createElement('div');
-                    div.className = 'mantra-item';
-                    div.id = `m-${e.id}`;
-                    div.innerHTML = `
-                        <div class="mantra-meta">${formatDate(e.created_at)}</div>
-                        <div class="mantra-content" contenteditable="true" oninput="handleEditMantra(${e.id}, this.innerText)">${e.content}</div>
-                        <div class="delete-btn" onclick="handleDeleteMantra(${e.id})">Delete</div>
-                    `;
-                    list.appendChild(div);
-                });
+            for (let i = 1; i <= 7; i++) {
+                const el = document.getElementById(`mantra-${i}`);
+                const saved = data ? data.find(d => d.field_id === `mantra-${i}`) : null;
+                el.innerText = saved ? saved.content : DEFAULT_MANTRAS[i-1];
+                
+                el.oninput = () => handleSave(`mantra-${i}`, el.innerText);
             }
         }
 
-        async function handleAddMantra() {
-            const input = document.getElementById('new-mantra');
-            const content = input.value.trim();
-            if(!content) return;
-
-            const status = document.getElementById('save-status');
-            status.innerText = 'Saving...';
-            const newEntry = await saveCategoryEntry(CATEGORY, content);
-            if(newEntry) {
-                input.value = '';
-                loadMantras();
-                status.innerText = 'All changes saved';
-            } else {
-                status.innerText = 'Error saving';
-            }
-        }
-
-        async function handleEditMantra(id, content) {
+        async function handleSave(fieldId, content) {
             const status = document.getElementById('save-status');
             status.innerText = 'Saving...';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                const result = await updateCategoryEntry(id, content);
-                status.innerText = result !== null ? 'All changes saved' : 'Error saving';
-            }, 1000);
-        }
-
-        async function handleDeleteMantra(id) {
-            if(confirm('Delete this mantra?')) {
-                const result = await deleteCategoryEntry(id);
-                if (result) {
-                    document.getElementById(`m-${id}`).remove();
+                if (typeof savePlannerData === 'function') {
+                    const result = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                    status.innerText = result !== null ? 'All changes saved' : 'Error saving';
                 }
-            }
+            }, 1000);
         }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
-
 </body>
 </html>

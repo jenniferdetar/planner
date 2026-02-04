@@ -8,53 +8,125 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        .content-area { padding: 0 !important; width: 100vw; box-sizing: border-box; overflow: hidden !important; }
+        :root {
+            --section-bg: #fdfaf2;
+            --border-color: #e1dfdd;
+            --navy: #00326b;
+            --text-color: #323130;
+        }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: var(--text-color); }
+        .content-area { padding: 40px; width: 100vw; box-sizing: border-box; min-height: 100vh; overflow-y: auto !important; }
         
-        .goals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-top: 10px; height: calc(100vh - 100px); overflow: hidden; }
-        .goal-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 15px; box-shadow: none; transition: box-shadow 0.2s; overflow: hidden; }
-        .goal-card:focus-within { box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
-        .card-header { font-size: 10pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .editable-list { display: flex; flex-direction: column; gap: 15px; }
-        .goal-item { display: flex; gap: 12px; align-items: flex-start; }
-        .bullet { width: 8px; height: 8px; border-radius: 50%; background: #00326b; margin-top: 8px; flex-shrink: 0; }
-        .item-content { flex-grow: 1; font-family: 'Coming Soon', cursive; font-size: 10pt; color: #323130; outline: none; line-height: 1.5; border-bottom: 1px dashed transparent; }
-        .item-content:focus { border-bottom-color: #00326b; }
-        
-        .vision-section { grid-column: 1 / -1; background: #fff; border: 1px solid #e1dfdd; border-radius: 12px; padding: 30px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .vision-text { font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.8; color: #323130; outline: none; min-height: 120px; white-space: pre-wrap; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header .small { font-size: 10pt; letter-spacing: 3px; color: #888; text-transform: uppercase; }
+        .header .large { font-size: 24pt; color: #333; margin: 10px 0; font-weight: 400; letter-spacing: 2px; }
+        .header .intro { font-size: 10pt; color: #666; font-style: italic; }
 
-        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 10pt; color: #666; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1100px; margin: 0 auto; align-items: start; }
+        
+        section { background: var(--section-bg); padding: 30px; border-radius: 4px; border: 1px solid #f0ede6; }
+        h2 { font-size: 11pt; margin: 0 0 15px 0; display: flex; align-items: baseline; gap: 10px; }
+        h2 span.title { font-weight: 700; text-transform: uppercase; border-right: 1px solid #ccc; padding-right: 10px; }
+        h2 span.subtitle { font-weight: 400; font-size: 9pt; color: #666; }
+
+        .form-group { margin-bottom: 25px; }
+        .label-row { font-size: 10pt; margin-bottom: 8px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .input-line { 
+            font-family: 'Coming Soon', cursive; 
+            font-size: 11pt; 
+            border-bottom: 1px solid #ccc; 
+            min-height: 24px; 
+            outline: none; 
+            padding: 2px 4px;
+            line-height: 1.6;
+            flex-grow: 1;
+            min-width: 150px;
+        }
+        .multi-line {
+            background-image: linear-gradient(transparent 31px, #ccc 31px);
+            background-size: 100% 32px;
+            line-height: 32px;
+            min-height: 128px;
+            border-bottom: none;
+            padding: 0;
+        }
+
+        .values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .value-item { display: flex; align-items: center; gap: 10px; font-size: 10pt; }
+        .checkbox { 
+            width: 14px; 
+            height: 14px; 
+            border: 1px solid #333; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            flex-shrink: 0;
+            background: #fff;
+        }
+        .checkbox.checked::after { content: '■'; font-size: 12px; color: #333; }
+
+        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 10pt; color: #666; z-index: 100; }
+        
+        .vision-text { font-size: 9pt; color: #666; margin-bottom: 15px; line-height: 1.5; }
+        .vision-text b { color: #333; font-weight: 700; }
+        
+        .left-col, .right-col { display: flex; flex-direction: column; gap: 40px; }
     </style>
 </head>
 <body>
     <div class="content-area">
-        <div class="goals-grid">
-            <div class="goal-card">
-                <div class="card-header">Health & Wellness</div>
-                <div class="editable-list" id="list-health"></div>
+        <div class="header">
+            <div class="small">Take a Moment</div>
+            <div class="large">INTENTIONS & DREAMS</div>
+            <div class="intro">As you begin a new year, take a moment to reflect on what you enjoy most and dream big!</div>
+        </div>
+
+        <div class="main-grid">
+            <div class="left-col">
+                <section>
+                    <h2><span class="title">Mission</span> <span class="subtitle">When thinking of your work, what do you consider to be your mission?</span></h2>
+                    <div class="label-row">My mission in my work is <div class="input-line" contenteditable="true" id="mission-work"></div></div>
+                    <div class="label-row">My goal is to <div class="input-line" contenteditable="true" id="mission-goal"></div> each day,</div>
+                    <div class="label-row">and I strive to <div class="input-line" contenteditable="true" id="mission-strive"></div></div>
+                    <div class="input-line multi-line" contenteditable="true" id="mission-notes" style="min-height: 96px; margin-top: 10px;"></div>
+                </section>
+
+                <section>
+                    <h2><span class="title">Vision</span> <span class="subtitle">So what on earth is the difference between your MISSION and your VISION?</span></h2>
+                    <div class="vision-text">
+                        Your mission looks closely at what you're doing today and who you're serving, while your vision is where you'd love to go one day.<br><br>
+                        <b>Think BIG. Dream WILDLY.</b><br><br>
+                        Where would you love to be in one year? Who do you serve today, and how would you love to serve them in a year, or even in five years? Take a few minutes, cast your vision looking into the future ~ and simply dream of where you'd love to be.
+                    </div>
+                    <div class="label-row">Looking forward to the year ahead, I'd love to ...</div>
+                    <div class="input-line multi-line" contenteditable="true" id="vision-year" style="min-height: 128px; margin-bottom: 20px;"></div>
+                    <div class="label-row">In the next five years, I hope to ...</div>
+                    <div class="input-line multi-line" contenteditable="true" id="vision-5year" style="min-height: 128px;"></div>
+                </section>
             </div>
 
-            <div class="goal-card">
-                <div class="card-header">Personal Growth</div>
-                <div class="editable-list" id="list-growth"></div>
-            </div>
+            <div class="right-col">
+                <section>
+                    <h2><span class="title">Value</span> <span class="subtitle">What (or who?) do you value?</span></h2>
+                    <div class="vision-text">What lights you up when you wake up each day? Here are a few examples to get you started if you're stumped ...</div>
+                    <div class="label-row">I value ...</div>
+                    <div class="values-grid" id="values-container">
+                        <!-- Value items generated via script -->
+                    </div>
+                </section>
 
-            <div class="goal-card">
-                <div class="card-header">Home & Family</div>
-                <div class="editable-list" id="list-family"></div>
-            </div>
-
-            <div class="goal-card">
-                <div class="card-header">Adventure & Joy</div>
-                <div class="editable-list" id="list-joy"></div>
-            </div>
-
-            <div class="vision-section">
-                <div class="card-header">Annual Vision Statement</div>
-                <div class="vision-text" contenteditable="true" id="vision-statement" oninput="handleSave('vision-statement', this.innerText)"></div>
+                <section>
+                    <h2><span class="title">Purpose</span> <span class="subtitle">When you were created, you were uniquely gifted...</span></h2>
+                    <div class="vision-text">
+                        ... in a way that simply no one else was. You were perfectly designed to fulfill a purpose that only you can.<br><br>
+                        What is your purpose? What are you gifted in that serves those around you each day? Looking forward, envision what the lives of those around you might look like when you fully step into exactly who you were made to be.
+                    </div>
+                    <div class="input-line multi-line" contenteditable="true" id="purpose-content" style="min-height: 320px;"></div>
+                </section>
             </div>
         </div>
+
         <div id="save-status" class="save-status">All changes saved</div>
     </div>
 
@@ -65,35 +137,65 @@
         const PERSISTENCE_KEY = `personal-goals-${currentYear}`;
         let saveTimeout;
 
-        const CATEGORIES = ['health', 'growth', 'family', 'joy'];
-        const ITEMS_PER_CAT = 5;
+        const LEFT_VALUES = ['Community', 'My family', 'Integrity', 'Determination', 'Grit', 'My health', 'Confidence', 'My faith'];
+        const RIGHT_VALUES = ['Gratitude', 'Humility', 'Innovation', 'Organization', 'Resourcefulness', 'Frugality', '', '', ''];
 
         async function init() {
-            setGlobalHeaderTitle(`PERSONAL GOALS ${currentYear}`);
-            
-            // Generate list inputs
-            CATEGORIES.forEach(cat => {
-                const container = document.getElementById(`list-${cat}`);
-                for (let i = 0; i < ITEMS_PER_CAT; i++) {
-                    const id = `goal-${cat}-${i}`;
-                    const div = document.createElement('div');
-                    div.className = 'goal-item';
-                    div.innerHTML = `
-                        <div class="bullet"></div>
-                        <div class="item-content" contenteditable="true" id="${id}" oninput="handleSave('${id}', this.innerText)"></div>
-                    `;
-                    container.appendChild(div);
-                }
-            });
+            if (typeof setGlobalHeaderTitle === 'function') {
+                setGlobalHeaderTitle(`PERSONAL GOALS ${currentYear}`);
+            }
 
-            // Load data
-            const data = await fetchPlannerData(PERSISTENCE_KEY);
-            if (data) {
-                data.forEach(d => {
-                    const el = document.getElementById(d.field_id);
-                    if (el) el.innerText = d.content;
+            const container = document.getElementById('values-container');
+            const maxLen = Math.max(LEFT_VALUES.length, RIGHT_VALUES.length);
+            
+            for (let i = 0; i < maxLen; i++) {
+                [LEFT_VALUES[i], RIGHT_VALUES[i]].forEach((val, col) => {
+                    if (val === undefined) return;
+                    const id = `val-chk-${col}-${i}`;
+                    const textId = `val-txt-${col}-${i}`;
+                    const div = document.createElement('div');
+                    div.className = 'value-item';
+                    
+                    if (val !== '' && val !== undefined) {
+                        div.innerHTML = `
+                            <div class="checkbox" id="${id}" onclick="toggleCheckbox('${id}')"></div>
+                            <span>${val}</span>
+                        `;
+                    } else if (val === '') {
+                        div.innerHTML = `
+                            <div class="checkbox" id="${id}" onclick="toggleCheckbox('${id}')"></div>
+                            <div class="input-line" style="flex-grow:1; min-height: 18px;" contenteditable="true" id="${textId}"></div>
+                        `;
+                    }
+                    container.appendChild(div);
                 });
             }
+
+            if (typeof fetchPlannerData === 'function') {
+                const data = await fetchPlannerData(PERSISTENCE_KEY);
+                if (data) {
+                    data.forEach(d => {
+                        const el = document.getElementById(d.field_id);
+                        if (el) {
+                            if (el.classList.contains('checkbox')) {
+                                if (d.content === 'true') el.classList.add('checked');
+                            } else {
+                                el.innerText = d.content;
+                            }
+                        }
+                    });
+                }
+            }
+
+            document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                el.oninput = () => handleSave(el.id, el.innerText);
+            });
+        }
+
+        function toggleCheckbox(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('checked');
+            handleSave(id, el.classList.contains('checked') ? 'true' : 'false');
         }
 
         async function handleSave(fieldId, content) {
@@ -101,13 +203,14 @@
             status.innerText = 'Saving...';
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                const result = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
-                status.innerText = result !== null ? 'All changes saved' : 'Error saving';
+                if (typeof savePlannerData === 'function') {
+                    const result = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                    status.innerText = result !== null ? 'All changes saved' : 'Error saving';
+                }
             }, 1000);
         }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
-
 </body>
 </html>
