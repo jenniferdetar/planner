@@ -24,10 +24,12 @@
         .bill-table-container { width: 100%; overflow: auto; margin-top: 5px; max-height: 50vh; }
         .bill-table { width: 100%; border-collapse: collapse; font-size: 10pt; table-layout: auto; }
         .bill-table th, .bill-table td { border: 1px solid #eee; padding: 8px; text-align: left; vertical-align: middle; }
-        .bill-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 10pt; }
-        .item-col { white-space: normal !important; min-width: 150px; }
-        .amt-col { width: 80px; }
-        .cat-col { width: 100px; }
+        .bill-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 10pt; text-align: center; }
+        .item-col { white-space: nowrap !important; width: auto; }
+        .amt-col { width: auto; }
+        td.amt-col { text-align: right !important; }
+        .cat-col { width: auto; }
+        td.cat-col { text-align: center !important; }
         .month-col { width: 35px; text-align: center !important; }
         .category-pill { display: inline-block; padding: 2px 8px; border-radius: 12px; color: #fff; font-size: 10pt; font-weight: 700; text-transform: uppercase; min-width: 60px; text-align: center; }
         .row-auto .category-pill { background-color: var(--row-auto); }
@@ -107,9 +109,9 @@
                 tr.className = bill.class || 'row-bill';
                 
                 let html = `
-                    <td class="planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'cat', this.innerText)"><span class="category-pill">${bill.cat}</span></td>
-                    <td class="planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'item', this.innerText)">${bill.item}</td>
-                    <td class="planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'amt', this.innerText)">${bill.amt}</td>
+                    <td class="cat-col planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'cat', this.innerText)"><span class="category-pill">${bill.cat}</span></td>
+                    <td class="item-col planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'item', this.innerText)">${bill.item}</td>
+                    <td class="amt-col planner-edit" contenteditable="true" oninput="handleBillSave('${bill.id}', 'amt', this.innerText)">${bill.amt}</td>
                 `;
 
                 for (let m = 1; m <= 12; m++) {
