@@ -349,7 +349,8 @@ function animateAndNavigate(event, url, direction = 'next') {
                     { label: 'Paylog Submissions', path: 'icaap-paylogs.html', icon: '📄' },
                     { label: 'Hours Worked', path: 'icaap-hours.html', icon: '📄' },
                     { label: 'Approval Dates', path: 'icaap-approvals.html', icon: '📄' },
-                    { label: 'Attendance Tracking', path: 'icaap-attendance.html', icon: '📄' }
+                    { label: 'Attendance Tracking', path: 'icaap-attendance.html', icon: '📄' },
+                    { label: 'Notes', path: 'icaap-notes.html', icon: '📝' }
                 ]
             },
             {

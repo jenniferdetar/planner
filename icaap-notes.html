@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICAAP Notes - Home Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="shared.js"></script>
+    <style>
+        :root {
+            --paper-bg: #fff;
+            --line-color: #f0ede6;
+            --text-color: #323130;
+        }
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; }
+        
+        .content-area { 
+            padding: 40px 40px 40px 20px; 
+            width: 100vw; 
+            box-sizing: border-box; 
+            min-height: 100vh; 
+            background-color: var(--paper-bg);
+            background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
+            background-size: 100% 32px;
+            overflow-y: auto !important;
+        }
+
+        .notes-container {
+            max-width: 1200px;
+            margin: 0;
+        }
+
+        .page-title { 
+            font-size: 10pt; 
+            font-weight: 700; 
+            letter-spacing: 3px; 
+            text-transform: uppercase; 
+            color: #00326b; 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid #00326b; 
+            padding-bottom: 5px; 
+        }
+
+        .notes-area {
+            font-family: 'Coming Soon', cursive;
+            font-size: 11pt;
+            line-height: 32px;
+            color: var(--text-color);
+            outline: none;
+            white-space: pre-wrap;
+            min-height: calc(100vh - 200px);
+        }
+
+        .save-status { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            background: rgba(255,255,255,0.9); 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            font-size: 10pt; 
+            color: #666; 
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-area">
+        <div class="notes-container">
+            <div class="page-title" id="notes-title">ICAAP NOTES</div>
+            <div class="notes-area" contenteditable="true" id="icaap-notes-content"></div>
+        </div>
+        <div id="save-status" class="save-status">All changes saved</div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const startYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
+        const PERSISTENCE_KEY = `icaap-notes-${startYear}-${startYear+1}`;
+        let saveTimeout;
+
+        async function init() {
+            if (typeof setGlobalHeaderTitle === 'function') {
+                setGlobalHeaderTitle(`ICAAP NOTES ${startYear}-${startYear+1}`);
+            }
+            document.getElementById('notes-title').innerText = `ICAAP NOTES ${startYear}-${startYear+1}`;
+            
+            // Load data
+            const data = await fetchPlannerData(PERSISTENCE_KEY);
+            const notesEl = document.getElementById('icaap-notes-content');
+            
+            if (data) {
+                const saved = data.find(d => d.field_id === 'icaap-notes-content');
+                if (saved) notesEl.innerText = saved.content;
+            }
+            
+            notesEl.oninput = () => handleSave('icaap-notes-content', notesEl.innerText);
+        }
+
+        async function handleSave(fieldId, content) {
+            const status = document.getElementById('save-status');
+            status.innerText = 'Saving...';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                if (typeof savePlannerData === 'function') {
+                    const result = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                    status.innerText = result !== null ? 'All changes saved' : 'Error saving';
+                }
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
