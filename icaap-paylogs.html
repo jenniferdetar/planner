@@ -35,65 +35,6 @@
                     <tbody id="tracking-body"></tbody>
                 </table>
             </div>
-            <div class="notes-section" style="margin-top: 20px; border-top: 2px solid var(--header-blue); padding-top: 10px;">
-                <div style="font-weight: bold; margin-bottom: 10px;">JANUARY 2026</div>
-                <div id="jan-notes" contenteditable="true" style="font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.5; outline: none; min-height: 100px;">
-Ann Bouillot - 40 - SPED
-Christina Clark - 40
-Christine Choi - 40
-Cindy Timm - 40
-Crystal Mendez - 40
-Dana Fikes - 40
-Debora Wechsler - 40 - SPED
-Diana Olivas - 40
-Douglas Klaif - 45 - TPSL
-Eime Miller - 40
-Elizabeth Elizalde - 40
-Elizabeth Romero - 40 - Preliminary
-Emily Wassler - 40
-Emir Gonzalez - 40
-Evelyn Mcfarlane - 40
-Genesis Aguirre - 40
-Gustavo Lopez - 40
-Hamilton Wyatt - 40
-Iliana Quintero - 40
-Jack Kuykendall - 40
-Jakeisha Gibson-sanders - 40
-Jeanne Garcia-armstrong - 40
-Jehisol Urbina - 40
-Julie Holt - 40
-Julie Resurreccion - 40
-Kristy Beaudry - 40 - SPED
-Linda Nguyen - 40
-Linda Taylor - 40
-Malika Ferrell - 55 - LiveText
-Mandana Saidi - 40
-Maria Hernandez - 40 - SPED
-Matthew Miller - 40
-Melanie Ronning - 40
-Michael Juarez - 32 - TPA
-Miguel Agredano - 40 - SPED
-Nancy Madrid - 40
-Naomi Kaidin - 40 - SPED
-Paula Dominguez - 40
-Ralph Bravo - 45 - TPSL
-Rhory Rebellon - 32 - TPA
-Sallyann Mastromarco - 40
-Sandy Walker - 40
-Sebastian Dawn - 40 - SPED
-Shannon Sayer - 40
-Sofia Manzo - 40 - SPED
-Sofia Manzo-reyes - 40
-Stacey Byham - 40
-Stacy Orosco - 40
-Susana Santa Cruz - 40 - SPED
-Susanna Garcia - 40 - SPED
-Valerie de la Rosa - 40
-Vanessa Sandoval - 45 - TPSL
-Veronica Arevalo - 40 - SPED
-Yesenia Enriquez - 32 - TPA
-                </div>
-            </div>
             <div id="save-status" class="save-status">All changes saved</div>
         </div>
     </div>
@@ -103,21 +44,11 @@ Yesenia Enriquez - 32 - TPA
         const urlParams = new URLSearchParams(window.location.search);
         let baseDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date();
         const startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
-        const PERSISTENCE_KEY = `icaap-paylogs-notes-${startYear}`;
         let saveTimeout;
 
         async function init() {
             if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle(`ICAAP PAYLOGS ${startYear}-${startYear+1}`);
             
-            // Load notes data
-            const notesData = await fetchPlannerData(PERSISTENCE_KEY);
-            const janNotesEl = document.getElementById('jan-notes');
-            if (notesData && notesData.length > 0) {
-                const saved = notesData.find(d => d.field_id === 'jan-notes');
-                if (saved) janNotesEl.innerText = saved.content;
-            }
-            janNotesEl.oninput = () => handleSaveNotes('jan-notes', janNotesEl.innerText);
-
             const paylogData = await fetchPaylogSubmissions(startYear);
             const employees = DEFAULT_EMPLOYEES;
 
@@ -140,18 +71,6 @@ Yesenia Enriquez - 32 - TPA
                 tr.innerHTML = rowHtml;
                 tbody.appendChild(tr);
             });
-        }
-
-        async function handleSaveNotes(fieldId, content) {
-            const status = document.getElementById('save-status');
-            status.innerText = 'Saving...';
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(async () => {
-                if (typeof savePlannerData === 'function') {
-                    const result = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
-                    status.innerText = result !== null ? 'All changes saved' : 'Error saving';
-                }
-            }, 1000);
         }
 
         async function handleSave(name, month, value) {
