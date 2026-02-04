@@ -62,9 +62,9 @@ lines.forEach((line, index) => {
             const pdStr = paydayDate.toISOString().split('T')[0];
             events.push({ date: pdStr, title: "Pay day", time: null });
 
-            // Budget 3 days before payday
+            // Budget 2 days before payday
             const budgetDate = new Date(paydayDate);
-            budgetDate.setDate(budgetDate.getDate() - 3);
+            budgetDate.setDate(budgetDate.getDate() - 2);
             events.push({ date: budgetDate.toISOString().split('T')[0], title: "Budget", time: null });
         });
     }
