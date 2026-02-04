@@ -1053,13 +1053,13 @@ function updateNavigationLinks(date) {
 
 async function fetchFinancialBills() {
     const client = getSupabase();
-    if (!client) return [];
+    if (!client) return DEFAULT_BILLS;
     const { data, error } = await client.from('financial_bills').select('*').order('id');
-    if (error) {
-        console.error('Error fetching financial bills:', error);
-        return [];
+    if (error || !data || data.length === 0) {
+        console.error('Error fetching financial bills or empty, using defaults:', error);
+        return DEFAULT_BILLS;
     }
-    return data || [];
+    return data;
 }
 
 async function updateFinancialBill(id, field, value) {
