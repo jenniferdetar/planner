@@ -346,7 +346,6 @@ function animateAndNavigate(event, url, direction = 'next') {
             {
                 label: 'ICAAP',
                 items: [
-                    { label: 'Dashboard', path: 'icaap.html', icon: '📊' },
                     { label: 'Paylog Submissions', path: 'icaap-paylogs.html', icon: '📄' },
                     { label: 'Hours Worked', path: 'icaap-hours.html', icon: '📄' },
                     { label: 'Approval Dates', path: 'icaap-approvals.html', icon: '📄' },
@@ -1015,7 +1014,6 @@ function updateNavigationLinks(date) {
         'csea.html',
         'financial.html',
         'hoa.html',
-        'icaap.html',
         'planning.html',
         'monthly-review.html',
         'check-breakdown.html',
