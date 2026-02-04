@@ -8,10 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        .content-area { padding: 40px; width: 100%; box-sizing: border-box; }
+        .content-area { padding: 0 !important; width: 100vw; box-sizing: border-box; overflow: hidden !important; }
         
-        .goals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 20px; }
-        .goal-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: box-shadow 0.2s; }
+        .goals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-top: 10px; height: calc(100vh - 100px); overflow: hidden; }
+        .goal-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 15px; box-shadow: none; transition: box-shadow 0.2s; overflow: hidden; }
         .goal-card:focus-within { box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
         .card-header { font-size: 10pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         

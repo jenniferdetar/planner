@@ -169,7 +169,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             padding: 0;
             height: 100vh;
             width: 100vw;
-            overflow: hidden;
+            overflow: hidden !important;
             background: var(--bg-light);
             font-size: 10pt;
             line-height: 1.2;
@@ -180,64 +180,20 @@ function animateAndNavigate(event, url, direction = 'next') {
             display: flex;
             width: 100vw;
             height: 100vh;
-            overflow: hidden;
+            overflow: hidden !important;
         }
 
         .dashboard-sidebar {
-            width: 240px;
-            background: #252525;
-            color: #d1d1d1;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            padding: 20px 0;
-            border-right: 1px solid #333;
-            overflow-y: auto;
-        }
-
-        .sidebar-section {
-            margin-bottom: 20px;
-        }
-
-        .sidebar-label {
-            padding: 0 25px 10px;
-            font-size: 10pt;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            opacity: 0.5;
-        }
-
-        .sidebar-link {
-            padding: 8px 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #d1d1d1;
-            text-decoration: none;
-            font-size: 10pt;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .sidebar-link:hover {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-        }
-
-        .sidebar-link.active {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            border-right: 4px solid var(--accent-gold);
+            display: none !important;
         }
 
         .dashboard-main {
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow: hidden !important;
             background: #fff;
+            width: 100vw !important;
         }
 
         .dashboard-header {
@@ -300,10 +256,18 @@ function animateAndNavigate(event, url, direction = 'next') {
 
         .dashboard-body {
             flex: 1;
-            overflow: auto;
-            padding: 0;
+            overflow: hidden !important;
+            padding: 0 !important;
             background: #fff;
-            width: 100%;
+            width: 100vw !important;
+        }
+
+        .content-area {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100vw !important;
+            max-width: none !important;
+            overflow: hidden !important;
         }
     `;
     document.head.appendChild(style);

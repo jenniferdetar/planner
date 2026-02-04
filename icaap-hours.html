@@ -9,10 +9,10 @@
     <script src="shared.js"></script>
     <style>
         body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; background: #fff; }
-        .content-area { padding: 20px; width: 100%; box-sizing: border-box; }
-        .view-section { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); width: 100%; box-sizing: border-box; }
-        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 20px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
-        .table-container { width: 100%; overflow-x: auto; margin-top: 10px; border: 1px solid #eee; border-radius: 4px; }
+        .content-area { padding: 0 !important; width: 100vw; box-sizing: border-box; overflow: hidden !important; }
+        .view-section { background: #fff; padding: 10px; border-radius: 0; border: 1px solid #eee; margin-bottom: 0; box-shadow: none; width: 100vw; box-sizing: border-box; height: calc(100vh - 80px); display: flex; flex-direction: column; }
+        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 10px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
+        .table-container { width: 100%; overflow: auto; margin-top: 5px; border: 1px solid #eee; border-radius: 4px; flex: 1; }
         .tracking-table { border-collapse: collapse; width: 100%; font-size: 10pt; table-layout: fixed; }
         .tracking-table th, .tracking-table td { border: 1px solid #eee; padding: 8px; text-align: center; height: 45px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .tracking-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 10pt; position: sticky; top: 0; z-index: 10; }
