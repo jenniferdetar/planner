@@ -12,23 +12,17 @@
             --paper-bg: #fff;
             --line-color: #f0ede6;
             --text-color: #323130;
+            --header-blue: #00326b;
         }
         body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; }
         
         .content-area { 
-            padding: 40px 40px 40px 20px; 
+            padding: 20px; 
             width: 100vw; 
             box-sizing: border-box; 
             min-height: 100vh; 
             background-color: var(--paper-bg);
-            background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
-            background-size: 100% 32px;
-            overflow-y: auto !important;
-        }
-
-        .notes-container {
-            max-width: 1200px;
-            margin: 0;
+            overflow-x: auto;
         }
 
         .page-title { 
@@ -36,20 +30,60 @@
             font-weight: 700; 
             letter-spacing: 3px; 
             text-transform: uppercase; 
-            color: #00326b; 
+            color: var(--header-blue); 
             margin-bottom: 20px; 
-            border-bottom: 2px solid #00326b; 
+            border-bottom: 2px solid var(--header-blue); 
             padding-bottom: 5px; 
         }
 
-        .notes-area {
-            font-family: 'Coming Soon', cursive;
+        .tables-flex-container {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .table-wrapper {
+            flex: 1;
+            min-width: 450px;
+        }
+
+        .section-subtitle {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
             font-size: 11pt;
-            line-height: 32px;
+            color: var(--header-blue);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Coming Soon', cursive;
+            font-size: 10pt;
+            background: #fff;
+        }
+
+        .notes-table th {
+            text-align: left;
+            background: #f8f9fa;
+            color: #888;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            text-transform: uppercase;
+            font-size: 8pt;
+            letter-spacing: 1px;
+            padding: 10px;
+            border-bottom: 2px solid var(--header-blue);
+        }
+
+        .notes-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
             color: var(--text-color);
-            outline: none;
-            white-space: pre-wrap;
-            min-height: calc(100vh - 200px);
+        }
+
+        .notes-table tr:hover {
+            background-color: #fcfcfc;
         }
 
         .save-status { 
@@ -64,121 +98,154 @@
             color: #666; 
             z-index: 100;
         }
+
+        [contenteditable="true"]:focus {
+            outline: none;
+            background: #fffde7;
+        }
     </style>
 </head>
 <body>
     <div class="content-area">
-        <div class="notes-container">
-            <div class="page-title" id="notes-title">ICAAP NOTES</div>
-            <div class="notes-area" contenteditable="true" id="icaap-notes-content">
-**WINTER BREAK**
-Aguirre, Genesis - RLAA IFs/Mentors - 40
-Aki, Ma Teresa - CATPA - 40
-Alcorn, Eileen - CATPA - 39
-Bacon, Dulce - IF - 60
-Bagadiong Trice, Tarah - CATPA - 34
-Bennett, Marie - IF - 40
-Bouillot, Jittima - RLAA IFs/Mentors - 40
-Bravo, Ralph - IF - 30
-Castillo, Patricia - CATPA - 34
-Cohen, Crystal - CATPA - 34
-De Guzman, Jhun - Induction - 5
-Deloach, Susan - CATPA - 34
-Edith Janec - RLAA IFs/Mentors - 40
-Elizalde, Elizabeth - RLAA IFs/Mentors - 40
-Fuentes, Carmen - CATPA - 34
-Garcia Armstrong, Jeanne - RLAA IFs/Mentors - 40
-Gonzalez, Emir - IF - 40
-Griffiths, Irma - CATPA - 34
-Griffiths, Joshua - CATPA - 40
-Gutierrez, Rodolfo - CATPA - 34
-Han, Alyson - CATPA - 40
-Hashimoto, Yolanda - IF - 40
-Hawkins, Kionna - Induction - 5
-Holmes, Staci - CATPA - 32
-Izuakor, Charles - CATPA - 34
-Jakeisha Gibson-sanders - RLAA IFs/Mentors - 40
-Janec, Edith - Induction - 5
-Kasper, Joy - CATPA - 39
-Linda Nguyen - RLAA IFs/Mentors - 40
-Makar, Enas - IF - 60
-Manzo Reyes, Sofia - RLAA IFs/Mentors - 40
-Mcfarlane, Evelyn - RLAA IFs/Mentors - 40
-Morales, Andreina - IF - 40
-Morales, Andreina - CATPA - 34
-Nolan, Susan - CATPA - 34
-Pena, Brigette - Induction - 5
-Quijada, Ida - IF - 40
-Rabas, Kimberly - CATPA - 35
-Ray, Praveen - CATPA - 34
-Rios, Malina - Induction - 5
-Rodriguez Sifontes, Veronica - RLAA IFs/Mentors - 40
-Rogers, Sherita - CATPA - 34
-Romero, Jose - CATPA - 34
-Ronning, Melanie - RLAA IFs/Mentors - 40
-Saidi, Mandana - Instructional Faculty - 40
-Schull, Tacy - CATPA - 39
-Segovia, Jasmin - CATPA - 34
-Vojkovich, Tiffany - IF - 40
-Winter, Bennett - Induction - 5
+        <div class="page-title" id="notes-title">ICAAP NOTES</div>
+        
+        <div class="tables-flex-container">
+            <!-- Winter Break Table -->
+            <div class="table-wrapper">
+                <div class="section-subtitle">WINTER BREAK</div>
+                <table class="notes-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th style="width: 60px;">Hours</th>
+                            <th>Position</th>
+                        </tr>
+                    </thead>
+                    <tbody id="winter-break-body" contenteditable="true">
+                        <tr><td>Aguirre, Genesis</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Aki, Ma Teresa</td><td>40</td><td>CATPA</td></tr>
+                        <tr><td>Alcorn, Eileen</td><td>39</td><td>CATPA</td></tr>
+                        <tr><td>Bacon, Dulce</td><td>60</td><td>IF</td></tr>
+                        <tr><td>Bagadiong Trice, Tarah</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Bennett, Marie</td><td>40</td><td>IF</td></tr>
+                        <tr><td>Bouillot, Jittima</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Bravo, Ralph</td><td>30</td><td>IF</td></tr>
+                        <tr><td>Castillo, Patricia</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Cohen, Crystal</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>De Guzman, Jhun</td><td>5</td><td>Induction</td></tr>
+                        <tr><td>Deloach, Susan</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Edith Janec</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Elizalde, Elizabeth</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Fuentes, Carmen</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Garcia Armstrong, Jeanne</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Gonzalez, Emir</td><td>40</td><td>IF</td></tr>
+                        <tr><td>Griffiths, Irma</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Griffiths, Joshua</td><td>40</td><td>CATPA</td></tr>
+                        <tr><td>Gutierrez, Rodolfo</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Han, Alyson</td><td>40</td><td>CATPA</td></tr>
+                        <tr><td>Hashimoto, Yolanda</td><td>40</td><td>IF</td></tr>
+                        <tr><td>Hawkins, Kionna</td><td>5</td><td>Induction</td></tr>
+                        <tr><td>Holmes, Staci</td><td>32</td><td>CATPA</td></tr>
+                        <tr><td>Izuakor, Charles</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Jakeisha Gibson-sanders</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Janec, Edith</td><td>5</td><td>Induction</td></tr>
+                        <tr><td>Kasper, Joy</td><td>39</td><td>CATPA</td></tr>
+                        <tr><td>Linda Nguyen</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Makar, Enas</td><td>60</td><td>IF</td></tr>
+                        <tr><td>Manzo Reyes, Sofia</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Mcfarlane, Evelyn</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Morales, Andreina</td><td>40</td><td>IF</td></tr>
+                        <tr><td>Morales, Andreina</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Nolan, Susan</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Pena, Brigette</td><td>5</td><td>Induction</td></tr>
+                        <tr><td>Quijada, Ida</td><td>40</td><td>IF</td></tr>
+                        <tr><td>Rabas, Kimberly</td><td>35</td><td>CATPA</td></tr>
+                        <tr><td>Ray, Praveen</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Rios, Malina</td><td>5</td><td>Induction</td></tr>
+                        <tr><td>Rodriguez Sifontes, Veronica</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Rogers, Sherita</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Romero, Jose</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Ronning, Melanie</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
+                        <tr><td>Saidi, Mandana</td><td>40</td><td>Instructional Faculty</td></tr>
+                        <tr><td>Schull, Tacy</td><td>39</td><td>CATPA</td></tr>
+                        <tr><td>Segovia, Jasmin</td><td>34</td><td>CATPA</td></tr>
+                        <tr><td>Vojkovich, Tiffany</td><td>40</td><td>IF</td></tr>
+                        <tr><td>Winter, Bennett</td><td>5</td><td>Induction</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-**JANUARY 2026**
-Ann Bouillot - 40 - SPED
-Christina Clark - 40
-Christine Choi - 40
-Cindy Timm - 40
-Crystal Mendez - 40
-Dana Fikes - 40
-Debora Wechsler - 40 - SPED
-Diana Olivas - 40
-Douglas Klaif - 45 - TPSL
-Eime Miller - 40
-Elizabeth Elizalde - 40
-Elizabeth Romero - 40 - Preliminary
-Emily Wassler - 40
-Emir Gonzalez - 40
-Evelyn Mcfarlane - 40
-Genesis Aguirre - 40
-Gustavo Lopez - 40
-Hamilton Wyatt - 40
-Iliana Quintero - 40
-Jack Kuykendall - 40
-Jakeisha Gibson-sanders - 40
-Jeanne Garcia-armstrong - 40
-Jehisol Urbina - 40
-Julie Holt - 40
-Julie Resurreccion - 40
-Kristy Beaudry - 40 - SPED
-Linda Nguyen - 40
-Linda Taylor - 40
-Malika Ferrell - 55 - LiveText
-Mandana Saidi - 40
-Maria Hernandez - 40 - SPED
-Matthew Miller - 40
-Melanie Ronning - 40
-Michael Juarez - 32 - TPA
-Miguel Agredano - 40 - SPED
-Nancy Madrid - 40
-Naomi Kaidin - 40 - SPED
-Paula Dominguez - 40
-Ralph Bravo - 45 - TPSL
-Rhory Rebellon - 32 - TPA
-Sallyann Mastromarco - 40
-Sandy Walker - 40
-Sebastian Dawn - 40 - SPED
-Shannon Sayer - 40
-Sofia Manzo - 40 - SPED
-Sofia Manzo-reyes - 40
-Stacey Byham - 40
-Stacy Orosco - 40
-Susana Santa Cruz - 40 - SPED
-Susanna Garcia - 40 - SPED
-Valerie de la Rosa - 40
-Vanessa Sandoval - 45 - TPSL
-Veronica Arevalo - 40 - SPED
-Yesenia Enriquez - 32 - TPA
+            <!-- January 2026 Table -->
+            <div class="table-wrapper">
+                <div class="section-subtitle">JANUARY 2026</div>
+                <table class="notes-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th style="width: 60px;">Hours</th>
+                            <th>Position</th>
+                        </tr>
+                    </thead>
+                    <tbody id="january-2026-body" contenteditable="true">
+                        <tr><td>Ann Bouillot</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Christina Clark</td><td>40</td><td></td></tr>
+                        <tr><td>Christine Choi</td><td>40</td><td></td></tr>
+                        <tr><td>Cindy Timm</td><td>40</td><td></td></tr>
+                        <tr><td>Crystal Mendez</td><td>40</td><td></td></tr>
+                        <tr><td>Dana Fikes</td><td>40</td><td></td></tr>
+                        <tr><td>Debora Wechsler</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Diana Olivas</td><td>40</td><td></td></tr>
+                        <tr><td>Douglas Klaif</td><td>45</td><td>TPSL</td></tr>
+                        <tr><td>Eime Miller</td><td>40</td><td></td></tr>
+                        <tr><td>Elizabeth Elizalde</td><td>40</td><td></td></tr>
+                        <tr><td>Elizabeth Romero</td><td>40</td><td>Preliminary</td></tr>
+                        <tr><td>Emily Wassler</td><td>40</td><td></td></tr>
+                        <tr><td>Emir Gonzalez</td><td>40</td><td></td></tr>
+                        <tr><td>Evelyn Mcfarlane</td><td>40</td><td></td></tr>
+                        <tr><td>Genesis Aguirre</td><td>40</td><td></td></tr>
+                        <tr><td>Gustavo Lopez</td><td>40</td><td></td></tr>
+                        <tr><td>Hamilton Wyatt</td><td>40</td><td></td></tr>
+                        <tr><td>Iliana Quintero</td><td>40</td><td></td></tr>
+                        <tr><td>Jack Kuykendall</td><td>40</td><td></td></tr>
+                        <tr><td>Jakeisha Gibson-sanders</td><td>40</td><td></td></tr>
+                        <tr><td>Jeanne Garcia-armstrong</td><td>40</td><td></td></tr>
+                        <tr><td>Jehisol Urbina</td><td>40</td><td></td></tr>
+                        <tr><td>Julie Holt</td><td>40</td><td></td></tr>
+                        <tr><td>Julie Resurreccion</td><td>40</td><td></td></tr>
+                        <tr><td>Kristy Beaudry</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Linda Nguyen</td><td>40</td><td></td></tr>
+                        <tr><td>Linda Taylor</td><td>40</td><td></td></tr>
+                        <tr><td>Malika Ferrell</td><td>55</td><td>LiveText</td></tr>
+                        <tr><td>Mandana Saidi</td><td>40</td><td></td></tr>
+                        <tr><td>Maria Hernandez</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Matthew Miller</td><td>40</td><td></td></tr>
+                        <tr><td>Melanie Ronning</td><td>40</td><td></td></tr>
+                        <tr><td>Michael Juarez</td><td>32</td><td>TPA</td></tr>
+                        <tr><td>Miguel Agredano</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Nancy Madrid</td><td>40</td><td></td></tr>
+                        <tr><td>Naomi Kaidin</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Paula Dominguez</td><td>40</td><td></td></tr>
+                        <tr><td>Ralph Bravo</td><td>45</td><td>TPSL</td></tr>
+                        <tr><td>Rhory Rebellon</td><td>32</td><td>TPA</td></tr>
+                        <tr><td>Sallyann Mastromarco</td><td>40</td><td></td></tr>
+                        <tr><td>Sandy Walker</td><td>40</td><td></td></tr>
+                        <tr><td>Sebastian Dawn</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Shannon Sayer</td><td>40</td><td></td></tr>
+                        <tr><td>Sofia Manzo</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Sofia Manzo-reyes</td><td>40</td><td></td></tr>
+                        <tr><td>Stacey Byham</td><td>40</td><td></td></tr>
+                        <tr><td>Stacy Orosco</td><td>40</td><td></td></tr>
+                        <tr><td>Susana Santa Cruz</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Susanna Garcia</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Valerie de la Rosa</td><td>40</td><td></td></tr>
+                        <tr><td>Vanessa Sandoval</td><td>45</td><td>TPSL</td></tr>
+                        <tr><td>Veronica Arevalo</td><td>40</td><td>SPED</td></tr>
+                        <tr><td>Yesenia Enriquez</td><td>32</td><td>TPA</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+        
         <div id="save-status" class="save-status">All changes saved</div>
     </div>
 
@@ -187,7 +254,7 @@ Yesenia Enriquez - 32 - TPA
         const dateParam = urlParams.get('date');
         const displayDate = dateParam ? new Date(dateParam) : new Date();
         const startYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
-        const PERSISTENCE_KEY = `icaap-notes-${startYear}-${startYear+1}`;
+        const PERSISTENCE_KEY = `icaap-notes-tables-${startYear}-${startYear+1}`;
         let saveTimeout;
 
         async function init() {
@@ -198,14 +265,19 @@ Yesenia Enriquez - 32 - TPA
             
             // Load data
             const data = await fetchPlannerData(PERSISTENCE_KEY);
-            const notesEl = document.getElementById('icaap-notes-content');
+            const winterBody = document.getElementById('winter-break-body');
+            const janBody = document.getElementById('january-2026-body');
             
             if (data && data.length > 0) {
-                const saved = data.find(d => d.field_id === 'icaap-notes-content');
-                if (saved) notesEl.innerText = saved.content;
+                const winterSaved = data.find(d => d.field_id === 'winter-break-body');
+                if (winterSaved) winterBody.innerHTML = winterSaved.content;
+                
+                const janSaved = data.find(d => d.field_id === 'january-2026-body');
+                if (janSaved) janBody.innerHTML = janSaved.content;
             }
             
-            notesEl.oninput = () => handleSave('icaap-notes-content', notesEl.innerText);
+            winterBody.oninput = () => handleSave('winter-break-body', winterBody.innerHTML);
+            janBody.oninput = () => handleSave('january-2026-body', janBody.innerHTML);
         }
 
         async function handleSave(fieldId, content) {
