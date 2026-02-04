@@ -106,6 +106,22 @@
         }
         .day-number { font-size: 10pt; font-weight: 700; color: #333; margin-bottom: 0px; line-height: 1; }
         .event-container { display: flex; flex-direction: column; gap: 1px; flex: 1; overflow: hidden; }
+        
+        /* Event Pill Styles */
+        .event-pill { font-size: 8pt; padding: 1px 4px; border-radius: 3px; border-left: 3px solid #ccc; background: #f3f2f1; color: #323130; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Coming Soon', cursive; margin-bottom: 1px; }
+        .event-pill.csea { border-left-color: #00326b; background: #eef2f7; }
+        .event-pill.la-fed { border-left-color: #00326b; background: #fdf3f0; }
+        .event-pill.due { border-left-color: #d83b01; background: #fdf3f0; }
+        .event-pill.pay-day { border-left-color: #107c10; background: #f1faf1; }
+        .event-pill.budget { border-left-color: #ffb900; background: #fffdf6; }
+        .event-pill.wen { border-left-color: #8e44ad; background: #f5eef8; }
+        .event-pill.dwp { border-left-color: #0078d4; background: #f3f9ff; }
+        .event-pill.lausd { border-left-color: #005a9e; background: #f3f2f1; }
+        .event-pill.meeting { border-left-color: #666; background: #f8f9fa; }
+        .event-pill.celebrate { border-left-color: #ff69b4; background: #fff0f5; }
+        .event-pill.conference { border-left-color: #2b579a; background: #eff3f8; }
+        .event-pill.cruise { border-left-color: #008080; background: #e0ffff; }
+
         .event-link { 
             font-family: 'Coming Soon', cursive;
             font-size: 10pt; 
@@ -395,7 +411,15 @@
             const dayClasses = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             container.innerHTML = `<div class="page-title">${monthName.toUpperCase()} ${year}</div><div class="calendar-grid">${dayNames.map((d, idx) => `<div class="calendar-header ${dayClasses[idx]}">${d}</div>`).join('')}${Array(startingDay).fill('').map(() => `<div class="calendar-day"></div>`).join('')}${Array(daysInMonth).fill(0).map((_, i) => { const d = i + 1; const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; return `<div class="calendar-day" style="cursor: pointer;" onclick="updateGlobalDate(new Date(${year}, ${month}, ${d}))"><div style="font-weight: 600; border-bottom: 1px solid #eee; margin-bottom: 5px; font-size: 10pt;">${d}</div><div id="events-${dateStr}"></div></div>`; }).join('')}</div>`;
             const events = await fetchCalendarEvents(firstDay, daysInMonth);
-            events.forEach(e => { const dc = container.querySelector('#events-' + e.date); if (dc) { const p = document.createElement('div'); p.className = 'event-link text-wrap-clamp'; p.innerText = e.title; dc.appendChild(p); } });
+            events.forEach(e => { 
+                const dc = container.querySelector('#events-' + e.date); 
+                if (dc) { 
+                    const p = document.createElement('div'); 
+                    p.className = getEventClass(e.title); 
+                    p.innerText = e.title; 
+                    dc.appendChild(p); 
+                } 
+            });
         }
 
         async function renderNotes(container) {

@@ -475,9 +475,17 @@ async function fetchCalendarEvents(startDate, days = 7) {
 
     const hardcodedEvents = getCalendarEvents().filter(e => e.date >= startStr && e.date <= endStr);
     
-    // Merge events, prioritizing DB events if there's a title/time collision? 
-    // For now, just combine them.
-    return [...dbEvents, ...hardcodedEvents];
+    // Combine and deduplicate by date + title
+    const allEvents = [...dbEvents, ...hardcodedEvents];
+    const uniqueMap = new Map();
+    allEvents.forEach(e => {
+        const key = `${e.date}|${e.title}`;
+        if (!uniqueMap.has(key)) {
+            uniqueMap.set(key, e);
+        }
+    });
+    
+    return Array.from(uniqueMap.values());
 }
 
 function getCalendarEvents() {
