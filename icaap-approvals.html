@@ -79,8 +79,8 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
-                await saveTrackingData('approval_dates', name, month, value, startYear);
-                status.innerText = 'All changes saved';
+                const result = await saveTrackingData('approval_dates', name, month, value, startYear);
+                status.innerText = result === true ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
 

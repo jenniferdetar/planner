@@ -84,7 +84,7 @@
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
                 const result = await saveTrackingData('hours_worked', name, month, value, startYear);
-                status.innerText = result !== null ? 'All changes saved' : 'Error saving';
+                status.innerText = result === true ? 'All changes saved' : 'Error saving';
             }, 1000);
         }
 
