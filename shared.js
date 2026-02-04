@@ -357,8 +357,7 @@ function animateAndNavigate(event, url, direction = 'next') {
                 label: 'Finance',
                 items: [
                     { label: 'Recurring Bills', path: 'financial.html', icon: '💰' },
-                    { label: 'Check Breakdown', path: 'check-breakdown.html', icon: '📄' },
-                    { label: 'Monthly Review', path: 'monthly-review.html', icon: '📄', params: { category: 'Finance' } }
+                    { label: 'Check Breakdown', path: 'check-breakdown.html', icon: '📄' }
                 ]
             },
             {

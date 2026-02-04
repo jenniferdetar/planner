@@ -70,7 +70,58 @@
     <div class="content-area">
         <div class="notes-container">
             <div class="page-title" id="notes-title">ICAAP NOTES</div>
-            <div class="notes-area" contenteditable="true" id="icaap-notes-content"></div>
+            <div class="notes-area" contenteditable="true" id="icaap-notes-content">
+**WINTER BREAK**
+Aguirre, Genesis - RLAA IFs/Mentors - 40
+Aki, Ma Teresa - CATPA - 40
+Alcorn, Eileen - CATPA - 39
+Bacon, Dulce - IF - 60
+Bagadiong Trice, Tarah - CATPA - 34
+Bennett, Marie - IF - 40
+Bouillot, Jittima - RLAA IFs/Mentors - 40
+Bravo, Ralph - IF - 30
+Castillo, Patricia - CATPA - 34
+Cohen, Crystal - CATPA - 34
+De Guzman, Jhun - Induction - 5
+Deloach, Susan - CATPA - 34
+Edith Janec - RLAA IFs/Mentors - 40
+Elizalde, Elizabeth - RLAA IFs/Mentors - 40
+Fuentes, Carmen - CATPA - 34
+Garcia Armstrong, Jeanne - RLAA IFs/Mentors - 40
+Gonzalez, Emir - IF - 40
+Griffiths, Irma - CATPA - 34
+Griffiths, Joshua - CATPA - 40
+Gutierrez, Rodolfo - CATPA - 34
+Han, Alyson - CATPA - 40
+Hashimoto, Yolanda - IF - 40
+Hawkins, Kionna - Induction - 5
+Holmes, Staci - CATPA - 32
+Izuakor, Charles - CATPA - 34
+Jakeisha Gibson-sanders - RLAA IFs/Mentors - 40
+Janec, Edith - Induction - 5
+Kasper, Joy - CATPA - 39
+Linda Nguyen - RLAA IFs/Mentors - 40
+Makar, Enas - IF - 60
+Manzo Reyes, Sofia - RLAA IFs/Mentors - 40
+Mcfarlane, Evelyn - RLAA IFs/Mentors - 40
+Morales, Andreina - IF - 40
+Morales, Andreina - CATPA - 34
+Nolan, Susan - CATPA - 34
+Pena, Brigette - Induction - 5
+Quijada, Ida - IF - 40
+Rabas, Kimberly - CATPA - 35
+Ray, Praveen - CATPA - 34
+Rios, Malina - Induction - 5
+Rodriguez Sifontes, Veronica - RLAA IFs/Mentors - 40
+Rogers, Sherita - CATPA - 34
+Romero, Jose - CATPA - 34
+Ronning, Melanie - RLAA IFs/Mentors - 40
+Saidi, Mandana - Instructional Faculty - 40
+Schull, Tacy - CATPA - 39
+Segovia, Jasmin - CATPA - 34
+Vojkovich, Tiffany - IF - 40
+Winter, Bennett - Induction - 5
+            </div>
         </div>
         <div id="save-status" class="save-status">All changes saved</div>
     </div>
@@ -93,7 +144,7 @@
             const data = await fetchPlannerData(PERSISTENCE_KEY);
             const notesEl = document.getElementById('icaap-notes-content');
             
-            if (data) {
+            if (data && data.length > 0) {
                 const saved = data.find(d => d.field_id === 'icaap-notes-content');
                 if (saved) notesEl.innerText = saved.content;
             }
