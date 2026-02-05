@@ -3,159 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Breakdown - Home Planner</title>
+    <title>Jennifer's Check Breakdown - Home Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        .content-area { padding: 0 !important; width: 100vw; box-sizing: border-box; overflow: hidden !important; }
-        
-        .breakdown-section { margin-bottom: 20px; }
-        .section-header { font-size: 10pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; height: calc(100vh - 120px); overflow: hidden; }
-        .card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 15px; box-shadow: none; }
-        
-        .input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
-        .input-label { font-size: 10pt; font-weight: 600; color: #605e5c; }
-        .input-value { font-family: 'Coming Soon', cursive; font-size: 10pt; color: #323130; outline: none; border-bottom: 1px dashed #ccc; min-width: 80px; text-align: right; }
-        .input-value:focus { border-bottom-color: #28a745; background: #fafffa; }
+        .content-area { 
+            padding: 0 !important; 
+            width: 100%; 
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
-        .total-row { border-top: 2px solid #eee; margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: 700; color: #323130; }
-        .net-total { color: #28a745; font-size: 14pt; }
+        .table-container {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+        }
 
-        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 10pt; color: #666; }
+        table {
+            border-collapse: collapse;
+            font-family: 'Coming Soon', cursive;
+            font-size: 10pt;
+            background: #fff;
+            min-width: 100%;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            z-index: 10;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 9pt;
+            color: #333;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* Fixed first column */
+        th:first-child, td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background: #fff;
+            border-right: 2px solid #ccc;
+            min-width: 200px;
+            text-align: left;
+        }
+
+        th:first-child {
+            z-index: 15;
+            background: #00326b;
+            color: #fff;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+            color: #323130;
+            white-space: nowrap;
+            min-width: 100px;
+        }
+
+        td.editable {
+            text-align: right;
+            cursor: text;
+        }
+
+        td.editable:focus {
+            outline: 2px solid #28a745;
+            background: #fafffa;
+            z-index: 20;
+            position: relative;
+        }
+
+        tr:nth-child(even) td {
+            background: #fafafa;
+        }
+
+        tr:nth-child(even) td:first-child {
+            background: #fafafa;
+        }
+
+        tr:hover td {
+            background-color: #f1f1f1 !important;
+        }
+
+        .date-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 10pt;
+            color: #666;
+            z-index: 1000;
+        }
+
+        .account-label {
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
     <div class="content-area">
-        <div class="grid-3">
-            <div class="breakdown-section">
-                <div class="section-header">Earnings</div>
-                <div class="card">
-                    <div class="input-row">
-                        <span class="input-label">Gross Pay</span>
-                        <div class="input-value" contenteditable="true" id="gross-pay" oninput="handleUpdate()"></div>
-                    </div>
-                    <div class="input-row">
-                        <span class="input-label">Other/Bonus</span>
-                        <div class="input-value" contenteditable="true" id="other-pay" oninput="handleUpdate()"></div>
-                    </div>
-                    <div class="total-row">
-                        <span>Total Gross</span>
-                        <span id="total-gross">$0.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="breakdown-section">
-                <div class="section-header">Deductions</div>
-                <div class="card">
-                    <div class="input-row">
-                        <span class="input-label">Federal Tax</span>
-                        <div class="input-value" contenteditable="true" id="fed-tax" oninput="handleUpdate()"></div>
-                    </div>
-                    <div class="input-row">
-                        <span class="input-label">State Tax</span>
-                        <div class="input-value" contenteditable="true" id="state-tax" oninput="handleUpdate()"></div>
-                    </div>
-                    <div class="input-row">
-                        <span class="input-label">Health/Benefits</span>
-                        <div class="input-value" contenteditable="true" id="benefits" oninput="handleUpdate()"></div>
-                    </div>
-                    <div class="input-row">
-                        <span class="input-label">Retirement</span>
-                        <div class="input-value" contenteditable="true" id="retirement" oninput="handleUpdate()"></div>
-                    </div>
-                    <div class="total-row">
-                        <span>Total Ded.</span>
-                        <span id="total-deductions">$0.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="breakdown-section">
-                <div class="section-header">Summary</div>
-                <div class="card">
-                    <div class="input-row">
-                        <span class="input-label">Pay Period</span>
-                        <div class="input-value" contenteditable="true" id="pay-period" style="text-align: left; min-width: 120px;"></div>
-                    </div>
-                    <div class="input-row">
-                        <span class="input-label">Pay Date</span>
-                        <div class="input-value" contenteditable="true" id="pay-date" style="text-align: left; min-width: 120px;"></div>
-                    </div>
-                    <div class="total-row" style="border-top-color: #28a745; border-top-width: 3px;">
-                        <span>NET PAY</span>
-                        <span class="net-total" id="net-pay">$0.00</span>
-                    </div>
-                </div>
-            </div>
+        <div class="table-container">
+            <table id="breakdown-table">
+                <thead>
+                    <tr id="header-row">
+                        <th>Account</th>
+                        <!-- Dates will be injected here -->
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Rows will be injected here -->
+                </tbody>
+            </table>
         </div>
         <div id="save-status" class="save-status">All changes saved</div>
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const dateParam = urlParams.get('date');
-        const displayDate = dateParam ? new Date(dateParam) : new Date();
-        const PERSISTENCE_KEY = `check-breakdown-${displayDate.getFullYear()}-${displayDate.getMonth() + 1}`;
+        const ACCOUNTS = [
+            "Currently in Checking",
+            "Jennifer's Check",
+            "Tithe",
+            "ADT",
+            "Amazon - Necessitites",
+            "Auto Maintenance",
+            "Blow",
+            "Ana",
+            "DWP",
+            "Gas",
+            "Groceries",
+            "Hair (Expensive)",
+            "Hair (Cheap)",
+            "HSA",
+            "Jennifer's Student Loans - NelNet",
+            "Jennifer's Student Loans - Sallie Mae",
+            "Laundry",
+            "Mercury Auto Insurance",
+            "Orkin",
+            "Schools First Loan",
+            "Spectrum",
+            "Summer Saver",
+            "Tahoe Registration",
+            "Trailblazer Registration",
+            "Verizon",
+            "Left Over"
+        ];
+
+        const PERSISTENCE_KEY = 'jennifers-check-breakdown';
         let saveTimeout;
 
-        async function init() {
-            setGlobalHeaderTitle(`CHECK BREAKDOWN | ${displayDate.toLocaleString('default', { month: 'long', year: 'numeric' }).toUpperCase()}`);
+        function generateDates(startYear, startMonth, startDay, count) {
+            const dates = [];
+            let current = new Date(startYear, startMonth - 1, startDay);
             
-            const data = await fetchPlannerData(PERSISTENCE_KEY);
-            if (data) {
-                data.forEach(d => {
+            for (let i = 0; i < count; i++) {
+                dates.push(new Date(current));
+                
+                // Paydays on 8th and 23rd
+                if (current.getDate() === 8) {
+                    current.setDate(23);
+                } else {
+                    current.setMonth(current.getMonth() + 1);
+                    current.setDate(8);
+                }
+            }
+            return dates;
+        }
+
+        async function init() {
+            if (typeof setGlobalHeaderTitle === 'function') {
+                setGlobalHeaderTitle("JENNIFER'S CHECK BREAKDOWN");
+            }
+
+            const dates = generateDates(2025, 7, 8, 24);
+            const headerRow = document.getElementById('header-row');
+            const tableBody = document.getElementById('table-body');
+
+            // Render Headers
+            dates.forEach(date => {
+                const th = document.createElement('th');
+                const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+                th.innerHTML = `
+                    <div class="date-header">
+                        <span>💵 ${dateStr}</span>
+                    </div>
+                `;
+                headerRow.appendChild(th);
+            });
+
+            // Render Rows
+            ACCOUNTS.forEach(account => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="account-label">${account}</td>`;
+                
+                dates.forEach(date => {
+                    const dateKey = date.toISOString().split('T')[0];
+                    const slotKey = `${account.replace(/\s+/g, '-')}`;
+                    const td = document.createElement('td');
+                    td.className = 'editable';
+                    td.contentEditable = true;
+                    td.id = `cell-${dateKey}-${slotKey}`;
+                    td.oninput = () => handleCellInput(dateKey, slotKey, td.innerText);
+                    tr.appendChild(td);
+                });
+                
+                tableBody.appendChild(tr);
+            });
+
+            // Load Data
+            const allData = await fetchPlannerData(PERSISTENCE_KEY);
+            if (allData) {
+                allData.forEach(d => {
                     const el = document.getElementById(d.field_id);
                     if (el) el.innerText = d.content;
                 });
             }
-            handleUpdate(false);
         }
 
-        function parseVal(id) {
-            const el = document.getElementById(id);
-            if (!el) return 0;
-            const val = el.innerText.replace(/[^0-9.]/g, '');
-            return parseFloat(val) || 0;
-        }
-
-        function formatCurrency(num) {
-            return '$' + num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function handleUpdate(shouldSave = true) {
-            const gross = parseVal('gross-pay') + parseVal('other-pay');
-            const ded = parseVal('fed-tax') + parseVal('state-tax') + parseVal('benefits') + parseVal('retirement');
-            const net = gross - ded;
-
-            document.getElementById('total-gross').innerText = formatCurrency(gross);
-            document.getElementById('total-deductions').innerText = formatCurrency(ded);
-            document.getElementById('net-pay').innerText = formatCurrency(net);
-
-            if (shouldSave) {
-                const status = document.getElementById('save-status');
+        function handleCellInput(dateKey, slotKey, content) {
+            const status = document.getElementById('save-status');
+            status.innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
-                clearTimeout(saveTimeout);
-                saveTimeout = setTimeout(async () => {
-                    const fields = ['gross-pay', 'other-pay', 'fed-tax', 'state-tax', 'benefits', 'retirement', 'pay-period', 'pay-date'];
-                    let allSuccess = true;
-                    for (const f of fields) {
-                        const el = document.getElementById(f);
-                        if (el) {
-                            const result = await savePlannerData(PERSISTENCE_KEY, f, el.innerText);
-                            if (result === null) allSuccess = false;
-                        }
-                    }
-                    status.innerText = allSuccess ? 'All changes saved' : 'Error saving';
-                }, 1000);
-            }
+                const fieldId = `cell-${dateKey}-${slotKey}`;
+                const result = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
+                status.innerText = result !== null ? 'All changes saved' : 'Error saving';
+            }, 1000);
         }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
-
 </body>
 </html>
