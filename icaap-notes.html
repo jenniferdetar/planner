@@ -43,8 +43,7 @@
         }
 
         .table-wrapper {
-            flex: 1;
-            min-width: 450px;
+            flex: none;
         }
 
         .section-subtitle {
@@ -57,7 +56,7 @@
         }
 
         .notes-table {
-            width: 100%;
+            width: auto;
             border-collapse: collapse;
             font-family: 'Coming Soon', cursive;
             font-size: 10pt;
@@ -65,7 +64,7 @@
         }
 
         .notes-table th {
-            text-align: left;
+            text-align: center;
             background: #f8f9fa;
             color: #888;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -74,12 +73,20 @@
             letter-spacing: 1px;
             padding: 10px;
             border-bottom: 2px solid var(--header-blue);
+            white-space: nowrap;
+            width: 1%;
         }
 
         .notes-table td {
             padding: 8px 10px;
             border-bottom: 1px solid #eee;
             color: var(--text-color);
+            white-space: nowrap;
+            width: 1%;
+        }
+        
+        .notes-table td:nth-child(2) {
+            text-align: center;
         }
 
         .notes-table tr:hover {
@@ -117,7 +124,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th style="width: 60px;">Hours</th>
+                            <th>Hours</th>
                             <th>Position</th>
                         </tr>
                     </thead>
@@ -182,7 +189,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th style="width: 60px;">Hours</th>
+                            <th>Hours</th>
                             <th>Position</th>
                         </tr>
                     </thead>
