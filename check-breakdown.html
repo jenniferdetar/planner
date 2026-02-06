@@ -195,6 +195,11 @@
         const PERSISTENCE_KEY = 'jennifers-check-breakdown';
         let saveTimeout;
 
+        function formatUSD(val) {
+            const num = parseFloat(String(val).replace(/[$,]/g, '')) || 0;
+            return num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        }
+
         function getSlotKey(account) {
             return account.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         }
@@ -259,12 +264,15 @@
                     
                     // Pre-fill seed data if index exists
                     if (!isLeftOver && SEED_DATA[slotKey] && SEED_DATA[slotKey][dIdx]) {
-                        td.innerText = SEED_DATA[slotKey][dIdx];
+                        td.innerText = formatUSD(SEED_DATA[slotKey][dIdx]);
                     }
 
                     td.oninput = () => {
                         handleCellInput(dateKey, slotKey, td.innerText);
                         updateCalculations(dateKey);
+                    };
+                    td.onblur = () => {
+                        td.innerText = formatUSD(td.innerText);
                     };
                     tr.appendChild(td);
                 });
@@ -277,7 +285,7 @@
             if (allData) {
                 allData.forEach(d => {
                     const el = document.getElementById(d.field_id);
-                    if (el) el.innerText = d.content;
+                    if (el) el.innerText = formatUSD(d.content);
                 });
             }
 
@@ -308,7 +316,7 @@
             const leftOver = income - expenses;
             const leftOverEl = document.getElementById(`cell-${dateKey}-left-over`);
             if (leftOverEl) {
-                leftOverEl.innerText = leftOver.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                leftOverEl.innerText = formatUSD(leftOver);
                 leftOverEl.style.color = leftOver < 0 ? '#a4262c' : '#323130';
             }
         }
