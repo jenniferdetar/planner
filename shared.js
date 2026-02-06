@@ -458,14 +458,15 @@ async function savePlannerData(date, fieldId, content) {
     const client = getSupabase();
     if (!client) return null;
 
-    // Apply timestamp for text entries, skip for numeric/empty/checkmarks/ICAAP/HTML
+    // Apply timestamp for text entries, skip for numeric/currency/empty/checkmarks/ICAAP/HTML
     let finalValue = content;
     const isNumeric = content && !isNaN(parseFloat(content)) && isFinite(content);
+    const isCurrency = content && /^\$?\d+(,\d{3})*(\.\d+)?$/.test(String(content).trim());
     const isCheckmark = content === 'true' || content === 'false';
     const isIcaap = fieldId && (fieldId.startsWith('attn-') || fieldId.startsWith('icaap-'));
     const isHtml = content && typeof content === 'string' && (content.includes('<') || content.includes('>'));
 
-    if (content && content.trim() && !isNumeric && !isCheckmark && !isIcaap && !isHtml) {
+    if (content && content.trim() && !isNumeric && !isCurrency && !isCheckmark && !isIcaap && !isHtml) {
         finalValue = ensureTimestamp(content);
     }
 

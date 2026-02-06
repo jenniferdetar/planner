@@ -131,7 +131,13 @@
             const status = document.getElementById('save-status');
             status.innerText = 'Saving...';
             const result = await savePlannerData(getPersistenceKey(), fieldId, value);
-            status.innerText = result !== null ? 'All changes saved' : 'Error saving';
+            if (result !== null) {
+                status.innerText = 'All changes saved';
+            } else {
+                status.innerText = 'Error saving - check console';
+                status.style.color = '#a4262c';
+                setTimeout(() => { status.style.color = '#888'; }, 3000);
+            }
         }
 
         function changeWeek(delta) {

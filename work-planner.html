@@ -116,12 +116,19 @@
                     reflection: document.getElementById('reflection').innerText
                 };
                 const result = await savePlannerData(PERSISTENCE_KEY, 'work-planner', JSON.stringify(content));
-                updateSaveStatus(result !== null ? 'All changes saved' : 'Error saving');
+                if (result !== null) {
+                    updateSaveStatus('All changes saved');
+                } else {
+                    updateSaveStatus('Error saving - check console', '#a4262c');
+                    setTimeout(() => { updateSaveStatus('All changes saved', '#666'); }, 3000);
+                }
             }, 1000);
         }
 
-        function updateSaveStatus(text) {
-            document.getElementById('save-status').innerText = text;
+        function updateSaveStatus(text, color = '#666') {
+            const status = document.getElementById('save-status');
+            status.innerText = text;
+            status.style.color = color;
         }
 
         document.addEventListener('DOMContentLoaded', init);

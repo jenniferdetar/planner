@@ -376,7 +376,9 @@
                     }
                 }
             } else {
-                saveStatus.innerText = 'Error saving';
+                saveStatus.innerText = 'Error saving - check console';
+                saveStatus.style.color = '#a4262c';
+                setTimeout(() => { saveStatus.style.color = '#605e5c'; }, 3000);
             }
         }
         function handleInput(e) {

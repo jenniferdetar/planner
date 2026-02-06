@@ -463,7 +463,16 @@
             saveTimeout = setTimeout(async () => {
                 if (statusEl) statusEl.innerText = 'Saving...';
                 const result = await savePlannerData(`draft-note-${category}`, 'draft', content);
-                if (statusEl) statusEl.innerText = result !== null ? 'All changes saved' : 'Error saving';
+                if (statusEl) {
+                    if (result !== null) {
+                        statusEl.innerText = 'All changes saved';
+                        statusEl.style.color = '#666';
+                    } else {
+                        statusEl.innerText = 'Error saving - check console';
+                        statusEl.style.color = '#a4262c';
+                        setTimeout(() => { statusEl.style.color = '#666'; }, 3000);
+                    }
+                }
             }, 1000);
         }
 
@@ -497,10 +506,17 @@
             if (newEntry) {
                 document.getElementById('new-note-content').value = '';
                 await savePlannerData(`draft-note-${category}`, 'draft', '');
-                if (statusEl) statusEl.innerText = 'Saved';
+                if (statusEl) {
+                    statusEl.innerText = 'Saved';
+                    statusEl.style.color = '#666';
+                }
                 switchTab(currentCategory);
             } else {
-                if (statusEl) statusEl.innerText = 'Error saving';
+                if (statusEl) {
+                    statusEl.innerText = 'Error saving - check console';
+                    statusEl.style.color = '#a4262c';
+                    setTimeout(() => { statusEl.style.color = '#666'; }, 3000);
+                }
             }
         }
 

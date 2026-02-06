@@ -196,8 +196,14 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 saveStatus.innerText = 'Saving...';
-                await savePlannerData(PERSISTENCE_KEY, 'draft', newNoteContent.value);
-                saveStatus.innerText = 'All changes saved';
+                const result = await savePlannerData(PERSISTENCE_KEY, 'draft', newNoteContent.value);
+                if (result !== null) {
+                    saveStatus.innerText = 'All changes saved';
+                } else {
+                    saveStatus.innerText = 'Error saving - check console';
+                    saveStatus.style.color = '#a4262c';
+                    setTimeout(() => { saveStatus.style.color = '#888'; }, 3000);
+                }
             }, 1000);
         }
 
@@ -207,8 +213,14 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 saveStatus.innerText = 'Saving...';
-                await updateCategoryEntry(id, content);
-                saveStatus.innerText = 'All changes saved';
+                const success = await updateCategoryEntry(id, content);
+                if (success) {
+                    saveStatus.innerText = 'All changes saved';
+                } else {
+                    saveStatus.innerText = 'Error saving - check console';
+                    saveStatus.style.color = '#a4262c';
+                    setTimeout(() => { saveStatus.style.color = '#888'; }, 3000);
+                }
             }, 1000);
         }
 
@@ -222,7 +234,9 @@
                 saveStatus.innerText = 'Saved';
                 loadEntries();
             } else {
-                saveStatus.innerText = 'Error saving';
+                saveStatus.innerText = 'Error saving - check console';
+                saveStatus.style.color = '#a4262c';
+                setTimeout(() => { saveStatus.style.color = '#888'; }, 3000);
             }
         }
 

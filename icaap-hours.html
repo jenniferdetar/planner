@@ -84,7 +84,13 @@
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
                 const result = await saveTrackingData('hours_worked', name, month, value, startYear);
-                status.innerText = result === true ? 'All changes saved' : 'Error saving';
+                if (result === true) {
+                    status.innerText = 'All changes saved';
+                } else {
+                    status.innerText = 'Error saving - check console';
+                    status.style.color = '#a4262c';
+                    setTimeout(() => { status.style.color = '#888'; }, 3000);
+                }
             }, 1000);
         }
 
