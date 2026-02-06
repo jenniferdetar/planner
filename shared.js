@@ -337,7 +337,7 @@ function animateAndNavigate(event, url, direction = 'next') {
         const existingNodes = Array.from(document.body.childNodes);
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         const urlParams = new URLSearchParams(window.location.search);
-        const dateStr = urlParams.get('date') || new Date().toISOString().split('T')[0];
+        const dateStr = urlParams.get('date') || '2026-02-01';
         const category = urlParams.get('category');
 
         // Create Sidebar Navigation
