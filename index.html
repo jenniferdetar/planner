@@ -59,7 +59,7 @@
 <body>
     <div class="month-nav-container">
         <span class="nav-arrow" onclick="changeMonth(-1)">&lt;</span>
-        <span id="current-month-display">January 2026</span>
+        <span id="current-month-display">February 2026</span>
         <span class="nav-arrow" onclick="changeMonth(1)">&gt;</span>
     </div>
 
@@ -72,7 +72,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentDate = dateParam ? new Date(dateParam) : new Date();
+        let currentDate = dateParam ? new Date(dateParam) : new Date('2026-02-01');
         currentDate.setDate(1);
 
         async function renderCalendar() {

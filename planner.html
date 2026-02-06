@@ -259,7 +259,7 @@
         let saveTimeout = null;
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let displayDate = dateParam ? new Date(dateParam) : new Date();
+        let displayDate = dateParam ? new Date(dateParam) : new Date('2026-02-01');
         if (dateParam && dateParam.includes('-')) {
             const [y, m, d] = dateParam.split('-').map(Number);
             displayDate = new Date(y, m - 1, d);

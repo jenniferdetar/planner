@@ -276,7 +276,7 @@
         }
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date();
+        let currentStartDate = dateParam ? parseLocalDate(dateParam) : new Date('2026-02-01');
         // Adjust to Sunday of the week
         const startDay = currentStartDate.getDay();
         currentStartDate.setDate(currentStartDate.getDate() - startDay);

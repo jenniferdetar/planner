@@ -42,7 +42,7 @@
     <script>
         const monthNames = ['July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'];
         const urlParams = new URLSearchParams(window.location.search);
-        let baseDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date();
+        let baseDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date("2026-02-01");
         const startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
         let saveTimeout;
 

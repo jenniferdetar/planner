@@ -83,7 +83,7 @@
         let saveTimeout;
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const displayDate = dateParam ? new Date(dateParam) : new Date('2026-02-01');
         const currentYear = displayDate.getFullYear();
         const PLANNING_DATE = `${currentYear}-financial`;
 

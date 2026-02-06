@@ -182,9 +182,9 @@
                 </table>
             </div>
 
-            <!-- January 2026 Table -->
+            <!-- February 2026 Table -->
             <div class="table-wrapper">
-                <div class="section-subtitle">JANUARY 2026</div>
+                <div class="section-subtitle">FEBRUARY 2026</div>
                 <table class="notes-table">
                     <thead>
                         <tr>
@@ -193,7 +193,7 @@
                             <th>Position</th>
                         </tr>
                     </thead>
-                    <tbody id="january-2026-body" contenteditable="true">
+                    <tbody id="february-2026-body" contenteditable="true">
                         <tr><td>Ann Bouillot</td><td>40</td><td>SPED</td></tr>
                         <tr><td>Christina Clark</td><td>40</td><td></td></tr>
                         <tr><td>Christine Choi</td><td>40</td><td></td></tr>
@@ -259,7 +259,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const displayDate = dateParam ? new Date(dateParam) : new Date("2026-02-01");
         const startYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
         const PERSISTENCE_KEY = `icaap-notes-tables-${startYear}-${startYear+1}`;
         let saveTimeout;
@@ -273,18 +273,18 @@
             // Load data
             const data = await fetchPlannerData(PERSISTENCE_KEY);
             const winterBody = document.getElementById('winter-break-body');
-            const janBody = document.getElementById('january-2026-body');
+            const febBody = document.getElementById('february-2026-body');
             
             if (data && data.length > 0) {
                 const winterSaved = data.find(d => d.field_id === 'winter-break-body');
                 if (winterSaved) winterBody.innerHTML = winterSaved.content;
                 
-                const janSaved = data.find(d => d.field_id === 'january-2026-body');
-                if (janSaved) janBody.innerHTML = janSaved.content;
+                const febSaved = data.find(d => d.field_id === 'february-2026-body');
+                if (febSaved) febBody.innerHTML = febSaved.content;
             }
             
             winterBody.oninput = () => handleSave('winter-break-body', winterBody.innerHTML);
-            janBody.oninput = () => handleSave('january-2026-body', janBody.innerHTML);
+            febBody.oninput = () => handleSave('february-2026-body', febBody.innerHTML);
         }
 
         async function handleSave(fieldId, content) {

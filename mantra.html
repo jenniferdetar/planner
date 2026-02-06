@@ -141,7 +141,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const currentYear = dateParam ? new Date(dateParam).getFullYear() : new Date().getFullYear();
+        const currentYear = dateParam ? new Date(dateParam).getFullYear() : new Date("2026-02-01").getFullYear();
         const PERSISTENCE_KEY = `mantra-data-${currentYear}`;
         let saveTimeout;
 
