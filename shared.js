@@ -887,22 +887,7 @@ async function fetchPaylogSubmissions(year) {
 }
 
 async function fetchAllTrackingNames(year) {
-    const [hours, approvals, paylogs] = await Promise.all([
-        fetchHoursWorked(year).catch(() => []),
-        fetchApprovalDates(year).catch(() => []),
-        fetchPaylogSubmissions(year).catch(() => [])
-    ]);
-    
-    const namesSet = new Set();
-    hours.forEach(r => { if (r.name) namesSet.add(toTitleCase(r.name)); });
-    approvals.forEach(r => { if (r.Name) namesSet.add(toTitleCase(r.Name)); });
-    paylogs.forEach(r => { if (r.name) namesSet.add(toTitleCase(r.name)); });
-    
-    if (namesSet.size === 0) {
-        return [...DEFAULT_EMPLOYEES].sort();
-    }
-    
-    return [...namesSet].sort();
+    return [...DEFAULT_EMPLOYEES].sort();
 }
 
 async function saveTrackingData(table, name, month, value, year) {

@@ -51,10 +51,7 @@
             
             const approvalData = await fetchApprovalDates(startYear);
             
-            // Merge DEFAULT_EMPLOYEES with any new names from Supabase
-            const namesFromDb = approvalData.map(r => r.Name);
-            const allNames = [...new Set([...DEFAULT_EMPLOYEES, ...namesFromDb])];
-            allNames.sort();
+            const allNames = [...DEFAULT_EMPLOYEES].sort();
 
             const headerRow = document.getElementById('header-row');
             headerRow.innerHTML = `<th class="employee-col">Employee Name</th>` + 
