@@ -250,26 +250,37 @@ function animateAndNavigate(event, url, direction = 'next') {
             justify-content: center;
             min-height: 80px;
             position: relative;
+            z-index: 100;
         }
 
         .header-left-controls {
             position: absolute;
             left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
             align-items: center;
             gap: 15px;
+            z-index: 101;
         }
 
         .header-center {
             text-align: center;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .header-right-controls {
             position: absolute;
             right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
             align-items: center;
             gap: 15px;
+            z-index: 101;
         }
 
         .header-title {
@@ -447,11 +458,14 @@ async function savePlannerData(date, fieldId, content) {
     const client = getSupabase();
     if (!client) return null;
 
-    // Apply timestamp for text entries, skip for numeric/empty/checkmarks
+    // Apply timestamp for text entries, skip for numeric/empty/checkmarks/ICAAP/HTML
     let finalValue = content;
     const isNumeric = content && !isNaN(parseFloat(content)) && isFinite(content);
     const isCheckmark = content === 'true' || content === 'false';
-    if (content && content.trim() && !isNumeric && !isCheckmark) {
+    const isIcaap = fieldId && (fieldId.startsWith('attn-') || fieldId.startsWith('icaap-'));
+    const isHtml = content && typeof content === 'string' && (content.includes('<') || content.includes('>'));
+
+    if (content && content.trim() && !isNumeric && !isCheckmark && !isIcaap && !isHtml) {
         finalValue = ensureTimestamp(content);
     }
 
@@ -462,36 +476,39 @@ async function savePlannerData(date, fieldId, content) {
             value: finalValue
         };
 
-        // Try upsert with onConflict if possible
-        const { error } = await client
+        // Standard upsert - requires unique constraint on (date_key, slot_key)
+        const { error: upsertError } = await client
             .from('work_planner_edits')
             .upsert(payload, { onConflict: 'date_key,slot_key' });
 
-        if (error) {
-            console.warn('Upsert failed, trying manual update/insert:', error.message);
+        if (upsertError) {
+            console.warn('Upsert failed, trying manual match update:', upsertError.message);
             
-            // Try update first
-            const { data: updateData, error: updateError } = await client
+            // Fallback: check existence then update or insert
+            const { data: existing, error: fetchError } = await client
                 .from('work_planner_edits')
-                .update({ value: finalValue })
+                .select('id')
                 .match({ date_key: date, slot_key: fieldId })
-                .select();
+                .maybeSingle();
 
-            if (updateError || !updateData || updateData.length === 0) {
-                // If update fails or matches nothing, try insert
+            if (fetchError) throw fetchError;
+
+            if (existing) {
+                const { error: updateError } = await client
+                    .from('work_planner_edits')
+                    .update({ value: finalValue })
+                    .eq('id', existing.id);
+                if (updateError) throw updateError;
+            } else {
                 const { error: insertError } = await client
                     .from('work_planner_edits')
                     .insert(payload);
-                
-                if (insertError) {
-                    console.error('Final insert fallback error:', insertError);
-                    return null;
-                }
+                if (insertError) throw insertError;
             }
         }
         return finalValue;
     } catch (err) {
-        console.error('Unexpected save error:', err);
+        console.error('Save error details:', err);
         return null;
     }
 }

@@ -167,8 +167,37 @@
             "Left Over"
         ];
 
+        const SEED_DATA = {
+            "currently-in-checking": ["22", "111", "94", "52", "74", "95", "77", "46", "43", "401", "44", "38", "44", "53", "22", "22"],
+            "jennifer-s-check": ["1856", "1876", "1988", "1744", "1678", "1743", "1833", "1743", "1965", "1571", "1656", "1899", "2129", "1844", "2026", "2115"],
+            "tithe": ["186", "188", "199", "175", "168", "175", "184", "175", "197", "158", "166", "190", "213", "185", "203", "211"],
+            "adt": ["27", "27", "27", "27", "27", "27", "27", "27", "27", "27", "27", "27", "27", "27", "27", "27"],
+            "amazon-necessitites": ["50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50"],
+            "auto-maintenance": ["50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50"],
+            "blow": ["100", "100", "100", "100", "100", "100", "100", "100", "100", "100", "100", "100", "100", "100", "100", "100"],
+            "ana": ["100", "100", "100", "100", "100", "100", "100", "100", "160", "160", "160", "160", "160", "160", "160", "160"],
+            "dwp": ["50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50", "50"],
+            "gas": ["200", "300", "300", "250", "200", "225", "250", "200", "225", "200", "200", "250", "300", "200", "200", "200"],
+            "groceries": ["300", "300", "300", "300", "200", "225", "250", "200", "225", "300", "200", "250", "300", "200", "200", "200"],
+            "hair-expensive": ["55", "55", "55", "55", "55", "55", "55", "55", "55", "55", "55", "55", "55", "55", "55", "55"],
+            "hsa": ["0", "100", "100", "100", "100", "100", "100", "100", "100", "0", "100", "100", "100", "0", "100", "100"],
+            "laundry": ["40", "40", "40", "40", "40", "40", "40", "40", "40", "40", "40", "40", "40", "40", "40", "40"],
+            "mercury-auto-insurance": ["194", "194", "194", "194", "194", "194", "194", "194", "194", "194", "194", "194", "194", "194", "194", "194"],
+            "orkin": ["25", "25", "25", "25", "25", "25", "25", "25", "25", "25", "25", "25", "25", "25", "25", "25"],
+            "schools-first-loan": ["200", "100", "180", "36", "36", "36", "36", "36", "36", "100", "36", "36", "36", "71", "71", "71"],
+            "spectrum": ["0", "0", "99", "99", "99", "99", "99", "99", "99", "99", "99", "99", "99", "99", "99", "99"],
+            "summer-saver": ["61", "61", "61", "61", "61", "61", "61", "61", "200", "200", "200", "200", "200", "100", "100", "100"],
+            "tahoe-registration": ["8", "8", "8", "8", "8", "8", "8", "8", "8", "8", "8", "8", "8", "8", "8", "8"],
+            "trailblazer-registration": ["14", "14", "14", "14", "14", "14", "14", "14", "14", "0", "14", "14", "14", "14", "14", "14"],
+            "verizon": ["135", "135", "135", "135", "135", "135", "150", "135", "135", "142", "142", "142", "142", "142", "142", "142"]
+        };
+
         const PERSISTENCE_KEY = 'jennifers-check-breakdown';
         let saveTimeout;
+
+        function getSlotKey(account) {
+            return account.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        }
 
         function generateDates(startYear, startMonth, startDay, count) {
             const dates = [];
@@ -213,28 +242,74 @@
             ACCOUNTS.forEach(account => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `<td class="account-label">${account}</td>`;
+                const slotKey = getSlotKey(account);
+                const isLeftOver = account === 'Left Over';
                 
-                dates.forEach(date => {
+                dates.forEach((date, dIdx) => {
                     const dateKey = date.toISOString().split('T')[0];
-                    const slotKey = `${account.replace(/\s+/g, '-')}`;
                     const td = document.createElement('td');
                     td.className = 'editable';
-                    td.contentEditable = true;
+                    if (!isLeftOver) {
+                        td.contentEditable = true;
+                    } else {
+                        td.style.fontWeight = 'bold';
+                        td.style.background = '#f8f9fa';
+                    }
                     td.id = `cell-${dateKey}-${slotKey}`;
-                    td.oninput = () => handleCellInput(dateKey, slotKey, td.innerText);
+                    
+                    // Pre-fill seed data if index exists
+                    if (!isLeftOver && SEED_DATA[slotKey] && SEED_DATA[slotKey][dIdx]) {
+                        td.innerText = SEED_DATA[slotKey][dIdx];
+                    }
+
+                    td.oninput = () => {
+                        handleCellInput(dateKey, slotKey, td.innerText);
+                        updateCalculations(dateKey);
+                    };
                     tr.appendChild(td);
                 });
                 
                 tableBody.appendChild(tr);
             });
 
-            // Load Data
-            const allData = await fetchPlannerData(PERSISTENCE_KEY);
+            // Load Data from Supabase
+            const allData = await fetchPlannerData(PERSISTENCE_KEY, 365);
             if (allData) {
                 allData.forEach(d => {
                     const el = document.getElementById(d.field_id);
                     if (el) el.innerText = d.content;
                 });
+            }
+
+            // Run initial calculations for all columns
+            dates.forEach(date => {
+                const dateKey = date.toISOString().split('T')[0];
+                updateCalculations(dateKey);
+            });
+        }
+
+        function updateCalculations(dateKey) {
+            let income = 0;
+            let expenses = 0;
+            
+            ACCOUNTS.forEach((account, idx) => {
+                if (account === 'Left Over') return;
+                const slotKey = getSlotKey(account);
+                const el = document.getElementById(`cell-${dateKey}-${slotKey}`);
+                const val = parseFloat(el?.innerText.replace(/[$,]/g, '')) || 0;
+                
+                if (idx < 2) { // Currently in Checking and Jennifer's Check are income
+                    income += val;
+                } else {
+                    expenses += val;
+                }
+            });
+            
+            const leftOver = income - expenses;
+            const leftOverEl = document.getElementById(`cell-${dateKey}-left-over`);
+            if (leftOverEl) {
+                leftOverEl.innerText = leftOver.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                leftOverEl.style.color = leftOver < 0 ? '#a4262c' : '#323130';
             }
         }
 
