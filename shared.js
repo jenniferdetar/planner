@@ -454,11 +454,11 @@ function animateAndNavigate(event, url, direction = 'next') {
     });
 })();
 
-async function savePlannerData(date, fieldId, content) {
+async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
     const client = getSupabase();
     if (!client) return null;
 
-    // Apply timestamp for text entries, skip for numeric/currency/empty/checkmarks/ICAAP/HTML
+    // Apply timestamp for text entries, skip for numeric/currency/empty/checkmarks/ICAAP/HTML/explicit skip
     let finalValue = content;
     const isNumeric = content && !isNaN(parseFloat(content)) && isFinite(content);
     const isCurrency = content && /^\$?\d+(,\d{3})*(\.\d+)?$/.test(String(content).trim());
@@ -466,7 +466,7 @@ async function savePlannerData(date, fieldId, content) {
     const isIcaap = fieldId && (fieldId.startsWith('attn-') || fieldId.startsWith('icaap-'));
     const isHtml = content && typeof content === 'string' && (content.includes('<') || content.includes('>'));
 
-    if (content && content.trim() && !isNumeric && !isCurrency && !isCheckmark && !isIcaap && !isHtml) {
+    if (!skipTimestamp && content && content.trim() && !isNumeric && !isCurrency && !isCheckmark && !isIcaap && !isHtml) {
         finalValue = ensureTimestamp(content);
     }
 
@@ -480,7 +480,7 @@ async function savePlannerData(date, fieldId, content) {
         // Standard upsert - requires unique constraint on (date_key, slot_key)
         const { error: upsertError } = await client
             .from('work_planner_edits')
-            .upsert(payload, { onConflict: 'date_key,slot_key' });
+            .upsert(payload);
 
         if (upsertError) {
             console.warn('Upsert failed, trying manual match update:', upsertError.message);
@@ -505,6 +505,8 @@ async function savePlannerData(date, fieldId, content) {
                     .from('work_planner_edits')
                     .insert(payload);
                 if (insertError) throw insertError;
+            }
+        }
             }
         }
         return finalValue;
@@ -850,7 +852,7 @@ async function fetchHoursWorked(year) {
     const client = getSupabase();
     if (!client) return [];
     let query = client.from('hours_worked').select('*');
-    if (year) query = query.eq('fiscal_year', year);
+    // hours_worked table does not include fiscal_year in current schema
     const { data, error } = await query;
     if (error) {
         console.error('Error fetching hours_worked:', error);
@@ -863,7 +865,7 @@ async function fetchApprovalDates(year) {
     const client = getSupabase();
     if (!client) return [];
     let query = client.from('approval_dates').select('*');
-    if (year) query = query.eq('fiscal_year', year);
+    // approval_dates table does not include fiscal_year in current schema
     const { data, error } = await query;
     if (error) {
         console.error('Error fetching approval_dates:', error);
@@ -876,7 +878,7 @@ async function fetchPaylogSubmissions(year) {
     const client = getSupabase();
     if (!client) return [];
     let query = client.from('paylog submission').select('*');
-    if (year) query = query.eq('fiscal_year', year);
+    // paylog submission table does not include fiscal_year in current schema
     const { data, error } = await query;
     if (error) {
         // Fallback if table doesn't exist yet
@@ -908,6 +910,7 @@ async function saveTrackingData(table, name, month, value, year) {
     // Normalize table name if someone uses underscore
     const actualTable = table === 'paylog_submission' ? 'paylog submission' : table;
     const isPaylogOrHours = actualTable === 'hours_worked' || actualTable === 'paylog submission';
+    const supportsFiscalYear = !['hours_worked', 'paylog submission', 'approval_dates'].includes(actualTable);
     
     // Normalize month: lowercase for hours_worked and paylog submission, Capitalized for others
     let col = isPaylogOrHours ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
@@ -921,13 +924,13 @@ async function saveTrackingData(table, name, month, value, year) {
     
     // 1. Try exact match first
     let query = client.from(actualTable).select('*').eq(nameCol, name);
-    if (year) query = query.eq('fiscal_year', year);
+    if (year && supportsFiscalYear) query = query.eq('fiscal_year', year);
     let { data: existingData, error: fetchError } = await query;
 
     // 2. If no exact match, try case-insensitive match (using ilike)
     if (!fetchError && (!existingData || existingData.length === 0)) {
         let ciQuery = client.from(actualTable).select('*').ilike(nameCol, name);
-        if (year) ciQuery = ciQuery.eq('fiscal_year', year);
+        if (year && supportsFiscalYear) ciQuery = ciQuery.eq('fiscal_year', year);
         const { data: ciData, error: ciError } = await ciQuery;
         if (!ciError && ciData && ciData.length > 0) {
             existingData = ciData;
@@ -938,10 +941,10 @@ async function saveTrackingData(table, name, month, value, year) {
         // Update the existing record (use the exact name from the DB to be safe)
         const dbName = existingData[0][nameCol];
         const updateObj = { [col]: value };
-        if (year) updateObj.fiscal_year = year;
+        if (year && supportsFiscalYear) updateObj.fiscal_year = year;
         
         let updateQuery = client.from(actualTable).update(updateObj).eq(nameCol, dbName);
-        if (year) updateQuery = updateQuery.eq('fiscal_year', year);
+        if (year && supportsFiscalYear) updateQuery = updateQuery.eq('fiscal_year', year);
         
         const { error: updateError } = await updateQuery;
         
@@ -952,7 +955,7 @@ async function saveTrackingData(table, name, month, value, year) {
     } else {
         // Insert new record
         const insertObj = { [nameCol]: name, [col]: value };
-        if (year) insertObj.fiscal_year = year;
+        if (year && supportsFiscalYear) insertObj.fiscal_year = year;
         
         const { error: insertError } = await client
             .from(actualTable)

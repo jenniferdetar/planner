@@ -9,14 +9,14 @@
     <script src="shared.js"></script>
     <style>
         body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; background: #fff; }
-        .content-area { padding: 0 !important; width: 100%; box-sizing: border-box; }
-        .view-section { background: #fff; padding: 5px 10px; border-radius: 0; border: 1px solid #eee; margin-bottom: 0; box-shadow: none; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; }
-        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 10px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
-        .table-container { width: 100%; overflow: auto; margin-top: 5px; border: 1px solid #eee; border-radius: 4px; }
-        .tracking-table { border-collapse: collapse; width: auto; font-size: 10pt; table-layout: auto; margin-right: auto; }
-        .tracking-table th, .tracking-table td { border: 1px solid #eee; padding: 4px 8px; text-align: center; height: 32px; white-space: nowrap; width: 1%; }
-        .tracking-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 10pt; position: sticky; top: 0; z-index: 10; }
-        .employee-col { text-align: left !important; font-weight: 700; width: auto !important; min-width: 150px; position: sticky; left: 0; background: #fff; z-index: 5; border-right: 2px solid #eee !important; }
+        .content-area { padding: 0 !important; width: 100%; box-sizing: border-box; overflow: hidden !important; }
+        .view-section { background: #fff; padding: 5px 10px 0 10px; border-radius: 0; border: 1px solid #eee; margin-bottom: 0; box-shadow: none; width: 100%; box-sizing: border-box; height: auto; display: flex; flex-direction: column; }
+        .page-title { font-size: 10pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--header-blue); margin-bottom: 5px; border-bottom: 2px solid var(--header-blue); padding-bottom: 5px; text-align: center; }
+        .table-container { width: 100%; overflow: auto; margin-top: 0; border: 1px solid #eee; border-radius: 4px; }
+        .tracking-table { border-collapse: collapse; width: auto; font-size: 10pt; table-layout: auto; }
+        .tracking-table th, .tracking-table td { border: 1px solid #eee; padding: 4px 8px; text-align: center; height: auto; width: 1%; white-space: nowrap; }
+        .tracking-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 9pt; position: sticky; top: 0; z-index: 10; }
+        .employee-col { text-align: left !important; font-weight: 700; min-width: 150px; position: sticky; left: 0; background: #fff; z-index: 5; border-right: 2px solid #eee !important; }
         .header-row th.employee-col { background: #f8f9fa; z-index: 11; }
         .handwriting, .editable-cell { font-family: 'Coming Soon', cursive; font-size: 10pt; color: #2c3e50; outline: none; }
         .editable-cell:focus { background-color: #fffde7; }
@@ -50,7 +50,11 @@
             if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle(`ICAAP PAYLOGS ${startYear}-${startYear+1}`);
             
             const paylogData = await fetchPaylogSubmissions(startYear);
-            const employees = DEFAULT_EMPLOYEES;
+            
+            // Merge DEFAULT_EMPLOYEES with any new names from Supabase
+            const namesFromDb = paylogData.map(r => r.name);
+            const allNames = [...new Set([...DEFAULT_EMPLOYEES, ...namesFromDb])];
+            allNames.sort();
 
             const headerRow = document.getElementById('header-row');
             headerRow.innerHTML = `<th class="employee-col">Employee Name</th>` + 
@@ -60,7 +64,7 @@
             const paylogMap = {};
             paylogData.forEach(row => { if (row.name) paylogMap[row.name.toLowerCase()] = row; });
 
-            employees.forEach((emp, eIdx) => {
+            allNames.forEach((emp, eIdx) => {
                 const tr = document.createElement('tr');
                 let rowHtml = `<td class="employee-col">${emp}</td>`;
                 monthNames.forEach((m, mIdx) => {
