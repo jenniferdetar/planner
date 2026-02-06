@@ -507,8 +507,6 @@ async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
                 if (insertError) throw insertError;
             }
         }
-            }
-        }
         return finalValue;
     } catch (err) {
         console.error('Save error details:', err);
