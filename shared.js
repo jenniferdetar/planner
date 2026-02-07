@@ -1044,7 +1044,6 @@ function updateNavigationLinks(date) {
     const internalPages = [
         'index.html',
         'work-planner.html',
-        'personal-planner.html',
         'planner.html',
         'csea.html',
         'financial.html',
@@ -1077,9 +1076,21 @@ function updateNavigationLinks(date) {
             let targetUrl = base;
             let params = new URLSearchParams(href.split('?')[1] || '');
             
-            if (internalPages.includes(base) || base === 'planner.html') {
-                params.set('date', dateStr);
+            // If it was pointing to personal-planner.html, point to index.html instead
+            if (base === 'personal-planner.html') {
+                targetUrl = 'index.html';
+                base = 'index.html';
+            }
+
+            // Do not put date in URL as per user request
+            if (params.has('date')) {
+                params.delete('date');
+            }
+            
+            if (params.toString()) {
                 link.href = `${targetUrl}?${params.toString()}`;
+            } else {
+                link.href = targetUrl;
             }
         }
     });
