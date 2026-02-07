@@ -494,36 +494,28 @@ async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
             value: finalValue
         };
 
-        // Standard upsert - requires unique constraint on (date_key, slot_key)
-        const { error: upsertError } = await client
+        // Standard update/insert pattern for better reliability
+        const { data: existing, error: fetchError } = await client
             .from('work_planner_edits')
-            .upsert(payload, { onConflict: 'date_key,slot_key' });
+            .select('id')
+            .match({ date_key: date, slot_key: fieldId })
+            .maybeSingle();
 
-        if (upsertError) {
-            console.warn('Upsert failed, trying manual match update:', upsertError.message);
-            
-            // Fallback: check existence then update or insert
-            const { data: existing, error: fetchError } = await client
+        if (fetchError) throw fetchError;
+
+        if (existing) {
+            const { error: updateError } = await client
                 .from('work_planner_edits')
-                .select('id')
-                .match({ date_key: date, slot_key: fieldId })
-                .maybeSingle();
-
-            if (fetchError) throw fetchError;
-
-            if (existing) {
-                const { error: updateError } = await client
-                    .from('work_planner_edits')
-                    .update({ value: finalValue })
-                    .eq('id', existing.id);
-                if (updateError) throw updateError;
-            } else {
-                const { error: insertError } = await client
-                    .from('work_planner_edits')
-                    .insert(payload);
-                if (insertError) throw insertError;
-            }
+                .update({ value: finalValue })
+                .eq('id', existing.id);
+            if (updateError) throw updateError;
+        } else {
+            const { error: insertError } = await client
+                .from('work_planner_edits')
+                .insert(payload);
+            if (insertError) throw insertError;
         }
+        
         return finalValue;
     } catch (err) {
         console.error('Save error details:', err);
