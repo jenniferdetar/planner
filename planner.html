@@ -219,19 +219,19 @@
 
         .personal-day-layout {
             display: flex;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
+            border-top: 2px solid #f59e9e;
+            margin-bottom: 40px;
             background: #fff;
-            min-height: 200px;
+            min-height: 300px;
         }
         .day-sidebar {
-            width: 200px;
-            border-right: 1px solid #eee;
-            padding: 10px;
+            width: 250px;
+            border-right: 1px solid #ddd;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background: #fafafa;
+            background: #fff;
         }
         .day-content {
             flex: 1;
@@ -240,49 +240,67 @@
             flex-direction: column;
         }
         .day-top-header {
-            padding: 8px 15px;
-            color: #fff;
+            padding: 10px 20px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-size: 11pt;
+            border-bottom: 1px solid #eee;
         }
-        .sidebar-icon-section {
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-        }
-        .sidebar-icon {
-            font-size: 14pt;
-            width: 25px;
-            text-align: center;
-            opacity: 0.6;
-        }
-        .sidebar-events {
-            flex: 1;
+        .sidebar-task-list {
             display: flex;
             flex-direction: column;
             gap: 5px;
+            margin-bottom: 20px;
+        }
+        .sidebar-task-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sidebar-icon-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .sidebar-icon {
+            font-size: 16pt;
+            width: 30px;
+            text-align: center;
+            opacity: 0.8;
+            padding-bottom: 5px;
+        }
+        .sidebar-ruled-lines {
+            flex: 1;
+            border-bottom: 1px solid #ccc;
+            min-height: 25px;
         }
         .ruled-main {
             flex: 1;
             background-image: linear-gradient(#eee 1px, transparent 1px);
-            background-size: 100% 30px;
+            background-size: 100% 32px;
             padding: 0 15px;
-            line-height: 30px;
-            min-height: 150px;
+            line-height: 32px;
+            min-height: 256px;
         }
-        .day-footer {
-            border-top: 1px solid #eee;
-            padding: 8px 15px;
+        .ruled-checkbox-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 700;
-            color: #4a3427;
+            height: 32px;
         }
-        .sum-box {
-            font-family: 'Coming Soon', cursive;
-            font-size: 12pt;
+        .check-box-small {
+            width: 14px;
+            height: 14px;
+            border: 1px solid #f59e9e;
+            background: #fff;
+            cursor: pointer;
+            flex-shrink: 0;
+            border-radius: 2px;
+        }
+        .check-box-small.checked {
+            background-color: #f59e9e;
         }
     </style>
 </head>
@@ -476,32 +494,78 @@
             const startDay = displayDate.getDay();
             const weekStart = new Date(displayDate);
             weekStart.setDate(weekStart.getDate() - startDay);
-            const [events, plannerData] = await Promise.all([ fetchCalendarEvents(weekStart), fetchPlannerData(weekStart) ]);
-            const timeSlots = []; for (let h = 6; h <= 21; h++) { timeSlots.push(`${h}:00`, `${h}:30`); } timeSlots.push('22:00');
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+            
+            const [events, plannerData] = await Promise.all([ 
+                fetchCalendarEvents(weekStart), 
+                fetchPlannerData(weekStart) 
+            ]);
+
+            const headerStr = `${formatDateMMM(weekStart)} - ${formatDateMMM(weekEnd)}`.toUpperCase();
+            
+            container.innerHTML = `
+                <div class="page-title">WORK PLANNER | ${headerStr}</div>
+                
+                <div class="habit-tracker-section" style="margin-top: 20px;">
+                    <div class="habit-card">
+                        <div class="habit-card-title">Priorities & Encouragement</div>
+                        <div class="grid-3">
+                            <div class="handwriting planner-edit" contenteditable="true" id="work-priorities" style="min-height: 100px; border: 1px solid #eee; padding: 10px;">${plannerData.find(p => p.field_id === 'work-priorities')?.content || ''}</div>
+                            <div class="handwriting planner-edit" contenteditable="true" id="work-encouragement" style="min-height: 100px; border: 1px solid #eee; padding: 10px;">${plannerData.find(p => p.field_id === 'work-encouragement')?.content || ''}</div>
+                            <div class="handwriting planner-edit" contenteditable="true" id="work-reflection" style="min-height: 100px; border: 1px solid #eee; padding: 10px;">${plannerData.find(p => p.field_id === 'work-reflection')?.content || ''}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="habit-card" style="margin-bottom: 20px;">
+                    <div class="habit-card-title">To-Do This Week</div>
+                    <div class="handwriting planner-edit" contenteditable="true" id="work-weekly-todo" style="min-height: 80px; border: 1px solid #eee; padding: 10px;">${plannerData.find(p => p.field_id === 'work-weekly-todo')?.content || ''}</div>
+                </div>
+
+                <div id="work-planner-grid" class="daily-columns" style="grid-template-columns: repeat(7, 1fr); gap: 2px; background: #eee;"></div>
+            `;
+            
+            const grid = container.querySelector('#work-planner-grid');
             const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const dayClasses = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             
-            container.innerHTML = `<div class="page-title">WORK PLANNER - WEEKLY VIEW</div><div id="planner-cols-weekly" class="daily-columns" style="grid-template-columns: repeat(7, 1fr);"></div>`;
-            const cols = container.querySelector('#planner-cols-weekly');
-            for (let i = 0; i < 7; i++) renderDayCol(cols, i, weekStart, events, plannerData, timeSlots, dayNames, dayClasses);
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(weekStart);
+                dayDate.setDate(dayDate.getDate() + i);
+                const ds = dayDate.toISOString().split('T')[0];
+                const dayEvents = events.filter(e => e.date === ds);
+                
+                const dayCol = document.createElement('div');
+                dayCol.className = 'day-col';
+                dayCol.style.background = '#fff';
+                
+                let dayHtml = `<div class="day-header ${dayClasses[i]}-header">${dayNames[i].substring(0,3).toUpperCase()} ${dayDate.getDate()}</div>`;
+                
+                // Hourly slots 5am - 8pm
+                for (let hour = 5; hour <= 20; hour++) {
+                    const timeLabel = hour === 12 ? '12p' : hour > 12 ? `${hour-12}p` : `${hour}a`;
+                    const fieldId = `work-hour-${hour}`;
+                    const saved = plannerData.find(p => p.date === ds && p.field_id === fieldId)?.content || '';
+                    
+                    // Check for calendar events at this hour
+                    const event = dayEvents.find(e => e.time && parseInt(e.time.split(':')[0]) === hour);
+                    
+                    dayHtml += `
+                        <div class="time-slot" style="border-bottom: 1px solid #f0f0f0; min-height: 40px; display: flex; align-items: flex-start; padding: 4px;">
+                            <div style="font-size: 8pt; color: #888; width: 25px; flex-shrink: 0; padding-top: 2px;">${timeLabel}</div>
+                            <div class="handwriting planner-edit" contenteditable="true" data-field="${fieldId}" data-date="${ds}" style="flex: 1; outline: none; font-size: 9pt;">
+                                ${event ? `<span style="color: #00326b; font-weight: bold;">[${event.title}]</span> ` : ''}${saved}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                dayCol.innerHTML = dayHtml;
+                grid.appendChild(dayCol);
+            }
             
             container.querySelectorAll('.planner-edit').forEach(el => { el.oninput = (e) => handlePlannerInput(e.target); });
-        }
-
-        function renderDayCol(container, i, weekStart, events, plannerData, timeSlots, dayNames, dayClasses) {
-            const dayDate = new Date(weekStart); dayDate.setDate(dayDate.getDate() + i); const dayStr = dayDate.toISOString().split('T')[0];
-            const dayEvents = events.filter(e => e.date === dayStr);
-            const dayCol = document.createElement('div'); dayCol.className = 'day-col';
-            dayCol.innerHTML = `<div class="day-header ${dayClasses[i]}-header">${dayNames[i].substring(0,3).toUpperCase()} ${formatDateMMM(dayStr).toUpperCase()}</div>`;
-            timeSlots.forEach(slot => {
-                const isChecked = plannerData.some(d => d.date === dayStr && d.field_id === `check-slot-${slot}` && d.content === 'true');
-                const saved = plannerData.find(d => d.date === dayStr && d.field_id === `slot-${slot}`);
-                const eventTitle = getEventForSlot(dayEvents, slot, i);
-                const slotDiv = document.createElement('div'); slotDiv.className = 'time-slot';
-                slotDiv.innerHTML = `<div class="time-label">${formatTime(slot, true)}</div><div class="check-box${isChecked ? ' checked' : ''}" onclick="togglePlannerCheck(this, '${dayStr}', 'check-slot-${slot}')"></div><div class="slot-content ${eventTitle ? '' : 'planner-edit'} text-wrap-clamp" ${eventTitle ? '' : 'contenteditable="true"'} data-field="slot-${slot}" data-date="${dayStr}" style="font-size: 10pt;">${eventTitle ? `<div class="${getEventClass(eventTitle)}">${eventTitle}</div>` : (saved ? saved.content : '')}</div>`;
-                dayCol.appendChild(slotDiv);
-            });
-            container.appendChild(dayCol);
         }
 
         function getEventForSlot(events, slot, dayIndex) {
@@ -663,7 +727,7 @@
             const ds = d.toISOString().split('T')[0];
             const dayEvents = events.filter(e => e.date === ds);
             const allDayEvents = dayEvents.filter(e => !e.time);
-            const timedEvents = dayEvents.filter(e => e.time);
+            const timedEvents = dayEvents.filter(e => e.time).sort((a,b) => (a.time||'').localeCompare(b.time||''));
             
             // Sum bills
             let billTotal = 0;
@@ -682,31 +746,75 @@
                 wed: '#5d9cec', thu: '#f59e9e', fri: '#ffca38', sat: '#a2d9d9'
             }[dayClasses[i]];
 
+            // Generate Right Column Ruled Lines
+            let rightColumnHtml = '';
+            for (let j = 0; j < 10; j++) {
+                const event = timedEvents[j];
+                const fieldId = `timed-row-${j}`;
+                const checkFieldId = `timed-check-${j}`;
+                const isChecked = plannerData.some(p => p.date === ds && p.field_id === checkFieldId && p.content === 'true');
+                const savedText = plannerData.find(p => p.date === ds && p.field_id === fieldId)?.content || '';
+                
+                rightColumnHtml += `
+                    <div class="ruled-checkbox-row">
+                        <div class="check-box-small ${isChecked ? 'checked' : ''}" onclick="toggleSmallCheck(this, '${ds}', '${checkFieldId}')"></div>
+                        <div class="handwriting planner-edit" contenteditable="true" data-field="${fieldId}" data-date="${ds}" style="flex: 1; outline: none; white-space: nowrap; overflow: hidden;">
+                            ${event ? `<span style="color: #888;">${formatTime(event.time)}</span> ${event.title}` : savedText}
+                        </div>
+                    </div>
+                `;
+            }
+
             col.innerHTML = `
                 <div class="day-sidebar">
-                    <div class="sidebar-icon-section">
-                        <div class="sidebar-icon">🍴</div>
-                        <div class="sidebar-events handwriting planner-edit" contenteditable="true" data-field="food" data-date="${ds}" style="min-height: 40px; border-bottom: 1px solid #eee;">${plannerData.find(p => p.date === ds && p.field_id === 'food')?.content || ''}</div>
+                    <div class="sidebar-task-list">
+                        ${[1, 2, 3].map(taskIdx => {
+                            const fieldId = `side-task-${taskIdx}`;
+                            const checkFieldId = `side-check-${taskIdx}`;
+                            const isChecked = plannerData.some(p => p.date === ds && p.field_id === checkFieldId && p.content === 'true');
+                            return `
+                                <div class="sidebar-task-item">
+                                    <div class="check-box-small ${isChecked ? 'checked' : ''}" onclick="toggleSmallCheck(this, '${ds}', '${checkFieldId}')"></div>
+                                    <div class="handwriting planner-edit" contenteditable="true" data-field="${fieldId}" data-date="${ds}" style="flex: 1; border-bottom: 1px solid #eee; min-height: 20px;">${plannerData.find(p => p.date === ds && p.field_id === fieldId)?.content || ''}</div>
+                                </div>
+                            `;
+                        }).join('')}
                     </div>
-                    <div class="sidebar-icon-section">
-                        <div class="sidebar-icon">☀</div>
-                        <div class="sidebar-events">
-                            ${allDayEvents.map(e => `<div class="${getEventClass(e.title)}">${e.title}</div>`).join('')}
-                            <div class="handwriting planner-edit" contenteditable="true" data-field="all-day-notes" data-date="${ds}" style="min-height: 100px;">${plannerData.find(p => p.date === ds && p.field_id === 'all-day-notes')?.content || ''}</div>
+                    
+                    <div class="sidebar-icon-row">
+                        <div class="sidebar-icon">🍴</div>
+                        <div class="sidebar-ruled-lines handwriting planner-edit" contenteditable="true" data-field="food" data-date="${ds}">${plannerData.find(p => p.date === ds && p.field_id === 'food')?.content || ''}</div>
+                    </div>
+                    <div class="sidebar-icon-row">
+                        <div class="sidebar-icon">🌼</div>
+                        <div class="sidebar-ruled-lines handwriting">
+                            <div class="planner-edit" contenteditable="true" data-field="flower-events" data-date="${ds}" style="outline: none;">
+                                ${allDayEvents.map(e => e.title).join(', ')} ${plannerData.find(p => p.date === ds && p.field_id === 'flower-events')?.content || ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebar-icon-row">
+                        <div class="sidebar-icon">💰</div>
+                        <div class="sidebar-ruled-lines handwriting">
+                            <div class="planner-edit" contenteditable="true" data-field="money-notes" data-date="${ds}" style="outline: none;">
+                                ${billTotal > 0 ? `$ ${billTotal.toLocaleString()} due` : ''} ${plannerData.find(p => p.date === ds && p.field_id === 'money-notes')?.content || ''}
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="day-content">
-                    <div class="day-top-header" style="background: ${headerColor}">${dayNames[i].toUpperCase()}, ${formatDateMMM(ds).toUpperCase()}</div>
-                    <div class="ruled-main handwriting planner-edit" contenteditable="true" data-field="timed-notes" data-date="${ds}" style="white-space: pre-wrap;">${timedEvents.map(e => `${formatTime(e.time)} ${e.title}`).join('\n')}${plannerData.find(p => p.date === ds && p.field_id === 'timed-notes')?.content || ''}</div>
-                    <div class="day-footer">
-                        <div style="font-size: 14pt;">💰</div>
-                        <div class="sum-box" style="min-width: 80px;">$ ${billTotal > 0 ? billTotal.toLocaleString() : ''}</div>
-                        <div class="handwriting planner-edit" contenteditable="true" data-field="bill-notes" data-date="${ds}" style="flex: 1; border-bottom: 1px solid #eee;">${plannerData.find(p => p.date === ds && p.field_id === 'bill-notes')?.content || ''}</div>
+                    <div class="day-top-header" style="color: ${headerColor}">${dayNames[i].toUpperCase()}, ${formatDateMMM(ds).toUpperCase()}</div>
+                    <div class="ruled-main">
+                        ${rightColumnHtml}
                     </div>
                 </div>
             `;
             container.appendChild(col);
+        }
+
+        function toggleSmallCheck(el, date, fieldId) {
+            el.classList.toggle('checked');
+            savePlannerData(date, fieldId, el.classList.contains('checked') ? 'true' : 'false');
         }
 
         function renderHabitSection(title, habits, plannerData) {

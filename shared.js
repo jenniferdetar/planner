@@ -361,7 +361,10 @@ function animateAndNavigate(event, url, direction = 'next') {
         const sidebarSections = [
             {
                 label: 'Dashboard',
-                items: [{ label: 'Calendar View', path: 'index.html', icon: '📅' }]
+                items: [
+                    { label: 'Calendar View', path: 'index.html', icon: '📅' },
+                    { label: 'Personal Planner', path: 'planner.html', params: { category: 'Personal-Planner' }, icon: '🏠' }
+                ]
             },
             {
                 label: 'Planning',
