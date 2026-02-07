@@ -54,6 +54,208 @@
         .event-pill.celebrate { border-left-color: #ff69b4; background: #fff0f5; }
         .event-pill.conference { border-left-color: #2b579a; background: #eff3f8; }
         .event-pill.cruise { border-left-color: #008080; background: #e0ffff; }
+
+        /* Weekly Planner Styles from personal-planner.html */
+        :root {
+            --sun-bg: #ff5252;
+            --mon-bg: #fb8c00;
+            --tue-bg: #00acc1;
+            --wed-bg: #3949ab;
+            --thu-bg: #e91e63;
+            --fri-bg: #fdd835;
+            --sat-bg: #00897b;
+            --border-color: #2f4f4f;
+            --text-color: #333;
+            --header-blue: #00326b;
+        }
+
+        .habit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+            width: 100%;
+            margin-top: 40px;
+        }
+        .habit-section {
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #e1dfdd;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .habit-title {
+            font-size: 10pt;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #605e5c;
+            border-bottom: 1px solid #f3f2f1;
+            padding-bottom: 8px;
+        }
+        .mini-week-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .habit-label {
+            font-size: 10pt;
+            color: #323130;
+            font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.2; font-weight: 600;
+        }
+        .mini-week-days {
+            display: grid;
+            grid-template-columns: repeat(7, 18px);
+            gap: 6px;
+        }
+        .mini-day-box {
+            width: 18px;
+            height: 18px;
+            border: 1px solid rgba(0,0,0,0.08);
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+        .mini-day-box:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        .mini-day-box.sun { background-color: var(--sun-bg); opacity: 0.6; }
+        .mini-day-box.mon { background-color: var(--mon-bg); opacity: 0.6; }
+        .mini-day-box.tue { background-color: var(--tue-bg); opacity: 0.6; }
+        .mini-day-box.wed { background-color: var(--wed-bg); opacity: 0.6; }
+        .mini-day-box.thu { background-color: var(--thu-bg); opacity: 0.6; }
+        .mini-day-box.fri { background-color: var(--fri-bg); opacity: 0.6; }
+        .mini-day-box.sat { background-color: var(--sat-bg); opacity: 0.6; }
+        
+        .mini-day-box.checked {
+            background-color: #1e3a63 !important;
+            opacity: 1 !important;
+            border-color: #1e3a63;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mini-day-box.checked::after {
+            content: "✓";
+            color: white;
+            font-size: 10pt;
+            font-weight: 600;
+        }
+
+        .day-section {
+            margin-bottom: 35px;
+            border: 1px solid #e1dfdd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .day-header {
+            font-size: 10pt;
+            text-transform: uppercase;
+            padding: 12px 20px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 1.5px;
+            font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.2; font-weight: 600;
+        }
+        .day-header.sun { background: linear-gradient(135deg, #f59e9e, #d32f2f); }
+        .day-header.mon { background: linear-gradient(135deg, #f6d2a2, #f57c00); }
+        .day-header.tue { background: linear-gradient(135deg, #a2d9d9, #0097a7); }
+        .day-header.wed { background: linear-gradient(135deg, #5a8ca0, #006064); }
+        .day-header.thu { background: linear-gradient(135deg, #f59e9e, #d32f2f); }
+        .day-header.fri { background: linear-gradient(135deg, #f6d2a2, #f57c00); }
+        .day-header.sat { background: linear-gradient(135deg, #a2d9d9, #0097a7); }
+
+        .day-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            background: #fff;
+        }
+        .day-sidebar {
+            padding: 20px;
+            border-right: 1px solid #f3f2f1;
+            background: #fdfdfd;
+        }
+        .day-content {
+            padding: 20px;
+            background: #fff;
+        }
+
+        .sidebar-icon-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+        }
+        .sidebar-icon { font-size: 10pt; width: 20px; }
+        .sidebar-line { flex-grow: 1; min-height: 20px; outline: none; font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.2; font-weight: 600; }
+
+        .task-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f9f9f9;
+        }
+        .check-box {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+        }
+        .check-box.checked::after {
+            content: "✓";
+            color: var(--header-blue);
+            font-size: 10pt;
+            font-weight: 600;
+        }
+        .editable-task { flex-grow: 1; outline: none; font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.2; font-weight: 600; }
+
+        .save-status {
+            font-size: 10pt;
+            color: #605e5c;
+            font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.2; font-weight: 600;
+            text-align: right;
+            padding: 10px 20px;
+        }
+
+        .week-nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #fff;
+            border-top: 2px solid #eee;
+            margin-top: 40px;
+        }
+        .week-title {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #00326b;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .nav-btn {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            font-size: 10pt;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background: #f3f2f1; }
     </style>
 </head>
 <body>
@@ -67,6 +269,51 @@
         <div id="calendar-grid" class="calendar-grid">
             <!-- Days will be injected here -->
         </div>
+
+        <!-- Weekly Planner Section -->
+        <div class="week-nav-container">
+            <button class="nav-btn" onclick="changeWeek(-1)">&larr; Previous Week</button>
+            <div id="save-status" class="save-status">All changes saved</div>
+            <button class="nav-btn" onclick="changeWeek(1)">Next Week &rarr;</button>
+        </div>
+
+        <div style="padding: 20px;">
+            <div class="habit-grid" style="margin-bottom: 10px;">
+                <div class="habit-section">
+                    <div class="habit-title">Weekly Habits</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                        <div class="mini-week-row">
+                            <div class="habit-label">Exercise</div>
+                            <div class="mini-week-days">
+                                <div class="mini-day-box sun"></div>
+                                <div class="mini-day-box mon"></div>
+                                <div class="mini-day-box tue"></div>
+                                <div class="mini-day-box wed"></div>
+                                <div class="mini-day-box thu"></div>
+                                <div class="mini-day-box fri"></div>
+                                <div class="mini-day-box sat"></div>
+                            </div>
+                        </div>
+                        <div class="mini-week-row">
+                            <div class="habit-label">Vitamins</div>
+                            <div class="mini-week-days">
+                                <div class="mini-day-box sun"></div>
+                                <div class="mini-day-box mon"></div>
+                                <div class="mini-day-box tue"></div>
+                                <div class="mini-day-box wed"></div>
+                                <div class="mini-day-box thu"></div>
+                                <div class="mini-day-box fri"></div>
+                                <div class="mini-day-box sat"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="planner-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                <!-- Days will be injected here -->
+            </div>
+        </div>
     </div>
 
     <script>
@@ -74,6 +321,245 @@
         const dateParam = urlParams.get('date');
         let currentDate = dateParam ? new Date(dateParam) : new Date();
         currentDate.setDate(1);
+
+        let currentWeekStartDate = dateParam ? new Date(dateParam) : new Date();
+        const startDay = currentWeekStartDate.getDay();
+        currentWeekStartDate.setDate(currentWeekStartDate.getDate() - startDay);
+
+        let billAmounts = {};
+        let saveTimeout = null;
+
+        async function loadBillAmounts() {
+            const bills = await fetchFinancialBills();
+            billAmounts = {};
+            bills.forEach(bill => {
+                billAmounts[bill.item] = bill.amt;
+            });
+        }
+
+        async function handleSavePlannerData(date, fieldId, content) {
+            const saveStatus = document.getElementById('save-status');
+            saveStatus.innerText = 'Saving...';
+            const savedValue = await savePlannerData(date, fieldId, content);
+            if (savedValue !== null) {
+                saveStatus.innerText = 'All changes saved';
+                const el = document.querySelector(`[data-field="${fieldId}"][data-date="${date}"]`);
+                if (el && savedValue !== content) {
+                    if (fieldId.startsWith('daily-task-')) {
+                        el.innerText = savedValue.replace('[x]', '').replace('[ ]', '');
+                    } else {
+                        el.innerText = savedValue;
+                    }
+                }
+            } else {
+                saveStatus.innerText = 'Error saving - check console';
+                saveStatus.style.color = '#a4262c';
+                setTimeout(() => { saveStatus.style.color = '#605e5c'; }, 3000);
+            }
+        }
+
+        function handleInput(e) {
+            const el = e.target;
+            const fieldId = el.getAttribute('data-field');
+            const date = el.getAttribute('data-date');
+            const content = el.innerText;
+            document.getElementById('save-status').innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => handleSavePlannerData(date, fieldId, content), 1000);
+        }
+
+        function toggleBox(e) {
+            const el = e.target;
+            el.classList.toggle('checked');
+            const fieldId = el.getAttribute('data-field');
+            const date = el.getAttribute('data-date');
+            const content = el.classList.contains('checked') ? 'true' : 'false';
+            handleSavePlannerData(date, fieldId, content);
+        }
+
+        function toggleEventBox(e, date, fieldId) {
+            const box = e.target;
+            box.classList.toggle('checked');
+            const isChecked = box.classList.contains('checked');
+            handleSavePlannerData(date, fieldId, isChecked ? 'true' : 'false');
+        }
+
+        function toggleDailyTask(e, date, fieldId) {
+            const box = e.target;
+            const div = box.nextElementSibling;
+            box.classList.toggle('checked');
+            const isChecked = box.classList.contains('checked');
+            const content = (isChecked ? '[x]' : '[ ]') + div.innerText;
+            handleSavePlannerData(date, fieldId, content);
+        }
+
+        function handleDailyTaskInput(e, date, fieldId) {
+            const div = e.target;
+            const box = div.previousElementSibling;
+            const isChecked = box.classList.contains('checked');
+            const content = (isChecked ? '[x]' : '[ ]') + div.innerText;
+            document.getElementById('save-status').innerText = 'Unsaved changes';
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => handleSavePlannerData(date, fieldId, content), 1000);
+        }
+
+        async function renderWeeklyPlanner() {
+            const gridContainer = document.getElementById('planner-grid');
+            gridContainer.innerHTML = 'Loading...';
+            
+            await loadBillAmounts();
+
+            const weekEnd = new Date(currentWeekStartDate);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+            
+            let [events, plannerData] = await Promise.all([
+                fetchCalendarEvents(currentWeekStartDate, 7),
+                fetchPlannerData(currentWeekStartDate)
+            ]);
+
+            // Habit Box Setup
+            document.querySelectorAll('.mini-week-row').forEach((row, rowIndex) => {
+                const habitName = row.querySelector('.habit-label').innerText.replace(/\s+/g, '-').toLowerCase();
+                const boxes = row.querySelectorAll('.mini-day-box');
+                boxes.forEach((box, dayIndex) => {
+                    const boxDate = new Date(currentWeekStartDate);
+                    boxDate.setDate(boxDate.getDate() + dayIndex);
+                    const boxDateStr = boxDate.toISOString().split('T')[0];
+                    const fieldId = `habit-${habitName}`;
+                    box.setAttribute('data-field', fieldId);
+                    box.setAttribute('data-date', boxDateStr);
+                    box.onclick = toggleBox;
+                    const saved = plannerData.find(d => d.date === boxDateStr && d.field_id === fieldId);
+                    if (saved && saved.content === 'true') {
+                        box.classList.add('checked');
+                    } else {
+                        box.classList.remove('checked');
+                    }
+                });
+            });
+
+            gridContainer.innerHTML = '';
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(currentWeekStartDate);
+                dayDate.setDate(dayDate.getDate() + i);
+                const dayStr = dayDate.toISOString().split('T')[0];
+                const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'long' });
+                const dayClass = dayDate.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+                const formattedDate = formatDateMMM(dayStr);
+                const dayEvents = events.filter(e => e.date === dayStr);
+                
+                const allDayEvents = dayEvents.filter(e => !e.time);
+                const timedEvents = dayEvents.filter(e => e.time);
+                
+                let totalFinancial = 0;
+                let foundBills = false;
+                dayEvents.forEach(e => {
+                    const titleLower = e.title.toLowerCase().trim();
+                    Object.keys(billAmounts).forEach(bill => {
+                        const billLower = bill.toLowerCase().trim();
+                        if (titleLower.includes(billLower)) {
+                            foundBills = true;
+                            const amountStr = billAmounts[bill].replace(/[$,]/g, '');
+                            const amount = parseFloat(amountStr);
+                            if (!isNaN(amount)) totalFinancial += amount;
+                        }
+                    });
+                });
+                const autoFinancial = foundBills ? '$' + totalFinancial.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day-section';
+                
+                let dayHtml = `
+                    <div class="day-header ${dayClass}">${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</div>
+                    <div class="day-layout">
+                        <div class="day-sidebar">
+                            ${allDayEvents.map(e => `
+                                <div class="task-line" style="border-bottom: none; height: auto; margin-bottom: 2px;">
+                                    <div class="${getEventClass(e.title)}">${e.title}</div>
+                                </div>
+                            `).join('')}
+                            ${Array(6).fill(0).map((_, li) => {
+                                const fieldId = `sidebar-line-${li}`;
+                                const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
+                                const text = saved ? saved.content : '';
+                                return `
+                                    <div class="task-line">
+                                        <div class="editable-task" contenteditable="true" 
+                                             data-date="${dayStr}" data-field="${fieldId}" 
+                                             oninput="handleInput(event)">${text}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                            <div class="sidebar-icon-row" style="margin-top: 10px;">
+                                <span class="sidebar-icon">🍴</span>
+                                <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="meal-plan" oninput="handleInput(event)">${
+                                    (() => {
+                                        const saved = plannerData.find(d => d.date === dayStr && d.field_id === 'meal-plan');
+                                        return saved ? saved.content : '';
+                                    })()
+                                }</div>
+                            </div>
+                            <div class="sidebar-icon-row">
+                                <span class="sidebar-icon">🌸</span>
+                                <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="self-care" oninput="handleInput(event)">${
+                                    (() => {
+                                        const saved = plannerData.find(d => d.date === dayStr && d.field_id === 'self-care');
+                                        return saved ? saved.content : '';
+                                    })()
+                                }</div>
+                            </div>
+                            <div class="sidebar-icon-row">
+                                <span class="sidebar-icon">💲</span>
+                                <div class="sidebar-line" contenteditable="true" data-date="${dayStr}" data-field="financial" oninput="handleInput(event)">${
+                                    (() => {
+                                        const saved = plannerData.find(d => d.date === dayStr && d.field_id === 'financial');
+                                        if (saved && saved.content) return saved.content;
+                                        return autoFinancial || '';
+                                    })()
+                                }</div>
+                            </div>
+                        </div>
+                        <div class="day-content">
+                            ${timedEvents.map((e, index) => {
+                                const eventId = `event-${index}`;
+                                const saved = plannerData.find(d => d.date === dayStr && d.field_id === eventId);
+                                const isChecked = saved && saved.content === 'true';
+                                return `
+                                    <div class="task-line" style="border-bottom: none; height: 25px; margin-bottom: 2px;">
+                                        <div class="check-box ${isChecked ? 'checked' : ''}" 
+                                             onclick="toggleEventBox(event, '${dayStr}', '${eventId}')"></div>
+                                        <div class="${getEventClass(e.title)}">${formatTime(e.time)} ${e.title}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                            ${Array(Math.max(4, 10 - (timedEvents.length))).fill(0).map((_, ti) => {
+                                const fieldId = `daily-task-${ti}`;
+                                const saved = plannerData.find(d => d.date === dayStr && d.field_id === fieldId);
+                                const isChecked = saved && saved.content.startsWith('[x]');
+                                const text = saved ? saved.content.replace('[x]', '').replace('[ ]', '') : '';
+                                return `
+                                    <div class="task-line">
+                                        <div class="check-box ${isChecked ? 'checked' : ''}" 
+                                             onclick="toggleDailyTask(event, '${dayStr}', '${fieldId}')"></div>
+                                        <div class="editable-task" contenteditable="true" 
+                                             data-date="${dayStr}" data-field="${fieldId}" 
+                                             oninput="handleDailyTaskInput(event, '${dayStr}', '${fieldId}')">${text}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+                dayDiv.innerHTML = dayHtml;
+                gridContainer.appendChild(dayDiv);
+            }
+        }
+
+        window.changeWeek = async (delta) => {
+            currentWeekStartDate.setDate(currentWeekStartDate.getDate() + (delta * 7));
+            await renderWeeklyPlanner();
+        };
 
         async function renderCalendar() {
             const year = currentDate.getFullYear();
@@ -112,7 +598,16 @@
                     <div class="day-number">${i}</div>
                     <div class="event-container" id="events-${dateKey}"></div>
                 `;
-                dayDiv.onclick = () => window.location.href = `planner.html?category=Work-Planner&date=${dateKey}`;
+                dayDiv.onclick = () => {
+                    // When clicking a day, update the weekly planner to that week
+                    const clickedDate = new Date(year, month, i);
+                    const day = clickedDate.getDay();
+                    currentWeekStartDate = new Date(clickedDate);
+                    currentWeekStartDate.setDate(clickedDate.getDate() - day);
+                    renderWeeklyPlanner();
+                    // Scroll to weekly planner
+                    document.querySelector('.week-nav-container').scrollIntoView({ behavior: 'smooth' });
+                };
                 grid.appendChild(dayDiv);
             }
 
@@ -136,10 +631,19 @@
         window.goToday = () => {
             currentDate = new Date();
             currentDate.setDate(1);
+            
+            currentWeekStartDate = new Date();
+            const day = currentWeekStartDate.getDay();
+            currentWeekStartDate.setDate(currentWeekStartDate.getDate() - day);
+            
             renderCalendar();
+            renderWeeklyPlanner();
         };
 
-        document.addEventListener('DOMContentLoaded', renderCalendar);
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCalendar();
+            renderWeeklyPlanner();
+        });
     </script>
 </body>
 </html>
