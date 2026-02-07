@@ -142,6 +142,7 @@
 
         function changeWeek(delta) {
             currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
+            localStorage.setItem('selectedDate', currentStartDate.toISOString().split('T')[0]);
             init();
         }
 

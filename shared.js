@@ -48,8 +48,10 @@ function parseLocalDate(dateStr) {
     if (!dateStr) {
         const stored = localStorage.getItem('selectedDate');
         if (stored) dateStr = stored;
-        else return null;
     }
+    
+    if (!dateStr) return new Date();
+
     const [year, month, day] = dateStr.split('-').map(Number);
     return new Date(year, month - 1, day);
 }

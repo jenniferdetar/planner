@@ -258,17 +258,13 @@
         let currentCategory = 'Home';
         let saveTimeout = null;
         const urlParams = new URLSearchParams(window.location.search);
-        const dateParam = urlParams.get('date');
-        let displayDate = dateParam ? new Date(dateParam) : new Date();
-        if (dateParam && dateParam.includes('-')) {
-            const [y, m, d] = dateParam.split('-').map(Number);
-            displayDate = new Date(y, m - 1, d);
-        }
+        let displayDate = parseLocalDate(urlParams.get('date'));
         let currentYear = displayDate.getFullYear();
         let fiscalYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
 
         function updateGlobalDate(newDate) {
             displayDate = newDate;
+            localStorage.setItem('selectedDate', displayDate.toISOString().split('T')[0]);
             currentYear = displayDate.getFullYear();
             fiscalYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
             switchTab(currentCategory);
@@ -290,9 +286,8 @@
                 const matchingKey = Object.keys(sections).find(k => k.toLowerCase() === tabId.toLowerCase());
                 currentCategory = matchingKey || tabId;
                 
-                const dateStr = displayDate.toISOString().split('T')[0];
-                const newUrl = `planner.html?${currentCategory}&date=${dateStr}`;
-                window.history.pushState({ category: currentCategory, date: dateStr }, '', newUrl);
+                const newUrl = `planner.html?category=${currentCategory}`;
+                window.history.pushState({ category: currentCategory }, '', newUrl);
                 
                 const config = sections[currentCategory];
                 if (!config) {
