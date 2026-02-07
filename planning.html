@@ -92,7 +92,7 @@
         const LOVE_TRAITS = ["Creative", "Energetic", "Fun", "Quiet", "Generous", "Loud", "Encouraging", "Involved", "Reliable", "Genuine", "Independent", "Curious", "Excited", "Valuable", "A leader", "Servant-hearted"];
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const displayDate = dateParam ? new Date(dateParam) : new Date("2026-02-01");
+        const displayDate = dateParam ? new Date(dateParam) : new Date();
         const currentYear = displayDate.getFullYear();
         const PERSISTENCE_KEY = `intentions-dreams-${currentYear}`;
         let saveTimeout;

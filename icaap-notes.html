@@ -140,9 +140,9 @@
                 </table>
             </div>
 
-            <!-- February 2026 Table -->
+            <!-- Monthly Table -->
             <div class="table-wrapper">
-                <div class="section-subtitle">FEBRUARY 2026</div>
+                <div class="section-subtitle" id="monthly-notes-title">MONTHLY NOTES</div>
                 <table class="notes-table">
                     <thead>
                         <tr>
@@ -170,7 +170,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const displayDate = dateParam ? new Date(dateParam) : new Date("2026-02-01");
+        const displayDate = dateParam ? new Date(dateParam) : new Date();
         const startYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
         const PERSISTENCE_KEY = `icaap-notes-tables-${startYear}-${startYear+1}`;
         let saveTimeout;
@@ -181,7 +181,10 @@
             }
             document.getElementById('notes-title').innerText = `ICAAP NOTES ${startYear}-${startYear+1}`;
             
-            // Load data
+            const monthName = displayDate.toLocaleString('default', { month: 'long' });
+            const monthYear = `${monthName} ${displayDate.getFullYear()}`;
+            const monthlyTitle = document.getElementById('monthly-notes-title');
+            if (monthlyTitle) monthlyTitle.innerText = monthYear.toUpperCase();
             const data = await fetchPlannerData(PERSISTENCE_KEY);
             const winterBody = document.getElementById('winter-break-body');
             const febBody = document.getElementById('february-2026-body');

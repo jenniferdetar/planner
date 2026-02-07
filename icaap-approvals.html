@@ -42,16 +42,17 @@
     <script>
         const monthNames = ['July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'];
         const urlParams = new URLSearchParams(window.location.search);
-        let baseDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date("2026-02-01");
+        let baseDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date();
         const startYear = baseDate.getMonth() < 6 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
         let saveTimeout;
 
         async function init() {
             if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle(`ICAAP APPROVALS ${startYear}-${startYear+1}`);
             
-            const approvalData = await fetchApprovalDates(startYear);
-            
-            const allNames = [...DEFAULT_EMPLOYEES].sort();
+            const [approvalData, allNames] = await Promise.all([
+                fetchApprovalDates(startYear),
+                fetchAllTrackingNames(startYear)
+            ]);
 
             const headerRow = document.getElementById('header-row');
             headerRow.innerHTML = `<th class="employee-col">Employee Name</th>` + 

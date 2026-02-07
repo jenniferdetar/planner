@@ -56,9 +56,9 @@
             const [y, m, d] = dateParam.split('-').map(Number);
             currentStartDate = new Date(y, m - 1, d);
         } else {
-            currentStartDate = new Date('2026-02-01');
+            currentStartDate = new Date();
         }
-        if (isNaN(currentStartDate.getTime())) currentStartDate = new Date('2026-02-01');
+        if (isNaN(currentStartDate.getTime())) currentStartDate = new Date();
         
         // Adjust to Monday
         const day = currentStartDate.getDay();
@@ -71,7 +71,7 @@
         }
 
         async function init() {
-            if (isNaN(currentStartDate.getTime())) currentStartDate = new Date('2026-02-01');
+            if (isNaN(currentStartDate.getTime())) currentStartDate = new Date();
             if (typeof setGlobalHeaderTitle === 'function') setGlobalHeaderTitle('ICAAP ATTENDANCE');
             
             const weekdays = [];
@@ -149,8 +149,6 @@
 
         function changeWeek(delta) {
             currentStartDate.setDate(currentStartDate.getDate() + (delta * 7));
-            const dateStr = currentStartDate.toISOString().split('T')[0];
-            window.history.pushState({}, '', `?date=${dateStr}`);
             init();
         }
 

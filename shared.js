@@ -337,7 +337,12 @@ function animateAndNavigate(event, url, direction = 'next') {
         const existingNodes = Array.from(document.body.childNodes);
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         const urlParams = new URLSearchParams(window.location.search);
-        const dateStr = urlParams.get('date') || '2026-02-01';
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const defaultDate = `${yyyy}-${mm}-${dd}`;
+        const dateStr = urlParams.get('date') || defaultDate;
         const category = urlParams.get('category');
 
         // Create Sidebar Navigation
@@ -386,7 +391,6 @@ function animateAndNavigate(event, url, direction = 'next') {
                 <div class="sidebar-label">${section.label}</div>
                 ${section.items.map(item => {
                     const itemUrl = new URL(item.path, window.location.origin);
-                    itemUrl.searchParams.set('date', dateStr);
                     if (item.params) {
                         Object.keys(item.params).forEach(key => itemUrl.searchParams.set(key, item.params[key]));
                     }
@@ -887,7 +891,29 @@ async function fetchPaylogSubmissions(year) {
 }
 
 async function fetchAllTrackingNames(year) {
-    return [...DEFAULT_EMPLOYEES].sort();
+    const client = getSupabase();
+    if (!client) return [...DEFAULT_EMPLOYEES].sort();
+    
+    try {
+        const [csea, hours, approvals, paylogs] = await Promise.all([
+            client.from('csea_members').select('full_name'),
+            client.from('hours_worked').select('name'),
+            client.from('approval_dates').select('Name'),
+            client.from('paylog submission').select('name')
+        ]);
+
+        const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
+        
+        if (csea.data) csea.data.forEach(r => nameSet.add(toTitleCase(r.full_name || r.name)));
+        if (hours.data) hours.data.forEach(r => nameSet.add(toTitleCase(r.name)));
+        if (approvals.data) approvals.data.forEach(r => nameSet.add(toTitleCase(r.Name || r.name)));
+        if (paylogs.data) paylogs.data.forEach(r => nameSet.add(toTitleCase(r.name)));
+
+        return [...nameSet].filter(n => n && n.trim()).sort();
+    } catch (err) {
+        console.error('Error fetching tracking names:', err);
+        return [...DEFAULT_EMPLOYEES].sort();
+    }
 }
 
 async function saveTrackingData(table, name, month, value, year) {

@@ -77,7 +77,7 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const dateParam = urlParams.get('date') || '2026-02-01';
+        const dateParam = urlParams.get('date') || new Date().toISOString().split('T')[0];
         const displayDate = new Date(dateParam);
         
         document.getElementById('page-title-display').innerText = `Work Planner - ${displayDate.toLocaleDateString('default', { month: 'long', day: 'numeric', year: 'numeric' })}`;
