@@ -497,7 +497,7 @@ async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
         // Standard upsert - requires unique constraint on (date_key, slot_key)
         const { error: upsertError } = await client
             .from('work_planner_edits')
-            .upsert(payload);
+            .upsert(payload, { onConflict: 'date_key,slot_key' });
 
         if (upsertError) {
             console.warn('Upsert failed, trying manual match update:', upsertError.message);
