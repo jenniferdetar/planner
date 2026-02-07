@@ -41,7 +41,7 @@
         .event-container { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; }
         
         /* Event Pill Styles */
-        .event-pill { font-size: 10pt; padding: 2px 6px; border-radius: 4px; border-left: 4px solid #ccc; background: #f3f2f1; color: #323130; font-weight: 600; white-space: normal; word-break: break-word; font-family: 'Coming Soon', cursive; }
+        .event-pill { font-size: 10pt; padding: 2px 6px; border-radius: 4px; border-left: 4px solid #ccc; background: #f3f2f1; color: #323130; font-weight: 600; white-space: normal; word-break: break-word; font-family: 'Coming Soon', cursive; margin-bottom: 4px; }
         .event-pill.csea { border-left-color: #00326b; background: #eef2f7; }
         .event-pill.la-fed { border-left-color: #00326b; background: #fdf3f0; }
         .event-pill.due { border-left-color: #d83b01; background: #fdf3f0; }
@@ -317,12 +317,18 @@
     </div>
 
     <script>
+        function parseLocalDate(dateStr) {
+            if (!dateStr) return null;
+            const [year, month, day] = dateStr.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentDate = dateParam ? new Date(dateParam) : new Date();
+        let currentDate = dateParam ? parseLocalDate(dateParam) : new Date();
         currentDate.setDate(1);
 
-        let currentWeekStartDate = dateParam ? new Date(dateParam) : new Date();
+        let currentWeekStartDate = dateParam ? parseLocalDate(dateParam) : new Date();
+        // Adjust to Sunday of the week
         const startDay = currentWeekStartDate.getDay();
         currentWeekStartDate.setDate(currentWeekStartDate.getDate() - startDay);
 
@@ -343,12 +349,18 @@
             const savedValue = await savePlannerData(date, fieldId, content);
             if (savedValue !== null) {
                 saveStatus.innerText = 'All changes saved';
-                const el = document.querySelector(`[data-field="${fieldId}"][data-date="${date}"]`);
-                if (el && savedValue !== content) {
-                    if (fieldId.startsWith('daily-task-')) {
-                        el.innerText = savedValue.replace('[x]', '').replace('[ ]', '');
-                    } else {
-                        el.innerText = savedValue;
+                if (savedValue !== content) {
+                    const el = document.querySelector(`[data-field="${fieldId}"][data-date="${date}"]`) || 
+                               document.querySelector(`[data-field="${fieldId}"]`);
+                    if (el) {
+                        // For daily tasks, we need to extract the text part
+                        if (fieldId.startsWith('daily-task-')) {
+                            const cleanText = savedValue.replace('[x]', '').replace('[ ]', '');
+                            el.innerText = cleanText;
+                        } else {
+                            if (el.innerText !== undefined) el.innerText = savedValue;
+                            else el.value = savedValue;
+                        }
                     }
                 }
             } else {

@@ -133,7 +133,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const currentYear = dateParam ? new Date(dateParam).getFullYear() : new Date().getFullYear();
+        const currentYear = (parseLocalDate(dateParam) || new Date()).getFullYear();
         const PERSISTENCE_KEY = `personal-goals-${currentYear}`;
         let saveTimeout;
 

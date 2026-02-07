@@ -227,7 +227,9 @@
                 setGlobalHeaderTitle("JENNIFER'S CHECK BREAKDOWN");
             }
 
-            const dates = generateDates(2025, 7, 8, 24);
+            const today = new Date();
+            const startYear = today.getMonth() < 6 ? today.getFullYear() - 1 : today.getFullYear();
+            const dates = generateDates(startYear, 7, 8, 24);
             const headerRow = document.getElementById('header-row');
             const tableBody = document.getElementById('table-body');
 

@@ -51,14 +51,7 @@
         
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        let currentStartDate;
-        if (dateParam && dateParam.includes('-')) {
-            const [y, m, d] = dateParam.split('-').map(Number);
-            currentStartDate = new Date(y, m - 1, d);
-        } else {
-            currentStartDate = new Date();
-        }
-        if (isNaN(currentStartDate.getTime())) currentStartDate = new Date();
+        let currentStartDate = parseLocalDate(dateParam) || new Date();
         
         // Adjust to Monday
         const day = currentStartDate.getDay();

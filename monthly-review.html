@@ -88,7 +88,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
-        const displayDate = dateParam ? new Date(dateParam) : new Date();
+        const displayDate = parseLocalDate(dateParam) || new Date();
         const monthYear = displayDate.toLocaleString('default', { month: 'long', year: 'numeric' });
         const PERSISTENCE_KEY = `monthly-review-${displayDate.getFullYear()}-${displayDate.getMonth() + 1}`;
         let saveTimeout;

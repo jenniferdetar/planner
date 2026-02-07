@@ -44,6 +44,16 @@ function getSupabase() {
     return null;
 }
 
+function parseLocalDate(dateStr) {
+    if (!dateStr) {
+        const stored = localStorage.getItem('selectedDate');
+        if (stored) dateStr = stored;
+        else return null;
+    }
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+}
+
 // Auth Logic
 function checkIsLoginPage() {
     const path = window.location.pathname;
@@ -341,8 +351,8 @@ function animateAndNavigate(event, url, direction = 'next') {
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, '0');
         const dd = String(today.getDate()).padStart(2, '0');
-        const defaultDate = `${yyyy}-${mm}-${dd}`;
-        const dateStr = urlParams.get('date') || defaultDate;
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+        const dateStr = urlParams.get('date') || localStorage.getItem('selectedDate') || todayStr;
         const category = urlParams.get('category');
 
         // Create Sidebar Navigation
@@ -418,7 +428,7 @@ function animateAndNavigate(event, url, direction = 'next') {
             <main class="dashboard-main">
                 <header class="dashboard-header">
                     <div class="header-left-controls">
-                        <button class="header-nav-btn" onclick="window.location.href='index.html?date=${dateStr}'">Today</button>
+                        <button class="header-nav-btn" onclick="localStorage.removeItem('selectedDate'); window.location.href='index.html'">Today</button>
                     </div>
                     <div class="header-center">
                         <h1 class="header-title">PLANNER 2026</h1>
@@ -447,9 +457,12 @@ function animateAndNavigate(event, url, direction = 'next') {
         if (datePicker) {
             datePicker.addEventListener('change', (e) => {
                 const newDate = e.target.value;
+                localStorage.setItem('selectedDate', newDate);
+                // Refresh without date in URL
                 const params = new URLSearchParams(window.location.search);
-                params.set('date', newDate);
-                window.location.href = `${window.location.pathname}?${params.toString()}`;
+                params.delete('date');
+                const newSearch = params.toString();
+                window.location.href = `${window.location.pathname}${newSearch ? '?' + newSearch : ''}`;
             });
         }
 
