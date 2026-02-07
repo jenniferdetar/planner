@@ -699,11 +699,23 @@
         }
 
         async function renderPersonalPlanner(container) {
-            const [events, plannerData] = await Promise.all([ fetchCalendarEvents(displayDate), fetchPlannerData(displayDate) ]);
+            const startDay = displayDate.getDay();
+            const weekStart = new Date(displayDate);
+            weekStart.setDate(weekStart.getDate() - startDay);
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+
+            const [events, plannerData] = await Promise.all([ 
+                fetchCalendarEvents(weekStart), 
+                fetchPlannerData(weekStart) 
+            ]);
+            
             const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const dayClasses = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             
-            container.innerHTML = `<div class="page-title">PERSONAL PLANNER - WEEKLY VIEW</div>
+            const headerStr = `${formatDateMMM(weekStart)} - ${formatDateMMM(weekEnd)}`.toUpperCase();
+
+            container.innerHTML = `<div class="page-title">PERSONAL PLANNER | ${headerStr}</div>
                 <div class="habit-tracker-section">
                     ${renderHabitSection('Home Care', ['Make beds', 'Ana - Cleaning', 'Recycling'], plannerData)}
                     ${renderHabitSection('Self Care', ['Shower', 'Read', 'Bring lunch to work'], plannerData)}
@@ -715,7 +727,7 @@
             
             const daysContainer = container.querySelector('#personal-days-container');
             for (let i = 0; i < 7; i++) {
-                renderPersonalDay(daysContainer, i, displayDate, events, plannerData, dayNames, dayClasses);
+                renderPersonalDay(daysContainer, i, weekStart, events, plannerData, dayNames, dayClasses);
             }
             
             container.querySelectorAll('.planner-edit').forEach(el => { el.oninput = (e) => handlePlannerInput(e.target); });
