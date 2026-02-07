@@ -738,16 +738,15 @@
             d.setDate(d.getDate() + i);
             const ds = d.toISOString().split('T')[0];
             const dayEvents = events.filter(e => e.date === ds);
-            const allDayEvents = dayEvents.filter(e => !e.time);
+            const dueEvents = dayEvents.filter(e => e.title.toLowerCase().includes('due'));
+            const allDayEvents = dayEvents.filter(e => !e.time && !e.title.toLowerCase().includes('due'));
             const timedEvents = dayEvents.filter(e => e.time).sort((a,b) => (a.time||'').localeCompare(b.time||''));
             
             // Sum bills
             let billTotal = 0;
-            dayEvents.forEach(e => {
-                if (e.title.toLowerCase().includes('due')) {
-                    const match = e.title.match(/\$?(\d+(,\d{3})*(\.\d+)?)/);
-                    if (match) billTotal += parseFloat(match[1].replace(/,/g, ''));
-                }
+            dueEvents.forEach(e => {
+                const match = e.title.match(/\$?(\d+(,\d{3})*(\.\d+)?)/);
+                if (match) billTotal += parseFloat(match[1].replace(/,/g, ''));
             });
 
             const col = document.createElement('div');
@@ -780,7 +779,17 @@
             col.innerHTML = `
                 <div class="day-sidebar">
                     <div class="sidebar-task-list">
-                        ${[1, 2, 3].map(taskIdx => {
+                        ${dueEvents.map((e, idx) => {
+                            const checkFieldId = `due-check-${idx}`;
+                            const isChecked = plannerData.some(p => p.date === ds && p.field_id === checkFieldId && p.content === 'true');
+                            return `
+                                <div class="sidebar-task-item">
+                                    <div class="check-box-small ${isChecked ? 'checked' : ''}" onclick="toggleSmallCheck(this, '${ds}', '${checkFieldId}')"></div>
+                                    <div class="handwriting" style="font-size: 9pt; flex: 1;">${e.title}</div>
+                                </div>
+                            `;
+                        }).join('')}
+                        ${[1, 2, 3].slice(dueEvents.length).map(taskIdx => {
                             const fieldId = `side-task-${taskIdx}`;
                             const checkFieldId = `side-check-${taskIdx}`;
                             const isChecked = plannerData.some(p => p.date === ds && p.field_id === checkFieldId && p.content === 'true');
