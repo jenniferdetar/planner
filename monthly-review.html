@@ -4,86 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monthly Review - Home Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        .content-area { padding: 0 !important; width: 100vw; box-sizing: border-box; overflow: hidden !important; }
-        
-        .review-section { margin-bottom: 20px; }
-        .section-header { font-size: 10pt; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        
-        .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; height: calc(100vh - 120px); overflow: hidden; }
-        .review-card { background: #fff; border: 1px solid #e1dfdd; border-radius: 8px; padding: 15px; box-shadow: none; transition: box-shadow 0.2s; }
-        .review-card:focus-within { box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
-        
-        .review-input { font-family: 'Coming Soon', cursive; font-size: 10pt; line-height: 1.7; color: #323130; outline: none; min-height: 140px; white-space: pre-wrap; }
-        
-        .rating-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 12px 20px; background: #fff; border-radius: 8px; border: 1px solid #eee; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
-        .rating-label { font-size: 10pt; font-weight: 600; color: #605e5c; }
-        .rating-stars { display: flex; gap: 8px; }
-        .star { cursor: pointer; color: #e1dfdd; font-size: 16pt; transition: color 0.2s, transform 0.1s; }
-        .star.active { color: #ffb900; }
-        .star:hover { color: #ffb900; transform: scale(1.1); }
+        :root {
+            --bg-cream: #fffbf0;
+            --gold-line: #d4af37;
+            --text-muted: #888;
+            --text-dark: #333;
+        }
 
-        .save-status { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 10pt; color: #666; }
+        body {
+            background: #fff !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            overflow-y: auto !important;
+        }
+
+        /* Hide the default dashboard header to match image perfectly */
+        .dashboard-header {
+            display: none !important;
+        }
+
+        .review-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-top {
+            font-size: 10pt;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .header-main {
+            font-size: 24pt;
+            font-weight: 400;
+            letter-spacing: 6px;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .header-subtext {
+            font-size: 10pt;
+            color: var(--text-dark);
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-style: italic;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--gold-line);
+            opacity: 0.5;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .review-box {
+            background: var(--bg-cream);
+            padding: 20px;
+            border-radius: 4px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-text {
+            font-size: 9pt;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .review-input {
+            font-family: 'Coming Soon', cursive !important;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #2c3e50;
+            flex-grow: 1;
+            outline: none;
+            white-space: pre-wrap;
+        }
+
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 9pt;
+            color: #666;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
-    <div class="content-area">
-        <div class="review-section">
-            <div class="section-header">Monthly Pulse</div>
-            <div class="review-grid" style="grid-template-columns: 1fr 1fr;">
-                <div class="rating-row">
-                    <span class="rating-label">Overall Satisfaction</span>
-                    <div class="rating-stars" id="stars-satisfaction"></div>
-                </div>
-                <div class="rating-row">
-                    <span class="rating-label">Goal Progress</span>
-                    <div class="rating-stars" id="stars-progress"></div>
-                </div>
-                <div class="rating-row">
-                    <span class="rating-label">Energy Levels</span>
-                    <div class="rating-stars" id="stars-energy"></div>
-                </div>
-                <div class="rating-row">
-                    <span class="rating-label">Balance</span>
-                    <div class="rating-stars" id="stars-balance"></div>
-                </div>
-            </div>
-        </div>
+    <div class="review-container">
+        <div class="header-top">Celebrate Your Success</div>
+        <div class="header-main">Monthly Review</div>
+        <p class="header-subtext">
+            Reflect on the past month to identify your biggest successes and challenges. Set yourself up 
+            for success next month by clarifying your next goal and what you're looking forward to.
+        </p>
+        <div class="divider"></div>
 
         <div class="review-grid">
-            <div class="review-section">
-                <div class="section-header">What went well?</div>
-                <div class="review-card">
-                    <div class="review-input" contenteditable="true" id="went-well" oninput="handleSave('went-well', this.innerText)"></div>
-                </div>
+            <div class="review-box">
+                <div class="question-text">What was your biggest win this month?</div>
+                <div class="review-input" contenteditable="true" id="win-month" oninput="handleSave('win-month', this.innerText)"></div>
+            </div>
+            <div class="review-box">
+                <div class="question-text">What do you wish you'd done differently in the last few weeks?</div>
+                <div class="review-input" contenteditable="true" id="differently" oninput="handleSave('differently', this.innerText)"></div>
+            </div>
+            
+            <div class="review-box full-width">
+                <div class="question-text">What did you do that was fun, personally or professionally, this month?</div>
+                <div class="review-input" contenteditable="true" id="fun" oninput="handleSave('fun', this.innerText)"></div>
             </div>
 
-            <div class="review-section">
-                <div class="section-header">Challenges & Obstacles</div>
-                <div class="review-card">
-                    <div class="review-input" contenteditable="true" id="challenges" oninput="handleSave('challenges', this.innerText)"></div>
-                </div>
+            <div class="review-box">
+                <div class="question-text">What change did you make that you want to continue?</div>
+                <div class="review-input" contenteditable="true" id="change-continue" oninput="handleSave('change-continue', this.innerText)"></div>
+            </div>
+            <div class="review-box">
+                <div class="question-text">What did you manage well over the last few weeks?</div>
+                <div class="review-input" contenteditable="true" id="well-managed" oninput="handleSave('well-managed', this.innerText)"></div>
             </div>
 
-            <div class="review-section">
-                <div class="section-header">Key Learnings</div>
-                <div class="review-card">
-                    <div class="review-input" contenteditable="true" id="learnings" oninput="handleSave('learnings', this.innerText)"></div>
-                </div>
+            <div class="review-box">
+                <div class="question-text">What's your biggest goal for the upcoming month?</div>
+                <div class="review-input" contenteditable="true" id="biggest-goal" oninput="handleSave('biggest-goal', this.innerText)"></div>
             </div>
-
-            <div class="review-section">
-                <div class="section-header">Next Month's Focus</div>
-                <div class="review-card">
-                    <div class="review-input" contenteditable="true" id="next-focus" oninput="handleSave('next-focus', this.innerText)"></div>
-                </div>
+            <div class="review-box">
+                <div class="question-text">What are you looking forward to in the next few weeks?</div>
+                <div class="review-input" contenteditable="true" id="looking-forward" oninput="handleSave('looking-forward', this.innerText)"></div>
             </div>
         </div>
-        <div id="save-status" class="save-status">All changes saved</div>
     </div>
+
+    <div id="save-status" class="save-status">All changes saved</div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -94,47 +174,17 @@
         let saveTimeout;
 
         async function init() {
-            setGlobalHeaderTitle(`${monthYear.toUpperCase()} REVIEW`);
+            // Keep the global title empty so our custom header is the main focus
+            setGlobalHeaderTitle('');
             
-            // Setup ratings
-            ['satisfaction', 'progress', 'energy', 'balance'].forEach(cat => {
-                const container = document.getElementById(`stars-${cat}`);
-                for (let i = 1; i <= 5; i++) {
-                    const star = document.createElement('span');
-                    star.className = 'star';
-                    star.innerHTML = '★';
-                    star.onclick = () => handleRating(cat, i);
-                    container.appendChild(star);
-                }
-            });
-
             // Load data
             const data = await fetchPlannerData(PERSISTENCE_KEY);
             if (data) {
                 data.forEach(d => {
-                    if (d.field_id.startsWith('rating-')) {
-                        const cat = d.field_id.replace('rating-', '');
-                        const val = parseInt(d.content);
-                        updateStars(cat, val);
-                    } else {
-                        const el = document.getElementById(d.field_id);
-                        if (el) el.innerText = d.content;
-                    }
+                    const el = document.getElementById(d.field_id);
+                    if (el) el.innerText = d.content;
                 });
             }
-        }
-
-        function updateStars(cat, val) {
-            const container = document.getElementById(`stars-${cat}`);
-            const stars = container.querySelectorAll('.star');
-            stars.forEach((s, i) => {
-                s.classList.toggle('active', i < val);
-            });
-        }
-
-        async function handleRating(cat, val) {
-            updateStars(cat, val);
-            await handleSave(`rating-${cat}`, val.toString());
         }
 
         async function handleSave(fieldId, content) {
@@ -155,6 +205,5 @@
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
-
 </body>
 </html>
