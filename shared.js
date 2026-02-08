@@ -891,9 +891,11 @@ async function fetchPaylogSubmissions(year) {
     let query = client.from('paylog submission').select('*');
     const { data, error } = await query;
     if (error) {
-        console.warn('paylog submission table not found, using empty data');
+        console.error('Error fetching paylog submission:', error);
+        console.warn('paylog submission table not found or RLS restricted, using empty data');
         return [];
     }
+    console.log('Fetched paylog submissions:', data ? data.length : 0, 'rows');
     return (data || []).map(r => ({ ...r, name: toTitleCase(r['Employee Name'] || r.name) }));
 }
 
@@ -908,6 +910,13 @@ async function fetchAllTrackingNames(year) {
             client.from('approval_dates').select('Name'),
             client.from('paylog submission').select('"Employee Name"')
         ]);
+
+        console.log('fetchAllTrackingNames counts:', {
+            csea: csea.data ? csea.data.length : 0,
+            hours: hours.data ? hours.data.length : 0,
+            approvals: approvals.data ? approvals.data.length : 0,
+            paylogs: paylogs.data ? paylogs.data.length : 0
+        });
 
         const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
         
