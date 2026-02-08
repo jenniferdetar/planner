@@ -369,7 +369,6 @@ function animateAndNavigate(event, url, direction = 'next') {
             {
                 label: 'Planning',
                 items: [
-                    { label: 'Yearly Focus', path: 'planning.html', icon: '🎯' },
                     { label: 'Personal Goals', path: 'personal-goals.html', icon: '✨' },
                     { label: 'Monthly Review', path: 'monthly-review.html', icon: '📄', params: { category: 'Planning' } }
                 ]
@@ -890,14 +889,12 @@ async function fetchPaylogSubmissions(year) {
     const client = getSupabase();
     if (!client) return [];
     let query = client.from('paylog submission').select('*');
-    // paylog submission table does not include fiscal_year in current schema
     const { data, error } = await query;
     if (error) {
-        // Fallback if table doesn't exist yet
         console.warn('paylog submission table not found, using empty data');
         return [];
     }
-    return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
+    return (data || []).map(r => ({ ...r, name: toTitleCase(r['Employee Name'] || r.name) }));
 }
 
 async function fetchAllTrackingNames(year) {
@@ -909,7 +906,7 @@ async function fetchAllTrackingNames(year) {
             client.from('csea_members').select('full_name'),
             client.from('hours_worked').select('name'),
             client.from('approval_dates').select('Name'),
-            client.from('paylog submission').select('name')
+            client.from('paylog submission').select('"Employee Name"')
         ]);
 
         const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
@@ -917,7 +914,7 @@ async function fetchAllTrackingNames(year) {
         if (csea.data) csea.data.forEach(r => nameSet.add(toTitleCase(r.full_name || r.name)));
         if (hours.data) hours.data.forEach(r => nameSet.add(toTitleCase(r.name)));
         if (approvals.data) approvals.data.forEach(r => nameSet.add(toTitleCase(r.Name || r.name)));
-        if (paylogs.data) paylogs.data.forEach(r => nameSet.add(toTitleCase(r.name)));
+        if (paylogs.data) paylogs.data.forEach(r => nameSet.add(toTitleCase(r['Employee Name'] || r.name)));
 
         return [...nameSet].filter(n => n && n.trim()).sort();
     } catch (err) {
@@ -930,20 +927,32 @@ async function saveTrackingData(table, name, month, value, year) {
     const client = getSupabase();
     if (!client) return false;
     
-    // Normalize table name if someone uses underscore
     const actualTable = table === 'paylog_submission' ? 'paylog submission' : table;
-    const isPaylogOrHours = actualTable === 'hours_worked' || actualTable === 'paylog submission';
+    const isHours = actualTable === 'hours_worked';
+    const isPaylog = actualTable === 'paylog submission';
+    const isApproval = actualTable === 'approval_dates';
     const supportsFiscalYear = !['hours_worked', 'paylog submission', 'approval_dates'].includes(actualTable);
     
-    // Normalize month: lowercase for hours_worked and paylog submission, Capitalized for others
-    let col = isPaylogOrHours ? month.toLowerCase().substring(0, 3) : month.substring(0, 3);
-    
-    // Override for 'total' column in hours_worked
-    if (actualTable === 'hours_worked' && month.toLowerCase() === 'total') {
-        col = 'total';
+    let col = month;
+    if (isHours) {
+        col = month.toLowerCase().substring(0, 3);
+        if (month.toLowerCase() === 'total') col = 'total';
+    } else if (isPaylog) {
+        // month passed is usually like 'jul' or 'July'
+        const mPart = month.substring(0, 3);
+        const capitalizedM = mPart.charAt(0).toUpperCase() + mPart.slice(1).toLowerCase();
+        // Determine year based on month index if possible, but here we just have 'month' and 'year'
+        // For paylog, we expect the caller to pass the full column name or we construct it
+        if (!month.includes('202')) {
+            const mIdx = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'].indexOf(capitalizedM);
+            const colYear = mIdx !== -1 && mIdx < 6 ? year : year + 1;
+            col = `${capitalizedM} ${colYear}`;
+        }
+    } else {
+        col = month.substring(0, 3);
     }
     
-    const nameCol = isPaylogOrHours ? 'name' : 'Name';
+    const nameCol = isPaylog ? 'Employee Name' : (isHours ? 'name' : 'Name');
     
     // 1. Try exact match first
     let query = client.from(actualTable).select('*').eq(nameCol, name);

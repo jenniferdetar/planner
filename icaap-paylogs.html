@@ -66,9 +66,13 @@
                 const tr = document.createElement('tr');
                 let rowHtml = `<td class="employee-col">${emp}</td>`;
                 monthNames.forEach((m, mIdx) => {
-                    const monthKey = m.toLowerCase().substring(0, 3);
-                    const dbVal = paylogMap[emp.toLowerCase()] ? paylogMap[emp.toLowerCase()][monthKey] : '';
-                    rowHtml += `<td class="editable-cell" contenteditable="true" oninput="handleSave('${emp}', '${monthKey}', this.innerText)">${dbVal || ''}</td>`;
+                    const mPart = m.substring(0, 3);
+                    const capitalizedM = mPart.charAt(0).toUpperCase() + mPart.slice(1).toLowerCase();
+                    const colYear = mIdx < 6 ? startYear : startYear + 1;
+                    const colName = `${capitalizedM} ${colYear}`;
+                    
+                    const dbVal = paylogMap[emp.toLowerCase()] ? paylogMap[emp.toLowerCase()][colName] : '';
+                    rowHtml += `<td class="editable-cell" contenteditable="true" oninput="handleSave('${emp}', '${colName}', this.innerText)">${dbVal || ''}</td>`;
                 });
                 tr.innerHTML = rowHtml;
                 tbody.appendChild(tr);
