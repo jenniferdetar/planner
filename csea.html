@@ -139,6 +139,64 @@
         .row-lblue { background-color: var(--step-lblue); }
         .row-mblue { background-color: var(--step-mblue); color: #fff; }
         .row-dblue { background-color: var(--step-dblue); color: #fff; }
+
+        /* Print Styles */
+        @media print {
+            @page {
+                size: landscape;
+                margin: 0.5cm;
+            }
+            body, html, .dashboard-container, .dashboard-main, .dashboard-body, .content-area {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                overflow: visible !important;
+                background: #fff !important;
+            }
+            .dashboard-sidebar, .dashboard-header, .tabs-nav, .save-status, .save-btn, #notes-log, #entries-list, .add-log-btn {
+                display: none !important;
+            }
+            #reopener {
+                display: block !important;
+                padding: 0 !important;
+            }
+            .view-section {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .reopener-grid {
+                gap: 8px !important;
+                margin-top: 10px !important;
+            }
+            .step-box {
+                min-height: 130px !important;
+                padding: 8px !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .step-title {
+                font-size: 8pt !important;
+            }
+            .step-policy {
+                font-size: 7pt !important;
+            }
+            .step-date-container {
+                padding: 2px !important;
+            }
+            .step-date-input {
+                font-size: 8pt !important;
+            }
+            .step-number {
+                font-size: 10pt !important;
+            }
+            .page-title {
+                margin-bottom: 5px !important;
+                padding-bottom: 2px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -205,7 +263,10 @@
         <!-- Tab 2: LA 500 Reopener -->
         <div id="reopener" class="tab-content">
             <div class="view-section">
-                <div class="page-title">LA 500 24-25 & 25-26 REOPENER</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="page-title" style="border:none; margin:0;">LA 500 24-25 & 25-26 REOPENER</div>
+                    <button class="save-btn" onclick="window.print()" style="padding: 4px 12px; font-size: 9pt;">Print Chart</button>
+                </div>
                 <div class="page-title" style="border:none; font-size: 14pt; margin: 10px 0;">610 PROCESS - SURVEY TO RATIFICATION</div>
                 
                 <div class="reopener-grid" id="reopener-grid-container">
