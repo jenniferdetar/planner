@@ -22,6 +22,8 @@
         .tracking-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 9pt; position: sticky; top: 0; z-index: 10; }
         .employee-col { text-align: left !important; font-weight: 700; min-width: 150px; position: sticky; left: 0; background: #fff; z-index: 5; border-right: 2px solid #eee !important; }
         .header-row th.employee-col { background: #f8f9fa; z-index: 11; }
+        .tracking-table tbody tr:nth-child(even) { background-color: #fcfcfc; }
+        .tracking-table tbody tr:nth-child(even) td.employee-col { background-color: #fcfcfc; }
         .attendance-select { font-family: 'Coming Soon', cursive; font-size: 10pt; width: auto; border: none; background: transparent; text-align: center; cursor: pointer; outline: none; }
         .attendance-select:focus { background: #fffde7; }
         .save-status { font-size: 10pt; color: #888; text-align: right; margin-top: 10px; }
@@ -91,23 +93,8 @@
             const pKey = getPersistenceKey();
             const sy = currentStartDate.getMonth() < 6 ? currentStartDate.getFullYear() - 1 : currentStartDate.getFullYear();
             
-            // Dynamic name loading from "attendance tracker" table
-            const client = getSupabase();
-            let names = [];
-            if (client) {
-                const { data: attendanceNames, error: nameError } = await client
-                    .from('attendance tracker')
-                    .select('name')
-                    .order('id');
-                if (!nameError && attendanceNames) {
-                    names = attendanceNames.map(r => toTitleCase(r.name));
-                }
-            }
-            
-            // Fallback if DB fetch fails or is empty
-            if (names.length === 0) {
-                names = await fetchAllTrackingNames(sy);
-            }
+            // Dynamic name loading from "employees" table via fetchAllTrackingNames
+            const names = await fetchAllTrackingNames(sy);
             
             const [data] = await Promise.all([
                 fetchPlannerData(pKey, 366)

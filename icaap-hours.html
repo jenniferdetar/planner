@@ -18,6 +18,8 @@
         .tracking-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 9pt; position: sticky; top: 0; z-index: 10; }
         .employee-col { text-align: left !important; font-weight: 700; min-width: 150px; position: sticky; left: 0; background: #fff; z-index: 5; border-right: 2px solid #eee !important; }
         .header-row th.employee-col { background: #f8f9fa; z-index: 11; }
+        .tracking-table tbody tr:nth-child(even) { background-color: #fcfcfc; }
+        .tracking-table tbody tr:nth-child(even) td.employee-col { background-color: #fcfcfc; }
         .handwriting, .editable-cell { font-family: 'Coming Soon', cursive; font-size: 10pt; color: #2c3e50; outline: none; }
         .editable-cell:focus { background-color: #fffde7; }
         .save-status { font-size: 10pt; color: #888; text-align: right; margin-top: 10px; }
@@ -60,18 +62,23 @@
 
             const tbody = document.getElementById('tracking-body');
             const hoursMap = {};
-            hoursData.forEach(row => { if (row.name) hoursMap[row.name.toLowerCase()] = row; });
+            hoursData.forEach(row => { 
+                const rowName = row.name || row['Employee Name'];
+                if (rowName) hoursMap[normalizeNameForMatch(rowName)] = row; 
+            });
 
             allNames.forEach((emp, eIdx) => {
                 const tr = document.createElement('tr');
                 let rowHtml = `<td class="employee-col">${emp}</td>`;
                 monthNames.forEach((m, mIdx) => {
                     const monthKey = m.toLowerCase().substring(0, 3);
-                    const dbVal = hoursMap[emp.toLowerCase()] ? hoursMap[emp.toLowerCase()][monthKey] : '';
+                    const rowData = hoursMap[normalizeNameForMatch(emp)];
+                    const dbVal = rowData ? rowData[monthKey] : '';
                     rowHtml += `<td class="editable-cell" contenteditable="true" oninput="handleSave('${emp}', '${monthKey}', this.innerText)">${dbVal || ''}</td>`;
                 });
                 
-                const totalVal = hoursMap[emp.toLowerCase()] ? hoursMap[emp.toLowerCase()].total : '';
+                const rowData = hoursMap[normalizeNameForMatch(emp)];
+                const totalVal = rowData ? rowData.total : '';
                 rowHtml += `<td class="editable-cell" contenteditable="true" oninput="handleSave('${emp}', 'total', this.innerText)">${totalVal || ''}</td>`;
                 
                 tr.innerHTML = rowHtml;

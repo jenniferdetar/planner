@@ -62,7 +62,10 @@
 
             const tbody = document.getElementById('tracking-body');
             const paylogMap = {};
-            paylogData.forEach(row => { if (row.name) paylogMap[row.name.toLowerCase()] = row; });
+            paylogData.forEach(row => { 
+                const rowName = row['Employee Name'] || row.name;
+                if (rowName) paylogMap[normalizeNameForMatch(rowName)] = row; 
+            });
 
             allNames.forEach((emp, eIdx) => {
                 const tr = document.createElement('tr');
@@ -73,7 +76,8 @@
                     const colYear = mIdx < 6 ? startYear : startYear + 1;
                     const colName = `${capitalizedM} ${colYear}`;
                     
-                    const dbVal = paylogMap[emp.toLowerCase()] ? paylogMap[emp.toLowerCase()][colName] : '';
+                    const rowData = paylogMap[normalizeNameForMatch(emp)];
+                    const dbVal = rowData ? rowData[colName] : '';
                     rowHtml += `<td class="editable-cell" contenteditable="true" oninput="handleSave('${emp}', '${colName}', this.innerText)">${dbVal || ''}</td>`;
                 });
                 tr.innerHTML = rowHtml;

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>iCAAP Pay Log – Time Entry (Auto-calc)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root{
+    --brand:#00493a;
+    --ink:#111;
+    --line:#999;
+    --card:#fafafa;
+    --warn-bg:#fff2f2;
+    --warn-fg:#b20000;
+    --holiday-bg:#fff3f3;
+    --holiday-fg:#8a0000;
+    --weekend-bg:#f7faff;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family:Arial,Helvetica,sans-serif;
+    color:var(--ink);
+    padding:16px;
+    max-width:1200px;
+    margin:auto;
+  }
+
+  /* ===== Masthead ===== */
+  .masthead{ text-align:center; margin:0 0 12px 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .masthead .mh-inner{ max-width:9.5in; margin:0 auto; }
+  .mh-district{ font-weight:800; font-size:32px; line-height:1.2; }
+  .mh-division{ font-weight:800; font-size:28px; line-height:1.2; margin-top:4px; }
+  .mh-line{ height:1px; background:#2f2f2f; width:92%; margin:8px auto 0; }
+  .mh-title{ font-size:28px; margin:14px 0 4px; font-weight:700; }
+  .mh-subtitle{ font-size:18px; font-weight:700; margin-bottom:8px; }
+  .mh-note{ font-size:15px; margin:2px 0; }
+  .mh-note.red{ color:#d30000; font-weight:800; }
+
+  /* ===== Employee Info ===== */
+  .emp-card{ border:2px solid #666; border-radius:12px; overflow:hidden; margin-bottom:18px; background:var(--card); }
+  .emp-card__head{ background:var(--brand); color:#fff; font-size:18px; text-align:center; padding:10px 12px; font-weight:bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .emp-grid{
+    display:grid;
+    grid-template-columns: 220px 1fr 220px 1fr;
+    gap:10px 14px;
+    padding:14px;
+    background:#f9f9f9;
+  }
+  .emp-label{ align-self:center; font-weight:bold; }
+  .emp-field input, .emp-field select{
+    width:100%; padding:6px 8px; border:1px solid #bbb; border-radius:8px; background:#fff;
+  }
+  .emp-note{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .emp-note .capwarn{ width:100%; margin-top:4px; }
+  .capwarn{ font-size:12px; padding:6px 8px; border-radius:6px; background:var(--warn-bg); border:1px solid #e09; color:var(--warn-fg); display:none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .capwarn.show{ display:block; }
+
+  /* ===== Daily Entries ===== */
+  .sectionhead{ background:#f3f3f3; font-weight:bold; text-align:center; padding:8px 6px; border:1px solid var(--line); border-bottom:none; border-radius:10px 10px 0 0; }
+  table.grid{ width:100%; border-collapse:collapse; border:1px solid var(--line); border-top:none; border-radius:0 0 10px 10px; overflow:hidden; }
+  .grid th, .grid td{ border:1px solid var(--line); padding:6px; vertical-align:middle; }
+  .grid input[type="text"], .grid select{ width:98%; padding:4px 6px; border:1px solid #bbb; border-radius:6px; background:#fff; }
+  input[readonly]{ background:#f7f7f7; }
+  .invalid{ outline:2px solid red; }
+
+  /* AM/PM badge under time fields */
+  .ampm{ font-size:11px; color:#555; margin-top:2px; }
+
+  /* Holiday / Weekend */
+  tr.holiday td{ background:var(--holiday-bg); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tr.weekend:not(.holiday) td{ background:var(--weekend-bg); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .holiday-tag{ color:var(--holiday-fg); font-weight:bold; }
+  .muted{ color:#666; font-style:italic; }
+
+  /* ===== Print: Landscape, ≤ 2 pages ===== */
+  @media print {
+    @page { size: Letter landscape; margin: 0.4in; }
+    body { padding:0; max-width:none; }
+    .mh-district{ font-size:32px; } .mh-division{ font-size:28px; }
+    .mh-title{ font-size:26px; } .mh-subtitle{ font-size:18px; } .mh-note{ font-size:14px; }
+    .mh-line{ height:1px; background:#2f2f2f; width:92%; margin:8px auto 0; }
+    .emp-card { break-inside: avoid; page-break-inside: avoid; margin-bottom:10px; border-width:1px; }
+    .emp-card__head { background:#000; color:#fff; padding:6px 8px; font-size:14px; }
+    .emp-grid { gap:6px 10px; padding:8px; grid-template-columns: 170px 1fr 170px 1fr; font-size:11px; }
+    .emp-field input, .emp-field select { padding:4px 6px; border-radius:4px; }
+    .capwarn { font-size:10px; padding:4px 6px; }
+    .sectionhead { padding:6px; font-size:13px; border-radius:6px 6px 0 0; }
+    .grid th, .grid td { padding:3px 4px; font-size:11px; }
+    .grid input[type="text"], .grid select { padding:2px 3px; border-radius:3px; font-size:11px; width:96%; }
+    #tbl_time { break-inside: avoid; page-break-inside: auto; }
+    #tbl_time tr { break-inside: avoid; page-break-inside: avoid; }
+    .sectionhead { background:#eaeaea; }
+  }
+</style>
+</head>
+
+<body>
+  <!-- Masthead -->
+  <div class="masthead">
+    <div class="mh-inner">
+      <div class="mh-district">Los Angeles Unified School District</div>
+      <div class="mh-division">Human Resources Division</div>
+      <div class="mh-line"></div>
+      <div class="mh-title">2025 - 2026 Funding Certification And Activity Log</div>
+      <div class="mh-subtitle">Instructional Faculty and Lead Mentors - Professional Expert Time</div>
+      <div class="mh-note red">Do not time report hours on illness, FMLA, or national holidays. Must Submit by end of the month.</div>
+      <div class="mh-note red">Program participants cannot be required to work during instructional breaks. REV. 09/2025</div>
+    </div>
+  </div>
+
+  <!-- Employee Information -->
+  <div class="emp-card">
+    <div class="emp-card__head">Employee Information</div>
+    <div class="emp-grid">
+      <div class="emp-label">Employee Name</div>
+      <div class="emp-field"><input type="text" id="empName" aria-label="Employee Name" /></div>
+
+      <div class="emp-label">PENR #</div>
+      <div class="emp-field"><input type="text" id="penr" aria-label="PENR Number" /></div>
+
+      <div class="emp-label">Address</div>
+      <div class="emp-field"><input type="text" id="address" aria-label="Address" /></div>
+
+      <div class="emp-label">Employee #</div>
+      <div class="emp-field"><input type="text" id="empNum" aria-label="Employee Number" /></div>
+
+      <div class="emp-label">Telephone</div>
+      <div class="emp-field"><input type="tel" id="phone" aria-label="Telephone" /></div>
+
+      <div class="emp-label">Email</div>
+      <div class="emp-field"><input type="email" id="email" aria-label="Email" /></div>
+
+      <div class="emp-label">iCAAP Program</div>
+      <div class="emp-field">
+        <select id="program" aria-label="iCAAP Program">
+          <option value="">-- Select Program --</option>
+          <option>Preliminary</option><option>Induction</option><option>ASD-AA</option><option>ECSE-AA</option>
+          <option>BIL-AA</option><option>RLAA</option>
+          <option>Special Education (MENTOR ONLY)</option><option>Multiple Subject (MENTOR ONLY)</option>
+          <option>Single Subject (MENTOR ONLY)</option><option>CENTSE (MENTOR ONLY)</option><option>OTHER</option>
+        </select>
+      </div>
+
+      <div class="emp-label">Position</div>
+      <div class="emp-field">
+        <select id="position" aria-label="Position">
+          <option value="">-- Select Position --</option>
+          <option>Director</option><option>Coordinator</option><option>Teacher Expert</option>
+          <option>Teacher Adviser</option><option>Instructional Faculty</option><option>Lead Mentor</option>
+        </select>
+      </div>
+
+      <div class="emp-label">Nature of Work</div>
+      <div class="emp-field"><input type="text" id="nature" aria-label="Nature of Work" /></div>
+
+      <div class="emp-label">Contracted Day Ends</div>
+      <div class="emp-field"><input type="text" id="contractEnd" aria-label="Contracted Day Ends" placeholder="HHMM or H:MM or 1:23pm" /></div>
+
+      <div class="emp-label">Pay Period</div>
+      <div class="emp-field"><input type="month" id="payPeriod" aria-label="Pay Period" /></div>
+
+      <div class="emp-label">Employee Signature</div>
+      <div class="emp-field"><input type="text" id="empSig" aria-label="Employee Signature" /></div>
+
+      <div class="emp-label">Monthly Hours may not exceed</div>
+      <div class="emp-field"><strong>40</strong></div>
+
+      <div class="emp-label">Supervisor Signature</div>
+      <div class="emp-field"><input type="text" id="supSig" aria-label="Supervisor Signature" /></div>
+
+      <div class="emp-label">Total Hours Worked</div>
+      <div class="emp-field emp-note">
+        <strong><span id="totalHoursTop">0.00</span></strong>
+        <div id="totalHoursWarn" class="capwarn" role="status" aria-live="polite">Up to 40.00 hour(s) remaining this month.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Daily Entries -->
+  <div class="sectionhead">Daily Entries</div>
+  <table id="tbl_time" class="grid">
+    <thead>
+      <tr>
+        <th style="width:12%">Date(s)</th>
+        <th style="width:12%">Time In</th>
+        <th style="width:12%">Time Out</th>
+        <th style="width:12%">Hours Worked</th>
+        <th>Description Of Activity</th>
+        <th style="width:14%">Location</th>
+        <th style="width:18%">Comments</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+<script>
+  /* ===== Helpers ===== */
+  function pad2(n){ return n<10?'0'+n:''+n; }
+  function fmtDate(d){ return `${pad2(d.getMonth()+1)}-${pad2(d.getDate())}-${d.getFullYear()}`; }
+  function isoDate(d){ return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
+  function daysInMonth(y,m0){ return new Date(y,m0+1,0).getDate(); }
+  function setInvalid(el,msg){ if(!el) return; el.classList.add('invalid'); el.setCustomValidity(msg||'Invalid'); el.title=msg||''; }
+  function clearInvalid(el){ if(!el) return; el.classList.remove('invalid'); el.setCustomValidity(''); el.title=''; }
+  function roundQuarter(h){ return Math.round(h*4)/4; }
+
+  // Parse: "1300", "0915", "13:00", "9:15", "9am", "9:15pm"
+  function parseTimeToMinutes(t){
+    if(t==null) return null;
+    t = String(t).trim().toLowerCase().replace(/\s+/g,'');
+    if(!t) return null;
+
+    // "h(h)mm" (e.g., 900, 1300) or "hh:mm"
+    const merMatch = t.match(/^(\d{1,2})(?::?(\d{2}))?([ap]m)?$/i);
+    if(!merMatch) return null;
+    let h = parseInt(merMatch[1],10);
+    let m = merMatch[2] ? parseInt(merMatch[2],10) : 0;
+    const mer = merMatch[3]; // am/pm or undefined
+
+    // If digits-only length 3 or 4, split hhmm
+    if(!merMatch[2] && !t.includes(':') && /^\d{3,4}$/.test(merMatch[1])){
+      const num = parseInt(merMatch[1],10);
+      h = Math.floor(num/100);
+      m = num % 100;
+    }
+
+    if(Number.isNaN(h) || Number.isNaN(m) || m<0 || m>59) return null;
+
+    if(mer){ // 12-hour with am/pm
+      if(h<1 || h>12) return null;
+      if(h===12) h=0;
+      if(mer==='pm') h+=12;
+    }else{ // 24-hour
+      if(h<0 || h>23) return null;
+    }
+    return h*60 + m;
+  }
+
+  function format24h(mins){
+    const h = Math.floor(mins/60), m = mins%60;
+    return `${pad2(h)}:${pad2(m)}`;
+  }
+  function formatAmPm(mins){
+    let h = Math.floor(mins/60), m = mins%60;
+    const mer = h>=12 ? 'PM' : 'AM';
+    h = h%12; if(h===0) h=12;
+    return `${h}:${pad2(m)} ${mer}`;
+  }
+
+  const ACTIVITY_OPTIONS=["Instructional Facilitation/ Teaching","Planning/Preparation","Cadre Meeting","Grading (IF ONLY)","Support (Staff Only)","Supervision at Cochran (Staff Only)","IF Observation (Staff Only)","Curriculum Development","Monitoring Progress on IDP (MENTOR ONLY)","Feedback on IDP (MENTOR ONLY)","Monitoring Progress on ILP (MENTOR ONLY)","Feedback on ILP (MENTOR ONLY)","Preparation (MENTOR ONLY)","Coaching Portfolio Mentees (MENTOR ONLY)","Coaching Induction Candidates (MENTOR ONLY)","Networking Meeting (MENTOR ONLY)","Admin Triad (MENTOR ONLY)","Exit Interview - Preliminary (MENTOR ONLY)","Exit Interview - Induction (MENTOR ONLY)","Clinical Support Task Feedback (MENTOR ONLY)","Induction Task Feedback (MENTOR ONLY)","Other"];
+  const LOCATION_OPTIONS=["Cochran","Beaudry","Zoom","Other"];
+
+  /* ===== Holidays / Recesses ===== */
+  const HOLIDAY_SINGLE = [
+    {date:"2025-07-04", label:"Independence Day"},
+    {date:"2025-08-29", label:"Admission Day"},
+    {date:"2025-09-01", label:"Labor Day"},
+    {date:"2025-11-11", label:"Veterans' Day"},
+    {date:"2026-01-19", label:"Dr Martin L King Jr Birthday"},
+    {date:"2026-02-16", label:"Presidents' Day"},
+    {date:"2026-03-27", label:"Cesar E Chavez Birthday (Observed)"},
+    {date:"2026-04-24", label:"Armenian Genocide Remembrance Day"},
+    {date:"2026-05-25", label:"Memorial Day"},
+    {date:"2026-06-19", label:"Juneteenth Holiday"}
+  ];
+  const HOLIDAY_RANGES = [
+    {start:"2025-11-27", end:"2025-11-28", label:"Thanksgiving Holiday"},
+    {start:"2025-12-22", end:"2026-01-09", label:"Winter Recess"},
+    {start:"2026-03-30", end:"2026-04-03", label:"Spring Recess"}
+  ];
+  const HOLIDAY_SET = new Map(HOLIDAY_SINGLE.map(h=>[h.date, h.label]));
+  function isWithinRange(iso, r){ return iso >= r.start && iso <= r.end; }
+  function getHolidayLabel(iso){
+    if(HOLIDAY_SET.has(iso)) return HOLIDAY_SET.get(iso);
+    for(const r of HOLIDAY_RANGES){ if(isWithinRange(iso, r)) return r.label; }
+    return null;
+  }
+
+  /* ===== Row calc ===== */
+  function recalcRow(row){
+    const tin=row.querySelector('input[data-role="time-in"]');
+    const tout=row.querySelector('input[data-role="time-out"]');
+    const hrs=row.querySelector('input[data-role="hours"]');
+    // Holiday rows lack data-role time inputs
+    if(!tin || !tout){ if(hrs) hrs.value='0.00'; return 0; }
+
+    const mi=parseTimeToMinutes(tin.value||'');
+    const mo=parseTimeToMinutes(tout.value||'');
+    clearInvalid(tin); clearInvalid(tout); if(hrs) clearInvalid(hrs);
+
+    if(mi==null || mo==null){ if(hrs) hrs.value=''; return 0; }
+    if(mo<=mi){ setInvalid(tout,'Time Out must be later than Time In.'); if(hrs) hrs.value=''; return 0; }
+
+    let diff=(mo-mi)/60;
+    diff=roundQuarter(diff);
+    if(diff>8){ diff=8; if(hrs) setInvalid(hrs,'Capped at 8.00 hours per day.'); }
+    if(hrs) hrs.value=diff.toFixed(2);
+    return diff;
+  }
+
+  function recalcTable(){
+    const tbody=document.querySelector('#tbl_time tbody'); if(!tbody) return;
+    let total=0;
+    tbody.querySelectorAll('tr[data-row="workday"]').forEach(tr=> total+=recalcRow(tr)||0 );
+    const totalTop=document.getElementById('totalHoursTop'); if(totalTop) totalTop.textContent=total.toFixed(2);
+    const cap=40, warn=document.getElementById('totalHoursWarn'); if(warn){
+      if(total>cap){ const over=(total-cap).toFixed(2); warn.innerHTML=`Monthly cap exceeded by <strong>${over}</strong> hour(s). Please adjust entries.`; warn.classList.add('show'); warn.setAttribute('aria-live','assertive'); }
+      else{ const remain=(cap-total).toFixed(2); warn.textContent=`Up to ${remain} hour(s) remaining this month.`; warn.classList.add('show'); warn.setAttribute('aria-live','polite'); }
+    }
+  }
+
+  function makeSelect(options, aria){
+    const s=document.createElement('select'); if(aria) s.setAttribute('aria-label',aria);
+    const first=document.createElement('option'); first.value=""; first.textContent="-- Select --"; s.appendChild(first);
+    options.forEach(o=>{ const op=document.createElement('option'); op.textContent=o; s.appendChild(op); });
+    return s;
+  }
+  function rowHasAnyData(tr){
+    return Array.from(tr.querySelectorAll('input, select')).some(el=> el.tagName==='SELECT' ? !!el.value : (el.type==='text') && !!el.value );
+  }
+  function tbodyHasData(tbody){ return Array.from(tbody.querySelectorAll('tr[data-row="workday"]')).some(rowHasAnyData); }
+
+  // Update AM/PM label beneath a given time input
+  function updateAmPmForInput(input){
+    if(!input) return;
+    const cell = input.closest('td');
+    const badge = cell ? cell.querySelector('.ampm') : null;
+    if(!badge) return;
+    const mins = parseTimeToMinutes(input.value||'');
+    badge.textContent = (mins==null) ? '—' : formatAmPm(mins);
+  }
+
+  function buildRowsForMonth(year, monthIdx){
+    const tbody=document.querySelector('#tbl_time tbody'); if(!tbody) return;
+    if(tbodyHasData(tbody)){ const ok=confirm('Changing the pay period will replace existing daily entries. Continue?'); if(!ok) return; }
+    tbody.innerHTML='';
+    const n=daysInMonth(year,monthIdx);
+
+    for(let d=1; d<=n; d++){
+      const date=new Date(year,monthIdx,d);
+      const iso = isoDate(date);
+      const holidayLabel = getHolidayLabel(iso);
+      const isWeekend = !holidayLabel && (date.getDay()===0 || date.getDay()===6);
+
+      const tr=document.createElement('tr');
+      tr.setAttribute('data-row','workday');
+      if(holidayLabel){ tr.classList.add('holiday'); tr.title = `${holidayLabel} — No Work Allowed`; }
+      else if(isWeekend){ tr.classList.add('weekend'); tr.title = 'Weekend'; }
+
+      // Date
+      const tdDate=document.createElement('td'); tdDate.textContent=fmtDate(date); tr.appendChild(tdDate);
+
+      // Time In
+      const tdIn=document.createElement('td');
+      const inEl=document.createElement('input');
+      inEl.type='text'; inEl.inputMode='numeric'; inEl.placeholder='HHMM';
+      inEl.setAttribute('aria-label',`Time In ${fmtDate(date)}`);
+      if(!holidayLabel){ inEl.dataset.role='time-in'; } else { inEl.disabled=true; inEl.title=`${holidayLabel} — No Work Allowed`; }
+      tdIn.appendChild(inEl);
+      const inBadge=document.createElement('div'); inBadge.className='ampm'; inBadge.textContent='—'; tdIn.appendChild(inBadge);
+      tr.appendChild(tdIn);
+
+      // Time Out
+      const tdOut=document.createElement('td');
+      const outEl=document.createElement('input');
+      outEl.type='text'; outEl.inputMode='numeric'; outEl.placeholder='HHMM';
+      outEl.setAttribute('aria-label',`Time Out ${fmtDate(date)}`);
+      if(!holidayLabel){ outEl.dataset.role='time-out'; } else { outEl.disabled=true; outEl.title=`${holidayLabel} — No Work Allowed`; }
+      tdOut.appendChild(outEl);
+      const outBadge=document.createElement('div'); outBadge.className='ampm'; outBadge.textContent='—'; tdOut.appendChild(outBadge);
+      tr.appendChild(tdOut);
+
+      // Hours Worked
+      const tdH=document.createElement('td');
+      const hEl=document.createElement('input'); hEl.type='text'; hEl.readOnly=true; hEl.setAttribute('aria-label',`Hours ${fmtDate(date)}`);
+      if(!holidayLabel){ hEl.dataset.role='hours'; hEl.value=''; } else { hEl.value='0.00'; }
+      tdH.appendChild(hEl); tr.appendChild(tdH);
+
+      // Description Of Activity
+      const tdA=document.createElement('td');
+      if(!holidayLabel){
+        tdA.appendChild(makeSelect(ACTIVITY_OPTIONS,`Description ${fmtDate(date)}`));
+      } else {
+        const span=document.createElement('span'); span.className='holiday-tag';
+        span.textContent=`Holiday / Recess — No Work Allowed (${holidayLabel})`;
+        tdA.appendChild(span);
+      }
+      tr.appendChild(tdA);
+
+      // Location
+      const tdL=document.createElement('td');
+      if(!holidayLabel){
+        tdL.appendChild(makeSelect(LOCATION_OPTIONS,`Location ${fmtDate(date)}`));
+      } else {
+        const sel=makeSelect([],`Location ${fmtDate(date)}`); sel.disabled=true; tdL.appendChild(sel);
+      }
+      tr.appendChild(tdL);
+
+      // Comments
+      const tdC=document.createElement('td');
+      const cEl=document.createElement('input'); cEl.type='text'; cEl.setAttribute('aria-label',`Comments ${fmtDate(date)}`);
+      if(holidayLabel){ cEl.placeholder='—'; cEl.classList.add('muted'); }
+      tdC.appendChild(cEl); tr.appendChild(tdC);
+
+      tbody.appendChild(tr);
+    }
+    recalcTable();
+  }
+
+  /* ===== Recalc + AM/PM updates ===== */
+  function handleTimeEdit(e){
+    const t = e.target;
+    if(!t || !t.closest || !t.closest('#tbl_time')) return;
+    const role = t.dataset ? t.dataset.role : undefined;
+    if(role === 'time-in' || role === 'time-out'){
+      // If user typed 3–4 digits without a colon, auto-format to HH:MM on blur
+      if(e.type === 'blur'){
+        const mins = parseTimeToMinutes(t.value||'');
+        if(mins!=null) t.value = format24h(mins);
+      }
+      updateAmPmForInput(t);
+      recalcTable();
+      if(t.reportValidity) t.reportValidity();
+    }
+  }
+  document.addEventListener('input', handleTimeEdit, true);
+  document.addEventListener('change', handleTimeEdit, true);
+  document.addEventListener('keyup', handleTimeEdit, true);
+  document.addEventListener('blur', handleTimeEdit, true);
+
+  /* ===== Init ===== */
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const pay = document.getElementById('payPeriod');
+    pay.addEventListener('change', ()=>{
+      if(!pay.value) return;
+      const [yy, mm] = pay.value.split('-').map(Number);
+      buildRowsForMonth(yy, mm-1);
+      // after rebuild, initialize AM/PM badges
+      document.querySelectorAll('#tbl_time input[data-role="time-in"],#tbl_time input[data-role="time-out"]').forEach(updateAmPmForInput);
+    });
+
+    // Initialize to current month
+    if(!pay.value){
+      const now = new Date();
+      pay.value = `${now.getFullYear()}-${('0'+(now.getMonth()+1)).slice(-2)}`;
+      buildRowsForMonth(now.getFullYear(), now.getMonth());
+    } else {
+      const [yy, mm] = pay.value.split('-').map(Number);
+      buildRowsForMonth(yy, mm-1);
+    }
+    // Seed AM/PM badges
+    document.querySelectorAll('#tbl_time input[data-role="time-in"],#tbl_time input[data-role="time-out"]').forEach(updateAmPmForInput);
+  });
+</script>
+</body>
+</html>

@@ -862,11 +862,10 @@ async function fetchCseaMembers() {
 async function fetchHoursWorked(year) {
     const client = getSupabase();
     if (!client) return [];
-    let query = client.from('hours_worked').select('*');
-    // hours_worked table does not include fiscal_year in current schema
+    let query = client.from('hours worked').select('*');
     const { data, error } = await query;
     if (error) {
-        console.error('Error fetching hours_worked:', error);
+        console.error('Error fetching hours worked:', error);
         return [];
     }
     return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
@@ -876,13 +875,12 @@ async function fetchApprovalDates(year) {
     const client = getSupabase();
     if (!client) return [];
     let query = client.from('approval_dates').select('*');
-    // approval_dates table does not include fiscal_year in current schema
     const { data, error } = await query;
     if (error) {
         console.error('Error fetching approval_dates:', error);
         return [];
     }
-    return (data || []).map(r => ({ ...r, Name: toTitleCase(r.Name) }));
+    return (data || []).map(r => ({ ...r, Name: toTitleCase(r.Name || r.name) }));
 }
 
 async function fetchPaylogSubmissions(year) {
@@ -902,21 +900,24 @@ async function fetchAllTrackingNames(year) {
     if (!client) return [...DEFAULT_EMPLOYEES].sort();
     
     try {
-        const [csea, hours, approvals, paylogs, attendance] = await Promise.all([
-            client.from('csea_members').select('full_name'),
-            client.from('hours_worked').select('name'),
-            client.from('approval_dates').select('Name'),
-            client.from('paylog submission').select('"Employee Name"'),
-            client.from('attendance tracker').select('name')
-        ]);
+        const { data, error } = await client
+            .from('employees')
+            .select('*')
+            .order('Lastname Firstname');
 
-        const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
-        
-        if (csea.data) csea.data.forEach(r => nameSet.add(toTitleCase(r.full_name || r.name)));
-        if (hours.data) hours.data.forEach(r => nameSet.add(toTitleCase(r.name)));
-        if (approvals.data) approvals.data.forEach(r => nameSet.add(toTitleCase(r.Name || r.name)));
-        if (paylogs.data) paylogs.data.forEach(r => nameSet.add(toTitleCase(r['Employee Name'] || r.name)));
-        if (attendance.data) attendance.data.forEach(r => nameSet.add(toTitleCase(r.name)));
+        if (error) throw error;
+
+        const nameSet = new Set();
+        if (data) {
+            data.forEach(r => {
+                const name = r['Lastname Firstname'];
+                if (name) nameSet.add(toTitleCase(name));
+            });
+        }
+
+        if (nameSet.size === 0) {
+            DEFAULT_EMPLOYEES.forEach(n => nameSet.add(toTitleCase(n)));
+        }
 
         return [...nameSet].filter(n => n && n.trim()).sort();
     } catch (err) {
@@ -925,26 +926,38 @@ async function fetchAllTrackingNames(year) {
     }
 }
 
+function normalizeNameForMatch(name) {
+    if (!name) return '';
+    // Remove commas and extra spaces, convert to lowercase
+    let n = name.toLowerCase().replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
+    // Split into parts
+    let parts = n.split(' ');
+    // Sort parts to handle "First Last" vs "Last First"
+    return parts.sort().join(' ');
+}
+
 async function saveTrackingData(table, name, month, value, year) {
     const client = getSupabase();
     if (!client) return false;
     
-    const actualTable = table === 'paylog_submission' ? 'paylog submission' : table;
-    const isHours = actualTable === 'hours_worked';
+    // Normalize table names
+    let actualTable = table;
+    if (table === 'paylog_submission' || table === 'paylog submission') actualTable = 'paylog submission';
+    if (table === 'hours_worked' || table === 'hours worked') actualTable = 'hours worked';
+    if (table === 'approval_dates') actualTable = 'approval_dates';
+
+    const isHours = actualTable === 'hours worked';
     const isPaylog = actualTable === 'paylog submission';
     const isApproval = actualTable === 'approval_dates';
-    const supportsFiscalYear = !['hours_worked', 'paylog submission', 'approval_dates'].includes(actualTable);
+    const supportsFiscalYear = !['hours worked', 'paylog submission', 'approval_dates'].includes(actualTable);
     
     let col = month;
     if (isHours) {
         col = month.toLowerCase().substring(0, 3);
         if (month.toLowerCase() === 'total') col = 'total';
     } else if (isPaylog) {
-        // month passed is usually like 'jul' or 'July'
         const mPart = month.substring(0, 3);
         const capitalizedM = mPart.charAt(0).toUpperCase() + mPart.slice(1).toLowerCase();
-        // Determine year based on month index if possible, but here we just have 'month' and 'year'
-        // For paylog, we expect the caller to pass the full column name or we construct it
         if (!month.includes('202')) {
             const mIdx = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'].indexOf(capitalizedM);
             const colYear = mIdx !== -1 && mIdx < 6 ? year : year + 1;
@@ -956,51 +969,31 @@ async function saveTrackingData(table, name, month, value, year) {
     
     const nameCol = isPaylog ? 'Employee Name' : (isHours ? 'name' : 'Name');
     
-    // 1. Try exact match first
-    let query = client.from(actualTable).select('*').eq(nameCol, name);
-    if (year && supportsFiscalYear) query = query.eq('fiscal_year', year);
-    let { data: existingData, error: fetchError } = await query;
-
-    // 2. If no exact match, try case-insensitive match (using ilike)
-    if (!fetchError && (!existingData || existingData.length === 0)) {
-        let ciQuery = client.from(actualTable).select('*').ilike(nameCol, name);
-        if (year && supportsFiscalYear) ciQuery = ciQuery.eq('fiscal_year', year);
-        const { data: ciData, error: ciError } = await ciQuery;
-        if (!ciError && ciData && ciData.length > 0) {
-            existingData = ciData;
-        }
+    // Fetch all records for matching (since we need to normalize)
+    const { data: allRows, error: fetchError } = await client.from(actualTable).select('*');
+    if (fetchError) {
+        console.error(`Error fetching from ${actualTable}:`, fetchError);
+        return false;
     }
 
-    if (existingData && existingData.length > 0) {
-        // Update the existing record (use the exact name from the DB to be safe)
-        const dbName = existingData[0][nameCol];
+    const normName = normalizeNameForMatch(name);
+    const existing = allRows.find(r => normalizeNameForMatch(r[nameCol]) === normName);
+
+    if (existing) {
         const updateObj = { [col]: value };
-        if (year && supportsFiscalYear) updateObj.fiscal_year = year;
-        
-        let updateQuery = client.from(actualTable).update(updateObj).eq(nameCol, dbName);
-        if (year && supportsFiscalYear) updateQuery = updateQuery.eq('fiscal_year', year);
-        
-        const { error: updateError } = await updateQuery;
-        
+        const { error: updateError } = await client.from(actualTable).update(updateObj).eq('id', existing.id);
         if (updateError) {
             console.error(`Error updating ${actualTable}:`, updateError);
             return false;
         }
     } else {
-        // Insert new record
         const insertObj = { [nameCol]: name, [col]: value };
-        if (year && supportsFiscalYear) insertObj.fiscal_year = year;
-        
-        const { error: insertError } = await client
-            .from(actualTable)
-            .insert(insertObj);
-        
+        const { error: insertError } = await client.from(actualTable).insert(insertObj);
         if (insertError) {
             console.error(`Error inserting into ${actualTable}:`, insertError);
             return false;
         }
     }
-    
     return true;
 }
 
