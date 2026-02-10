@@ -880,10 +880,11 @@ async function fetchCseaMembers() {
 async function fetchHoursWorked(year) {
     const client = getSupabase();
     if (!client) return [];
-    let query = client.from('hours worked').select('*');
+    let query = client.from('hours_worked').select('*');
+    if (year) query = query.eq('fiscal_year', year);
     const { data, error } = await query;
     if (error) {
-        console.error('Error fetching hours worked:', error);
+        console.error('Error fetching hours_worked:', error);
         return [];
     }
     return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
@@ -893,6 +894,7 @@ async function fetchApprovalDates(year) {
     const client = getSupabase();
     if (!client) return [];
     let query = client.from('approval_dates').select('*');
+    if (year) query = query.eq('fiscal_year', year);
     const { data, error } = await query;
     if (error) {
         console.error('Error fetching approval_dates:', error);
@@ -905,6 +907,7 @@ async function fetchPaylogSubmissions(year) {
     const client = getSupabase();
     if (!client) return [];
     let query = client.from('paylog submission').select('*');
+    if (year) query = query.eq('fiscal_year', year);
     const { data, error } = await query;
     if (error) {
         console.warn('paylog submission table not found, using empty data');
@@ -991,13 +994,12 @@ async function saveTrackingData(table, name, month, value, year) {
     // Normalize table names
     let actualTable = table;
     if (table === 'paylog_submission' || table === 'paylog submission') actualTable = 'paylog submission';
-    if (table === 'hours_worked' || table === 'hours worked') actualTable = 'hours worked';
+    if (table === 'hours_worked' || table === 'hours worked') actualTable = 'hours_worked';
     if (table === 'approval_dates') actualTable = 'approval_dates';
 
-    const isHours = actualTable === 'hours worked';
+    const isHours = actualTable === 'hours_worked';
     const isPaylog = actualTable === 'paylog submission';
     const isApproval = actualTable === 'approval_dates';
-    const supportsFiscalYear = !['hours worked', 'paylog submission', 'approval_dates'].includes(actualTable);
     
     let col = month;
     if (isHours) {
@@ -1011,14 +1013,17 @@ async function saveTrackingData(table, name, month, value, year) {
             const colYear = mIdx !== -1 && mIdx < 6 ? year : year + 1;
             col = `${capitalizedM} ${colYear}`;
         }
-    } else {
+    } else if (isApproval) {
         col = month.substring(0, 3);
     }
     
     const nameCol = isPaylog ? 'Employee Name' : (isHours ? 'name' : 'Name');
     
-    // Fetch all records for matching (since we need to normalize)
-    const { data: allRows, error: fetchError } = await client.from(actualTable).select('*');
+    // Fetch records for matching (filtered by fiscal_year)
+    let query = client.from(actualTable).select('*');
+    if (year) query = query.eq('fiscal_year', year);
+    const { data: allRows, error: fetchError } = await query;
+
     if (fetchError) {
         console.error(`Error fetching from ${actualTable}:`, fetchError);
         return false;
@@ -1036,6 +1041,7 @@ async function saveTrackingData(table, name, month, value, year) {
         }
     } else {
         const insertObj = { [nameCol]: name, [col]: value };
+        if (year) insertObj.fiscal_year = year;
         const { error: insertError } = await client.from(actualTable).insert(insertObj);
         if (insertError) {
             console.error(`Error inserting into ${actualTable}:`, insertError);
