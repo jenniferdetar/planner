@@ -8,11 +8,53 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="shared.js"></script>
     <style>
-        :root { --soft-bg: #fdfcf0; }
+        :root { 
+            --soft-bg: #fdfcf0; 
+            --header-blue: #00326b;
+            --step-yellow: #ffcc33;
+            --step-orange: #f39200;
+            --step-lblue: #a8def5;
+            --step-mblue: #2b7eb3;
+            --step-dblue: #003366;
+        }
         body { margin: 0; padding: 0; font-family: 'Coming Soon', cursive; background: #fff; }
         
         .content-area { padding: 0 !important; width: 100%; overflow: hidden !important; }
         
+        /* Tabs Styling */
+        .tabs-nav {
+            display: flex;
+            gap: 5px;
+            padding: 10px 15px 0 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab-btn {
+            padding: 8px 20px;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            background: #eee;
+            cursor: pointer;
+            font-family: 'Coming Soon', cursive;
+            font-weight: 700;
+            font-size: 10pt;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: #fff;
+            border-bottom: 2px solid #fff;
+            margin-bottom: -1px;
+            color: var(--header-blue);
+        }
+        .tab-content {
+            display: none;
+            padding: 15px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
         .view-section { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .handwriting, textarea, .planner-edit { font-family: 'Coming Soon', cursive; font-size: 10pt; color: #2c3e50; }
         
@@ -30,60 +72,147 @@
         .special-table th { background: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 10pt; }
         .log-input { width: 100%; border: 1px solid #eee; padding: 4px; font-family: 'Coming Soon', cursive; font-size: 10pt; border-radius: 4px; }
         .add-log-btn { padding: 5px 15px; background-color: var(--header-blue); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 10pt; font-weight: 600; }
+
+        /* 610 Process Grid Styling */
+        .reopener-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .step-box {
+            padding: 15px;
+            border-radius: 10px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: 180px;
+        }
+        .step-title {
+            font-weight: 700;
+            font-size: 9pt;
+            line-height: 1.2;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .step-policy {
+            font-size: 8pt;
+            text-align: center;
+            opacity: 0.9;
+        }
+        .step-number {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 12pt;
+            font-weight: 700;
+            opacity: 0.5;
+        }
+        .step-date-container {
+            margin-top: auto;
+            background: #fff;
+            padding: 5px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .step-date-label {
+            font-size: 8pt;
+            font-weight: 700;
+        }
+        .step-date-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-family: 'Coming Soon', cursive;
+            font-size: 9pt;
+            background: transparent;
+        }
+
+        /* Row Colors */
+        .row-yellow { background-color: var(--step-yellow); }
+        .row-orange { background-color: var(--step-orange); color: #fff; }
+        .row-lblue { background-color: var(--step-lblue); }
+        .row-mblue { background-color: var(--step-mblue); color: #fff; }
+        .row-dblue { background-color: var(--step-dblue); color: #fff; }
     </style>
 </head>
 <body>
     <div class="content-area">
-        <div class="view-section">
-            <div class="page-title">CSEA NOTES</div>
-            <div class="new-note-area">
-                <textarea id="new-note-content" class="handwriting" placeholder="Start typing CSEA notes..." oninput="handleNoteDraftInput()" style="width: 100%; min-height: 200px; border: none; outline: none; background: transparent; resize: none;"></textarea>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                    <button class="save-btn" onclick="handleAddNote()">Save Note</button>
-                    <div id="save-status" class="save-status">All changes saved</div>
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('notes-log')">Notes & Log</button>
+            <button class="tab-btn" onclick="switchTab('reopener')">LA 500 Reopener</button>
+        </div>
+
+        <!-- Tab 1: Notes & Interaction Log -->
+        <div id="notes-log" class="tab-content active">
+            <div class="view-section">
+                <div class="page-title">CSEA NOTES</div>
+                <div class="new-note-area">
+                    <textarea id="new-note-content" class="handwriting" placeholder="Start typing CSEA notes..." oninput="handleNoteDraftInput()" style="width: 100%; min-height: 200px; border: none; outline: none; background: transparent; resize: none;"></textarea>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                        <button class="save-btn" onclick="handleAddNote()">Save Note</button>
+                        <div id="save-status" class="save-status">All changes saved</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <div class="page-title">MEMBER INTERACTION LOG</div>
+                <div class="special-table-container">
+                    <table class="special-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Member</th>
+                                <th>Location</th>
+                                <th>Discussion</th>
+                                <th>Outcome</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="interaction-log-body"></tbody>
+                        <tfoot>
+                            <tr style="background: #fffde7;">
+                                <td><input type="date" id="log-date" class="log-input"></td>
+                                <td>
+                                    <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
+                                    <datalist id="members-list"></datalist>
+                                </td>
+                                <td>
+                                    <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
+                                    <datalist id="schools-list"></datalist>
+                                </td>
+                                <td>
+                                    <input type="text" id="log-discussion" class="log-input" placeholder="Issue" list="issues-list">
+                                    <datalist id="issues-list"></datalist>
+                                </td>
+                                <td><input type="text" id="log-outcome" class="log-input" placeholder="Result"></td>
+                                <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div id="entries-list"></div>
+        </div>
+
+        <!-- Tab 2: LA 500 Reopener -->
+        <div id="reopener" class="tab-content">
+            <div class="view-section">
+                <div class="page-title">LA 500 24-25 & 25-26 REOPENER</div>
+                <div class="page-title" style="border:none; font-size: 14pt; margin: 10px 0;">610 PROCESS - SURVEY TO RATIFICATION</div>
+                
+                <div class="reopener-grid" id="reopener-grid-container">
+                    <!-- Grid items will be generated by JS -->
                 </div>
             </div>
         </div>
-
-        <div class="view-section">
-            <div class="page-title">MEMBER INTERACTION LOG</div>
-            <div class="special-table-container">
-                <table class="special-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Member</th>
-                            <th>Location</th>
-                            <th>Discussion</th>
-                            <th>Outcome</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="interaction-log-body"></tbody>
-                    <tfoot>
-                        <tr style="background: #fffde7;">
-                            <td><input type="date" id="log-date" class="log-input"></td>
-                            <td>
-                                <input type="text" id="log-member" class="log-input" placeholder="Name" list="members-list">
-                                <datalist id="members-list"></datalist>
-                            </td>
-                            <td>
-                                <input type="text" id="log-location" class="log-input" placeholder="Location" list="schools-list">
-                                <datalist id="schools-list"></datalist>
-                            </td>
-                            <td>
-                                <input type="text" id="log-discussion" class="log-input" placeholder="Issue" list="issues-list">
-                                <datalist id="issues-list"></datalist>
-                            </td>
-                            <td><input type="text" id="log-outcome" class="log-input" placeholder="Result"></td>
-                            <td><button class="add-log-btn" onclick="handleAddInteraction()">Add</button></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-
-        <div id="entries-list"></div>
     </div>
 
     <script>
@@ -93,6 +222,7 @@
         const currentYear = displayDate.getFullYear();
         const CATEGORY = `CSEA-${currentYear}`;
         const PERSISTENCE_KEY = `draft-note-${CATEGORY}`;
+        const REOPENER_KEY = `csea-reopener-24-26`;
         
         const entriesList = document.getElementById('entries-list');
         const newNoteContent = document.getElementById('new-note-content');
@@ -100,16 +230,48 @@
         const interactionLogBody = document.getElementById('interaction-log-body');
         let saveTimeout = null;
 
+        const reopenerSteps = [
+            { id: 1, row: 'yellow', title: 'LRR Review 610 Process with Bargaining Team', policy: 'Policy 610.4' },
+            { id: 2, row: 'yellow', title: 'Survey Membership (Successor Contract) & Analyze/Prioritize Survey', policy: 'Policy 610.5.01' },
+            { id: 3, row: 'yellow', title: 'Analyze/Prioritize Surveys and Write Initial Proposal', policy: '' },
+            { id: 4, row: 'yellow', title: 'Forward Initial Proposal to Field Director through LRR for Review', policy: 'Policy 610.5.02' },
+            
+            { id: 5, row: 'orange', title: 'Distribute Initial Proposal to Membership', policy: '' },
+            { id: 6, row: 'orange', title: 'Chapter to Approve Initial Proposal', policy: 'Policy 610.5.01' },
+            { id: 7, row: 'orange', title: 'Chapter Forwards Initial Proposal to District for "Sunshining"', policy: '' },
+            { id: 8, row: 'orange', title: 'District "Sunshines" Chapter\'s Initial Proposal', policy: 'Gov. Code 3547 (a)(b)' },
+            
+            { id: 9, row: 'lblue', title: 'District "Sunshines" its Initial Proposal', policy: 'Gov. Code 3547 (a)(b)' },
+            { id: 10, row: 'lblue', title: 'Bargaining Team Review 610 Process with District', policy: 'Policy 610.5' },
+            { id: 11, row: 'lblue', title: 'Negotiations Begins', policy: '' },
+            { id: 12, row: 'lblue', title: 'Negotiations team shall provide bargaining updates after each session', policy: 'Policy 610.7.05' },
+            
+            { id: 13, row: 'mblue', title: 'Tentative Agreement Reached', policy: '' },
+            { id: 14, row: 'mblue', title: 'Submit signed T.A. to LRR', policy: 'Policy 610.9.01' },
+            { id: 15, row: 'mblue', title: 'LRR Sends T.A. to Field Director for Review', policy: 'Policy 610.9.02' },
+            { id: 16, row: 'mblue', title: 'Field Director Reviews TA/Issues 610 Letter to Chapter President', policy: 'Policy 610.9.01, and Policy 610.9.02' },
+            
+            { id: 17, row: 'dblue', title: '5 Day Meeting Notice sent to Bargaining Unit Members with a copy of agreement or summary', policy: 'Policy 610.9.05 & Policy 610.09.06' },
+            { id: 18, row: 'dblue', title: 'Ratification vote via secret ballot in accordance with chapter constitution', policy: 'Policy 610.10' },
+            { id: 19, row: 'dblue', title: 'Chapter informs LRR of date agreement is ratified', policy: '' },
+            { id: 20, row: 'dblue', title: 'Violations of Ratification Policies and Practices', policy: 'Appeal Rights 4.10.12.02 & 4.10.13.06(b)' }
+        ];
+
         // Initialize Global Sidebar/Header
         if (typeof setGlobalHeaderTitle === 'function') {
             setGlobalHeaderTitle(`CSEA NOTES ${currentYear}`);
         }
-        if (typeof updateNavigationLinks === 'function') {
-            updateNavigationLinks(displayDate);
-        }
 
         async function init() {
-            await Promise.all([loadEntries(), loadInteractions(), populateDatalists()]);
+            await Promise.all([loadEntries(), loadInteractions(), populateDatalists(), loadReopenerData()]);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
         }
 
         async function populateDatalists() {
@@ -162,6 +324,43 @@
                 `;
                 interactionLogBody.appendChild(tr);
             });
+        }
+
+        async function loadReopenerData() {
+            const data = await fetchPlannerData(REOPENER_KEY, 100);
+            const dataMap = {};
+            data.forEach(item => dataMap[item.field_id] = item.content);
+
+            const gridContainer = document.getElementById('reopener-grid-container');
+            gridContainer.innerHTML = reopenerSteps.map(step => {
+                const fieldId = `step-${step.id}-date`;
+                const savedDate = dataMap[fieldId] || '';
+                return `
+                    <div class="step-box row-${step.row}">
+                        <div class="step-title">${step.title}</div>
+                        ${step.policy ? `<div class="step-policy">${step.policy}</div>` : ''}
+                        <div class="step-date-container">
+                            <div class="step-date-label">Date:</div>
+                            <input type="text" class="step-date-input" 
+                                placeholder="mm/dd/yyyy"
+                                data-field="${fieldId}"
+                                value="${savedDate}"
+                                oninput="handleReopenerSave(this)">
+                        </div>
+                        <div class="step-number">${step.id}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function handleReopenerSave(el) {
+            const fieldId = el.dataset.field;
+            const content = el.value;
+            // Debounce save
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(async () => {
+                await savePlannerData(REOPENER_KEY, fieldId, content);
+            }, 1000);
         }
 
         async function handleAddInteraction() {
