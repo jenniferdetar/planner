@@ -390,7 +390,12 @@
         async function loadReopenerData() {
             const data = await fetchPlannerData(REOPENER_KEY, 100);
             const dataMap = {};
-            data.forEach(item => dataMap[item.field_id] = item.content);
+            const tsRegex = /^\[\d{2}\/\d{2}\/\d{2}\s\d{2}:\d{2}\s[AP]M\]\s*/;
+            data.forEach(item => {
+                let clean = item.content || '';
+                if (typeof clean === 'string') clean = clean.replace(tsRegex, '');
+                dataMap[item.field_id] = clean;
+            });
 
             const gridContainer = document.getElementById('reopener-grid-container');
             gridContainer.innerHTML = reopenerSteps.map(step => {
@@ -420,7 +425,8 @@
             // Debounce save
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                await savePlannerData(REOPENER_KEY, fieldId, content);
+                // Pass true to skip timestamp for 610 Process dates
+                await savePlannerData(REOPENER_KEY, fieldId, content, true);
             }, 1000);
         }
 
