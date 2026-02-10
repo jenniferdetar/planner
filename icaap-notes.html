@@ -156,38 +156,48 @@
         async function fetchTableData(tableName) {
             const client = getSupabase();
             if (!client) {
-                console.error("Supabase client not initialized");
-                return [];
+                return { data: [], error: "Supabase client not initialized" };
             }
             
             try {
                 const { data, error } = await client.from(tableName).select('*');
-                if (error) {
-                    console.error(`Error fetching ${tableName}:`, error);
-                    return [];
-                }
-                return data || [];
+                return { data: data || [], error: error ? error.message : null };
             } catch (err) {
-                console.error(`Exception fetching ${tableName}:`, err);
-                return [];
+                return { data: [], error: err.message };
             }
         }
 
-        function populateTable(tbodyId, data, nameMapper, programMapper, hoursMapper) {
+        function populateTable(tbodyId, data, nameMapper, programMapper, hoursMapper, errorMessage) {
             const tbody = document.getElementById(tbodyId);
             tbody.innerHTML = '';
             
+            if (errorMessage) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #a4262c; padding: 20px;">Error: ${errorMessage}</td></tr>`;
+                return;
+            }
+
             if (!data || data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999; padding: 20px;">No data found</td></tr>';
                 return;
             }
 
-            data.forEach(row => {
+            // Sort by name
+            const sortedData = [...data].sort((a, b) => {
+                const nameA = (nameMapper(a) || '').toLowerCase();
+                const nameB = (nameMapper(b) || '').toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+
+            sortedData.forEach(row => {
                 const tr = document.createElement('tr');
+                const name = nameMapper(row) || '';
+                const program = programMapper(row) || '';
+                const hours = hoursMapper(row) || '';
+                
                 tr.innerHTML = `
-                    <td>${nameMapper(row) || ''}</td>
-                    <td>${programMapper(row) || ''}</td>
-                    <td>${hoursMapper(row) || ''}</td>
+                    <td>${typeof toTitleCase === 'function' ? toTitleCase(name) : name}</td>
+                    <td>${program}</td>
+                    <td>${hours}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -201,38 +211,41 @@
             const loading = document.getElementById('loading-status');
 
             try {
-                // Fetch data in parallel for better performance
-                const [profDev, winterBreak, january] = await Promise.all([
+                // Fetch data in parallel
+                const [profDevRes, winterBreakRes, januaryRes] = await Promise.all([
                     fetchTableData('profesional development 09-27-25'),
                     fetchTableData('winter break 2025-2026'),
                     fetchTableData('january 2026')
                 ]);
 
-                // Professional Development Mapping: Supabase columns are "First Name", "Last name", "Hours"
-                populateTable('prof-dev-body', profDev, 
+                // Professional Development Mapping
+                populateTable('prof-dev-body', profDevRes.data, 
                     row => `${row['First Name'] || ''} ${row['Last name'] || ''}`.trim(),
                     row => row['Program'] || 'Professional Development', 
-                    row => row['Hours'] || ''
+                    row => row['Hours'] || '',
+                    profDevRes.error
                 );
 
-                // Winter Break Mapping: Supabase columns are "Name", "Program", "Hours"
-                populateTable('winter-break-body', winterBreak, 
+                // Winter Break Mapping
+                populateTable('winter-break-body', winterBreakRes.data, 
                     row => row['Name'] || '',
                     row => row['Program'] || '',
-                    row => row['Hours'] || ''
+                    row => row['Hours'] || '',
+                    winterBreakRes.error
                 );
 
-                // January Mapping: Supabase columns are "Name", "Hours", "Program"
-                populateTable('january-body', january, 
+                // January Mapping
+                populateTable('january-body', januaryRes.data, 
                     row => row['Name'] || '',
                     row => row['Program'] || '',
-                    row => row['Hours'] || ''
+                    row => row['Hours'] || '',
+                    januaryRes.error
                 );
 
                 loading.style.display = 'none';
             } catch (err) {
                 console.error('Init error:', err);
-                loading.innerText = 'Error loading data from Supabase. Please check your connection.';
+                loading.innerText = 'Critical error loading data from Supabase.';
                 loading.style.color = '#a4262c';
             }
         }
