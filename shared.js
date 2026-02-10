@@ -926,6 +926,36 @@ async function fetchAllTrackingNames(year) {
     }
 }
 
+async function fetchAttendanceTrackerNames() {
+    const client = getSupabase();
+    if (!client) return [...DEFAULT_EMPLOYEES].sort();
+    
+    try {
+        const { data, error } = await client
+            .from('attendance tracker')
+            .select('name')
+            .order('name');
+
+        if (error) throw error;
+
+        const nameSet = new Set();
+        if (data) {
+            data.forEach(r => {
+                if (r.name) nameSet.add(toTitleCase(r.name));
+            });
+        }
+
+        if (nameSet.size === 0) {
+            DEFAULT_EMPLOYEES.forEach(n => nameSet.add(toTitleCase(n)));
+        }
+
+        return [...nameSet].filter(n => n && n.trim()).sort();
+    } catch (err) {
+        console.error('Error fetching attendance tracker names:', err);
+        return [...DEFAULT_EMPLOYEES].sort();
+    }
+}
+
 function normalizeNameForMatch(name) {
     if (!name) return '';
     // Remove commas and extra spaces, convert to lowercase

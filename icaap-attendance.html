@@ -93,8 +93,8 @@
             const pKey = getPersistenceKey();
             const sy = currentStartDate.getMonth() < 6 ? currentStartDate.getFullYear() - 1 : currentStartDate.getFullYear();
             
-            // Dynamic name loading from "employees" table via fetchAllTrackingNames
-            const names = await fetchAllTrackingNames(sy);
+            // Dynamic name loading from "attendance tracker" table
+            const names = await fetchAttendanceTrackerNames();
             
             const [data] = await Promise.all([
                 fetchPlannerData(pKey, 366)
