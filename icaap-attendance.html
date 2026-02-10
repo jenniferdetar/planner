@@ -47,7 +47,7 @@
     </div>
 
     <script>
-        const options = ["", "Cochren", "Beaudry", "Illness", "Kin Care", "Personal Necessity", "Vacation", "Bereavement"];
+        const options = ["", "Cochran", "Beaudry", "Illness", "Kin Care", "Personal Necessity", "Vacation", "Bereavement"];
         
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
@@ -91,10 +91,26 @@
             const pKey = getPersistenceKey();
             const sy = currentStartDate.getMonth() < 6 ? currentStartDate.getFullYear() - 1 : currentStartDate.getFullYear();
             
-            // Dynamic name loading
-            const [data, names] = await Promise.all([
-                fetchPlannerData(pKey, 366),
-                fetchAllTrackingNames(sy)
+            // Dynamic name loading from "attendance tracker" table
+            const client = getSupabase();
+            let names = [];
+            if (client) {
+                const { data: attendanceNames, error: nameError } = await client
+                    .from('attendance tracker')
+                    .select('name')
+                    .order('id');
+                if (!nameError && attendanceNames) {
+                    names = attendanceNames.map(r => toTitleCase(r.name));
+                }
+            }
+            
+            // Fallback if DB fetch fails or is empty
+            if (names.length === 0) {
+                names = await fetchAllTrackingNames(sy);
+            }
+            
+            const [data] = await Promise.all([
+                fetchPlannerData(pKey, 366)
             ]);
 
             const dataMap = {};

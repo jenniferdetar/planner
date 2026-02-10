@@ -902,11 +902,12 @@ async function fetchAllTrackingNames(year) {
     if (!client) return [...DEFAULT_EMPLOYEES].sort();
     
     try {
-        const [csea, hours, approvals, paylogs] = await Promise.all([
+        const [csea, hours, approvals, paylogs, attendance] = await Promise.all([
             client.from('csea_members').select('full_name'),
             client.from('hours_worked').select('name'),
             client.from('approval_dates').select('Name'),
-            client.from('paylog submission').select('"Employee Name"')
+            client.from('paylog submission').select('"Employee Name"'),
+            client.from('attendance tracker').select('name')
         ]);
 
         const nameSet = new Set(DEFAULT_EMPLOYEES.map(toTitleCase));
@@ -915,6 +916,7 @@ async function fetchAllTrackingNames(year) {
         if (hours.data) hours.data.forEach(r => nameSet.add(toTitleCase(r.name)));
         if (approvals.data) approvals.data.forEach(r => nameSet.add(toTitleCase(r.Name || r.name)));
         if (paylogs.data) paylogs.data.forEach(r => nameSet.add(toTitleCase(r['Employee Name'] || r.name)));
+        if (attendance.data) attendance.data.forEach(r => nameSet.add(toTitleCase(r.name)));
 
         return [...nameSet].filter(n => n && n.trim()).sort();
     } catch (err) {
