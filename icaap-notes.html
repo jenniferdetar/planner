@@ -34,6 +34,7 @@
             margin-bottom: 10px; 
             border-bottom: 2px solid var(--header-blue); 
             padding-bottom: 5px; 
+            text-align: center;
         }
 
         .tables-flex-container {
@@ -93,12 +94,13 @@
             font-size: 10pt;
             color: #888;
             margin-top: 10px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="content-area">
-        <div class="page-title" id="notes-title">ICAAP NOTES</div>
+        <div class="page-title" id="notes-title">ICAAP NOTES SUMMARY</div>
         
         <div id="loading-status" class="loading-status">Loading data from Supabase...</div>
 
@@ -158,18 +160,17 @@
                 return [];
             }
             
-            // Try fetching with the provided name
-            const { data, error } = await client.from(tableName).select('*');
-            if (error) {
-                console.error(`Error fetching ${tableName}:`, error);
-                // If it fails, try with possible double space as fallback for winter break
-                if (tableName === 'winter break 2025-2026') {
-                    const { data: data2, error: error2 } = await client.from('winter  break 2025-2026').select('*');
-                    if (!error2) return data2 || [];
+            try {
+                const { data, error } = await client.from(tableName).select('*');
+                if (error) {
+                    console.error(`Error fetching ${tableName}:`, error);
+                    return [];
                 }
+                return data || [];
+            } catch (err) {
+                console.error(`Exception fetching ${tableName}:`, err);
                 return [];
             }
-            return data || [];
         }
 
         function populateTable(tbodyId, data, nameMapper, programMapper, hoursMapper) {
@@ -177,7 +178,7 @@
             tbody.innerHTML = '';
             
             if (!data || data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999;">No data found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999; padding: 20px;">No data found</td></tr>';
                 return;
             }
 
@@ -200,26 +201,28 @@
             const loading = document.getElementById('loading-status');
 
             try {
-                // Fetch data sequentially to handle specific errors better if needed
-                const profDev = await fetchTableData('profesional development 09-27-25');
-                const winterBreak = await fetchTableData('winter break 2025-2026');
-                const january = await fetchTableData('january 2026');
+                // Fetch data in parallel for better performance
+                const [profDev, winterBreak, january] = await Promise.all([
+                    fetchTableData('profesional development 09-27-25'),
+                    fetchTableData('winter break 2025-2026'),
+                    fetchTableData('january 2026')
+                ]);
 
-                // Professional Development Mapping
+                // Professional Development Mapping: Supabase columns are "First Name", "Last name", "Hours"
                 populateTable('prof-dev-body', profDev, 
                     row => `${row['First Name'] || ''} ${row['Last name'] || ''}`.trim(),
-                    row => row['Program'] || '', 
+                    row => row['Program'] || 'Professional Development', 
                     row => row['Hours'] || ''
                 );
 
-                // Winter Break Mapping
+                // Winter Break Mapping: Supabase columns are "Name", "Program", "Hours"
                 populateTable('winter-break-body', winterBreak, 
                     row => row['Name'] || '',
                     row => row['Program'] || '',
                     row => row['Hours'] || ''
                 );
 
-                // January Mapping
+                // January Mapping: Supabase columns are "Name", "Hours", "Program"
                 populateTable('january-body', january, 
                     row => row['Name'] || '',
                     row => row['Program'] || '',
@@ -229,8 +232,8 @@
                 loading.style.display = 'none';
             } catch (err) {
                 console.error('Init error:', err);
-                loading.innerText = 'Error loading data: ' + err.message;
-                loading.style.color = 'red';
+                loading.innerText = 'Error loading data from Supabase. Please check your connection.';
+                loading.style.color = '#a4262c';
             }
         }
 
