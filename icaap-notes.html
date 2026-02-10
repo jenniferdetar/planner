@@ -153,10 +153,20 @@
     <script>
         async function fetchTableData(tableName) {
             const client = getSupabase();
-            if (!client) return [];
+            if (!client) {
+                console.error("Supabase client not initialized");
+                return [];
+            }
+            
+            // Try fetching with the provided name
             const { data, error } = await client.from(tableName).select('*');
             if (error) {
                 console.error(`Error fetching ${tableName}:`, error);
+                // If it fails, try with possible double space as fallback for winter break
+                if (tableName === 'winter break 2025-2026') {
+                    const { data: data2, error: error2 } = await client.from('winter  break 2025-2026').select('*');
+                    if (!error2) return data2 || [];
+                }
                 return [];
             }
             return data || [];
@@ -166,6 +176,11 @@
             const tbody = document.getElementById(tbodyId);
             tbody.innerHTML = '';
             
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999;">No data found</td></tr>';
+                return;
+            }
+
             data.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -185,22 +200,19 @@
             const loading = document.getElementById('loading-status');
 
             try {
-                const [profDev, winterBreak, january] = await Promise.all([
-                    fetchTableData('profesional development 09-27-25'),
-                    fetchTableData('winter break 2025-2026'),
-                    fetchTableData('january 2026')
-                ]);
+                // Fetch data sequentially to handle specific errors better if needed
+                const profDev = await fetchTableData('profesional development 09-27-25');
+                const winterBreak = await fetchTableData('winter break 2025-2026');
+                const january = await fetchTableData('january 2026');
 
                 // Professional Development Mapping
-                // Screenshot shows "First Name" and "Last name", but no Program.
                 populateTable('prof-dev-body', profDev, 
                     row => `${row['First Name'] || ''} ${row['Last name'] || ''}`.trim(),
-                    row => row['Program'] || '', // Likely empty but keeping structure
+                    row => row['Program'] || '', 
                     row => row['Hours'] || ''
                 );
 
                 // Winter Break Mapping
-                // Screenshot shows "Name", "Program", "Hours"
                 populateTable('winter-break-body', winterBreak, 
                     row => row['Name'] || '',
                     row => row['Program'] || '',
@@ -208,7 +220,6 @@
                 );
 
                 // January Mapping
-                // Screenshot shows "Name", "Hours", "Program"
                 populateTable('january-body', january, 
                     row => row['Name'] || '',
                     row => row['Program'] || '',
@@ -218,7 +229,7 @@
                 loading.style.display = 'none';
             } catch (err) {
                 console.error('Init error:', err);
-                loading.innerText = 'Error loading data from Supabase.';
+                loading.innerText = 'Error loading data: ' + err.message;
                 loading.style.color = 'red';
             }
         }
