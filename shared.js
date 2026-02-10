@@ -395,6 +395,7 @@ function animateAndNavigate(event, url, direction = 'next') {
                 items: [
                     { label: 'HOA', path: 'hoa.html', icon: '🏠' },
                     { label: 'CSEA', path: 'csea.html', icon: '📋' },
+                    { label: 'Personal Notes', path: 'planner.html', params: { category: 'Personal-Notes' }, icon: '📝' },
                     { label: 'Mantra', path: 'mantra.html', icon: '✨' }
                 ]
             }
@@ -433,6 +434,8 @@ function animateAndNavigate(event, url, direction = 'next') {
                 <header class="dashboard-header">
                     <div class="header-left-controls">
                         <button class="header-nav-btn" onclick="localStorage.removeItem('selectedDate'); window.location.href='index.html'">Today</button>
+                        <button class="header-nav-btn" onclick="changeGlobalDate(-1)">Prev</button>
+                        <button class="header-nav-btn" onclick="changeGlobalDate(1)">Next</button>
                     </div>
                     <div class="header-center">
                         <h1 class="header-title">PLANNER 2026</h1>
@@ -455,6 +458,21 @@ function animateAndNavigate(event, url, direction = 'next') {
         
         document.body.innerHTML = '';
         document.body.appendChild(dashboard);
+
+        // Define navigation function globally
+        window.changeGlobalDate = function(delta) {
+            const current = parseLocalDate();
+            // If in Personal-Planner or Attendance, jump by week, otherwise by day
+            const isWeekly = category === 'Personal-Planner' || currentPath.includes('attendance');
+            current.setDate(current.getDate() + (delta * (isWeekly ? 7 : 1)));
+            const newDateStr = current.toISOString().split('T')[0];
+            localStorage.setItem('selectedDate', newDateStr);
+            
+            const params = new URLSearchParams(window.location.search);
+            params.delete('date');
+            const newSearch = params.toString();
+            window.location.href = `${window.location.pathname}${newSearch ? '?' + newSearch : ''}`;
+        };
 
         // Handle Date Picker
         const datePicker = document.getElementById('global-date-picker');

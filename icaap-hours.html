@@ -92,7 +92,7 @@
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
                 status.innerText = 'Saving...';
-                const result = await saveTrackingData('hours_worked', name, month, value, startYear);
+                const result = await saveTrackingData('hours worked', name, month, value, startYear);
                 if (result === true) {
                     status.innerText = 'All changes saved';
                 } else {

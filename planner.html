@@ -305,6 +305,7 @@
     </style>
 </head>
 <body>
+    <div id="global-save-status" style="position: fixed; top: 10px; right: 10px; font-size: 9pt; color: #888; background: rgba(255,255,255,0.8); padding: 2px 8px; border-radius: 4px; z-index: 9999; pointer-events: none;">All changes saved</div>
     <div class="content-area">
         <div id="planner-content" class="notebook-page"></div>
     </div>
@@ -324,6 +325,7 @@
             'Check-Breakdown': { title: 'Check Breakdown', views: ['CheckBreakdown', 'Notes'] },
             'Monthly-Review': { title: 'Financial Review', views: ['FinancialReview', 'Notes'] },
             Planning: { title: 'Planning & Review', views: ['Notes'] },
+            'Personal-Notes': { title: 'Personal Notes', views: ['Notes'] },
             Mantra: { title: 'Personal Mantras', views: ['Notes'] }
         };
 
@@ -334,6 +336,16 @@
         let financialBills = [];
         const attnOptions = ["", "Cochren", "Beaudry", "Illness", "Kin Care", "Personal Necessity", "Vacation", "Bereavement"];
         const monthNames = ['July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'];
+
+        function updateSaveStatus(status, isError = false) {
+            const el = document.getElementById('global-save-status');
+            if (!el) return;
+            el.innerText = status;
+            el.style.color = isError ? '#a4262c' : '#888';
+            if (status === 'All changes saved') {
+                setTimeout(() => { if (el.innerText === 'All changes saved') el.style.color = '#ccc'; }, 3000);
+            }
+        }
 
         async function refreshGlobalData() {
             try {
@@ -634,22 +646,12 @@
 
         function handleNoteDraftInput(category) {
             const content = document.getElementById('new-note-content').value;
-            const statusEl = document.getElementById('save-status');
-            if (statusEl) statusEl.innerText = 'Unsaved changes';
+            updateSaveStatus('Unsaved changes');
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                if (statusEl) statusEl.innerText = 'Saving...';
+                updateSaveStatus('Saving...');
                 const result = await savePlannerData(`draft-note-${category}`, 'draft', content);
-                if (statusEl) {
-                    if (result !== null) {
-                        statusEl.innerText = 'All changes saved';
-                        statusEl.style.color = '#666';
-                    } else {
-                        statusEl.innerText = 'Error saving - check console';
-                        statusEl.style.color = '#a4262c';
-                        setTimeout(() => { statusEl.style.color = '#666'; }, 3000);
-                    }
-                }
+                updateSaveStatus(result !== null ? 'All changes saved' : 'Error saving', result === null);
             }, 1000);
         }
 
@@ -677,23 +679,15 @@
         async function handleAddNote(category) {
             const content = document.getElementById('new-note-content').value;
             if (!content.trim()) return;
-            const statusEl = document.getElementById('save-status');
-            if (statusEl) statusEl.innerText = 'Saving...';
+            updateSaveStatus('Saving...');
             const newEntry = await saveCategoryEntry(category, content);
             if (newEntry) {
                 document.getElementById('new-note-content').value = '';
                 await savePlannerData(`draft-note-${category}`, 'draft', '');
-                if (statusEl) {
-                    statusEl.innerText = 'Saved';
-                    statusEl.style.color = '#666';
-                }
-                switchTab(currentCategory);
+                updateSaveStatus('All changes saved');
+                switchTab(currentTab);
             } else {
-                if (statusEl) {
-                    statusEl.innerText = 'Error saving - check console';
-                    statusEl.style.color = '#a4262c';
-                    setTimeout(() => { statusEl.style.color = '#666'; }, 3000);
-                }
+                updateSaveStatus('Error saving', true);
             }
         }
 
@@ -835,7 +829,9 @@
 
         function toggleSmallCheck(el, date, fieldId) {
             el.classList.toggle('checked');
-            savePlannerData(date, fieldId, el.classList.contains('checked') ? 'true' : 'false');
+            updateSaveStatus('Saving...');
+            savePlannerData(date, fieldId, el.classList.contains('checked') ? 'true' : 'false')
+                .then(res => updateSaveStatus(res ? 'All changes saved' : 'Error saving', !res));
         }
 
         function renderHabitSection(title, habits, plannerData) {
@@ -892,7 +888,6 @@
         function toggleHabitCheck(el) { 
             el.classList.toggle('checked'); 
             const { field, date } = el.dataset; 
-            // Update background color based on toggle
             if (el.classList.contains('checked')) {
                 el.style.backgroundColor = '#00326b';
             } else {
@@ -900,10 +895,16 @@
                 const dayColors = ['#f59e9e', '#ffca38', '#a2d9d9', '#5d9cec', '#f59e9e', '#ffca38', '#a2d9d9'];
                 el.style.backgroundColor = dayColors[dIdx] + '44';
             }
-            savePlannerData(date, field, el.classList.contains('checked') ? 'true' : 'false'); 
+            updateSaveStatus('Saving...');
+            savePlannerData(date, field, el.classList.contains('checked') ? 'true' : 'false')
+                .then(res => updateSaveStatus(res ? 'All changes saved' : 'Error saving', !res));
         }
 
-        async function handleAttendanceSave(select) { await savePlannerData(`icaap-attendance-data-${fiscalYear}`, select.dataset.field, select.value); }
+        async function handleAttendanceSave(select) { 
+            updateSaveStatus('Saving...');
+            const res = await savePlannerData(`icaap-attendance-data-${fiscalYear}`, select.dataset.field, select.value); 
+            updateSaveStatus(res ? 'All changes saved' : 'Error saving', !res);
+        }
 
         async function handleTrackingSave(el) {
             const name = el.dataset.name;
@@ -914,9 +915,12 @@
             const tableMap = { 'paylog': 'paylog submission', 'hours': 'hours_worked', 'appr': 'approval_dates' };
             const tableName = tableMap[type];
             
+            updateSaveStatus('Unsaved changes');
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                await saveTrackingData(tableName, name, month, value, fiscalYear);
+                updateSaveStatus('Saving...');
+                const res = await saveTrackingData(tableName, name, month, value, fiscalYear);
+                updateSaveStatus(res ? 'All changes saved' : 'Error saving', !res);
             }, 1000);
         }
 
@@ -924,10 +928,21 @@
 
         async function handlePlannerInput(el) {
             const fieldId = el.dataset.field || el.id; const content = el.innerText; const dateStr = el.dataset.date || displayDate.toISOString().split('T')[0];
-            clearTimeout(saveTimeout); saveTimeout = setTimeout(async () => { await savePlannerData(dateStr, fieldId, content); }, 1000);
+            updateSaveStatus('Unsaved changes');
+            clearTimeout(saveTimeout); 
+            saveTimeout = setTimeout(async () => { 
+                updateSaveStatus('Saving...');
+                const res = await savePlannerData(dateStr, fieldId, content); 
+                updateSaveStatus(res ? 'All changes saved' : 'Error saving', !res);
+            }, 1000);
         }
 
-        async function togglePlannerCheck(el, date, fieldId) { el.classList.toggle('checked'); await savePlannerData(date, fieldId, el.classList.contains('checked') ? 'true' : 'false'); }
+        async function togglePlannerCheck(el, date, fieldId) { 
+            el.classList.toggle('checked'); 
+            updateSaveStatus('Saving...');
+            const res = await savePlannerData(date, fieldId, el.classList.contains('checked') ? 'true' : 'false'); 
+            updateSaveStatus(res ? 'All changes saved' : 'Error saving', !res);
+        }
 
         function renderIcaapLinks(container) { 
             container.innerHTML = `
@@ -989,7 +1004,12 @@
             data.forEach(item => { const el = container.querySelector(`[data-field="${item.field_id}"]`); if (el && item.content === 'true') el.classList.add('checked'); });
         }
 
-        function toggleBudgetCheck(el) { el.classList.toggle('checked'); savePlannerData(`${currentYear}-financial`, el.dataset.field, el.classList.contains('checked') ? 'true' : 'false'); }
+        function toggleBudgetCheck(el) { 
+            el.classList.toggle('checked'); 
+            updateSaveStatus('Saving...');
+            savePlannerData(`${currentYear}-financial`, el.dataset.field, el.classList.contains('checked') ? 'true' : 'false')
+                .then(res => updateSaveStatus(res ? 'All changes saved' : 'Error saving', !res));
+        }
 
         async function renderIcaapAttendance(container) {
             const weekStart = new Date(displayDate); weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
@@ -1093,9 +1113,12 @@
         }
 
         async function handleEditNote(e, id) {
+            updateSaveStatus('Unsaved changes');
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(async () => {
-                await updateCategoryEntry(id, e.target.innerText);
+                updateSaveStatus('Saving...');
+                const res = await updateCategoryEntry(id, e.target.innerText);
+                updateSaveStatus(res ? 'All changes saved' : 'Error saving', !res);
             }, 1000);
         }
 
