@@ -40,10 +40,12 @@
             display: flex;
             gap: 40px;
             align-items: flex-start;
+            flex-wrap: wrap;
         }
 
         .table-wrapper {
-            flex: none;
+            flex: 0 0 auto;
+            margin-bottom: 30px;
         }
 
         .section-subtitle {
@@ -74,7 +76,6 @@
             padding: 10px;
             border-bottom: 2px solid var(--header-blue);
             white-space: nowrap;
-            width: 1%;
         }
 
         .notes-table td {
@@ -82,33 +83,16 @@
             border-bottom: 1px solid #eee;
             color: var(--text-color);
             white-space: nowrap;
-            width: 1%;
-        }
-        
-        .notes-table td:nth-child(2) {
-            text-align: center;
         }
 
         .notes-table tr:hover {
             background-color: #fcfcfc;
         }
 
-        .save-status { 
-            position: fixed; 
-            bottom: 20px; 
-            right: 20px; 
-            background: rgba(255,255,255,0.9); 
-            padding: 5px 15px; 
-            border-radius: 20px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-            font-size: 10pt; 
-            color: #666; 
-            z-index: 100;
-        }
-
-        [contenteditable="true"]:focus {
-            outline: none;
-            background: #fffde7;
+        .loading-status {
+            font-size: 10pt;
+            color: #888;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -116,107 +100,127 @@
     <div class="content-area">
         <div class="page-title" id="notes-title">ICAAP NOTES</div>
         
+        <div id="loading-status" class="loading-status">Loading data from Supabase...</div>
+
         <div class="tables-flex-container">
-            <!-- Winter Break Table -->
+            <!-- Professional Development Table -->
             <div class="table-wrapper">
-                <div class="section-subtitle">WINTER BREAK</div>
+                <div class="section-subtitle">PROFESSIONAL DEVELOPMENT 09-27-25</div>
                 <table class="notes-table">
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Program</th>
                             <th>Hours</th>
-                            <th>Position</th>
                         </tr>
                     </thead>
-                    <tbody id="winter-break-body" contenteditable="true">
-                        <tr><td>Bonnie Ratner</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
-                        <tr><td>Eberardo Rodriguez</td><td>40</td><td>CATPA</td></tr>
-                        <tr><td>Maikai Finnell</td><td>39</td><td>CATPA</td></tr>
-                        <tr><td>Patricia Pernin</td><td>60</td><td>IF</td></tr>
-                        <tr><td>Rene Gaudet</td><td>34</td><td>CATPA</td></tr>
-                        <tr><td>Stephen Maccarone</td><td>40</td><td>IF</td></tr>
-                        <tr><td>Zina Dixon</td><td>40</td><td>RLAA IFs/Mentors</td></tr>
-                    </tbody>
+                    <tbody id="prof-dev-body"></tbody>
                 </table>
             </div>
 
-            <!-- Monthly Table -->
+            <!-- Winter Break Table -->
             <div class="table-wrapper">
-                <div class="section-subtitle" id="monthly-notes-title">MONTHLY NOTES</div>
+                <div class="section-subtitle">WINTER BREAK 2025-2026</div>
                 <table class="notes-table">
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Program</th>
                             <th>Hours</th>
-                            <th>Position</th>
                         </tr>
                     </thead>
-                    <tbody id="february-2026-body" contenteditable="true">
-                        <tr><td>Bonnie Ratner</td><td>40</td><td></td></tr>
-                        <tr><td>Eberardo Rodriguez</td><td>40</td><td></td></tr>
-                        <tr><td>Maikai Finnell</td><td>40</td><td></td></tr>
-                        <tr><td>Patricia Pernin</td><td>40</td><td></td></tr>
-                        <tr><td>Rene Gaudet</td><td>40</td><td></td></tr>
-                        <tr><td>Stephen Maccarone</td><td>45</td><td>TPSL</td></tr>
-                        <tr><td>Zina Dixon</td><td>40</td><td></td></tr>
-                    </tbody>
+                    <tbody id="winter-break-body"></tbody>
+                </table>
+            </div>
+
+            <!-- January 2026 Table -->
+            <div class="table-wrapper">
+                <div class="section-subtitle">JANUARY 2026</div>
+                <table class="notes-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Program</th>
+                            <th>Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody id="january-body"></tbody>
                 </table>
             </div>
         </div>
-        
-        <div id="save-status" class="save-status">All changes saved</div>
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const dateParam = urlParams.get('date');
-        const displayDate = dateParam ? new Date(dateParam) : new Date();
-        const startYear = displayDate.getMonth() < 6 ? displayDate.getFullYear() - 1 : displayDate.getFullYear();
-        const PERSISTENCE_KEY = `icaap-notes-tables-${startYear}-${startYear+1}`;
-        let saveTimeout;
+        async function fetchTableData(tableName) {
+            const client = getSupabase();
+            if (!client) return [];
+            const { data, error } = await client.from(tableName).select('*');
+            if (error) {
+                console.error(`Error fetching ${tableName}:`, error);
+                return [];
+            }
+            return data || [];
+        }
+
+        function populateTable(tbodyId, data, nameMapper, programMapper, hoursMapper) {
+            const tbody = document.getElementById(tbodyId);
+            tbody.innerHTML = '';
+            
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${nameMapper(row) || ''}</td>
+                    <td>${programMapper(row) || ''}</td>
+                    <td>${hoursMapper(row) || ''}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
         async function init() {
             if (typeof setGlobalHeaderTitle === 'function') {
-                setGlobalHeaderTitle(`ICAAP NOTES ${startYear}-${startYear+1}`);
+                setGlobalHeaderTitle(`ICAAP NOTES SUMMARY`);
             }
-            document.getElementById('notes-title').innerText = `ICAAP NOTES ${startYear}-${startYear+1}`;
-            
-            const monthName = displayDate.toLocaleString('default', { month: 'long' });
-            const monthYear = `${monthName} ${displayDate.getFullYear()}`;
-            const monthlyTitle = document.getElementById('monthly-notes-title');
-            if (monthlyTitle) monthlyTitle.innerText = monthYear.toUpperCase();
-            const data = await fetchPlannerData(PERSISTENCE_KEY);
-            const winterBody = document.getElementById('winter-break-body');
-            const febBody = document.getElementById('february-2026-body');
-            
-            if (data && data.length > 0) {
-                const winterSaved = data.find(d => d.field_id === 'winter-break-body');
-                if (winterSaved) winterBody.innerHTML = winterSaved.content;
-                
-                const febSaved = data.find(d => d.field_id === 'february-2026-body');
-                if (febSaved) febBody.innerHTML = febSaved.content;
-            }
-            
-            winterBody.oninput = () => handleSave('winter-break-body', winterBody.innerHTML);
-            febBody.oninput = () => handleSave('february-2026-body', febBody.innerHTML);
-        }
 
-        async function handleSave(fieldId, content) {
-            const status = document.getElementById('save-status');
-            status.innerText = 'Saving...';
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(async () => {
-                if (typeof savePlannerData === 'function') {
-                    const result = await savePlannerData(PERSISTENCE_KEY, fieldId, content);
-                    if (result !== null) {
-                        status.innerText = 'All changes saved';
-                    } else {
-                        status.innerText = 'Error saving - check console';
-                        status.style.color = '#a4262c';
-                        setTimeout(() => { status.style.color = '#666'; }, 3000);
-                    }
-                }
-            }, 1000);
+            const loading = document.getElementById('loading-status');
+
+            try {
+                const [profDev, winterBreak, january] = await Promise.all([
+                    fetchTableData('profesional development 09-27-25'),
+                    fetchTableData('winter break 2025-2026'),
+                    fetchTableData('january 2026')
+                ]);
+
+                // Professional Development Mapping
+                // Screenshot shows "First Name" and "Last name", but no Program.
+                populateTable('prof-dev-body', profDev, 
+                    row => `${row['First Name'] || ''} ${row['Last name'] || ''}`.trim(),
+                    row => row['Program'] || '', // Likely empty but keeping structure
+                    row => row['Hours'] || ''
+                );
+
+                // Winter Break Mapping
+                // Screenshot shows "Name", "Program", "Hours"
+                populateTable('winter-break-body', winterBreak, 
+                    row => row['Name'] || '',
+                    row => row['Program'] || '',
+                    row => row['Hours'] || ''
+                );
+
+                // January Mapping
+                // Screenshot shows "Name", "Hours", "Program"
+                populateTable('january-body', january, 
+                    row => row['Name'] || '',
+                    row => row['Program'] || '',
+                    row => row['Hours'] || ''
+                );
+
+                loading.style.display = 'none';
+            } catch (err) {
+                console.error('Init error:', err);
+                loading.innerText = 'Error loading data from Supabase.';
+                loading.style.color = 'red';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', init);
