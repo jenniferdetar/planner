@@ -1,0 +1,1 @@
+Keep all code clean and to a minimum. Check all code to minimize constant re-writing all files every time a change happens.

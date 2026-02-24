@@ -34,7 +34,48 @@ const DEFAULT_BILLS = [
     { id: 26, cat: 'Savings', item: 'Vacation', amt: '$125', class: 'row-savings' }
 ];
 
-let supabaseClient;
+// Global Helpers
+window.getDateKey = function(date) {
+    if (!date) return '';
+    const d = date instanceof Date ? date : new Date(date);
+    if (isNaN(d.getTime())) return '';
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
+window.getEventClass = function(title) {
+    const lowerTitle = title.toLowerCase();
+    if (lowerTitle.includes('csea') || lowerTitle.includes('negotiations') || lowerTitle.includes('la 500')) return 'event-pill csea';
+    if (lowerTitle.includes('la fed')) return 'event-pill la-fed';
+    if (lowerTitle.includes('due')) return 'event-pill due';
+    if (lowerTitle.includes('meeting')) return 'event-pill meeting';
+    if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
+    if (lowerTitle.includes('budget')) return 'event-pill budget';
+    if (lowerTitle.includes('wen')) return 'event-pill wen';
+    if (lowerTitle.includes('dwp')) return 'event-pill dwp';
+    if (lowerTitle.includes('cutoff') || lowerTitle.includes('cut-off') || lowerTitle.includes('off-cycle')) return 'event-pill lausd';
+    if (lowerTitle.includes('celebrate')) return 'event-pill celebrate';
+    if (lowerTitle.includes('conference')) return 'event-pill conference';
+    if (lowerTitle.includes('cruise')) return 'event-pill cruise';
+    
+    // Names that are likely birthdays or explicitly Anniversary
+    const celebrateNames = [
+        'allison', 'allyson', 'anniversary', 'brienne', 'chelsea', 'chris', 
+        'christine', 'cj ', 'craig', 'cynthia', 'debbie', 'dennis', 
+        'dianne', 'donna', 'eberardo', 'elias', 'emily', 'gayle', 
+        'geoff', 'greg', 'harrison', 'jacee', 'jackob', 'jaelyn', 
+        'jana', 'jeff', 'jennifer', 'jeremy', 'jim', 'joie', 
+        'kathie', 'kay ', 'lincoln', 'lynda', 'marjorie', 'nick ', 
+        'nicole', 'norm ', 'renee', 'rose', 'susan', 'terry', 'tom ', 
+        'vic ', 'stephen'
+    ];
+    
+    if (celebrateNames.some(name => lowerTitle.includes(name))) {
+        return 'event-pill celebrate';
+    }
+
+    return 'event-pill';
+};
+
 function getSupabase() {
     if (supabaseClient) return supabaseClient;
     if (typeof window !== 'undefined' && window.supabase) {
@@ -95,7 +136,13 @@ function setGlobalHeaderTitle(title) {
 // Global Auth Check
 if (typeof window !== 'undefined') {
     if (!checkIsLoginPage()) {
-        requireAuth();
+        (async () => {
+            try {
+                await requireAuth();
+            } catch (err) {
+                console.error('Auth error:', err);
+            }
+        })();
     }
 }
 
@@ -128,28 +175,32 @@ async function fetchPlannerData(startDate, days = 7) {
     const isDateObject = startDate instanceof Date;
 
     if (isDateString || isDateObject) {
-        const startStr = isDateObject ? startDate.toISOString().split('T')[0] : startDate;
-        const endDate = new Date(startStr);
+        const startStr = getDateKey(startDate);
+        const endDate = new Date(startStr + 'T12:00:00');
         endDate.setDate(endDate.getDate() + (days - 1));
-        const endStr = endDate.toISOString().split('T')[0];
+        const endStr = getDateKey(endDate);
         query = query.gte('date_key', startStr).lte('date_key', endStr);
     } else {
         // Treat as a literal persistence key (e.g., 'icaap-tracking-data', 'planning-data')
         query = query.eq('date_key', startDate);
     }
 
-    const { data, error } = await query;
-
-    if (error) {
-        console.error('Error fetching planner data:', error);
+    try {
+        const { data, error } = await query;
+        if (error) {
+            console.error('Error fetching planner data:', error);
+            return [];
+        }
+        // Map back to internal format for compatibility
+        return (data || []).map(item => ({
+            date: item.date_key,
+            field_id: item.slot_key,
+            content: item.value
+        }));
+    } catch (err) {
+        console.error('Network or unexpected error fetching planner data:', err);
         return [];
     }
-    // Map back to internal format for compatibility
-    return (data || []).map(item => ({
-        date: item.date_key,
-        field_id: item.slot_key,
-        content: item.value
-    }));
 }
 
 // Global Animation Helper
@@ -456,8 +507,10 @@ function animateAndNavigate(event, url, direction = 'next') {
             dashboardBody.appendChild(node);
         });
         
-        document.body.innerHTML = '';
-        document.body.appendChild(dashboard);
+        const scriptsAndStyles = Array.from(document.body.querySelectorAll('script, style'));
+        
+        // Use replaceChildren for a cleaner swap of the main layout while preserving scripts/styles
+        document.body.replaceChildren(dashboard, ...scriptsAndStyles);
 
         // Define navigation function globally
         window.changeGlobalDate = function(delta) {
@@ -548,19 +601,27 @@ async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
 // Calendar Events Logic
 async function fetchCalendarEvents(startDate, days = 7) {
     const client = getSupabase();
-    const endDate = new Date(startDate);
+    const startStr = getDateKey(startDate);
+    const endDate = new Date(startStr + 'T12:00:00');
     endDate.setDate(endDate.getDate() + (days - 1));
-    const startStr = startDate instanceof Date ? startDate.toISOString().split('T')[0] : startDate;
-    const endStr = endDate.toISOString().split('T')[0];
+    const endStr = getDateKey(endDate);
 
     let dbEvents = [];
     if (client) {
-        const { data, error } = await client
-            .from('calendar_by_date')
-            .select('*')
-            .gte('date', startStr)
-            .lte('date', endStr);
-        if (!error) dbEvents = data || [];
+        try {
+            const { data, error } = await client
+                .from('calendar_by_date')
+                .select('*')
+                .gte('date', startStr)
+                .lte('date', endStr);
+            if (!error) {
+                dbEvents = data || [];
+            } else {
+                console.error('Supabase error fetching calendar events:', error);
+            }
+        } catch (err) {
+            console.error('Network error fetching calendar events:', err);
+        }
     }
 
     const hardcodedEvents = getCalendarEvents().filter(e => e.date >= startStr && e.date <= endStr);
@@ -728,35 +789,7 @@ function formatTime(timeStr, compact = false, showSpace = false) {
 }
 
 function getEventClass(title) {
-    const lowerTitle = title.toLowerCase();
-    if (lowerTitle.includes('csea') || lowerTitle.includes('negotiations') || lowerTitle.includes('la 500')) return 'event-pill csea';
-    if (lowerTitle.includes('la fed')) return 'event-pill la-fed';
-    if (lowerTitle.includes('due')) return 'event-pill due';
-    if (lowerTitle.includes('meeting')) return 'event-pill meeting';
-    if (lowerTitle.includes('pay day') || lowerTitle.includes('payday') || lowerTitle.includes('paycheck')) return 'event-pill pay-day';
-    if (lowerTitle.includes('budget')) return 'event-pill budget';
-    if (lowerTitle.includes('wen')) return 'event-pill wen';
-    if (lowerTitle.includes('dwp')) return 'event-pill dwp';
-    if (lowerTitle.includes('cutoff') || lowerTitle.includes('cut-off') || lowerTitle.includes('off-cycle')) return 'event-pill lausd';
-    if (lowerTitle.includes('conference')) return 'event-pill conference';
-    if (lowerTitle.includes('cruise')) return 'event-pill cruise';
-    
-    // Names that are likely birthdays or explicitly Anniversary
-    const celebrateNames = [
-        'allison', 'allyson', 'anniversary', 'brienne', 'chelsea', 'chris', 
-        'christine', 'cj ', 'craig', 'cynthia', 'debbie', 'dennis', 
-        'dianne', 'donna', 'eberardo', 'elias', 'emily', 'gayle', 
-        'geoff', 'greg', 'harrison', 'jacee', 'jackob', 'jaelyn', 
-        'jana', 'jeff', 'jennifer', 'jeremy', 'jim', 'joie', 
-        'kathie', 'kay ', 'lincoln', 'lynda', 'marjorie', 'nick ', 
-        'nicole', 'norm ', 'renee', 'rose', 'susan', 'terry', 'tom ', 
-        'vic ', 'stephen'
-    ];
-    
-    if (celebrateNames.some(name => lowerTitle.includes(name))) {
-        return 'event-pill celebrate';
-    }
-
+    if (typeof window.getEventClass === 'function') return window.getEventClass(title);
     return 'event-pill';
 }
 
@@ -1054,39 +1087,61 @@ async function saveTrackingData(table, name, month, value, year) {
 async function fetchCseaStewards() {
     const client = getSupabase();
     if (!client) return [];
-    const { data } = await client.from('csea_stewards').select('*').order('name');
-    return (data || []).map(m => ({ ...m, name: toTitleCase(m.name) }));
+    try {
+        const { data, error } = await client.from('csea_stewards').select('*').order('name');
+        if (error) {
+            console.error('Error fetching stewards:', error);
+            return [];
+        }
+        return (data || []).map(m => ({ ...m, name: toTitleCase(m.name) }));
+    } catch (err) {
+        console.error('Network error fetching stewards:', err);
+        return [];
+    }
 }
 
 async function fetchCseaIssues() {
     const client = getSupabase();
     if (!client) return [];
     
-    // Combine logic: Get unique discussion topics from member_interactions
-    const { data, error } = await client
-        .from('member_interactions')
-        .select('discussion')
-        .not('discussion', 'is', null)
-        .order('discussion');
-    
-    if (error) {
-        console.error('Error fetching issues from interactions:', error);
+    try {
+        const { data, error } = await client
+            .from('member_interactions')
+            .select('discussion')
+            .not('discussion', 'is', null)
+            .order('discussion');
+        
+        if (error) {
+            console.error('Error fetching issues from interactions:', error);
+            return [];
+        }
+        
+        // Filter for unique, non-empty values and map to issue_name format
+        const uniqueDiscussions = [...new Set(data.map(i => toTitleCase(i.discussion.trim())))]
+            .filter(d => d.length > 0)
+            .map(d => ({ issue_name: d }));
+            
+        return uniqueDiscussions;
+    } catch (err) {
+        console.error('Network error fetching issues:', err);
         return [];
     }
-    
-    // Filter for unique, non-empty values and map to issue_name format
-    const uniqueDiscussions = [...new Set(data.map(i => toTitleCase(i.discussion.trim())))]
-        .filter(d => d.length > 0)
-        .map(d => ({ issue_name: d }));
-        
-    return uniqueDiscussions;
 }
 
 async function fetchSchoolDirectory() {
     const client = getSupabase();
     if (!client) return [];
-    const { data } = await client.from('school_directory').select('*').order('site_name');
-    return (data || []).map(s => ({ ...s, site_name: toTitleCase(s.site_name) }));
+    try {
+        const { data, error } = await client.from('school_directory').select('*').order('site_name');
+        if (error) {
+            console.error('Error fetching school directory:', error);
+            return [];
+        }
+        return (data || []).map(s => ({ ...s, site_name: toTitleCase(s.site_name) }));
+    } catch (err) {
+        console.error('Network error fetching school directory:', err);
+        return [];
+    }
 }
 
 function toTitleCase(str) {
@@ -1167,12 +1222,17 @@ function updateNavigationLinks(date) {
 async function fetchFinancialBills() {
     const client = getSupabase();
     if (!client) return DEFAULT_BILLS;
-    const { data, error } = await client.from('financial_bills').select('*').order('id');
-    if (error || !data || data.length === 0) {
-        console.error('Error fetching financial bills or empty, using defaults:', error);
+    try {
+        const { data, error } = await client.from('financial_bills').select('*').order('id');
+        if (error || !data || data.length === 0) {
+            console.error('Error fetching financial bills or empty, using defaults:', error);
+            return DEFAULT_BILLS;
+        }
+        return data;
+    } catch (err) {
+        console.error('Network error fetching financial bills, using defaults:', err);
         return DEFAULT_BILLS;
     }
-    return data;
 }
 
 async function updateFinancialBill(id, field, value) {
