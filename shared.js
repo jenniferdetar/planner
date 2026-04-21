@@ -1,5 +1,10 @@
-const SUPABASE_URL = 'https://hhhuidbnvbtllxcaiusl.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaHVpZGJudmJ0bGx4Y2FpdXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1ODUxNzcsImV4cCI6MjA4MTE2MTE3N30.bXob7mlt0m8QD5gQpcTYZlC3vrsPvUZt7u_tJB17XHE';
+const MONGO_APP_ID = '69caa28329abfb126e9f3a88'; 
+const MONGO_USER = "jennifermsamples_db_user";
+const MONGO_PASS = "al-gjS6jf_q01hajcZ9ZZtUaCORZp0eUxBfYy4uL5q1dN9";
+
+let mongoApp = null;
+let mongoUser = null;
+let mongoClient = null;
 
 const DEFAULT_EMPLOYEES = [
     "Bonnie Ratner", "Eberardo Rodriguez", "Maikai Finnell", "Patricia Pernin", "Rene Gaudet", "Stephen Maccarone", "Zina Dixon"
@@ -57,7 +62,6 @@ window.getEventClass = function(title) {
     if (lowerTitle.includes('conference')) return 'event-pill conference';
     if (lowerTitle.includes('cruise')) return 'event-pill cruise';
     
-    // Names that are likely birthdays or explicitly Anniversary
     const celebrateNames = [
         'allison', 'allyson', 'anniversary', 'brienne', 'chelsea', 'chris', 
         'christine', 'cj ', 'craig', 'cynthia', 'debbie', 'dennis', 
@@ -76,13 +80,31 @@ window.getEventClass = function(title) {
     return 'event-pill';
 };
 
-function getSupabase() {
-    if (supabaseClient) return supabaseClient;
-    if (typeof window !== 'undefined' && window.supabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        return supabaseClient;
+async function getMongoClient() {
+    if (mongoClient) return mongoClient;
+    if (typeof Realm === 'undefined') return null;
+    
+    if (!mongoApp) {
+        mongoApp = new Realm.App({ id: MONGO_APP_ID });
     }
-    return null;
+
+    if (!mongoApp.currentUser) {
+        const credentials = Realm.Credentials.emailPassword(MONGO_USER, MONGO_PASS);
+        mongoUser = await mongoApp.logIn(credentials);
+    } else {
+        mongoUser = mongoApp.currentUser;
+    }
+
+    mongoClient = mongoUser.mongoClient("mongodb-atlas");
+    return mongoClient;
+}
+
+function getCollection(name) {
+    const client = mongoClient || (mongoUser && mongoUser.mongoClient("mongodb-atlas"));
+    if (!client) return null;
+    // Replace spaces with underscores to match migration script
+    const collName = name.replace(/ /g, '_');
+    return client.db("planner_2026").collection(collName);
 }
 
 function parseLocalDate(dateStr) {
@@ -106,24 +128,26 @@ function checkIsLoginPage() {
 }
 
 async function requireAuth() {
-    const client = getSupabase();
-    if (!client) return;
-
-    const { data: { session } } = await client.auth.getSession();
+    if (typeof Realm === 'undefined') return null;
+    if (!mongoApp) mongoApp = new Realm.App({ id: MONGO_APP_ID });
+    
+    const user = mongoApp.currentUser;
     const isLoginPage = checkIsLoginPage();
-    if (!session) {
-        // If on login.html, don't redirect
+    
+    if (!user) {
         if (!isLoginPage) {
             window.location.href = 'login.html';
         }
+    } else {
+        await getMongoClient();
     }
-    return session;
+    return user;
 }
 
 async function logout() {
-    const client = getSupabase();
-    if (client) {
-        await client.auth.signOut();
+    if (mongoApp && mongoApp.currentUser) {
+        await mongoApp.currentUser.logOut();
+        mongoClient = null;
         window.location.href = 'login.html';
     }
 }
@@ -162,395 +186,42 @@ function ensureTimestamp(content) {
 }
 
 async function fetchPlannerData(startDate, days = 7) {
-    const client = getSupabase();
-    if (!client) {
-        console.error('Supabase client not initialized');
-        return [];
-    }
+    const client = await getMongoClient();
+    const coll = getCollection('work_planner_edits');
+    if (!coll) return [];
 
-    let query = client.from('work_planner_edits').select('date_key, slot_key, value');
-
-    // Determine if startDate is a specific date or a generic persistence key
     const isDateString = typeof startDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(startDate);
     const isDateObject = startDate instanceof Date;
 
+    let filter = {};
     if (isDateString || isDateObject) {
         const startStr = getDateKey(startDate);
         const endDate = new Date(startStr + 'T12:00:00');
         endDate.setDate(endDate.getDate() + (days - 1));
         const endStr = getDateKey(endDate);
-        query = query.gte('date_key', startStr).lte('date_key', endStr);
+        filter = { date_key: { $gte: startStr, $lte: endStr } };
     } else {
-        // Treat as a literal persistence key (e.g., 'icaap-tracking-data', 'planning-data')
-        query = query.eq('date_key', startDate);
+        filter = { date_key: startDate };
     }
 
     try {
-        const { data, error } = await query;
-        if (error) {
-            console.error('Error fetching planner data:', error);
-            return [];
-        }
-        // Map back to internal format for compatibility
+        const data = await coll.find(filter);
         return (data || []).map(item => ({
             date: item.date_key,
             field_id: item.slot_key,
             content: item.value
         }));
     } catch (err) {
-        console.error('Network or unexpected error fetching planner data:', err);
+        console.error('Error fetching planner data:', err);
         return [];
     }
 }
 
-// Global Animation Helper
-function animateAndNavigate(event, url, direction = 'next') {
-    if (event) event.preventDefault();
-    window.location.href = url;
-}
-
-// Modern Dashboard Layout & Navigation System
-(function() {
-    const style = document.createElement('style');
-    style.innerHTML = `
-        :root {
-            --primary-navy: #00326b;
-            --accent-gold: #c5a059;
-            --bg-light: #f5f7fa;
-            --text-dark: #333;
-            --border-color: #d1d1d1;
-            --font-main: 'Coming Soon', cursive;
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: 'Coming Soon', cursive !important;
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden !important;
-            background: var(--bg-light);
-            font-size: 10pt;
-            line-height: 1.2;
-            font-weight: 600;
-        }
-
-        .dashboard-container {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .dashboard-sidebar {
-            width: 250px;
-            background: var(--primary-navy);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            overflow-y: auto;
-            padding-top: 20px;
-        }
-
-        .sidebar-section {
-            padding: 10px 0;
-        }
-
-        .sidebar-label {
-            padding: 5px 25px;
-            font-size: 8pt;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.5);
-            font-weight: 700;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 25px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 10pt;
-            transition: background 0.2s;
-        }
-
-        .sidebar-link:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .sidebar-link.active {
-            background: rgba(255,255,255,0.2);
-            border-left: 4px solid var(--accent-gold);
-            padding-left: 21px;
-        }
-
-        .sidebar-icon {
-            font-size: 12pt;
-        }
-
-        .dashboard-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            background: #fff;
-        }
-
-        .dashboard-header {
-            flex-shrink: 0;
-            background: #fff;
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 80px;
-            position: relative;
-            z-index: 100;
-        }
-
-        .header-left-controls {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 101;
-        }
-
-        .header-center {
-            text-align: center;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .header-right-controls {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 101;
-        }
-
-        .header-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary-navy);
-            margin: 0;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .header-nav-btn {
-            background: #fff;
-            border: 1px solid var(--border-color);
-            padding: 6px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 10pt;
-            font-weight: 600;
-            color: var(--text-dark);
-            transition: all 0.2s;
-        }
-
-        .header-nav-btn:hover {
-            background: #f8f9fa;
-            border-color: var(--primary-navy);
-        }
-
-        .dashboard-body {
-            flex: 1;
-            overflow: auto;
-            padding: 0 !important;
-            background: #fff;
-        }
-
-        .content-area {
-            padding: 0 !important;
-            margin: 0 !important;
-            max-width: none !important;
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Dynamic Header Title Helper
-    window.setGlobalHeaderTitle = function(title) {
-        const titleEl = document.querySelector('.header-title');
-        if (titleEl) titleEl.innerText = title;
-    };
-
-    // Initialize Dashboard Wrapper
-    document.addEventListener('DOMContentLoaded', () => {
-        if (checkIsLoginPage()) return;
-
-        const existingNodes = Array.from(document.body.childNodes);
-        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-        const urlParams = new URLSearchParams(window.location.search);
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
-        const dd = String(today.getDate()).padStart(2, '0');
-        const todayStr = `${yyyy}-${mm}-${dd}`;
-        const dateStr = urlParams.get('date') || localStorage.getItem('selectedDate') || todayStr;
-        const category = urlParams.get('category');
-
-        // Create Sidebar Navigation
-        const sidebarSections = [
-            {
-                label: 'Dashboard',
-                items: [
-                    { label: 'Calendar View', path: 'index.html', icon: '📅' },
-                    { label: 'Personal Planner', path: 'planner.html', params: { category: 'Personal-Planner' }, icon: '🏠' }
-                ]
-            },
-            {
-                label: 'Planning',
-                items: [
-                    { label: 'Personal Goals', path: 'personal-goals.html', icon: '✨' },
-                    { label: 'Monthly Review', path: 'monthly-review.html', icon: '📄', params: { category: 'Planning' } }
-                ]
-            },
-            {
-                label: 'ICAAP',
-                items: [
-                    { label: 'Paylog Submissions', path: 'icaap-paylogs.html', icon: '📄' },
-                    { label: 'Hours Worked', path: 'icaap-hours.html', icon: '📄' },
-                    { label: 'Approval Dates', path: 'icaap-approvals.html', icon: '📄' },
-                    { label: 'Attendance Tracking', path: 'icaap-attendance.html', icon: '📄' },
-                    { label: 'Notes', path: 'icaap-notes.html', icon: '📝' }
-                ]
-            },
-            {
-                label: 'Finance',
-                items: [
-                    { label: 'Recurring Bills', path: 'financial.html', icon: '💰' },
-                    { label: 'Check Breakdown', path: 'check-breakdown.html', icon: '📄' }
-                ]
-            },
-            {
-                label: 'Other',
-                items: [
-                    { label: 'HOA', path: 'hoa.html', icon: '🏠' },
-                    { label: 'CSEA', path: 'csea.html', icon: '📋' },
-                    { label: 'Personal Notes', path: 'planner.html', params: { category: 'Personal-Notes' }, icon: '📝' },
-                    { label: 'Mantra', path: 'mantra.html', icon: '✨' }
-                ]
-            }
-        ];
-
-        const sidebarHtml = sidebarSections.map(section => `
-            <div class="sidebar-section">
-                <div class="sidebar-label">${section.label}</div>
-                ${section.items.map(item => {
-                    const itemUrl = new URL(item.path, window.location.origin);
-                    if (item.params) {
-                        Object.keys(item.params).forEach(key => itemUrl.searchParams.set(key, item.params[key]));
-                    }
-                    
-                    const isActive = currentPath === item.path && 
-                                   (!item.params || Object.keys(item.params).every(k => urlParams.get(k) === item.params[k]));
-                    
-                    return `
-                        <a href="${itemUrl.pathname}${itemUrl.search}" class="sidebar-link ${isActive ? 'active' : ''}">
-                            <span class="sidebar-icon">${item.icon}</span>
-                            ${item.label}
-                        </a>
-                    `;
-                }).join('')}
-            </div>
-        `).join('');
-
-        const dashboard = document.createElement('div');
-        dashboard.className = 'dashboard-container';
-        dashboard.innerHTML = `
-            <aside class="dashboard-sidebar">
-                <div style="padding: 0 25px 30px; font-size: 10pt; font-weight: 700; color: #fff; letter-spacing: 2px;">PLANNER 2026</div>
-                ${sidebarHtml}
-            </aside>
-            <main class="dashboard-main">
-                <header class="dashboard-header">
-                    <div class="header-left-controls">
-                        <button class="header-nav-btn" onclick="localStorage.removeItem('selectedDate'); window.location.href='index.html'">Today</button>
-                        <button class="header-nav-btn" onclick="changeGlobalDate(-1)">Prev</button>
-                        <button class="header-nav-btn" onclick="changeGlobalDate(1)">Next</button>
-                    </div>
-                    <div class="header-center">
-                        <h1 class="header-title">PLANNER 2026</h1>
-                    </div>
-                    <div class="header-right-controls">
-                        <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Coming Soon', cursive; font-size: 10pt; font-weight: 600;">
-                        <a href="#" onclick="logout(); return false;" style="text-decoration: none; color: var(--primary-navy); font-size: 10pt; font-weight: 600; text-transform: uppercase;">Logout</a>
-                    </div>
-                </header>
-                <div class="dashboard-body">
-                </div>
-            </main>
-        `;
-
-        const dashboardBody = dashboard.querySelector('.dashboard-body');
-        existingNodes.forEach(node => {
-            if (node.nodeType === 1 && (node.tagName === 'STYLE' || node.tagName === 'SCRIPT')) return;
-            dashboardBody.appendChild(node);
-        });
-        
-        const scriptsAndStyles = Array.from(document.body.querySelectorAll('script, style'));
-        
-        // Use replaceChildren for a cleaner swap of the main layout while preserving scripts/styles
-        document.body.replaceChildren(dashboard, ...scriptsAndStyles);
-
-        // Define navigation function globally
-        window.changeGlobalDate = function(delta) {
-            const current = parseLocalDate();
-            // If in Personal-Planner or Attendance, jump by week, otherwise by day
-            const isWeekly = category === 'Personal-Planner' || currentPath.includes('attendance');
-            current.setDate(current.getDate() + (delta * (isWeekly ? 7 : 1)));
-            const newDateStr = current.toISOString().split('T')[0];
-            localStorage.setItem('selectedDate', newDateStr);
-            
-            const params = new URLSearchParams(window.location.search);
-            params.delete('date');
-            const newSearch = params.toString();
-            window.location.href = `${window.location.pathname}${newSearch ? '?' + newSearch : ''}`;
-        };
-
-        // Handle Date Picker
-        const datePicker = document.getElementById('global-date-picker');
-        if (datePicker) {
-            datePicker.addEventListener('change', (e) => {
-                const newDate = e.target.value;
-                localStorage.setItem('selectedDate', newDate);
-                // Refresh without date in URL
-                const params = new URLSearchParams(window.location.search);
-                params.delete('date');
-                const newSearch = params.toString();
-                window.location.href = `${window.location.pathname}${newSearch ? '?' + newSearch : ''}`;
-            });
-        }
-
-        // Update all links to preserve date
-        updateNavigationLinks(dateStr);
-    });
-})();
-
 async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
-    const client = getSupabase();
-    if (!client) return null;
+    const client = await getMongoClient();
+    const coll = getCollection('work_planner_edits');
+    if (!coll) return null;
 
-    // Apply timestamp for text entries, skip for numeric/currency/empty/checkmarks/ICAAP/HTML/explicit skip
     let finalValue = content;
     const isNumeric = content && !isNaN(parseFloat(content)) && isFinite(content);
     const isCurrency = content && /^\$?\d+(,\d{3})*(\.\d+)?$/.test(String(content).trim());
@@ -563,34 +234,11 @@ async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
     }
 
     try {
-        const payload = { 
-            date_key: date, 
-            slot_key: fieldId, 
-            value: finalValue
-        };
-
-        // Standard update/insert pattern for better reliability
-        const { data: existing, error: fetchError } = await client
-            .from('work_planner_edits')
-            .select('id')
-            .match({ date_key: date, slot_key: fieldId })
-            .maybeSingle();
-
-        if (fetchError) throw fetchError;
-
-        if (existing) {
-            const { error: updateError } = await client
-                .from('work_planner_edits')
-                .update({ value: finalValue })
-                .eq('id', existing.id);
-            if (updateError) throw updateError;
-        } else {
-            const { error: insertError } = await client
-                .from('work_planner_edits')
-                .insert(payload);
-            if (insertError) throw insertError;
-        }
-        
+        await coll.updateOne(
+            { date_key: date, slot_key: fieldId },
+            { $set: { value: finalValue } },
+            { upsert: true }
+        );
         return finalValue;
     } catch (err) {
         console.error('Save error details:', err);
@@ -598,35 +246,26 @@ async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
     }
 }
 
-// Calendar Events Logic
 async function fetchCalendarEvents(startDate, days = 7) {
-    const client = getSupabase();
+    const client = await getMongoClient();
+    const coll = getCollection('calendar_by_date');
+    if (!coll) return [];
+
     const startStr = getDateKey(startDate);
     const endDate = new Date(startStr + 'T12:00:00');
     endDate.setDate(endDate.getDate() + (days - 1));
     const endStr = getDateKey(endDate);
 
     let dbEvents = [];
-    if (client) {
-        try {
-            const { data, error } = await client
-                .from('calendar_by_date')
-                .select('*')
-                .gte('date', startStr)
-                .lte('date', endStr);
-            if (!error) {
-                dbEvents = data || [];
-            } else {
-                console.error('Supabase error fetching calendar events:', error);
-            }
-        } catch (err) {
-            console.error('Network error fetching calendar events:', err);
-        }
+    try {
+        dbEvents = await coll.find({
+            date: { $gte: startStr, $lte: endStr }
+        });
+    } catch (err) {
+        console.error('Error fetching calendar events:', err);
     }
 
     const hardcodedEvents = getCalendarEvents().filter(e => e.date >= startStr && e.date <= endStr);
-    
-    // Combine and deduplicate by date + title
     const allEvents = [...dbEvents, ...hardcodedEvents];
     const uniqueMap = new Map();
     allEvents.forEach(e => {
@@ -645,7 +284,6 @@ function getCalendarEvents() {
         { date: '2026-01-26', time: '19:00', title: 'LA Fed', duration: 60 },
         { date: '2026-02-06', time: '09:30', title: 'CSEA Reopener Negotiations', duration: 420 },
         { date: '2026-02-07', time: '08:30', title: 'CSEA Officer Skills Training', duration: 450 },
-        // WEN SweetAlmondMint & Pomegranate Auto-Delivery
         { date: '2026-04-01', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
         { date: '2026-05-31', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
         { date: '2026-07-30', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
@@ -654,7 +292,6 @@ function getCalendarEvents() {
         { date: '2027-01-26', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
         { date: '2027-03-27', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
         { date: '2027-05-26', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
-        // WEN Replenishing Treatment Auto-Delivery
         { date: '2026-02-17', title: 'A-D WEN Replenishing Treatment' },
         { date: '2026-04-18', title: 'A-D WEN Replenishing Treatment' },
         { date: '2026-06-17', title: 'A-D WEN Replenishing Treatment' },
@@ -667,187 +304,109 @@ function getCalendarEvents() {
     ];
 }
 
-// Notes Logic
 async function fetchEntries(category, date) {
-    const client = getSupabase();
-    if (!client) return [];
-    let query = client.from('category_entries').select('*').eq('category', category);
-    if (date) query = query.eq('date_key', date);
-    const { data, error } = await query.order('created_at', { ascending: false });
-    return error ? [] : (data || []);
+    const client = await getMongoClient();
+    const coll = getCollection('category_entries');
+    if (!coll) return [];
+    
+    let filter = { category };
+    if (date) filter.date_key = date;
+    
+    try {
+        return await coll.find(filter, { sort: { created_at: -1 } });
+    } catch (err) {
+        console.error('Error fetching entries:', err);
+        return [];
+    }
 }
 
 async function saveEntry(category, date, content) {
-    const client = getSupabase();
-    if (!client || !content.trim()) return null;
+    const client = await getMongoClient();
+    const coll = getCollection('category_entries');
+    if (!coll || !content.trim()) return null;
+    
     const finalContent = ensureTimestamp(content);
-    const { data, error } = await client.from('category_entries').insert({ category, content: finalContent, date_key: date }).select().single();
-    return error ? null : data;
+    const doc = { category, content: finalContent, date_key: date, created_at: new Date().toISOString() };
+    try {
+        await coll.insertOne(doc);
+        return doc;
+    } catch (err) {
+        console.error('Error saving entry:', err);
+        return null;
+    }
 }
 
 async function fetchCategoryEntries(category) {
-    const client = getSupabase();
-    if (!client) return [];
-    const { data, error } = await client
-        .from('category_entries')
-        .select('*')
-        .eq('category', category)
-        .order('created_at', { ascending: false });
-    
-    if (error) {
-        console.error('Error fetching entries:', error);
-        return [];
-    }
-    return data;
+    return await fetchEntries(category);
 }
 
 async function saveCategoryEntry(category, content) {
-    const client = getSupabase();
-    if (!client || !content.trim()) return null;
-    const finalContent = ensureTimestamp(content);
-    const { data, error } = await client
-        .from('category_entries')
-        .insert({ category, content: finalContent })
-        .select()
-        .single();
-    
-    if (error) {
-        console.error('Error saving entry:', error);
-        alert('Save failed: ' + error.message);
-        return null;
-    }
-    return data;
+    return await saveEntry(category, null, content);
 }
 
 async function updateCategoryEntry(id, content) {
-    const client = getSupabase();
-    if (!client) return false;
-    const finalContent = ensureTimestamp(content);
-    const { error } = await client
-        .from('category_entries')
-        .update({ content: finalContent })
-        .eq('id', id);
+    const client = await getMongoClient();
+    const coll = getCollection('category_entries');
+    if (!coll) return false;
     
-    if (error) {
-        console.error('Error updating entry:', error);
+    const finalContent = ensureTimestamp(content);
+    try {
+        await coll.updateOne({ _id: id }, { $set: { content: finalContent } });
+        return finalContent;
+    } catch (err) {
+        console.error('Error updating entry:', err);
         return null;
     }
-    return finalContent;
 }
 
-function formatDate(dateStr) {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    const datePart = date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric'
-    }).replace(',', '');
-    const timePart = date.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-    });
-    return `${datePart} ${timePart}`;
-}
-
-function formatDateMMM(dateStr) {
-    if (!dateStr) return '';
-    let date;
-    if (dateStr instanceof Date) {
-        date = dateStr;
-    } else {
-        // Handle ISO strings or YYYY-MM-DD by splitting to avoid timezone shifts
-        const datePart = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
-        const parts = datePart.split('-');
-        if (parts.length === 3) {
-            date = new Date(parts[0], parts[1] - 1, parts[2]);
-        } else {
-            date = new Date(dateStr);
-        }
-    }
-    
-    if (isNaN(date.getTime())) return 'Invalid Date';
-
-    return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric'
-    }).replace(',', '');
-}
-
-function formatTime(timeStr, compact = false, showSpace = false) {
-    if (!timeStr) return '';
-    const [h, m] = timeStr.split(':').map(Number);
-    let ampm = compact ? (h >= 12 ? 'p' : 'a') : (h >= 12 ? 'pm' : 'am');
-    if (showSpace && !compact) ampm = ' ' + ampm;
-    const displayHour = h % 12 || 12;
-    if (compact && m === 0) {
-        return `${displayHour}${ampm}`;
-    }
-    return `${displayHour}:${m.toString().padStart(2, '0')}${ampm}`;
-}
-
-function getEventClass(title) {
-    if (typeof window.getEventClass === 'function') return window.getEventClass(title);
-    return 'event-pill';
-}
-
-async function deleteCategoryEntry(id) {
-    const client = getSupabase();
-    if (!client) return false;
-    const { error } = await client
-        .from('category_entries')
-        .delete()
-        .eq('id', id);
-    
-    if (error) {
-        console.error('Error deleting entry:', error);
+async function deleteEntry(id) {
+    const client = await getMongoClient();
+    const coll = getCollection('category_entries');
+    if (!coll) return false;
+    try {
+        await coll.deleteOne({ _id: id });
+        return true;
+    } catch (err) {
+        console.error('Error deleting entry:', err);
         return false;
     }
-    return true;
 }
 
-// Interaction Log Logic
 async function fetchInteractions(category) {
-    const client = getSupabase();
-    if (!client) return [];
-    const { data, error } = await client
-        .from('member_interactions')
-        .select('*')
-        .eq('category', category)
-        .order('date_spoke', { ascending: false });
+    const client = await getMongoClient();
+    const coll = getCollection('member_interactions');
+    if (!coll) return [];
     
-    if (error) {
-        console.error('Error fetching interactions:', error);
+    try {
+        const data = await coll.find({ category }, { sort: { date_spoke: -1 } });
+        return (data || []).map(inter => {
+            let normalized = { 
+                ...inter, 
+                member_name: toTitleCase(inter.member_name),
+                work_location: toTitleCase(inter.work_location)
+            };
+            if (inter.point_of_contact && inter.point_of_contact.startsWith('{')) {
+                try {
+                    const extra = JSON.parse(inter.point_of_contact);
+                    normalized = { ...normalized, ...extra };
+                } catch (e) {}
+            }
+            return normalized;
+        });
+    } catch (err) {
+        console.error('Error fetching interactions:', err);
         return [];
     }
-    
-    // Unpack extra fields from point_of_contact if they exist and normalize names
-    return (data || []).map(inter => {
-        let normalized = { 
-            ...inter, 
-            member_name: toTitleCase(inter.member_name),
-            work_location: toTitleCase(inter.work_location)
-        };
-        if (inter.point_of_contact && inter.point_of_contact.startsWith('{')) {
-            try {
-                const extra = JSON.parse(inter.point_of_contact);
-                normalized = { ...normalized, ...extra };
-            } catch (e) {}
-        }
-        return normalized;
-    });
 }
 
 async function saveInteraction(category, interaction) {
-    const client = getSupabase();
-    if (!client) return null;
+    const client = await getMongoClient();
+    const coll = getCollection('member_interactions');
+    if (!coll) return null;
     
-    // Pack extra fields into point_of_contact to avoid schema changes
-    const knownFields = ['id', 'category', 'date_spoke', 'member_name', 'work_location', 'discussion', 'who_involved', 'contact_person', 'created_at'];
+    const knownFields = ['_id', 'id', 'category', 'date_spoke', 'member_name', 'work_location', 'discussion', 'who_involved', 'contact_person', 'created_at'];
     const extraFields = {};
-    const baseInteraction = { category };
+    const baseInteraction = { category, created_at: new Date().toISOString() };
     
     Object.keys(interaction).forEach(key => {
         let val = interaction[key];
@@ -866,103 +425,101 @@ async function saveInteraction(category, interaction) {
         baseInteraction.point_of_contact = JSON.stringify(extraFields);
     }
     
-    const { data, error } = await client
-        .from('member_interactions')
-        .insert(baseInteraction)
-        .select()
-        .single();
-    
-    if (error) {
-        console.error('Error saving interaction:', error);
+    try {
+        await coll.insertOne(baseInteraction);
+        if (baseInteraction.point_of_contact && baseInteraction.point_of_contact.startsWith('{')) {
+            try {
+                const extra = JSON.parse(baseInteraction.point_of_contact);
+                return { ...baseInteraction, ...extra };
+            } catch (e) {}
+        }
+        return baseInteraction;
+    } catch (err) {
+        console.error('Error saving interaction:', err);
         return null;
     }
-    
-    // Unpack for the response
-    if (data.point_of_contact && data.point_of_contact.startsWith('{')) {
-        try {
-            const extra = JSON.parse(data.point_of_contact);
-            return { ...data, ...extra };
-        } catch (e) {}
-    }
-    return data;
 }
 
 async function deleteInteraction(id) {
-    const client = getSupabase();
-    if (!client) return false;
-    const { error } = await client
-        .from('member_interactions')
-        .delete()
-        .eq('id', id);
-    
-    if (error) {
-        console.error('Error deleting interaction:', error);
+    const client = await getMongoClient();
+    const coll = getCollection('member_interactions');
+    if (!coll) return false;
+    try {
+        await coll.deleteOne({ _id: id });
+        return true;
+    } catch (err) {
+        console.error('Error deleting interaction:', err);
         return false;
     }
-    return true;
 }
 
-// Reference Tables Logic
 async function fetchCseaMembers() {
-    const client = getSupabase();
-    if (!client) return [];
-    const { data } = await client.from('csea_members').select('*').order('full_name');
-    return (data || []).map(m => ({ ...m, name: toTitleCase(m.full_name) }));
+    const client = await getMongoClient();
+    const coll = getCollection('csea_members');
+    if (!coll) return [];
+    try {
+        const data = await coll.find({}, { sort: { full_name: 1 } });
+        return (data || []).map(m => ({ ...m, name: toTitleCase(m.full_name) }));
+    } catch (err) {
+        console.error('Error fetching csea members:', err);
+        return [];
+    }
 }
 
 async function fetchHoursWorked(year) {
-    const client = getSupabase();
-    if (!client) return [];
-    let query = client.from('hours_worked').select('*');
-    if (year) query = query.eq('fiscal_year', year);
-    const { data, error } = await query;
-    if (error) {
-        console.error('Error fetching hours_worked:', error);
+    const client = await getMongoClient();
+    const coll = getCollection('hours_worked');
+    if (!coll) return [];
+    try {
+        let filter = {};
+        if (year) filter.fiscal_year = year;
+        const data = await coll.find(filter);
+        return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
+    } catch (err) {
+        console.error('Error fetching hours worked:', err);
         return [];
     }
-    return (data || []).map(r => ({ ...r, name: toTitleCase(r.name) }));
 }
 
 async function fetchApprovalDates(year) {
-    const client = getSupabase();
-    if (!client) return [];
-    let query = client.from('approval_dates').select('*');
-    if (year) query = query.eq('fiscal_year', year);
-    const { data, error } = await query;
-    if (error) {
-        console.error('Error fetching approval_dates:', error);
+    const client = await getMongoClient();
+    const coll = getCollection('approval_dates');
+    if (!coll) return [];
+    try {
+        let filter = {};
+        if (year) filter.fiscal_year = year;
+        const data = await coll.find(filter);
+        return (data || []).map(r => ({ ...r, Name: toTitleCase(r.Name || r.name) }));
+    } catch (err) {
+        console.error('Error fetching approval dates:', err);
         return [];
     }
-    return (data || []).map(r => ({ ...r, Name: toTitleCase(r.Name || r.name) }));
 }
 
 async function fetchPaylogSubmissions(year) {
-    const client = getSupabase();
-    if (!client) return [];
-    let query = client.from('paylog submission').select('*');
-    if (year) query = query.eq('fiscal_year', year);
-    const { data, error } = await query;
-    if (error) {
-        console.warn('paylog submission table not found, using empty data');
+    const client = await getMongoClient();
+    const coll = getCollection('paylog submission');
+    if (!coll) return [];
+    try {
+        let filter = {};
+        if (year) filter.fiscal_year = year;
+        const data = await coll.find(filter);
+        return (data || []).map(r => ({ ...r, name: toTitleCase(r['Employee Name'] || r.name) }));
+    } catch (err) {
+        console.error('Error fetching paylog submissions:', err);
         return [];
     }
-    return (data || []).map(r => ({ ...r, name: toTitleCase(r['Employee Name'] || r.name) }));
 }
 
 async function fetchAllTrackingNames(year) {
-    const client = getSupabase();
-    if (!client) return [...DEFAULT_EMPLOYEES].sort();
+    const client = await getMongoClient();
+    const coll = getCollection('employees');
+    if (!coll) return [...DEFAULT_EMPLOYEES].sort();
     
     try {
-        const { data, error } = await client
-            .from('employees')
-            .select('*')
-            .order('Lastname Firstname');
-
-        if (error) throw error;
-
+        const data = await coll.find({}, { sort: { "Lastname Firstname": 1 } });
         const nameSet = new Set();
-        if (data) {
+        if (data && data.length > 0) {
             data.forEach(r => {
                 const name = r['Lastname Firstname'];
                 if (name) nameSet.add(toTitleCase(name));
@@ -981,19 +538,14 @@ async function fetchAllTrackingNames(year) {
 }
 
 async function fetchAttendanceTrackerNames() {
-    const client = getSupabase();
-    if (!client) return [...DEFAULT_EMPLOYEES].sort();
+    const client = await getMongoClient();
+    const coll = getCollection('attendance tracker');
+    if (!coll) return [...DEFAULT_EMPLOYEES].sort();
     
     try {
-        const { data, error } = await client
-            .from('attendance tracker')
-            .select('name')
-            .order('name');
-
-        if (error) throw error;
-
+        const data = await coll.find({}, { sort: { name: 1 } });
         const nameSet = new Set();
-        if (data) {
+        if (data && data.length > 0) {
             data.forEach(r => {
                 if (r.name) nameSet.add(toTitleCase(r.name));
             });
@@ -1012,27 +564,19 @@ async function fetchAttendanceTrackerNames() {
 
 function normalizeNameForMatch(name) {
     if (!name) return '';
-    // Remove commas and extra spaces, convert to lowercase
     let n = name.toLowerCase().replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
-    // Split into parts
     let parts = n.split(' ');
-    // Sort parts to handle "First Last" vs "Last First"
     return parts.sort().join(' ');
 }
 
 async function saveTrackingData(table, name, month, value, year) {
-    const client = getSupabase();
-    if (!client) return false;
+    const client = await getMongoClient();
+    const coll = getCollection(table);
+    if (!coll) return false;
     
-    // Normalize table names
-    let actualTable = table;
-    if (table === 'paylog_submission' || table === 'paylog submission') actualTable = 'paylog submission';
-    if (table === 'hours_worked' || table === 'hours worked') actualTable = 'hours_worked';
-    if (table === 'approval_dates') actualTable = 'approval_dates';
-
-    const isHours = actualTable === 'hours_worked';
-    const isPaylog = actualTable === 'paylog submission';
-    const isApproval = actualTable === 'approval_dates';
+    const isHours = table.includes('hours_worked');
+    const isPaylog = table.includes('paylog submission');
+    const isApproval = table.includes('approval_dates');
     
     let col = month;
     if (isHours) {
@@ -1051,95 +595,64 @@ async function saveTrackingData(table, name, month, value, year) {
     }
     
     const nameCol = isPaylog ? 'Employee Name' : (isHours ? 'name' : 'Name');
+    const normName = normalizeNameForMatch(name);
     
-    // Fetch records for matching (filtered by fiscal_year)
-    let query = client.from(actualTable).select('*');
-    if (year) query = query.eq('fiscal_year', year);
-    const { data: allRows, error: fetchError } = await query;
+    try {
+        let filter = { fiscal_year: year };
+        const allRows = await coll.find(filter);
+        const existing = allRows.find(r => normalizeNameForMatch(r[nameCol]) === normName);
 
-    if (fetchError) {
-        console.error(`Error fetching from ${actualTable}:`, fetchError);
+        if (existing) {
+            await coll.updateOne({ _id: existing._id }, { $set: { [col]: value } });
+        } else {
+            await coll.insertOne({ [nameCol]: name, [col]: value, fiscal_year: year });
+        }
+        return true;
+    } catch (err) {
+        console.error(`Error saving tracking data to ${table}:`, err);
         return false;
     }
-
-    const normName = normalizeNameForMatch(name);
-    const existing = allRows.find(r => normalizeNameForMatch(r[nameCol]) === normName);
-
-    if (existing) {
-        const updateObj = { [col]: value };
-        const { error: updateError } = await client.from(actualTable).update(updateObj).eq('id', existing.id);
-        if (updateError) {
-            console.error(`Error updating ${actualTable}:`, updateError);
-            return false;
-        }
-    } else {
-        const insertObj = { [nameCol]: name, [col]: value };
-        if (year) insertObj.fiscal_year = year;
-        const { error: insertError } = await client.from(actualTable).insert(insertObj);
-        if (insertError) {
-            console.error(`Error inserting into ${actualTable}:`, insertError);
-            return false;
-        }
-    }
-    return true;
 }
 
 async function fetchCseaStewards() {
-    const client = getSupabase();
-    if (!client) return [];
+    const client = await getMongoClient();
+    const coll = getCollection('csea_stewards');
+    if (!coll) return [];
     try {
-        const { data, error } = await client.from('csea_stewards').select('*').order('name');
-        if (error) {
-            console.error('Error fetching stewards:', error);
-            return [];
-        }
+        const data = await coll.find({}, { sort: { name: 1 } });
         return (data || []).map(m => ({ ...m, name: toTitleCase(m.name) }));
     } catch (err) {
-        console.error('Network error fetching stewards:', err);
+        console.error('Error fetching stewards:', err);
         return [];
     }
 }
 
 async function fetchCseaIssues() {
-    const client = getSupabase();
-    if (!client) return [];
+    const client = await getMongoClient();
+    const coll = getCollection('member_interactions');
+    if (!coll) return [];
     
     try {
-        const { data, error } = await client
-            .from('member_interactions')
-            .select('discussion')
-            .not('discussion', 'is', null)
-            .order('discussion');
-        
-        if (error) {
-            console.error('Error fetching issues from interactions:', error);
-            return [];
-        }
-        
-        // Filter for unique, non-empty values and map to issue_name format
+        const data = await coll.find({ discussion: { $ne: null } });
         const uniqueDiscussions = [...new Set(data.map(i => toTitleCase(i.discussion.trim())))]
             .filter(d => d.length > 0)
             .map(d => ({ issue_name: d }));
-            
         return uniqueDiscussions;
     } catch (err) {
-        console.error('Network error fetching issues:', err);
+        console.error('Error fetching issues:', err);
         return [];
     }
 }
 
 async function fetchSchoolDirectory() {
-    const client = getSupabase();
-    if (!client) return [];
+    const client = await getMongoClient();
+    const coll = getCollection('school_directory');
+    if (!coll) return [];
     try {
-        const { data, error } = await client.from('school_directory').select('*').order('site_name');
-        if (error) {
-            console.error('Error fetching school directory:', error);
-            return [];
-        }
+        const data = await coll.find({}, { sort: { site_name: 1 } });
         return (data || []).map(s => ({ ...s, site_name: toTitleCase(s.site_name) }));
     } catch (err) {
-        console.error('Network error fetching school directory:', err);
+        console.error('Error fetching school directory:', err);
         return [];
     }
 }
@@ -1164,106 +677,110 @@ function toTitleCase(str) {
 function updateNavigationLinks(date) {
     if (!date) return;
     const dateStr = date instanceof Date ? date.toISOString().split('T')[0] : date;
-    const internalPages = [
-        'index.html',
-        'work-planner.html',
-        'planner.html',
-        'csea.html',
-        'financial.html',
-        'hoa.html',
-        'planning.html',
-        'monthly-review.html',
-        'check-breakdown.html',
-        'icaap-attendance.html',
-        'mantra.html',
-        'personal-goals.html'
-    ];
-
-    const categoryMapping = {
-        'financial.html': 'Budget',
-        'monthly-review.html': 'Monthly-Review',
-        'icaap-attendance.html': 'ICAAP-Attendance',
-        'csea.html': 'CSEA',
-        'hoa.html': 'HOA',
-        'mantra.html': 'Mantra',
-        'personal-goals.html': 'Goals',
-        'planning.html': 'Planning',
-        'work-planner.html': 'Work-Planner',
-        'personal-planner.html': 'Personal-Planner'
-    };
-
     document.querySelectorAll('a.nav-link, a.nav-btn, a.tracking-pill, a.tracking-link, a.section-icon, a.section-link').forEach(link => {
         const href = link.getAttribute('href');
         if (href) {
             let base = href.split('?')[0];
-            let targetUrl = base;
             let params = new URLSearchParams(href.split('?')[1] || '');
-            
-            // If it was pointing to personal-planner.html, point to index.html instead
-            if (base === 'personal-planner.html') {
-                targetUrl = 'index.html';
-                base = 'index.html';
-            }
-
-            // Do not put date in URL as per user request
-            if (params.has('date')) {
-                params.delete('date');
-            }
-            
-            if (params.toString()) {
-                link.href = `${targetUrl}?${params.toString()}`;
-            } else {
-                link.href = targetUrl;
-            }
+            params.set('date', dateStr);
+            link.setAttribute('href', base + '?' + params.toString());
         }
     });
 }
 
-async function fetchFinancialBills() {
-    const client = getSupabase();
-    if (!client) return DEFAULT_BILLS;
-    try {
-        const { data, error } = await client.from('financial_bills').select('*').order('id');
-        if (error || !data || data.length === 0) {
-            console.error('Error fetching financial bills or empty, using defaults:', error);
-            return DEFAULT_BILLS;
-        }
-        return data;
-    } catch (err) {
-        console.error('Network error fetching financial bills, using defaults:', err);
-        return DEFAULT_BILLS;
-    }
-}
-
-async function updateFinancialBill(id, field, value) {
-    const client = getSupabase();
-    if (!client) return false;
-    
-    const updateData = {};
-    updateData[field] = value;
-    
-    const { error } = await client
-        .from('financial_bills')
-        .update(updateData)
-        .eq('id', id);
-        
-    if (error) {
-        console.error('Error updating financial bill:', error);
-        return false;
-    }
-    return true;
-}
-
-// Global initialization if needed
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const dateParam = urlParams.get('date');
-    const today = new Date().toISOString().split('T')[0];
-    
-    if (dateParam) {
-        updateNavigationLinks(dateParam);
+function formatDateMMM(dateStr) {
+    if (!dateStr) return '';
+    let date;
+    if (dateStr instanceof Date) {
+        date = dateStr;
     } else {
-        // If no date, update links with today's date
-        updateNavigationLinks(today);
+        const datePart = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+        const parts = datePart.split('-');
+        if (parts.length === 3) {
+            date = new Date(parts[0], parts[1] - 1, parts[2]);
+        } else {
+            date = new Date(dateStr);
+        }
     }
-});
+    if (isNaN(date.getTime())) return 'Invalid Date';
+    return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).replace(',', '');
+}
+
+function formatTime(timeStr, compact = false, showSpace = false) {
+    if (!timeStr) return '';
+    const [h, m] = timeStr.split(':').map(Number);
+    let ampm = compact ? (h >= 12 ? 'p' : 'a') : (h >= 12 ? 'pm' : 'am');
+    if (showSpace && !compact) ampm = ' ' + ampm;
+    let displayH = h % 12 || 12;
+    return `${displayH}:${String(m).padStart(2, '0')}${ampm}`;
+}
+
+// Dashboard Layout
+(function() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        :root { --primary-navy: #00326b; --accent-gold: #c5a059; --bg-light: #f5f7fa; --text-dark: #333; --border-color: #d1d1d1; --font-main: 'Coming Soon', cursive; }
+        * { box-sizing: border-box; font-family: 'Coming Soon', cursive !important; }
+        body, html { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden !important; background: var(--bg-light); font-size: 10pt; line-height: 1.2; font-weight: 600; }
+        .dashboard-container { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+        .dashboard-sidebar { width: 250px; background: var(--primary-navy); color: #fff; display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; padding-top: 20px; }
+        .sidebar-section { padding: 10px 0; }
+        .sidebar-label { padding: 5px 25px; font-size: 8pt; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); font-weight: 700; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 25px; color: #fff; text-decoration: none; font-size: 10pt; transition: background 0.2s; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.1); }
+        .sidebar-link.active { background: rgba(255,255,255,0.2); border-left: 4px solid var(--accent-gold); padding-left: 21px; }
+        .sidebar-icon { font-size: 12pt; }
+        .dashboard-main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: #fff; }
+        .dashboard-header { flex-shrink: 0; background: #fff; border-bottom: 1px solid var(--border-color); padding: 10px 20px; display: flex; align-items: center; justify-content: center; min-height: 80px; position: relative; z-index: 100; }
+        .header-left-controls { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 15px; z-index: 101; }
+        .header-center { text-align: center; width: 100%; display: flex; justify-content: center; align-items: center; }
+        .header-right-controls { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 15px; z-index: 101; }
+        .header-title { font-size: 14px; font-weight: 700; color: var(--primary-navy); margin: 0; letter-spacing: 3px; text-transform: uppercase; }
+        .header-nav-btn { background: #fff; border: 1px solid var(--border-color); padding: 6px 15px; border-radius: 4px; cursor: pointer; font-size: 10pt; font-weight: 600; color: var(--text-dark); transition: all 0.2s; }
+        .header-nav-btn:hover { background: #f8f9fa; border-color: var(--primary-navy); }
+        .dashboard-body { flex: 1; overflow: auto; padding: 0 !important; background: #fff; }
+    `;
+    document.head.appendChild(style);
+
+    window.setGlobalHeaderTitle = function(title) {
+        const titleEl = document.querySelector('.header-title');
+        if (titleEl) titleEl.innerText = title;
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (checkIsLoginPage()) return;
+        const existingNodes = Array.from(document.body.childNodes);
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateStr = urlParams.get('date') || localStorage.getItem('selectedDate') || new Date().toISOString().split('T')[0];
+        
+        const dashboard = document.createElement('div');
+        dashboard.className = 'dashboard-container';
+        dashboard.innerHTML = `
+            <aside class="dashboard-sidebar">
+                <div style="padding: 0 25px 30px; font-size: 10pt; font-weight: 700; color: #fff; letter-spacing: 2px;">PLANNER 2026</div>
+                <div id="sidebar-nav"></div>
+            </aside>
+            <main class="dashboard-main">
+                <header class="dashboard-header">
+                    <div class="header-left-controls">
+                        <button class="header-nav-btn" onclick="localStorage.removeItem('selectedDate'); window.location.href='index.html'">Today</button>
+                    </div>
+                    <div class="header-center"><h1 class="header-title">PLANNER 2026</h1></div>
+                    <div class="header-right-controls">
+                        <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Coming Soon', cursive; font-size: 10pt;">
+                        <a href="#" onclick="logout(); return false;" style="text-decoration: none; color: var(--primary-navy); font-size: 10pt; font-weight: 600; text-transform: uppercase;">Logout</a>
+                    </div>
+                </header>
+                <div class="dashboard-body"></div>
+            </main>
+        `;
+
+        const dashboardBody = dashboard.querySelector('.dashboard-body');
+        existingNodes.forEach(node => {
+            if (node.nodeType === 1 && (node.tagName === 'STYLE' || node.tagName === 'SCRIPT')) return;
+            dashboardBody.appendChild(node);
+        });
+        document.body.replaceChildren(dashboard, ...Array.from(document.body.querySelectorAll('script, style')));
+    });
+})();

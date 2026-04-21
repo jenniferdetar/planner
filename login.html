@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Home Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/realm-web@1.5.1/dist/bundle.iife.js"></script>
     <script src="shared.js"></script>
     <style>
         :root {
@@ -120,6 +120,8 @@
     </div>
 
     <script>
+        const app = new Realm.App({ id: '69caa28329abfb126e9f3a88' }); 
+
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -128,24 +130,19 @@
             
             errorMessage.style.display = 'none';
             
-            const { data, error } = await getSupabase().auth.signInWithPassword({
-                email,
-                password
-            });
-
-            if (error) {
-                errorMessage.innerText = error.message;
-                errorMessage.style.display = 'block';
-            } else {
+            try {
+                const credentials = Realm.Credentials.emailPassword(email, password);
+                await app.logIn(credentials);
                 window.location.href = 'index.html';
+            } catch (err) {
+                errorMessage.innerText = err.message;
+                errorMessage.style.display = 'block';
             }
         });
 
         // Redirect if already logged in
         async function checkAuth() {
-            const client = getSupabase();
-            const { data: { session } } = await client.auth.getSession();
-            if (session) {
+            if (app.currentUser) {
                 window.location.href = 'index.html';
             }
         }
