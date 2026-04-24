@@ -232,24 +232,28 @@ async function savePlannerData(date, fieldId, content, skipTimestamp = false) {
 async function fetchCalendarEvents(startDate, days = 7) {
     const client = await getMongoClient();
     const coll = getCollection('calendar_by_date');
-    if (!coll) return [];
 
     const startStr = getDateKey(startDate);
-    const endDate = new Date(startStr + 'T12:00:00');
+    const start = new Date(startStr + 'T12:00:00');
+    const endDate = new Date(start.getTime());
     endDate.setDate(endDate.getDate() + (days - 1));
     const endStr = getDateKey(endDate);
 
     let dbEvents = [];
-    try {
-        dbEvents = await coll.find({
-            date: { $gte: startStr, $lte: endStr }
-        });
-    } catch (err) {
-        console.error('Error fetching calendar events:', err);
+    if (coll) {
+        try {
+            dbEvents = await coll.find({
+                date: { $gte: startStr, $lte: endStr }
+            });
+        } catch (err) {
+            console.error('Error fetching calendar events:', err);
+        }
     }
 
+    const staticEvents = getStaticEventsInRange(start, endDate);
     const hardcodedEvents = getCalendarEvents().filter(e => e.date >= startStr && e.date <= endStr);
-    const allEvents = [...dbEvents, ...hardcodedEvents];
+    
+    const allEvents = [...dbEvents, ...staticEvents, ...hardcodedEvents];
     const uniqueMap = new Map();
     allEvents.forEach(e => {
         const key = `${e.date}|${e.title}`;
@@ -261,6 +265,49 @@ async function fetchCalendarEvents(startDate, days = 7) {
     return Array.from(uniqueMap.values());
 }
 
+function getStaticEventsInRange(start, end) {
+    const events = [];
+    let curr = new Date(start.getTime());
+    while (curr <= end) {
+        const day = curr.getDate();
+        const dateStr = getDateKey(curr);
+
+        // Paydays: 8th and 23rd
+        if (day === 8 || day === 23) {
+            events.push({ date: dateStr, title: 'Pay Day' });
+        }
+
+        // Budget Reminders: 3 days before payday (5th and 20th)
+        if (day === 5 || day === 20) {
+            events.push({ date: dateStr, title: 'Budget / Pay Bills' });
+        }
+
+        // Recurring Bills based on full_event_list.txt
+        if (day === 1) {
+            events.push({ date: dateStr, title: 'HOA Due' });
+            events.push({ date: dateStr, title: 'Mortgage Due' });
+        }
+        if (day === 8) {
+            events.push({ date: dateStr, title: 'Schools First Credit Card Due' });
+        }
+        if (day === 10) {
+            events.push({ date: dateStr, title: 'HELOC Due' });
+        }
+        if (day === 13) {
+            events.push({ date: dateStr, title: 'Paramount+ Due' });
+        }
+        if (day === 19) {
+            events.push({ date: dateStr, title: 'ADT Due' });
+        }
+        if (day === 21) {
+            events.push({ date: dateStr, title: 'Spectrum Due' });
+        }
+
+        curr.setDate(curr.getDate() + 1);
+    }
+    return events;
+}
+
 function getCalendarEvents() {
     return [
         { date: '2026-01-26', time: '17:30', title: 'Chapter 500 Monthly', duration: 120 },
@@ -268,6 +315,42 @@ function getCalendarEvents() {
         { date: '2026-02-06', time: '09:30', title: 'CSEA Reopener Negotiations', duration: 420 },
         { date: '2026-02-07', time: '08:30', title: 'CSEA Officer Skills Training', duration: 450 },
         { date: '2026-04-01', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
+        { date: '2026-04-01', title: 'April Fool\'s Day' },
+        { date: '2026-04-01', time: '17:30', title: 'CSEA MB Committee' },
+        { date: '2026-04-01', time: '17:30', title: 'CSEA RPM Region 8' },
+        { date: '2026-04-02', title: 'Passover' },
+        { date: '2026-04-02', time: '17:00', title: 'CSEA Chapter E-Board' },
+        { date: '2026-04-02', time: '17:30', title: 'CSEA RPM Region 59' },
+        { date: '2026-04-03', title: 'Good Friday' },
+        { date: '2026-04-03', time: '18:00', title: 'Certificated & Classified Off-cycles' },
+        { date: '2026-04-05', title: 'Easter' },
+        { date: '2026-04-06', time: '17:30', title: 'CSEA RPM Region 26' },
+        { date: '2026-04-10', title: 'HELOC Due' },
+        { date: '2026-04-11', title: 'Tom Detar' },
+        { date: '2026-04-13', title: 'Paramount+ Due' },
+        { date: '2026-04-15', title: 'Taxes Due' },
+        { date: '2026-04-15', time: '17:30', title: 'CSEA RPM Region 66' },
+        { date: '2026-04-15', time: '08:30', title: 'CSEA Statewide Blitz' },
+        { date: '2026-04-16', time: '12:00', title: 'CSEA 500 NEO' },
+        { date: '2026-04-16', time: '18:00', title: 'Semi-Monthly Cut-Off' },
+        { date: '2026-04-18', time: '09:00', title: 'CSEA State E-Board San Jose' },
+        { date: '2026-04-19', title: 'Disney Cruise' },
+        { date: '2026-04-19', title: 'ADT Due' },
+        { date: '2026-04-20', title: 'Brienne Detar' },
+        { date: '2026-04-20', title: 'Disney Cruise' },
+        { date: '2026-04-21', title: 'Spectrum Due' },
+        { date: '2026-04-21', title: 'Disney Cruise' },
+        { date: '2026-04-21', time: '17:00', title: 'LA Fed' },
+        { date: '2026-04-22', title: 'Admin Assist Day' },
+        { date: '2026-04-22', title: 'Earth Day' },
+        { date: '2026-04-22', title: 'Disney Cruise' },
+        { date: '2026-04-23', title: 'Harrison Detar' },
+        { date: '2026-04-23', title: 'DWP Meter Reading' },
+        { date: '2026-04-23', title: 'Disney Cruise' },
+        { date: '2026-04-23', time: '17:30', title: 'CSEA Chapter 500 Meeting' },
+        { date: '2026-04-25', time: '17:00', title: 'CSEA Chapter E-Board' },
+        { date: '2026-04-26', title: 'Verizon Due' },
+        { date: '2026-04-27', time: '18:00', title: 'Certificated Cutoff' },
         { date: '2026-05-31', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
         { date: '2026-07-30', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
         { date: '2026-09-28', title: 'A-D WEN SweetAlmondMint & Pomegranate' },
