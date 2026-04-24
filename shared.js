@@ -120,36 +120,21 @@ function parseLocalDate(dateStr) {
 }
 
 // Auth Logic
-function checkIsLoginPage() {
-    const path = window.location.pathname;
-    return path.endsWith('login.html') || 
-           path.endsWith('/login') || 
-           path === '/login/';
-}
-
 async function requireAuth() {
     if (typeof Realm === 'undefined') return null;
     if (!mongoApp) mongoApp = new Realm.App({ id: MONGO_APP_ID });
     
-    const user = mongoApp.currentUser;
-    const isLoginPage = checkIsLoginPage();
-    
+    let user = mongoApp.currentUser;
     if (!user) {
-        if (!isLoginPage) {
-            window.location.href = 'login.html';
+        try {
+            user = await getMongoClient();
+        } catch (err) {
+            console.error('Auto-login failed:', err);
         }
     } else {
         await getMongoClient();
     }
     return user;
-}
-
-async function logout() {
-    if (mongoApp && mongoApp.currentUser) {
-        await mongoApp.currentUser.logOut();
-        mongoClient = null;
-        window.location.href = 'login.html';
-    }
 }
 
 function setGlobalHeaderTitle(title) {
@@ -159,15 +144,13 @@ function setGlobalHeaderTitle(title) {
 
 // Global Auth Check
 if (typeof window !== 'undefined') {
-    if (!checkIsLoginPage()) {
-        (async () => {
-            try {
-                await requireAuth();
-            } catch (err) {
-                console.error('Auth error:', err);
-            }
-        })();
-    }
+    (async () => {
+        try {
+            await requireAuth();
+        } catch (err) {
+            console.error('Auth error:', err);
+        }
+    })();
 }
 
 // Planner Data Logic
@@ -748,7 +731,6 @@ function formatTime(timeStr, compact = false, showSpace = false) {
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-        if (checkIsLoginPage()) return;
         const existingNodes = Array.from(document.body.childNodes);
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         const urlParams = new URLSearchParams(window.location.search);
@@ -769,7 +751,6 @@ function formatTime(timeStr, compact = false, showSpace = false) {
                     <div class="header-center"><h1 class="header-title">PLANNER 2026</h1></div>
                     <div class="header-right-controls">
                         <input type="date" value="${dateStr}" id="global-date-picker" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Coming Soon', cursive; font-size: 10pt;">
-                        <a href="#" onclick="logout(); return false;" style="text-decoration: none; color: var(--primary-navy); font-size: 10pt; font-weight: 600; text-transform: uppercase;">Logout</a>
                     </div>
                 </header>
                 <div class="dashboard-body"></div>
