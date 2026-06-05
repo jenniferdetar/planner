@@ -40,7 +40,7 @@ export default function Sidebar({
       <div className="sidebar-header">
         <div className="logo">
           <span className="logo-icon">◆</span>
-          <span className="logo-text">Opus One</span>
+          <span className="logo-text">My Meridian Planner</span>
         </div>
         <div className="sidebar-tabs">
           <button className={`sidebar-tab ${sideTab === 'tasks' ? 'active' : ''}`} onClick={() => setSideTab('tasks')}>Tasks</button>

@@ -7,7 +7,7 @@ export default function LoginScreen() {
       <div className="login-card">
         <div className="login-logo">
           <span className="login-icon">◆</span>
-          <span className="login-name">Opus One</span>
+          <span className="login-name">My Meridian Planner</span>
         </div>
         <p className="login-tagline">Your personal agenda planner</p>
         <div className="login-divider" />
