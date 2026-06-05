@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './IcaapTracker.css'
 
 const CATEGORIES = ['Task', 'Meeting', 'Research', 'Review', 'Report', 'Follow-up', 'Other']
@@ -49,7 +49,7 @@ async function getFirstWorkspace(token) {
   return data[0]?.gid ?? null
 }
 
-export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteItem }) {
+export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
   const [tab, setTab] = useState('board')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
@@ -139,10 +139,21 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
       <div className="icaap-tabs">
         <button className={`icaap-tab ${tab === 'board' ? 'active' : ''}`} onClick={() => setTab('board')}>Board</button>
         <button className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>List</button>
+        <button className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
       </div>
 
+      {/* Asana tab */}
+      {tab === 'asana' && (
+        <div className="icaap-list">
+          {asanaTasks.length === 0 && <p className="icaap-empty">No iCAAP tasks in Asana</p>}
+          {asanaTasks.map(task => (
+            <AsanaTaskRow key={task.id} task={task} onComplete={onCompleteAsanaTask} onUpdateNotes={onUpdateAsanaTaskNotes} />
+          ))}
+        </div>
+      )}
+
       {/* Toolbar */}
-      <div className="icaap-toolbar">
+      <div className="icaap-toolbar" style={{ display: tab === 'asana' ? 'none' : undefined }}>
         {tab === 'list' ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (
@@ -155,8 +166,8 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
         <button className="icaap-add-btn" onClick={() => setShowForm(true)}>+ Add Item</button>
       </div>
 
-      {/* Add form */}
-      {showForm && (
+      {/* Add form — hidden on Asana tab */}
+      {showForm && tab !== 'asana' && (
         <form className="icaap-form" onSubmit={handleAdd}>
           <input className="icaap-input" placeholder="Title *" value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))} autoFocus />
@@ -204,7 +215,7 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
         </form>
       )}
 
-      {/* Board view */}
+      {/* Board view — only when not on Asana tab */}
       {tab === 'board' && (
         <div className="icaap-board">
           {[
@@ -247,6 +258,44 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
               pushResult={pushResult[item.id]}
             />
           ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function AsanaTaskRow({ task, onComplete, onUpdateNotes }) {
+  const [expanded, setExpanded] = useState(false)
+  const [notesText, setNotesText] = useState(task.notes || '')
+  const saveTimer = useRef(null)
+
+  function handleNotesChange(e) {
+    const val = e.target.value
+    setNotesText(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => onUpdateNotes?.(task.id, val), 800)
+  }
+
+  return (
+    <div className="asana-task-row">
+      <div className="asana-task-header" onClick={() => setExpanded(e => !e)}>
+        <span className="asana-task-title">{task.title}</span>
+        {task.due_on && <span className="asana-task-due">📅 {task.due_on}</span>}
+        <span className="icaap-chevron">{expanded ? '▾' : '▸'}</span>
+      </div>
+      {expanded && (
+        <div className="asana-task-body">
+          <textarea
+            className="icaap-input"
+            placeholder="Notes…"
+            value={notesText}
+            onChange={handleNotesChange}
+            rows={3}
+            style={{ resize: 'vertical', width: '100%' }}
+          />
+          <div className="asana-task-actions">
+            <button className="asana-complete-btn" onClick={() => onComplete?.(task.id)}>✓ Complete</button>
+          </div>
         </div>
       )}
     </div>

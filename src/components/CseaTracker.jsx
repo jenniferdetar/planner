@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './CseaTracker.css'
 
 const ISSUE_TYPES = ['Grievance', 'Gripe', 'Complaint']
@@ -11,7 +11,7 @@ const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction }) {
+export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
   const [tab, setTab] = useState('issues')
   const [showAddIssue, setShowAddIssue] = useState(false)
   const [showAddInteraction, setShowAddInteraction] = useState(false)
@@ -80,7 +80,22 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
       <div className="csea-tabs">
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions</button>
+        <button className={`csea-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="csea-tab-badge">{asanaTasks.length}</span>}</button>
       </div>
+
+      {tab === 'asana' && (
+        <div className="csea-panel">
+          <div className="csea-toolbar">
+            <span className="csea-toolbar-label">CSEA tasks from Asana</span>
+          </div>
+          <div className="csea-issue-list">
+            {asanaTasks.length === 0 && <p className="csea-empty">No CSEA tasks in Asana</p>}
+            {asanaTasks.map(task => (
+              <CseaAsanaTaskRow key={task.id} task={task} onComplete={onCompleteAsanaTask} onUpdateNotes={onUpdateAsanaTaskNotes} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {tab === 'issues' && (
         <div className="csea-panel">
@@ -196,6 +211,43 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
                 {i.who_involved && <div className="interaction-who">With: {i.who_involved}</div>}
               </div>
             ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function CseaAsanaTaskRow({ task, onComplete, onUpdateNotes }) {
+  const [expanded, setExpanded] = useState(false)
+  const [notesText, setNotesText] = useState(task.notes || '')
+  const saveTimer = useRef(null)
+
+  function handleNotesChange(e) {
+    const val = e.target.value
+    setNotesText(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => onUpdateNotes?.(task.id, val), 800)
+  }
+
+  return (
+    <div className="asana-task-row">
+      <div className="asana-task-header" onClick={() => setExpanded(e => !e)}>
+        <span className="asana-task-title">{task.title}</span>
+        {task.due_on && <span className="asana-task-due">📅 {task.due_on}</span>}
+        <span className="issue-chevron">{expanded ? '▾' : '▸'}</span>
+      </div>
+      {expanded && (
+        <div className="asana-task-body">
+          <textarea
+            className="csea-textarea"
+            placeholder="Notes…"
+            value={notesText}
+            onChange={handleNotesChange}
+            rows={3}
+          />
+          <div className="asana-task-actions">
+            <button className="asana-complete-btn" onClick={() => onComplete?.(task.id)}>✓ Complete</button>
           </div>
         </div>
       )}

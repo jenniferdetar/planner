@@ -38,6 +38,7 @@ export default function DailyPlanner({
   taskCounts,
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
   cseaInteractions, onAddCseaInteraction,
+  asanaCseaTasks, asanaIcaapTasks, onCompleteAsanaTask, onUpdateAsanaTaskNotes,
   onMonthChange,
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
@@ -135,6 +136,9 @@ export default function DailyPlanner({
           onAddItem={onAddIcaapItem}
           onUpdateItem={onUpdateIcaapItem}
           onDeleteItem={onDeleteIcaapItem}
+          asanaTasks={asanaIcaapTasks || []}
+          onCompleteAsanaTask={onCompleteAsanaTask}
+          onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
         />
       )}
 
@@ -146,6 +150,9 @@ export default function DailyPlanner({
           onDeleteIssue={onDeleteCseaIssue}
           interactions={cseaInteractions || []}
           onAddInteraction={onAddCseaInteraction}
+          asanaTasks={asanaCseaTasks || []}
+          onCompleteAsanaTask={onCompleteAsanaTask}
+          onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
         />
       )}
 
