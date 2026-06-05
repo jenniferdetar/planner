@@ -84,3 +84,16 @@
   color: #bbb;
   line-height: 1.6;
 }
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .login-card {
+    width: calc(100% - 32px);
+    padding: 36px 24px;
+    border-radius: 16px;
+  }
+
+  .login-name {
+    font-size: 22px;
+  }
+}

@@ -421,3 +421,32 @@
   color: #fff;
   border-color: #f86336;
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .sidebar {
+    height: 100%;
+    min-height: 100%;
+  }
+
+  .sidebar-header {
+    padding: 20px 16px 12px;
+  }
+
+  .task-list {
+    padding: 0 8px;
+  }
+
+  .add-task-form {
+    margin: 8px 8px;
+  }
+
+  .add-btn {
+    margin: 8px 8px;
+    width: calc(100% - 16px);
+  }
+
+  .sidebar-footer {
+    padding: 12px 16px;
+  }
+}

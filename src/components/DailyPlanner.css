@@ -89,7 +89,6 @@
   border-radius: 8px;
   padding: 3px;
   gap: 2px;
-  margin-left: auto;
 }
 
 .view-tab {
@@ -620,4 +619,78 @@
 .add-block-btn:hover {
   background: #c9a96e;
   color: #fff;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .daily-planner {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .planner-header {
+    padding: 12px 16px 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .date-nav {
+    gap: 8px;
+  }
+
+  .date-main {
+    font-size: 17px;
+  }
+
+  .view-tabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-shrink: 0;
+    margin-left: 0 !important;
+  }
+
+  .view-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .view-tab {
+    font-size: 12px;
+    padding: 6px 12px;
+    white-space: nowrap;
+  }
+
+  .planner-body {
+    overflow-y: visible;
+  }
+
+  .daily-tasks-section {
+    padding: 14px 16px 12px;
+  }
+
+  .schedule-section {
+    padding: 14px 16px;
+  }
+
+  .hour-label {
+    width: 48px;
+    font-size: 10px;
+  }
+
+  .block-text {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* Show add-block button on touch (no hover) */
+  .add-block-btn {
+    opacity: 0.5;
+  }
+
+  .add-block-inline {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 }
