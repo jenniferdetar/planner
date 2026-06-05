@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { signOut } from '../lib/supabase'
-import FinancialPanel from './FinancialPanel'
 import './Sidebar.css'
 
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
@@ -8,11 +7,7 @@ const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 
 export default function Sidebar({
   masterTasks, onAddTask, onDeleteTask, quote, user,
-  transactions, onAddTransaction, onDeleteTransaction,
-  bills, onAddBill, onToggleBillPaid, onDeleteBill,
-  goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
 }) {
-  const [sideTab, setSideTab] = useState('tasks')
   const [newText, setNewText] = useState('')
   const [newPriority, setNewPriority] = useState('medium')
   const [showAdd, setShowAdd] = useState(false)
@@ -42,112 +37,88 @@ export default function Sidebar({
           <span className="logo-icon">◆</span>
           <span className="logo-text">My Meridian Planner</span>
         </div>
-        <div className="sidebar-tabs">
-          <button className={`sidebar-tab ${sideTab === 'tasks' ? 'active' : ''}`} onClick={() => setSideTab('tasks')}>Tasks</button>
-          <button className={`sidebar-tab ${sideTab === 'finance' ? 'active' : ''}`} onClick={() => setSideTab('finance')}>Finance</button>
-        </div>
       </div>
 
-      {sideTab === 'tasks' && (
-        <>
-          <div className="quote-box">
-            <p className="quote-text">"{quote.text}"</p>
-            <p className="quote-author">— {quote.author}</p>
-          </div>
+      <div className="quote-box">
+        <p className="quote-text">"{quote.text}"</p>
+        <p className="quote-author">— {quote.author}</p>
+      </div>
 
-          <div className="task-section">
-            <div className="task-list">
-              {masterTasks.length === 0 && (
-                <p className="empty-state">Your master task list is empty</p>
-              )}
-              {['high', 'medium', 'low'].map((priority) =>
-                byPriority[priority].length > 0 ? (
-                  <div key={priority} className="priority-group">
-                    <div className="priority-group-label" style={{ color: PRIORITY_COLORS[priority] }}>
-                      {PRIORITY_LABELS[priority]}
-                    </div>
-                    {byPriority[priority].map((task) => (
-                      <TaskRow key={task.id} task={task} onDelete={onDeleteTask} />
-                    ))}
-                  </div>
-                ) : null
-              )}
-            </div>
-
-            {showAdd ? (
-              <form className="add-task-form" onSubmit={handleAdd}>
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="Task description..."
-                  value={newText}
-                  onChange={(e) => setNewText(e.target.value)}
-                  className="add-task-input"
-                />
-                <div className="add-task-row">
-                  <div className="priority-pills">
-                    {['high', 'medium', 'low'].map((p) => (
-                      <button
-                        key={p}
-                        type="button"
-                        className={`priority-pill ${newPriority === p ? 'active' : ''}`}
-                        style={{ '--p-color': PRIORITY_COLORS[p] }}
-                        onClick={() => setNewPriority(p)}
-                      >
-                        {PRIORITY_LABELS[p]}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="form-actions">
-                    <button type="button" className="btn-cancel" onClick={() => setShowAdd(false)}>✕</button>
-                    <button type="submit" className="btn-save">Add</button>
-                  </div>
+      <div className="task-section">
+        <div className="task-list">
+          {masterTasks.length === 0 && (
+            <p className="empty-state">Your master task list is empty</p>
+          )}
+          {['high', 'medium', 'low'].map((priority) =>
+            byPriority[priority].length > 0 ? (
+              <div key={priority} className="priority-group">
+                <div className="priority-group-label" style={{ color: PRIORITY_COLORS[priority] }}>
+                  {PRIORITY_LABELS[priority]}
                 </div>
-              </form>
-            ) : (
-              <button className="add-btn" onClick={() => setShowAdd(true)}>
-                <span>+</span> Add master task
-              </button>
-            )}
-          </div>
+                {byPriority[priority].map((task) => (
+                  <TaskRow key={task.id} task={task} onDelete={onDeleteTask} />
+                ))}
+              </div>
+            ) : null
+          )}
+        </div>
 
-          <div className="sidebar-footer">
-            <div className="user-row">
-              {avatarUrl ? (
-                <img src={avatarUrl} className="user-avatar" alt="" />
-              ) : (
-                <div className="user-avatar-placeholder">{displayName[0].toUpperCase()}</div>
-              )}
-              <div className="user-info">
-                <span className="user-name">{displayName}</span>
-                <button className="sign-out-btn" onClick={signOut}>Sign out</button>
+        {showAdd ? (
+          <form className="add-task-form" onSubmit={handleAdd}>
+            <input
+              autoFocus
+              type="text"
+              placeholder="Task description..."
+              value={newText}
+              onChange={(e) => setNewText(e.target.value)}
+              className="add-task-input"
+            />
+            <div className="add-task-row">
+              <div className="priority-pills">
+                {['high', 'medium', 'low'].map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    className={`priority-pill ${newPriority === p ? 'active' : ''}`}
+                    style={{ '--p-color': PRIORITY_COLORS[p] }}
+                    onClick={() => setNewPriority(p)}
+                  >
+                    {PRIORITY_LABELS[p]}
+                  </button>
+                ))}
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-cancel" onClick={() => setShowAdd(false)}>✕</button>
+                <button type="submit" className="btn-save">Add</button>
               </div>
             </div>
-            <div className="stats">
-              <div className="stat">
-                <span className="stat-num">{masterTasks.length}</span>
-                <span className="stat-label">backlog</span>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+          </form>
+        ) : (
+          <button className="add-btn" onClick={() => setShowAdd(true)}>
+            <span>+</span> Add master task
+          </button>
+        )}
+      </div>
 
-      {sideTab === 'finance' && (
-        <FinancialPanel
-          transactions={transactions || []}
-          onAddTransaction={onAddTransaction}
-          onDeleteTransaction={onDeleteTransaction}
-          bills={bills || []}
-          onAddBill={onAddBill}
-          onToggleBillPaid={onToggleBillPaid}
-          onDeleteBill={onDeleteBill}
-          goals={goals || []}
-          onAddGoal={onAddGoal}
-          onUpdateGoalAmount={onUpdateGoalAmount}
-          onDeleteGoal={onDeleteGoal}
-        />
-      )}
+      <div className="sidebar-footer">
+        <div className="user-row">
+          {avatarUrl ? (
+            <img src={avatarUrl} className="user-avatar" alt="" />
+          ) : (
+            <div className="user-avatar-placeholder">{displayName[0].toUpperCase()}</div>
+          )}
+          <div className="user-info">
+            <span className="user-name">{displayName}</span>
+            <button className="sign-out-btn" onClick={signOut}>Sign out</button>
+          </div>
+        </div>
+        <div className="stats">
+          <div className="stat">
+            <span className="stat-num">{masterTasks.length}</span>
+            <span className="stat-label">backlog</span>
+          </div>
+        </div>
+      </div>
     </aside>
   )
 }
