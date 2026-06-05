@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './DailyPlanner.css'
 import MonthView from './MonthView'
 import CseaTracker from './CseaTracker'
+import FinancialPanel from './FinancialPanel'
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
@@ -37,6 +38,9 @@ export default function DailyPlanner({
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
   cseaInteractions, onAddCseaInteraction,
   onMonthChange,
+  transactions, onAddTransaction, onDeleteTransaction,
+  bills, onAddBill, onToggleBillPaid, onDeleteBill,
+  goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -95,7 +99,7 @@ export default function DailyPlanner({
           )}
         </div>
         <div className="view-tabs">
-          {['day', 'month', 'csea'].map(v => (
+          {['day', 'month', 'csea', 'finance'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
@@ -128,7 +132,23 @@ export default function DailyPlanner({
         />
       )}
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea') ? 'none' : undefined }}>
+      {view === 'finance' && (
+        <FinancialPanel
+          transactions={transactions || []}
+          onAddTransaction={onAddTransaction}
+          onDeleteTransaction={onDeleteTransaction}
+          bills={bills || []}
+          onAddBill={onAddBill}
+          onToggleBillPaid={onToggleBillPaid}
+          onDeleteBill={onDeleteBill}
+          goals={goals || []}
+          onAddGoal={onAddGoal}
+          onUpdateGoalAmount={onUpdateGoalAmount}
+          onDeleteGoal={onDeleteGoal}
+        />
+      )}
+
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance') ? 'none' : undefined }}>
         {/* Daily Tasks */}
         <div className="daily-tasks-section">
           <div className="section-label">

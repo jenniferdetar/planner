@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { signOut } from '../lib/supabase'
-import FinancialPanel from './FinancialPanel'
 import './Sidebar.css'
 
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
@@ -8,9 +7,6 @@ const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 
 export default function Sidebar({
   masterTasks, onAddTask, onDeleteTask, quote, user,
-  transactions, onAddTransaction, onDeleteTransaction,
-  bills, onAddBill, onToggleBillPaid, onDeleteBill,
-  goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
 }) {
   const [sideTab, setSideTab] = useState('tasks')
   const [newText, setNewText] = useState('')
@@ -42,14 +38,9 @@ export default function Sidebar({
           <span className="logo-icon">◆</span>
           <span className="logo-text">My Meridian Planner</span>
         </div>
-        <div className="sidebar-tabs">
-          <button className={`sidebar-tab ${sideTab === 'tasks' ? 'active' : ''}`} onClick={() => setSideTab('tasks')}>Tasks</button>
-          <button className={`sidebar-tab ${sideTab === 'finance' ? 'active' : ''}`} onClick={() => setSideTab('finance')}>Finance</button>
-        </div>
       </div>
 
-      {sideTab === 'tasks' && (
-        <>
+      <>
           <div className="quote-box">
             <p className="quote-text">"{quote.text}"</p>
             <p className="quote-author">— {quote.author}</p>
@@ -130,24 +121,7 @@ export default function Sidebar({
               </div>
             </div>
           </div>
-        </>
-      )}
-
-      {sideTab === 'finance' && (
-        <FinancialPanel
-          transactions={transactions || []}
-          onAddTransaction={onAddTransaction}
-          onDeleteTransaction={onDeleteTransaction}
-          bills={bills || []}
-          onAddBill={onAddBill}
-          onToggleBillPaid={onToggleBillPaid}
-          onDeleteBill={onDeleteBill}
-          goals={goals || []}
-          onAddGoal={onAddGoal}
-          onUpdateGoalAmount={onUpdateGoalAmount}
-          onDeleteGoal={onDeleteGoal}
-        />
-      )}
+      </>
     </aside>
   )
 }

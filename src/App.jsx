@@ -127,17 +127,6 @@ export default function App() {
         onDeleteTask={deleteMasterTask}
         quote={quote}
         user={user}
-        transactions={transactions}
-        onAddTransaction={addTransaction}
-        onDeleteTransaction={deleteTransaction}
-        bills={bills}
-        onAddBill={addBill}
-        onToggleBillPaid={toggleBillPaid}
-        onDeleteBill={deleteBill}
-        goals={goals}
-        onAddGoal={addGoal}
-        onUpdateGoalAmount={updateGoalAmount}
-        onDeleteGoal={deleteGoal}
       />
       <DailyPlanner
         selectedDate={selectedDate}
@@ -162,6 +151,17 @@ export default function App() {
         cseaInteractions={cseaInteractions}
         onAddCseaInteraction={addCseaInteraction}
         onMonthChange={(y, m) => { setCalViewYear(y); setCalViewMonth(m) }}
+        transactions={transactions}
+        onAddTransaction={addTransaction}
+        onDeleteTransaction={deleteTransaction}
+        bills={bills}
+        onAddBill={addBill}
+        onToggleBillPaid={toggleBillPaid}
+        onDeleteBill={deleteBill}
+        goals={goals}
+        onAddGoal={addGoal}
+        onUpdateGoalAmount={updateGoalAmount}
+        onDeleteGoal={deleteGoal}
       />
       <RightPanel
         selectedDate={selectedDate}
