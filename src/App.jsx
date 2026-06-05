@@ -47,9 +47,8 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
-  const { masterTasks: asanaMasterTasks, todayTasks: asanaTodayTasks, status: asanaStatus, completeTask: completeAsanaTask } = useAsanaTasks()
+  const { todayTasks: asanaTodayTasks, completeTask: completeAsanaTask } = useAsanaTasks()
 
-  const allMasterTasks = [...masterTasks, ...asanaMasterTasks]
   const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
 
   const weekStart = new Date(selectedDate)
@@ -96,13 +95,11 @@ export default function App() {
   return (
     <div className="app">
       <Sidebar
-        masterTasks={allMasterTasks}
+        masterTasks={masterTasks}
         onAddTask={addMasterTask}
         onDeleteTask={deleteMasterTask}
         quote={quote}
         user={user}
-        asanaStatus={asanaStatus}
-        onCompleteAsanaTask={completeAsanaTask}
       />
       <DailyPlanner
         selectedDate={selectedDate}
