@@ -5,13 +5,13 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
 const DAY_COLORS = [
-  '#e8a0a0',
-  '#e8c97a',
-  '#7ec8c8',
-  '#7ba7e0',
-  '#e8a0a0',
-  '#e8c97a',
-  '#7ec8c8',
+  '#e8a0a0', // Sunday   – rose
+  '#e8c97a', // Monday   – amber
+  '#7ec8c8', // Tuesday  – teal
+  '#7ba7e0', // Wednesday – blue
+  '#e8a0a0', // Thursday – rose
+  '#e8c97a', // Friday   – amber
+  '#7ec8c8', // Saturday – teal
 ]
 
 function sameDay(a, b) {
@@ -24,33 +24,41 @@ function toDateStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 }
 
-export default function MonthView({ selectedDate, onDateChange, taskCounts, timeBlocks }) {
+export default function MonthView({ selectedDate, onDateChange, taskCounts, timeBlocks, onMonthChange }) {
   const today = new Date()
   const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
   const [viewMonth, setViewMonth] = useState(selectedDate.getMonth())
 
   function prevMonth() {
-    if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11) }
-    else setViewMonth(m => m - 1)
+    let y = viewYear, m = viewMonth
+    if (m === 0) { y -= 1; m = 11 } else { m -= 1 }
+    setViewYear(y); setViewMonth(m)
+    onMonthChange?.(y, m)
   }
 
   function nextMonth() {
-    if (viewMonth === 11) { setViewYear(y => y + 1); setViewMonth(0) }
-    else setViewMonth(m => m + 1)
+    let y = viewYear, m = viewMonth
+    if (m === 11) { y += 1; m = 0 } else { m += 1 }
+    setViewYear(y); setViewMonth(m)
+    onMonthChange?.(y, m)
   }
 
   const firstDay = new Date(viewYear, viewMonth, 1).getDay()
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
   const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate()
 
+  // Build a flat 42-cell grid (6 weeks × 7 days)
   const cells = []
 
+  // Trailing days from previous month
   for (let i = firstDay - 1; i >= 0; i--) {
     cells.push({ day: daysInPrevMonth - i, month: viewMonth - 1, year: viewMonth === 0 ? viewYear - 1 : viewYear, overflow: true })
   }
+  // Current month
   for (let d = 1; d <= daysInMonth; d++) {
     cells.push({ day: d, month: viewMonth, year: viewYear, overflow: false })
   }
+  // Leading days of next month
   while (cells.length < 42) {
     const d = cells.length - firstDay - daysInMonth + 1
     cells.push({ day: d, month: viewMonth + 1, year: viewMonth === 11 ? viewYear + 1 : viewYear, overflow: true })
@@ -65,6 +73,7 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
       </div>
 
       <div className="month-grid">
+        {/* Day-of-week headers */}
         {DAY_NAMES.map((name, i) => (
           <div
             key={name}
@@ -75,6 +84,7 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
           </div>
         ))}
 
+        {/* Day cells */}
         {cells.map((cell, idx) => {
           const cellDate = new Date(cell.year, cell.month, cell.day)
           const isToday = !cell.overflow && sameDay(cellDate, today)
@@ -91,6 +101,7 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
             >
               <span className={`cell-num ${isToday ? 'today-num' : ''}`}>{cell.day}</span>
 
+              {/* Task count pill */}
               {!cell.overflow && counts?.total > 0 && (
                 <div className="cell-tasks">
                   <div
@@ -101,6 +112,7 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
                 </div>
               )}
 
+              {/* Google Calendar events */}
               {!cell.overflow && gcalBlocks.slice(0, 3).map(block => (
                 <div
                   key={block.id}
