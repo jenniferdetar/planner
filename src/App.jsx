@@ -4,6 +4,7 @@ import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts } f
 import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
+import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useTransactions, useBills, useFinancialGoals } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
 import Sidebar from './components/Sidebar'
@@ -76,6 +77,7 @@ export default function App() {
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
+  const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
 
   // Merge Asana tasks into local lists (read-only, source='asana')
   const allMasterTasks = masterTasks
@@ -213,6 +215,9 @@ export default function App() {
           onAddIcaapItem={addIcaapItem}
           onUpdateIcaapItem={updateIcaapItem}
           onDeleteIcaapItem={deleteIcaapItem}
+          attendanceRecords={attendanceRecords}
+          onUpsertAttendance={upsertAttendance}
+          onUpdateAttendanceNotes={updateAttendanceNotes}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
