@@ -107,13 +107,13 @@ export function useMeetings(userId, selectedDate) {
       .then(({ data }) => setMeetings(data || []))
   }, [userId, dateStr])
 
-  async function addMeeting(title, hour, color) {
+  async function addMeeting(title, hour, color, startTime, endTime) {
     const pad = (n) => String(n).padStart(2, '0')
-    const startTime = `${pad(hour)}:00:00`
-    const endTime = `${pad(hour + 1)}:00:00`
+    const st = startTime ?? `${pad(hour)}:00:00`
+    const et = endTime ?? `${pad(Math.min(hour + 1, 23))}:00:00`
     const { data } = await supabase
       .from('opus_meetings')
-      .insert({ title, date: dateStr, start_time: startTime, end_time: endTime, user_id: userId })
+      .insert({ title, date: dateStr, start_time: st, end_time: et, user_id: userId })
       .select()
       .single()
     if (data) setMeetings((prev) => [...prev, data])

@@ -48,6 +48,8 @@ export default function DailyPlanner({
   const [addingBlock, setAddingBlock] = useState(null)
   const [blockText, setBlockText] = useState('')
   const [blockColor, setBlockColor] = useState(BLOCK_COLORS[0])
+  const [blockStart, setBlockStart] = useState('')
+  const [blockEnd, setBlockEnd] = useState('')
 
   const today = new Date()
   const isToday = sameDay(selectedDate, today)
@@ -75,10 +77,22 @@ export default function DailyPlanner({
 
   function handleAddBlock(hour) {
     if (!blockText.trim()) return
-    onAddBlock(hour, blockText.trim(), blockColor)
+    const pad = (n) => String(n).padStart(2, '0')
+    const st = blockStart || `${pad(hour)}:00`
+    const et = blockEnd || `${pad(Math.min(hour + 1, 23))}:00`
+    onAddBlock(hour, blockText.trim(), blockColor, st + ':00', et + ':00')
     setBlockText('')
     setBlockColor(BLOCK_COLORS[0])
+    setBlockStart('')
+    setBlockEnd('')
     setAddingBlock(null)
+  }
+
+  function openAddBlock(hour) {
+    const pad = (n) => String(n).padStart(2, '0')
+    setBlockStart(`${pad(hour)}:00`)
+    setBlockEnd(`${pad(Math.min(hour + 1, 23))}:00`)
+    setAddingBlock(hour)
   }
 
   const pending = (dailyTasks || []).filter(t => !t.completed)
@@ -263,7 +277,7 @@ export default function DailyPlanner({
                         <input
                           autoFocus
                           type="text"
-                          placeholder="Add event…"
+                          placeholder="Event title…"
                           value={blockText}
                           onChange={e => setBlockText(e.target.value)}
                           onKeyDown={e => {
@@ -271,6 +285,19 @@ export default function DailyPlanner({
                             if (e.key === 'Escape') setAddingBlock(null)
                           }}
                           className="block-input"
+                        />
+                        <input
+                          type="time"
+                          value={blockStart}
+                          onChange={e => setBlockStart(e.target.value)}
+                          className="block-time-input"
+                        />
+                        <span className="block-time-sep">–</span>
+                        <input
+                          type="time"
+                          value={blockEnd}
+                          onChange={e => setBlockEnd(e.target.value)}
+                          className="block-time-input"
                         />
                         <div className="color-swatches">
                           {BLOCK_COLORS.map(c => (
@@ -286,7 +313,7 @@ export default function DailyPlanner({
                         <button className="block-cancel-btn" onClick={() => setAddingBlock(null)}>✕</button>
                       </div>
                     ) : (
-                      <button className="add-block-btn" onClick={() => setAddingBlock(hour)}>+</button>
+                      <button className="add-block-btn" onClick={() => openAddBlock(hour)}>+</button>
                     )}
                   </div>
                 </div>
