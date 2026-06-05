@@ -340,3 +340,35 @@
   text-transform: uppercase;
   margin-top: 2px;
 }
+
+.asana-badge {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: rgba(248, 99, 54, 0.15);
+  color: #f86336;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.asana-badge.syncing {
+  color: #c9a96e;
+  background: rgba(201, 169, 110, 0.15);
+}
+
+.asana-badge.error {
+  color: #e05c5c;
+  background: rgba(224, 92, 92, 0.15);
+}
+
+.asana-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f86336;
+  flex-shrink: 0;
+  margin-left: 2px;
+  opacity: 0.7;
+}
