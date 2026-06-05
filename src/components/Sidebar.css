@@ -140,11 +140,11 @@
   flex-shrink: 0;
 }
 
-.task-text {
+.sidebar .task-text {
   font-size: 13px;
   flex: 1;
   line-height: 1.4;
-  color: rgba(255,255,255,0.95);
+  color: #fff;
 }
 
 .task-category {
