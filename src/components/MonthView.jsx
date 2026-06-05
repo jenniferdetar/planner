@@ -24,19 +24,23 @@ function toDateStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 }
 
-export default function MonthView({ selectedDate, onDateChange, taskCounts, timeBlocks }) {
+export default function MonthView({ selectedDate, onDateChange, taskCounts, timeBlocks, onMonthChange }) {
   const today = new Date()
   const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
   const [viewMonth, setViewMonth] = useState(selectedDate.getMonth())
 
   function prevMonth() {
-    if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11) }
-    else setViewMonth(m => m - 1)
+    let y = viewYear, m = viewMonth
+    if (m === 0) { y -= 1; m = 11 } else { m -= 1 }
+    setViewYear(y); setViewMonth(m)
+    onMonthChange?.(y, m)
   }
 
   function nextMonth() {
-    if (viewMonth === 11) { setViewYear(y => y + 1); setViewMonth(0) }
-    else setViewMonth(m => m + 1)
+    let y = viewYear, m = viewMonth
+    if (m === 11) { y += 1; m = 0 } else { m += 1 }
+    setViewYear(y); setViewMonth(m)
+    onMonthChange?.(y, m)
   }
 
   const firstDay = new Date(viewYear, viewMonth, 1).getDay()

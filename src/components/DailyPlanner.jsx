@@ -36,6 +36,7 @@ export default function DailyPlanner({
   taskCounts,
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
   cseaInteractions, onAddCseaInteraction,
+  onMonthChange,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -123,6 +124,7 @@ export default function DailyPlanner({
           onDateChange={(d) => { onDateChange(d); onViewChange('day') }}
           taskCounts={taskCounts}
           timeBlocks={timeBlocks}
+          onMonthChange={onMonthChange}
         />
       )}
 

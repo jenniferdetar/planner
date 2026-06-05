@@ -38,6 +38,8 @@ export default function App() {
   const { session, user, providerToken, loading } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
   const [view, setView] = useState('day')
+  const [calViewYear, setCalViewYear] = useState(today.getFullYear())
+  const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
 
   const userId = user?.id ?? null
   const quote = QUOTES[today.getDate() % QUOTES.length]
@@ -58,13 +60,29 @@ export default function App() {
   const allMasterTasks = masterTasks
   const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
 
-  // Fetch Google Calendar events for the current week
-  const weekStart = new Date(selectedDate)
-  weekStart.setDate(selectedDate.getDate() - selectedDate.getDay())
-  const weekEnd = new Date(weekStart)
-  weekEnd.setDate(weekStart.getDate() + 6)
+  // Fetch Google Calendar events: full month grid when in month view, else current week
+  const calFetchStart = (() => {
+    if (view === 'month') {
+      const d = new Date(calViewYear, calViewMonth, 1)
+      d.setDate(d.getDate() - d.getDay()) // back to Sunday
+      return d
+    }
+    const d = new Date(selectedDate)
+    d.setDate(d.getDate() - d.getDay())
+    return d
+  })()
+  const calFetchEnd = (() => {
+    if (view === 'month') {
+      const d = new Date(calViewYear, calViewMonth, 1)
+      d.setDate(d.getDate() - d.getDay() + 41) // 6 weeks of grid
+      return d
+    }
+    const d = new Date(calFetchStart)
+    d.setDate(d.getDate() + 6)
+    return d
+  })()
 
-  const { events: calEvents } = useCalendarEvents(providerToken, weekStart, weekEnd)
+  const { events: calEvents } = useCalendarEvents(providerToken, calFetchStart, calFetchEnd)
 
   // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
   const dateStr = selectedDate.toISOString().split('T')[0]
@@ -132,7 +150,10 @@ export default function App() {
         onAddBlock={handleAddBlock}
         onDeleteBlock={handleDeleteBlock}
         view={view}
-        onViewChange={setView}
+        onViewChange={(v) => {
+          if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
+          setView(v)
+        }}
         taskCounts={taskCounts}
         cseaIssues={cseaIssues}
         onAddCseaIssue={addCseaIssue}
@@ -140,6 +161,7 @@ export default function App() {
         onDeleteCseaIssue={deleteCseaIssue}
         cseaInteractions={cseaInteractions}
         onAddCseaInteraction={addCseaInteraction}
+        onMonthChange={(y, m) => { setCalViewYear(y); setCalViewMonth(m) }}
       />
       <RightPanel
         selectedDate={selectedDate}

@@ -130,11 +130,14 @@
 
 .cell-tasks {
   position: relative;
-  height: 16px;
+  height: 18px;
   background: #e8e4dc;
   border-radius: 4px;
   overflow: hidden;
   margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cell-task-bar {
@@ -152,11 +155,11 @@
   z-index: 1;
   font-size: 10px;
   font-weight: 700;
-  color: #555;
+  color: #444;
   padding: 0 5px;
-  line-height: 16px;
   white-space: nowrap;
   letter-spacing: 0.2px;
+  text-align: center;
 }
 
 .cell-event {
