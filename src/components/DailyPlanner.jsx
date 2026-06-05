@@ -230,7 +230,7 @@ export default function DailyPlanner({
         </div>
       )}
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks') ? 'none' : undefined }}>
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks' || view === 'icaap') ? 'none' : undefined }}>
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">
