@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './DailyPlanner.css'
 import MonthView from './MonthView'
 import CseaTracker from './CseaTracker'
@@ -31,7 +31,7 @@ const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 export default function DailyPlanner({
   selectedDate, onDateChange,
   dailyTasks, timeBlocks,
-  onAddTask, onToggleTask, onDeleteTask,
+  onAddTask, onToggleTask, onDeleteTask, onUpdateTaskNotes,
   onAddBlock, onDeleteBlock,
   view, onViewChange,
   taskCounts,
@@ -99,7 +99,7 @@ export default function DailyPlanner({
           )}
         </div>
         <div className="view-tabs">
-          {['day', 'month', 'csea', 'finance'].map(v => (
+          {['month', 'day', 'tasks', 'csea', 'finance'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
@@ -148,59 +148,62 @@ export default function DailyPlanner({
         />
       )}
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance') ? 'none' : undefined }}>
-        {/* Daily Tasks */}
-        <div className="daily-tasks-section">
-          <div className="section-label">
-            <span>Daily Tasks</span>
-            <span className="task-count">{pending.length} remaining</span>
-          </div>
-          <div className="daily-task-list">
-            {pending.map(task => (
-              <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
-            ))}
-            {done.length > 0 && (
-              <>
-                <div className="done-sep"><span>Done</span></div>
-                {done.map(task => (
-                  <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
-                ))}
-              </>
-            )}
-
-            {showTaskAdd ? (
-              <form className="inline-add-form" onSubmit={handleAddTask}>
-                <span className="check-box placeholder" />
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="New task…"
-                  value={newTaskText}
-                  onChange={e => setNewTaskText(e.target.value)}
-                  className="inline-input"
-                />
-                <div className="inline-priority">
-                  {['high', 'medium', 'low'].map(p => (
-                    <button
-                      key={p}
-                      type="button"
-                      className={`mini-priority-btn ${newTaskPriority === p ? 'active' : ''}`}
-                      style={{ '--c': PRIORITY_COLORS[p] }}
-                      onClick={() => setNewTaskPriority(p)}
-                    />
+      {/* Tasks Tab */}
+      {view === 'tasks' && (
+        <div className="planner-body">
+          <div className="daily-tasks-section" style={{ borderBottom: 'none' }}>
+            <div className="section-label">
+              <span>Tasks — {formatDate(selectedDate)}</span>
+              <span className="task-count">{pending.length} remaining</span>
+            </div>
+            <div className="daily-task-list">
+              {pending.map(task => (
+                <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} onUpdateNotes={onUpdateTaskNotes} />
+              ))}
+              {done.length > 0 && (
+                <>
+                  <div className="done-sep"><span>Done</span></div>
+                  {done.map(task => (
+                    <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} onUpdateNotes={onUpdateTaskNotes} />
                   ))}
-                </div>
-                <button type="submit" className="inline-save">✓</button>
-                <button type="button" className="inline-cancel" onClick={() => setShowTaskAdd(false)}>✕</button>
-              </form>
-            ) : (
-              <button className="add-daily-task-btn" onClick={() => setShowTaskAdd(true)}>
-                + Add task
-              </button>
-            )}
+                </>
+              )}
+              {showTaskAdd ? (
+                <form className="inline-add-form" onSubmit={handleAddTask}>
+                  <span className="check-box placeholder" />
+                  <input
+                    autoFocus
+                    type="text"
+                    placeholder="New task…"
+                    value={newTaskText}
+                    onChange={e => setNewTaskText(e.target.value)}
+                    className="inline-input"
+                  />
+                  <div className="inline-priority">
+                    {['high', 'medium', 'low'].map(p => (
+                      <button
+                        key={p}
+                        type="button"
+                        className={`mini-priority-btn ${newTaskPriority === p ? 'active' : ''}`}
+                        style={{ '--c': PRIORITY_COLORS[p] }}
+                        onClick={() => setNewTaskPriority(p)}
+                      />
+                    ))}
+                  </div>
+                  <button type="submit" className="inline-save">✓</button>
+                  <button type="button" className="inline-cancel" onClick={() => setShowTaskAdd(false)}>✕</button>
+                </form>
+              ) : (
+                <button className="add-daily-task-btn" onClick={() => setShowTaskAdd(true)}>
+                  + Add task
+                </button>
+              )}
+            </div>
           </div>
         </div>
+      )}
 
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks') ? 'none' : undefined }}>
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">
@@ -294,18 +297,49 @@ export default function DailyPlanner({
   )
 }
 
-function DailyTaskRow({ task, onToggle, onDelete }) {
+function DailyTaskRow({ task, onToggle, onDelete, onUpdateNotes }) {
+  const [expanded, setExpanded] = useState(false)
+  const [notesText, setNotesText] = useState(task.notes || task.description || '')
+  const saveTimer = useRef(null)
+
+  const hasNotes = !!(task.notes || task.description)
+
+  function handleNotesChange(e) {
+    const val = e.target.value
+    setNotesText(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => onUpdateNotes?.(task.id, val), 800)
+  }
+
   return (
-    <div className={`daily-task-row ${task.completed ? 'done' : ''}`}>
-      <button className="check-btn" onClick={() => onToggle(task.id)}>
-        <span className={`check-box ${task.completed ? 'checked' : ''}`} />
-      </button>
-      <span
-        className="priority-dot"
-        style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
-      />
-      <span className="task-text">{task.title}</span>
-      <button className="delete-task-btn" onClick={() => onDelete(task.id)}>✕</button>
+    <div className={`daily-task-row-wrap ${task.completed ? 'done' : ''}`}>
+      <div className="daily-task-row">
+        <button className="check-btn" onClick={() => onToggle(task.id)}>
+          <span className={`check-box ${task.completed ? 'checked' : ''}`} />
+        </button>
+        <span
+          className="priority-dot"
+          style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
+        />
+        <span className="task-text">{task.title}</span>
+        {task.project && <span className="task-project">{task.project}</span>}
+        <button
+          className={`notes-btn ${hasNotes ? 'has-notes' : ''} ${expanded ? 'open' : ''}`}
+          onClick={() => setExpanded(e => !e)}
+          title="Notes"
+        >≡</button>
+        <button className="delete-task-btn" onClick={() => onDelete(task.id)}>✕</button>
+      </div>
+      {expanded && (
+        <textarea
+          className="task-notes-input"
+          placeholder="Add notes…"
+          value={notesText}
+          onChange={handleNotesChange}
+          rows={3}
+          autoFocus
+        />
+      )}
     </div>
   )
 }

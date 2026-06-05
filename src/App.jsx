@@ -19,6 +19,7 @@ const QUOTES = [
   { text: "Small steps every day.", author: "Unknown" },
 ]
 
+// Color palette for Supabase-created time blocks
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
 
 function meetingToBlock(meeting, color) {
@@ -36,7 +37,7 @@ export default function App() {
   const today = new Date()
   const { session, user, providerToken, loading } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
-  const [view, setView] = useState('day')
+  const [view, setView] = useState('month')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
 
@@ -55,12 +56,15 @@ export default function App() {
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
 
+  // Merge Asana tasks into local lists (read-only, source='asana')
+  const allMasterTasks = masterTasks
   const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
 
+  // Fetch Google Calendar events: full month grid when in month view, else current week
   const calFetchStart = (() => {
     if (view === 'month') {
       const d = new Date(calViewYear, calViewMonth, 1)
-      d.setDate(d.getDate() - d.getDay())
+      d.setDate(d.getDate() - d.getDay()) // back to Sunday
       return d
     }
     const d = new Date(selectedDate)
@@ -70,7 +74,7 @@ export default function App() {
   const calFetchEnd = (() => {
     if (view === 'month') {
       const d = new Date(calViewYear, calViewMonth, 1)
-      d.setDate(d.getDate() - d.getDay() + 41)
+      d.setDate(d.getDate() - d.getDay() + 41) // 6 weeks of grid
       return d
     }
     const d = new Date(calFetchStart)
@@ -80,6 +84,7 @@ export default function App() {
 
   const { events: calEvents } = useCalendarEvents(providerToken, calFetchStart, calFetchEnd)
 
+  // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
   const dateStr = selectedDate.toISOString().split('T')[0]
   const supabaseBlocks = meetings.map((m) => meetingToBlock(m, BLOCK_COLORS[0]))
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
@@ -105,7 +110,7 @@ export default function App() {
   }
 
   async function handleDeleteBlock(id) {
-    if (String(id).startsWith('gcal_')) return
+    if (String(id).startsWith('gcal_')) return // Google Calendar events are read-only
     await deleteMeeting(id)
   }
 
