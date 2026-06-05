@@ -92,7 +92,18 @@ export default function App() {
     return d
   })()
 
-  const { events: calEvents } = useCalendarEvents(providerToken, calFetchStart, calFetchEnd)
+  const { events: calEvents, authExpired: calAuthExpired } = useCalendarEvents(providerToken, calFetchStart, calFetchEnd)
+
+  async function reconnectGoogle() {
+    const { supabase } = await import('./lib/supabase')
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        scopes: 'https://www.googleapis.com/auth/calendar.readonly',
+        redirectTo: window.location.href,
+      },
+    })
+  }
 
   // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
   const dateStr = selectedDate.toISOString().split('T')[0]
@@ -187,6 +198,8 @@ export default function App() {
         timeBlocks={allTimeBlocks}
         noteContent={noteContent}
         onNoteChange={onNoteChange}
+        calAuthExpired={calAuthExpired}
+        onReconnectGoogle={reconnectGoogle}
       />
     </div>
   )

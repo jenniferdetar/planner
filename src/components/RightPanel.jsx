@@ -25,11 +25,13 @@ function toDateStr(d) {
 
 export default function RightPanel({
   selectedDate, onDateChange,
-  taskCounts,     // { 'YYYY-MM-DD': { total, done } }
-  dailyTasks,     // tasks for selected date
-  timeBlocks,     // time blocks for selected date
+  taskCounts,
+  dailyTasks,
+  timeBlocks,
   noteContent,
   onNoteChange,
+  calAuthExpired,
+  onReconnectGoogle,
 }) {
   const today = new Date()
   const [calYear, setCalYear] = useState(selectedDate.getFullYear())
@@ -80,6 +82,12 @@ export default function RightPanel({
 
   return (
     <aside className="right-panel">
+      {calAuthExpired && (
+        <div className="gcal-expired-banner">
+          <span>Google Calendar session expired</span>
+          <button className="gcal-reconnect-btn" onClick={onReconnectGoogle}>Reconnect</button>
+        </div>
+      )}
       {/* Mini Calendar */}
       <div className="mini-cal">
         <div className="cal-header">
