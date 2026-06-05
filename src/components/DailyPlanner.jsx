@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './DailyPlanner.css'
 import MonthView from './MonthView'
+import CseaTracker from './CseaTracker'
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
@@ -33,6 +34,8 @@ export default function DailyPlanner({
   onAddBlock, onDeleteBlock,
   view, onViewChange,
   taskCounts,
+  cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
+  cseaInteractions, onAddCseaInteraction,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -91,17 +94,28 @@ export default function DailyPlanner({
           )}
         </div>
         <div className="view-tabs">
-          {['day', 'month'].map(v => (
+          {['day', 'month', 'csea'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >
-              {v.charAt(0).toUpperCase() + v.slice(1)}
+              {v === 'csea' ? 'CSEA' : v.charAt(0).toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>
       </div>
+
+      {view === 'csea' && (
+        <CseaTracker
+          issues={cseaIssues || []}
+          onAddIssue={onAddCseaIssue}
+          onUpdateStatus={onUpdateCseaStatus}
+          onDeleteIssue={onDeleteCseaIssue}
+          interactions={cseaInteractions || []}
+          onAddInteraction={onAddCseaInteraction}
+        />
+      )}
 
       {view === 'month' && (
         <MonthView
@@ -112,7 +126,7 @@ export default function DailyPlanner({
         />
       )}
 
-      <div className="planner-body" style={{ display: view === 'month' ? 'none' : undefined }}>
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea') ? 'none' : undefined }}>
         {/* Daily Tasks */}
         <div className="daily-tasks-section">
           <div className="section-label">

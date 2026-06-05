@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts } from './hooks/usePlannerData'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
+import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
 import RightPanel from './components/RightPanel'
@@ -44,6 +45,8 @@ export default function App() {
   const { meetings, addMeeting, deleteMeeting } = useMeetings(userId, selectedDate)
   const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
   const taskCounts = useTaskCounts(userId)
+  const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
+  const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
 
   // Fetch Google Calendar events for the current week
   const weekStart = new Date(selectedDate)
@@ -100,6 +103,12 @@ export default function App() {
         view={view}
         onViewChange={setView}
         taskCounts={taskCounts}
+        cseaIssues={cseaIssues}
+        onAddCseaIssue={addCseaIssue}
+        onUpdateCseaStatus={updateCseaStatus}
+        onDeleteCseaIssue={deleteCseaIssue}
+        cseaInteractions={cseaInteractions}
+        onAddCseaInteraction={addCseaInteraction}
       />
       <RightPanel
         selectedDate={selectedDate}
