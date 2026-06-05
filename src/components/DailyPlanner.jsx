@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './DailyPlanner.css'
+import MonthView from './MonthView'
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
@@ -31,6 +32,7 @@ export default function DailyPlanner({
   onAddTask, onToggleTask, onDeleteTask,
   onAddBlock, onDeleteBlock,
   view, onViewChange,
+  taskCounts,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -89,7 +91,7 @@ export default function DailyPlanner({
           )}
         </div>
         <div className="view-tabs">
-          {['day', 'week'].map(v => (
+          {['day', 'month'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
@@ -101,7 +103,16 @@ export default function DailyPlanner({
         </div>
       </div>
 
-      <div className="planner-body">
+      {view === 'month' && (
+        <MonthView
+          selectedDate={selectedDate}
+          onDateChange={(d) => { onDateChange(d); onViewChange('day') }}
+          taskCounts={taskCounts}
+          timeBlocks={timeBlocks}
+        />
+      )}
+
+      <div className="planner-body" style={{ display: view === 'month' ? 'none' : undefined }}>
         {/* Daily Tasks */}
         <div className="daily-tasks-section">
           <div className="section-label">

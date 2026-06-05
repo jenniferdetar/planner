@@ -1,0 +1,181 @@
+.month-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 18px 32px 12px;
+  background: #fff;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+}
+
+.month-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a2e;
+  min-width: 200px;
+  text-align: center;
+}
+
+.mnav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f0ede6;
+  font-size: 18px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.mnav-btn:hover {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto repeat(6, 1fr);
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Day-of-week headers */
+.dow-header {
+  padding: 10px 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  border-right: 1px solid rgba(255,255,255,0.25);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.dow-header:last-child {
+  border-right: none;
+}
+
+/* Day cells */
+.month-cell {
+  border-right: 1px solid #ede9e2;
+  border-bottom: 1px solid #ede9e2;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+  transition: background 0.12s;
+  overflow: hidden;
+  background: #fff;
+  min-height: 90px;
+}
+
+.month-cell:hover:not(.overflow) {
+  background: #faf9f6;
+}
+
+.month-cell.overflow {
+  background: #f8f7f4;
+  cursor: default;
+}
+
+.month-cell.overflow .cell-num {
+  color: #ccc;
+}
+
+.month-cell.today {
+  background: #fffdf7;
+}
+
+.month-cell.selected {
+  background: #f5f1e8;
+  outline: 2px solid #c9a96e;
+  outline-offset: -2px;
+}
+
+.cell-num {
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.today-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #c9a96e;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.cell-tasks {
+  position: relative;
+  height: 14px;
+  background: #f0ede6;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.cell-task-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: #c9a96e;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.cell-task-label {
+  position: relative;
+  z-index: 1;
+  font-size: 9px;
+  font-weight: 600;
+  color: #888;
+  padding: 0 4px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.cell-event {
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 10px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+
+.cell-event-time {
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.cell-more {
+  font-size: 10px;
+  color: #aaa;
+  padding: 0 2px;
+}

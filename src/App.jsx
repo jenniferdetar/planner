@@ -99,6 +99,7 @@ export default function App() {
         onDeleteBlock={handleDeleteBlock}
         view={view}
         onViewChange={setView}
+        taskCounts={taskCounts}
       />
       <RightPanel
         selectedDate={selectedDate}
