@@ -87,17 +87,19 @@ export default function DailyPlanner({
   return (
     <main className="daily-planner">
       <div className="planner-header">
-        <div className="date-nav">
-          <button className="nav-btn" onClick={prevDay}>‹</button>
-          <div className="date-display">
-            <h1 className="date-main">{formatDate(selectedDate)}</h1>
-            {isToday && <span className="today-badge">Today</span>}
+        {(view === 'day' || view === 'tasks') && (
+          <div className="date-nav">
+            <button className="nav-btn" onClick={prevDay}>‹</button>
+            <div className="date-display">
+              <h1 className="date-main">{formatDate(selectedDate)}</h1>
+              {isToday && <span className="today-badge">Today</span>}
+            </div>
+            <button className="nav-btn" onClick={nextDay}>›</button>
+            {!isToday && (
+              <button className="today-btn" onClick={() => onDateChange(today)}>Today</button>
+            )}
           </div>
-          <button className="nav-btn" onClick={nextDay}>›</button>
-          {!isToday && (
-            <button className="today-btn" onClick={() => onDateChange(today)}>Today</button>
-          )}
-        </div>
+        )}
         <div className="view-tabs">
           {['month', 'day', 'tasks', 'csea', 'finance'].map(v => (
             <button
