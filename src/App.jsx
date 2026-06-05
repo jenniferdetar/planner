@@ -18,7 +18,6 @@ const QUOTES = [
   { text: "Small steps every day.", author: "Unknown" },
 ]
 
-// Color palette for Supabase-created time blocks
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
 
 function meetingToBlock(meeting, color) {
@@ -48,13 +47,11 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
-  const { masterTasks: asanaMasterTasks, todayTasks: asanaTodayTasks, status: asanaStatus } = useAsanaTasks()
+  const { masterTasks: asanaMasterTasks, todayTasks: asanaTodayTasks, status: asanaStatus, completeTask: completeAsanaTask } = useAsanaTasks()
 
-  // Merge Asana tasks into local lists (read-only, source='asana')
   const allMasterTasks = [...masterTasks, ...asanaMasterTasks]
   const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
 
-  // Fetch Google Calendar events for the current week
   const weekStart = new Date(selectedDate)
   weekStart.setDate(selectedDate.getDate() - selectedDate.getDay())
   const weekEnd = new Date(weekStart)
@@ -62,7 +59,6 @@ export default function App() {
 
   const { events: calEvents } = useCalendarEvents(providerToken, weekStart, weekEnd)
 
-  // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
   const dateStr = selectedDate.toISOString().split('T')[0]
   const supabaseBlocks = meetings.map((m) => meetingToBlock(m, BLOCK_COLORS[0]))
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
@@ -72,8 +68,18 @@ export default function App() {
     await addMeeting(text, hour, color)
   }
 
+  async function handleToggleDailyTask(id) {
+    if (String(id).startsWith('asana_')) return completeAsanaTask(id)
+    return toggleDailyTask(id)
+  }
+
+  async function handleDeleteDailyTask(id) {
+    if (String(id).startsWith('asana_')) return completeAsanaTask(id)
+    return deleteDailyTask(id)
+  }
+
   async function handleDeleteBlock(id) {
-    if (String(id).startsWith('gcal_')) return // Google Calendar events are read-only
+    if (String(id).startsWith('gcal_')) return
     await deleteMeeting(id)
   }
 
@@ -96,6 +102,7 @@ export default function App() {
         quote={quote}
         user={user}
         asanaStatus={asanaStatus}
+        onCompleteAsanaTask={completeAsanaTask}
       />
       <DailyPlanner
         selectedDate={selectedDate}
@@ -103,8 +110,8 @@ export default function App() {
         dailyTasks={allDailyTasks}
         timeBlocks={allTimeBlocks}
         onAddTask={addDailyTask}
-        onToggleTask={toggleDailyTask}
-        onDeleteTask={deleteDailyTask}
+        onToggleTask={handleToggleDailyTask}
+        onDeleteTask={handleDeleteDailyTask}
         onAddBlock={handleAddBlock}
         onDeleteBlock={handleDeleteBlock}
         view={view}

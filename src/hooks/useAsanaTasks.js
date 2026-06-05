@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { fetchWorkspaces, fetchMyTasks, asanaTaskToMaster } from '../lib/asana'
+import { fetchWorkspaces, fetchMyTasks, asanaTaskToMaster, completeAsanaTask } from '../lib/asana'
 
 const POLL_INTERVAL = 5 * 60 * 1000 // 5 minutes
 
@@ -41,5 +41,12 @@ export function useAsanaTasks() {
     return () => clearInterval(timerRef.current)
   }, [token])
 
-  return { masterTasks, todayTasks, status }
+  async function completeTask(id) {
+    const gid = id.replace('asana_', '')
+    await completeAsanaTask(token, gid)
+    setMasterTasks(prev => prev.filter(t => t.id !== id))
+    setTodayTasks(prev => prev.filter(t => t.id !== id))
+  }
+
+  return { masterTasks, todayTasks, status, completeTask }
 }

@@ -5,7 +5,7 @@ import './Sidebar.css'
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 
-export default function Sidebar({ masterTasks, onAddTask, onDeleteTask, quote, user, asanaStatus }) {
+export default function Sidebar({ masterTasks, onAddTask, onDeleteTask, quote, user, asanaStatus, onCompleteAsanaTask }) {
   const [newText, setNewText] = useState('')
   const [newPriority, setNewPriority] = useState('medium')
   const [showAdd, setShowAdd] = useState(false)
@@ -60,7 +60,7 @@ export default function Sidebar({ masterTasks, onAddTask, onDeleteTask, quote, u
                   {PRIORITY_LABELS[priority]}
                 </div>
                 {byPriority[priority].map((task) => (
-                  <TaskRow key={task.id} task={task} onDelete={onDeleteTask} />
+                  <TaskRow key={task.id} task={task} onDelete={onDeleteTask} onCompleteAsana={onCompleteAsanaTask} />
                 ))}
               </div>
             ) : null
@@ -127,8 +127,15 @@ export default function Sidebar({ masterTasks, onAddTask, onDeleteTask, quote, u
   )
 }
 
-function TaskRow({ task, onDelete }) {
+function TaskRow({ task, onDelete, onCompleteAsana }) {
   const [hovered, setHovered] = useState(false)
+  const [completing, setCompleting] = useState(false)
+
+  async function handleComplete(e) {
+    e.stopPropagation()
+    setCompleting(true)
+    await onCompleteAsana(task.id)
+  }
 
   return (
     <div
@@ -136,10 +143,21 @@ function TaskRow({ task, onDelete }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <span
-        className="priority-dot"
-        style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
-      />
+      {task.source === 'asana' ? (
+        <button
+          className={`asana-check-btn ${completing ? 'completing' : ''}`}
+          onClick={handleComplete}
+          title="Mark complete in Asana"
+          disabled={completing}
+        >
+          {completing || hovered ? '✓' : '○'}
+        </button>
+      ) : (
+        <span
+          className="priority-dot"
+          style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
+        />
+      )}
       <span className="task-text">{task.title}</span>
       {task.source === 'asana' && task.project && (
         <span className="task-category">{task.project}</span>
@@ -147,9 +165,6 @@ function TaskRow({ task, onDelete }) {
       {task.category && task.source !== 'asana' && <span className="task-category">{task.category}</span>}
       {hovered && task.source !== 'asana' && (
         <button className="delete-btn" onClick={() => onDelete(task.id)}>✕</button>
-      )}
-      {task.source === 'asana' && (
-        <span className="asana-dot" title="From Asana" />
       )}
     </div>
   )
