@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import './DailyPlanner.css'
 
-const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am - 10pm
+const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December']
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
 function formatHour(h) {
   if (h === 12) return '12 PM'
@@ -24,12 +23,14 @@ function sameDay(a, b) {
     a.getDate() === b.getDate()
 }
 
+const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
+
 export default function DailyPlanner({
   selectedDate, onDateChange,
   dailyTasks, timeBlocks,
   onAddTask, onToggleTask, onDeleteTask,
   onAddBlock, onDeleteBlock,
-  view, onViewChange
+  view, onViewChange,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -70,7 +71,8 @@ export default function DailyPlanner({
     setAddingBlock(null)
   }
 
-  const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
+  const pending = (dailyTasks || []).filter(t => !t.completed)
+  const done = (dailyTasks || []).filter(t => t.completed)
 
   return (
     <main className="daily-planner">
@@ -104,29 +106,28 @@ export default function DailyPlanner({
         <div className="daily-tasks-section">
           <div className="section-label">
             <span>Daily Tasks</span>
-            <span className="task-count">{dailyTasks.filter(t => !t.done).length} remaining</span>
+            <span className="task-count">{pending.length} remaining</span>
           </div>
           <div className="daily-task-list">
-            {dailyTasks.map(task => (
-              <div key={task.id} className={`daily-task-row ${task.done ? 'done' : ''}`}>
-                <button className="check-btn" onClick={() => onToggleTask(task.id)}>
-                  <span className={`check-box ${task.done ? 'checked' : ''}`} />
-                </button>
-                <span
-                  className="priority-dot"
-                  style={{ background: PRIORITY_COLORS[task.priority] }}
-                />
-                <span className="task-text">{task.text}</span>
-                <button className="delete-task-btn" onClick={() => onDeleteTask(task.id)}>✕</button>
-              </div>
+            {pending.map(task => (
+              <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
             ))}
+            {done.length > 0 && (
+              <>
+                <div className="done-sep"><span>Done</span></div>
+                {done.map(task => (
+                  <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
+                ))}
+              </>
+            )}
+
             {showTaskAdd ? (
               <form className="inline-add-form" onSubmit={handleAddTask}>
                 <span className="check-box placeholder" />
                 <input
                   autoFocus
                   type="text"
-                  placeholder="New task..."
+                  placeholder="New task…"
                   value={newTaskText}
                   onChange={e => setNewTaskText(e.target.value)}
                   className="inline-input"
@@ -157,6 +158,7 @@ export default function DailyPlanner({
         <div className="schedule-section">
           <div className="section-label">
             <span>Schedule</span>
+            <span className="task-count">{timeBlocks.filter(b => b.source === 'google').length} from Google Calendar</span>
           </div>
           <div className="time-grid">
             {HOURS.map(hour => {
@@ -175,25 +177,41 @@ export default function DailyPlanner({
                         <span className="now-line" />
                       </div>
                     )}
+
                     {blocksAtHour.map(block => (
                       <div
                         key={block.id}
-                        className="time-block"
-                        style={{ background: block.color + '22', borderLeft: `3px solid ${block.color}` }}
+                        className={`time-block ${block.source === 'google' ? 'gcal-block' : ''}`}
+                        style={{ background: block.color + '18', borderLeft: `3px solid ${block.color}` }}
                       >
-                        <span className="block-text">{block.text}</span>
-                        <button
-                          className="delete-block-btn"
-                          onClick={() => onDeleteBlock(block.id)}
-                        >✕</button>
+                        <div className="block-main">
+                          <span className="block-text">{block.title || block.text}</span>
+                          {block.startLabel && (
+                            <span className="block-time">{block.startLabel}–{block.endLabel}</span>
+                          )}
+                        </div>
+                        <div className="block-meta">
+                          {block.calendarName && (
+                            <span className="block-cal-badge" style={{ color: block.color }}>
+                              {block.calendarName}
+                            </span>
+                          )}
+                          {block.source !== 'google' && (
+                            <button
+                              className="delete-block-btn"
+                              onClick={() => onDeleteBlock(block.id)}
+                            >✕</button>
+                          )}
+                        </div>
                       </div>
                     ))}
+
                     {isAddingHere ? (
                       <div className="add-block-inline">
                         <input
                           autoFocus
                           type="text"
-                          placeholder="Add event..."
+                          placeholder="Add event…"
                           value={blockText}
                           onChange={e => setBlockText(e.target.value)}
                           onKeyDown={e => {
@@ -216,10 +234,7 @@ export default function DailyPlanner({
                         <button className="block-cancel-btn" onClick={() => setAddingBlock(null)}>✕</button>
                       </div>
                     ) : (
-                      <button
-                        className="add-block-btn"
-                        onClick={() => setAddingBlock(hour)}
-                      >+</button>
+                      <button className="add-block-btn" onClick={() => setAddingBlock(hour)}>+</button>
                     )}
                   </div>
                 </div>
@@ -229,5 +244,21 @@ export default function DailyPlanner({
         </div>
       </div>
     </main>
+  )
+}
+
+function DailyTaskRow({ task, onToggle, onDelete }) {
+  return (
+    <div className={`daily-task-row ${task.completed ? 'done' : ''}`}>
+      <button className="check-btn" onClick={() => onToggle(task.id)}>
+        <span className={`check-box ${task.completed ? 'checked' : ''}`} />
+      </button>
+      <span
+        className="priority-dot"
+        style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
+      />
+      <span className="task-text">{task.title}</span>
+      <button className="delete-task-btn" onClick={() => onDelete(task.id)}>✕</button>
+    </div>
   )
 }

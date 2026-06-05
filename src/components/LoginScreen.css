@@ -1,0 +1,86 @@
+.login-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f5f4f0;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 48px 40px;
+  width: 380px;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.login-icon {
+  color: #c9a96e;
+  font-size: 20px;
+}
+
+.login-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.login-tagline {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 24px;
+  letter-spacing: 0.3px;
+}
+
+.login-divider {
+  height: 1px;
+  background: #f0ede6;
+  margin-bottom: 24px;
+}
+
+.login-desc {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 20px;
+  background: #fff;
+  border: 1.5px solid #e0ddd7;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 16px;
+}
+
+.google-btn:hover {
+  background: #f5f4f0;
+  border-color: #ccc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.login-note {
+  font-size: 11px;
+  color: #bbb;
+  line-height: 1.6;
+}

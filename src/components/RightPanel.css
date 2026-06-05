@@ -4,7 +4,6 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .panel-section-label {
@@ -14,6 +13,9 @@
   text-transform: uppercase;
   color: #bbb;
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Mini Calendar */
@@ -45,6 +47,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.15s;
+  cursor: pointer;
 }
 
 .cal-nav:hover {
@@ -78,6 +81,7 @@
   transition: all 0.15s;
   position: relative;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .cal-day:hover {
@@ -127,6 +131,7 @@
   transition: all 0.15s;
   position: relative;
   gap: 2px;
+  cursor: pointer;
 }
 
 .week-day-card:hover {
@@ -192,7 +197,7 @@
 
 .summary-stat-row {
   display: flex;
-  gap: 0;
+  gap: 6px;
 }
 
 .summary-stat {
@@ -203,10 +208,6 @@
   padding: 8px;
   background: #f5f4f0;
   border-radius: 8px;
-}
-
-.summary-stat + .summary-stat {
-  margin-left: 6px;
 }
 
 .summary-num {
@@ -240,7 +241,7 @@
   height: 100%;
   background: #c9a96e;
   border-radius: 2px;
-  transition: width 0.3s ease;
+  transition: width 0.4s ease;
 }
 
 .progress-label {
@@ -249,13 +250,40 @@
   text-align: right;
 }
 
+.gcal-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #888;
+}
+
+.gcal-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4a90d9;
+  flex-shrink: 0;
+}
+
 /* Notes */
 .notes-section {
   padding: 16px 20px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-hint {
+  font-size: 9px;
+  font-weight: 400;
+  color: #c9a96e;
+  letter-spacing: 0.5px;
+  text-transform: none;
 }
 
 .notes-area {
+  flex: 1;
   width: 100%;
   background: #f5f4f0;
   border: none;
@@ -267,6 +295,7 @@
   outline: none;
   line-height: 1.6;
   font-family: 'Inter', sans-serif;
+  min-height: 120px;
 }
 
 .notes-area::placeholder {

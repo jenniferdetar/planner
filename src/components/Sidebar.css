@@ -10,6 +10,7 @@
 .sidebar-header {
   padding: 28px 24px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
 }
 
 .logo {
@@ -47,6 +48,7 @@
   background: rgba(201, 169, 110, 0.08);
   border-left: 2px solid #c9a96e;
   border-radius: 0 6px 6px 0;
+  flex-shrink: 0;
 }
 
 .quote-text {
@@ -70,6 +72,7 @@
   display: flex;
   flex-direction: column;
   padding: 8px 0;
+  min-height: 0;
 }
 
 .task-list {
@@ -78,11 +81,24 @@
   padding: 0 12px;
 }
 
+.priority-group {
+  margin-bottom: 12px;
+}
+
+.priority-group-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px 2px;
+  opacity: 0.8;
+}
+
 .task-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
+  padding: 7px 10px;
   border-radius: 8px;
   transition: background 0.15s;
   position: relative;
@@ -90,44 +106,6 @@
 
 .task-row:hover {
   background: rgba(255,255,255,0.05);
-}
-
-.task-row.done .task-text {
-  text-decoration: line-through;
-  opacity: 0.4;
-}
-
-.check-btn {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.check-circle {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.3);
-  display: block;
-  transition: all 0.15s;
-}
-
-.check-circle.checked {
-  background: #c9a96e;
-  border-color: #c9a96e;
-  position: relative;
-}
-
-.check-circle.checked::after {
-  content: '✓';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 9px;
-  color: #1a1a2e;
-  font-weight: 700;
 }
 
 .priority-dot {
@@ -144,6 +122,15 @@
   color: rgba(255,255,255,0.85);
 }
 
+.task-category {
+  font-size: 9px;
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.4);
+  padding: 2px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
 .delete-btn {
   font-size: 10px;
   color: rgba(255,255,255,0.3);
@@ -154,28 +141,6 @@
 
 .delete-btn:hover {
   color: #e05c5c;
-}
-
-.done-divider {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 8px 10px 4px;
-}
-
-.done-divider span {
-  font-size: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
-  white-space: nowrap;
-}
-
-.done-divider::before, .done-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255,255,255,0.08);
 }
 
 .empty-state {
@@ -191,6 +156,7 @@
   background: rgba(255,255,255,0.06);
   border-radius: 10px;
   padding: 12px;
+  flex-shrink: 0;
 }
 
 .add-task-input {
@@ -228,6 +194,7 @@
   color: var(--p-color);
   opacity: 0.6;
   transition: opacity 0.15s;
+  cursor: pointer;
 }
 
 .priority-pill.active {
@@ -254,6 +221,7 @@
   font-weight: 600;
   padding: 4px 12px;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .add-btn {
@@ -268,6 +236,8 @@
   transition: all 0.15s;
   width: calc(100% - 24px);
   border: 1px dashed rgba(255,255,255,0.12);
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .add-btn:hover {
@@ -282,8 +252,66 @@
 }
 
 .sidebar-footer {
-  padding: 16px 24px;
+  padding: 14px 20px;
   border-top: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(255,255,255,0.15);
+}
+
+.user-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #c9a96e;
+  color: #1a1a2e;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sign-out-btn {
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  text-align: left;
+  transition: color 0.15s;
+  cursor: pointer;
+}
+
+.sign-out-btn:hover {
+  color: #e05c5c;
 }
 
 .stats {
@@ -311,10 +339,4 @@
   color: rgba(255,255,255,0.35);
   text-transform: uppercase;
   margin-top: 2px;
-}
-
-.stat-divider {
-  width: 1px;
-  height: 24px;
-  background: rgba(255,255,255,0.1);
 }
