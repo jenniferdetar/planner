@@ -99,7 +99,7 @@ export default function DailyPlanner({
           )}
         </div>
         <div className="view-tabs">
-          {['day', 'month', 'csea', 'finance'].map(v => (
+          {['month', 'day', 'tasks', 'csea', 'finance'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
@@ -148,59 +148,62 @@ export default function DailyPlanner({
         />
       )}
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance') ? 'none' : undefined }}>
-        {/* Daily Tasks */}
-        <div className="daily-tasks-section">
-          <div className="section-label">
-            <span>Daily Tasks</span>
-            <span className="task-count">{pending.length} remaining</span>
-          </div>
-          <div className="daily-task-list">
-            {pending.map(task => (
-              <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} onUpdateNotes={onUpdateTaskNotes} />
-            ))}
-            {done.length > 0 && (
-              <>
-                <div className="done-sep"><span>Done</span></div>
-                {done.map(task => (
-                  <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} onUpdateNotes={onUpdateTaskNotes} />
-                ))}
-              </>
-            )}
-
-            {showTaskAdd ? (
-              <form className="inline-add-form" onSubmit={handleAddTask}>
-                <span className="check-box placeholder" />
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="New task…"
-                  value={newTaskText}
-                  onChange={e => setNewTaskText(e.target.value)}
-                  className="inline-input"
-                />
-                <div className="inline-priority">
-                  {['high', 'medium', 'low'].map(p => (
-                    <button
-                      key={p}
-                      type="button"
-                      className={`mini-priority-btn ${newTaskPriority === p ? 'active' : ''}`}
-                      style={{ '--c': PRIORITY_COLORS[p] }}
-                      onClick={() => setNewTaskPriority(p)}
-                    />
+      {/* Tasks Tab */}
+      {view === 'tasks' && (
+        <div className="planner-body">
+          <div className="daily-tasks-section" style={{ borderBottom: 'none' }}>
+            <div className="section-label">
+              <span>Tasks — {formatDate(selectedDate)}</span>
+              <span className="task-count">{pending.length} remaining</span>
+            </div>
+            <div className="daily-task-list">
+              {pending.map(task => (
+                <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} onUpdateNotes={onUpdateTaskNotes} />
+              ))}
+              {done.length > 0 && (
+                <>
+                  <div className="done-sep"><span>Done</span></div>
+                  {done.map(task => (
+                    <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} onUpdateNotes={onUpdateTaskNotes} />
                   ))}
-                </div>
-                <button type="submit" className="inline-save">✓</button>
-                <button type="button" className="inline-cancel" onClick={() => setShowTaskAdd(false)}>✕</button>
-              </form>
-            ) : (
-              <button className="add-daily-task-btn" onClick={() => setShowTaskAdd(true)}>
-                + Add task
-              </button>
-            )}
+                </>
+              )}
+              {showTaskAdd ? (
+                <form className="inline-add-form" onSubmit={handleAddTask}>
+                  <span className="check-box placeholder" />
+                  <input
+                    autoFocus
+                    type="text"
+                    placeholder="New task…"
+                    value={newTaskText}
+                    onChange={e => setNewTaskText(e.target.value)}
+                    className="inline-input"
+                  />
+                  <div className="inline-priority">
+                    {['high', 'medium', 'low'].map(p => (
+                      <button
+                        key={p}
+                        type="button"
+                        className={`mini-priority-btn ${newTaskPriority === p ? 'active' : ''}`}
+                        style={{ '--c': PRIORITY_COLORS[p] }}
+                        onClick={() => setNewTaskPriority(p)}
+                      />
+                    ))}
+                  </div>
+                  <button type="submit" className="inline-save">✓</button>
+                  <button type="button" className="inline-cancel" onClick={() => setShowTaskAdd(false)}>✕</button>
+                </form>
+              ) : (
+                <button className="add-daily-task-btn" onClick={() => setShowTaskAdd(true)}>
+                  + Add task
+                </button>
+              )}
+            </div>
           </div>
         </div>
+      )}
 
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks') ? 'none' : undefined }}>
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">

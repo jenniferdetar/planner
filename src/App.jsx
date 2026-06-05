@@ -37,7 +37,7 @@ export default function App() {
   const today = new Date()
   const { session, user, providerToken, loading } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
-  const [view, setView] = useState('day')
+  const [view, setView] = useState('month')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
 
