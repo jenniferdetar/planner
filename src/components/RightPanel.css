@@ -18,6 +18,7 @@
   justify-content: space-between;
 }
 
+/* Mini Calendar */
 .mini-cal {
   padding: 24px 20px 16px;
   border-bottom: 1px solid #f0ede6;
@@ -109,6 +110,7 @@
   background: #c9a96e;
 }
 
+/* Weekly Overview */
 .weekly-overview {
   padding: 16px 20px;
   border-bottom: 1px solid #f0ede6;
@@ -173,6 +175,7 @@
   font-weight: 600;
 }
 
+/* Day Summary */
 .day-summary {
   padding: 16px 20px;
   border-bottom: 1px solid #f0ede6;
@@ -263,6 +266,7 @@
   flex-shrink: 0;
 }
 
+/* Notes */
 .notes-section {
   padding: 16px 20px;
   flex: 1;
@@ -300,4 +304,34 @@
 
 .notes-area:focus {
   background: #f0ede6;
+}
+
+.gcal-expired-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 12px 16px 0;
+  padding: 10px 12px;
+  background: #fff8f0;
+  border: 1px solid #f0a040;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #a06010;
+}
+
+.gcal-reconnect-btn {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: #f0a040;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.gcal-reconnect-btn:hover {
+  background: #d08830;
 }

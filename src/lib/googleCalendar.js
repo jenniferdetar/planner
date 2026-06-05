@@ -1,3 +1,4 @@
+// Calendar IDs from Jennifer's Google account with color coding per calendar
 export const CALENDARS = [
   { id: 'jennifermsamples@gmail.com', name: 'Gmail', color: '#4a90d9' },
   { id: '1nqd1n2enc3vmi5q5g2o5ldv7s@group.calendar.google.com', name: 'Family', color: '#5cb85c' },
@@ -30,6 +31,7 @@ export async function fetchCalendarEvents(providerToken, startDate, endDate) {
         `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?${params}`,
         { headers: { Authorization: `Bearer ${providerToken}` } }
       )
+      if (res.status === 401) throw new Error('GOOGLE_AUTH_EXPIRED')
       if (!res.ok) return []
       const data = await res.json()
       return (data.items || []).map((evt) => ({
@@ -44,6 +46,10 @@ export async function fetchCalendarEvents(providerToken, startDate, endDate) {
       }))
     })
   )
+
+  // If any calendar returned a 401, propagate the auth error
+  const authError = results.find(r => r.status === 'rejected' && r.reason?.message === 'GOOGLE_AUTH_EXPIRED')
+  if (authError) throw new Error('GOOGLE_AUTH_EXPIRED')
 
   return results
     .filter((r) => r.status === 'fulfilled')

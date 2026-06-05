@@ -26,5 +26,6 @@ export function useCalendarEvents(providerToken, startDate, endDate) {
       })
   }, [providerToken, startDate?.toDateString(), endDate?.toDateString()])
 
-  return { events, loading, error }
+  const authExpired = error === 'GOOGLE_AUTH_EXPIRED'
+  return { events, loading, error, authExpired }
 }

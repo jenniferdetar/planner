@@ -30,6 +30,8 @@ export default function RightPanel({
   timeBlocks,
   noteContent,
   onNoteChange,
+  calAuthExpired,
+  onReconnectGoogle,
 }) {
   const today = new Date()
   const [calYear, setCalYear] = useState(selectedDate.getFullYear())
@@ -52,6 +54,7 @@ export default function RightPanel({
     onDateChange(new Date(calYear, calMonth, day))
   }
 
+  // Week strip centred on selected date
   const startOfWeek = new Date(selectedDate)
   startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay())
   const weekDays = Array.from({ length: 7 }, (_, i) => {
@@ -69,6 +72,7 @@ export default function RightPanel({
     return taskCounts[toDateStr(d)]?.total ?? 0
   }
 
+  // Summary for selected date
   const tasks = dailyTasks || []
   const gcalCount = (timeBlocks || []).filter(b => b.source === 'google').length
   const supabaseMeetings = (timeBlocks || []).filter(b => b.source === 'supabase').length
@@ -78,6 +82,13 @@ export default function RightPanel({
 
   return (
     <aside className="right-panel">
+      {calAuthExpired && (
+        <div className="gcal-expired-banner">
+          <span>Google Calendar session expired</span>
+          <button className="gcal-reconnect-btn" onClick={onReconnectGoogle}>Reconnect</button>
+        </div>
+      )}
+      {/* Mini Calendar */}
       <div className="mini-cal">
         <div className="cal-header">
           <button className="cal-nav" onClick={prevMonth}>‹</button>
@@ -109,6 +120,7 @@ export default function RightPanel({
         </div>
       </div>
 
+      {/* Week Strip */}
       <div className="weekly-overview">
         <div className="panel-section-label">Week Overview</div>
         <div className="week-days">
@@ -131,6 +143,7 @@ export default function RightPanel({
         </div>
       </div>
 
+      {/* Summary */}
       <div className="day-summary">
         <div className="panel-section-label">Day Summary</div>
         <div className="summary-items">
@@ -171,6 +184,7 @@ export default function RightPanel({
         </div>
       </div>
 
+      {/* Notes — persisted to Supabase */}
       <div className="notes-section">
         <div className="panel-section-label">
           Notes
