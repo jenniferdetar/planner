@@ -5,6 +5,8 @@ function toDateStr(d) {
   return d.toISOString().split('T')[0]
 }
 
+// ─── Master Tasks ────────────────────────────────────────────
+
 export function useMasterTasks(userId) {
   const [tasks, setTasks] = useState([])
 
@@ -33,6 +35,8 @@ export function useMasterTasks(userId) {
 
   return { tasks, addTask, deleteTask }
 }
+
+// ─── Daily Tasks ───────────────────────────────────────────────
 
 export function useDailyTasks(userId, selectedDate) {
   const [tasks, setTasks] = useState([])
@@ -74,8 +78,20 @@ export function useDailyTasks(userId, selectedDate) {
     setTasks((prev) => prev.filter((t) => t.id !== id))
   }
 
-  return { tasks, addTask, toggleTask, deleteTask }
+  async function updateTaskDescription(id, description) {
+    const { data } = await supabase
+      .from('opus_tasks')
+      .update({ description, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single()
+    if (data) setTasks((prev) => prev.map((t) => (t.id === id ? data : t)))
+  }
+
+  return { tasks, addTask, toggleTask, deleteTask, updateTaskDescription }
 }
+
+// ─── Meetings (time blocks from Supabase) ────────────────────────────────────
 
 export function useMeetings(userId, selectedDate) {
   const [meetings, setMeetings] = useState([])
@@ -111,6 +127,8 @@ export function useMeetings(userId, selectedDate) {
 
   return { meetings, addMeeting, deleteMeeting }
 }
+
+// ─── Notes ──────────────────────────────────────────────────────────────────────────
 
 export function useNotes(userId, selectedDate) {
   const [content, setContent] = useState('')
@@ -160,6 +178,8 @@ export function useNotes(userId, selectedDate) {
 
   return { content, onChange: handleChange }
 }
+
+// ─── All-dates task counts (for calendar dots) ──────────────────────────────────────
 
 export function useTaskCounts(userId) {
   const [counts, setCounts] = useState({})

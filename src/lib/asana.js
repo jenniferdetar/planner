@@ -29,6 +29,15 @@ export async function completeAsanaTask(token, gid) {
   if (!res.ok) throw new Error(`Asana PUT /tasks/${gid} ${res.status}`)
 }
 
+export async function updateAsanaTaskNotes(token, gid, notes) {
+  const res = await fetch(`${BASE}/tasks/${gid}`, {
+    method: 'PUT',
+    headers: { ...headers(token), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: { notes } }),
+  })
+  if (!res.ok) throw new Error(`Asana PUT /tasks/${gid} notes ${res.status}`)
+}
+
 export function asanaTaskToMaster(task) {
   return {
     id: `asana_${task.gid}`,
@@ -37,5 +46,6 @@ export function asanaTaskToMaster(task) {
     source: 'asana',
     due_on: task.due_on ?? null,
     project: task.memberships?.[0]?.project?.name ?? null,
+    notes: task.notes ?? '',
   }
 }

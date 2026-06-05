@@ -44,13 +44,13 @@ export default function App() {
   const quote = QUOTES[today.getDate() % QUOTES.length]
 
   const { tasks: masterTasks, addTask: addMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
-  const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask } = useDailyTasks(userId, selectedDate)
+  const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask, updateTaskDescription } = useDailyTasks(userId, selectedDate)
   const { meetings, addMeeting, deleteMeeting } = useMeetings(userId, selectedDate)
   const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
-  const { todayTasks: asanaTodayTasks, completeTask: completeAsanaTask } = useAsanaTasks()
+  const { todayTasks: asanaTodayTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
@@ -99,6 +99,11 @@ export default function App() {
     return deleteDailyTask(id)
   }
 
+  async function handleUpdateTaskNotes(id, notes) {
+    if (String(id).startsWith('asana_')) return updateAsanaNotes(id, notes)
+    return updateTaskDescription(id, notes)
+  }
+
   async function handleDeleteBlock(id) {
     if (String(id).startsWith('gcal_')) return
     await deleteMeeting(id)
@@ -131,6 +136,7 @@ export default function App() {
         onAddTask={addDailyTask}
         onToggleTask={handleToggleDailyTask}
         onDeleteTask={handleDeleteDailyTask}
+        onUpdateTaskNotes={handleUpdateTaskNotes}
         onAddBlock={handleAddBlock}
         onDeleteBlock={handleDeleteBlock}
         view={view}
