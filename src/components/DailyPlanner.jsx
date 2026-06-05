@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './DailyPlanner.css'
 import MonthView from './MonthView'
 import CseaTracker from './CseaTracker'
@@ -31,7 +31,7 @@ const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 export default function DailyPlanner({
   selectedDate, onDateChange,
   dailyTasks, timeBlocks,
-  onAddTask, onToggleTask, onDeleteTask,
+  onAddTask, onToggleTask, onDeleteTask, onUpdateTaskNotes,
   onAddBlock, onDeleteBlock,
   view, onViewChange,
   taskCounts,
@@ -157,13 +157,13 @@ export default function DailyPlanner({
           </div>
           <div className="daily-task-list">
             {pending.map(task => (
-              <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
+              <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} onUpdateNotes={onUpdateTaskNotes} />
             ))}
             {done.length > 0 && (
               <>
                 <div className="done-sep"><span>Done</span></div>
                 {done.map(task => (
-                  <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
+                  <DailyTaskRow key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} onUpdateNotes={onUpdateTaskNotes} />
                 ))}
               </>
             )}
@@ -294,18 +294,49 @@ export default function DailyPlanner({
   )
 }
 
-function DailyTaskRow({ task, onToggle, onDelete }) {
+function DailyTaskRow({ task, onToggle, onDelete, onUpdateNotes }) {
+  const [expanded, setExpanded] = useState(false)
+  const [notesText, setNotesText] = useState(task.notes || task.description || '')
+  const saveTimer = useRef(null)
+
+  const hasNotes = !!(task.notes || task.description)
+
+  function handleNotesChange(e) {
+    const val = e.target.value
+    setNotesText(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => onUpdateNotes?.(task.id, val), 800)
+  }
+
   return (
-    <div className={`daily-task-row ${task.completed ? 'done' : ''}`}>
-      <button className="check-btn" onClick={() => onToggle(task.id)}>
-        <span className={`check-box ${task.completed ? 'checked' : ''}`} />
-      </button>
-      <span
-        className="priority-dot"
-        style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
-      />
-      <span className="task-text">{task.title}</span>
-      <button className="delete-task-btn" onClick={() => onDelete(task.id)}>✕</button>
+    <div className={`daily-task-row-wrap ${task.completed ? 'done' : ''}`}>
+      <div className="daily-task-row">
+        <button className="check-btn" onClick={() => onToggle(task.id)}>
+          <span className={`check-box ${task.completed ? 'checked' : ''}`} />
+        </button>
+        <span
+          className="priority-dot"
+          style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
+        />
+        <span className="task-text">{task.title}</span>
+        {task.project && <span className="task-project">{task.project}</span>}
+        <button
+          className={`notes-btn ${hasNotes ? 'has-notes' : ''} ${expanded ? 'open' : ''}`}
+          onClick={() => setExpanded(e => !e)}
+          title="Notes"
+        >≡</button>
+        <button className="delete-task-btn" onClick={() => onDelete(task.id)}>✕</button>
+      </div>
+      {expanded && (
+        <textarea
+          className="task-notes-input"
+          placeholder="Add notes…"
+          value={notesText}
+          onChange={handleNotesChange}
+          rows={3}
+          autoFocus
+        />
+      )}
     </div>
   )
 }

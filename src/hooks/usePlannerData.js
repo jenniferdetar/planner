@@ -78,7 +78,17 @@ export function useDailyTasks(userId, selectedDate) {
     setTasks((prev) => prev.filter((t) => t.id !== id))
   }
 
-  return { tasks, addTask, toggleTask, deleteTask }
+  async function updateTaskDescription(id, description) {
+    const { data } = await supabase
+      .from('opus_tasks')
+      .update({ description, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single()
+    if (data) setTasks((prev) => prev.map((t) => (t.id === id ? data : t)))
+  }
+
+  return { tasks, addTask, toggleTask, deleteTask, updateTaskDescription }
 }
 
 // ─── Meetings (time blocks from Supabase) ────────────────────────────────────

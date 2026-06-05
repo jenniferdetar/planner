@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { fetchWorkspaces, fetchMyTasks, asanaTaskToMaster, completeAsanaTask } from '../lib/asana'
+import { fetchWorkspaces, fetchMyTasks, asanaTaskToMaster, completeAsanaTask, updateAsanaTaskNotes } from '../lib/asana'
 
 const POLL_INTERVAL = 5 * 60 * 1000 // 5 minutes
 
@@ -7,25 +7,19 @@ export function useAsanaTasks() {
   const token = import.meta.env.VITE_ASANA_TOKEN
   const [masterTasks, setMasterTasks] = useState([])
   const [todayTasks, setTodayTasks] = useState([])
-  const [status, setStatus] = useState('idle') // idle | loading | ready | error | no-token
+  const [status, setStatus] = useState('idle')
   const timerRef = useRef(null)
 
   useEffect(() => {
-    if (!token) {
-      setStatus('no-token')
-      return
-    }
+    if (!token) { setStatus('no-token'); return }
 
     async function sync() {
       setStatus('loading')
       try {
         const workspaces = await fetchWorkspaces(token)
         if (!workspaces.length) { setStatus('ready'); return }
-        const workspaceGid = workspaces[0].gid
-
-        const raw = await fetchMyTasks(token, workspaceGid)
+        const raw = await fetchMyTasks(token, workspaces[0].gid)
         const mapped = raw.map(asanaTaskToMaster)
-
         const today = new Date().toISOString().split('T')[0]
         setMasterTasks(mapped)
         setTodayTasks(mapped.filter(t => t.due_on === today))
@@ -48,5 +42,13 @@ export function useAsanaTasks() {
     setTodayTasks(prev => prev.filter(t => t.id !== id))
   }
 
-  return { masterTasks, todayTasks, status, completeTask }
+  async function updateTaskNotes(id, notes) {
+    const gid = id.replace('asana_', '')
+    await updateAsanaTaskNotes(token, gid, notes)
+    const update = t => t.id === id ? { ...t, notes } : t
+    setMasterTasks(prev => prev.map(update))
+    setTodayTasks(prev => prev.map(update))
+  }
+
+  return { masterTasks, todayTasks, status, completeTask, updateTaskNotes }
 }

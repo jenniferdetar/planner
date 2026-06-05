@@ -144,17 +144,25 @@
   gap: 2px;
 }
 
+.daily-task-row-wrap {
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.daily-task-row-wrap:hover {
+  background: #f5f4f0;
+}
+
+.daily-task-row-wrap.done .task-text {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
 .daily-task-row {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 7px 8px;
-  border-radius: 8px;
-  transition: background 0.15s;
-}
-
-.daily-task-row:hover {
-  background: #f5f4f0;
 }
 
 .daily-task-row.done .task-text {
@@ -220,8 +228,66 @@
   cursor: pointer;
 }
 
-.daily-task-row:hover .delete-task-btn {
+.daily-task-row-wrap:hover .delete-task-btn,
+.daily-task-row-wrap:hover .notes-btn {
   opacity: 1;
+}
+
+.notes-btn {
+  font-size: 13px;
+  color: #ccc;
+  padding: 2px 4px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.notes-btn.has-notes {
+  color: #c9a96e;
+  opacity: 0.7;
+}
+
+.notes-btn.open {
+  color: #c9a96e;
+  opacity: 1;
+}
+
+.notes-btn:hover {
+  color: #c9a96e;
+}
+
+.task-project {
+  font-size: 10px;
+  background: rgba(74, 144, 217, 0.12);
+  color: #4a90d9;
+  padding: 2px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.task-notes-input {
+  width: 100%;
+  margin: 0 8px 8px;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  width: calc(100% - 16px);
+  border: 1px solid #e8e5de;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #444;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  background: #faf9f6;
+  line-height: 1.5;
+  transition: border-color 0.15s;
+}
+
+.task-notes-input:focus {
+  border-color: #c9a96e;
+  background: #fff;
 }
 
 .delete-task-btn:hover {
