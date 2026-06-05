@@ -71,7 +71,7 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
-  const { todayTasks: asanaTodayTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
+  const { todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
@@ -193,6 +193,10 @@ export default function App() {
           onDeleteCseaIssue={deleteCseaIssue}
           cseaInteractions={cseaInteractions}
           onAddCseaInteraction={addCseaInteraction}
+          asanaCseaTasks={asanaCseaTasks}
+          asanaIcaapTasks={asanaIcaapTasks}
+          onCompleteAsanaTask={completeAsanaTask}
+          onUpdateAsanaTaskNotes={updateAsanaNotes}
           onMonthChange={(y, m) => { setCalViewYear(y); setCalViewMonth(m) }}
           transactions={transactions}
           onAddTransaction={addTransaction}

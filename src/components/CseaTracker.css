@@ -447,3 +447,76 @@
   color: #999;
   font-style: italic;
 }
+
+.csea-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #4a90d9;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.asana-task-row {
+  background: #fff;
+  border: 1px solid #e8e5de;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.asana-task-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.asana-task-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a2e;
+}
+
+.asana-task-due {
+  font-size: 11px;
+  color: #888;
+}
+
+.asana-task-body {
+  padding: 0 14px 12px;
+  border-top: 1px solid #f0ede8;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.asana-task-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.asana-complete-btn {
+  background: #5cb85c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.asana-complete-btn:hover {
+  background: #4aa84a;
+}
