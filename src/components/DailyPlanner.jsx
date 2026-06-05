@@ -44,6 +44,7 @@ export default function DailyPlanner({
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
+  attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -139,6 +140,9 @@ export default function DailyPlanner({
           asanaTasks={asanaIcaapTasks || []}
           onCompleteAsanaTask={onCompleteAsanaTask}
           onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
+          attendanceRecords={attendanceRecords || []}
+          onUpsertAttendance={onUpsertAttendance}
+          onUpdateAttendanceNotes={onUpdateAttendanceNotes}
         />
       )}
 

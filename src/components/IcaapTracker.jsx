@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import './IcaapTracker.css'
+import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 
 const CATEGORIES = ['Task', 'Meeting', 'Research', 'Review', 'Report', 'Follow-up', 'Other']
 const PRIORITIES = ['Low', 'Medium', 'High']
@@ -49,10 +50,11 @@ async function getFirstWorkspace(token) {
   return data[0]?.gid ?? null
 }
 
-export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
+export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
   const [tab, setTab] = useState('board')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
+  const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
   const [pushingId, setPushingId] = useState(null)
   const [pushResult, setPushResult] = useState({}) // id -> 'ok' | 'err'
 
@@ -140,6 +142,7 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
         <button className={`icaap-tab ${tab === 'board' ? 'active' : ''}`} onClick={() => setTab('board')}>Board</button>
         <button className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>List</button>
         <button className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
+        <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
       </div>
 
       {/* Asana tab */}
@@ -152,8 +155,19 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
         </div>
       )}
 
+      {/* Attendance tab */}
+      {tab === 'attendance' && (
+        <AttendancePanel
+          date={attendanceDate}
+          onDateChange={setAttendanceDate}
+          records={attendanceRecords}
+          onUpsert={onUpsertAttendance}
+          onUpdateNotes={onUpdateAttendanceNotes}
+        />
+      )}
+
       {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: tab === 'asana' ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance') ? 'none' : undefined }}>
         {tab === 'list' ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (
@@ -166,8 +180,8 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
         <button className="icaap-add-btn" onClick={() => setShowForm(true)}>+ Add Item</button>
       </div>
 
-      {/* Add form — hidden on Asana tab */}
-      {showForm && tab !== 'asana' && (
+      {/* Add form — hidden on Asana/Attendance tabs */}
+      {showForm && tab !== 'asana' && tab !== 'attendance' && (
         <form className="icaap-form" onSubmit={handleAdd}>
           <input className="icaap-input" placeholder="Title *" value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))} autoFocus />
@@ -264,6 +278,107 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
   )
 }
 
+const ATTENDANCE_STATUSES = ['Present', 'Absent', 'Excused']
+const ATTENDANCE_STATUS_COLORS = { Present: '#5cb85c', Absent: '#e05c5c', Excused: '#f0a040' }
+
+function AttendancePanel({ date, onDateChange, records, onUpsert, onUpdateNotes }) {
+  const presentCount = ATTENDANCE_MEMBERS.filter(m => {
+    const r = records.find(r => r.meeting_date === date && r.member_name === m)
+    return !r || r.status === 'Present'
+  }).length
+
+  return (
+    <div className="attendance-panel">
+      <div className="attendance-header">
+        <div className="attendance-date-row">
+          <label className="attendance-date-label">Meeting date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => onDateChange(e.target.value)}
+            className="attendance-date-input"
+          />
+        </div>
+        <div className="attendance-summary">
+          <span className="attendance-present-count" style={{ color: '#5cb85c' }}>{presentCount}</span>
+          <span className="attendance-summary-label">/ {ATTENDANCE_MEMBERS.length} present</span>
+        </div>
+      </div>
+      <div className="attendance-list">
+        {ATTENDANCE_MEMBERS.map(member => {
+          const record = records.find(r => r.meeting_date === date && r.member_name === member)
+          const status = record?.status ?? 'Present'
+          const notes = record?.notes ?? ''
+          return (
+            <AttendanceMemberRow
+              key={member}
+              member={member}
+              status={status}
+              notes={notes}
+              onStatusChange={s => onUpsert?.(date, member, s, record?.notes ?? null)}
+              onNotesChange={n => onUpdateNotes?.(date, member, n)}
+            />
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function AttendanceMemberRow({ member, status, notes, onStatusChange, onNotesChange }) {
+  const [expanded, setExpanded] = useState(false)
+  const [notesText, setNotesText] = useState(notes)
+  const saveTimer = useRef(null)
+
+  // Sync notes when date changes
+  if (notesText !== notes && !saveTimer.current) {
+    setNotesText(notes)
+  }
+
+  function handleNotesChange(e) {
+    const val = e.target.value
+    setNotesText(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      onNotesChange?.(val)
+      saveTimer.current = null
+    }, 800)
+  }
+
+  return (
+    <div className={`attendance-row ${status === 'Absent' ? 'absent' : ''}`}>
+      <div className="attendance-row-main">
+        <span className="attendance-member-name">{member}</span>
+        <div className="attendance-status-btns">
+          {ATTENDANCE_STATUSES.map(s => (
+            <button
+              key={s}
+              className={`att-status-btn ${status === s ? 'active' : ''}`}
+              style={{ '--ac': ATTENDANCE_STATUS_COLORS[s] }}
+              onClick={() => onStatusChange(s)}
+            >{s}</button>
+          ))}
+        </div>
+        <button
+          className={`att-notes-btn ${notes ? 'has-notes' : ''} ${expanded ? 'open' : ''}`}
+          onClick={() => setExpanded(e => !e)}
+          title="Notes"
+        >≡</button>
+      </div>
+      {expanded && (
+        <textarea
+          className="att-notes-input"
+          placeholder="Notes for this member…"
+          value={notesText}
+          onChange={handleNotesChange}
+          rows={2}
+          autoFocus
+        />
+      )}
+    </div>
+  )
+}
+
 function AsanaTaskRow({ task, onComplete, onUpdateNotes }) {
   const [expanded, setExpanded] = useState(false)
   const [notesText, setNotesText] = useState(task.notes || '')
@@ -344,7 +459,7 @@ function ItemCard({ item, onUpdateItem, onDeleteItem, onPushToAsana, pushing, pu
                   onClick={() => onPushToAsana(item)}
                   disabled={pushing}
                 >
-                  {pushing ? '…' : pushResult === 'ok' ? '✓ Pushed' : pushResult === 'err' ? '✗ Failed' : '↑ Asana'}
+                  {pushing ? '…' : pushResult === 'ok' ? '✓ Pushed' : pushResult === 'err' ? '✕ Failed' : '↑ Asana'}
                 </button>
               )}
               <button className="icaap-delete-btn" onClick={() => onDeleteItem(item.id)}>Delete</button>
