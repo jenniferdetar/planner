@@ -48,7 +48,7 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
-  const { masterTasks: asanaMasterTasks, todayTasks: asanaTodayTasks, status: asanaStatus } = useAsanaTasks()
+  const { masterTasks: asanaMasterTasks, todayTasks: asanaTodayTasks, status: asanaStatus, completeTask: completeAsanaTask } = useAsanaTasks()
 
   // Merge Asana tasks into local lists (read-only, source='asana')
   const allMasterTasks = [...masterTasks, ...asanaMasterTasks]
@@ -70,6 +70,16 @@ export default function App() {
 
   async function handleAddBlock(hour, text, color) {
     await addMeeting(text, hour, color)
+  }
+
+  async function handleToggleDailyTask(id) {
+    if (String(id).startsWith('asana_')) return completeAsanaTask(id)
+    return toggleDailyTask(id)
+  }
+
+  async function handleDeleteDailyTask(id) {
+    if (String(id).startsWith('asana_')) return completeAsanaTask(id)
+    return deleteDailyTask(id)
   }
 
   async function handleDeleteBlock(id) {
@@ -96,6 +106,7 @@ export default function App() {
         quote={quote}
         user={user}
         asanaStatus={asanaStatus}
+        onCompleteAsanaTask={completeAsanaTask}
       />
       <DailyPlanner
         selectedDate={selectedDate}
@@ -103,8 +114,8 @@ export default function App() {
         dailyTasks={allDailyTasks}
         timeBlocks={allTimeBlocks}
         onAddTask={addDailyTask}
-        onToggleTask={toggleDailyTask}
-        onDeleteTask={deleteDailyTask}
+        onToggleTask={handleToggleDailyTask}
+        onDeleteTask={handleDeleteDailyTask}
         onAddBlock={handleAddBlock}
         onDeleteBlock={handleDeleteBlock}
         view={view}

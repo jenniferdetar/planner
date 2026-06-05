@@ -20,7 +20,14 @@ export async function fetchMyTasks(token, workspaceGid) {
   return data
 }
 
-export function asanaTaskToMaster(task) {
+export async function completeAsanaTask(token, gid) {
+  const res = await fetch(`${BASE}/tasks/${gid}`, {
+    method: 'PUT',
+    headers: { ...headers(token), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: { completed: true } }),
+  })
+  if (!res.ok) throw new Error(`Asana PUT /tasks/${gid} ${res.status}`)
+}
   return {
     id: `asana_${task.gid}`,
     title: task.name,
