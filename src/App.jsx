@@ -3,6 +3,7 @@ import { useAuth } from './hooks/useAuth'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts } from './hooks/usePlannerData'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
+import { useIcaapItems } from './hooks/useIcaapData'
 import { useTransactions, useBills, useFinancialGoals } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
 import Sidebar from './components/Sidebar'
@@ -74,6 +75,7 @@ export default function App() {
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
+  const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
 
   // Merge Asana tasks into local lists (read-only, source='asana')
   const allMasterTasks = masterTasks
@@ -203,6 +205,10 @@ export default function App() {
           onAddGoal={addGoal}
           onUpdateGoalAmount={updateGoalAmount}
           onDeleteGoal={deleteGoal}
+          icaapItems={icaapItems}
+          onAddIcaapItem={addIcaapItem}
+          onUpdateIcaapItem={updateIcaapItem}
+          onDeleteIcaapItem={deleteIcaapItem}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
