@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts } from './hooks/usePlannerData'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
@@ -53,6 +53,15 @@ export default function App() {
 
   const userId = user?.id ?? null
   const quote = QUOTES[today.getDate() % QUOTES.length]
+
+  const [mobilePanel, setMobilePanel] = useState('main') // 'sidebar' | 'main' | 'right'
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   const { tasks: masterTasks, addTask: addMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
   const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask, updateTaskDescription } = useDailyTasks(userId, selectedDate)
@@ -145,62 +154,86 @@ export default function App() {
 
   if (!session) return <LoginScreen />
 
+  const mp = isMobile ? mobilePanel : null
+
   return (
     <div className="app">
-      <Sidebar
-        masterTasks={masterTasks}
-        onAddTask={addMasterTask}
-        onDeleteTask={deleteMasterTask}
-        quote={quote}
-        user={user}
-      />
-      <DailyPlanner
-        selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
-        dailyTasks={allDailyTasks}
-        timeBlocks={allTimeBlocks}
-        onAddTask={addDailyTask}
-        onToggleTask={handleToggleDailyTask}
-        onDeleteTask={handleDeleteDailyTask}
-        onUpdateTaskNotes={handleUpdateTaskNotes}
-        onAddBlock={handleAddBlock}
-        onDeleteBlock={handleDeleteBlock}
-        view={view}
-        onViewChange={(v) => {
-          if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
-          setView(v)
-        }}
-        taskCounts={taskCounts}
-        cseaIssues={cseaIssues}
-        onAddCseaIssue={addCseaIssue}
-        onUpdateCseaStatus={updateCseaStatus}
-        onDeleteCseaIssue={deleteCseaIssue}
-        cseaInteractions={cseaInteractions}
-        onAddCseaInteraction={addCseaInteraction}
-        onMonthChange={(y, m) => { setCalViewYear(y); setCalViewMonth(m) }}
-        transactions={transactions}
-        onAddTransaction={addTransaction}
-        onDeleteTransaction={deleteTransaction}
-        bills={bills}
-        onAddBill={addBill}
-        onToggleBillPaid={toggleBillPaid}
-        onDeleteBill={deleteBill}
-        goals={goals}
-        onAddGoal={addGoal}
-        onUpdateGoalAmount={updateGoalAmount}
-        onDeleteGoal={deleteGoal}
-      />
-      <RightPanel
-        selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
-        taskCounts={taskCounts}
-        dailyTasks={dailyTasks}
-        timeBlocks={allTimeBlocks}
-        noteContent={noteContent}
-        onNoteChange={onNoteChange}
-        calAuthExpired={calAuthExpired}
-        onReconnectGoogle={reconnectGoogle}
-      />
+      <div className={mp === 'sidebar' ? 'mobile-active' : undefined}>
+        <Sidebar
+          masterTasks={masterTasks}
+          onAddTask={addMasterTask}
+          onDeleteTask={deleteMasterTask}
+          quote={quote}
+          user={user}
+        />
+      </div>
+      <div className={mp === null || mp === 'main' ? 'mobile-active' : undefined}>
+        <DailyPlanner
+          selectedDate={selectedDate}
+          onDateChange={setSelectedDate}
+          dailyTasks={allDailyTasks}
+          timeBlocks={allTimeBlocks}
+          onAddTask={addDailyTask}
+          onToggleTask={handleToggleDailyTask}
+          onDeleteTask={handleDeleteDailyTask}
+          onUpdateTaskNotes={handleUpdateTaskNotes}
+          onAddBlock={handleAddBlock}
+          onDeleteBlock={handleDeleteBlock}
+          view={view}
+          onViewChange={(v) => {
+            if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
+            setView(v)
+          }}
+          taskCounts={taskCounts}
+          cseaIssues={cseaIssues}
+          onAddCseaIssue={addCseaIssue}
+          onUpdateCseaStatus={updateCseaStatus}
+          onDeleteCseaIssue={deleteCseaIssue}
+          cseaInteractions={cseaInteractions}
+          onAddCseaInteraction={addCseaInteraction}
+          onMonthChange={(y, m) => { setCalViewYear(y); setCalViewMonth(m) }}
+          transactions={transactions}
+          onAddTransaction={addTransaction}
+          onDeleteTransaction={deleteTransaction}
+          bills={bills}
+          onAddBill={addBill}
+          onToggleBillPaid={toggleBillPaid}
+          onDeleteBill={deleteBill}
+          goals={goals}
+          onAddGoal={addGoal}
+          onUpdateGoalAmount={updateGoalAmount}
+          onDeleteGoal={deleteGoal}
+        />
+      </div>
+      <div className={mp === 'right' ? 'mobile-active' : undefined}>
+        <RightPanel
+          selectedDate={selectedDate}
+          onDateChange={setSelectedDate}
+          taskCounts={taskCounts}
+          dailyTasks={dailyTasks}
+          timeBlocks={allTimeBlocks}
+          noteContent={noteContent}
+          onNoteChange={onNoteChange}
+          calAuthExpired={calAuthExpired}
+          onReconnectGoogle={reconnectGoogle}
+        />
+      </div>
+      {isMobile && (
+        <nav className="mobile-nav">
+          <button className={`mobile-nav-btn${mobilePanel === 'sidebar' ? ' active' : ''}`} onClick={() => setMobilePanel('sidebar')}>
+            <span className="mobile-nav-icon">☰</span>
+            Tasks
+          </button>
+          <button className={`mobile-nav-btn${mobilePanel === 'main' ? ' active' : ''}`} onClick={() => setMobilePanel('main')}>
+            <span className="mobile-nav-icon">📅</span>
+            Planner
+          </button>
+          <button className={`mobile-nav-btn${mobilePanel === 'right' ? ' active' : ''}`} onClick={() => setMobilePanel('right')}>
+            <span className="mobile-nav-icon">◆</span>
+            Summary
+          </button>
+        </nav>
+      )}
     </div>
   )
 }
