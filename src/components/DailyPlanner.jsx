@@ -3,6 +3,7 @@ import './DailyPlanner.css'
 import MonthView from './MonthView'
 import CseaTracker from './CseaTracker'
 import FinancialPanel from './FinancialPanel'
+import IcaapTracker from './IcaapTracker'
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
@@ -41,6 +42,7 @@ export default function DailyPlanner({
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
+  icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -115,17 +117,26 @@ export default function DailyPlanner({
           </div>
         )}
         <div className="view-tabs">
-          {['month', 'day', 'tasks', 'csea', 'finance'].map(v => (
+          {['month', 'day', 'tasks', 'icaap', 'csea', 'finance'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >
-              {v === 'csea' ? 'CSEA' : v.charAt(0).toUpperCase() + v.slice(1)}
+              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v.charAt(0).toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>
       </div>
+
+      {view === 'icaap' && (
+        <IcaapTracker
+          items={icaapItems || []}
+          onAddItem={onAddIcaapItem}
+          onUpdateItem={onUpdateIcaapItem}
+          onDeleteItem={onDeleteIcaapItem}
+        />
+      )}
 
       {view === 'csea' && (
         <CseaTracker
