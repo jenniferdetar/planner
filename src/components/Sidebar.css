@@ -42,6 +42,31 @@
   margin-top: 2px;
 }
 
+.sidebar-tabs {
+  display: flex;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.sidebar-tab {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.35);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+
+.sidebar-tab.active {
+  color: #c9a96e;
+  border-color: rgba(201,169,110,0.3);
+  background: rgba(201,169,110,0.08);
+}
+
 .quote-box {
   margin: 20px 20px 8px;
   padding: 16px;
