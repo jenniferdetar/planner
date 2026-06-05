@@ -5,7 +5,7 @@ import './Sidebar.css'
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 
-export default function Sidebar({ masterTasks, onAddTask, onDeleteTask, quote, user }) {
+export default function Sidebar({ masterTasks, onAddTask, onDeleteTask, quote, user, asanaStatus }) {
   const [newText, setNewText] = useState('')
   const [newPriority, setNewPriority] = useState('medium')
   const [showAdd, setShowAdd] = useState(false)
@@ -35,7 +35,12 @@ export default function Sidebar({ masterTasks, onAddTask, onDeleteTask, quote, u
           <span className="logo-icon">◆</span>
           <span className="logo-text">Opus One</span>
         </div>
-        <p className="sidebar-subtitle">Master Tasks</p>
+        <p className="sidebar-subtitle">
+          Master Tasks
+          {asanaStatus === 'ready' && <span className="asana-badge">Asana ✓</span>}
+          {asanaStatus === 'loading' && <span className="asana-badge syncing">Asana…</span>}
+          {asanaStatus === 'error' && <span className="asana-badge error">Asana ✕</span>}
+        </p>
       </div>
 
       <div className="quote-box">
@@ -136,9 +141,15 @@ function TaskRow({ task, onDelete }) {
         style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
       />
       <span className="task-text">{task.title}</span>
-      {task.category && <span className="task-category">{task.category}</span>}
-      {hovered && (
+      {task.source === 'asana' && task.project && (
+        <span className="task-category">{task.project}</span>
+      )}
+      {task.category && task.source !== 'asana' && <span className="task-category">{task.category}</span>}
+      {hovered && task.source !== 'asana' && (
         <button className="delete-btn" onClick={() => onDelete(task.id)}>✕</button>
+      )}
+      {task.source === 'asana' && (
+        <span className="asana-dot" title="From Asana" />
       )}
     </div>
   )

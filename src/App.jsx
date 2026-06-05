@@ -3,6 +3,7 @@ import { useAuth } from './hooks/useAuth'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts } from './hooks/usePlannerData'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
+import { useAsanaTasks } from './hooks/useAsanaTasks'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
 import RightPanel from './components/RightPanel'
@@ -47,6 +48,11 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
+  const { masterTasks: asanaMasterTasks, todayTasks: asanaTodayTasks, status: asanaStatus } = useAsanaTasks()
+
+  // Merge Asana tasks into local lists (read-only, source='asana')
+  const allMasterTasks = [...masterTasks, ...asanaMasterTasks]
+  const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
 
   // Fetch Google Calendar events for the current week
   const weekStart = new Date(selectedDate)
@@ -84,16 +90,17 @@ export default function App() {
   return (
     <div className="app">
       <Sidebar
-        masterTasks={masterTasks}
+        masterTasks={allMasterTasks}
         onAddTask={addMasterTask}
         onDeleteTask={deleteMasterTask}
         quote={quote}
         user={user}
+        asanaStatus={asanaStatus}
       />
       <DailyPlanner
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
-        dailyTasks={dailyTasks}
+        dailyTasks={allDailyTasks}
         timeBlocks={allTimeBlocks}
         onAddTask={addDailyTask}
         onToggleTask={toggleDailyTask}
@@ -114,7 +121,7 @@ export default function App() {
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
         taskCounts={taskCounts}
-        dailyTasks={dailyTasks}
+        dailyTasks={allDailyTasks}
         timeBlocks={allTimeBlocks}
         noteContent={noteContent}
         onNoteChange={onNoteChange}
