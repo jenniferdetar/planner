@@ -5,7 +5,7 @@ function toDateStr(d) {
   return d.toISOString().split('T')[0]
 }
 
-// ─── Master Tasks ────────────────────────────────────────────
+// ─── Master Tasks ────────────────────────────────────────────────────────────────────────────
 
 export function useMasterTasks(userId) {
   const [tasks, setTasks] = useState([])
@@ -36,7 +36,7 @@ export function useMasterTasks(userId) {
   return { tasks, addTask, deleteTask }
 }
 
-// ─── Daily Tasks ───────────────────────────────────────────────
+// ─── Daily Tasks ──────────────────────────────────────────────────────────────────────────────
 
 export function useDailyTasks(userId, selectedDate) {
   const [tasks, setTasks] = useState([])
@@ -91,7 +91,7 @@ export function useDailyTasks(userId, selectedDate) {
   return { tasks, addTask, toggleTask, deleteTask, updateTaskDescription }
 }
 
-// ─── Meetings (time blocks from Supabase) ────────────────────────────────────
+// ─── Meetings (time blocks from Supabase) ───────────────────────────────────────────────────────────────────────
 
 export function useMeetings(userId, selectedDate) {
   const [meetings, setMeetings] = useState([])
@@ -107,13 +107,13 @@ export function useMeetings(userId, selectedDate) {
       .then(({ data }) => setMeetings(data || []))
   }, [userId, dateStr])
 
-  async function addMeeting(title, hour, color) {
+  async function addMeeting(title, hour, color, startTime, endTime) {
     const pad = (n) => String(n).padStart(2, '0')
-    const startTime = `${pad(hour)}:00:00`
-    const endTime = `${pad(hour + 1)}:00:00`
+    const st = startTime ?? `${pad(hour)}:00:00`
+    const et = endTime ?? `${pad(Math.min(hour + 1, 23))}:00:00`
     const { data } = await supabase
       .from('opus_meetings')
-      .insert({ title, date: dateStr, start_time: startTime, end_time: endTime, user_id: userId })
+      .insert({ title, date: dateStr, start_time: st, end_time: et, user_id: userId })
       .select()
       .single()
     if (data) setMeetings((prev) => [...prev, data])
@@ -128,7 +128,7 @@ export function useMeetings(userId, selectedDate) {
   return { meetings, addMeeting, deleteMeeting }
 }
 
-// ─── Notes ──────────────────────────────────────────────────────────────────────────
+// ─── Notes ────────────────────────────────────────────────────────────────────────────────────────
 
 export function useNotes(userId, selectedDate) {
   const [content, setContent] = useState('')
@@ -179,7 +179,7 @@ export function useNotes(userId, selectedDate) {
   return { content, onChange: handleChange }
 }
 
-// ─── All-dates task counts (for calendar dots) ──────────────────────────────────────
+// ─── All-dates task counts (for calendar dots) ────────────────────────────────────────────────────────────
 
 export function useTaskCounts(userId) {
   const [counts, setCounts] = useState({})

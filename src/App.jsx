@@ -22,6 +22,14 @@ const QUOTES = [
 // Color palette for Supabase-created time blocks
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
 
+function formatTime(timeStr) {
+  if (!timeStr) return ''
+  const [h, m] = timeStr.split(':').map(Number)
+  const suffix = h >= 12 ? 'PM' : 'AM'
+  const h12 = h % 12 || 12
+  return m === 0 ? `${h12} ${suffix}` : `${h12}:${String(m).padStart(2,'0')} ${suffix}`
+}
+
 function meetingToBlock(meeting, color) {
   const hour = parseInt(meeting.start_time?.split(':')[0] ?? '9', 10)
   return {
@@ -30,6 +38,8 @@ function meetingToBlock(meeting, color) {
     text: meeting.title,
     color: color ?? '#4a90d9',
     source: 'supabase',
+    startLabel: meeting.start_time ? formatTime(meeting.start_time) : null,
+    endLabel: meeting.end_time ? formatTime(meeting.end_time) : null,
   }
 }
 
@@ -90,8 +100,8 @@ export default function App() {
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
   const allTimeBlocks = [...supabaseBlocks, ...gcalBlocksForDay]
 
-  async function handleAddBlock(hour, text, color) {
-    await addMeeting(text, hour, color)
+  async function handleAddBlock(hour, text, color, startTime, endTime) {
+    await addMeeting(text, hour, color, startTime, endTime)
   }
 
   async function handleToggleDailyTask(id) {
