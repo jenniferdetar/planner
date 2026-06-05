@@ -3,6 +3,7 @@ import { useAuth } from './hooks/useAuth'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts } from './hooks/usePlannerData'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
+import { useTransactions, useBills, useFinancialGoals } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
@@ -48,6 +49,9 @@ export default function App() {
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
   const { todayTasks: asanaTodayTasks, completeTask: completeAsanaTask } = useAsanaTasks()
+  const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
+  const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
+  const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
 
   const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
 
@@ -100,6 +104,17 @@ export default function App() {
         onDeleteTask={deleteMasterTask}
         quote={quote}
         user={user}
+        transactions={transactions}
+        onAddTransaction={addTransaction}
+        onDeleteTransaction={deleteTransaction}
+        bills={bills}
+        onAddBill={addBill}
+        onToggleBillPaid={toggleBillPaid}
+        onDeleteBill={deleteBill}
+        goals={goals}
+        onAddGoal={addGoal}
+        onUpdateGoalAmount={updateGoalAmount}
+        onDeleteGoal={deleteGoal}
       />
       <DailyPlanner
         selectedDate={selectedDate}

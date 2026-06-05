@@ -33,15 +33,29 @@
   color: #fff;
 }
 
-.sidebar-subtitle {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  margin-top: 2px;
+.sidebar-tabs {
   display: flex;
-  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.sidebar-tab {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.35);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+
+.sidebar-tab.active {
+  color: #c9a96e;
+  border-color: rgba(201,169,110,0.3);
+  background: rgba(201,169,110,0.08);
 }
 
 .quote-box {
@@ -341,49 +355,4 @@
   color: rgba(255,255,255,0.35);
   text-transform: uppercase;
   margin-top: 2px;
-}
-
-.asana-badge {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  background: rgba(248, 99, 54, 0.15);
-  color: #f86336;
-  padding: 1px 6px;
-  border-radius: 10px;
-  margin-left: 6px;
-}
-
-.asana-badge.syncing {
-  color: #c9a96e;
-  background: rgba(201, 169, 110, 0.15);
-}
-
-.asana-badge.error {
-  color: #e05c5c;
-  background: rgba(224, 92, 92, 0.15);
-}
-
-.asana-check-btn {
-  width: 14px;
-  height: 14px;
-  font-size: 9px;
-  color: rgba(248, 99, 54, 0.5);
-  border: 1px solid rgba(248, 99, 54, 0.4);
-  border-radius: 50%;
-  flex-shrink: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-  padding: 0;
-  line-height: 1;
-}
-
-.asana-check-btn:hover,
-.asana-check-btn.completing {
-  background: #f86336;
-  color: #fff;
-  border-color: #f86336;
 }
