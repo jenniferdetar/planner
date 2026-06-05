@@ -8,7 +8,6 @@ const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 export default function Sidebar({
   masterTasks, onAddTask, onDeleteTask, quote, user,
 }) {
-  const [sideTab, setSideTab] = useState('tasks')
   const [newText, setNewText] = useState('')
   const [newPriority, setNewPriority] = useState('medium')
   const [showAdd, setShowAdd] = useState(false)
@@ -40,8 +39,7 @@ export default function Sidebar({
         </div>
       </div>
 
-      <>
-          <div className="quote-box">
+      <div className="quote-box">
             <p className="quote-text">"{quote.text}"</p>
             <p className="quote-author">— {quote.author}</p>
           </div>
@@ -121,7 +119,6 @@ export default function Sidebar({
               </div>
             </div>
           </div>
-      </>
     </aside>
   )
 }
