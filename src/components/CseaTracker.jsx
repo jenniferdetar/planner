@@ -1,0 +1,248 @@
+import { useState } from 'react'
+import './CseaTracker.css'
+
+const ISSUE_TYPES = ['Grievance', 'Gripe', 'Complaint']
+const PRIORITIES = ['Low', 'Medium', 'High']
+const STATUSES = ['Open', 'In Progress', 'Resolved', 'Closed']
+
+const TYPE_COLORS = { Grievance: '#e05c5c', Gripe: '#f0a040', Complaint: '#5c9ee0' }
+const STATUS_COLORS = { Open: '#e05c5c', 'In Progress': '#f0a040', Resolved: '#5cb85c', Closed: '#aaa' }
+const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
+
+const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
+
+export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction }) {
+  const [tab, setTab] = useState('issues')
+  const [showAddIssue, setShowAddIssue] = useState(false)
+  const [showAddInteraction, setShowAddInteraction] = useState(false)
+  const [filter, setFilter] = useState('active')
+
+  const [issueForm, setIssueForm] = useState({
+    issue_type: 'Grievance', member_name: '', work_location: '',
+    description: '', priority: 'Medium', status: 'Open',
+    point_of_contact: '', involved_parties: '',
+  })
+
+  const [interactionForm, setInteractionForm] = useState({
+    category: 'General', member_name: '', work_location: '',
+    discussion: '', who_involved: '', date_spoke: new Date().toISOString().split('T')[0],
+  })
+
+  const activeIssues = issues.filter(i => i.status === 'Open' || i.status === 'In Progress')
+  const resolvedIssues = issues.filter(i => i.status === 'Resolved' || i.status === 'Closed')
+  const displayIssues = filter === 'active' ? activeIssues : filter === 'resolved' ? resolvedIssues : issues
+
+  const counts = {
+    Grievance: activeIssues.filter(i => i.issue_type === 'Grievance').length,
+    Gripe: activeIssues.filter(i => i.issue_type === 'Gripe').length,
+    Complaint: activeIssues.filter(i => i.issue_type === 'Complaint').length,
+  }
+
+  async function handleAddIssue(e) {
+    e.preventDefault()
+    if (!issueForm.member_name.trim() || !issueForm.description.trim()) return
+    await onAddIssue(issueForm)
+    setIssueForm({ issue_type: 'Grievance', member_name: '', work_location: '', description: '', priority: 'Medium', status: 'Open', point_of_contact: '', involved_parties: '' })
+    setShowAddIssue(false)
+  }
+
+  async function handleAddInteraction(e) {
+    e.preventDefault()
+    if (!interactionForm.member_name.trim()) return
+    await onAddInteraction(interactionForm)
+    setInteractionForm({ category: 'General', member_name: '', work_location: '', discussion: '', who_involved: '', date_spoke: new Date().toISOString().split('T')[0] })
+    setShowAddInteraction(false)
+  }
+
+  return (
+    <div className="csea-tracker">
+      {/* Stats bar */}
+      <div className="csea-stats">
+        <div className="csea-stat">
+          <span className="csea-stat-num" style={{ color: '#e05c5c' }}>{counts.Grievance}</span>
+          <span className="csea-stat-lbl">Grievances</span>
+        </div>
+        <div className="csea-stat">
+          <span className="csea-stat-num" style={{ color: '#f0a040' }}>{counts.Gripe}</span>
+          <span className="csea-stat-lbl">Gripes</span>
+        </div>
+        <div className="csea-stat">
+          <span className="csea-stat-num" style={{ color: '#5c9ee0' }}>{counts.Complaint}</span>
+          <span className="csea-stat-lbl">Complaints</span>
+        </div>
+        <div className="csea-stat">
+          <span className="csea-stat-num">{activeIssues.length}</span>
+          <span className="csea-stat-lbl">Active</span>
+        </div>
+      </div>
+
+      {/* Sub-tabs */}
+      <div className="csea-tabs">
+        <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
+        <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions</button>
+      </div>
+
+      {tab === 'issues' && (
+        <div className="csea-panel">
+          <div className="csea-toolbar">
+            <div className="csea-filter-pills">
+              {['active', 'resolved', 'all'].map(f => (
+                <button key={f} className={`filter-pill ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
+                  {f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+            </div>
+            <button className="csea-add-btn" onClick={() => setShowAddIssue(true)}>+ Log Issue</button>
+          </div>
+
+          {showAddIssue && (
+            <form className="csea-form" onSubmit={handleAddIssue}>
+              <div className="csea-form-row">
+                <div className="csea-type-btns">
+                  {ISSUE_TYPES.map(t => (
+                    <button key={t} type="button"
+                      className={`type-btn ${issueForm.issue_type === t ? 'active' : ''}`}
+                      style={{ '--tc': TYPE_COLORS[t] }}
+                      onClick={() => setIssueForm(f => ({ ...f, issue_type: t }))}
+                    >{t}</button>
+                  ))}
+                </div>
+              </div>
+              <input className="csea-input" placeholder="Member name *" value={issueForm.member_name}
+                onChange={e => setIssueForm(f => ({ ...f, member_name: e.target.value }))} />
+              <input className="csea-input" placeholder="Work location" value={issueForm.work_location}
+                onChange={e => setIssueForm(f => ({ ...f, work_location: e.target.value }))} />
+              <textarea className="csea-textarea" placeholder="Description *" rows={3} value={issueForm.description}
+                onChange={e => setIssueForm(f => ({ ...f, description: e.target.value }))} />
+              <input className="csea-input" placeholder="Involved parties" value={issueForm.involved_parties}
+                onChange={e => setIssueForm(f => ({ ...f, involved_parties: e.target.value }))} />
+              <div className="csea-form-row">
+                <div className="csea-priority-btns">
+                  {PRIORITIES.map(p => (
+                    <button key={p} type="button"
+                      className={`priority-btn ${issueForm.priority === p ? 'active' : ''}`}
+                      style={{ '--pc': PRIORITY_COLORS[p] }}
+                      onClick={() => setIssueForm(f => ({ ...f, priority: p }))}
+                    >{p}</button>
+                  ))}
+                </div>
+                <div className="csea-form-actions">
+                  <button type="button" className="csea-cancel" onClick={() => setShowAddIssue(false)}>Cancel</button>
+                  <button type="submit" className="csea-save">Save</button>
+                </div>
+              </div>
+            </form>
+          )}
+
+          <div className="csea-issue-list">
+            {displayIssues.length === 0 && (
+              <p className="csea-empty">No {filter === 'active' ? 'active' : filter === 'resolved' ? 'resolved' : ''} issues</p>
+            )}
+            {displayIssues.map(issue => (
+              <IssueCard key={issue.id} issue={issue} onUpdateStatus={onUpdateStatus} onDelete={onDeleteIssue} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === 'interactions' && (
+        <div className="csea-panel">
+          <div className="csea-toolbar">
+            <span className="csea-toolbar-label">Recent member contacts</span>
+            <button className="csea-add-btn" onClick={() => setShowAddInteraction(true)}>+ Log Contact</button>
+          </div>
+
+          {showAddInteraction && (
+            <form className="csea-form" onSubmit={handleAddInteraction}>
+              <div className="csea-form-row">
+                <div className="csea-type-btns">
+                  {INTERACTION_CATEGORIES.map(c => (
+                    <button key={c} type="button"
+                      className={`type-btn ${interactionForm.category === c ? 'active' : ''}`}
+                      style={{ '--tc': '#4a90d9' }}
+                      onClick={() => setInteractionForm(f => ({ ...f, category: c }))}
+                    >{c}</button>
+                  ))}
+                </div>
+              </div>
+              <input className="csea-input" placeholder="Member name *" value={interactionForm.member_name}
+                onChange={e => setInteractionForm(f => ({ ...f, member_name: e.target.value }))} />
+              <input className="csea-input" placeholder="Work location" value={interactionForm.work_location}
+                onChange={e => setInteractionForm(f => ({ ...f, work_location: e.target.value }))} />
+              <input className="csea-input" type="date" value={interactionForm.date_spoke}
+                onChange={e => setInteractionForm(f => ({ ...f, date_spoke: e.target.value }))} />
+              <textarea className="csea-textarea" placeholder="What was discussed?" rows={3} value={interactionForm.discussion}
+                onChange={e => setInteractionForm(f => ({ ...f, discussion: e.target.value }))} />
+              <input className="csea-input" placeholder="Others involved" value={interactionForm.who_involved}
+                onChange={e => setInteractionForm(f => ({ ...f, who_involved: e.target.value }))} />
+              <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
+                <button type="button" className="csea-cancel" onClick={() => setShowAddInteraction(false)}>Cancel</button>
+                <button type="submit" className="csea-save">Save</button>
+              </div>
+            </form>
+          )}
+
+          <div className="csea-issue-list">
+            {interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
+            {interactions.map(i => (
+              <div key={i.id} className="interaction-card">
+                <div className="interaction-header">
+                  <span className="interaction-name">{i.member_name}</span>
+                  <span className="interaction-cat">{i.category}</span>
+                  <span className="interaction-date">{i.date_spoke}</span>
+                </div>
+                {i.work_location && <div className="interaction-loc">📍 {i.work_location}</div>}
+                {i.discussion && <div className="interaction-disc">{i.discussion}</div>}
+                {i.who_involved && <div className="interaction-who">With: {i.who_involved}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function IssueCard({ issue, onUpdateStatus, onDelete }) {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <div className={`issue-card ${issue.status === 'Resolved' || issue.status === 'Closed' ? 'resolved' : ''}`}>
+      <div className="issue-header" onClick={() => setExpanded(e => !e)}>
+        <span className="issue-type-badge" style={{ background: TYPE_COLORS[issue.issue_type] + '22', color: TYPE_COLORS[issue.issue_type] }}>
+          {issue.issue_type}
+        </span>
+        <span className="issue-member">{issue.member_name}</span>
+        {issue.priority && (
+          <span className="issue-priority" style={{ color: PRIORITY_COLORS[issue.priority] }}>
+            {issue.priority}
+          </span>
+        )}
+        <span className="issue-status-badge" style={{ background: STATUS_COLORS[issue.status] + '22', color: STATUS_COLORS[issue.status] }}>
+          {issue.status}
+        </span>
+        <span className="issue-chevron">{expanded ? '▾' : '▸'}</span>
+      </div>
+
+      {expanded && (
+        <div className="issue-body">
+          {issue.work_location && <div className="issue-detail">📍 {issue.work_location}</div>}
+          {issue.description && <div className="issue-desc">{issue.description}</div>}
+          {issue.involved_parties && <div className="issue-detail">👥 {issue.involved_parties}</div>}
+          {issue.issue_date && <div className="issue-detail">📅 {issue.issue_date}</div>}
+          <div className="issue-actions">
+            <div className="issue-status-btns">
+              {STATUSES.filter(s => s !== issue.status).map(s => (
+                <button key={s} className="status-change-btn" style={{ '--sc': STATUS_COLORS[s] }}
+                  onClick={() => onUpdateStatus(issue.id, s)}>
+                  → {s}
+                </button>
+              ))}
+            </div>
+            <button className="issue-delete-btn" onClick={() => onDelete(issue.id)}>Delete</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

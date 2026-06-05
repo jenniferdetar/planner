@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts } from './hooks/usePlannerData'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
+import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
 import RightPanel from './components/RightPanel'
@@ -16,6 +17,7 @@ const QUOTES = [
   { text: "Small steps every day.", author: "Unknown" },
 ]
 
+// Color palette for Supabase-created time blocks
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
 
 function meetingToBlock(meeting, color) {
@@ -43,7 +45,10 @@ export default function App() {
   const { meetings, addMeeting, deleteMeeting } = useMeetings(userId, selectedDate)
   const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
   const taskCounts = useTaskCounts(userId)
+  const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
+  const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
 
+  // Fetch Google Calendar events for the current week
   const weekStart = new Date(selectedDate)
   weekStart.setDate(selectedDate.getDate() - selectedDate.getDay())
   const weekEnd = new Date(weekStart)
@@ -51,6 +56,7 @@ export default function App() {
 
   const { events: calEvents } = useCalendarEvents(providerToken, weekStart, weekEnd)
 
+  // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
   const dateStr = selectedDate.toISOString().split('T')[0]
   const supabaseBlocks = meetings.map((m) => meetingToBlock(m, BLOCK_COLORS[0]))
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
@@ -61,7 +67,7 @@ export default function App() {
   }
 
   async function handleDeleteBlock(id) {
-    if (String(id).startsWith('gcal_')) return
+    if (String(id).startsWith('gcal_')) return // Google Calendar events are read-only
     await deleteMeeting(id)
   }
 
@@ -97,6 +103,12 @@ export default function App() {
         view={view}
         onViewChange={setView}
         taskCounts={taskCounts}
+        cseaIssues={cseaIssues}
+        onAddCseaIssue={addCseaIssue}
+        onUpdateCseaStatus={updateCseaStatus}
+        onDeleteCseaIssue={deleteCseaIssue}
+        cseaInteractions={cseaInteractions}
+        onAddCseaInteraction={addCseaInteraction}
       />
       <RightPanel
         selectedDate={selectedDate}
