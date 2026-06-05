@@ -51,7 +51,7 @@ export default function App() {
   const { masterTasks: asanaMasterTasks, todayTasks: asanaTodayTasks, status: asanaStatus, completeTask: completeAsanaTask } = useAsanaTasks()
 
   // Merge Asana tasks into local lists (read-only, source='asana')
-  const allMasterTasks = [...masterTasks, ...asanaMasterTasks]
+  const allMasterTasks = masterTasks
   const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
 
   // Fetch Google Calendar events for the current week
