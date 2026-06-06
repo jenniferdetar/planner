@@ -46,6 +46,7 @@ export default function DailyPlanner({
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
   calendarBlocks,
+  calAuthExpired, onReconnectGoogle,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -247,7 +248,10 @@ export default function DailyPlanner({
         <div className="schedule-section">
           <div className="section-label">
             <span>Schedule</span>
-            <span className="task-count">{timeBlocks.filter(b => b.source === 'google').length} from Google Calendar</span>
+            {calAuthExpired
+              ? <button className="gcal-reconnect-inline" onClick={onReconnectGoogle}>🔗 Connect Google Calendar</button>
+              : <span className="task-count">{timeBlocks.filter(b => b.source === 'google').length} from Google Calendar</span>
+            }
           </div>
           <div className="time-grid">
             {HOURS.map(hour => {

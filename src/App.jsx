@@ -234,6 +234,8 @@ export default function App() {
           attendanceRecords={attendanceRecords}
           onUpsertAttendance={upsertAttendance}
           onUpdateAttendanceNotes={updateAttendanceNotes}
+          calAuthExpired={calAuthExpired}
+          onReconnectGoogle={reconnectGoogle}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
