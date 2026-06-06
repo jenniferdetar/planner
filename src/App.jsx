@@ -48,7 +48,7 @@ function meetingToBlock(meeting, color) {
 
 export default function App() {
   const today = new Date()
-  const { session, user, providerToken, loading } = useAuth()
+  const { session, user, providerToken, loading, clearProviderToken } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
   const [view, setView] = useState('month')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
@@ -113,6 +113,7 @@ export default function App() {
   const rangedMeetings = useMeetingsInRange(userId, calFetchStart, calFetchEnd)
 
   async function reconnectGoogle() {
+    clearProviderToken()
     const { supabase } = await import('./lib/supabase')
     await supabase.auth.signInWithOAuth({
       provider: 'google',
