@@ -1,13 +1,37 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { signOut } from '../lib/supabase'
 import './Sidebar.css'
 
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 
+const TABS = [
+  { key: 'tasks',    label: 'Master Tasks', color: '#f0a040' },
+  { key: 'roles',    label: 'Roles',        color: '#c9a96e' },
+  { key: 'goals',    label: 'Goals',        color: '#8bc34a' },
+  { key: 'meetings', label: 'Meetings',     color: '#888' },
+  { key: 'mission',  label: 'Mission',      color: '#4a90d9' },
+  { key: 'notes',    label: 'Notes',        color: '#f0a040' },
+  { key: 'journal',  label: 'Journal',      color: '#a0785a' },
+  { key: 'vision',   label: 'Vision',       color: '#5cb85c' },
+  { key: 'values',   label: 'Values',       color: '#2e8b57' },
+]
+
+const PLACEHOLDERS = {
+  roles:    'List your key roles in life and work…\n\n• Role 1\n• Role 2',
+  goals:    'Your most important goals…\n\n• Goal 1\n• Goal 2',
+  meetings: 'Meeting notes and agenda…',
+  mission:  'Your personal mission statement…',
+  notes:    'General notes and ideas…',
+  journal:  'Journal entry…',
+  vision:   'Your long-term vision…',
+  values:   'Your core values…\n\n• Value 1\n• Value 2',
+}
+
 export default function Sidebar({
-  masterTasks, onAddTask, onDeleteTask, quote, user,
+  masterTasks, onAddTask, onDeleteTask, quote, user, sections = {}, onUpdateSection,
 }) {
+  const [activeTab, setActiveTab] = useState('tasks')
   const [newText, setNewText] = useState('')
   const [newPriority, setNewPriority] = useState('medium')
   const [showAdd, setShowAdd] = useState(false)
@@ -29,6 +53,7 @@ export default function Sidebar({
 
   const avatarUrl = user?.user_metadata?.avatar_url
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'You'
+  const activeColor = TABS.find(t => t.key === activeTab)?.color ?? '#c9a96e'
 
   return (
     <aside className="sidebar">
@@ -39,12 +64,24 @@ export default function Sidebar({
         </div>
       </div>
 
-      <div className="quote-box">
-            <p className="quote-text">"{quote.text}"</p>
-            <p className="quote-author">— {quote.author}</p>
-          </div>
+      {/* Folder tabs */}
+      <div className="folder-tabs">
+        {TABS.map(tab => (
+          <button
+            key={tab.key}
+            className={`folder-tab ${activeTab === tab.key ? 'active' : ''}`}
+            style={{ '--fc': tab.color }}
+            onClick={() => setActiveTab(tab.key)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-          <div className="task-section">
+      {/* Section content */}
+      <div className="sidebar-section-content">
+        {activeTab === 'tasks' ? (
+          <>
             <div className="task-list">
               {masterTasks.length === 0 && (
                 <p className="empty-state">Your master task list is empty</p>
@@ -98,28 +135,70 @@ export default function Sidebar({
                 <span>+</span> Add master task
               </button>
             )}
-          </div>
+          </>
+        ) : (
+          <SectionTextArea
+            key={activeTab}
+            sectionKey={activeTab}
+            value={sections[activeTab] ?? ''}
+            placeholder={PLACEHOLDERS[activeTab] ?? ''}
+            accentColor={activeColor}
+            onChange={onUpdateSection}
+          />
+        )}
+      </div>
 
-          <div className="sidebar-footer">
-            <div className="user-row">
-              {avatarUrl ? (
-                <img src={avatarUrl} className="user-avatar" alt="" />
-              ) : (
-                <div className="user-avatar-placeholder">{displayName[0].toUpperCase()}</div>
-              )}
-              <div className="user-info">
-                <span className="user-name">{displayName}</span>
-                <button className="sign-out-btn" onClick={signOut}>Sign out</button>
-              </div>
-            </div>
-            <div className="stats">
-              <div className="stat">
-                <span className="stat-num">{masterTasks.length}</span>
-                <span className="stat-label">backlog</span>
-              </div>
-            </div>
+      <div className="sidebar-footer">
+        <div className="user-row">
+          {avatarUrl ? (
+            <img src={avatarUrl} className="user-avatar" alt="" />
+          ) : (
+            <div className="user-avatar-placeholder">{displayName[0].toUpperCase()}</div>
+          )}
+          <div className="user-info">
+            <span className="user-name">{displayName}</span>
+            <button className="sign-out-btn" onClick={signOut}>Sign out</button>
           </div>
+        </div>
+        <div className="stats">
+          <div className="stat">
+            <span className="stat-num">{masterTasks.length}</span>
+            <span className="stat-label">backlog</span>
+          </div>
+        </div>
+      </div>
     </aside>
+  )
+}
+
+function SectionTextArea({ sectionKey, value, placeholder, accentColor, onChange }) {
+  const saveTimer = useRef(null)
+  const [text, setText] = useState(value)
+
+  // Sync when switching tabs
+  if (text !== value && !saveTimer.current) {
+    setText(value)
+  }
+
+  function handleChange(e) {
+    const val = e.target.value
+    setText(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      onChange?.(sectionKey, val)
+      saveTimer.current = null
+    }, 800)
+  }
+
+  return (
+    <textarea
+      className="section-textarea"
+      style={{ '--ac': accentColor }}
+      placeholder={placeholder}
+      value={text}
+      onChange={handleChange}
+      autoFocus
+    />
   )
 }
 
