@@ -23,7 +23,6 @@ const PLACEHOLDERS = {
   meetings: 'Meeting notes and agenda…',
   mission:  'Your personal mission statement…',
   notes:    'General notes and ideas…',
-  journal:  'Journal entry…',
   vision:   'Your long-term vision…',
   values:   'Your core values…\n\n• Value 1\n• Value 2',
 }
@@ -136,6 +135,26 @@ export default function Sidebar({
               </button>
             )}
           </>
+        ) : activeTab === 'journal' ? (
+          <div className="journal-panel">
+            <a
+              href="https://penzu.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="penzu-btn"
+            >
+              <span className="penzu-icon">📓</span>
+              Open Penzu Journal
+            </a>
+            <SectionTextArea
+              key="journal-notes"
+              sectionKey="journal"
+              value={sections['journal'] ?? ''}
+              placeholder="Quick notes before opening Penzu…"
+              accentColor={activeColor}
+              onChange={onUpdateSection}
+            />
+          </div>
         ) : (
           <SectionTextArea
             key={activeTab}
