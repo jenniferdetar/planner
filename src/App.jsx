@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
+import { usePlannerSections } from './hooks/usePlannerSections'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
@@ -78,6 +79,7 @@ export default function App() {
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
+  const { sections, updateSection } = usePlannerSections(userId)
 
   // Merge Asana tasks into local lists (read-only, source='asana')
   const allMasterTasks = masterTasks
@@ -179,6 +181,8 @@ export default function App() {
           onDeleteTask={deleteMasterTask}
           quote={quote}
           user={user}
+          sections={sections}
+          onUpdateSection={updateSection}
         />
       </div>
       <div className={mp === null || mp === 'main' ? 'mobile-active' : undefined}>
