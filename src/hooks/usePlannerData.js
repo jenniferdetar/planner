@@ -5,7 +5,7 @@ function toDateStr(d) {
   return d.toISOString().split('T')[0]
 }
 
-// ─── Master Tasks ────────────────────────────────────────────────────────────────────────────
+// ─── Master Tasks ────────────────────────────────────────────────────────────
 
 export function useMasterTasks(userId) {
   const [tasks, setTasks] = useState([])
@@ -36,7 +36,7 @@ export function useMasterTasks(userId) {
   return { tasks, addTask, deleteTask }
 }
 
-// ─── Daily Tasks ──────────────────────────────────────────────────────────────────────────────
+// ─── Daily Tasks ─────────────────────────────────────────────────────────────
 
 export function useDailyTasks(userId, selectedDate) {
   const [tasks, setTasks] = useState([])
@@ -91,7 +91,7 @@ export function useDailyTasks(userId, selectedDate) {
   return { tasks, addTask, toggleTask, deleteTask, updateTaskDescription }
 }
 
-// ─── Meetings (time blocks from Supabase) ───────────────────────────────────────────────────────────────────────
+// ─── Meetings (time blocks from Supabase) ────────────────────────────────────
 
 export function useMeetings(userId, selectedDate) {
   const [meetings, setMeetings] = useState([])
@@ -128,7 +128,7 @@ export function useMeetings(userId, selectedDate) {
   return { meetings, addMeeting, deleteMeeting }
 }
 
-// ─── Notes ────────────────────────────────────────────────────────────────────────────────────────
+// ─── Notes ───────────────────────────────────────────────────────────────────
 
 export function useNotes(userId, selectedDate) {
   const [content, setContent] = useState('')
@@ -179,7 +179,7 @@ export function useNotes(userId, selectedDate) {
   return { content, onChange: handleChange }
 }
 
-// ─── All-dates task counts (for calendar dots) ────────────────────────────────────────────────────────────
+// ─── All-dates task counts (for calendar dots) ───────────────────────────────
 
 export function useTaskCounts(userId) {
   const [counts, setCounts] = useState({})
@@ -202,4 +202,25 @@ export function useTaskCounts(userId) {
   }, [userId])
 
   return counts
+}
+
+// Fetch all meetings in a date range for the month calendar view
+export function useMeetingsInRange(userId, startDate, endDate) {
+  const [meetings, setMeetings] = useState([])
+  const startStr = toDateStr(startDate)
+  const endStr = toDateStr(endDate)
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('opus_meetings')
+      .select('*')
+      .eq('user_id', userId)
+      .gte('date', startStr)
+      .lte('date', endStr)
+      .order('start_time', { ascending: true })
+      .then(({ data }) => setMeetings(data || []))
+  }, [userId, startStr, endStr])
+
+  return meetings
 }
