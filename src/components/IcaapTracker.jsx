@@ -459,7 +459,7 @@ function ItemCard({ item, onUpdateItem, onDeleteItem, onPushToAsana, pushing, pu
                   onClick={() => onPushToAsana(item)}
                   disabled={pushing}
                 >
-                  {pushing ? '…' : pushResult === 'ok' ? '✓ Pushed' : pushResult === 'err' ? '✕ Failed' : '↑ Asana'}
+                  {pushing ? '…' : pushResult === 'ok' ? '✓ Pushed' : pushResult === 'err' ? '✗ Failed' : '↑ Asana'}
                 </button>
               )}
               <button className="icaap-delete-btn" onClick={() => onDeleteItem(item.id)}>Delete</button>
