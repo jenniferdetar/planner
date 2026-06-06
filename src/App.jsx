@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
-import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts } from './hooks/usePlannerData'
+import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
@@ -107,6 +107,9 @@ export default function App() {
 
   const { events: calEvents, authExpired: calAuthExpired } = useCalendarEvents(providerToken, calFetchStart, calFetchEnd)
 
+  // Fetch all Supabase meetings in the calendar view range for the month grid
+  const rangedMeetings = useMeetingsInRange(userId, calFetchStart, calFetchEnd)
+
   async function reconnectGoogle() {
     const { supabase } = await import('./lib/supabase')
     await supabase.auth.signInWithOAuth({
@@ -123,6 +126,13 @@ export default function App() {
   const supabaseBlocks = meetings.map((m) => meetingToBlock(m, BLOCK_COLORS[0]))
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
   const allTimeBlocks = [...supabaseBlocks, ...gcalBlocksForDay]
+
+  // All timed events for the month calendar grid (Supabase + Google Cal)
+  const supabaseBlocksForMonth = rangedMeetings.map((m) => ({
+    ...meetingToBlock(m, BLOCK_COLORS[0]),
+    startIso: `${m.date}T${m.start_time || '00:00:00'}`,
+  }))
+  const allCalendarBlocks = [...supabaseBlocksForMonth, ...calEvents]
 
   async function handleAddBlock(hour, text, color, startTime, endTime) {
     await addMeeting(text, hour, color, startTime, endTime)
@@ -177,6 +187,7 @@ export default function App() {
           onDateChange={setSelectedDate}
           dailyTasks={allDailyTasks}
           timeBlocks={allTimeBlocks}
+          calendarBlocks={allCalendarBlocks}
           onAddTask={addDailyTask}
           onToggleTask={handleToggleDailyTask}
           onDeleteTask={handleDeleteDailyTask}

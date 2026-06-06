@@ -45,6 +45,7 @@ export default function DailyPlanner({
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
+  calendarBlocks,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -165,7 +166,7 @@ export default function DailyPlanner({
           selectedDate={selectedDate}
           onDateChange={(d) => { onDateChange(d); onViewChange('day') }}
           taskCounts={taskCounts}
-          timeBlocks={timeBlocks}
+          timeBlocks={calendarBlocks || timeBlocks}
           onMonthChange={onMonthChange}
         />
       )}

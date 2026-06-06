@@ -203,3 +203,24 @@ export function useTaskCounts(userId) {
 
   return counts
 }
+
+// Fetch all meetings in a date range for the month calendar view
+export function useMeetingsInRange(userId, startDate, endDate) {
+  const [meetings, setMeetings] = useState([])
+  const startStr = toDateStr(startDate)
+  const endStr = toDateStr(endDate)
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('opus_meetings')
+      .select('*')
+      .eq('user_id', userId)
+      .gte('date', startStr)
+      .lte('date', endStr)
+      .order('start_time', { ascending: true })
+      .then(({ data }) => setMeetings(data || []))
+  }, [userId, startStr, endStr])
+
+  return meetings
+}
