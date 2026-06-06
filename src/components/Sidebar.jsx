@@ -136,6 +136,26 @@ export default function Sidebar({
               </button>
             )}
           </>
+        ) : activeTab === 'journal' ? (
+          <div className="journal-panel">
+            <a
+              href="https://penzu.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="penzu-btn"
+            >
+              <span className="penzu-icon">📓</span>
+              Open Penzu Journal
+            </a>
+            <SectionTextArea
+              key="journal-notes"
+              sectionKey="journal"
+              value={sections['journal'] ?? ''}
+              placeholder="Quick notes before opening Penzu…"
+              accentColor={activeColor}
+              onChange={onUpdateSection}
+            />
+          </div>
         ) : (
           <SectionTextArea
             key={activeTab}
