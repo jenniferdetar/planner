@@ -9,6 +9,7 @@ export function useCalendarEvents(providerToken, startDate, endDate) {
   useEffect(() => {
     if (!providerToken || !startDate || !endDate) {
       setEvents([])
+      if (!providerToken) setError('GOOGLE_AUTH_EXPIRED')
       return
     }
 
