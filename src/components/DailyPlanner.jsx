@@ -331,6 +331,133 @@ export default function DailyPlanner({
   )
 }
 
+function UnifiedTaskHub({ masterTasks, dailyTasks, selectedDate, onAddDailyTask, onToggleDailyTask, onDeleteDailyTask, onUpdateTaskNotes, onDeleteMasterTask }) {
+  const [activeArea, setActiveArea] = useState('All')
+  const [newText, setNewText] = useState('')
+  const [newPriority, setNewPriority] = useState('medium')
+  const [showAdd, setShowAdd] = useState(false)
+
+  const areas = ['All', ...TASK_AREAS]
+  const pending = dailyTasks.filter(t => !t.completed)
+  const done = dailyTasks.filter(t => t.completed)
+
+  const filteredMaster = activeArea === 'All'
+    ? masterTasks
+    : masterTasks.filter(t => (t.category || 'General') === activeArea)
+
+  const filteredPending = activeArea === 'All'
+    ? pending
+    : pending.filter(t => (t.category || t.project || 'General') === activeArea)
+
+  const filteredDone = activeArea === 'All'
+    ? done
+    : done.filter(t => (t.category || t.project || 'General') === activeArea)
+
+  function handleAddDaily(e) {
+    e.preventDefault()
+    if (!newText.trim()) return
+    onAddDailyTask(newText.trim(), newPriority)
+    setNewText('')
+    setNewPriority('medium')
+    setShowAdd(false)
+  }
+
+  return (
+    <div className="task-hub">
+      {/* Area filter bar */}
+      <div className="task-hub-filters">
+        {areas.map(area => (
+          <button
+            key={area}
+            className={`task-hub-filter-btn ${activeArea === area ? 'active' : ''}`}
+            onClick={() => setActiveArea(area)}
+          >
+            {area}
+          </button>
+        ))}
+      </div>
+
+      <div className="task-hub-body">
+        {/* Today's tasks */}
+        <div className="task-hub-section">
+          <div className="task-hub-section-header">
+            <span className="task-hub-section-title">Today — {formatDate(selectedDate)}</span>
+            <span className="task-count">{filteredPending.length} remaining</span>
+          </div>
+          <div className="daily-task-list">
+            {filteredPending.map(task => (
+              <DailyTaskRow key={task.id} task={task} onToggle={onToggleDailyTask} onDelete={onDeleteDailyTask} onUpdateNotes={onUpdateTaskNotes} />
+            ))}
+            {filteredDone.length > 0 && (
+              <>
+                <div className="done-sep"><span>Done</span></div>
+                {filteredDone.map(task => (
+                  <DailyTaskRow key={task.id} task={task} onToggle={onToggleDailyTask} onDelete={onDeleteDailyTask} onUpdateNotes={onUpdateTaskNotes} />
+                ))}
+              </>
+            )}
+            {filteredPending.length === 0 && filteredDone.length === 0 && (
+              <p className="task-hub-empty">No tasks for today{activeArea !== 'All' ? ` in ${activeArea}` : ''}</p>
+            )}
+            {showAdd ? (
+              <form className="inline-add-form" onSubmit={handleAddDaily}>
+                <span className="check-box placeholder" />
+                <input autoFocus type="text" placeholder="New task…" value={newText} onChange={e => setNewText(e.target.value)} className="inline-input" />
+                <div className="inline-priority">
+                  {['high', 'medium', 'low'].map(p => (
+                    <button key={p} type="button" className={`mini-priority-btn ${newPriority === p ? 'active' : ''}`} style={{ '--c': PRIORITY_COLORS[p] }} onClick={() => setNewPriority(p)} />
+                  ))}
+                </div>
+                <button type="submit" className="inline-save">✓</button>
+                <button type="button" className="inline-cancel" onClick={() => setShowAdd(false)}>✕</button>
+              </form>
+            ) : (
+              <button className="add-daily-task-btn" onClick={() => setShowAdd(true)}>+ Add today's task</button>
+            )}
+          </div>
+        </div>
+
+        {/* Master backlog */}
+        <div className="task-hub-section">
+          <div className="task-hub-section-header">
+            <span className="task-hub-section-title">Backlog</span>
+            <span className="task-count">{filteredMaster.length} tasks</span>
+          </div>
+          {filteredMaster.length === 0 && (
+            <p className="task-hub-empty">No backlog tasks{activeArea !== 'All' ? ` in ${activeArea}` : ''}</p>
+          )}
+          {['high', 'medium', 'low'].map(priority => {
+            const group = filteredMaster.filter(t => t.priority === priority)
+            if (!group.length) return null
+            return (
+              <div key={priority} className="task-hub-priority-group">
+                <div className="priority-group-label" style={{ color: PRIORITY_COLORS[priority] }}>
+                  {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                </div>
+                {group.map(task => (
+                  <MasterTaskRow key={task.id} task={task} onDelete={onDeleteMasterTask} />
+                ))}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MasterTaskRow({ task, onDelete }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <div className="task-hub-master-row" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <span className="priority-dot" style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }} />
+      <span className="task-text" style={{ flex: 1 }}>{task.title}</span>
+      {task.category && <span className="task-hub-area-tag">{task.category}</span>}
+      {hovered && <button className="delete-task-btn" onClick={() => onDelete(task.id)}>✕</button>}
+    </div>
+  )
+}
+
 function DailyTaskRow({ task, onToggle, onDelete, onUpdateNotes }) {
   const [expanded, setExpanded] = useState(false)
   const [notesText, setNotesText] = useState(task.notes || task.description || '')
