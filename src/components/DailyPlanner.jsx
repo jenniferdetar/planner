@@ -6,6 +6,7 @@ import FinancialPanel from './FinancialPanel'
 import IcaapTracker from './IcaapTracker'
 import LibraryPanel from './LibraryPanel'
 import GcuPanel from './GcuPanel'
+import PersonalPanel from './PersonalPanel'
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
@@ -131,13 +132,13 @@ export default function DailyPlanner({
           </button>
         )}
         <div className="view-tabs">
-          {['month', 'day', 'tasks', 'icaap', 'csea', 'finance', 'library', 'gcu'].map(v => (
+          {['month', 'day', 'tasks', 'icaap', 'csea', 'finance', 'library', 'gcu', 'personal'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >
-              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v.charAt(0).toUpperCase() + v.slice(1)}
+              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v.charAt(0).toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>
@@ -181,6 +182,8 @@ export default function DailyPlanner({
           onMonthChange={onMonthChange}
         />
       )}
+
+      {view === 'personal' && <PersonalPanel />}
 
       {view === 'gcu' && (
         <GcuPanel
@@ -270,7 +273,7 @@ export default function DailyPlanner({
         </div>
       )}
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks' || view === 'icaap' || view === 'library' || view === 'gcu') ? 'none' : undefined }}>
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks' || view === 'icaap' || view === 'library' || view === 'gcu' || view === 'personal') ? 'none' : undefined }}>
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">
