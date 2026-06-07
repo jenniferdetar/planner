@@ -1,14 +1,18 @@
 import { useState } from 'react'
+import { useGmail } from '../hooks/useGmail'
+import GmailPanel from './GmailPanel'
 import './PersonalPanel.css'
 
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/edit?usp=drivesdk'
 
 const SUB_TABS = [
+  { key: 'gmail', label: 'Gmail' },
   { key: 'spreadsheet', label: 'Spreadsheet' },
 ]
 
-export default function PersonalPanel() {
-  const [activeTab, setActiveTab] = useState('spreadsheet')
+export default function PersonalPanel({ providerToken, onReconnect }) {
+  const [activeTab, setActiveTab] = useState('gmail')
+  const gmail = useGmail(providerToken)
 
   return (
     <div className="personal-panel">
@@ -30,6 +34,14 @@ export default function PersonalPanel() {
       </div>
 
       <div className="personal-body">
+        {activeTab === 'gmail' && (
+          <GmailPanel
+            {...gmail}
+            providerToken={providerToken}
+            onReconnect={onReconnect}
+          />
+        )}
+
         {activeTab === 'spreadsheet' && (
           <div className="sheet-launcher">
             <div className="sheet-launcher-icon">📊</div>

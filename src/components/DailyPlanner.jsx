@@ -49,7 +49,7 @@ export default function DailyPlanner({
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
   calendarBlocks,
-  calAuthExpired, onReconnectGoogle,
+  calAuthExpired, onReconnectGoogle, providerToken,
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
   onPushGcuToAsana, gcuPushing,
   user, onSignOut,
@@ -183,7 +183,7 @@ export default function DailyPlanner({
         />
       )}
 
-      {view === 'personal' && <PersonalPanel />}
+      {view === 'personal' && <PersonalPanel providerToken={providerToken} onReconnect={onReconnectGoogle} />}
 
       {view === 'gcu' && (
         <GcuPanel
