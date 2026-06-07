@@ -139,6 +139,23 @@
   color: #bbb;
 }
 
+.gcal-reconnect-inline {
+  font-size: 11px;
+  color: #4a90d9;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(74,144,217,0.35);
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(74,144,217,0.08);
+  transition: all 0.15s;
+}
+
+.gcal-reconnect-inline:hover {
+  background: rgba(74,144,217,0.18);
+  border-color: rgba(74,144,217,0.6);
+}
+
 .daily-task-list {
   display: flex;
   flex-direction: column;

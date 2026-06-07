@@ -106,6 +106,7 @@
 
 .fin-add-btn:hover { background: #c9a96e; color: #fff; }
 
+/* Form */
 .fin-form {
   margin: 10px 14px;
   background: #fff;
@@ -205,6 +206,7 @@
 
 .fin-save.small { padding: 3px 7px; font-size: 10px; }
 
+/* Transactions */
 .fin-txn-list {
   padding: 10px 14px;
   display: flex;
@@ -283,6 +285,7 @@
 
 .fin-delete-btn:hover { color: #e05c5c; border-color: #e05c5c; }
 
+/* Bills */
 .fin-bill-list {
   padding: 10px 14px;
   display: flex;
@@ -341,6 +344,7 @@
 .fin-bill-due { font-size: 10px; color: #aaa; }
 .fin-bill-amount { font-size: 13px; font-weight: 700; color: #1a1a2e; flex-shrink: 0; }
 
+/* Goals */
 .fin-goals-list {
   padding: 10px 14px;
   display: flex;

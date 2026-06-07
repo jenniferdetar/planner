@@ -23,6 +23,7 @@ const PLACEHOLDERS = {
   meetings: 'Meeting notes and agenda…',
   mission:  'Your personal mission statement…',
   notes:    'General notes and ideas…',
+  journal:  'Journal entry…',
   vision:   'Your long-term vision…',
   values:   'Your core values…\n\n• Value 1\n• Value 2',
 }
