@@ -77,7 +77,7 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
-  const { todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
+  const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
@@ -204,10 +204,11 @@ export default function App() {
     <div className="app">
       <div className={mp === 'sidebar' ? 'mobile-active' : undefined}>
         <Sidebar
-          masterTasks={masterTasks}
-          onAddTask={addMasterTask}
-          onDeleteTask={deleteMasterTask}
-          quote={quote}
+          asanaTasks={asanaTasks}
+          asanaProjects={asanaProjects}
+          asanaStatus={asanaStatus}
+          onAddAsanaTask={addAsanaTask}
+          onCompleteAsanaTask={completeAsanaTask}
           user={user}
           sections={sections}
           onUpdateSection={updateSection}

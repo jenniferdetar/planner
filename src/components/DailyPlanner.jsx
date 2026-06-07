@@ -134,7 +134,7 @@ export default function DailyPlanner({
           </button>
         )}
         <div className="view-tabs">
-          {['csea', 'finance', 'gcu', 'icaap', 'library', 'month', 'personal', 'tasks'].map(v => (
+          {['csea', 'finance', 'gcu', 'icaap', 'library', 'month', 'personal'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
@@ -220,21 +220,8 @@ export default function DailyPlanner({
         />
       )}
 
-      {/* Tasks Tab — unified hub */}
-      {view === 'tasks' && (
-        <UnifiedTaskHub
-          masterTasks={masterTasks || []}
-          dailyTasks={dailyTasks || []}
-          selectedDate={selectedDate}
-          onAddDailyTask={onAddTask}
-          onToggleDailyTask={onToggleTask}
-          onDeleteDailyTask={onDeleteTask}
-          onUpdateTaskNotes={onUpdateTaskNotes}
-          onDeleteMasterTask={onDeleteMasterTask}
-        />
-      )}
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks' || view === 'icaap' || view === 'library' || view === 'gcu' || view === 'personal') ? 'none' : undefined }}>
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'icaap' || view === 'library' || view === 'gcu' || view === 'personal') ? 'none' : undefined }}>
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">

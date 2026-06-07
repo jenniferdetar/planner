@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { fetchWorkspaces, fetchMyTasks, asanaTaskToMaster, completeAsanaTask, updateAsanaTaskNotes } from '../lib/asana'
+import { fetchWorkspaces, fetchMyTasks, asanaTaskToMaster, completeAsanaTask, updateAsanaTaskNotes, createTask, findOrCreateProject, fetchProjects } from '../lib/asana'
 
 const POLL_INTERVAL = 5 * 60 * 1000 // 5 minutes
 
@@ -14,6 +14,8 @@ export function useAsanaTasks() {
   const [allTasks, setAllTasks] = useState([])
   const [masterTasks, setMasterTasks] = useState([])
   const [todayTasks, setTodayTasks] = useState([])
+  const [projects, setProjects] = useState([])
+  const [workspaceGid, setWorkspaceGid] = useState(null)
   const [status, setStatus] = useState('idle')
   const timerRef = useRef(null)
 
@@ -25,8 +27,14 @@ export function useAsanaTasks() {
       try {
         const workspaces = await fetchWorkspaces(token)
         if (!workspaces.length) { setStatus('ready'); return }
-        // Fetch with memberships so we can filter by project
-        const raw = await fetchMyTasksWithMemberships(token, workspaces[0].gid)
+        const wsGid = workspaces[0].gid
+        setWorkspaceGid(wsGid)
+        // Fetch tasks + projects in parallel
+        const [raw, projectList] = await Promise.all([
+          fetchMyTasksWithMemberships(token, wsGid),
+          fetchProjects(token, wsGid),
+        ])
+        setProjects(projectList)
         const mapped = raw.map(t => ({ ...asanaTaskToMaster(t), _raw: t }))
         const today = new Date().toISOString().split('T')[0]
         setAllTasks(raw)
@@ -68,7 +76,20 @@ export function useAsanaTasks() {
     .filter(t => matchesProject(t, 'iCAAP'))
     .map(t => ({ ...asanaTaskToMaster(t), _raw: t }))
 
-  return { masterTasks, todayTasks, cseaTasks, icaapTasks, status, completeTask, updateTaskNotes }
+  async function addTask(name, notes, projectName) {
+    if (!token || !workspaceGid) return
+    let projectGid = null
+    if (projectName) {
+      const proj = await findOrCreateProject(token, workspaceGid, projectName)
+      projectGid = proj.gid
+    }
+    const newTask = await createTask(token, workspaceGid, projectGid, name, notes)
+    const mapped = { ...asanaTaskToMaster(newTask), _raw: newTask }
+    setAllTasks(prev => [...prev, newTask])
+    setMasterTasks(prev => [...prev, mapped])
+  }
+
+  return { masterTasks, todayTasks, cseaTasks, icaapTasks, projects, workspaceGid, status, completeTask, updateTaskNotes, addTask }
 }
 
 async function fetchMyTasksWithMemberships(token, workspaceGid) {
