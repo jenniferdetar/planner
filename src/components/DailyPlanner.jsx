@@ -115,25 +115,8 @@ export default function DailyPlanner({
 
   return (
     <main className="daily-planner">
-      <div className="planner-header">
-        {(view === 'day' || view === 'tasks') && (
-          <div className="date-nav">
-            <button className="nav-btn" onClick={prevDay}>‹</button>
-            <div className="date-display">
-              <h1 className="date-main">{formatDate(selectedDate)}</h1>
-              {isToday && <span className="today-badge">Today</span>}
-            </div>
-            <button className="nav-btn" onClick={nextDay}>›</button>
-            {!isToday && (
-              <button className="today-btn" onClick={() => onDateChange(today)}>Today</button>
-            )}
-          </div>
-        )}
-        {onSignOut && (
-          <button className="planner-signout-btn" onClick={onSignOut} title="Sign out">
-            ⏻
-          </button>
-        )}
+      {/* Tab strip — always visible at top */}
+      <div className="planner-tabs-bar">
         <div className="view-tabs">
           {['csea', 'finance', 'gcu', 'icaap', 'library', 'month', 'personal', 'week'].map(v => (
             <button
@@ -145,7 +128,32 @@ export default function DailyPlanner({
             </button>
           ))}
         </div>
+        {onSignOut && (
+          <button className="planner-signout-btn" onClick={onSignOut} title="Sign out">⏻</button>
+        )}
       </div>
+
+      {/* Day hero — large date + mini month, only in day view */}
+      {view === 'day' && (
+        <div className="day-hero">
+          <div className="day-hero-left">
+            <button className="nav-btn" onClick={prevDay}>‹</button>
+            <div className="day-hero-date">
+              <span className="day-hero-num">{selectedDate.getDate()}</span>
+              <div className="day-hero-meta">
+                <span className="day-hero-dayname">{DAY_NAMES[selectedDate.getDay()]}</span>
+                <span className="day-hero-monthyear">{MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getFullYear()}</span>
+                {isToday && <span className="today-badge">Today</span>}
+                {!isToday && (
+                  <button className="today-btn" onClick={() => onDateChange(today)}>Today</button>
+                )}
+              </div>
+            </div>
+            <button className="nav-btn" onClick={nextDay}>›</button>
+          </div>
+          <MiniMonth selectedDate={selectedDate} onDateChange={onDateChange} />
+        </div>
+      )}
 
       {view === 'icaap' && (
         <IcaapTracker
@@ -464,6 +472,64 @@ function MasterTaskRow({ task, onDelete }) {
       <span className="task-text" style={{ flex: 1 }}>{task.title}</span>
       {task.category && <span className="task-hub-area-tag">{task.category}</span>}
       {hovered && <button className="delete-task-btn" onClick={() => onDelete(task.id)}>✕</button>}
+    </div>
+  )
+}
+
+// ── Mini Month ──────────────────────────────────────────────────────────────
+function MiniMonth({ selectedDate, onDateChange }) {
+  const today = new Date()
+  const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
+  const [viewMonth, setViewMonth] = useState(selectedDate.getMonth())
+
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay()
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+  const daysInPrev = new Date(viewYear, viewMonth, 0).getDate()
+
+  const cells = []
+  for (let i = firstDay - 1; i >= 0; i--)
+    cells.push({ day: daysInPrev - i, overflow: true })
+  for (let d = 1; d <= daysInMonth; d++)
+    cells.push({ day: d, overflow: false })
+  while (cells.length < 35)
+    cells.push({ day: cells.length - firstDay - daysInMonth + 1, overflow: true })
+
+  function prevMonth() {
+    if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11) }
+    else setViewMonth(m => m - 1)
+  }
+  function nextMonth() {
+    if (viewMonth === 11) { setViewYear(y => y + 1); setViewMonth(0) }
+    else setViewMonth(m => m + 1)
+  }
+
+  return (
+    <div className="mini-month">
+      <div className="mini-month-nav">
+        <button className="mini-nav-btn" onClick={prevMonth}>‹</button>
+        <span className="mini-month-label">{MONTH_NAMES[viewMonth].slice(0,3)} {viewYear}</span>
+        <button className="mini-nav-btn" onClick={nextMonth}>›</button>
+      </div>
+      <div className="mini-month-grid">
+        {['S','M','T','W','T','F','S'].map((d, i) => (
+          <span key={i} className="mini-dow">{d}</span>
+        ))}
+        {cells.map((cell, i) => {
+          if (cell.overflow) return <span key={i} className="mini-cell overflow" />
+          const cellDate = new Date(viewYear, viewMonth, cell.day)
+          const isToday = sameDay(cellDate, today)
+          const isSelected = sameDay(cellDate, selectedDate)
+          return (
+            <button
+              key={i}
+              className={`mini-cell ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}`}
+              onClick={() => onDateChange(cellDate)}
+            >
+              {cell.day}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }
