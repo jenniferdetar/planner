@@ -2,7 +2,6 @@ import { useState } from 'react'
 import './PersonalPanel.css'
 
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/edit?usp=drivesdk'
-const SHEET_EMBED = 'https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/edit?usp=sharing&rm=minimal'
 
 const SUB_TABS = [
   { key: 'spreadsheet', label: 'Spreadsheet' },
@@ -10,7 +9,6 @@ const SUB_TABS = [
 
 export default function PersonalPanel() {
   const [activeTab, setActiveTab] = useState('spreadsheet')
-  const [embedError, setEmbedError] = useState(false)
 
   return (
     <div className="personal-panel">
@@ -33,39 +31,18 @@ export default function PersonalPanel() {
 
       <div className="personal-body">
         {activeTab === 'spreadsheet' && (
-          <div className="sheet-container">
-            <div className="sheet-toolbar">
-              <span className="sheet-label">Google Sheets</span>
-              <a
-                href={SHEET_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sheet-open-btn"
-              >
-                ↗ Open in Google Sheets
-              </a>
-            </div>
-            {embedError ? (
-              <div className="sheet-embed-fallback">
-                <p>This sheet can't be embedded directly.</p>
-                <a
-                  href={SHEET_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="sheet-fallback-link"
-                >
-                  Open Spreadsheet →
-                </a>
-              </div>
-            ) : (
-              <iframe
-                className="sheet-iframe"
-                src={SHEET_EMBED}
-                title="Personal Spreadsheet"
-                onError={() => setEmbedError(true)}
-                allow="clipboard-write"
-              />
-            )}
+          <div className="sheet-launcher">
+            <div className="sheet-launcher-icon">📊</div>
+            <h3 className="sheet-launcher-title">My Spreadsheet</h3>
+            <p className="sheet-launcher-desc">Opens in Google Sheets</p>
+            <a
+              href={SHEET_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sheet-launch-btn"
+            >
+              Open Spreadsheet →
+            </a>
           </div>
         )}
       </div>
