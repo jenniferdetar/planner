@@ -653,6 +653,137 @@
   color: #fff;
 }
 
+/* ── Task Hub ── */
+.task-hub {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.task-hub-filters {
+  display: flex;
+  gap: 6px;
+  padding: 12px 32px 10px;
+  border-bottom: 1px solid #e8e5de;
+  background: #fff;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.task-hub-filter-btn {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: 20px;
+  color: #888;
+  border: 1px solid #e8e5de;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: #fff;
+}
+
+.task-hub-filter-btn:hover {
+  border-color: #c9a96e;
+  color: #c9a96e;
+}
+
+.task-hub-filter-btn.active {
+  background: #c9a96e;
+  color: #fff;
+  border-color: #c9a96e;
+  font-weight: 700;
+}
+
+.task-hub-body {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: start;
+}
+
+.task-hub-section {
+  padding: 20px 24px;
+  border-right: 1px solid #e8e5de;
+}
+
+.task-hub-section:last-child {
+  border-right: none;
+}
+
+.task-hub-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.task-hub-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.task-hub-empty {
+  font-size: 12px;
+  color: #ccc;
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.task-hub-priority-group {
+  margin-bottom: 12px;
+}
+
+.task-hub-master-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.task-hub-master-row:hover {
+  background: #f5f4f0;
+}
+
+.task-hub-area-tag {
+  font-size: 9px;
+  background: rgba(201,169,110,0.12);
+  color: #c9a96e;
+  padding: 2px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .task-hub-body {
+    grid-template-columns: 1fr;
+  }
+
+  .task-hub-section {
+    padding: 14px 16px;
+    border-right: none;
+    border-bottom: 1px solid #e8e5de;
+  }
+
+  .task-hub-filters {
+    padding: 10px 16px 8px;
+    gap: 4px;
+  }
+
+  .task-hub-filter-btn {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
+
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .daily-planner {

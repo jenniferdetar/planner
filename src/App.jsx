@@ -217,6 +217,8 @@ export default function App() {
         <DailyPlanner
           selectedDate={selectedDate}
           onDateChange={setSelectedDate}
+          masterTasks={masterTasks}
+          onDeleteMasterTask={deleteMasterTask}
           dailyTasks={allDailyTasks}
           timeBlocks={allTimeBlocks}
           calendarBlocks={allCalendarBlocks}

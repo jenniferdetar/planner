@@ -19,10 +19,10 @@ export function useMasterTasks(userId) {
       .then(({ data }) => setTasks(data || []))
   }, [userId])
 
-  async function addTask(title, priority) {
+  async function addTask(title, priority, category = '') {
     const { data } = await supabase
       .from('opus_master_tasks')
-      .insert({ title, priority, user_id: userId })
+      .insert({ title, priority, category: category || null, user_id: userId })
       .select()
       .single()
     if (data) setTasks((prev) => [...prev, data])

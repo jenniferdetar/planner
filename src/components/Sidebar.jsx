@@ -5,6 +5,8 @@ import './Sidebar.css'
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 
+export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'General']
+
 const TABS = [
   { key: 'tasks',    label: 'Master Tasks', color: '#f0a040' },
   { key: 'roles',    label: 'Roles',        color: '#c9a96e' },
@@ -34,14 +36,16 @@ export default function Sidebar({
   const [activeTab, setActiveTab] = useState('tasks')
   const [newText, setNewText] = useState('')
   const [newPriority, setNewPriority] = useState('medium')
+  const [newArea, setNewArea] = useState('')
   const [showAdd, setShowAdd] = useState(false)
 
   function handleAdd(e) {
     e.preventDefault()
     if (!newText.trim()) return
-    onAddTask(newText.trim(), newPriority)
+    onAddTask(newText.trim(), newPriority, newArea)
     setNewText('')
     setNewPriority('medium')
+    setNewArea('')
     setShowAdd(false)
   }
 
@@ -129,6 +133,14 @@ export default function Sidebar({
                     <button type="submit" className="btn-save">Add</button>
                   </div>
                 </div>
+                <select
+                  className="add-task-area-select"
+                  value={newArea}
+                  onChange={e => setNewArea(e.target.value)}
+                >
+                  <option value="">— Area (optional) —</option>
+                  {TASK_AREAS.map(a => <option key={a} value={a}>{a}</option>)}
+                </select>
               </form>
             ) : (
               <button className="add-btn" onClick={() => setShowAdd(true)}>

@@ -200,6 +200,24 @@
   color: rgba(255,255,255,0.3);
 }
 
+.add-task-area-select {
+  width: 100%;
+  margin-top: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: rgba(255,255,255,0.7);
+  font-size: 11px;
+  padding: 4px 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+.add-task-area-select option {
+  background: #1a1a2e;
+  color: #fff;
+}
+
 .add-task-row {
   display: flex;
   align-items: center;
