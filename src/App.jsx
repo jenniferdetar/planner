@@ -145,7 +145,7 @@ export default function App() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        scopes: 'https://www.googleapis.com/auth/calendar.readonly',
+        scopes: 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send',
         redirectTo: window.location.href,
       },
     })
@@ -272,6 +272,7 @@ export default function App() {
           gcuPushing={gcuPushing}
           user={user}
           onSignOut={signOut}
+          providerToken={providerToken}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
