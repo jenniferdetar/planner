@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
+import { signOut } from './lib/supabase'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
 import { usePlannerSections } from './hooks/usePlannerSections'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
@@ -8,6 +9,8 @@ import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useTransactions, useBills, useFinancialGoals } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
+import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
+import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
@@ -82,6 +85,28 @@ export default function App() {
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
   const { sections, updateSection } = usePlannerSections(userId)
+
+  const [gcuPushing, setGcuPushing] = useState(false)
+  async function handlePushGcuToAsana() {
+    const token = import.meta.env.VITE_ASANA_TOKEN
+    if (!token) { alert('Asana token not configured'); return }
+    setGcuPushing(true)
+    try {
+      const workspaces = await fetchWorkspaces(token)
+      if (!workspaces.length) throw new Error('No Asana workspaces found')
+      const wsGid = workspaces[0].gid
+      const project = await findOrCreateProject(token, wsGid, 'GCU – MPA Government & Policy')
+      for (const course of GCU_COURSES) {
+        await createTask(token, wsGid, project.gid, `${course.code}: ${course.name}`, course.description)
+      }
+      alert(`✓ ${GCU_COURSES.length} courses pushed to Asana project "GCU – MPA Government & Policy"`)
+    } catch (err) {
+      console.error('GCU Asana push failed:', err)
+      alert(`Failed to push to Asana: ${err.message}`)
+    } finally {
+      setGcuPushing(false)
+    }
+  }
 
   // Merge Asana tasks into local lists (read-only, source='asana')
   const allMasterTasks = masterTasks
@@ -243,6 +268,10 @@ export default function App() {
           onUpdateBookStatus={updateBookStatus}
           onDeleteBook={deleteBook}
           onImportBooks={importBooks}
+          onPushGcuToAsana={handlePushGcuToAsana}
+          gcuPushing={gcuPushing}
+          user={user}
+          onSignOut={signOut}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>

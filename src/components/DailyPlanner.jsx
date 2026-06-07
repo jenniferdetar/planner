@@ -5,6 +5,7 @@ import CseaTracker from './CseaTracker'
 import FinancialPanel from './FinancialPanel'
 import IcaapTracker from './IcaapTracker'
 import LibraryPanel from './LibraryPanel'
+import GcuPanel from './GcuPanel'
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
@@ -49,6 +50,8 @@ export default function DailyPlanner({
   calendarBlocks,
   calAuthExpired, onReconnectGoogle,
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
+  onPushGcuToAsana, gcuPushing,
+  user, onSignOut,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -122,14 +125,19 @@ export default function DailyPlanner({
             )}
           </div>
         )}
+        {onSignOut && (
+          <button className="planner-signout-btn" onClick={onSignOut} title="Sign out">
+            ⏻
+          </button>
+        )}
         <div className="view-tabs">
-          {['month', 'day', 'tasks', 'icaap', 'csea', 'finance', 'library'].map(v => (
+          {['month', 'day', 'tasks', 'icaap', 'csea', 'finance', 'library', 'gcu'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >
-              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v.charAt(0).toUpperCase() + v.slice(1)}
+              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v.charAt(0).toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>
@@ -171,6 +179,13 @@ export default function DailyPlanner({
           taskCounts={taskCounts}
           timeBlocks={calendarBlocks || timeBlocks}
           onMonthChange={onMonthChange}
+        />
+      )}
+
+      {view === 'gcu' && (
+        <GcuPanel
+          onPushToAsana={onPushGcuToAsana}
+          pushing={gcuPushing}
         />
       )}
 
@@ -255,7 +270,7 @@ export default function DailyPlanner({
         </div>
       )}
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks' || view === 'icaap' || view === 'library') ? 'none' : undefined }}>
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'tasks' || view === 'icaap' || view === 'library' || view === 'gcu') ? 'none' : undefined }}>
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">
