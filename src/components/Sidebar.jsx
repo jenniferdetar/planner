@@ -7,8 +7,6 @@ export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'Gener
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 
-export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'General']
-
 const TABS = [
   { key: 'tasks',    label: 'Tasks',    color: '#f86336' },
   { key: 'roles',    label: 'Roles',    color: '#c9a96e' },
