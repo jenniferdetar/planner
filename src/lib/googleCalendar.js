@@ -47,9 +47,9 @@ export async function fetchCalendarEvents(providerToken, startDate, endDate) {
     })
   )
 
-  // If any calendar returned a 401, propagate the auth error
-  const authError = results.find(r => r.status === 'rejected' && r.reason?.message === 'GOOGLE_AUTH_EXPIRED')
-  if (authError) throw new Error('GOOGLE_AUTH_EXPIRED')
+  // If any calendar returned 401, propagate the auth error
+  const authFailed = results.some(r => r.status === 'rejected' && r.reason?.message === 'GOOGLE_AUTH_EXPIRED')
+  if (authFailed) throw new Error('GOOGLE_AUTH_EXPIRED')
 
   return results
     .filter((r) => r.status === 'fulfilled')
