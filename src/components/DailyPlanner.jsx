@@ -132,7 +132,7 @@ export default function DailyPlanner({
           </button>
         )}
         <div className="view-tabs">
-          {['month', 'day', 'tasks', 'icaap', 'csea', 'finance', 'library', 'gcu', 'personal'].map(v => (
+          {['csea', 'finance', 'gcu', 'icaap', 'library', 'month', 'personal', 'tasks'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
