@@ -37,8 +37,12 @@ export function useLibrary(userId) {
     setBooks(prev => prev.filter(b => b.id !== id))
   }, [])
 
-  const importDefaults = useCallback(async (defaultBooks) => {
-    const rows = defaultBooks.map(b => ({ ...b, user_id: userId }))
+  const importDefaults = useCallback(async (defaultBooks, existingBooks) => {
+    // Only insert books not already in the library (match on title+shelf)
+    const existing = new Set((existingBooks || []).map(b => `${b.shelf}::${b.title}`))
+    const missing = defaultBooks.filter(b => !existing.has(`${b.shelf}::${b.title}`))
+    if (!missing.length) return
+    const rows = missing.map(b => ({ ...b, user_id: userId }))
     const { data } = await supabase.from('library_books').insert(rows).select()
     if (data) setBooks(prev => [...prev, ...data])
   }, [userId])

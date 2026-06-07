@@ -1,0 +1,208 @@
+.gcu-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: #faf9f6;
+}
+
+.gcu-header {
+  padding: 20px 32px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+}
+
+.gcu-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.gcu-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0 0 4px;
+}
+
+.gcu-subtitle {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.gcu-asana-btn {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #f86336;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.gcu-asana-btn:disabled,
+.gcu-asana-btn.pushing {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.gcu-asana-btn:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+.gcu-progress-bar-wrap {
+  height: 5px;
+  background: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.gcu-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #c9a96e, #8bc34a);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.gcu-progress-label {
+  font-size: 11px;
+  color: #999;
+  letter-spacing: 0.3px;
+}
+
+.gcu-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 32px 24px;
+}
+
+.gcu-group {
+  margin-bottom: 24px;
+}
+
+.gcu-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #ede9e2;
+}
+
+.gcu-course-row {
+  border-radius: 8px;
+  transition: background 0.15s;
+  margin-bottom: 2px;
+}
+
+.gcu-course-row:hover {
+  background: #f5f4f0;
+}
+
+.gcu-course-row.open {
+  background: #f5f4f0;
+}
+
+.gcu-course-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  cursor: pointer;
+}
+
+.gcu-status-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.15s;
+  border: none;
+  padding: 0;
+}
+
+.gcu-status-dot:hover {
+  transform: scale(1.3);
+}
+
+.gcu-course-info {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.gcu-course-code {
+  font-size: 11px;
+  font-weight: 700;
+  color: #c9a96e;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.gcu-course-name {
+  font-size: 13px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gcu-credits {
+  font-size: 11px;
+  color: #bbb;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.gcu-status-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.gcu-chevron {
+  font-size: 10px;
+  color: #ccc;
+  flex-shrink: 0;
+}
+
+.gcu-course-desc {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.6;
+  padding: 4px 10px 12px 31px;
+}
+
+@media (max-width: 768px) {
+  .gcu-header {
+    padding: 14px 16px 12px;
+  }
+
+  .gcu-body {
+    padding: 12px 16px 20px;
+  }
+
+  .gcu-title {
+    font-size: 17px;
+  }
+
+  .gcu-course-name {
+    white-space: normal;
+  }
+}

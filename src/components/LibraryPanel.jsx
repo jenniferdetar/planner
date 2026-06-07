@@ -151,7 +151,7 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
 
   async function handleImport() {
     setImporting(true)
-    await onImportBooks(DEFAULTS)
+    await onImportBooks(DEFAULTS, books)
     setImporting(false)
   }
 
@@ -160,8 +160,13 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
   return (
     <div className="library-panel">
       <div className="library-header">
-        <h2 className="library-title">My Library</h2>
-        <p className="library-subtitle">Nook Book Collection</p>
+        <div>
+          <h2 className="library-title">My Library</h2>
+          <p className="library-subtitle">Nook Book Collection</p>
+        </div>
+        <button className="import-btn" onClick={handleImport} disabled={importing}>
+          {importing ? 'Importing…' : '↓ Sync Nook library'}
+        </button>
       </div>
 
       <div className="library-shelf-tabs">
@@ -180,20 +185,7 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
       </div>
 
       <div className="library-body">
-        {books.length === 0 && (
-          <div className="library-empty-state">
-            <p className="empty-state-text">Your library is empty.</p>
-            <button
-              className="import-btn"
-              onClick={handleImport}
-              disabled={importing}
-            >
-              {importing ? 'Importing…' : 'Import my Nook library'}
-            </button>
-          </div>
-        )}
-
-        {books.length > 0 && shelfBooks.length === 0 && (
+        {shelfBooks.length === 0 && (
           <div className="shelf-empty">
             <p>No books on this shelf yet.</p>
           </div>
