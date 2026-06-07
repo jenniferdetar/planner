@@ -2,21 +2,21 @@ import { useState, useRef } from 'react'
 import { signOut } from '../lib/supabase'
 import './Sidebar.css'
 
+export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'General']
+
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 const PRIORITY_LABELS = { high: 'High', medium: 'Med', low: 'Low' }
 
-export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'General']
-
 const TABS = [
-  { key: 'tasks',    label: 'Master Tasks', color: '#f0a040' },
-  { key: 'roles',    label: 'Roles',        color: '#c9a96e' },
-  { key: 'goals',    label: 'Goals',        color: '#8bc34a' },
-  { key: 'meetings', label: 'Meetings',     color: '#888' },
-  { key: 'mission',  label: 'Mission',      color: '#4a90d9' },
-  { key: 'notes',    label: 'Notes',        color: '#f0a040' },
-  { key: 'journal',  label: 'Journal',      color: '#a0785a' },
-  { key: 'vision',   label: 'Vision',       color: '#5cb85c' },
-  { key: 'values',   label: 'Values',       color: '#2e8b57' },
+  { key: 'tasks',    label: 'Tasks',    color: '#f86336' },
+  { key: 'roles',    label: 'Roles',    color: '#c9a96e' },
+  { key: 'goals',    label: 'Goals',    color: '#8bc34a' },
+  { key: 'meetings', label: 'Meetings', color: '#888' },
+  { key: 'mission',  label: 'Mission',  color: '#4a90d9' },
+  { key: 'notes',    label: 'Notes',    color: '#f0a040' },
+  { key: 'journal',  label: 'Journal',  color: '#a0785a' },
+  { key: 'vision',   label: 'Vision',   color: '#5cb85c' },
+  { key: 'values',   label: 'Values',   color: '#2e8b57' },
 ]
 
 const PLACEHOLDERS = {
@@ -31,29 +31,32 @@ const PLACEHOLDERS = {
 }
 
 export default function Sidebar({
-  masterTasks, onAddTask, onDeleteTask, quote, user, sections = {}, onUpdateSection,
+  asanaTasks, asanaProjects, asanaStatus, onAddAsanaTask, onCompleteAsanaTask,
+  user, sections = {}, onUpdateSection,
 }) {
   const [activeTab, setActiveTab] = useState('tasks')
   const [newText, setNewText] = useState('')
-  const [newPriority, setNewPriority] = useState('medium')
-  const [newArea, setNewArea] = useState('')
+  const [newProject, setNewProject] = useState('')
   const [showAdd, setShowAdd] = useState(false)
+  const [adding, setAdding] = useState(false)
+  const [filterProject, setFilterProject] = useState('All')
 
-  function handleAdd(e) {
+  async function handleAdd(e) {
     e.preventDefault()
     if (!newText.trim()) return
-    onAddTask(newText.trim(), newPriority, newArea)
+    setAdding(true)
+    await onAddAsanaTask(newText.trim(), '', newProject || null)
     setNewText('')
-    setNewPriority('medium')
-    setNewArea('')
+    setNewProject('')
     setShowAdd(false)
+    setAdding(false)
   }
 
-  const byPriority = {
-    high: masterTasks.filter((t) => t.priority === 'high'),
-    medium: masterTasks.filter((t) => t.priority === 'medium'),
-    low: masterTasks.filter((t) => t.priority === 'low'),
-  }
+  // Group tasks by project
+  const projectNames = ['All', ...(asanaProjects || []).map(p => p.name).sort()]
+  const filteredTasks = filterProject === 'All'
+    ? (asanaTasks || [])
+    : (asanaTasks || []).filter(t => t.project === filterProject)
 
   const avatarUrl = user?.user_metadata?.avatar_url
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'You'
@@ -86,22 +89,37 @@ export default function Sidebar({
       <div className="sidebar-section-content">
         {activeTab === 'tasks' ? (
           <>
+            {/* Project filter pills */}
+            {projectNames.length > 1 && (
+              <div className="asana-project-filter">
+                {projectNames.map(name => (
+                  <button
+                    key={name}
+                    className={`asana-proj-pill ${filterProject === name ? 'active' : ''}`}
+                    onClick={() => setFilterProject(name)}
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div className="task-list">
-              {masterTasks.length === 0 && (
-                <p className="empty-state">Your master task list is empty</p>
+              {asanaStatus === 'loading' && (
+                <p className="empty-state">Loading from Asana…</p>
               )}
-              {['high', 'medium', 'low'].map((priority) =>
-                byPriority[priority].length > 0 ? (
-                  <div key={priority} className="priority-group">
-                    <div className="priority-group-label" style={{ color: PRIORITY_COLORS[priority] }}>
-                      {PRIORITY_LABELS[priority]}
-                    </div>
-                    {byPriority[priority].map((task) => (
-                      <TaskRow key={task.id} task={task} onDelete={onDeleteTask} />
-                    ))}
-                  </div>
-                ) : null
+              {asanaStatus === 'no-token' && (
+                <p className="empty-state">Set VITE_ASANA_TOKEN to sync tasks</p>
               )}
+              {asanaStatus === 'error' && (
+                <p className="empty-state">Asana sync failed</p>
+              )}
+              {asanaStatus === 'ready' && filteredTasks.length === 0 && (
+                <p className="empty-state">No tasks{filterProject !== 'All' ? ` in ${filterProject}` : ''}</p>
+              )}
+              {filteredTasks.map(task => (
+                <AsanaTaskRow key={task.id} task={task} onComplete={onCompleteAsanaTask} />
+              ))}
             </div>
 
             {showAdd ? (
@@ -109,42 +127,33 @@ export default function Sidebar({
                 <input
                   autoFocus
                   type="text"
-                  placeholder="Task description..."
+                  placeholder="Task name…"
                   value={newText}
-                  onChange={(e) => setNewText(e.target.value)}
+                  onChange={e => setNewText(e.target.value)}
                   className="add-task-input"
                 />
-                <div className="add-task-row">
-                  <div className="priority-pills">
-                    {['high', 'medium', 'low'].map((p) => (
-                      <button
-                        key={p}
-                        type="button"
-                        className={`priority-pill ${newPriority === p ? 'active' : ''}`}
-                        style={{ '--p-color': PRIORITY_COLORS[p] }}
-                        onClick={() => setNewPriority(p)}
-                      >
-                        {PRIORITY_LABELS[p]}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="form-actions">
-                    <button type="button" className="btn-cancel" onClick={() => setShowAdd(false)}>✕</button>
-                    <button type="submit" className="btn-save">Add</button>
-                  </div>
-                </div>
                 <select
                   className="add-task-area-select"
-                  value={newArea}
-                  onChange={e => setNewArea(e.target.value)}
+                  value={newProject}
+                  onChange={e => setNewProject(e.target.value)}
                 >
-                  <option value="">— Area (optional) —</option>
-                  {TASK_AREAS.map(a => <option key={a} value={a}>{a}</option>)}
+                  <option value="">— Project (optional) —</option>
+                  {(asanaProjects || []).map(p => (
+                    <option key={p.gid} value={p.name}>{p.name}</option>
+                  ))}
                 </select>
+                <div className="add-task-row" style={{ marginTop: 8 }}>
+                  <div className="form-actions" style={{ marginLeft: 'auto' }}>
+                    <button type="button" className="btn-cancel" onClick={() => setShowAdd(false)}>✕</button>
+                    <button type="submit" className="btn-save" disabled={adding}>
+                      {adding ? '…' : 'Add'}
+                    </button>
+                  </div>
+                </div>
               </form>
             ) : (
               <button className="add-btn" onClick={() => setShowAdd(true)}>
-                <span>+</span> Add master task
+                <span>+</span> Add Asana task
               </button>
             )}
           </>
@@ -194,7 +203,7 @@ export default function Sidebar({
         </div>
         <div className="stats">
           <div className="stat">
-            <span className="stat-num">{masterTasks.length}</span>
+            <span className="stat-num">{(asanaTasks || []).length}</span>
             <span className="stat-label">backlog</span>
           </div>
         </div>
@@ -203,11 +212,34 @@ export default function Sidebar({
   )
 }
 
+function AsanaTaskRow({ task, onComplete }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <div
+      className="task-row"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <button
+        className="asana-check-btn"
+        onClick={() => onComplete(task.id)}
+        title="Complete in Asana"
+      >✓</button>
+      <span className="sidebar .task-text" style={{ flex: 1, fontSize: 13, color: '#e8e4d8', lineHeight: 1.4 }}>
+        {task.title}
+      </span>
+      {task.project && (
+        <span className="task-category">{task.project}</span>
+      )}
+    </div>
+  )
+}
+
 function SectionTextArea({ sectionKey, value, placeholder, accentColor, onChange }) {
   const saveTimer = useRef(null)
   const [text, setText] = useState(value)
 
-  // Sync when switching tabs
   if (text !== value && !saveTimer.current) {
     setText(value)
   }
@@ -231,24 +263,5 @@ function SectionTextArea({ sectionKey, value, placeholder, accentColor, onChange
       onChange={handleChange}
       autoFocus
     />
-  )
-}
-
-function TaskRow({ task, onDelete }) {
-  const [hovered, setHovered] = useState(false)
-
-  return (
-    <div
-      className="task-row"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <span className="priority-dot" style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }} />
-      <span className="task-text">{task.title}</span>
-      {task.category && <span className="task-category">{task.category}</span>}
-      {hovered && (
-        <button className="delete-btn" onClick={() => onDelete(task.id)}>✕</button>
-      )}
-    </div>
   )
 }
