@@ -8,6 +8,7 @@ import LibraryPanel from './LibraryPanel'
 import GcuPanel from './GcuPanel'
 import PersonalPanel from './PersonalPanel'
 import { TASK_AREAS } from './Sidebar'
+import WeekView from './WeekView'
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
@@ -134,13 +135,13 @@ export default function DailyPlanner({
           </button>
         )}
         <div className="view-tabs">
-          {['csea', 'finance', 'gcu', 'icaap', 'library', 'month', 'personal'].map(v => (
+          {['csea', 'finance', 'gcu', 'icaap', 'library', 'month', 'personal', 'week'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >
-              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v.charAt(0).toUpperCase() + v.slice(1)}
+              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v === 'week' ? 'Week' : v.charAt(0).toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>
@@ -185,6 +186,15 @@ export default function DailyPlanner({
         />
       )}
 
+      {view === 'week' && (
+        <WeekView
+          selectedDate={selectedDate}
+          onDateChange={(d) => { onDateChange(d); onViewChange('day') }}
+          timeBlocks={timeBlocks}
+          calendarBlocks={calendarBlocks || []}
+        />
+      )}
+
       {view === 'personal' && <PersonalPanel providerToken={providerToken} onReconnect={onReconnectGoogle} />}
 
       {view === 'gcu' && (
@@ -221,7 +231,7 @@ export default function DailyPlanner({
       )}
 
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'icaap' || view === 'library' || view === 'gcu' || view === 'personal') ? 'none' : undefined }}>
+      <div className="planner-body" style={{ display: (view === 'month' || view === 'week' || view === 'csea' || view === 'finance' || view === 'icaap' || view === 'library' || view === 'gcu' || view === 'personal') ? 'none' : undefined }}>
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">
