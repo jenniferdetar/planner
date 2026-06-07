@@ -8,6 +8,7 @@ import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useTransactions, useBills, useFinancialGoals } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
+import { useLibrary } from './hooks/useLibrary'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
 import RightPanel from './components/RightPanel'
@@ -79,6 +80,7 @@ export default function App() {
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
+  const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
   const { sections, updateSection } = usePlannerSections(userId)
 
   // Merge Asana tasks into local lists (read-only, source='asana')
@@ -236,6 +238,11 @@ export default function App() {
           onUpdateAttendanceNotes={updateAttendanceNotes}
           calAuthExpired={calAuthExpired}
           onReconnectGoogle={reconnectGoogle}
+          books={books}
+          onAddBook={addBook}
+          onUpdateBookStatus={updateBookStatus}
+          onDeleteBook={deleteBook}
+          onImportBooks={importBooks}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>

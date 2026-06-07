@@ -16,8 +16,7 @@ const STATUS_LABELS = {
 
 const STATUS_CYCLE = ['want-to-read', 'reading', 'read']
 
-const DEFAULTS = [
-  // Fiction
+const FICTION_DEFAULTS = [
   { title: 'Mark of the Lion', author: 'Francine Rivers', shelf: 'Fiction', status: 'want-to-read' },
   { title: 'Piercing the Darkness', author: 'Frank Peretti', shelf: 'Fiction', status: 'want-to-read' },
   { title: "Hinds' Feet on High Places", author: 'Hannah Hurnard', shelf: 'Fiction', status: 'want-to-read' },
@@ -57,73 +56,6 @@ const DEFAULTS = [
   { title: 'Sons of Encouragement', author: 'Francine Rivers', shelf: 'Fiction', status: 'want-to-read' },
   { title: 'The Adventures of Pinocchio', author: 'Carlo Collodi', shelf: 'Fiction', status: 'want-to-read' },
   { title: 'The Secret Adversary', author: 'Agatha Christie', shelf: 'Fiction', status: 'want-to-read' },
-  // Business
-  { title: '12 Months to $1 Million', author: 'Ryan Daniel Moran', shelf: 'Business', status: 'want-to-read' },
-  { title: '45 Practical Effective Tips to Generate More Revenue from Your Events', author: 'Disa Palega', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Start Up Using Chat GPT', author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'The Absolute Beginner\'s Guide to HTML and CSS', author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Amazon Ads for Books', author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Amazon Seller Pro Tips', author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Bootstrap Brilliance: Mastering Self-Funding for a Start-Up Business', author: 'B.R. Wayne', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Building eCommerce Applications', author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Business Boutique', author: 'Christy Wright', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Delegation', author: 'Dave Ramsey', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Dover', author: 'Jon Acuff', shelf: 'Business', status: 'want-to-read' },
-  { title: "Don't Drop It", author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Dropshipping', author: 'James Moore', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Entrepreneur Mind Sets and Habits', author: 'James Mazur', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Startups (magazine)', author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'From Paycheck to Purpose', author: 'Ken Coleman', shelf: 'Business', status: 'want-to-read' },
-  { title: 'How to Build a Million Dollar App', author: 'George Berkowski', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Kingdom Business Breakthrough', author: 'Candice Zakariya', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Little Me, Big Business', author: 'Nailea Devora', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Manifest $10,000', author: 'Cassie Parks', shelf: 'Business', status: 'want-to-read' },
-  { title: 'The Proximity Principle', author: 'Ken Coleman', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Purpose + Profit', author: 'George Sarsten', shelf: 'Business', status: 'want-to-read' },
-  { title: 'The Restart Roadmap', author: 'Jason Tarlick', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Running Remote', author: 'Liam Martin & Rob Rawson', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Small Business Owner\'s Bible 2024', author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Punch Fear in the Face Escape Average Do Work That Matters START', author: 'Jon Acuff', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Super Simple Pod', author: '', shelf: 'Business', status: 'want-to-read' },
-  { title: 'Workbook for Rich Dad Poor Dad', author: 'Robert T. Kiyosaki', shelf: 'Business', status: 'want-to-read' },
-  // Religious
-  { title: "Hinds' Feet on High Places", author: 'Hannah Hurnard', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'This Is My Day! 31 Days of Supernatural Living', author: 'Kayode Fadele', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'Own Your Past Change Your Future', author: 'Dr. John Delony', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'Punch Fear in the Face START', author: 'Jon Acuff', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'Dover', author: 'Jon Acuff', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'Business Boutique', author: 'Christy Wright', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'Words of Peace and Welcome', author: 'Horatio Bonar', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'The Angel City Rapture', author: 'Moses Angel Hernandez Jr.', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'Christians and the Supernatural', author: '', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'Israel My Beloved', author: 'Kay Arthur', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'The Chronicles of Narnia', author: 'C.S. Lewis', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'He Speaks to Me', author: 'Priscilla Shirer', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'The Pursuit of God', author: 'A.W. Tozer', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'From Paycheck to Purpose', author: 'Ken Coleman', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'Redefining Anxiety', author: '', shelf: 'Religious', status: 'want-to-read' },
-  { title: 'The Proximity Principle', author: 'Ken Coleman', shelf: 'Religious', status: 'want-to-read' },
-  // Self-Help
-  { title: 'Own Your Past Change Your Future', author: 'Dr. John Delony', shelf: 'Self-Help', status: 'want-to-read' },
-  { title: 'Punch Fear in the Face START', author: 'Jon Acuff', shelf: 'Self-Help', status: 'want-to-read' },
-  { title: 'Ketogenic Cookbook for Weight Loss', author: '', shelf: 'Self-Help', status: 'want-to-read' },
-  { title: 'Instant Pot Cookbook', author: '', shelf: 'Self-Help', status: 'want-to-read' },
-  { title: 'I Will Teach You to Be Rich', author: 'Ramit Sethi', shelf: 'Self-Help', status: 'want-to-read' },
-  { title: 'The Restart Roadmap', author: 'Jason Tarlick', shelf: 'Self-Help', status: 'want-to-read' },
-  { title: 'He Speaks to Me', author: 'Priscilla Shirer', shelf: 'Self-Help', status: 'want-to-read' },
-  { title: 'Redefining Anxiety', author: '', shelf: 'Self-Help', status: 'want-to-read' },
-  // Education
-  { title: "The Absolute Beginner's Guide to HTML and CSS", author: '', shelf: 'Education', status: 'want-to-read' },
-  { title: 'Ketogenic Cookbook for Weight Loss', author: '', shelf: 'Education', status: 'want-to-read' },
-  { title: 'Instant Pot Cookbook', author: '', shelf: 'Education', status: 'want-to-read' },
-  { title: 'Manifest $10,000', author: 'Cassie Parks', shelf: 'Education', status: 'want-to-read' },
-  { title: 'I Will Teach You to Be Rich', author: 'Ramit Sethi', shelf: 'Education', status: 'want-to-read' },
-  { title: 'Running Remote', author: 'Liam Martin & Rob Rawson', shelf: 'Education', status: 'want-to-read' },
-  // Magazine
-  { title: 'Startups', author: '', shelf: 'Magazine', status: 'want-to-read' },
-  { title: 'Real Simple', author: '', shelf: 'Magazine', status: 'want-to-read' },
-  { title: 'Better Homes and Gardens', author: '', shelf: 'Magazine', status: 'want-to-read' },
-  { title: 'Popular Mechanics', author: '', shelf: 'Magazine', status: 'want-to-read' },
 ]
 
 export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDeleteBook, onImportBooks }) {
@@ -151,7 +83,7 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
 
   async function handleImport() {
     setImporting(true)
-    await onImportBooks(DEFAULTS)
+    await onImportBooks(FICTION_DEFAULTS)
     setImporting(false)
   }
 
