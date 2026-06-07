@@ -8,6 +8,161 @@
   background: #faf9f6;
 }
 
+/* ── Tabs bar (replaces old planner-header for tab strip) ── */
+.planner-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 10px;
+  border-bottom: 1px solid #e8e5de;
+  background: #fff;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+/* ── Day hero ── */
+.day-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 28px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.day-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.day-hero-date {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.day-hero-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1;
+  color: #1a1a2e;
+  letter-spacing: -2px;
+}
+
+.day-hero-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.day-hero-dayname {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
+  line-height: 1.1;
+}
+
+.day-hero-monthyear {
+  font-size: 13px;
+  color: #999;
+  letter-spacing: 0.3px;
+}
+
+/* ── Mini Month ── */
+.mini-month {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 210px;
+}
+
+.mini-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.mini-nav-btn {
+  font-size: 15px;
+  color: #aaa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.mini-nav-btn:hover {
+  background: #f0ede6;
+  color: #333;
+}
+
+.mini-month-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.mini-month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.mini-dow {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #bbb;
+  text-align: center;
+  padding: 2px 0 4px;
+}
+
+.mini-cell {
+  font-size: 11px;
+  text-align: center;
+  padding: 4px 2px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.12s;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin: auto;
+}
+
+.mini-cell:hover {
+  background: #f0ede6;
+}
+
+.mini-cell.today {
+  background: rgba(201, 169, 110, 0.18);
+  color: #c9a96e;
+  font-weight: 700;
+}
+
+.mini-cell.selected {
+  background: #c9a96e;
+  color: #fff;
+  font-weight: 700;
+}
+
+.mini-cell.overflow {
+  pointer-events: none;
+}
+
+/* ── Legacy header (kept for non-day views that still use it) ── */
 .planner-header {
   padding: 24px 32px 16px;
   border-bottom: 1px solid #e8e5de;
@@ -790,6 +945,36 @@
     height: auto;
     min-height: 100%;
     overflow: visible;
+  }
+
+  .planner-tabs-bar {
+    padding: 10px 12px 8px;
+    gap: 8px;
+  }
+
+  .day-hero {
+    flex-direction: column;
+    padding: 14px 16px 12px;
+    gap: 12px;
+  }
+
+  .day-hero-num {
+    font-size: 52px;
+  }
+
+  .day-hero-dayname {
+    font-size: 15px;
+  }
+
+  .mini-month {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .mini-cell {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
   }
 
   .planner-header {
