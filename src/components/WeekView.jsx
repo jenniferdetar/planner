@@ -113,11 +113,12 @@ export default function WeekView({ selectedDate, onDateChange, timeBlocks = [], 
               </div>
               {days.map((day, di) => {
                 const isCurrentCell = sameDay(day, today) && nowHour === hour
+                const isTodayCol = sameDay(day, today)
                 const dayBlocks = blocksForDay(day).filter(b => b.hour === hour)
                 return (
                   <div
                     key={`${hour}-${di}`}
-                    className={`week-cell ${isCurrentCell ? 'now-cell' : ''}`}
+                    className={`week-cell ${isCurrentCell ? 'now-cell' : isTodayCol ? 'today-col' : ''}`}
                     onClick={() => onDateChange(day)}
                   >
                     {dayBlocks.map(block => (
