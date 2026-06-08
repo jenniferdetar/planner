@@ -32,6 +32,8 @@ export default function RightPanel({
   onNoteChange,
   calAuthExpired,
   onReconnectGoogle,
+  asanaTasks = [],
+  onCompleteAsanaTask,
 }) {
   const today = new Date()
   const [calYear, setCalYear] = useState(selectedDate.getFullYear())
@@ -145,6 +147,22 @@ export default function RightPanel({
           )}
         </div>
       </div>
+
+      {/* Asana Tasks */}
+      {asanaTasks.length > 0 && (
+        <div className="asana-section">
+          <div className="panel-section-label">Asana Tasks <span className="asana-count">{asanaTasks.length}</span></div>
+          <ul className="asana-task-list">
+            {asanaTasks.map(task => (
+              <li key={task.gid ?? task.id} className="asana-task-item">
+                <button className="asana-check-btn" onClick={() => onCompleteAsanaTask?.(task.gid ?? task.id)} title="Complete" />
+                <span className="asana-task-name">{task.name ?? task.title}</span>
+                {task.due_on && <span className="asana-task-due">{task.due_on}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Notes — persisted to Supabase */}
       <div className="notes-section">
