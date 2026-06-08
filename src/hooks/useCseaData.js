@@ -36,10 +36,10 @@ export function useWorkLocations() {
   const [locations, setLocations] = useState([])
   useEffect(() => {
     supabase
-      .from('school_directory')
-      .select('site_name')
-      .order('site_name')
-      .then(({ data }) => setLocations((data || []).map(r => r.site_name)))
+      .from('school directory')
+      .select('"School Name"')
+      .order('"School Name"')
+      .then(({ data }) => setLocations((data || []).map(r => r['School Name'])))
   }, [])
   return locations
 }
