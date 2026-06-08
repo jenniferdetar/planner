@@ -193,7 +193,7 @@ export default function DailyPlanner({
         />
       )}
 
-      {view === 'personal' && <PersonalPanel providerToken={providerToken} onReconnect={onReconnectGoogle} />}
+      {view === 'personal' && <PersonalPanel />}
 
       {view === 'gcu' && (
         <GcuPanel
