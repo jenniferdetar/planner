@@ -12,11 +12,15 @@ export function useCseaMembers() {
     const term = q.trim()
     const { data } = await supabase
       .from('csea_members')
-      .select('first_name, last_name, employee_number')
-      .or(`first_name.ilike.%${term}%,last_name.ilike.%${term}%`)
-      .order('last_name')
+      .select('"First Name", "Last Name", "Employee Number"')
+      .or(`"First Name".ilike.%${term}%,"Last Name".ilike.%${term}%`)
+      .order('"Last Name"')
       .limit(10)
-    setResults(data || [])
+    setResults((data || []).map(r => ({
+      first_name: r['First Name'],
+      last_name: r['Last Name'],
+      employee_number: r['Employee Number'],
+    })))
     setLoading(false)
   }, [])
 
