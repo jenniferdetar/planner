@@ -471,11 +471,11 @@
   border-color: #f86336;
 }
 
-/* ── Folder Tabs ── */
+/* ── Section Nav Links ── */
 .folder-tabs {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   padding: 8px 12px;
   flex-shrink: 0;
   border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -484,6 +484,7 @@
 .folder-tab {
   display: flex;
   align-items: center;
+  gap: 8px;
   padding: 7px 12px;
   font-size: 12px;
   font-weight: 500;
@@ -495,27 +496,138 @@
   text-align: left;
 }
 
-.folder-tab:hover {
+.folder-tab.section-link:hover {
   color: var(--fc);
   background: rgba(255,255,255,0.05);
+  border-color: color-mix(in srgb, var(--fc) 20%, transparent);
 }
 
-.folder-tab.active {
-  color: var(--fc);
-  background: rgba(255,255,255,0.07);
-  border-color: color-mix(in srgb, var(--fc) 30%, transparent);
-  font-weight: 600;
-}
-
-.folder-tab.active::before {
-  content: '';
-  display: inline-block;
-  width: 3px;
-  height: 14px;
-  background: var(--fc);
-  border-radius: 2px;
-  margin-right: 8px;
+.section-link-icon {
+  font-size: 13px;
   flex-shrink: 0;
+}
+
+.section-link-arrow {
+  margin-left: auto;
+  font-size: 14px;
+  opacity: 0.3;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.folder-tab.section-link:hover .section-link-arrow {
+  opacity: 0.8;
+  transform: translateX(2px);
+}
+
+/* ── Full-page Section Overlay ── */
+.section-page-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(2px);
+}
+
+.section-page {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 720px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.section-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  background: #faf9f6;
+  flex-shrink: 0;
+}
+
+.section-page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-page-icon {
+  font-size: 22px;
+}
+
+.section-page-title h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.section-page-close {
+  font-size: 16px;
+  color: #aaa;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.section-page-close:hover {
+  background: #f0ede6;
+  color: #333;
+}
+
+.section-page .section-textarea {
+  flex: 1;
+  width: 100%;
+  background: #fff;
+  border: none;
+  outline: none;
+  resize: none;
+  color: #2a2520;
+  font-size: 15px;
+  line-height: 1.8;
+  padding: 20px 28px;
+  font-family: inherit;
+  min-height: 0;
+}
+
+.section-page .section-textarea::placeholder {
+  color: #ccc;
+  font-style: italic;
+}
+
+.section-page-footer {
+  padding: 10px 24px;
+  border-top: 1px solid #f0ede8;
+  background: #faf9f6;
+  flex-shrink: 0;
+}
+
+.section-autosave {
+  font-size: 11px;
+  color: #bbb;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 768px) {
+  .section-page-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .section-page {
+    border-radius: 20px 20px 0 0;
+    height: 90vh;
+    max-width: 100%;
+  }
 }
 
 .sidebar-section-content {
