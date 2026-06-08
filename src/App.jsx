@@ -134,7 +134,7 @@ export default function App() {
     return d
   })()
 
-  const { events: calEvents, authExpired: calAuthExpired } = useCalendarEvents(providerToken, calFetchStart, calFetchEnd)
+  const { events: calEvents, authExpired: calAuthExpired } = useCalendarEvents(providerToken, calFetchStart, calFetchEnd, clearProviderToken)
 
   // Fetch all Supabase meetings in the calendar view range for the month grid
   const rangedMeetings = useMeetingsInRange(userId, calFetchStart, calFetchEnd)
