@@ -326,6 +326,39 @@
   border-color: rgba(74,144,217,0.6);
 }
 
+.gcal-empty-state {
+  padding: 20px 24px;
+  background: #f0f6ff;
+  border-radius: 8px;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gcal-empty-state p {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+}
+
+.gcal-empty-state button {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #4a90d9;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.gcal-empty-state button:hover {
+  background: #357abd;
+}
+
 .daily-task-list {
   display: flex;
   flex-direction: column;
