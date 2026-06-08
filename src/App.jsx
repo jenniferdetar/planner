@@ -274,8 +274,6 @@ export default function App() {
           onImportBooks={importBooks}
           onPushGcuToAsana={handlePushGcuToAsana}
           gcuPushing={gcuPushing}
-          user={user}
-          onSignOut={signOut}
           providerToken={providerToken}
         />
       </div>

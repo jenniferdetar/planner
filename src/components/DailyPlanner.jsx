@@ -8,7 +8,7 @@ import LibraryPanel from './LibraryPanel'
 import GcuPanel from './GcuPanel'
 import PersonalPanel from './PersonalPanel'
 import { TASK_AREAS } from './Sidebar'
-import WeekView from './WeekView'
+
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
@@ -55,7 +55,6 @@ export default function DailyPlanner({
   calAuthExpired, onReconnectGoogle, providerToken,
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
   onPushGcuToAsana, gcuPushing,
-  user, onSignOut,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
