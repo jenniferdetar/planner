@@ -32,6 +32,18 @@ export function useCseaMembers() {
   return { search, setSearch, results, loading }
 }
 
+export function useWorkLocations() {
+  const [locations, setLocations] = useState([])
+  useEffect(() => {
+    supabase
+      .from('school_directory')
+      .select('site_name')
+      .order('site_name')
+      .then(({ data }) => setLocations((data || []).map(r => r.site_name)))
+  }, [])
+  return locations
+}
+
 export function useCseaIssues(userId) {
   const [issues, setIssues] = useState([])
 
