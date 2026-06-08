@@ -133,7 +133,7 @@ export default function DailyPlanner({
         )}
       </div>
 
-      {/* Day hero — large date + mini month, only in day view */}
+      {/* Day hero — large date + nav, only in day view */}
       {view === 'day' && (
         <div className="day-hero">
           <div className="day-hero-left">
@@ -151,7 +151,6 @@ export default function DailyPlanner({
             </div>
             <button className="nav-btn" onClick={nextDay}>›</button>
           </div>
-          <MiniMonth selectedDate={selectedDate} onDateChange={onDateChange} />
         </div>
       )}
 
