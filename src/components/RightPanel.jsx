@@ -82,11 +82,6 @@ export default function RightPanel({
 
   return (
     <aside className="right-panel">
-      <div className="gcal-connect-row">
-        <button className="gcal-reconnect-btn" onClick={onReconnectGoogle}>
-          {calAuthExpired ? '🔗 Connect Google Calendar' : '🔗 Sync Google Calendar'}
-        </button>
-      </div>
       {/* Week Strip */}
       <div className="weekly-overview">
         <div className="panel-section-label">Week Overview</div>
