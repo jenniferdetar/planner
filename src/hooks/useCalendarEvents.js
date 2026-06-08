@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { fetchCalendarEvents, eventToTimeBlock } from '../lib/googleCalendar'
 
-export function useCalendarEvents(providerToken, startDate, endDate) {
+export function useCalendarEvents(providerToken, startDate, endDate, onAuthExpired) {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -24,9 +24,12 @@ export function useCalendarEvents(providerToken, startDate, endDate) {
       .catch((err) => {
         setError(err.message)
         setLoading(false)
+        if (err.message === 'GOOGLE_AUTH_EXPIRED') {
+          onAuthExpired?.()
+        }
       })
   }, [providerToken, startDate?.toDateString(), endDate?.toDateString()])
 
-  const authExpired = error === 'GOOGLE_AUTH_EXPIRED'
+  const authExpired = !providerToken || error === 'GOOGLE_AUTH_EXPIRED'
   return { events, loading, error, authExpired }
 }
