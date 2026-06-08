@@ -77,20 +77,6 @@ export default function Sidebar({
 
         {/* Asana task list */}
         <div className="sidebar-section-content">
-          {projectNames.length > 1 && (
-            <div className="asana-project-filter">
-              {projectNames.map(name => (
-                <button
-                  key={name}
-                  className={`asana-proj-pill ${filterProject === name ? 'active' : ''}`}
-                  onClick={() => setFilterProject(name)}
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
-          )}
-
           <div className="task-list">
             {asanaStatus === 'loading' && <p className="empty-state">Loading from Asana…</p>}
             {asanaStatus === 'no-token' && <p className="empty-state">Set VITE_ASANA_TOKEN to sync tasks</p>}
