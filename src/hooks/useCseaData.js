@@ -1,5 +1,32 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+
+export function useCseaMembers() {
+  const [search, setSearch] = useState('')
+  const [results, setResults] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const query = useCallback(async (q) => {
+    if (!q || q.length < 2) { setResults([]); return }
+    setLoading(true)
+    const term = q.trim()
+    const { data } = await supabase
+      .from('csea_members')
+      .select('first_name, last_name, employee_number')
+      .or(`first_name.ilike.%${term}%,last_name.ilike.%${term}%`)
+      .order('last_name')
+      .limit(10)
+    setResults(data || [])
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    const timer = setTimeout(() => query(search), 250)
+    return () => clearTimeout(timer)
+  }, [search, query])
+
+  return { search, setSearch, results, loading }
+}
 
 export function useCseaIssues(userId) {
   const [issues, setIssues] = useState([])

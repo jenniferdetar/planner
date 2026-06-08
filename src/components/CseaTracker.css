@@ -520,3 +520,51 @@
 .asana-complete-btn:hover {
   background: #4aa84a;
 }
+
+.member-search {
+  position: relative;
+  width: 100%;
+}
+
+.member-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e8e5de;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.member-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f5f4f0;
+  gap: 8px;
+}
+
+.member-option:hover {
+  background: #faf9f6;
+}
+
+.member-name {
+  font-size: 13px;
+  color: #222;
+}
+
+.member-emp {
+  font-size: 11px;
+  color: #aaa;
+  flex-shrink: 0;
+}

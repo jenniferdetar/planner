@@ -1,5 +1,50 @@
 import { useState, useRef } from 'react'
+import { useCseaMembers } from '../hooks/useCseaData'
 import './CseaTracker.css'
+
+function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
+  const { search, setSearch, results, loading } = useCseaMembers()
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  function handleInput(e) {
+    const v = e.target.value
+    onChange(v)
+    setSearch(v)
+    setOpen(true)
+  }
+
+  function select(member) {
+    const name = `${member.first_name} ${member.last_name}`
+    onChange(name)
+    setSearch(name)
+    setOpen(false)
+  }
+
+  return (
+    <div className="member-search" ref={ref}>
+      <input
+        className="csea-input"
+        placeholder={placeholder}
+        value={value}
+        onChange={handleInput}
+        onFocus={() => value.length >= 2 && setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        autoComplete="off"
+      />
+      {open && results.length > 0 && (
+        <ul className="member-dropdown">
+          {results.map((m, i) => (
+            <li key={i} className="member-option" onMouseDown={() => select(m)}>
+              <span className="member-name">{m.first_name} {m.last_name}</span>
+              {m.employee_number && <span className="member-emp">#{m.employee_number}</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
 
 const ISSUE_TYPES = ['Grievance', 'Gripe', 'Complaint']
 const PRIORITIES = ['Low', 'Medium', 'High']
@@ -123,8 +168,7 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
                   ))}
                 </div>
               </div>
-              <input className="csea-input" placeholder="Member name *" value={issueForm.member_name}
-                onChange={e => setIssueForm(f => ({ ...f, member_name: e.target.value }))} />
+              <MemberSearch value={issueForm.member_name} onChange={v => setIssueForm(f => ({ ...f, member_name: v }))} />
               <input className="csea-input" placeholder="Work location" value={issueForm.work_location}
                 onChange={e => setIssueForm(f => ({ ...f, work_location: e.target.value }))} />
               <textarea className="csea-textarea" placeholder="Description *" rows={3} value={issueForm.description}
@@ -180,8 +224,7 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
                   ))}
                 </div>
               </div>
-              <input className="csea-input" placeholder="Member name *" value={interactionForm.member_name}
-                onChange={e => setInteractionForm(f => ({ ...f, member_name: e.target.value }))} />
+              <MemberSearch value={interactionForm.member_name} onChange={v => setInteractionForm(f => ({ ...f, member_name: v }))} />
               <input className="csea-input" placeholder="Work location" value={interactionForm.work_location}
                 onChange={e => setInteractionForm(f => ({ ...f, work_location: e.target.value }))} />
               <input className="csea-input" type="date" value={interactionForm.date_spoke}
