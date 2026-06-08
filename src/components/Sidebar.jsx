@@ -61,7 +61,20 @@ export default function Sidebar({
 
         {/* Section nav links */}
         <div className="folder-tabs">
-          {SECTION_LINKS.map(sec => (
+          {SECTION_LINKS.map(sec => sec.key === 'journal' ? (
+            <a
+              key={sec.key}
+              href="https://penzu.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="folder-tab section-link"
+              style={{ '--fc': sec.color }}
+            >
+              <span className="section-link-icon">{sec.icon}</span>
+              {sec.label}
+              <span className="section-link-arrow">›</span>
+            </a>
+          ) : (
             <button
               key={sec.key}
               className="folder-tab section-link"
