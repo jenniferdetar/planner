@@ -234,9 +234,6 @@ export default function DailyPlanner({
         <div className="schedule-section">
           <div className="section-label">
             <span>Schedule</span>
-            <button className="gcal-reconnect-inline" onClick={onReconnectGoogle}>
-              {calAuthExpired ? '🔗 Connect Google Calendar' : `🔗 ${timeBlocks.filter(b => b.source === 'google').length} from Google`}
-            </button>
           </div>
           <div className="time-grid">
             {HOURS.map(hour => {
