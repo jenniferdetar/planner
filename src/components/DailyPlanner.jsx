@@ -389,14 +389,14 @@ function UnifiedTaskHub({ masterTasks, dailyTasks, selectedDate, onAddDailyTask,
             <span className="task-count">{filteredPending.length} remaining</span>
           </div>
           <div className="daily-task-list">
-            {filteredPending.map(task => (
-              <DailyTaskRow key={task.id} task={task} onToggle={onToggleDailyTask} onDelete={onDeleteDailyTask} onUpdateNotes={onUpdateTaskNotes} />
+            {filteredPending.map((task, i) => (
+              <DailyTaskRow key={task.id} task={task} index={i + 1} onToggle={onToggleDailyTask} onDelete={onDeleteDailyTask} onUpdateNotes={onUpdateTaskNotes} />
             ))}
             {filteredDone.length > 0 && (
               <>
                 <div className="done-sep"><span>Done</span></div>
-                {filteredDone.map(task => (
-                  <DailyTaskRow key={task.id} task={task} onToggle={onToggleDailyTask} onDelete={onDeleteDailyTask} onUpdateNotes={onUpdateTaskNotes} />
+                {filteredDone.map((task, i) => (
+                  <DailyTaskRow key={task.id} task={task} index={filteredPending.length + i + 1} onToggle={onToggleDailyTask} onDelete={onDeleteDailyTask} onUpdateNotes={onUpdateTaskNotes} />
                 ))}
               </>
             )}
@@ -520,12 +520,10 @@ function MiniMonth({ selectedDate, onDateChange }) {
   )
 }
 
-function DailyTaskRow({ task, onToggle, onDelete, onUpdateNotes }) {
+function DailyTaskRow({ task, index, onToggle, onDelete, onUpdateNotes }) {
   const [expanded, setExpanded] = useState(false)
   const [notesText, setNotesText] = useState(task.notes || task.description || '')
   const saveTimer = useRef(null)
-
-  const hasNotes = !!(task.notes || task.description)
 
   function handleNotesChange(e) {
     const val = e.target.value
@@ -534,24 +532,23 @@ function DailyTaskRow({ task, onToggle, onDelete, onUpdateNotes }) {
     saveTimer.current = setTimeout(() => onUpdateNotes?.(task.id, val), 800)
   }
 
+  const dueLabel = task.due_date
+    ? new Date(task.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    : null
+
   return (
-    <div className={`daily-task-row-wrap ${task.completed ? 'done' : ''}`}>
-      <div className="daily-task-row">
-        <button className="check-btn" onClick={() => onToggle(task.id)}>
-          <span className={`check-box ${task.completed ? 'checked' : ''}`} />
+    <div className={`asana-row ${task.completed ? 'done' : ''}`}>
+      <div className="asana-row-main">
+        <span className="asana-row-num">{index}</span>
+        <button className="asana-check" onClick={() => onToggle(task.id)}>
+          <span className={`asana-circle ${task.completed ? 'checked' : ''}`} />
         </button>
-        <span
-          className="priority-dot"
-          style={{ background: PRIORITY_COLORS[task.priority] || '#ccc' }}
-        />
-        <span className="task-text">{task.title}</span>
-        {task.project && <span className="task-project">{task.project}</span>}
-        <button
-          className={`notes-btn ${hasNotes ? 'has-notes' : ''} ${expanded ? 'open' : ''}`}
-          onClick={() => setExpanded(e => !e)}
-          title="Notes"
-        >≡</button>
-        <button className="delete-task-btn" onClick={() => onDelete(task.id)}>✕</button>
+        <span className="asana-title">{task.title}</span>
+        <div className="asana-row-meta">
+          {dueLabel && <span className="asana-due">{dueLabel}</span>}
+          <button className="asana-notes-btn" onClick={() => setExpanded(e => !e)} title="Notes">≡</button>
+          <button className="asana-delete-btn" onClick={() => onDelete(task.id)}>✕</button>
+        </div>
       </div>
       {expanded && (
         <textarea

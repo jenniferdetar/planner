@@ -329,39 +329,125 @@
 .daily-task-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
 }
 
-.daily-task-row-wrap {
-  border-radius: 8px;
-  transition: background 0.15s;
+/* Asana-style task rows */
+.asana-row {
+  border-bottom: 1px solid #f0ede6;
 }
 
-.daily-task-row-wrap:hover {
-  background: #f5f4f0;
+.asana-row:first-child {
+  border-top: 1px solid #f0ede6;
 }
 
-.daily-task-row-wrap.done .task-text {
+.asana-row.done .asana-title {
   text-decoration: line-through;
-  opacity: 0.45;
+  color: #bbb;
 }
 
-.daily-task-row {
+.asana-row-main {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 8px;
+  gap: 0;
+  padding: 0;
+  min-height: 40px;
 }
 
-.daily-task-row.done .task-text {
-  text-decoration: line-through;
-  opacity: 0.45;
+.asana-row-main:hover {
+  background: #faf9f6;
 }
 
-.check-btn {
+.asana-row-num {
+  width: 32px;
+  text-align: right;
+  padding-right: 10px;
+  font-size: 12px;
+  color: #bbb;
   flex-shrink: 0;
+  user-select: none;
+}
+
+.asana-check {
+  flex-shrink: 0;
+  padding: 0 10px 0 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.asana-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #ccc;
+  display: block;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.asana-circle.checked {
+  background: #c9a96e;
+  border-color: #c9a96e;
+}
+
+.asana-circle.checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.asana-title {
+  flex: 1;
+  font-size: 13px;
+  color: #2d2d2d;
+  padding: 10px 8px 10px 0;
+  line-height: 1.4;
+}
+
+.asana-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 8px;
+  flex-shrink: 0;
+}
+
+.asana-due {
+  font-size: 12px;
+  color: #e05c5c;
+  white-space: nowrap;
+}
+
+.asana-notes-btn {
+  font-size: 13px;
+  color: #ccc;
+  padding: 2px 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
   cursor: pointer;
 }
+
+.asana-delete-btn {
+  font-size: 10px;
+  color: #ccc;
+  padding: 2px 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  cursor: pointer;
+}
+
+.asana-row-main:hover .asana-notes-btn,
+.asana-row-main:hover .asana-delete-btn {
+  opacity: 1;
+}
+
+.asana-delete-btn:hover { color: #e05c5c; }
+.asana-notes-btn:hover  { color: #c9a96e; }
 
 .check-box {
   width: 16px;
@@ -373,76 +459,9 @@
   position: relative;
 }
 
-.check-box.checked {
-  background: #c9a96e;
-  border-color: #c9a96e;
-}
-
-.check-box.checked::after {
-  content: '✓';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 9px;
-  color: #fff;
-  font-weight: 700;
-}
-
 .check-box.placeholder {
   border-color: #ddd;
   opacity: 0.4;
-}
-
-.priority-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.task-text {
-  font-size: 14px;
-  flex: 1;
-  color: #333;
-}
-
-.delete-task-btn {
-  font-size: 10px;
-  color: #ccc;
-  padding: 2px 4px;
-  opacity: 0;
-  transition: opacity 0.15s;
-  cursor: pointer;
-}
-
-.daily-task-row-wrap:hover .delete-task-btn,
-.daily-task-row-wrap:hover .notes-btn {
-  opacity: 1;
-}
-
-.notes-btn {
-  font-size: 13px;
-  color: #ccc;
-  padding: 2px 4px;
-  opacity: 0;
-  transition: opacity 0.15s, color 0.15s;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.notes-btn.has-notes {
-  color: #c9a96e;
-  opacity: 0.7;
-}
-
-.notes-btn.open {
-  color: #c9a96e;
-  opacity: 1;
-}
-
-.notes-btn:hover {
-  color: #c9a96e;
 }
 
 .task-project {
