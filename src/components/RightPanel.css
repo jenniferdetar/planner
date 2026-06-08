@@ -417,3 +417,52 @@
   color: #aaa;
   white-space: nowrap;
 }
+
+/* ── Day task list ── */
+.day-task-list {
+  padding: 12px 20px 12px;
+  border-bottom: 1px solid #f0ede6;
+}
+
+.day-tasks {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.day-task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #444;
+}
+
+.day-task-item.done {
+  opacity: 0.45;
+}
+
+.day-task-dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4a90d9;
+  margin-top: 5px;
+}
+
+.day-task-dot.done {
+  background: #5cb85c;
+}
+
+.day-task-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.day-task-item.done .day-task-text {
+  text-decoration: line-through;
+}

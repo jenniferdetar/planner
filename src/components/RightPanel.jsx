@@ -148,6 +148,21 @@ export default function RightPanel({
         </div>
       </div>
 
+      {/* Task List for selected day */}
+      {tasks.length > 0 && (
+        <div className="day-task-list">
+          <div className="panel-section-label">Tasks</div>
+          <ul className="day-tasks">
+            {tasks.map(task => (
+              <li key={task.id} className={`day-task-item ${task.completed ? 'done' : ''}`}>
+                <span className={`day-task-dot ${task.completed ? 'done' : ''}`} />
+                <span className="day-task-text">{task.description || task.title || task.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Asana Tasks */}
       {asanaTasks.length > 0 && (
         <div className="asana-section">
