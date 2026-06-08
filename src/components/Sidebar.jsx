@@ -75,54 +75,6 @@ export default function Sidebar({
           ))}
         </div>
 
-        {/* Asana task list */}
-        <div className="sidebar-section-content">
-          <div className="task-list">
-            {asanaStatus === 'loading' && <p className="empty-state">Loading from Asana…</p>}
-            {asanaStatus === 'no-token' && <p className="empty-state">Set VITE_ASANA_TOKEN to sync tasks</p>}
-            {asanaStatus === 'error' && <p className="empty-state">Asana sync failed</p>}
-            {asanaStatus === 'ready' && filteredTasks.length === 0 && (
-              <p className="empty-state">No tasks{filterProject !== 'All' ? ` in ${filterProject}` : ''}</p>
-            )}
-            {filteredTasks.map(task => (
-              <AsanaTaskRow key={task.id} task={task} onComplete={onCompleteAsanaTask} />
-            ))}
-          </div>
-
-          {showAdd ? (
-            <form className="add-task-form" onSubmit={handleAdd}>
-              <input
-                autoFocus
-                type="text"
-                placeholder="Task name…"
-                value={newText}
-                onChange={e => setNewText(e.target.value)}
-                className="add-task-input"
-              />
-              <select
-                className="add-task-area-select"
-                value={newProject}
-                onChange={e => setNewProject(e.target.value)}
-              >
-                <option value="">— Project (optional) —</option>
-                {(asanaProjects || []).map(p => (
-                  <option key={p.gid} value={p.name}>{p.name}</option>
-                ))}
-              </select>
-              <div className="add-task-row" style={{ marginTop: 8 }}>
-                <div className="form-actions" style={{ marginLeft: 'auto' }}>
-                  <button type="button" className="btn-cancel" onClick={() => setShowAdd(false)}>✕</button>
-                  <button type="submit" className="btn-save" disabled={adding}>{adding ? '…' : 'Add'}</button>
-                </div>
-              </div>
-            </form>
-          ) : (
-            <button className="add-btn" onClick={() => setShowAdd(true)}>
-              <span>+</span> Add Asana task
-            </button>
-          )}
-        </div>
-
         <div className="sidebar-footer">
           <div className="user-row">
             {avatarUrl ? (
@@ -133,12 +85,6 @@ export default function Sidebar({
             <div className="user-info">
               <span className="user-name">{displayName}</span>
               <button className="sign-out-btn" onClick={signOut}>Sign out</button>
-            </div>
-          </div>
-          <div className="stats">
-            <div className="stat">
-              <span className="stat-num">{(asanaTasks || []).length}</span>
-              <span className="stat-label">backlog</span>
             </div>
           </div>
         </div>
