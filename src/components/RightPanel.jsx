@@ -87,38 +87,6 @@ export default function RightPanel({
           {calAuthExpired ? '🔗 Connect Google Calendar' : '🔗 Sync Google Calendar'}
         </button>
       </div>
-      {/* Mini Calendar */}
-      <div className="mini-cal">
-        <div className="cal-header">
-          <button className="cal-nav" onClick={prevMonth}>‹</button>
-          <span className="cal-title">{MONTH_NAMES[calMonth]} {calYear}</span>
-          <button className="cal-nav" onClick={nextMonth}>›</button>
-        </div>
-        <div className="cal-grid">
-          {DAY_ABBR.map((d, i) => (
-            <div key={i} className="cal-day-label">{d}</div>
-          ))}
-          {Array.from({ length: firstDay }, (_, i) => <div key={`e${i}`} />)}
-          {Array.from({ length: daysInMonth }, (_, i) => {
-            const day = i + 1
-            const d = new Date(calYear, calMonth, day)
-            const isSelected = sameDay(d, selectedDate)
-            const isToday = sameDay(d, today)
-            const active = hasActivity(d)
-            return (
-              <button
-                key={day}
-                className={`cal-day ${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''}`}
-                onClick={() => selectDay(day)}
-              >
-                {day}
-                {active && !isSelected && <span className="cal-dot" />}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
       {/* Week Strip */}
       <div className="weekly-overview">
         <div className="panel-section-label">Week Overview</div>
