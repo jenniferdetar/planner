@@ -82,12 +82,11 @@ export default function RightPanel({
 
   return (
     <aside className="right-panel">
-      {calAuthExpired && (
-        <div className="gcal-expired-banner">
-          <span>Google Calendar session expired</span>
-          <button className="gcal-reconnect-btn" onClick={onReconnectGoogle}>Reconnect</button>
-        </div>
-      )}
+      <div className="gcal-connect-row">
+        <button className="gcal-reconnect-btn" onClick={onReconnectGoogle}>
+          {calAuthExpired ? '🔗 Connect Google Calendar' : '🔗 Sync Google Calendar'}
+        </button>
+      </div>
       {/* Mini Calendar */}
       <div className="mini-cal">
         <div className="cal-header">
