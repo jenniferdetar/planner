@@ -8,6 +8,9 @@ export const CALENDARS = [
   { id: '0e650fb5ce57cd5b0ceccac50d077ae5571754f61d4584df980426e0e3f0d772@group.calendar.google.com', name: 'CSEA', color: '#e05c5c' },
   { id: 'cdht4hpq2deltvh22q7e2fnd1k@group.calendar.google.com', name: 'Hale Charter', color: '#16a085' },
   { id: 'orvrdj70hcvclief24dfm1lgss@group.calendar.google.com', name: 'HoneyBook', color: '#8e44ad' },
+  { id: 'g1j3ll4vrhi55uioh0qjo57bpk@group.calendar.google.com', name: 'Todoist', color: '#db4035' },
+  { id: '7a5vu03rc2bt317j42u9c1mtq8@group.calendar.google.com', name: "Jennifer's iPhone", color: '#888' },
+  { id: 'c70ql70g6mjbuiv9cbocfbcgp8@group.calendar.google.com', name: 'Facebook Appointments', color: '#1877f2' },
 ]
 
 export async function fetchCalendarEvents(providerToken, startDate, endDate) {
