@@ -4,7 +4,6 @@ function headers(token) {
   return { Authorization: `Bearer ${token}`, Accept: 'application/json' }
 }
 
-// Decode base64url to plain string
 function decodeBase64(str) {
   if (!str) return ''
   try {
@@ -28,7 +27,6 @@ function parseMessage(msg) {
   const to = getHeader(hdrs, 'To')
   const date = getHeader(hdrs, 'Date')
 
-  // Extract plain-text body
   function findBody(part) {
     if (!part) return ''
     if (part.mimeType === 'text/plain' && part.body?.data) return decodeBase64(part.body.data)
@@ -41,9 +39,6 @@ function parseMessage(msg) {
     return ''
   }
 
-  const body = findBody(msg.payload)
-  const snippet = msg.snippet ?? ''
-
   return {
     id: msg.id,
     threadId: msg.threadId,
@@ -51,32 +46,11 @@ function parseMessage(msg) {
     from,
     to,
     date: date ? new Date(date) : null,
-    snippet,
-    body,
+    snippet: msg.snippet ?? '',
+    body: findBody(msg.payload),
     unread: msg.labelIds?.includes('UNREAD') ?? false,
     starred: msg.labelIds?.includes('STARRED') ?? false,
     labels: msg.labelIds ?? [],
-  }
-}
-
-export async function fetchThreads(token, query = 'in:inbox', maxResults = 30) {
-  const url = `${BASE}/threads?q=${encodeURIComponent(query)}&maxResults=${maxResults}`
-  const res = await fetch(url, { headers: headers(token) })
-  if (res.status === 401 || res.status === 403) throw new Error('GMAIL_AUTH_EXPIRED')
-  if (!res.ok) throw new Error(`Gmail /threads ${res.status}`)
-  const { threads = [] } = await res.json()
-  return threads // [{ id, threadId, snippet }]
-}
-
-export async function fetchThread(token, threadId) {
-  const url = `${BASE}/threads/${threadId}?format=full`
-  const res = await fetch(url, { headers: headers(token) })
-  if (res.status === 401 || res.status === 403) throw new Error('GMAIL_AUTH_EXPIRED')
-  if (!res.ok) throw new Error(`Gmail /threads/${threadId} ${res.status}`)
-  const data = await res.json()
-  return {
-    id: data.id,
-    messages: (data.messages ?? []).map(parseMessage),
   }
 }
 
@@ -106,15 +80,6 @@ export async function markRead(token, id) {
   if (!res.ok) throw new Error(`Gmail markRead ${res.status}`)
 }
 
-export async function markUnread(token, id) {
-  const res = await fetch(`${BASE}/messages/${id}/modify`, {
-    method: 'POST',
-    headers: { ...headers(token), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ addLabelIds: ['UNREAD'] }),
-  })
-  if (!res.ok) throw new Error(`Gmail markUnread ${res.status}`)
-}
-
 export async function archiveMessage(token, id) {
   const res = await fetch(`${BASE}/messages/${id}/modify`, {
     method: 'POST',
@@ -125,7 +90,6 @@ export async function archiveMessage(token, id) {
 }
 
 export async function sendEmail(token, { to, subject, body, replyToMessageId, threadId }) {
-  // Build RFC 2822 message
   const lines = [
     `To: ${to}`,
     `Subject: ${subject}`,
@@ -148,10 +112,4 @@ export async function sendEmail(token, { to, subject, body, replyToMessageId, th
   })
   if (!res.ok) throw new Error(`Gmail send ${res.status}`)
   return res.json()
-}
-
-export async function fetchProfile(token) {
-  const res = await fetch(`${BASE}/profile`, { headers: headers(token) })
-  if (!res.ok) throw new Error(`Gmail /profile ${res.status}`)
-  return res.json() // { emailAddress, messagesTotal, threadsTotal, historyId }
 }
