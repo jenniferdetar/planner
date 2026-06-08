@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { useCseaMembers } from '../hooks/useCseaData'
+import { useCseaMembers, useWorkLocations } from '../hooks/useCseaData'
 import './CseaTracker.css'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
@@ -57,6 +57,7 @@ const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
 export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
+  const workLocations = useWorkLocations()
   const [tab, setTab] = useState('issues')
   const [showAddIssue, setShowAddIssue] = useState(false)
   const [showAddInteraction, setShowAddInteraction] = useState(false)
@@ -169,8 +170,11 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
                 </div>
               </div>
               <MemberSearch value={issueForm.member_name} onChange={v => setIssueForm(f => ({ ...f, member_name: v }))} />
-              <input className="csea-input" placeholder="Work location" value={issueForm.work_location}
-                onChange={e => setIssueForm(f => ({ ...f, work_location: e.target.value }))} />
+              <select className="csea-input" value={issueForm.work_location}
+                onChange={e => setIssueForm(f => ({ ...f, work_location: e.target.value }))}>
+                <option value="">Work location</option>
+                {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+              </select>
               <textarea className="csea-textarea" placeholder="Description *" rows={3} value={issueForm.description}
                 onChange={e => setIssueForm(f => ({ ...f, description: e.target.value }))} />
               <input className="csea-input" placeholder="Involved parties" value={issueForm.involved_parties}
@@ -225,8 +229,11 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
                 </div>
               </div>
               <MemberSearch value={interactionForm.member_name} onChange={v => setInteractionForm(f => ({ ...f, member_name: v }))} />
-              <input className="csea-input" placeholder="Work location" value={interactionForm.work_location}
-                onChange={e => setInteractionForm(f => ({ ...f, work_location: e.target.value }))} />
+              <select className="csea-input" value={interactionForm.work_location}
+                onChange={e => setInteractionForm(f => ({ ...f, work_location: e.target.value }))}>
+                <option value="">Work location</option>
+                {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+              </select>
               <input className="csea-input" type="date" value={interactionForm.date_spoke}
                 onChange={e => setInteractionForm(f => ({ ...f, date_spoke: e.target.value }))} />
               <textarea className="csea-textarea" placeholder="What was discussed?" rows={3} value={interactionForm.discussion}
