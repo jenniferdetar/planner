@@ -62,7 +62,7 @@ function parseMessage(msg) {
 export async function fetchThreads(token, query = 'in:inbox', maxResults = 30) {
   const url = `${BASE}/threads?q=${encodeURIComponent(query)}&maxResults=${maxResults}`
   const res = await fetch(url, { headers: headers(token) })
-  if (res.status === 401) throw new Error('GMAIL_AUTH_EXPIRED')
+  if (res.status === 401 || res.status === 403) throw new Error('GMAIL_AUTH_EXPIRED')
   if (!res.ok) throw new Error(`Gmail /threads ${res.status}`)
   const { threads = [] } = await res.json()
   return threads // [{ id, threadId, snippet }]
@@ -71,7 +71,7 @@ export async function fetchThreads(token, query = 'in:inbox', maxResults = 30) {
 export async function fetchThread(token, threadId) {
   const url = `${BASE}/threads/${threadId}?format=full`
   const res = await fetch(url, { headers: headers(token) })
-  if (res.status === 401) throw new Error('GMAIL_AUTH_EXPIRED')
+  if (res.status === 401 || res.status === 403) throw new Error('GMAIL_AUTH_EXPIRED')
   if (!res.ok) throw new Error(`Gmail /threads/${threadId} ${res.status}`)
   const data = await res.json()
   return {
@@ -83,7 +83,7 @@ export async function fetchThread(token, threadId) {
 export async function fetchMessageList(token, query = 'in:inbox', maxResults = 30) {
   const url = `${BASE}/messages?q=${encodeURIComponent(query)}&maxResults=${maxResults}`
   const res = await fetch(url, { headers: headers(token) })
-  if (res.status === 401) throw new Error('GMAIL_AUTH_EXPIRED')
+  if (res.status === 401 || res.status === 403) throw new Error('GMAIL_AUTH_EXPIRED')
   if (!res.ok) throw new Error(`Gmail /messages ${res.status}`)
   const { messages = [] } = await res.json()
   return messages
@@ -92,7 +92,7 @@ export async function fetchMessageList(token, query = 'in:inbox', maxResults = 3
 export async function fetchMessage(token, id) {
   const url = `${BASE}/messages/${id}?format=full`
   const res = await fetch(url, { headers: headers(token) })
-  if (res.status === 401) throw new Error('GMAIL_AUTH_EXPIRED')
+  if (res.status === 401 || res.status === 403) throw new Error('GMAIL_AUTH_EXPIRED')
   if (!res.ok) throw new Error(`Gmail /messages/${id} ${res.status}`)
   return parseMessage(await res.json())
 }
