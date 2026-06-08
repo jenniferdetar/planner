@@ -288,6 +288,8 @@ export default function App() {
           onNoteChange={onNoteChange}
           calAuthExpired={calAuthExpired}
           onReconnectGoogle={reconnectGoogle}
+          asanaTasks={asanaTasks}
+          onCompleteAsanaTask={completeAsanaTask}
         />
       </div>
       {isMobile && (
