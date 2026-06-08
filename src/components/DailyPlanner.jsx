@@ -128,9 +128,6 @@ export default function DailyPlanner({
             </button>
           ))}
         </div>
-        {onSignOut && (
-          <button className="planner-signout-btn" onClick={onSignOut} title="Sign out">⏻</button>
-        )}
       </div>
 
       {/* Day hero — large date + nav, only in day view */}
