@@ -146,7 +146,7 @@ export default function App() {
       provider: 'google',
       options: {
         scopes: 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send',
-        redirectTo: window.location.href,
+        redirectTo: window.location.origin,
       },
     })
   }
