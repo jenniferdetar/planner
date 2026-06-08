@@ -42,11 +42,16 @@ export function useAuth() {
       setLoading(false)
     })
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session)
       if (session?.provider_token) {
         localStorage.setItem(TOKEN_KEY, session.provider_token)
         setCachedToken(session.provider_token)
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        // With implicit flow the hash token is captured in useState initializer;
+        // re-read localStorage in case it was just written there
+        const stored = localStorage.getItem(TOKEN_KEY)
+        if (stored) setCachedToken(stored)
       }
     })
 
