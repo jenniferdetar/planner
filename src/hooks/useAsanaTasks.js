@@ -18,37 +18,50 @@ export function useAsanaTasks() {
   const [workspaceGid, setWorkspaceGid] = useState(null)
   const [status, setStatus] = useState('idle')
   const timerRef = useRef(null)
+  const wsGidRef = useRef(null)
+
+  async function sync(wsGid) {
+    const gid = wsGid ?? wsGidRef.current
+    if (!gid) return
+    setStatus('loading')
+    try {
+      const [raw, projectList] = await Promise.all([
+        fetchMyTasksWithMemberships(token, gid),
+        fetchProjects(token, gid),
+      ])
+      setProjects(projectList)
+      const mapped = raw.map(t => ({ ...asanaTaskToMaster(t), _raw: t }))
+      const today = new Date().toISOString().split('T')[0]
+      setAllTasks(raw)
+      setMasterTasks(mapped)
+      setTodayTasks(mapped.filter(t => t.due_on === today))
+      setStatus('ready')
+    } catch (err) {
+      console.error('Asana sync failed:', err)
+      setStatus('error')
+    }
+  }
 
   useEffect(() => {
     if (!token) { setStatus('no-token'); return }
 
-    async function sync() {
+    async function init() {
       setStatus('loading')
       try {
         const workspaces = await fetchWorkspaces(token)
         if (!workspaces.length) { setStatus('ready'); return }
         const wsGid = workspaces[0].gid
         setWorkspaceGid(wsGid)
-        // Fetch tasks + projects in parallel
-        const [raw, projectList] = await Promise.all([
-          fetchMyTasksWithMemberships(token, wsGid),
-          fetchProjects(token, wsGid),
-        ])
-        setProjects(projectList)
-        const mapped = raw.map(t => ({ ...asanaTaskToMaster(t), _raw: t }))
-        const today = new Date().toISOString().split('T')[0]
-        setAllTasks(raw)
-        setMasterTasks(mapped)
-        setTodayTasks(mapped.filter(t => t.due_on === today))
-        setStatus('ready')
+        wsGidRef.current = wsGid
+        await sync(wsGid)
       } catch (err) {
-        console.error('Asana sync failed:', err)
+        console.error('Asana init failed:', err)
         setStatus('error')
       }
     }
 
-    sync()
-    timerRef.current = setInterval(sync, POLL_INTERVAL)
+    init()
+    timerRef.current = setInterval(() => sync(), POLL_INTERVAL)
     return () => clearInterval(timerRef.current)
   }, [token])
 
@@ -89,7 +102,7 @@ export function useAsanaTasks() {
     setMasterTasks(prev => [...prev, mapped])
   }
 
-  return { masterTasks, todayTasks, cseaTasks, icaapTasks, projects, workspaceGid, status, completeTask, updateTaskNotes, addTask }
+  return { masterTasks, todayTasks, cseaTasks, icaapTasks, projects, workspaceGid, status, completeTask, updateTaskNotes, addTask, refresh: () => sync() }
 }
 
 async function fetchMyTasksWithMemberships(token, workspaceGid) {

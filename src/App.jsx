@@ -77,7 +77,7 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
-  const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask } = useAsanaTasks()
+  const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
@@ -210,6 +210,7 @@ export default function App() {
           asanaStatus={asanaStatus}
           onAddAsanaTask={addAsanaTask}
           onCompleteAsanaTask={completeAsanaTask}
+          onRefreshAsana={refreshAsana}
           user={user}
           sections={sections}
           onUpdateSection={updateSection}
@@ -290,6 +291,7 @@ export default function App() {
           onReconnectGoogle={reconnectGoogle}
           asanaTasks={asanaTasks}
           onCompleteAsanaTask={completeAsanaTask}
+          onRefreshAsana={refreshAsana}
         />
       </div>
       {isMobile && (
