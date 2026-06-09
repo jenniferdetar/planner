@@ -3,34 +3,19 @@ import { supabase } from '../lib/supabase'
 
 const TOKEN_KEY = 'gcal_provider_token'
 
-function extractProviderTokenFromHash() {
-  try {
-    const hash = window.location.hash
-    if (!hash || !hash.includes('provider_token')) return null
-    const params = new URLSearchParams(hash.startsWith('#') ? hash.slice(1) : hash)
-    const token = params.get('provider_token')
-    if (token) {
-      // Clean the hash from the URL without a page reload
-      history.replaceState(null, '', window.location.pathname + window.location.search)
-    }
-    return token || null
-  } catch {
-    return null
+// Module-level listener captures SIGNED_IN before React mounts.
+// Supabase fires this event during SDK init (when it detects the OAuth
+// redirect hash), which happens before any useEffect can run.
+supabase.auth.onAuthStateChange((event, session) => {
+  if (session?.provider_token) {
+    localStorage.setItem(TOKEN_KEY, session.provider_token)
   }
-}
+})
 
 export function useAuth() {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [cachedToken, setCachedToken] = useState(() => {
-    // Grab token from URL hash first (present right after OAuth redirect)
-    const hashToken = extractProviderTokenFromHash()
-    if (hashToken) {
-      localStorage.setItem(TOKEN_KEY, hashToken)
-      return hashToken
-    }
-    return localStorage.getItem(TOKEN_KEY)
-  })
+  const [cachedToken, setCachedToken] = useState(() => localStorage.getItem(TOKEN_KEY))
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -38,6 +23,10 @@ export function useAuth() {
       if (data.session?.provider_token) {
         localStorage.setItem(TOKEN_KEY, data.session.provider_token)
         setCachedToken(data.session.provider_token)
+      } else {
+        // Pick up whatever the module-level listener just wrote
+        const stored = localStorage.getItem(TOKEN_KEY)
+        if (stored) setCachedToken(stored)
       }
       setLoading(false)
     })
@@ -48,8 +37,6 @@ export function useAuth() {
         localStorage.setItem(TOKEN_KEY, session.provider_token)
         setCachedToken(session.provider_token)
       } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        // With implicit flow the hash token is captured in useState initializer;
-        // re-read localStorage in case it was just written there
         const stored = localStorage.getItem(TOKEN_KEY)
         if (stored) setCachedToken(stored)
       }
