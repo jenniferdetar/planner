@@ -34,6 +34,7 @@ export default function RightPanel({
   onReconnectGoogle,
   asanaTasks = [],
   onCompleteAsanaTask,
+  onRefreshAsana,
 }) {
   const today = new Date()
   const [calYear, setCalYear] = useState(selectedDate.getFullYear())
@@ -166,7 +167,10 @@ export default function RightPanel({
       {/* Asana Tasks */}
       {asanaTasks.length > 0 && (
         <div className="asana-section">
-          <div className="panel-section-label">Asana Tasks <span className="asana-count">{asanaTasks.length}</span></div>
+          <div className="panel-section-label">
+            Asana Tasks <span className="asana-count">{asanaTasks.length}</span>
+            <button className="asana-sync-btn" onClick={onRefreshAsana} title="Sync with Asana">↻</button>
+          </div>
           <ul className="asana-task-list">
             {asanaTasks.map(task => (
               <li key={task.gid ?? task.id} className="asana-task-item">
