@@ -40,7 +40,7 @@ export function useBills(userId) {
       .from('bills')
       .select('*')
       .eq('user_id', userId)
-      .order('due_day', { ascending: true })
+      .order('name', { ascending: true })
       .then(({ data }) => setBills(data || []))
   }, [userId])
 
@@ -49,7 +49,7 @@ export function useBills(userId) {
       .from('bills')
       .insert({ ...fields, user_id: userId })
       .select().single()
-    if (data) setBills(prev => [...prev, data])
+    if (data) setBills(prev => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)))
   }
 
   async function toggleBillPaid(id) {
