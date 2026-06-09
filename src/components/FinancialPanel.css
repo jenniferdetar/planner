@@ -424,3 +424,42 @@
   color: #bbb;
   text-align: right;
 }
+
+/* ── Paycheck Tracker ── */
+.pc-pills { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0 4px; }
+.pc-pill { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 12px; border: 1px solid #ddd; background: #f9f8f5; color: #666; cursor: pointer; }
+.pc-pill.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+
+.pc-detail { margin-top: 8px; }
+
+.pc-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0 8px; border-bottom: 2px solid #e8e5de; }
+.pc-header-left { display: flex; flex-direction: column; gap: 2px; }
+.pc-label { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+.pc-date { font-size: 11px; color: #aaa; }
+.pc-amount-btn { font-size: 20px; font-weight: 700; color: #1a1a2e; background: none; border: none; cursor: pointer; padding: 0; }
+.pc-amount-btn:hover { color: #4a90d9; }
+.pc-amount-edit { display: flex; gap: 6px; align-items: center; }
+
+.pc-summary-bar { display: flex; gap: 0; border-radius: 8px; overflow: hidden; margin: 10px 0; border: 1px solid #e8e5de; }
+.pc-summary-item { flex: 1; text-align: center; padding: 8px 4px; background: #f9f8f5; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid #e8e5de; }
+.pc-summary-item:last-child { border-right: none; }
+.pc-summary-val { font-size: 13px; font-weight: 700; }
+.pc-summary-lbl { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.pc-bill-list { display: flex; flex-direction: column; }
+.pc-bill-row { display: flex; align-items: center; gap: 8px; padding: 8px 4px; border-bottom: 1px solid #f0ede6; cursor: pointer; transition: background 0.1s; }
+.pc-bill-row:hover { background: #f9f8f5; }
+.pc-bill-row.paid { opacity: 0.5; }
+.pc-bill-row.leftover { cursor: default; font-weight: 600; padding-top: 10px; border-top: 2px solid #e8e5de; border-bottom: none; }
+.pc-bill-row.leftover:hover { background: none; }
+.pc-check { width: 18px; font-size: 13px; color: #bbb; flex-shrink: 0; }
+.pc-check.checked { color: #5cb85c; }
+.pc-bill-name { flex: 1; font-size: 13px; color: #333; }
+.pc-bill-row.paid .pc-bill-name { text-decoration: line-through; }
+.pc-bill-method { font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 4px; flex-shrink: 0; }
+.pc-bill-method.billpay { background: #e8f0fb; color: #4a90d9; }
+.pc-bill-method.cash { background: #eaf7ea; color: #5cb85c; }
+.pc-bill-amt { font-size: 13px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; min-width: 70px; text-align: right; }
+
+.pc-delete-btn { margin-top: 16px; font-size: 11px; color: #ccc; background: none; border: none; cursor: pointer; padding: 0; }
+.pc-delete-btn:hover { color: #e05c5c; }

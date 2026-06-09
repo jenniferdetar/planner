@@ -49,6 +49,7 @@ export default function DailyPlanner({
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
+  paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
   calendarBlocks,
@@ -221,6 +222,11 @@ export default function DailyPlanner({
           onAddGoal={onAddGoal}
           onUpdateGoalAmount={onUpdateGoalAmount}
           onDeleteGoal={onDeleteGoal}
+          paychecks={paychecks || []}
+          onAddPaycheck={onAddPaycheck}
+          onUpdatePaycheckAmount={onUpdatePaycheckAmount}
+          onTogglePaycheckBill={onTogglePaycheckBill}
+          onDeletePaycheck={onDeletePaycheck}
         />
       )}
 
