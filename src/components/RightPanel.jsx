@@ -58,20 +58,6 @@ export default function RightPanel({
     onDateChange(new Date(calYear, calMonth, day))
   }
 
-  // Week strip centred on selected date
-  const startOfWeek = new Date(selectedDate)
-  startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay())
-  const weekDays = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(startOfWeek)
-    d.setDate(startOfWeek.getDate() + i)
-    return d
-  })
-
-  function hasActivity(d) {
-    const k = toDateStr(d)
-    return !!taskCounts[k]?.total
-  }
-
   function countForDay(d) {
     return taskCounts[toDateStr(d)]?.total ?? 0
   }
@@ -86,29 +72,6 @@ export default function RightPanel({
 
   return (
     <aside className="right-panel">
-      {/* Week Strip */}
-      <div className="weekly-overview">
-        <div className="panel-section-label">Week Overview</div>
-        <div className="week-days">
-          {weekDays.map((d, i) => {
-            const isSelected = sameDay(d, selectedDate)
-            const isToday = sameDay(d, today)
-            const count = countForDay(d)
-            return (
-              <button
-                key={i}
-                className={`week-day-card ${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''}`}
-                onClick={() => onDateChange(new Date(d))}
-              >
-                <span className="week-day-name">{DAY_NAMES_SHORT[d.getDay()]}</span>
-                <span className="week-day-num">{d.getDate()}</span>
-                {count > 0 && <span className="week-count">{count}</span>}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
       {/* Summary */}
       <div className="day-summary">
         <div className="panel-section-label">Day Summary</div>
