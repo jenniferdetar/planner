@@ -343,6 +343,9 @@
 .fin-bill-name { font-size: 13px; font-weight: 600; color: #333; }
 .fin-bill-due { font-size: 10px; color: #aaa; }
 .fin-bill-amount { font-size: 13px; font-weight: 700; color: #1a1a2e; flex-shrink: 0; }
+.fin-bill-method { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+.fin-bill-method.billpay { background: #e8f0fb; color: #4a90d9; }
+.fin-bill-method.cash { background: #eaf7ea; color: #5cb85c; }
 
 /* Goals */
 .fin-goals-list {

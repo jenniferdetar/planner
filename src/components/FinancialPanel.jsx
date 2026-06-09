@@ -123,13 +123,13 @@ function SpendingTab({ transactions, onAdd, onDelete }) {
 
 function BillsTab({ bills, onAdd, onToggle, onDelete }) {
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ name: '', amount: '', due_day: '', frequency: 'monthly' })
+  const [form, setForm] = useState({ name: '', amount: '', due_day: '', frequency: 'monthly', payment_method: 'Bill Pay' })
 
   async function handleSubmit(e) {
     e.preventDefault()
     if (!form.name || !form.amount) return
     await onAdd({ ...form, amount: parseFloat(form.amount), due_day: parseInt(form.due_day) || null })
-    setForm({ name: '', amount: '', due_day: '', frequency: 'monthly' })
+    setForm({ name: '', amount: '', due_day: '', frequency: 'monthly', payment_method: 'Bill Pay' })
     setShowForm(false)
   }
 
@@ -153,11 +153,17 @@ function BillsTab({ bills, onAdd, onToggle, onDelete }) {
             <input className="fin-input" type="number" placeholder="Due day" min="1" max="31"
               value={form.due_day} onChange={e => setForm(f => ({ ...f, due_day: e.target.value }))} />
           </div>
-          <select className="fin-input" value={form.frequency} onChange={e => setForm(f => ({ ...f, frequency: e.target.value }))}>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="annual">Annual</option>
-          </select>
+          <div className="fin-form-row">
+            <select className="fin-input" value={form.frequency} onChange={e => setForm(f => ({ ...f, frequency: e.target.value }))}>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="annual">Annual</option>
+            </select>
+            <select className="fin-input" value={form.payment_method} onChange={e => setForm(f => ({ ...f, payment_method: e.target.value }))}>
+              <option value="Bill Pay">Bill Pay</option>
+              <option value="Cash">Cash</option>
+            </select>
+          </div>
           <div className="fin-form-actions">
             <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
             <button type="submit" className="fin-save">Save</button>
@@ -190,6 +196,11 @@ function BillRow({ bill, onToggle, onDelete }) {
         {bill.due_day && <span className="fin-bill-due">Due {bill.due_day}{bill.due_day === 1 ? 'st' : bill.due_day === 2 ? 'nd' : bill.due_day === 3 ? 'rd' : 'th'}</span>}
       </div>
       <span className="fin-bill-amount">{fmt(bill.amount)}</span>
+      {bill.payment_method && (
+        <span className={`fin-bill-method ${bill.payment_method === 'Cash' ? 'cash' : 'billpay'}`}>
+          {bill.payment_method}
+        </span>
+      )}
       <button className="fin-delete-btn" onClick={() => onDelete(bill.id)}>✕</button>
     </div>
   )
