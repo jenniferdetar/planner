@@ -447,10 +447,10 @@
 .pc-summary-lbl { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
 
 .pc-bill-list { display: flex; flex-direction: column; }
-.pc-bill-row { display: flex; align-items: center; gap: 8px; padding: 8px 4px; border-bottom: 1px solid #f0ede6; cursor: pointer; transition: background 0.1s; }
+.pc-bill-row { display: flex; align-items: center; gap: 8px; padding: 4px 4px; border-bottom: 1px solid #f0ede6; cursor: pointer; transition: background 0.1s; }
 .pc-bill-row:hover { background: #f9f8f5; }
 .pc-bill-row.paid { opacity: 0.5; }
-.pc-bill-row.leftover { cursor: default; font-weight: 600; padding-top: 10px; border-top: 2px solid #e8e5de; border-bottom: none; }
+.pc-bill-row.leftover { cursor: default; font-weight: 600; padding-top: 6px; border-top: 2px solid #e8e5de; border-bottom: none; }
 .pc-bill-row.leftover:hover { background: none; }
 .pc-check { width: 18px; font-size: 13px; color: #bbb; flex-shrink: 0; }
 .pc-check.checked { color: #5cb85c; }
