@@ -70,6 +70,44 @@ export function useBills(userId) {
   return { bills, addBill, toggleBillPaid, deleteBill }
 }
 
+export function useFinancialGoals(userId) {
+  const [goals, setGoals] = useState([])
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('financial_goals')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: true })
+      .then(({ data }) => setGoals(data || []))
+  }, [userId])
+
+  async function addGoal(fields) {
+    const { data } = await supabase
+      .from('financial_goals')
+      .insert({ ...fields, user_id: userId })
+      .select().single()
+    if (data) setGoals(prev => [...prev, data])
+  }
+
+  async function updateGoalAmount(id, current_amount) {
+    const { data } = await supabase
+      .from('financial_goals')
+      .update({ current_amount })
+      .eq('id', id)
+      .select().single()
+    if (data) setGoals(prev => prev.map(g => g.id === id ? data : g))
+  }
+
+  async function deleteGoal(id) {
+    await supabase.from('financial_goals').delete().eq('id', id)
+    setGoals(prev => prev.filter(g => g.id !== id))
+  }
+
+  return { goals, addGoal, updateGoalAmount, deleteGoal }
+}
+
 export function usePaychecks(userId) {
   const [paychecks, setPaychecks] = useState([])
 
@@ -110,41 +148,4 @@ export function usePaychecks(userId) {
   }
 
   return { paychecks, addPaycheck, updatePaycheckAmount, togglePaycheckBill, deletePaycheck }
-}
-
-  const [goals, setGoals] = useState([])
-
-  useEffect(() => {
-    if (!userId) return
-    supabase
-      .from('financial_goals')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: true })
-      .then(({ data }) => setGoals(data || []))
-  }, [userId])
-
-  async function addGoal(fields) {
-    const { data } = await supabase
-      .from('financial_goals')
-      .insert({ ...fields, user_id: userId })
-      .select().single()
-    if (data) setGoals(prev => [...prev, data])
-  }
-
-  async function updateGoalAmount(id, current_amount) {
-    const { data } = await supabase
-      .from('financial_goals')
-      .update({ current_amount })
-      .eq('id', id)
-      .select().single()
-    if (data) setGoals(prev => prev.map(g => g.id === id ? data : g))
-  }
-
-  async function deleteGoal(id) {
-    await supabase.from('financial_goals').delete().eq('id', id)
-    setGoals(prev => prev.filter(g => g.id !== id))
-  }
-
-  return { goals, addGoal, updateGoalAmount, deleteGoal }
 }
