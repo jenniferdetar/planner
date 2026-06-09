@@ -284,6 +284,7 @@ export default function App() {
           onDateChange={setSelectedDate}
           taskCounts={taskCounts}
           dailyTasks={dailyTasks}
+          onToggleTask={handleToggleDailyTask}
           timeBlocks={allTimeBlocks}
           noteContent={noteContent}
           onNoteChange={onNoteChange}

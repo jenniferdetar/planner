@@ -439,6 +439,15 @@
   gap: 8px;
   font-size: 13px;
   color: #444;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: 0 -4px;
+  transition: background 0.12s;
+}
+
+.day-task-item:hover {
+  background: #f0ede6;
 }
 
 .day-task-item.done {
