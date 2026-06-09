@@ -7,7 +7,7 @@ import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
-import { useTransactions, useBills, useFinancialGoals } from './hooks/useFinancialData'
+import { useTransactions, useBills, useFinancialGoals, usePaychecks } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
@@ -81,6 +81,7 @@ export default function App() {
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
+  const { paychecks, addPaycheck, updatePaycheckAmount, togglePaycheckBill, deletePaycheck } = usePaychecks(userId)
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
@@ -259,6 +260,11 @@ export default function App() {
           onAddGoal={addGoal}
           onUpdateGoalAmount={updateGoalAmount}
           onDeleteGoal={deleteGoal}
+          paychecks={paychecks}
+          onAddPaycheck={addPaycheck}
+          onUpdatePaycheckAmount={updatePaycheckAmount}
+          onTogglePaycheckBill={togglePaycheckBill}
+          onDeletePaycheck={deletePaycheck}
           icaapItems={icaapItems}
           onAddIcaapItem={addIcaapItem}
           onUpdateIcaapItem={updateIcaapItem}
@@ -284,6 +290,7 @@ export default function App() {
           onDateChange={setSelectedDate}
           taskCounts={taskCounts}
           dailyTasks={dailyTasks}
+          onToggleTask={handleToggleDailyTask}
           timeBlocks={allTimeBlocks}
           noteContent={noteContent}
           onNoteChange={onNoteChange}

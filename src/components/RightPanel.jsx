@@ -27,6 +27,7 @@ export default function RightPanel({
   selectedDate, onDateChange,
   taskCounts,
   dailyTasks,
+  onToggleTask,
   timeBlocks,
   noteContent,
   onNoteChange,
@@ -155,7 +156,11 @@ export default function RightPanel({
           <div className="panel-section-label">Tasks</div>
           <ul className="day-tasks">
             {tasks.map(task => (
-              <li key={task.id} className={`day-task-item ${task.completed ? 'done' : ''}`}>
+              <li
+                key={task.id}
+                className={`day-task-item ${task.completed ? 'done' : ''}`}
+                onClick={() => onToggleTask?.(task.id)}
+              >
                 <span className={`day-task-dot ${task.completed ? 'done' : ''}`} />
                 <span className="day-task-text">{task.description || task.title || task.text}</span>
               </li>

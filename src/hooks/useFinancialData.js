@@ -40,7 +40,7 @@ export function useBills(userId) {
       .from('bills')
       .select('*')
       .eq('user_id', userId)
-      .order('due_day', { ascending: true })
+      .order('name', { ascending: true })
       .then(({ data }) => setBills(data || []))
   }, [userId])
 
@@ -49,7 +49,7 @@ export function useBills(userId) {
       .from('bills')
       .insert({ ...fields, user_id: userId })
       .select().single()
-    if (data) setBills(prev => [...prev, data])
+    if (data) setBills(prev => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)))
   }
 
   async function toggleBillPaid(id) {
@@ -70,7 +70,48 @@ export function useBills(userId) {
   return { bills, addBill, toggleBillPaid, deleteBill }
 }
 
-export function useFinancialGoals(userId) {
+export function usePaychecks(userId) {
+  const [paychecks, setPaychecks] = useState([])
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('paychecks')
+      .select('*')
+      .eq('user_id', userId)
+      .order('pay_date', { ascending: false })
+      .then(({ data }) => setPaychecks(data || []))
+  }, [userId])
+
+  async function addPaycheck(pay_date, amount) {
+    const { data } = await supabase
+      .from('paychecks')
+      .insert({ user_id: userId, pay_date, amount, paid_bill_ids: [] })
+      .select().single()
+    if (data) setPaychecks(prev => [data, ...prev])
+  }
+
+  async function updatePaycheckAmount(id, amount) {
+    const { data } = await supabase.from('paychecks').update({ amount }).eq('id', id).select().single()
+    if (data) setPaychecks(prev => prev.map(p => p.id === id ? data : p))
+  }
+
+  async function togglePaycheckBill(id, billId) {
+    const pc = paychecks.find(p => p.id === id)
+    const ids = pc.paid_bill_ids || []
+    const updated = ids.includes(billId) ? ids.filter(x => x !== billId) : [...ids, billId]
+    const { data } = await supabase.from('paychecks').update({ paid_bill_ids: updated }).eq('id', id).select().single()
+    if (data) setPaychecks(prev => prev.map(p => p.id === id ? data : p))
+  }
+
+  async function deletePaycheck(id) {
+    await supabase.from('paychecks').delete().eq('id', id)
+    setPaychecks(prev => prev.filter(p => p.id !== id))
+  }
+
+  return { paychecks, addPaycheck, updatePaycheckAmount, togglePaycheckBill, deletePaycheck }
+}
+
   const [goals, setGoals] = useState([])
 
   useEffect(() => {
