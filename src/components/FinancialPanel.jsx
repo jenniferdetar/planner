@@ -53,7 +53,7 @@ export default function FinancialPanel({
       {tab === 'spending' && <SpendingTab transactions={transactions} onAdd={onAddTransaction} onDelete={onDeleteTransaction} />}
       {tab === 'bills' && <BillsTab bills={bills} onAdd={onAddBill} onToggle={onToggleBillPaid} onDelete={onDeleteBill} />}
       {tab === 'tracker' && <PaycheckTracker bills={bills} paychecks={paychecks} onAdd={onAddPaycheck} onUpdateAmount={onUpdatePaycheckAmount} onToggleBill={onTogglePaycheckBill} onDelete={onDeletePaycheck} />}
-      {tab === 'goals' && <GoalsTab goals={goals} onAdd={onAddGoal} onUpdate={onUpdateGoalAmount} onDelete={onDeleteGoal} />}
+      {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
     </div>
   )
 }
@@ -211,51 +211,151 @@ function BillRow({ bill, onToggle, onDelete }) {
   )
 }
 
-function GoalsTab({ goals, onAdd, onUpdate, onDelete }) {
-  const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ name: '', target_amount: '', current_amount: '', color: GOAL_COLORS[0] })
-  const [editing, setEditing] = useState(null)
-  const [editAmount, setEditAmount] = useState('')
+function GoalsTab({ goals, onUpdate }) {
+  const [editing, setEditing] = useState(null) // { id, col } col = '3mo'|'6mo'
+  const [editVal, setEditVal] = useState('')
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    if (!form.name || !form.target_amount) return
-    await onAdd({
-      ...form,
-      target_amount: parseFloat(form.target_amount),
-      current_amount: parseFloat(form.current_amount) || 0,
-    })
-    setForm({ name: '', target_amount: '', current_amount: '', color: GOAL_COLORS[0] })
-    setShowForm(false)
+  // Group goals into rows by bill name (strip " – 3mo" / " – 6mo" suffix)
+  const rows = {}
+  goals.forEach(g => {
+    const is3 = g.name.endsWith('– 3mo') || g.name.endsWith('- 3mo')
+    const is6 = g.name.endsWith('– 6mo') || g.name.endsWith('- 6mo')
+    if (!is3 && !is6) return
+    const billName = g.name.replace(/\s*[–-]\s*[36]mo$/, '').trim()
+    if (!rows[billName]) rows[billName] = { name: billName, mo3: null, mo6: null }
+    if (is3) rows[billName].mo3 = g
+    if (is6) rows[billName].mo6 = g
+  })
+  const sortedRows = Object.values(rows).sort((a, b) => a.name.localeCompare(b.name))
+
+  const total3 = sortedRows.reduce((s, r) => s + Number(r.mo3?.current_amount || 0), 0)
+  const total6 = sortedRows.reduce((s, r) => s + Number(r.mo6?.current_amount || 0), 0)
+  const target3 = sortedRows.reduce((s, r) => s + Number(r.mo3?.target_amount || 0), 0)
+  const target6 = sortedRows.reduce((s, r) => s + Number(r.mo6?.target_amount || 0), 0)
+
+  function startEdit(goal, col) {
+    setEditing({ id: goal.id, col })
+    setEditVal(String(goal.current_amount))
   }
 
-  async function handleUpdateAmount(id) {
-    await onUpdate(id, parseFloat(editAmount) || 0)
+  async function commitEdit() {
+    if (!editing) return
+    await onUpdate(editing.id, parseFloat(editVal) || 0)
     setEditing(null)
+  }
+
+  function GoalCell({ goal }) {
+    if (!goal) return <td className="goals-cell empty">—</td>
+    const pct = goal.target_amount > 0 ? Math.min(100, Math.round((goal.current_amount / goal.target_amount) * 100)) : 0
+    const isEditing = editing?.id === goal.id
+    return (
+      <td className="goals-cell" onClick={() => !isEditing && startEdit(goal, '')}>
+        {isEditing ? (
+          <input
+            className="goals-cell-input"
+            type="number" step="0.01" min="0"
+            value={editVal}
+            onChange={e => setEditVal(e.target.value)}
+            onBlur={commitEdit}
+            onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') setEditing(null) }}
+            autoFocus
+            onClick={e => e.stopPropagation()}
+          />
+        ) : (
+          <>
+            <span className="goals-saved">{fmt(goal.current_amount)}</span>
+            <span className="goals-target">/ {fmt(goal.target_amount)}</span>
+            <div className="goals-bar"><div className="goals-fill" style={{ width: `${pct}%` }} /></div>
+          </>
+        )}
+      </td>
+    )
   }
 
   return (
     <div className="fin-content">
       <div className="fin-toolbar">
-        <span className="fin-toolbar-label">{goals.length} goal{goals.length !== 1 ? 's' : ''}</span>
-        <button className="fin-add-btn" onClick={() => setShowForm(true)}>+ Add Goal</button>
+        <span className="fin-toolbar-label">Emergency fund targets — click a cell to update saved amount</span>
+      </div>
+      <div className="goals-table-wrap">
+        <table className="goals-table">
+          <thead>
+            <tr>
+              <th className="goals-th-name">Bill</th>
+              <th className="goals-th-col mo3">3 Months</th>
+              <th className="goals-th-col mo6">6 Months</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedRows.map(row => (
+              <tr key={row.name}>
+                <td className="goals-name">{row.name}</td>
+                <GoalCell goal={row.mo3} />
+                <GoalCell goal={row.mo6} />
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="goals-total-row">
+              <td className="goals-name">Total</td>
+              <td className="goals-cell total">
+                <span className="goals-saved">{fmt(total3)}</span>
+                <span className="goals-target">/ {fmt(target3)}</span>
+              </td>
+              <td className="goals-cell total">
+                <span className="goals-saved">{fmt(total6)}</span>
+                <span className="goals-target">/ {fmt(target6)}</span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+// ── Paycheck Tracker ─────────────────────────────────────────────────────────
+function PaycheckTracker({ bills, paychecks, onAdd, onUpdateAmount, onToggleBill, onDelete }) {
+  const [showForm, setShowForm] = useState(false)
+  const [formDate, setFormDate] = useState('')
+  const [formAmount, setFormAmount] = useState('')
+  const [activeId, setActiveId] = useState(null)
+  const [editingAmount, setEditingAmount] = useState(null)
+  const [editAmountVal, setEditAmountVal] = useState('')
+
+  async function handleAdd(e) {
+    e.preventDefault()
+    if (!formDate || !formAmount) return
+    await onAdd(formDate, parseFloat(formAmount))
+    setFormDate('')
+    setFormAmount('')
+    setShowForm(false)
+  }
+
+  function billAmount(bill) {
+    return FULL_AMOUNT_BILLS.includes(bill.name) ? Number(bill.amount) : Number(bill.amount) / 2
+  }
+
+  const active = paychecks.find(p => p.id === activeId) || paychecks[0] || null
+
+  const allocatedTotal = bills.reduce((s, b) => s + billAmount(b), 0)
+  const paidTotal = active ? bills.filter(b => (active.paid_bill_ids || []).includes(b.id)).reduce((s, b) => s + billAmount(b), 0) : 0
+  const leftOver = active ? Number(active.amount) - allocatedTotal : 0
+  const remaining = active ? Number(active.amount) - paidTotal : 0
+
+  return (
+    <div className="fin-content">
+      <div className="fin-toolbar">
+        <span className="fin-toolbar-label">Semi-monthly paycheck tracker</span>
+        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Paycheck</button>
       </div>
 
       {showForm && (
-        <form className="fin-form" onSubmit={handleSubmit}>
-          <input className="fin-input" placeholder="Goal name *" value={form.name}
-            onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
+        <form className="fin-form" onSubmit={handleAdd}>
           <div className="fin-form-row">
-            <input className="fin-input amount" type="number" placeholder="Target $" step="0.01" min="0"
-              value={form.target_amount} onChange={e => setForm(f => ({ ...f, target_amount: e.target.value }))} required />
-            <input className="fin-input amount" type="number" placeholder="Saved so far $" step="0.01" min="0"
-              value={form.current_amount} onChange={e => setForm(f => ({ ...f, current_amount: e.target.value }))} />
-          </div>
-          <div className="fin-color-row">
-            {GOAL_COLORS.map(c => (
-              <button key={c} type="button" className={`fin-color-swatch ${form.color === c ? 'active' : ''}`}
-                style={{ background: c }} onClick={() => setForm(f => ({ ...f, color: c }))} />
-            ))}
+            <input className="fin-input" type="date" value={formDate} onChange={e => setFormDate(e.target.value)} required />
+            <input className="fin-input amount" type="number" placeholder="Paycheck amount" step="0.01" min="0"
+              value={formAmount} onChange={e => setFormAmount(e.target.value)} required />
           </div>
           <div className="fin-form-actions">
             <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
@@ -264,42 +364,90 @@ function GoalsTab({ goals, onAdd, onUpdate, onDelete }) {
         </form>
       )}
 
-      <div className="fin-goals-list">
-        {goals.length === 0 && <p className="fin-empty">No goals yet</p>}
-        {goals.map(g => {
-          const pct = Math.min(100, Math.round((g.current_amount / g.target_amount) * 100))
-          return (
-            <div key={g.id} className="fin-goal">
-              <div className="fin-goal-header">
-                <span className="fin-goal-name">{g.name}</span>
-                <div className="fin-goal-actions">
-                  <button className="fin-edit-btn" onClick={() => { setEditing(g.id); setEditAmount(String(g.current_amount)) }}>Edit</button>
-                  <button className="fin-delete-btn" onClick={() => onDelete(g.id)}>✕</button>
-                </div>
-              </div>
-              <div className="fin-goal-amounts">
-                {editing === g.id ? (
-                  <div className="fin-goal-edit">
-                    <input className="fin-input amount" type="number" step="0.01" min="0"
-                      value={editAmount} onChange={e => setEditAmount(e.target.value)}
-                      onKeyDown={e => { if (e.key === 'Enter') handleUpdateAmount(g.id); if (e.key === 'Escape') setEditing(null) }}
-                      autoFocus />
-                    <button className="fin-save small" onClick={() => handleUpdateAmount(g.id)}>✓</button>
-                    <button className="fin-cancel small" onClick={() => setEditing(null)}>✕</button>
-                  </div>
-                ) : (
-                  <span className="fin-goal-saved" style={{ color: g.color }}>{fmt(g.current_amount)}</span>
-                )}
-                <span className="fin-goal-target">of {fmt(g.target_amount)}</span>
-              </div>
-              <div className="fin-progress-bar">
-                <div className="fin-progress-fill" style={{ width: `${pct}%`, background: g.color }} />
-              </div>
-              <span className="fin-goal-pct">{pct}%</span>
+      {/* Paycheck selector pills */}
+      {paychecks.length > 0 && (
+        <div className="pc-pills">
+          {paychecks.slice(0, 8).map(p => (
+            <button key={p.id}
+              className={`pc-pill ${(active?.id === p.id) ? 'active' : ''}`}
+              onClick={() => setActiveId(p.id)}>
+              {new Date(p.pay_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {active && (
+        <div className="pc-detail">
+          {/* Paycheck amount header */}
+          <div className="pc-header">
+            <div className="pc-header-left">
+              <span className="pc-label">Jennifer's Check</span>
+              <span className="pc-date">{new Date(active.pay_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
             </div>
-          )
-        })}
-      </div>
+            {editingAmount === active.id ? (
+              <div className="pc-amount-edit">
+                <input type="number" className="fin-input amount" value={editAmountVal}
+                  onChange={e => setEditAmountVal(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') { onUpdateAmount(active.id, parseFloat(editAmountVal)); setEditingAmount(null) }
+                    if (e.key === 'Escape') setEditingAmount(null)
+                  }} autoFocus />
+                <button className="fin-save" onClick={() => { onUpdateAmount(active.id, parseFloat(editAmountVal)); setEditingAmount(null) }}>✓</button>
+              </div>
+            ) : (
+              <button className="pc-amount-btn" onClick={() => { setEditingAmount(active.id); setEditAmountVal(String(active.amount)) }}>
+                {active.amount > 0 ? fmt(active.amount) : 'Enter amount'}
+              </button>
+            )}
+          </div>
+
+          {/* Summary bar */}
+          <div className="pc-summary-bar">
+            <div className="pc-summary-item">
+              <span className="pc-summary-val">{fmt(allocatedTotal)}</span>
+              <span className="pc-summary-lbl">Bills</span>
+            </div>
+            <div className="pc-summary-item">
+              <span className="pc-summary-val" style={{ color: '#5cb85c' }}>{fmt(paidTotal)}</span>
+              <span className="pc-summary-lbl">Paid</span>
+            </div>
+            <div className="pc-summary-item">
+              <span className="pc-summary-val" style={{ color: remaining >= 0 ? '#4a90d9' : '#e05c5c' }}>{fmt(remaining)}</span>
+              <span className="pc-summary-lbl">Remaining</span>
+            </div>
+          </div>
+
+          {/* Bill rows */}
+          <div className="pc-bill-list">
+            {bills.map(bill => {
+              const amt = billAmount(bill)
+              const paid = (active.paid_bill_ids || []).includes(bill.id)
+              return (
+                <div key={bill.id} className={`pc-bill-row ${paid ? 'paid' : ''}`}
+                  onClick={() => onToggleBill(active.id, bill.id)}>
+                  <span className={`pc-check ${paid ? 'checked' : ''}`}>{paid ? '✓' : '○'}</span>
+                  <span className="pc-bill-name">{bill.name}</span>
+                  <span className={`pc-bill-method ${bill.payment_method === 'Cash' ? 'cash' : 'billpay'}`}>
+                    {bill.payment_method || 'Bill Pay'}
+                  </span>
+                  <span className="pc-bill-amt">{fmt(amt)}</span>
+                </div>
+              )
+            })}
+            {/* Left Over row */}
+            <div className="pc-bill-row leftover">
+              <span className="pc-check" />
+              <span className="pc-bill-name">Left Over</span>
+              <span className="pc-bill-amt" style={{ color: leftOver >= 0 ? '#5cb85c' : '#e05c5c' }}>{fmt(leftOver)}</span>
+            </div>
+          </div>
+
+          <button className="pc-delete-btn" onClick={() => { onDelete(active.id); setActiveId(null) }}>Delete this paycheck</button>
+        </div>
+      )}
+
+      {paychecks.length === 0 && <p className="fin-empty">No paychecks added yet. Click "+ Add Paycheck" to start tracking.</p>}
     </div>
   )
 }
