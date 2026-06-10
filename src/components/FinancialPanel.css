@@ -425,44 +425,125 @@
   text-align: right;
 }
 
-/* ── Paycheck Tracker ── */
-.pc-pills { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0 4px; }
-.pc-pill { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 12px; border: 1px solid #ddd; background: #f9f8f5; color: #666; cursor: pointer; }
-.pc-pill.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+/* ── Paycheck Tracker Table ── */
+.pc-table-content { padding: 0 !important; }
+.pc-table-wrap { flex: 1; overflow: auto; }
 
-.pc-detail { margin-top: 8px; }
+.pc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
 
-.pc-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0 8px; border-bottom: 2px solid #e8e5de; }
-.pc-header-left { display: flex; flex-direction: column; gap: 2px; }
-.pc-label { font-size: 14px; font-weight: 700; color: #1a1a2e; }
-.pc-date { font-size: 11px; color: #aaa; }
-.pc-amount-btn { font-size: 20px; font-weight: 700; color: #1a1a2e; background: none; border: none; cursor: pointer; padding: 0; }
-.pc-amount-btn:hover { color: #4a90d9; }
-.pc-amount-edit { display: flex; gap: 6px; align-items: center; }
+.pc-th-account {
+  position: sticky; left: 0; z-index: 2;
+  background: #1a1a2e; color: #fff;
+  text-align: left; padding: 8px 12px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+  min-width: 180px;
+  border-right: 2px solid #333;
+}
 
-.pc-summary-bar { display: flex; gap: 0; border-radius: 8px; overflow: hidden; margin: 10px 0; border: 1px solid #e8e5de; }
-.pc-summary-item { flex: 1; text-align: center; padding: 8px 4px; background: #f9f8f5; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid #e8e5de; }
-.pc-summary-item:last-child { border-right: none; }
-.pc-summary-val { font-size: 13px; font-weight: 700; }
-.pc-summary-lbl { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
+.pc-th-date {
+  background: #1a1a2e; color: #c9a96e;
+  padding: 6px 10px; text-align: center;
+  font-size: 11px; font-weight: 600;
+  min-width: 100px;
+  border-right: 1px solid #333;
+  position: relative;
+}
+.pc-col-del {
+  display: block; font-size: 9px; color: #666; background: none; border: none;
+  cursor: pointer; margin: 2px auto 0; padding: 0; line-height: 1;
+}
+.pc-col-del:hover { color: #e05c5c; }
 
-.pc-bill-list { display: flex; flex-direction: column; }
-.pc-bill-row { display: flex; align-items: center; gap: 8px; padding: 4px 4px; border-bottom: 1px solid #f0ede6; cursor: pointer; transition: background 0.1s; }
-.pc-bill-row:hover { background: #f9f8f5; }
-.pc-bill-row.paid { opacity: 0.5; }
-.pc-bill-row.leftover { cursor: default; font-weight: 600; padding-top: 6px; border-top: 2px solid #e8e5de; border-bottom: none; }
-.pc-bill-row.leftover:hover { background: none; }
-.pc-check { width: 18px; font-size: 13px; color: #bbb; flex-shrink: 0; }
-.pc-check.checked { color: #5cb85c; }
-.pc-bill-name { flex: 1; font-size: 13px; color: #333; }
-.pc-bill-row.paid .pc-bill-name { text-decoration: line-through; }
-.pc-bill-method { font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 4px; flex-shrink: 0; }
-.pc-bill-method.billpay { background: #e8f0fb; color: #4a90d9; }
-.pc-bill-method.cash { background: #eaf7ea; color: #5cb85c; }
-.pc-bill-amt { font-size: 13px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; min-width: 70px; text-align: right; }
+/* Account column (sticky) */
+.pc-td-account {
+  position: sticky; left: 0; z-index: 1;
+  background: #fff;
+  padding: 5px 12px;
+  border-right: 2px solid #e8e5de;
+  border-bottom: 1px solid #f0ede6;
+  min-width: 180px;
+}
+.pc-td-bill-name { display: block; font-size: 12.5px; color: #1a1a2e; }
+.pc-td-method { font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 3px; }
+.pc-td-method.billpay { background: #e8f0fb; color: #4a90d9; }
+.pc-td-method.cash { background: #eaf7ea; color: #5cb85c; }
 
-.pc-delete-btn { margin-top: 16px; font-size: 11px; color: #ccc; background: none; border: none; cursor: pointer; padding: 0; }
-.pc-delete-btn:hover { color: #e05c5c; }
+/* Jennifer's Check row */
+.pc-row-check .pc-td-account { background: #f5f4f0; }
+.pc-td-check-label { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+.pc-td-check-amount {
+  text-align: center; padding: 6px 8px;
+  font-size: 13px; font-weight: 700; color: #1a1a2e;
+  cursor: pointer; border-bottom: 2px solid #e8e5de;
+  border-right: 1px solid #e8e5de;
+  background: #f5f4f0;
+}
+.pc-td-check-amount:hover { background: #eae9e4; }
+.pc-cell-input {
+  width: 80px; border: 1px solid #4a90d9; border-radius: 3px;
+  padding: 2px 4px; font-size: 12px; text-align: right;
+}
+
+/* Bill cells */
+.pc-td-cell {
+  text-align: right; padding: 5px 10px;
+  cursor: pointer; border-bottom: 1px solid #f0ede6;
+  border-right: 1px solid #f0ede6;
+  transition: background 0.1s;
+  color: #333;
+  position: relative;
+}
+.pc-td-cell:hover { background: #f0f7ff; }
+.pc-td-cell.paid { background: #f5faf5; color: #bbb; }
+.pc-td-cell.paid .pc-cell-amt { text-decoration: line-through; }
+.pc-cell-check { color: #5cb85c; font-size: 10px; margin-right: 4px; }
+.pc-cell-amt { font-size: 12px; }
+
+/* Totals */
+.pc-row-total .pc-td-account { background: #f0ede6; font-weight: 700; }
+.pc-td-total-label { font-size: 12px; font-weight: 700; color: #1a1a2e; }
+.pc-td-total {
+  text-align: right; padding: 5px 10px;
+  font-size: 12px; font-weight: 700; color: #1a1a2e;
+  background: #f0ede6; border-right: 1px solid #e0ddd7;
+  border-bottom: 1px solid #e0ddd7;
+}
+
+/* Left over */
+.pc-row-leftover .pc-td-account { background: #f5f4f0; }
+.pc-td-leftover-label { font-size: 12px; font-weight: 700; color: #1a1a2e; }
+.pc-td-leftover {
+  text-align: right; padding: 5px 10px;
+  font-size: 12px; font-weight: 700;
+  border-right: 1px solid #e0ddd7;
+  background: #faf9f6;
+}
+
+/* ── Coins Tab ── */
+.coins-total-badge {
+  font-size: 16px; font-weight: 700; color: #5cb85c;
+  margin-right: auto; margin-left: 12px;
+}
+.coins-table-wrap { flex: 1; overflow-y: auto; padding: 8px 16px; }
+.coins-table { width: 100%; border-collapse: collapse; font-size: 13px; max-width: 420px; }
+.coins-table th { padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #aaa; border-bottom: 2px solid #e8e5de; }
+.coins-table th:last-child { text-align: right; }
+.coins-row td { border-bottom: 1px solid #f0ede6; padding: 8px 12px; }
+.coins-td-name { font-weight: 600; color: #1a1a2e; }
+.coins-td-val { color: #888; font-size: 12px; }
+.coins-td-count { display: flex; align-items: center; gap: 8px; }
+.coins-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; background: #f5f4f0; font-size: 16px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #555; }
+.coins-btn:hover { background: #e8e5de; }
+.coins-input { width: 52px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 3px 4px; font-size: 13px; }
+.coins-td-sub { text-align: right; font-weight: 600; color: #1a1a2e; }
+.coins-total-row td { padding: 10px 12px; font-weight: 700; font-size: 14px; border-top: 2px solid #e8e5de; }
+.coins-td-total-label { color: #1a1a2e; }
+.coins-td-total { text-align: right; color: #5cb85c; font-size: 16px; }
 
 /* ── Goals Table ── */
 .goals-table-wrap { flex: 1; overflow-y: auto; padding: 0 0 16px; }

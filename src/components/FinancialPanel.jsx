@@ -41,7 +41,7 @@ export default function FinancialPanel({
       </div>
 
       <div className="fin-tabs">
-        {['spending', 'bills', 'tracker', 'goals'].map(t => (
+        {['spending', 'bills', 'tracker', 'goals', 'coins'].map(t => (
           <button key={t} className={`fin-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
             {t === 'tracker' ? 'Paycheck' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
@@ -52,6 +52,7 @@ export default function FinancialPanel({
       {tab === 'bills' && <BillsTab bills={bills} onAdd={onAddBill} onToggle={onToggleBillPaid} onDelete={onDeleteBill} />}
       {tab === 'tracker' && <PaycheckTracker bills={bills} paychecks={paychecks} onAdd={onAddPaycheck} onUpdateAmount={onUpdatePaycheckAmount} onToggleBill={onTogglePaycheckBill} onDelete={onDeletePaycheck} />}
       {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
+      {tab === 'coins' && <CoinsTab />}
     </div>
   )
 }
@@ -315,9 +316,8 @@ function PaycheckTracker({ bills, paychecks, onAdd, onUpdateAmount, onToggleBill
   const [showForm, setShowForm] = useState(false)
   const [formDate, setFormDate] = useState('')
   const [formAmount, setFormAmount] = useState('')
-  const [activeId, setActiveId] = useState(null)
-  const [editingAmount, setEditingAmount] = useState(null)
-  const [editAmountVal, setEditAmountVal] = useState('')
+  const [editingCell, setEditingCell] = useState(null) // { paycheckId }
+  const [editVal, setEditVal] = useState('')
 
   async function handleAdd(e) {
     e.preventDefault()
@@ -332,15 +332,16 @@ function PaycheckTracker({ bills, paychecks, onAdd, onUpdateAmount, onToggleBill
     return FULL_AMOUNT_BILLS.includes(bill.name) ? Number(bill.amount) : Number(bill.amount) / 2
   }
 
-  const active = paychecks.find(p => p.id === activeId) || paychecks[0] || null
+  function fmtDate(dateStr) {
+    const d = new Date(dateStr + 'T12:00:00')
+    return d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' })
+  }
 
+  const sorted = [...paychecks].sort((a, b) => a.pay_date.localeCompare(b.pay_date))
   const allocatedTotal = bills.reduce((s, b) => s + billAmount(b), 0)
-  const paidTotal = active ? bills.filter(b => (active.paid_bill_ids || []).includes(b.id)).reduce((s, b) => s + billAmount(b), 0) : 0
-  const leftOver = active ? Number(active.amount) - allocatedTotal : 0
-  const remaining = active ? Number(active.amount) - paidTotal : 0
 
   return (
-    <div className="fin-content">
+    <div className="fin-content pc-table-content">
       <div className="fin-toolbar">
         <span className="fin-toolbar-label">Semi-monthly paycheck tracker</span>
         <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Paycheck</button>
@@ -360,85 +361,187 @@ function PaycheckTracker({ bills, paychecks, onAdd, onUpdateAmount, onToggleBill
         </form>
       )}
 
+      {paychecks.length === 0 && <p className="fin-empty">No paychecks yet. Click "+ Add Paycheck" to start.</p>}
+
       {paychecks.length > 0 && (
-        <div className="pc-pills">
-          {paychecks.slice(0, 8).map(p => (
-            <button key={p.id}
-              className={`pc-pill ${(active?.id === p.id) ? 'active' : ''}`}
-              onClick={() => setActiveId(p.id)}>
-              {new Date(p.pay_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            </button>
-          ))}
+        <div className="pc-table-wrap">
+          <table className="pc-table">
+            <thead>
+              <tr>
+                <th className="pc-th-account">Account</th>
+                {sorted.map(p => (
+                  <th key={p.id} className="pc-th-date">
+                    {fmtDate(p.pay_date)}
+                    <button className="pc-col-del" onClick={() => onDelete(p.id)} title="Delete">✕</button>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {/* Jennifer's Check row — paycheck amount, editable */}
+              <tr className="pc-row-check">
+                <td className="pc-td-account pc-td-check-label">Jennifer's Check</td>
+                {sorted.map(p => (
+                  <td key={p.id} className="pc-td-check-amount"
+                    onClick={() => { setEditingCell(p.id); setEditVal(String(p.amount)) }}>
+                    {editingCell === p.id ? (
+                      <input
+                        className="pc-cell-input"
+                        type="number" step="0.01" min="0"
+                        value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={() => { onUpdateAmount(p.id, parseFloat(editVal) || 0); setEditingCell(null) }}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') { onUpdateAmount(p.id, parseFloat(editVal) || 0); setEditingCell(null) }
+                          if (e.key === 'Escape') setEditingCell(null)
+                        }}
+                        autoFocus
+                        onClick={e => e.stopPropagation()}
+                      />
+                    ) : (
+                      p.amount > 0 ? fmt(p.amount) : '—'
+                    )}
+                  </td>
+                ))}
+              </tr>
+
+              {/* Bill rows */}
+              {bills.map(bill => {
+                const amt = billAmount(bill)
+                return (
+                  <tr key={bill.id} className="pc-row-bill">
+                    <td className="pc-td-account">
+                      <span className="pc-td-bill-name">{bill.name}</span>
+                      <span className={`pc-td-method ${bill.payment_method === 'Cash' ? 'cash' : 'billpay'}`}>
+                        {bill.payment_method || 'Bill Pay'}
+                      </span>
+                    </td>
+                    {sorted.map(p => {
+                      const paid = (p.paid_bill_ids || []).includes(bill.id)
+                      return (
+                        <td key={p.id}
+                          className={`pc-td-cell ${paid ? 'paid' : ''}`}
+                          onClick={() => onToggleBill(p.id, bill.id)}>
+                          {paid ? <span className="pc-cell-check">✓</span> : null}
+                          <span className="pc-cell-amt">{fmt(amt)}</span>
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              })}
+
+              {/* Totals row */}
+              <tr className="pc-row-total">
+                <td className="pc-td-account pc-td-total-label">Total Bills</td>
+                {sorted.map(p => (
+                  <td key={p.id} className="pc-td-total">{fmt(allocatedTotal)}</td>
+                ))}
+              </tr>
+
+              {/* Left over row */}
+              <tr className="pc-row-leftover">
+                <td className="pc-td-account pc-td-leftover-label">Left Over</td>
+                {sorted.map(p => {
+                  const lo = Number(p.amount) - allocatedTotal
+                  return (
+                    <td key={p.id} className="pc-td-leftover" style={{ color: lo >= 0 ? '#5cb85c' : '#e05c5c' }}>
+                      {fmt(lo)}
+                    </td>
+                  )
+                })}
+              </tr>
+            </tbody>
+          </table>
         </div>
       )}
+    </div>
+  )
+}
 
-      {active && (
-        <div className="pc-detail">
-          <div className="pc-header">
-            <div className="pc-header-left">
-              <span className="pc-label">Jennifer's Check</span>
-              <span className="pc-date">{new Date(active.pay_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-            </div>
-            {editingAmount === active.id ? (
-              <div className="pc-amount-edit">
-                <input type="number" className="fin-input amount" value={editAmountVal}
-                  onChange={e => setEditAmountVal(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') { onUpdateAmount(active.id, parseFloat(editAmountVal)); setEditingAmount(null) }
-                    if (e.key === 'Escape') setEditingAmount(null)
-                  }} autoFocus />
-                <button className="fin-save" onClick={() => { onUpdateAmount(active.id, parseFloat(editAmountVal)); setEditingAmount(null) }}>✓</button>
-              </div>
-            ) : (
-              <button className="pc-amount-btn" onClick={() => { setEditingAmount(active.id); setEditAmountVal(String(active.amount)) }}>
-                {active.amount > 0 ? fmt(active.amount) : 'Enter amount'}
-              </button>
-            )}
-          </div>
+const COIN_TYPES = [
+  { name: 'Dollars', value: 1.00, symbol: '$1' },
+  { name: 'Halves', value: 0.50, symbol: '50¢' },
+  { name: 'Quarters', value: 0.25, symbol: '25¢' },
+  { name: 'Dimes', value: 0.10, symbol: '10¢' },
+  { name: 'Nickels', value: 0.05, symbol: '5¢' },
+  { name: 'Pennies', value: 0.01, symbol: '1¢' },
+]
 
-          <div className="pc-summary-bar">
-            <div className="pc-summary-item">
-              <span className="pc-summary-val">{fmt(allocatedTotal)}</span>
-              <span className="pc-summary-lbl">Bills</span>
-            </div>
-            <div className="pc-summary-item">
-              <span className="pc-summary-val" style={{ color: '#5cb85c' }}>{fmt(paidTotal)}</span>
-              <span className="pc-summary-lbl">Paid</span>
-            </div>
-            <div className="pc-summary-item">
-              <span className="pc-summary-val" style={{ color: remaining >= 0 ? '#4a90d9' : '#e05c5c' }}>{fmt(remaining)}</span>
-              <span className="pc-summary-lbl">Remaining</span>
-            </div>
-          </div>
+function CoinsTab() {
+  const [counts, setCounts] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('coin_counts') || '{}') } catch { return {} }
+  })
 
-          <div className="pc-bill-list">
-            {bills.map(bill => {
-              const amt = billAmount(bill)
-              const paid = (active.paid_bill_ids || []).includes(bill.id)
-              return (
-                <div key={bill.id} className={`pc-bill-row ${paid ? 'paid' : ''}`}
-                  onClick={() => onToggleBill(active.id, bill.id)}>
-                  <span className={`pc-check ${paid ? 'checked' : ''}`}>{paid ? '✓' : '○'}</span>
-                  <span className="pc-bill-name">{bill.name}</span>
-                  <span className={`pc-bill-method ${bill.payment_method === 'Cash' ? 'cash' : 'billpay'}`}>
-                    {bill.payment_method || 'Bill Pay'}
-                  </span>
-                  <span className="pc-bill-amt">{fmt(amt)}</span>
-                </div>
-              )
-            })}
-            <div className="pc-bill-row leftover">
-              <span className="pc-check" />
-              <span className="pc-bill-name">Left Over</span>
-              <span className="pc-bill-amt" style={{ color: leftOver >= 0 ? '#5cb85c' : '#e05c5c' }}>{fmt(leftOver)}</span>
-            </div>
-          </div>
+  function update(name, delta) {
+    setCounts(prev => {
+      const next = { ...prev, [name]: Math.max(0, (prev[name] || 0) + delta) }
+      localStorage.setItem('coin_counts', JSON.stringify(next))
+      return next
+    })
+  }
 
-          <button className="pc-delete-btn" onClick={() => { onDelete(active.id); setActiveId(null) }}>Delete this paycheck</button>
-        </div>
-      )}
+  function setDirect(name, val) {
+    const n = Math.max(0, parseInt(val) || 0)
+    setCounts(prev => {
+      const next = { ...prev, [name]: n }
+      localStorage.setItem('coin_counts', JSON.stringify(next))
+      return next
+    })
+  }
 
-      {paychecks.length === 0 && <p className="fin-empty">No paychecks added yet. Click "+ Add Paycheck" to start tracking.</p>}
+  function reset() {
+    const empty = {}
+    localStorage.setItem('coin_counts', JSON.stringify(empty))
+    setCounts(empty)
+  }
+
+  const total = COIN_TYPES.reduce((s, c) => s + (counts[c.name] || 0) * c.value, 0)
+
+  return (
+    <div className="fin-content">
+      <div className="fin-toolbar">
+        <span className="fin-toolbar-label">Coin counter</span>
+        <span className="coins-total-badge">{fmt(total)}</span>
+        <button className="fin-cancel" onClick={reset}>Reset</button>
+      </div>
+      <div className="coins-table-wrap">
+        <table className="coins-table">
+          <thead>
+            <tr>
+              <th>Coin</th>
+              <th>Value</th>
+              <th>Count</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {COIN_TYPES.map(coin => (
+              <tr key={coin.name} className="coins-row">
+                <td className="coins-td-name">{coin.name}</td>
+                <td className="coins-td-val">{coin.symbol}</td>
+                <td className="coins-td-count">
+                  <button className="coins-btn" onClick={() => update(coin.name, -1)}>−</button>
+                  <input
+                    className="coins-input"
+                    type="number" min="0"
+                    value={counts[coin.name] || 0}
+                    onChange={e => setDirect(coin.name, e.target.value)}
+                  />
+                  <button className="coins-btn" onClick={() => update(coin.name, 1)}>+</button>
+                </td>
+                <td className="coins-td-sub">{fmt((counts[coin.name] || 0) * coin.value)}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="coins-total-row">
+              <td colSpan={3} className="coins-td-total-label">Total</td>
+              <td className="coins-td-total">{fmt(total)}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   )
 }
