@@ -1,6 +1,6 @@
 .app {
   display: grid;
-  grid-template-columns: 280px 1fr 260px;
+  grid-template-columns: 260px 1fr;
   height: 100vh;
   overflow: hidden;
   background: #f5f4f0;
