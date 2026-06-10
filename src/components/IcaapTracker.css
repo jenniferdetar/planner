@@ -837,6 +837,12 @@
   flex-shrink: 0;
 }
 
+.dash-stat-spacer {
+  width: 35%;
+  flex-shrink: 0;
+  border-right: 1px solid #f0ede6;
+}
+
 .dash-stat {
   flex: 1;
   display: flex;

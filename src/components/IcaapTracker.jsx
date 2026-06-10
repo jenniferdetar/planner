@@ -686,6 +686,7 @@ function IcaapDashboard() {
       </div>
 
       <div className="dash-summary">
+        <div className="dash-stat-spacer" />
         <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#4a90d9' }}>{submitted}/{total}</span><span className="dash-stat-lbl">Hours Worked</span></div>
         <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#9b59b6' }}>{paylogged}/{total}</span><span className="dash-stat-lbl">Paylog Submitted</span></div>
         <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#5cb85c' }}>{approved}/{total}</span><span className="dash-stat-lbl">Approved</span></div>
