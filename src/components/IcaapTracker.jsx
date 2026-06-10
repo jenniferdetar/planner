@@ -649,7 +649,7 @@ function IcaapDashboard() {
             >{m.label}</button>
           ))}
         </div>
-        <div className="dash-toolbar-right">
+        <div className="dash-toolbar-bottom-row">
           <input
             className="dash-search"
             placeholder="Search employee…"
