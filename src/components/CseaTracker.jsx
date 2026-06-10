@@ -312,13 +312,6 @@ function InteractionCard({ interaction: i, onUpdate, workLocations }) {
   return (
     <div className="interaction-card interaction-card-editable">
       <div className="interaction-header">
-        <input
-          className="interaction-field interaction-name-input"
-          value={form.member_name}
-          onChange={e => handleChange('member_name', e.target.value)}
-          onBlur={handleBlur}
-          placeholder="Member name"
-        />
         <select
           className="interaction-field interaction-cat-select"
           value={form.category}
@@ -326,6 +319,15 @@ function InteractionCard({ interaction: i, onUpdate, workLocations }) {
           onBlur={handleBlur}
         >
           {INTERACTION_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+        <select
+          className="interaction-field interaction-loc-select interaction-loc-inline"
+          value={form.work_location}
+          onChange={e => handleChange('work_location', e.target.value)}
+          onBlur={handleBlur}
+        >
+          <option value="">📍 Location</option>
+          {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
         </select>
         <input
           className="interaction-field interaction-date-input"
@@ -335,15 +337,6 @@ function InteractionCard({ interaction: i, onUpdate, workLocations }) {
           onBlur={handleBlur}
         />
       </div>
-      <select
-        className="interaction-field interaction-loc-select"
-        value={form.work_location}
-        onChange={e => handleChange('work_location', e.target.value)}
-        onBlur={handleBlur}
-      >
-        <option value="">📍 Work location</option>
-        {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
-      </select>
       <textarea
         className="interaction-field interaction-disc-textarea"
         value={form.discussion}
