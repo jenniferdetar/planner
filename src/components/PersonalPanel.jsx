@@ -1,6 +1,6 @@
 import './PersonalPanel.css'
 
-const SHEET_EMBED_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQw-kXg2P4HWAlxsvx8c9h4HWNTBSx7M1_r-ZJQsxAOHMcUPZK3OMcrB85LOBOoXHePzf5D0pYLgSlF/pubhtml?widget=true&headers=false'
+const SHEET_EMBED_URL = 'https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/edit?usp=sharing&rm=minimal'
 
 export default function PersonalPanel() {
   return (
