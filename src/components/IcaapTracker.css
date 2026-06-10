@@ -906,7 +906,7 @@
 
 .dash-tr:nth-child(even) .dash-td-name,
 .dash-tr:nth-child(even) .dash-cell {
-  background: #ede9e0;
+  background: #ddd8cc;
 }
 
 .dash-done {
