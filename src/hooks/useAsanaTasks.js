@@ -67,10 +67,10 @@ export function useAsanaTasks() {
 
   async function completeTask(id) {
     const gid = id.replace('asana_', '')
-    await completeAsanaTask(token, gid)
     setAllTasks(prev => prev.filter(t => t.gid !== gid))
     setMasterTasks(prev => prev.filter(t => t.id !== id))
     setTodayTasks(prev => prev.filter(t => t.id !== id))
+    completeAsanaTask(token, gid).catch(err => console.error('Asana complete failed:', err))
   }
 
   async function updateTaskNotes(id, notes) {
