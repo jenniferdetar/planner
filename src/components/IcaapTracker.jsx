@@ -281,101 +281,136 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
 const ATTENDANCE_STATUSES = ['Present', 'Absent', 'Excused']
 const ATTENDANCE_STATUS_COLORS = { Present: '#5cb85c', Absent: '#e05c5c', Excused: '#f0a040' }
 
+function getWeekDates(anchorDate) {
+  const d = new Date(anchorDate + 'T12:00:00')
+  const day = d.getDay() // 0=Sun
+  const monday = new Date(d)
+  monday.setDate(d.getDate() - (day === 0 ? 6 : day - 1))
+  return Array.from({ length: 5 }, (_, i) => {
+    const dd = new Date(monday)
+    dd.setDate(monday.getDate() + i)
+    return dd.toISOString().split('T')[0]
+  })
+}
+
+function fmtWeekDay(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00')
+  return { day: d.toLocaleDateString('en-US', { weekday: 'short' }), date: d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' }) }
+}
+
 function AttendancePanel({ date, onDateChange, records, onUpsert, onUpdateNotes }) {
-  const presentCount = ATTENDANCE_MEMBERS.filter(m => {
-    const r = records.find(r => r.meeting_date === date && r.member_name === m)
-    return !r || r.status === 'Present'
-  }).length
+  const weekDates = getWeekDates(date)
+
+  function prevWeek() {
+    const d = new Date(weekDates[0] + 'T12:00:00')
+    d.setDate(d.getDate() - 7)
+    onDateChange(d.toISOString().split('T')[0])
+  }
+  function nextWeek() {
+    const d = new Date(weekDates[0] + 'T12:00:00')
+    d.setDate(d.getDate() + 7)
+    onDateChange(d.toISOString().split('T')[0])
+  }
+
+  const weekLabel = (() => {
+    const s = new Date(weekDates[0] + 'T12:00:00')
+    const e = new Date(weekDates[4] + 'T12:00:00')
+    return `${s.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${e.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+  })()
 
   return (
     <div className="attendance-panel">
-      <div className="attendance-header">
-        <div className="attendance-date-row">
-          <label className="attendance-date-label">Meeting date</label>
-          <input
-            type="date"
-            value={date}
-            onChange={e => onDateChange(e.target.value)}
-            className="attendance-date-input"
-          />
-        </div>
-        <div className="attendance-summary">
-          <span className="attendance-present-count" style={{ color: '#5cb85c' }}>{presentCount}</span>
-          <span className="attendance-summary-label">/ {ATTENDANCE_MEMBERS.length} present</span>
-        </div>
+      <div className="att-week-nav">
+        <button className="att-week-btn" onClick={prevWeek}>‹</button>
+        <span className="att-week-label">{weekLabel}</span>
+        <button className="att-week-btn" onClick={nextWeek}>›</button>
       </div>
-      <div className="attendance-list">
-        {ATTENDANCE_MEMBERS.map(member => {
-          const record = records.find(r => r.meeting_date === date && r.member_name === member)
-          const status = record?.status ?? 'Present'
-          const notes = record?.notes ?? ''
-          return (
-            <AttendanceMemberRow
-              key={member}
-              member={member}
-              status={status}
-              notes={notes}
-              onStatusChange={s => onUpsert?.(date, member, s, record?.notes ?? null)}
-              onNotesChange={n => onUpdateNotes?.(date, member, n)}
-            />
-          )
-        })}
+      <div className="att-table-wrap">
+        <table className="att-table">
+          <thead>
+            <tr>
+              <th className="att-th-name">Member</th>
+              {weekDates.map(d => {
+                const { day, date: dt } = fmtWeekDay(d)
+                return (
+                  <th key={d} className="att-th-day">
+                    <span className="att-th-weekday">{day}</span>
+                    <span className="att-th-date">{dt}</span>
+                  </th>
+                )
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {ATTENDANCE_MEMBERS.map(member => (
+              <tr key={member} className="att-tr">
+                <td className="att-td-name">{member}</td>
+                {weekDates.map(d => {
+                  const record = records.find(r => r.meeting_date === d && r.member_name === member)
+                  const status = record?.status ?? null
+                  const timeIn = record?.time_in ?? ''
+                  return (
+                    <AttendanceCell
+                      key={d}
+                      status={status}
+                      timeIn={timeIn}
+                      onStatusChange={s => onUpsert?.(d, member, s, record?.notes ?? null, record?.time_in ?? null)}
+                      onTimeChange={t => onUpsert?.(d, member, record?.status ?? 'Present', record?.notes ?? null, t)}
+                    />
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   )
 }
 
-function AttendanceMemberRow({ member, status, notes, onStatusChange, onNotesChange }) {
-  const [expanded, setExpanded] = useState(false)
-  const [notesText, setNotesText] = useState(notes)
-  const saveTimer = useRef(null)
+function AttendanceCell({ status, timeIn, onStatusChange, onTimeChange }) {
+  const [editingTime, setEditingTime] = useState(false)
+  const [timeVal, setTimeVal] = useState(timeIn)
+  const timer = useRef(null)
 
-  // Sync notes when date changes
-  if (notesText !== notes && !saveTimer.current) {
-    setNotesText(notes)
+  if (timeVal !== timeIn && !timer.current) setTimeVal(timeIn)
+
+  function handleTimeBlur() {
+    setEditingTime(false)
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => { onTimeChange(timeVal); timer.current = null }, 0)
   }
 
-  function handleNotesChange(e) {
-    const val = e.target.value
-    setNotesText(val)
-    clearTimeout(saveTimer.current)
-    saveTimer.current = setTimeout(() => {
-      onNotesChange?.(val)
-      saveTimer.current = null
-    }, 800)
-  }
+  const COLOR = { Present: '#5cb85c', Absent: '#e05c5c', Excused: '#f0a040' }
+  const next = { Present: 'Absent', Absent: 'Excused', Excused: 'Present', null: 'Present' }
 
   return (
-    <div className={`attendance-row ${status === 'Absent' ? 'absent' : ''}`}>
-      <div className="attendance-row-main">
-        <span className="attendance-member-name">{member}</span>
-        <div className="attendance-status-btns">
-          {ATTENDANCE_STATUSES.map(s => (
-            <button
-              key={s}
-              className={`att-status-btn ${status === s ? 'active' : ''}`}
-              style={{ '--ac': ATTENDANCE_STATUS_COLORS[s] }}
-              onClick={() => onStatusChange(s)}
-            >{s}</button>
-          ))}
-        </div>
-        <button
-          className={`att-notes-btn ${notes ? 'has-notes' : ''} ${expanded ? 'open' : ''}`}
-          onClick={() => setExpanded(e => !e)}
-          title="Notes"
-        >≡</button>
-      </div>
-      {expanded && (
-        <textarea
-          className="att-notes-input"
-          placeholder="Notes for this member…"
-          value={notesText}
-          onChange={handleNotesChange}
-          rows={2}
-          autoFocus
-        />
+    <td className={`att-td-cell ${status ? status.toLowerCase() : 'empty'}`}>
+      <button
+        className="att-cell-status"
+        style={status ? { background: COLOR[status], color: '#fff' } : {}}
+        onClick={() => onStatusChange(next[status] ?? 'Present')}
+        title="Click to change"
+      >
+        {status ?? '—'}
+      </button>
+      {status && status !== 'Absent' && (
+        editingTime ? (
+          <input
+            className="att-time-input"
+            type="time"
+            value={timeVal}
+            onChange={e => setTimeVal(e.target.value)}
+            onBlur={handleTimeBlur}
+            autoFocus
+          />
+        ) : (
+          <button className="att-time-btn" onClick={() => setEditingTime(true)}>
+            {timeIn || '+ time'}
+          </button>
+        )
       )}
-    </div>
+    </td>
   )
 }
 
