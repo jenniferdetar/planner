@@ -249,10 +249,37 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
 
           <div className="csea-issue-list">
             {interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
-            {interactions.map(i => (
-              <InteractionCard key={i.id} interaction={i} onUpdate={onUpdateInteraction} workLocations={workLocations} />
+            {Object.entries(
+              interactions.reduce((groups, i) => {
+                const key = i.member_name || 'Unknown'
+                if (!groups[key]) groups[key] = []
+                groups[key].push(i)
+                return groups
+              }, {})
+            ).map(([member, items]) => (
+              <MemberInteractionGroup key={member} member={member} items={items} onUpdate={onUpdateInteraction} workLocations={workLocations} />
             ))}
           </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
+  const [collapsed, setCollapsed] = useState(false)
+  return (
+    <div className="interaction-group">
+      <button className="interaction-group-header" onClick={() => setCollapsed(c => !c)}>
+        <span className="interaction-group-name">{member}</span>
+        <span className="interaction-group-count">{items.length}</span>
+        <span className="interaction-group-chevron">{collapsed ? '▸' : '▾'}</span>
+      </button>
+      {!collapsed && (
+        <div className="interaction-group-items">
+          {items.map(i => (
+            <InteractionCard key={i.id} interaction={i} onUpdate={onUpdate} workLocations={workLocations} />
+          ))}
         </div>
       )}
     </div>

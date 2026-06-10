@@ -393,6 +393,56 @@
   border-color: #e05c5c;
 }
 
+/* Interaction groups */
+.interaction-group {
+  border: 1px solid #e8e5de;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.interaction-group-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f7f5f1;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.interaction-group-header:hover {
+  background: #f0ece5;
+}
+
+.interaction-group-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.interaction-group-count {
+  font-size: 11px;
+  font-weight: 600;
+  background: #e8f0fc;
+  color: #4a90d9;
+  padding: 1px 7px;
+  border-radius: 20px;
+}
+
+.interaction-group-chevron {
+  font-size: 11px;
+  color: #999;
+}
+
+.interaction-group-items .interaction-card {
+  border: none;
+  border-top: 1px solid #f0ece5;
+  border-radius: 0;
+}
+
 /* Interactions */
 .interaction-card {
   background: #fff;
