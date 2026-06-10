@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
+import { useIcaapDashboard, DASHBOARD_MONTHS } from '../hooks/useIcaapDashboard'
 
 const CATEGORIES = ['Task', 'Meeting', 'Research', 'Review', 'Report', 'Follow-up', 'Other']
 const PRIORITIES = ['Low', 'Medium', 'High']
@@ -51,7 +52,7 @@ async function getFirstWorkspace(token) {
 }
 
 export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
-  const [tab, setTab] = useState('list')
+  const [tab, setTab] = useState('dashboard')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
@@ -139,10 +140,14 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
 
       {/* Sub-tabs */}
       <div className="icaap-tabs">
+        <button className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
         <button className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>List</button>
         <button className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
       </div>
+
+      {/* Dashboard tab */}
+      {tab === 'dashboard' && <IcaapDashboard />}
 
       {/* Asana tab */}
       {tab === 'asana' && (
@@ -474,6 +479,88 @@ function ItemCard({ item, onUpdateItem, onDeleteItem, onPushToAsana, pushing, pu
               <button className="icaap-delete-btn" onClick={() => onDeleteItem(item.id)}>Delete</button>
             </div>
           </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── iCAAP Dashboard ───────────────────────────────────────────────────────────
+
+const CURRENT_MONTH = (() => {
+  const keys = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  return keys[new Date().getMonth()]
+})()
+
+function IcaapDashboard() {
+  const { rows, loading } = useIcaapDashboard()
+  const [selectedMonth, setSelectedMonth] = useState(CURRENT_MONTH)
+  const [search, setSearch] = useState('')
+
+  const month = DASHBOARD_MONTHS.find(m => m.key === selectedMonth)
+  const filtered = rows.filter(r => r.name.toLowerCase().includes(search.toLowerCase()))
+
+  const submitted = filtered.filter(r => !!r.hw[month?.key]).length
+  const paylogged = filtered.filter(r => !!r.ps[month?.paylogKey]).length
+  const approved  = filtered.filter(r => !!r.ad[month?.key]).length
+  const total = filtered.length
+
+  return (
+    <div className="dash-panel">
+      <div className="dash-toolbar">
+        <div className="dash-month-pills">
+          {DASHBOARD_MONTHS.map(m => (
+            <button
+              key={m.key}
+              className={`dash-month-pill ${selectedMonth === m.key ? 'active' : ''}`}
+              onClick={() => setSelectedMonth(m.key)}
+            >{m.label}</button>
+          ))}
+        </div>
+        <input
+          className="dash-search"
+          placeholder="Search employee…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+      </div>
+
+      <div className="dash-summary">
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#4a90d9' }}>{submitted}/{total}</span><span className="dash-stat-lbl">Hours Worked</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#9b59b6' }}>{paylogged}/{total}</span><span className="dash-stat-lbl">Paylog Submitted</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#5cb85c' }}>{approved}/{total}</span><span className="dash-stat-lbl">Approved</span></div>
+      </div>
+
+      {loading ? (
+        <p className="icaap-empty">Loading…</p>
+      ) : (
+        <div className="dash-table-wrap">
+          <table className="dash-table">
+            <thead>
+              <tr>
+                <th className="dash-th-name">Employee</th>
+                <th className="dash-th" style={{ color: '#4a90d9' }}>Hours Worked</th>
+                <th className="dash-th" style={{ color: '#9b59b6' }}>Paylog Submitted</th>
+                <th className="dash-th" style={{ color: '#5cb85c' }}>Approved</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(r => (
+                <tr key={r.name}>
+                  <td className="dash-td-name">{r.name}</td>
+                  <td className={`dash-cell ${r.hw[month?.key] ? 'dash-done' : 'dash-missing'}`}>
+                    {r.hw[month?.key] || '—'}
+                  </td>
+                  <td className={`dash-cell ${r.ps[month?.paylogKey] ? 'dash-done' : 'dash-missing'}`}>
+                    {r.ps[month?.paylogKey] || '—'}
+                  </td>
+                  <td className={`dash-cell ${r.ad[month?.key] ? 'dash-done' : 'dash-missing'}`}>
+                    {r.ad[month?.key] || '—'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

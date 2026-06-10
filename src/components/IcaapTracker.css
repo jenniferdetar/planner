@@ -768,3 +768,140 @@
     padding: 3px 7px;
   }
 }
+
+/* ── Dashboard ── */
+.dash-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dash-toolbar {
+  padding: 10px 16px 8px;
+  background: #fff;
+  border-bottom: 1px solid #e8e5de;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.dash-month-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.dash-month-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid #e0ddd7;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dash-month-pill.active {
+  background: #1a1a2e;
+  color: #fff;
+  border-color: #1a1a2e;
+}
+
+.dash-search {
+  padding: 6px 10px;
+  border: 1px solid #e8e5de;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  width: 200px;
+  align-self: flex-end;
+}
+
+.dash-search:focus { border-color: #c9a96e; }
+
+.dash-summary {
+  display: flex;
+  border-bottom: 1px solid #e8e5de;
+  background: #faf9f6;
+  flex-shrink: 0;
+}
+
+.dash-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px;
+  border-right: 1px solid #f0ede6;
+}
+
+.dash-stat:last-child { border-right: none; }
+
+.dash-stat-num {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dash-stat-lbl {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-top: 3px;
+}
+
+.dash-table-wrap {
+  flex: 1;
+  overflow: auto;
+}
+
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.dash-th-name, .dash-th {
+  position: sticky;
+  top: 0;
+  background: #f5f4f0;
+  padding: 7px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e8e5de;
+  z-index: 1;
+}
+
+.dash-th-name { text-align: left; width: 35%; }
+.dash-th { text-align: center; width: 21.6%; }
+
+.dash-td-name {
+  padding: 5px 12px;
+  font-size: 12px;
+  color: #333;
+  border-bottom: 1px solid #f0ede6;
+}
+
+.dash-cell {
+  padding: 5px 12px;
+  text-align: center;
+  border-bottom: 1px solid #f0ede6;
+  font-size: 11px;
+}
+
+.dash-done {
+  color: #5cb85c;
+  font-weight: 600;
+}
+
+.dash-missing {
+  color: #ddd;
+}
