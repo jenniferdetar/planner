@@ -71,14 +71,13 @@ export function useIcaapDashboard() {
 
   // Import parsed CSV rows: [{ name, monthCol, dateValue }]
   async function importPaylogRows(parsedRows) {
-    const errors = []
-    for (const { name, monthCol, dateValue } of parsedRows) {
-      const { error } = await supabase
-        .from('paylog submission')
-        .update({ [monthCol]: dateValue })
-        .eq('Employee Name', name)
-      if (error) errors.push({ name, error: error.message })
-    }
+    const results = await Promise.all(
+      parsedRows.map(({ name, monthCol, dateValue }) =>
+        supabase.from('paylog submission').update({ [monthCol]: dateValue }).eq('Employee Name', name)
+          .then(({ error }) => error ? { name, error: error.message } : null)
+      )
+    )
+    const errors = results.filter(Boolean)
     await fetchAll()
     return errors
   }
