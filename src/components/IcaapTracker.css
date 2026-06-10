@@ -623,160 +623,131 @@
 /* Attendance */
 .attendance-panel {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-.attendance-header {
+.att-week-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 14px 24px;
+  gap: 12px;
+  padding: 10px 16px;
   background: #fff;
   border-bottom: 1px solid #e8e5de;
   flex-shrink: 0;
-  gap: 16px;
-  flex-wrap: wrap;
 }
 
-.attendance-date-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.attendance-date-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #bbb;
-}
-
-.attendance-date-input {
-  font-size: 13px;
-  padding: 5px 10px;
-  border: 1px solid #e8e5de;
+.att-week-btn {
+  font-size: 18px;
+  color: #888;
+  background: none;
+  border: 1px solid #e0ddd7;
   border-radius: 6px;
-  color: #333;
-  font-family: inherit;
-  outline: none;
-}
-
-.attendance-date-input:focus {
-  border-color: #9b59b6;
-}
-
-.attendance-summary {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-}
-
-.attendance-present-count {
-  font-size: 28px;
-  font-weight: 700;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
   line-height: 1;
 }
+.att-week-btn:hover { background: #f0ede6; color: #333; }
 
-.attendance-summary-label {
-  font-size: 13px;
-  color: #aaa;
-}
-
-.attendance-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.attendance-row {
-  background: #fff;
-  border: 1px solid #e8e5de;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.attendance-row.absent {
-  opacity: 0.7;
-}
-
-.attendance-row-main {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-}
-
-.attendance-member-name {
-  flex: 1;
+.att-week-label {
   font-size: 13px;
   font-weight: 600;
   color: #1a1a2e;
 }
 
-.attendance-status-btns {
-  display: flex;
-  gap: 4px;
-  flex-shrink: 0;
+.att-table-wrap {
+  flex: 1;
+  overflow: auto;
 }
 
-.att-status-btn {
-  font-size: 11px;
-  padding: 4px 9px;
-  border-radius: 20px;
-  border: 1px solid var(--ac);
-  color: var(--ac);
-  opacity: 0.45;
-  cursor: pointer;
-  transition: opacity 0.15s, background 0.15s;
-  font-weight: 600;
-}
-
-.att-status-btn.active {
-  opacity: 1;
-  background: var(--ac);
-  color: #fff;
-}
-
-.att-notes-btn {
-  font-size: 14px;
-  color: #ccc;
-  padding: 3px 6px;
-  border: 1px solid #e8e5de;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: color 0.15s;
-  flex-shrink: 0;
-}
-
-.att-notes-btn.has-notes {
-  color: #9b59b6;
-  border-color: #9b59b6;
-}
-
-.att-notes-btn.open {
-  background: #f5f0fa;
-}
-
-.att-notes-input {
+.att-table {
   width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.att-th-name {
+  position: sticky; left: 0; z-index: 2;
+  background: #1a1a2e; color: #fff;
+  text-align: left; padding: 8px 14px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
+  min-width: 160px;
+  border-right: 2px solid #333;
+}
+
+.att-th-day {
+  background: #1a1a2e; color: #c9a96e;
+  text-align: center; padding: 6px 10px;
+  min-width: 110px;
+  border-right: 1px solid #333;
+}
+.att-th-weekday { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+.att-th-date    { display: block; font-size: 10px; font-weight: 400; color: #aaa; margin-top: 1px; }
+
+.att-tr:nth-child(even) .att-td-name { background: #faf9f6; }
+.att-tr:nth-child(even) .att-td-cell { background: #faf9f6; }
+
+.att-td-name {
+  position: sticky; left: 0; z-index: 1;
+  background: #fff;
   padding: 8px 14px;
+  font-size: 13px; font-weight: 600; color: #1a1a2e;
+  border-right: 2px solid #e8e5de;
+  border-bottom: 1px solid #f0ede6;
+  white-space: nowrap;
+}
+
+.att-td-cell {
+  text-align: center;
+  padding: 6px 8px;
+  border-right: 1px solid #f0ede6;
+  border-bottom: 1px solid #f0ede6;
+  vertical-align: middle;
+}
+.att-td-cell.present { background: #f0faf0; }
+.att-td-cell.absent  { background: #fdf2f2; }
+.att-td-cell.excused { background: #fffaf0; }
+
+.att-cell-status {
+  display: block;
+  width: 100%;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 6px;
+  border-radius: 12px;
   border: none;
-  border-top: 1px solid #f0ede8;
-  font-size: 12px;
-  color: #555;
+  background: #eee; color: #999;
+  cursor: pointer;
+  transition: background 0.1s;
+  white-space: nowrap;
+}
+.att-cell-status:hover { filter: brightness(0.93); }
+
+.att-time-btn {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 10px;
+  color: #aaa;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.att-time-btn:hover { color: #9b59b6; }
+
+.att-time-input {
+  display: block;
+  width: 90px;
+  margin: 4px auto 0;
+  font-size: 11px;
+  padding: 2px 4px;
+  border: 1px solid #9b59b6;
+  border-radius: 4px;
+  text-align: center;
   font-family: inherit;
-  resize: none;
-  outline: none;
-  line-height: 1.5;
-  background: #faf9f6;
-  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
