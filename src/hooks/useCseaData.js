@@ -39,6 +39,7 @@ export function useWorkLocations() {
       .from('school directory')
       .select('"School Name"')
       .order('"School Name"')
+      .limit(2000)
       .then(({ data }) => setLocations((data || []).map(r => r['School Name'])))
   }, [])
   return locations
