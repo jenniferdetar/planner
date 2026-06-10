@@ -558,7 +558,7 @@
   position: sticky;
   top: 0;
   background: #f5f4f0;
-  padding: 8px 10px;
+  padding: 5px 10px;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.8px;
@@ -574,7 +574,7 @@
 .goals-th-col.mo6 { color: #5cb85c; }
 
 .goals-name {
-  padding: 7px 10px;
+  padding: 4px 10px;
   font-size: 12px;
   color: #333;
   border-bottom: 1px solid #f0ede6;
@@ -582,7 +582,7 @@
 }
 
 .goals-cell {
-  padding: 6px 10px;
+  padding: 4px 10px;
   text-align: center;
   border-bottom: 1px solid #f0ede6;
   cursor: pointer;
@@ -606,7 +606,7 @@
   font-size: 10px;
   color: #bbb;
   line-height: 1.2;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .goals-bar {
