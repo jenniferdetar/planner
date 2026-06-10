@@ -14,7 +14,6 @@ import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
-import RightPanel from './components/RightPanel'
 import LoginScreen from './components/LoginScreen'
 import './App.css'
 
@@ -285,21 +284,6 @@ export default function App() {
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
-        <RightPanel
-          selectedDate={selectedDate}
-          onDateChange={setSelectedDate}
-          taskCounts={taskCounts}
-          dailyTasks={dailyTasks}
-          onToggleTask={handleToggleDailyTask}
-          timeBlocks={allTimeBlocks}
-          noteContent={noteContent}
-          onNoteChange={onNoteChange}
-          calAuthExpired={calAuthExpired}
-          onReconnectGoogle={reconnectGoogle}
-          asanaTasks={asanaTasks}
-          onCompleteAsanaTask={completeAsanaTask}
-          onRefreshAsana={refreshAsana}
-        />
       </div>
       {isMobile && (
         <nav className="mobile-nav">
@@ -310,10 +294,6 @@ export default function App() {
           <button className={`mobile-nav-btn${mobilePanel === 'main' ? ' active' : ''}`} onClick={() => setMobilePanel('main')}>
             <span className="mobile-nav-icon">📅</span>
             Planner
-          </button>
-          <button className={`mobile-nav-btn${mobilePanel === 'right' ? ' active' : ''}`} onClick={() => setMobilePanel('right')}>
-            <span className="mobile-nav-icon">◆</span>
-            Summary
           </button>
         </nav>
       )}
