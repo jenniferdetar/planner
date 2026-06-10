@@ -537,7 +537,8 @@ function parsePaylogCSV(text) {
     if (!name || !monthRaw) { skipped.push(i + 1); continue }
     const monthCol = normalizePaylogMonth(monthRaw)
     if (!monthCol) { skipped.push(i + 1); continue }
-    parsed.push({ name, monthCol, dateValue, monthRaw })
+    const properName = name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+    parsed.push({ name: properName, monthCol, dateValue, monthRaw })
   }
   return { parsed, skipped }
 }
