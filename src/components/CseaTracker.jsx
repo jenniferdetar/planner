@@ -260,63 +260,78 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
 }
 
 function InteractionCard({ interaction: i, onUpdate, workLocations }) {
-  const [editing, setEditing] = useState(false)
   const [form, setForm] = useState({
     category: i.category, member_name: i.member_name, work_location: i.work_location || '',
     date_spoke: i.date_spoke, discussion: i.discussion || '', who_involved: i.who_involved || '',
   })
+  const saveTimer = useRef(null)
 
-  async function handleSave(e) {
-    e.preventDefault()
-    await onUpdate(i.id, form)
-    setEditing(false)
+  function scheduleUpdate(updated) {
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => onUpdate?.(i.id, updated), 800)
   }
 
-  if (editing) {
-    return (
-      <form className="csea-form interaction-edit-form" onSubmit={handleSave}>
-        <div className="csea-form-row">
-          <div className="csea-type-btns">
-            {INTERACTION_CATEGORIES.map(c => (
-              <button key={c} type="button"
-                className={`type-btn ${form.category === c ? 'active' : ''}`}
-                style={{ '--tc': '#4a90d9' }}
-                onClick={() => setForm(f => ({ ...f, category: c }))}
-              >{c}</button>
-            ))}
-          </div>
-        </div>
-        <MemberSearch value={form.member_name} onChange={v => setForm(f => ({ ...f, member_name: v }))} />
-        <select className="csea-input" value={form.work_location}
-          onChange={e => setForm(f => ({ ...f, work_location: e.target.value }))}>
-          <option value="">Work location</option>
-          {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
-        </select>
-        <input className="csea-input" type="date" value={form.date_spoke}
-          onChange={e => setForm(f => ({ ...f, date_spoke: e.target.value }))} />
-        <textarea className="csea-textarea" placeholder="What was discussed?" rows={3} value={form.discussion}
-          onChange={e => setForm(f => ({ ...f, discussion: e.target.value }))} />
-        <input className="csea-input" placeholder="Others involved" value={form.who_involved}
-          onChange={e => setForm(f => ({ ...f, who_involved: e.target.value }))} />
-        <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
-          <button type="button" className="csea-cancel" onClick={() => setEditing(false)}>Cancel</button>
-          <button type="submit" className="csea-save">Save</button>
-        </div>
-      </form>
-    )
+  function handleChange(field, value) {
+    const updated = { ...form, [field]: value }
+    setForm(updated)
+    scheduleUpdate(updated)
+  }
+
+  function handleBlur() {
+    clearTimeout(saveTimer.current)
+    onUpdate?.(i.id, form)
   }
 
   return (
-    <div className="interaction-card">
+    <div className="interaction-card interaction-card-editable">
       <div className="interaction-header">
-        <span className="interaction-name">{i.member_name}</span>
-        <span className="interaction-cat">{i.category}</span>
-        <span className="interaction-date">{i.date_spoke}</span>
-        <button className="interaction-edit-btn" onClick={() => setEditing(true)}>Edit</button>
+        <input
+          className="interaction-field interaction-name-input"
+          value={form.member_name}
+          onChange={e => handleChange('member_name', e.target.value)}
+          onBlur={handleBlur}
+          placeholder="Member name"
+        />
+        <select
+          className="interaction-field interaction-cat-select"
+          value={form.category}
+          onChange={e => handleChange('category', e.target.value)}
+          onBlur={handleBlur}
+        >
+          {INTERACTION_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+        <input
+          className="interaction-field interaction-date-input"
+          type="date"
+          value={form.date_spoke}
+          onChange={e => handleChange('date_spoke', e.target.value)}
+          onBlur={handleBlur}
+        />
       </div>
-      {i.work_location && <div className="interaction-loc">📍 {i.work_location}</div>}
-      {i.discussion && <div className="interaction-disc">{i.discussion}</div>}
-      {i.who_involved && <div className="interaction-who">With: {i.who_involved}</div>}
+      <select
+        className="interaction-field interaction-loc-select"
+        value={form.work_location}
+        onChange={e => handleChange('work_location', e.target.value)}
+        onBlur={handleBlur}
+      >
+        <option value="">📍 Work location</option>
+        {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+      </select>
+      <textarea
+        className="interaction-field interaction-disc-textarea"
+        value={form.discussion}
+        onChange={e => handleChange('discussion', e.target.value)}
+        onBlur={handleBlur}
+        placeholder="What was discussed?"
+        rows={2}
+      />
+      <input
+        className="interaction-field interaction-who-input"
+        value={form.who_involved}
+        onChange={e => handleChange('who_involved', e.target.value)}
+        onBlur={handleBlur}
+        placeholder="Others involved"
+      />
     </div>
   )
 }

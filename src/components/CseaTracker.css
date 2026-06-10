@@ -410,64 +410,83 @@
   gap: 8px;
 }
 
-.interaction-name {
+/* Shared style for all inline editable fields */
+.interaction-field {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.interaction-field:hover {
+  border-color: #ddd;
+  background: #fafafa;
+}
+
+.interaction-field:focus {
+  border-color: #4a90d9;
+  background: #fff;
+}
+
+.interaction-name-input {
   font-size: 13px;
   font-weight: 600;
   color: #333;
   flex: 1;
+  min-width: 0;
+  padding: 2px 5px;
 }
 
-.interaction-cat {
+.interaction-cat-select {
   font-size: 10px;
   font-weight: 600;
-  background: #e8f0fc;
   color: #4a90d9;
-  padding: 2px 7px;
+  background: #e8f0fc;
   border-radius: 20px;
+  padding: 2px 7px;
+  cursor: pointer;
+  width: auto;
+  flex-shrink: 0;
 }
 
-.interaction-date {
+.interaction-cat-select:hover,
+.interaction-cat-select:focus {
+  border-color: #4a90d9;
+  background: #d8e8f8;
+}
+
+.interaction-date-input {
   font-size: 11px;
-  color: #bbb;
+  color: #888;
+  padding: 2px 4px;
+  width: auto;
+  flex-shrink: 0;
 }
 
-.interaction-loc {
+.interaction-loc-select {
   font-size: 12px;
   color: #888;
+  padding: 2px 5px;
+  cursor: pointer;
 }
 
-.interaction-disc {
+.interaction-disc-textarea {
   font-size: 13px;
   color: #555;
   line-height: 1.5;
+  resize: vertical;
+  padding: 3px 5px;
 }
 
-.interaction-who {
+.interaction-who-input {
   font-size: 12px;
   color: #999;
   font-style: italic;
-}
-
-.interaction-edit-btn {
-  font-size: 11px;
-  color: #4a90d9;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-
-.interaction-card:hover .interaction-edit-btn {
-  opacity: 1;
-}
-
-.interaction-edit-form {
-  border: 1px solid #d0e4f7;
-  border-radius: 10px;
-  background: #f8fbff;
+  padding: 2px 5px;
 }
 
 .csea-tab-badge {
