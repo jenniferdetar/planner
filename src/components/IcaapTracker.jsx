@@ -706,7 +706,7 @@ function IcaapDashboard() {
             </thead>
             <tbody>
               {filtered.map(r => (
-                <tr key={r.name}>
+                <tr key={r.name} className="dash-tr">
                   <td className="dash-td-name">{r.name}</td>
                   <td className={`dash-cell ${r.hw[month?.key] ? 'dash-done' : 'dash-missing'}`}>
                     {r.hw[month?.key] || '—'}
