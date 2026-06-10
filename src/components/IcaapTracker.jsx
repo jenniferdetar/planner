@@ -494,22 +494,46 @@ const CURRENT_MONTH = (() => {
 
 function parsePaylogCSV(text) {
   const lines = text.trim().split('\n').filter(l => l.trim())
-  // Skip header row if first cell looks like a header
-  const start = lines[0]?.toLowerCase().includes('id') || lines[0]?.toLowerCase().includes('start') ? 1 : 0
+  if (!lines.length) return { parsed: [], skipped: [] }
+
+  // Detect delimiter: tab-separated if first line has tabs
+  const isTab = lines[0].includes('\t')
+  const delim = isTab ? '\t' : ','
+
+  // Skip header row if first cell looks like a header (non-date text)
+  const firstCell = lines[0].split(delim)[0].trim().toLowerCase()
+  const start = /^[a-z]/.test(firstCell) ? 1 : 0
+
   const parsed = []
   const skipped = []
   for (let i = start; i < lines.length; i++) {
-    // Handle quoted CSV fields
-    const cols = []
-    let cur = '', inQuote = false
-    for (const ch of lines[i] + ',') {
-      if (ch === '"') { inQuote = !inQuote }
-      else if (ch === ',' && !inQuote) { cols.push(cur.trim()); cur = '' }
-      else cur += ch
+    let cols
+    if (isTab) {
+      cols = lines[i].split('\t').map(c => c.trim())
+    } else {
+      // Handle quoted CSV fields
+      cols = []
+      let cur = '', inQuote = false
+      for (const ch of lines[i] + ',') {
+        if (ch === '"') { inQuote = !inQuote }
+        else if (ch === ',' && !inQuote) { cols.push(cur.trim()); cur = '' }
+        else cur += ch
+      }
     }
-    const name = cols[4]?.trim()       // Col E
-    const monthRaw = cols[9]?.trim()   // Col J
-    const dateValue = cols[2]?.trim()  // Col C (End Time = submission date)
+
+    let name, monthRaw, dateValue
+    if (isTab && cols.length <= 5) {
+      // 3-column tab format: date | name | month
+      dateValue = cols[0]
+      name = cols[1]
+      monthRaw = cols[2]
+    } else {
+      // Full form CSV export format
+      name = cols[4]       // Col E
+      monthRaw = cols[9]   // Col J
+      dateValue = cols[2]  // Col C
+    }
+
     if (!name || !monthRaw) { skipped.push(i + 1); continue }
     const monthCol = normalizePaylogMonth(monthRaw)
     if (!monthCol) { skipped.push(i + 1); continue }
