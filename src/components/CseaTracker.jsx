@@ -256,7 +256,7 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
                 groups[key].push(i)
                 return groups
               }, {})
-            ).map(([member, items]) => (
+            ).sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
               <MemberInteractionGroup key={member} member={member} items={items} onUpdate={onUpdateInteraction} workLocations={workLocations} />
             ))}
           </div>
@@ -267,14 +267,16 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
 }
 
 function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   return (
     <div className="interaction-group">
-      <button className="interaction-group-header" onClick={() => setCollapsed(c => !c)}>
+      <div className="interaction-group-header">
         <span className="interaction-group-name">{member}</span>
         <span className="interaction-group-count">{items.length}</span>
-        <span className="interaction-group-chevron">{collapsed ? '▸' : '▾'}</span>
-      </button>
+        <button className="interaction-group-toggle" onClick={() => setCollapsed(c => !c)}>
+          {collapsed ? '▾' : '▴'}
+        </button>
+      </div>
       {!collapsed && (
         <div className="interaction-group-items">
           {items.map(i => (
