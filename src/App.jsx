@@ -75,7 +75,7 @@ export default function App() {
   const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
-  const { interactions: cseaInteractions, addInteraction: addCseaInteraction } = useMemberInteractions(userId)
+  const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction } = useMemberInteractions(userId)
   const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
@@ -243,6 +243,7 @@ export default function App() {
           onDeleteCseaIssue={deleteCseaIssue}
           cseaInteractions={cseaInteractions}
           onAddCseaInteraction={addCseaInteraction}
+          onUpdateCseaInteraction={updateCseaInteraction}
           asanaCseaTasks={asanaCseaTasks}
           asanaIcaapTasks={asanaIcaapTasks}
           onCompleteAsanaTask={completeAsanaTask}

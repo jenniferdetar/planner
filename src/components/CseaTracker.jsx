@@ -56,7 +56,7 @@ const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
+export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
   const workLocations = useWorkLocations()
   const [tab, setTab] = useState('issues')
   const [showAddIssue, setShowAddIssue] = useState(false)
@@ -250,20 +250,88 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
           <div className="csea-issue-list">
             {interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
             {interactions.map(i => (
-              <div key={i.id} className="interaction-card">
-                <div className="interaction-header">
-                  <span className="interaction-name">{i.member_name}</span>
-                  <span className="interaction-cat">{i.category}</span>
-                  <span className="interaction-date">{i.date_spoke}</span>
-                </div>
-                {i.work_location && <div className="interaction-loc">📍 {i.work_location}</div>}
-                {i.discussion && <div className="interaction-disc">{i.discussion}</div>}
-                {i.who_involved && <div className="interaction-who">With: {i.who_involved}</div>}
-              </div>
+              <InteractionCard key={i.id} interaction={i} onUpdate={onUpdateInteraction} workLocations={workLocations} />
             ))}
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function InteractionCard({ interaction: i, onUpdate, workLocations }) {
+  const [form, setForm] = useState({
+    category: i.category, member_name: i.member_name, work_location: i.work_location || '',
+    date_spoke: i.date_spoke, discussion: i.discussion || '', who_involved: i.who_involved || '',
+  })
+  const saveTimer = useRef(null)
+
+  function scheduleUpdate(updated) {
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => onUpdate?.(i.id, updated), 800)
+  }
+
+  function handleChange(field, value) {
+    const updated = { ...form, [field]: value }
+    setForm(updated)
+    scheduleUpdate(updated)
+  }
+
+  function handleBlur() {
+    clearTimeout(saveTimer.current)
+    onUpdate?.(i.id, form)
+  }
+
+  return (
+    <div className="interaction-card interaction-card-editable">
+      <div className="interaction-header">
+        <input
+          className="interaction-field interaction-name-input"
+          value={form.member_name}
+          onChange={e => handleChange('member_name', e.target.value)}
+          onBlur={handleBlur}
+          placeholder="Member name"
+        />
+        <select
+          className="interaction-field interaction-cat-select"
+          value={form.category}
+          onChange={e => handleChange('category', e.target.value)}
+          onBlur={handleBlur}
+        >
+          {INTERACTION_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+        <input
+          className="interaction-field interaction-date-input"
+          type="date"
+          value={form.date_spoke}
+          onChange={e => handleChange('date_spoke', e.target.value)}
+          onBlur={handleBlur}
+        />
+      </div>
+      <select
+        className="interaction-field interaction-loc-select"
+        value={form.work_location}
+        onChange={e => handleChange('work_location', e.target.value)}
+        onBlur={handleBlur}
+      >
+        <option value="">📍 Work location</option>
+        {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+      </select>
+      <textarea
+        className="interaction-field interaction-disc-textarea"
+        value={form.discussion}
+        onChange={e => handleChange('discussion', e.target.value)}
+        onBlur={handleBlur}
+        placeholder="What was discussed?"
+        rows={2}
+      />
+      <input
+        className="interaction-field interaction-who-input"
+        value={form.who_involved}
+        onChange={e => handleChange('who_involved', e.target.value)}
+        onBlur={handleBlur}
+        placeholder="Others involved"
+      />
     </div>
   )
 }

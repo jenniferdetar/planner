@@ -39,6 +39,7 @@ export function useWorkLocations() {
       .from('school directory')
       .select('"School Name"')
       .order('"School Name"')
+      .limit(2000)
       .then(({ data }) => setLocations((data || []).map(r => r['School Name'])))
   }, [])
   return locations
@@ -105,5 +106,15 @@ export function useMemberInteractions(userId) {
     if (data) setInteractions((prev) => [data, ...prev])
   }
 
-  return { interactions, addInteraction }
+  async function updateInteraction(id, fields) {
+    const { data } = await supabase
+      .from('member_interactions')
+      .update(fields)
+      .eq('id', id)
+      .select()
+      .single()
+    if (data) setInteractions((prev) => prev.map(i => i.id === id ? data : i))
+  }
+
+  return { interactions, addInteraction, updateInteraction }
 }
