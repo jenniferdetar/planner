@@ -904,6 +904,11 @@
   font-size: 11px;
 }
 
+.dash-tr:nth-child(even) .dash-td-name,
+.dash-tr:nth-child(even) .dash-cell {
+  background: #f7f5f0;
+}
+
 .dash-done {
   color: #5cb85c;
   font-weight: 600;
