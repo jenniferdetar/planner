@@ -218,6 +218,7 @@ export default function App() {
       </div>
       <div className={mp === null || mp === 'main' ? 'mobile-active' : undefined}>
         <DailyPlanner
+          userId={userId}
           selectedDate={selectedDate}
           onDateChange={setSelectedDate}
           masterTasks={masterTasks}

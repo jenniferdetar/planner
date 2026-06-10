@@ -35,6 +35,7 @@ function sameDay(a, b) {
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 
 export default function DailyPlanner({
+  userId,
   selectedDate, onDateChange,
   masterTasks, onDeleteMasterTask,
   dailyTasks, timeBlocks,
@@ -191,7 +192,7 @@ export default function DailyPlanner({
         />
       )}
 
-      {view === 'personal' && <PersonalPanel />}
+      {view === 'personal' && <PersonalPanel userId={userId} selectedDate={selectedDate} />}
 
       {view === 'gcu' && (
         <GcuPanel

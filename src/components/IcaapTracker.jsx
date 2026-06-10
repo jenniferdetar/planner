@@ -51,7 +51,7 @@ async function getFirstWorkspace(token) {
 }
 
 export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
-  const [tab, setTab] = useState('board')
+  const [tab, setTab] = useState('list')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
@@ -139,7 +139,6 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
 
       {/* Sub-tabs */}
       <div className="icaap-tabs">
-        <button className={`icaap-tab ${tab === 'board' ? 'active' : ''}`} onClick={() => setTab('board')}>Board</button>
         <button className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>List</button>
         <button className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
@@ -229,33 +228,6 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
         </form>
       )}
 
-      {/* Board view — only when not on Asana tab */}
-      {tab === 'board' && (
-        <div className="icaap-board">
-          {[
-            { label: 'To Do', key: 'To Do', color: '#888', list: todo },
-            { label: 'In Progress', key: 'In Progress', color: '#4a90d9', list: inProg },
-            { label: 'Blocked', key: 'Blocked', color: '#e05c5c', list: blocked },
-            { label: 'Done', key: 'Done', color: '#5cb85c', list: done },
-          ].map(col => (
-            <div key={col.key} className="icaap-col">
-              <div className="icaap-col-header" style={{ '--cc': col.color }}>
-                <span>{col.label}</span>
-                <span className="icaap-col-count">{col.list.length}</span>
-              </div>
-              {col.list.map(item => (
-                <ItemCard key={item.id} item={item}
-                  onUpdateItem={onUpdateItem}
-                  onDeleteItem={onDeleteItem}
-                  onPushToAsana={handlePushToAsana}
-                  pushing={pushingId === item.id}
-                  pushResult={pushResult[item.id]}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* List view */}
       {tab === 'list' && (
