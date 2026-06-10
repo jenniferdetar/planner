@@ -3,9 +3,6 @@ import { supabase } from '../lib/supabase'
 
 const TOKEN_KEY = 'gcal_provider_token'
 
-// Module-level listener captures SIGNED_IN before React mounts.
-// Supabase fires this event during SDK init (when it detects the OAuth
-// redirect hash), which happens before any useEffect can run.
 supabase.auth.onAuthStateChange((event, session) => {
   if (session?.provider_token) {
     localStorage.setItem(TOKEN_KEY, session.provider_token)
@@ -18,18 +15,31 @@ export function useAuth() {
   const [cachedToken, setCachedToken] = useState(() => localStorage.getItem(TOKEN_KEY))
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      if (data.session?.provider_token) {
-        localStorage.setItem(TOKEN_KEY, data.session.provider_token)
-        setCachedToken(data.session.provider_token)
-      } else {
-        // Pick up whatever the module-level listener just wrote
-        const stored = localStorage.getItem(TOKEN_KEY)
-        if (stored) setCachedToken(stored)
+    async function init() {
+      const { data } = await supabase.auth.getSession()
+      let sess = data.session
+
+      if (sess?.provider_token) {
+        localStorage.setItem(TOKEN_KEY, sess.provider_token)
+        setCachedToken(sess.provider_token)
+      } else if (sess) {
+        // Session exists but no provider_token — try refreshing to get a fresh Google token
+        const { data: refreshed } = await supabase.auth.refreshSession()
+        if (refreshed?.session?.provider_token) {
+          sess = refreshed.session
+          localStorage.setItem(TOKEN_KEY, refreshed.session.provider_token)
+          setCachedToken(refreshed.session.provider_token)
+        } else {
+          const stored = localStorage.getItem(TOKEN_KEY)
+          if (stored) setCachedToken(stored)
+        }
       }
+
+      setSession(sess)
       setLoading(false)
-    })
+    }
+
+    init()
 
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session)
