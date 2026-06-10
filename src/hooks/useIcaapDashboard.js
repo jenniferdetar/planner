@@ -82,5 +82,18 @@ export function useIcaapDashboard() {
     return errors
   }
 
-  return { rows, loading, importPaylogRows, refresh: fetchAll }
+  // Import hours: [{ name, updates: { Jul: 40, Aug: 38, ... } }]
+  async function importHoursRows(parsedRows) {
+    const results = await Promise.all(
+      parsedRows.map(({ name, updates }) =>
+        supabase.from('hours_worked').update(updates).eq('Name', name)
+          .then(({ error }) => error ? { name, error: error.message } : null)
+      )
+    )
+    const errors = results.filter(Boolean)
+    await fetchAll()
+    return errors
+  }
+
+  return { rows, loading, importPaylogRows, importHoursRows, refresh: fetchAll }
 }

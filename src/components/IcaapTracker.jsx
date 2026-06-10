@@ -642,11 +642,143 @@ function ImportModal({ onClose, onImport }) {
   )
 }
 
+const HOURS_MONTH_KEYS = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan']
+
+function parseHoursCSV(text) {
+  const lines = text.trim().split('\n').filter(l => l.trim())
+  if (!lines.length) return { parsed: [], skipped: [] }
+  const isTab = lines[0].includes('\t')
+  const split = line => isTab ? line.split('\t').map(c => c.trim()) : line.split(',').map(c => c.trim())
+
+  // Detect header row: first cell is "Row Labels" or non-numeric
+  const header = split(lines[0])
+  const hasHeader = /row label|name|employee/i.test(header[0]) || isNaN(Number(header[1]))
+  const colHeaders = hasHeader ? header.slice(1).map(h => {
+    const abbr = h.trim().split(/\s+/)[0]
+    return HOURS_MONTH_KEYS.find(k => k.toLowerCase() === abbr.toLowerCase()) || null
+  }) : HOURS_MONTH_KEYS.map((_, i) => HOURS_MONTH_KEYS[i])
+
+  const parsed = [], skipped = []
+  const start = hasHeader ? 1 : 0
+  for (let i = start; i < lines.length; i++) {
+    const cols = split(lines[i])
+    const rawName = cols[0]
+    if (!rawName) { skipped.push(i + 1); continue }
+    const name = rawName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+    const updates = {}
+    for (let j = 1; j < cols.length; j++) {
+      const key = colHeaders[j - 1]
+      if (!key) continue
+      const val = parseFloat(cols[j])
+      if (!isNaN(val)) updates[key] = val
+    }
+    if (!Object.keys(updates).length) { skipped.push(i + 1); continue }
+    parsed.push({ name, updates })
+  }
+  return { parsed, skipped }
+}
+
+function ImportHoursModal({ onClose, onImport }) {
+  const [csv, setCsv] = useState('')
+  const [preview, setPreview] = useState(null)
+  const [importing, setImporting] = useState(false)
+  const [result, setResult] = useState(null)
+
+  function handleParse() {
+    const { parsed, skipped } = parseHoursCSV(csv)
+    setPreview({ parsed, skipped })
+    setResult(null)
+  }
+
+  async function handleImport() {
+    if (!preview?.parsed?.length) return
+    setImporting(true)
+    const errors = await onImport(preview.parsed)
+    setResult({ count: preview.parsed.length - errors.length, errors })
+    setImporting(false)
+    setPreview(null)
+    setCsv('')
+  }
+
+  return (
+    <div className="import-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="import-modal">
+        <div className="import-modal-header">
+          <span className="import-modal-title">Import Hours Worked</span>
+          <button className="import-modal-close" onClick={onClose}>×</button>
+        </div>
+        {result ? (
+          <div className="import-result">
+            <p className="import-result-ok">✓ Imported {result.count} rows successfully.</p>
+            {result.errors.length > 0 && (
+              <div className="import-result-errors">
+                <p>Could not match {result.errors.length} names:</p>
+                <ul>{result.errors.map((e, i) => <li key={i}>{e.name}</li>)}</ul>
+              </div>
+            )}
+            <button className="import-done-btn" onClick={onClose}>Done</button>
+          </div>
+        ) : (
+          <>
+            <p className="import-instructions">
+              Paste the pivot table with <strong>Employee Name</strong> in column 1 and month columns (Jul–Jan).<br />
+              Tab-separated or comma-separated both work.
+            </p>
+            <textarea
+              className="import-textarea"
+              placeholder="Paste hours data here…"
+              value={csv}
+              onChange={e => { setCsv(e.target.value); setPreview(null) }}
+              rows={8}
+            />
+            <button className="import-parse-btn" onClick={handleParse} disabled={!csv.trim()}>
+              Preview Import
+            </button>
+            {preview && (
+              <div className="import-preview">
+                <p className="import-preview-label">
+                  {preview.parsed.length} rows ready to import
+                  {preview.skipped.length > 0 && ` · ${preview.skipped.length} rows skipped`}
+                </p>
+                <div className="import-preview-table-wrap">
+                  <table className="import-preview-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        {HOURS_MONTH_KEYS.map(k => <th key={k}>{k}</th>)}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {preview.parsed.map((r, i) => (
+                        <tr key={i}>
+                          <td>{r.name}</td>
+                          {HOURS_MONTH_KEYS.map(k => <td key={k}>{r.updates[k] ?? '—'}</td>)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="import-modal-actions">
+                  <button className="import-cancel-btn" onClick={() => setPreview(null)}>Back</button>
+                  <button className="import-confirm-btn" onClick={handleImport} disabled={importing}>
+                    {importing ? 'Importing…' : `Import ${preview.parsed.length} rows`}
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function IcaapDashboard() {
-  const { rows, loading, importPaylogRows } = useIcaapDashboard()
+  const { rows, loading, importPaylogRows, importHoursRows } = useIcaapDashboard()
   const [selectedMonth, setSelectedMonth] = useState(CURRENT_MONTH)
   const [search, setSearch] = useState('')
   const [showImport, setShowImport] = useState(false)
+  const [showImportHours, setShowImportHours] = useState(false)
 
   const month = DASHBOARD_MONTHS.find(m => m.key === selectedMonth)
   const filtered = rows.filter(r => r.name.toLowerCase().includes(search.toLowerCase()))
@@ -662,6 +794,12 @@ function IcaapDashboard() {
         <ImportModal
           onClose={() => setShowImport(false)}
           onImport={importPaylogRows}
+        />
+      )}
+      {showImportHours && (
+        <ImportHoursModal
+          onClose={() => setShowImportHours(false)}
+          onImport={importHoursRows}
         />
       )}
       <div className="dash-toolbar">
@@ -681,7 +819,8 @@ function IcaapDashboard() {
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
-          <button className="dash-import-btn" onClick={() => setShowImport(true)}>↑ Import CSV</button>
+          <button className="dash-import-btn" onClick={() => setShowImportHours(true)}>↑ Import Hours</button>
+          <button className="dash-import-btn" onClick={() => setShowImport(true)}>↑ Import Paylog</button>
         </div>
       </div>
 
