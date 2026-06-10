@@ -482,15 +482,6 @@
   background: #fff;
 }
 
-.interaction-name-input {
-  font-size: 13px;
-  font-weight: 600;
-  color: #333;
-  flex: 1;
-  min-width: 0;
-  padding: 2px 5px;
-}
-
 .interaction-cat-select {
   font-size: 10px;
   font-weight: 600;
@@ -522,6 +513,11 @@
   color: #888;
   padding: 2px 5px;
   cursor: pointer;
+}
+
+.interaction-loc-inline {
+  flex: 1;
+  min-width: 0;
 }
 
 .interaction-disc-textarea {
