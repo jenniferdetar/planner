@@ -463,13 +463,13 @@
 .pc-td-account {
   position: sticky; left: 0; z-index: 1;
   background: #fff;
-  padding: 5px 12px;
+  padding: 3px 12px;
   border-right: 2px solid #e8e5de;
   border-bottom: 1px solid #f0ede6;
   min-width: 180px;
 }
-.pc-td-bill-name { display: block; font-size: 12.5px; color: #1a1a2e; }
-.pc-td-method { font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 3px; }
+.pc-td-bill-name { display: block; font-size: 12.5px; color: #1a1a2e; line-height: 1.2; }
+.pc-td-method { font-size: 10px; font-weight: 600; padding: 0px 5px; border-radius: 3px; }
 .pc-td-method.billpay { background: #e8f0fb; color: #4a90d9; }
 .pc-td-method.cash { background: #eaf7ea; color: #5cb85c; }
 
@@ -491,7 +491,7 @@
 
 /* Bill cells */
 .pc-td-cell {
-  text-align: right; padding: 5px 10px;
+  text-align: right; padding: 3px 10px;
   cursor: pointer; border-bottom: 1px solid #f0ede6;
   border-right: 1px solid #f0ede6;
   transition: background 0.1s;
