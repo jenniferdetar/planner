@@ -393,10 +393,15 @@ function AsanaTaskRow({ task, onComplete, onUpdateNotes }) {
 
   return (
     <div className="asana-task-row">
-      <div className="asana-task-header" onClick={() => setExpanded(e => !e)}>
-        <span className="asana-task-title">{task.title}</span>
+      <div className="asana-task-header">
+        <button
+          className="asana-row-check-btn"
+          onClick={() => onComplete?.(task.id)}
+          title="Mark complete"
+        />
+        <span className="asana-task-title" onClick={() => setExpanded(e => !e)}>{task.title}</span>
         {task.due_on && <span className="asana-task-due">📅 {task.due_on}</span>}
-        <span className="icaap-chevron">{expanded ? '▾' : '▸'}</span>
+        <span className="icaap-chevron" onClick={() => setExpanded(e => !e)}>{expanded ? '▾' : '▸'}</span>
       </div>
       {expanded && (
         <div className="asana-task-body">
@@ -408,9 +413,6 @@ function AsanaTaskRow({ task, onComplete, onUpdateNotes }) {
             rows={3}
             style={{ resize: 'vertical', width: '100%' }}
           />
-          <div className="asana-task-actions">
-            <button className="asana-complete-btn" onClick={() => onComplete?.(task.id)}>✓ Complete</button>
-          </div>
         </div>
       )}
     </div>
