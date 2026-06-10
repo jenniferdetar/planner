@@ -56,7 +56,7 @@ const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
+export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
   const workLocations = useWorkLocations()
   const [tab, setTab] = useState('issues')
   const [showAddIssue, setShowAddIssue] = useState(false)
@@ -250,20 +250,73 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
           <div className="csea-issue-list">
             {interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
             {interactions.map(i => (
-              <div key={i.id} className="interaction-card">
-                <div className="interaction-header">
-                  <span className="interaction-name">{i.member_name}</span>
-                  <span className="interaction-cat">{i.category}</span>
-                  <span className="interaction-date">{i.date_spoke}</span>
-                </div>
-                {i.work_location && <div className="interaction-loc">📍 {i.work_location}</div>}
-                {i.discussion && <div className="interaction-disc">{i.discussion}</div>}
-                {i.who_involved && <div className="interaction-who">With: {i.who_involved}</div>}
-              </div>
+              <InteractionCard key={i.id} interaction={i} onUpdate={onUpdateInteraction} workLocations={workLocations} />
             ))}
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function InteractionCard({ interaction: i, onUpdate, workLocations }) {
+  const [editing, setEditing] = useState(false)
+  const [form, setForm] = useState({
+    category: i.category, member_name: i.member_name, work_location: i.work_location || '',
+    date_spoke: i.date_spoke, discussion: i.discussion || '', who_involved: i.who_involved || '',
+  })
+
+  async function handleSave(e) {
+    e.preventDefault()
+    await onUpdate(i.id, form)
+    setEditing(false)
+  }
+
+  if (editing) {
+    return (
+      <form className="csea-form interaction-edit-form" onSubmit={handleSave}>
+        <div className="csea-form-row">
+          <div className="csea-type-btns">
+            {INTERACTION_CATEGORIES.map(c => (
+              <button key={c} type="button"
+                className={`type-btn ${form.category === c ? 'active' : ''}`}
+                style={{ '--tc': '#4a90d9' }}
+                onClick={() => setForm(f => ({ ...f, category: c }))}
+              >{c}</button>
+            ))}
+          </div>
+        </div>
+        <MemberSearch value={form.member_name} onChange={v => setForm(f => ({ ...f, member_name: v }))} />
+        <select className="csea-input" value={form.work_location}
+          onChange={e => setForm(f => ({ ...f, work_location: e.target.value }))}>
+          <option value="">Work location</option>
+          {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+        </select>
+        <input className="csea-input" type="date" value={form.date_spoke}
+          onChange={e => setForm(f => ({ ...f, date_spoke: e.target.value }))} />
+        <textarea className="csea-textarea" placeholder="What was discussed?" rows={3} value={form.discussion}
+          onChange={e => setForm(f => ({ ...f, discussion: e.target.value }))} />
+        <input className="csea-input" placeholder="Others involved" value={form.who_involved}
+          onChange={e => setForm(f => ({ ...f, who_involved: e.target.value }))} />
+        <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
+          <button type="button" className="csea-cancel" onClick={() => setEditing(false)}>Cancel</button>
+          <button type="submit" className="csea-save">Save</button>
+        </div>
+      </form>
+    )
+  }
+
+  return (
+    <div className="interaction-card">
+      <div className="interaction-header">
+        <span className="interaction-name">{i.member_name}</span>
+        <span className="interaction-cat">{i.category}</span>
+        <span className="interaction-date">{i.date_spoke}</span>
+        <button className="interaction-edit-btn" onClick={() => setEditing(true)}>Edit</button>
+      </div>
+      {i.work_location && <div className="interaction-loc">📍 {i.work_location}</div>}
+      {i.discussion && <div className="interaction-disc">{i.discussion}</div>}
+      {i.who_involved && <div className="interaction-who">With: {i.who_involved}</div>}
     </div>
   )
 }
