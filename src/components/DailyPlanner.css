@@ -147,13 +147,13 @@
 }
 
 .mini-cell.today {
-  background: rgba(201, 169, 110, 0.18);
-  color: #c9a96e;
+  background: rgba(82, 35, 152, 0.18);
+  color: #522398;
   font-weight: 700;
 }
 
 .mini-cell.selected {
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
   font-weight: 700;
 }
@@ -213,7 +213,7 @@
 }
 
 .today-badge {
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -224,17 +224,17 @@
 
 .today-btn {
   font-size: 12px;
-  color: #c9a96e;
+  color: #522398;
   font-weight: 600;
   padding: 6px 12px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #522398;
   border-radius: 6px;
   transition: all 0.15s;
   cursor: pointer;
 }
 
 .today-btn:hover {
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
 }
 
@@ -419,8 +419,8 @@
 }
 
 .asana-circle.checked {
-  background: #c9a96e;
-  border-color: #c9a96e;
+  background: #522398;
+  border-color: #522398;
 }
 
 .asana-circle.checked::after {
@@ -480,7 +480,7 @@
 }
 
 .asana-delete-btn:hover { color: #e05c5c; }
-.asana-notes-btn:hover  { color: #c9a96e; }
+.asana-notes-btn:hover  { color: #522398; }
 
 .check-box {
   width: 16px;
@@ -526,7 +526,7 @@
 }
 
 .task-notes-input:focus {
-  border-color: #c9a96e;
+  border-color: #522398;
   background: #fff;
 }
 
@@ -621,7 +621,7 @@
 }
 
 .add-daily-task-btn:hover {
-  color: #c9a96e;
+  color: #522398;
 }
 
 /* Schedule */
@@ -642,7 +642,7 @@
 }
 
 .time-row.current-hour .hour-label {
-  color: #c9a96e;
+  color: #522398;
   font-weight: 600;
 }
 
@@ -823,7 +823,7 @@
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  background: #c9a96e;
+  background: #522398;
   padding: 3px 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -856,7 +856,7 @@
 }
 
 .add-block-btn:hover {
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
 }
 
@@ -891,14 +891,14 @@
 }
 
 .task-hub-filter-btn:hover {
-  border-color: #c9a96e;
-  color: #c9a96e;
+  border-color: #522398;
+  color: #522398;
 }
 
 .task-hub-filter-btn.active {
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
-  border-color: #c9a96e;
+  border-color: #522398;
   font-weight: 700;
 }
 
@@ -961,8 +961,8 @@
 
 .task-hub-area-tag {
   font-size: 9px;
-  background: rgba(201,169,110,0.12);
-  color: #c9a96e;
+  background: rgba(82, 35, 152, 0.12);
+  color: #522398;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;

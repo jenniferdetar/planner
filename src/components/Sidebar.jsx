@@ -5,7 +5,7 @@ import './Sidebar.css'
 export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'General']
 
 const SECTION_LINKS = [
-  { key: 'roles',    label: 'Roles',    color: '#c9a96e', icon: '👤', placeholder: 'List your key roles in life and work…\n\n• Role 1\n• Role 2' },
+  { key: 'roles',    label: 'Roles',    color: '#A78BFA', icon: '👤', placeholder: 'List your key roles in life and work…\n\n• Role 1\n• Role 2' },
   { key: 'goals',    label: 'Goals',    color: '#8bc34a', icon: '🎯', placeholder: 'Your most important goals…\n\n• Goal 1\n• Goal 2' },
   { key: 'meetings', label: 'Meetings', color: '#888',    icon: '📅', placeholder: 'Meeting notes and agenda…' },
   { key: 'mission',  label: 'Mission',  color: '#4a90d9', icon: '🧭', placeholder: 'Your personal mission statement…' },

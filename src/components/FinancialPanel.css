@@ -65,7 +65,7 @@
 .fin-tab.active {
   color: #1a1a2e;
   background: #fff;
-  border-bottom-color: #c9a96e;
+  border-bottom-color: #522398;
 }
 
 .fin-content {
@@ -96,15 +96,15 @@
 .fin-add-btn {
   font-size: 11px;
   font-weight: 600;
-  color: #c9a96e;
+  color: #522398;
   padding: 5px 10px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #522398;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
-.fin-add-btn:hover { background: #c9a96e; color: #fff; }
+.fin-add-btn:hover { background: #522398; color: #fff; }
 
 /* Form */
 .fin-form {
@@ -138,7 +138,7 @@
   background: #fff;
 }
 
-.fin-input:focus { border-color: #c9a96e; }
+.fin-input:focus { border-color: #522398; }
 .fin-input.amount { font-weight: 600; }
 
 .fin-type-toggle {
@@ -197,7 +197,7 @@
 .fin-save {
   font-size: 11px;
   font-weight: 600;
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
   padding: 5px 14px;
   border-radius: 6px;
@@ -320,8 +320,8 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1.5px solid #c9a96e;
-  color: #c9a96e;
+  border: 1.5px solid #522398;
+  color: #522398;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -330,7 +330,7 @@
   transition: all 0.15s;
 }
 
-.fin-bill-check.checked { background: #c9a96e; color: #fff; }
+.fin-bill-check.checked { background: #522398; color: #fff; }
 
 .fin-bill-info {
   flex: 1;
@@ -385,7 +385,7 @@
   transition: all 0.15s;
 }
 
-.fin-edit-btn:hover { color: #c9a96e; border-color: #c9a96e; }
+.fin-edit-btn:hover { color: #522398; border-color: #522398; }
 
 .fin-goal-amounts {
   display: flex;
@@ -446,7 +446,7 @@
 }
 
 .pc-th-date {
-  background: #1a1a2e; color: #c9a96e;
+  background: #1a1a2e; color: #A78BFA;
   padding: 6px 10px; text-align: center;
   font-size: 11px; font-weight: 600;
   min-width: 100px;
@@ -570,7 +570,7 @@
 
 .goals-th-name { text-align: left; width: 45%; }
 .goals-th-col { text-align: center; width: 27.5%; }
-.goals-th-col.mo3 { color: #c9a96e; }
+.goals-th-col.mo3 { color: #522398; }
 .goals-th-col.mo6 { color: #5cb85c; }
 
 .goals-name {
@@ -618,7 +618,7 @@
 
 .goals-fill {
   height: 100%;
-  background: #c9a96e;
+  background: #522398;
   border-radius: 2px;
   transition: width 0.3s;
 }
@@ -634,7 +634,7 @@
 .goals-cell-input {
   width: 100%;
   padding: 4px 6px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #522398;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
