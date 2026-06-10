@@ -11,7 +11,7 @@ import { TASK_AREAS } from './Sidebar'
 
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
-const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
+const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#522398']
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']

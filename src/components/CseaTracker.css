@@ -65,7 +65,7 @@
 .csea-tab.active {
   color: #1a1a2e;
   background: #fff;
-  border-bottom-color: #c9a96e;
+  border-bottom-color: #522398;
 }
 
 .csea-panel {
@@ -117,16 +117,16 @@
 .csea-add-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #c9a96e;
+  color: #522398;
   padding: 6px 12px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #522398;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .csea-add-btn:hover {
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
 }
 
@@ -203,7 +203,7 @@
 }
 
 .csea-input:focus {
-  border-color: #c9a96e;
+  border-color: #522398;
 }
 
 .csea-textarea {
@@ -221,7 +221,7 @@
 }
 
 .csea-textarea:focus {
-  border-color: #c9a96e;
+  border-color: #522398;
 }
 
 .csea-form-actions {
@@ -241,7 +241,7 @@
 .csea-save {
   font-size: 12px;
   font-weight: 600;
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
   padding: 6px 16px;
   border-radius: 6px;

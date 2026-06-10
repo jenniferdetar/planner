@@ -4,7 +4,7 @@ export const CALENDARS = [
   { id: '1nqd1n2enc3vmi5q5g2o5ldv7s@group.calendar.google.com', name: 'Family', color: '#5cb85c' },
   { id: '6r0b19vgn2aq54neum36g6n9og@group.calendar.google.com', name: 'Business', color: '#9b59b6' },
   { id: 'fuhknadjrrm4gtmmq5s1hk035c@group.calendar.google.com', name: 'Client Work', color: '#f0a040' },
-  { id: 'aa19a8010c1926c44788de224952b227627ad3bbfb811c3e786bdfb16e1c3814@group.calendar.google.com', name: 'Study & School', color: '#c9a96e' },
+  { id: 'aa19a8010c1926c44788de224952b227627ad3bbfb811c3e786bdfb16e1c3814@group.calendar.google.com', name: 'Study & School', color: '#522398' },
   { id: '0e650fb5ce57cd5b0ceccac50d077ae5571754f61d4584df980426e0e3f0d772@group.calendar.google.com', name: 'CSEA', color: '#e05c5c' },
   { id: 'cdht4hpq2deltvh22q7e2fnd1k@group.calendar.google.com', name: 'Hale Charter', color: '#16a085' },
   { id: 'orvrdj70hcvclief24dfm1lgss@group.calendar.google.com', name: 'HoneyBook', color: '#8e44ad' },

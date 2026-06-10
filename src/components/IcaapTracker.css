@@ -679,7 +679,7 @@
 }
 
 .att-th-day {
-  background: #1a1a2e; color: #c9a96e;
+  background: #1a1a2e; color: #A78BFA;
   text-align: center; padding: 6px 10px;
   min-width: 110px;
   border-right: 1px solid #333;
@@ -828,7 +828,7 @@
   align-self: flex-end;
 }
 
-.dash-search:focus { border-color: #c9a96e; }
+.dash-search:focus { border-color: #522398; }
 
 .dash-summary {
   display: flex;
@@ -934,9 +934,9 @@
 .dash-import-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #c9a96e;
+  color: #522398;
   padding: 5px 12px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #522398;
   border-radius: 6px;
   cursor: pointer;
   background: none;
@@ -945,7 +945,7 @@
 }
 
 .dash-import-btn:hover {
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
 }
 
@@ -1017,7 +1017,7 @@
   box-sizing: border-box;
 }
 
-.import-textarea:focus { border-color: #c9a96e; }
+.import-textarea:focus { border-color: #522398; }
 
 .import-parse-btn {
   font-size: 12px;
@@ -1092,7 +1092,7 @@
 .import-confirm-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #c9a96e;
+  background: #522398;
   color: #fff;
   padding: 7px 18px;
   border-radius: 6px;

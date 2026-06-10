@@ -1,5 +1,5 @@
 .sidebar {
-  background: #12122b;
+  background: #1e0a38;
   color: #e8e6df;
   display: flex;
   flex-direction: column;
@@ -21,7 +21,7 @@
 }
 
 .logo-icon {
-  color: #c9a96e;
+  color: #A78BFA;
   font-size: 14px;
 }
 
@@ -62,16 +62,16 @@
 }
 
 .sidebar-tab.active {
-  color: #c9a96e;
-  border-color: rgba(201,169,110,0.3);
-  background: rgba(201,169,110,0.08);
+  color: #A78BFA;
+  border-color: rgba(167,139,250,0.3);
+  background: rgba(167,139,250,0.08);
 }
 
 .quote-box {
   margin: 20px 20px 8px;
   padding: 14px 16px;
-  background: rgba(201, 169, 110, 0.1);
-  border-left: 3px solid #c9a96e;
+  background: rgba(167, 139, 250, 0.1);
+  border-left: 3px solid #A78BFA;
   border-radius: 0 6px 6px 0;
   flex-shrink: 0;
 }
@@ -86,7 +86,7 @@
 
 .quote-author {
   font-size: 10px;
-  color: #c9a96e;
+  color: #A78BFA;
   margin-top: 6px;
   letter-spacing: 0.5px;
 }
@@ -245,7 +245,7 @@
 }
 
 .add-task-area-select option {
-  background: #1a1a2e;
+  background: #1e0a38;
   color: #fff;
 }
 
@@ -290,8 +290,8 @@
 
 .btn-save {
   font-size: 12px;
-  background: #c9a96e;
-  color: #12122b;
+  background: #522398;
+  color: #fff;
   font-weight: 700;
   padding: 4px 12px;
   border-radius: 6px;
@@ -315,9 +315,9 @@
 }
 
 .add-btn:hover {
-  color: #c9a96e;
-  border-color: rgba(201, 169, 110, 0.45);
-  background: rgba(201, 169, 110, 0.06);
+  color: #A78BFA;
+  border-color: rgba(167, 139, 250, 0.45);
+  background: rgba(167, 139, 250, 0.06);
 }
 
 .add-btn span {
@@ -350,8 +350,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #c9a96e;
-  color: #12122b;
+  background: #522398;
+  color: #fff;
   font-size: 13px;
   font-weight: 700;
   display: flex;
@@ -403,7 +403,7 @@
 .stat-num {
   font-size: 20px;
   font-weight: 600;
-  color: #c9a96e;
+  color: #A78BFA;
   line-height: 1;
 }
 
@@ -428,8 +428,8 @@
 }
 
 .asana-badge.syncing {
-  color: #c9a96e;
-  background: rgba(201, 169, 110, 0.15);
+  color: #A78BFA;
+  background: rgba(167, 139, 250, 0.15);
 }
 
 .asana-badge.error {
@@ -660,7 +660,7 @@
 }
 
 .section-textarea:focus {
-  box-shadow: inset 2px 0 0 var(--ac, #c9a96e);
+  box-shadow: inset 2px 0 0 var(--ac, #A78BFA);
 }
 
 .journal-panel {
