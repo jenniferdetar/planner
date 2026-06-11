@@ -1,7 +1,7 @@
 // Calendar IDs from Jennifer's Google account with color coding per calendar
 export const CALENDARS = [
-  { id: 'jennifermsamples@gmail.com', name: 'Gmail', color: '#2d9e56' },
-  { id: '1nqd1n2enc3vmi5q5g2o5ldv7s@group.calendar.google.com', name: 'Family', color: '#3ecf6e' },
+  { id: 'jennifermsamples@gmail.com', name: 'Gmail', color: '#1e4d31' },
+  { id: '1nqd1n2enc3vmi5q5g2o5ldv7s@group.calendar.google.com', name: 'Family', color: '#2d7a4f' },
   { id: '6r0b19vgn2aq54neum36g6n9og@group.calendar.google.com', name: 'Business', color: '#9b59b6' },
   { id: 'fuhknadjrrm4gtmmq5s1hk035c@group.calendar.google.com', name: 'Client Work', color: '#f0a040' },
   { id: 'aa19a8010c1926c44788de224952b227627ad3bbfb811c3e786bdfb16e1c3814@group.calendar.google.com', name: 'Study & School', color: '#c9a96e' },

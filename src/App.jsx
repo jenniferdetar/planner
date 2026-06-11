@@ -27,7 +27,7 @@ const QUOTES = [
 ]
 
 // Color palette for Supabase-created time blocks
-const BLOCK_COLORS = ['#3ecf6e', '#2d9e56', '#4a90d9', '#e05c5c', '#f0a040', '#9b59b6']
+const BLOCK_COLORS = ['#2d7a4f', '#1e4d31', '#4a90d9', '#e05c5c', '#f0a040', '#9b59b6']
 
 function formatTime(timeStr) {
   if (!timeStr) return ''

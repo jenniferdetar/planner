@@ -11,7 +11,7 @@ import { TASK_AREAS } from './Sidebar'
 
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
-const BLOCK_COLORS = ['#3ecf6e', '#2d9e56', '#4a90d9', '#e05c5c', '#f0a040', '#9b59b6']
+const BLOCK_COLORS = ['#2d7a4f', '#1e4d31', '#4a90d9', '#e05c5c', '#f0a040', '#9b59b6']
 
 function contrastColor(hex) {
   const c = (hex ?? '#4a90d9').replace('#', '')
@@ -332,9 +332,6 @@ export default function DailyPlanner({
           <div className="section-label">
             <span>Schedule</span>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              {calAuthExpired && (
-                <button className="gcal-reconnect-inline" onClick={onReconnectGoogle}>🔗 Connect Google Calendar</button>
-              )}
               <button
                 className="gcal-reconnect-inline"
                 onClick={() => icalInputRef.current?.click()}
