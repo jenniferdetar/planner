@@ -6,6 +6,7 @@
   border-left: 1px solid #e8e5de;
   border-right: 1px solid #e8e5de;
   background: #faf9f6;
+  min-width: 0;
 }
 
 /* ── Tabs bar (replaces old planner-header for tab strip) ── */
