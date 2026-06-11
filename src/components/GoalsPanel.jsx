@@ -20,7 +20,7 @@ const CATEGORY_COLORS = {
 
 const CATEGORY_ORDER = ['Physical','Mental','Relational','Self-Care','Hobbies','Home','Career','Financial','Organizational','Screen Time','Learn','CSEA']
 
-export default function GoalsPanel({ userId }) {
+export default function GoalsPanel({ userId, section = 'all' }) {
   const { byCategory, addGoal, deleteGoal } = usePersonalGoals(userId)
   const { tasks: checklistTasks, isChecked, toggle: toggleCheck, addTask: addChecklistTask, deleteTask: deleteChecklistTask } = usePersonalChecklist(userId)
 
@@ -44,7 +44,7 @@ export default function GoalsPanel({ userId }) {
   return (
     <div className="goals-panel">
       {/* My Personal Goals */}
-      <div className="goals-section">
+      {(section === 'all' || section === 'goals') && <div className="goals-section">
         <div className="goals-section-header">
           <span className="goals-trophy">🏆</span>
           <h3 className="goals-title">My Personal Goals</h3>
@@ -92,10 +92,10 @@ export default function GoalsPanel({ userId }) {
             )
           })}
         </div>
-      </div>
+      </div>}
 
       {/* Monthly Checklist */}
-      <div className="checklist-section">
+      {(section === 'all' || section === 'checklist') && <div className="checklist-section">
         <h3 className="checklist-title">Monthly Checklist</h3>
         <table className="checklist-table">
           <thead>
@@ -170,7 +170,7 @@ export default function GoalsPanel({ userId }) {
             </tr>
           </tbody>
         </table>
-      </div>
+      </div>}
     </div>
   )
 }

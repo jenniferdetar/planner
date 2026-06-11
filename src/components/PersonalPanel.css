@@ -6,6 +6,37 @@
   background: #faf9f6;
 }
 
+.personal-sub-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e8e5de;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.personal-sub-tab {
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #999;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.personal-sub-tab:hover {
+  color: #1a1a2e;
+}
+
+.personal-sub-tab.active {
+  color: #1a1a2e;
+  border-bottom-color: #c9a96e;
+}
+
 .personal-header {
   padding: 20px 32px 0;
   background: #fff;

@@ -131,13 +131,13 @@ export default function DailyPlanner({
       {/* Tab strip — always visible at top */}
       <div className="planner-tabs-bar">
         <div className="view-tabs">
-          {['week', 'month', 'csea', 'finance', 'goals', 'gcu', 'icaap', 'library', 'personal'].map(v => (
+          {['week', 'month', 'csea', 'finance', 'gcu', 'icaap', 'library', 'personal'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >
-              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v === 'week' ? 'Week' : v === 'goals' ? 'Goals' : v.charAt(0).toUpperCase() + v.slice(1)}
+              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v === 'week' ? 'Week' : v.charAt(0).toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>
@@ -194,8 +194,6 @@ export default function DailyPlanner({
           onMonthChange={onMonthChange}
         />
       )}
-
-      {view === 'goals' && <GoalsPanel userId={userId} />}
 
       {view === 'personal' && <PersonalPanel userId={userId} selectedDate={selectedDate} />}
 
