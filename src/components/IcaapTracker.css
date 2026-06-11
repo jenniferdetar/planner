@@ -750,6 +750,37 @@
   font-family: inherit;
 }
 
+.att-notes-btn {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 10px;
+  color: #aaa;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+.att-notes-btn:hover { color: #c9a96e; }
+
+.att-notes-input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 11px;
+  padding: 3px 5px;
+  border: 1px solid #c9a96e;
+  border-radius: 4px;
+  font-family: inherit;
+  resize: vertical;
+  min-width: 120px;
+}
+
 @media (max-width: 768px) {
   .attendance-header {
     padding: 12px 16px;

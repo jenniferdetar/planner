@@ -331,8 +331,10 @@ function AttendancePanel({ date, onDateChange, records, onUpsert, onUpdateNotes 
                       key={d}
                       status={status}
                       timeIn={timeIn}
+                      notes={record?.notes ?? ''}
                       onStatusChange={s => onUpsert?.(d, member, s, record?.notes ?? null, record?.time_in ?? null)}
                       onTimeChange={t => onUpsert?.(d, member, record?.status ?? 'Present', record?.notes ?? null, t)}
+                      onNotesChange={n => onUpsert?.(d, member, record?.status ?? 'Present', n, record?.time_in ?? null)}
                     />
                   )
                 })}
@@ -345,17 +347,33 @@ function AttendancePanel({ date, onDateChange, records, onUpsert, onUpdateNotes 
   )
 }
 
-function AttendanceCell({ status, timeIn, onStatusChange, onTimeChange }) {
+function AttendanceCell({ status, timeIn, notes, onStatusChange, onTimeChange, onNotesChange }) {
   const [editingTime, setEditingTime] = useState(false)
   const [timeVal, setTimeVal] = useState(timeIn)
+  const [notesVal, setNotesVal] = useState(notes ?? '')
+  const [editingNotes, setEditingNotes] = useState(false)
   const timer = useRef(null)
 
-  if (timeVal !== timeIn && !timer.current) setTimeVal(timeIn)
+  if (timeVal !== timeIn && !editingTime) setTimeVal(timeIn)
+  if (notesVal !== (notes ?? '') && !editingNotes) setNotesVal(notes ?? '')
 
-  function handleTimeBlur() {
+  function handleTimeChange(e) {
+    setTimeVal(e.target.value)
+  }
+
+  function commitTime(val) {
     setEditingTime(false)
-    clearTimeout(timer.current)
-    timer.current = setTimeout(() => { onTimeChange(timeVal); timer.current = null }, 0)
+    onTimeChange(val)
+  }
+
+  function handleTimeKeyDown(e) {
+    if (e.key === 'Enter') commitTime(timeVal)
+    if (e.key === 'Escape') { setTimeVal(timeIn); setEditingTime(false) }
+  }
+
+  function handleNotesBlur() {
+    setEditingNotes(false)
+    onNotesChange(notesVal)
   }
 
   const COLOR = { Present: '#5cb85c', Absent: '#e05c5c', Excused: '#f0a040' }
@@ -377,13 +395,38 @@ function AttendanceCell({ status, timeIn, onStatusChange, onTimeChange }) {
             className="att-time-input"
             type="time"
             value={timeVal}
-            onChange={e => setTimeVal(e.target.value)}
-            onBlur={handleTimeBlur}
+            onChange={handleTimeChange}
+            onKeyDown={handleTimeKeyDown}
+            onBlur={e => {
+              // Don't commit on blur if focus moved to AM/PM spinner (relatedTarget inside same input)
+              setTimeout(() => {
+                if (!document.activeElement?.closest('.att-time-input')) {
+                  commitTime(timeVal)
+                }
+              }, 150)
+            }}
             autoFocus
           />
         ) : (
           <button className="att-time-btn" onClick={() => setEditingTime(true)}>
             {timeIn || '+ time'}
+          </button>
+        )
+      )}
+      {status && (
+        editingNotes ? (
+          <textarea
+            className="att-notes-input"
+            value={notesVal}
+            onChange={e => setNotesVal(e.target.value)}
+            onBlur={handleNotesBlur}
+            placeholder="Notes…"
+            rows={2}
+            autoFocus
+          />
+        ) : (
+          <button className="att-notes-btn" onClick={() => setEditingNotes(true)}>
+            {notesVal || '+ note'}
           </button>
         )
       )}
