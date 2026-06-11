@@ -120,12 +120,37 @@ export function useMeetings(userId, selectedDate) {
     return data
   }
 
+  async function bulkAddMeetings(events) {
+    // events: [{ title, date, start_time, end_time }]
+    if (!events.length || !userId) return { added: 0, skipped: 0 }
+    const dates = [...new Set(events.map((e) => e.date))]
+    const { data: existing } = await supabase
+      .from('opus_meetings')
+      .select('title,date,start_time')
+      .eq('user_id', userId)
+      .in('date', dates)
+    const existingKeys = new Set((existing || []).map((r) => `${r.date}|${r.title}|${r.start_time}`))
+    const toInsert = events
+      .filter((e) => !existingKeys.has(`${e.date}|${e.title}|${e.start_time}`))
+      .map((e) => ({ ...e, user_id: userId }))
+    if (toInsert.length) {
+      await supabase.from('opus_meetings').insert(toInsert)
+      // Refresh current day view if any events fall on selected date
+      if (toInsert.some((e) => e.date === dateStr)) {
+        const { data } = await supabase
+          .from('opus_meetings').select('*').eq('date', dateStr).order('start_time', { ascending: true })
+        setMeetings(data || [])
+      }
+    }
+    return { added: toInsert.length, skipped: events.length - toInsert.length }
+  }
+
   async function deleteMeeting(id) {
     await supabase.from('opus_meetings').delete().eq('id', id)
     setMeetings((prev) => prev.filter((m) => m.id !== id))
   }
 
-  return { meetings, addMeeting, deleteMeeting }
+  return { meetings, addMeeting, bulkAddMeetings, deleteMeeting }
 }
 
 // ─── Notes ───────────────────────────────────────────────────────────────────

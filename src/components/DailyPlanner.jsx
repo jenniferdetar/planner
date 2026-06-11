@@ -40,7 +40,7 @@ export default function DailyPlanner({
   masterTasks, onDeleteMasterTask,
   dailyTasks, timeBlocks,
   onAddTask, onToggleTask, onDeleteTask, onUpdateTaskNotes,
-  onAddBlock, onDeleteBlock,
+  onAddBlock, onBulkAddMeetings, onDeleteBlock,
   view, onViewChange,
   taskCounts,
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
@@ -107,7 +107,7 @@ export default function DailyPlanner({
   const icalInputRef = useRef(null)
   const [icalImporting, setIcalImporting] = useState(false)
 
-  function parseIcal(text, targetDate) {
+  function parseIcal(text) {
     const events = []
     const blocks = text.split('BEGIN:VEVENT')
     for (let i = 1; i < blocks.length; i++) {
@@ -120,15 +120,10 @@ export default function DailyPlanner({
       const dtstart = get('DTSTART')
       const dtend = get('DTEND')
       if (!dtstart) continue
-      // Parse datetime (handles TZID param and basic UTC)
+      // Skip all-day events (date-only format: 8 digits)
+      if (/^\d{8}$/.test(dtstart)) continue
       const parseIcalDate = (s) => {
         if (!s) return null
-        // Strip TZID= prefix if present in value (already stripped by regex)
-        const basic = s.replace(/[TZ]/g, (c, i) => i === 8 ? 'T' : (c === 'Z' ? 'Z' : c))
-        if (s.length === 8) {
-          // All-day: YYYYMMDD
-          return new Date(s.slice(0,4)+'-'+s.slice(4,6)+'-'+s.slice(6,8)+'T00:00:00')
-        }
         // YYYYMMDDTHHMMSS[Z]
         return new Date(
           s.slice(0,4)+'-'+s.slice(4,6)+'-'+s.slice(6,8)+'T'+
@@ -137,19 +132,14 @@ export default function DailyPlanner({
       }
       const start = parseIcalDate(dtstart)
       const end = parseIcalDate(dtend)
-      if (!start || !end) continue
-      // Filter to targetDate
-      if (start.getFullYear() !== targetDate.getFullYear() ||
-          start.getMonth() !== targetDate.getMonth() ||
-          start.getDate() !== targetDate.getDate()) continue
-      // Skip all-day
-      if (dtstart.length === 8) continue
+      if (!start || !end || isNaN(start)) continue
       const pad = (n) => String(n).padStart(2,'0')
+      const dateStr = `${start.getFullYear()}-${pad(start.getMonth()+1)}-${pad(start.getDate())}`
       events.push({
         title: summary,
-        hour: start.getHours(),
-        startTime: `${pad(start.getHours())}:${pad(start.getMinutes())}:00`,
-        endTime: `${pad(end.getHours())}:${pad(end.getMinutes())}:00`,
+        date: dateStr,
+        start_time: `${pad(start.getHours())}:${pad(start.getMinutes())}:00`,
+        end_time: `${pad(end.getHours())}:${pad(end.getMinutes())}:00`,
       })
     }
     return events
@@ -159,20 +149,21 @@ export default function DailyPlanner({
     const file = e.target.files?.[0]
     if (!file) return
     setIcalImporting(true)
-    const text = await file.text()
-    const events = parseIcal(text, selectedDate)
-    if (!events.length) {
-      alert(`No timed events found for ${formatDate(selectedDate)} in this file.`)
+    try {
+      const text = await file.text()
+      const events = parseIcal(text)
+      if (!events.length) {
+        alert('No timed events found in this file.')
+        return
+      }
+      const { added, skipped } = await onBulkAddMeetings(events)
+      alert(`Import complete: ${added} added, ${skipped} skipped (duplicates).`)
+    } catch (err) {
+      alert('Import failed: ' + err.message)
+    } finally {
       setIcalImporting(false)
       e.target.value = ''
-      return
     }
-    for (const ev of events) {
-      await onAddBlock(ev.hour, ev.title, BLOCK_COLORS[0], ev.startTime, ev.endTime)
-    }
-    alert(`Imported ${events.length} event${events.length > 1 ? 's' : ''}.`)
-    setIcalImporting(false)
-    e.target.value = ''
   }
 
   function openAddBlock(hour) {

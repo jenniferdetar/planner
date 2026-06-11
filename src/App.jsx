@@ -71,7 +71,7 @@ export default function App() {
 
   const { tasks: masterTasks, addTask: addMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
   const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask, updateTaskDescription } = useDailyTasks(userId, selectedDate)
-  const { meetings, addMeeting, deleteMeeting } = useMeetings(userId, selectedDate)
+  const { meetings, addMeeting, bulkAddMeetings, deleteMeeting } = useMeetings(userId, selectedDate)
   const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
@@ -234,6 +234,7 @@ export default function App() {
           onDeleteTask={handleDeleteDailyTask}
           onUpdateTaskNotes={handleUpdateTaskNotes}
           onAddBlock={handleAddBlock}
+          onBulkAddMeetings={bulkAddMeetings}
           onDeleteBlock={handleDeleteBlock}
           view={view}
           onViewChange={(v) => {
