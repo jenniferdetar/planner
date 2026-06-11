@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import './DailyPlanner.css'
 import MonthView from './MonthView'
 import CseaTracker from './CseaTracker'
@@ -102,6 +102,77 @@ export default function DailyPlanner({
     setBlockStart('')
     setBlockEnd('')
     setAddingBlock(null)
+  }
+
+  const icalInputRef = useRef(null)
+  const [icalImporting, setIcalImporting] = useState(false)
+
+  function parseIcal(text, targetDate) {
+    const events = []
+    const blocks = text.split('BEGIN:VEVENT')
+    for (let i = 1; i < blocks.length; i++) {
+      const block = blocks[i]
+      const get = (key) => {
+        const m = block.match(new RegExp(`${key}[^:]*:([^\\r\\n]+)`))
+        return m ? m[1].trim() : null
+      }
+      const summary = get('SUMMARY') || '(No title)'
+      const dtstart = get('DTSTART')
+      const dtend = get('DTEND')
+      if (!dtstart) continue
+      // Parse datetime (handles TZID param and basic UTC)
+      const parseIcalDate = (s) => {
+        if (!s) return null
+        // Strip TZID= prefix if present in value (already stripped by regex)
+        const basic = s.replace(/[TZ]/g, (c, i) => i === 8 ? 'T' : (c === 'Z' ? 'Z' : c))
+        if (s.length === 8) {
+          // All-day: YYYYMMDD
+          return new Date(s.slice(0,4)+'-'+s.slice(4,6)+'-'+s.slice(6,8)+'T00:00:00')
+        }
+        // YYYYMMDDTHHMMSS[Z]
+        return new Date(
+          s.slice(0,4)+'-'+s.slice(4,6)+'-'+s.slice(6,8)+'T'+
+          s.slice(9,11)+':'+s.slice(11,13)+':'+s.slice(13,15)+(s.endsWith('Z')?'Z':'')
+        )
+      }
+      const start = parseIcalDate(dtstart)
+      const end = parseIcalDate(dtend)
+      if (!start || !end) continue
+      // Filter to targetDate
+      if (start.getFullYear() !== targetDate.getFullYear() ||
+          start.getMonth() !== targetDate.getMonth() ||
+          start.getDate() !== targetDate.getDate()) continue
+      // Skip all-day
+      if (dtstart.length === 8) continue
+      const pad = (n) => String(n).padStart(2,'0')
+      events.push({
+        title: summary,
+        hour: start.getHours(),
+        startTime: `${pad(start.getHours())}:${pad(start.getMinutes())}:00`,
+        endTime: `${pad(end.getHours())}:${pad(end.getMinutes())}:00`,
+      })
+    }
+    return events
+  }
+
+  async function handleIcalImport(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setIcalImporting(true)
+    const text = await file.text()
+    const events = parseIcal(text, selectedDate)
+    if (!events.length) {
+      alert(`No timed events found for ${formatDate(selectedDate)} in this file.`)
+      setIcalImporting(false)
+      e.target.value = ''
+      return
+    }
+    for (const ev of events) {
+      await onAddBlock(ev.hour, ev.title, BLOCK_COLORS[0], ev.startTime, ev.endTime)
+    }
+    alert(`Imported ${events.length} event${events.length > 1 ? 's' : ''}.`)
+    setIcalImporting(false)
+    e.target.value = ''
   }
 
   function openAddBlock(hour) {
@@ -239,9 +310,24 @@ export default function DailyPlanner({
         <div className="schedule-section">
           <div className="section-label">
             <span>Schedule</span>
-            {calAuthExpired && (
-              <button className="gcal-reconnect-inline" onClick={onReconnectGoogle}>🔗 Connect Google Calendar</button>
-            )}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              {calAuthExpired && (
+                <button className="gcal-reconnect-inline" onClick={onReconnectGoogle}>🔗 Connect Google Calendar</button>
+              )}
+              <button
+                className="gcal-reconnect-inline"
+                onClick={() => icalInputRef.current?.click()}
+                disabled={icalImporting}
+                title="Import events from an .ics file"
+              >{icalImporting ? 'Importing…' : '📅 Import iCal'}</button>
+              <input
+                ref={icalInputRef}
+                type="file"
+                accept=".ics,text/calendar"
+                style={{ display: 'none' }}
+                onChange={handleIcalImport}
+              />
+            </div>
           </div>
 
           <div className="time-grid">
