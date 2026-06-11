@@ -11,6 +11,7 @@ export const CALENDARS = [
   { id: 'g1j3ll4vrhi55uioh0qjo57bpk@group.calendar.google.com', name: 'Todoist', color: '#db4035' },
   { id: '7a5vu03rc2bt317j42u9c1mtq8@group.calendar.google.com', name: "Jennifer's iPhone", color: '#888' },
   { id: 'c70ql70g6mjbuiv9cbocfbcgp8@group.calendar.google.com', name: 'Facebook Appointments', color: '#1877f2' },
+  { id: 'c_f8dd932d5779276dc40addb962d1904160a62cec3d68828cce37a472c9e41b2b@group.calendar.google.com', name: 'LA Fed', color: '#e05c5c' },
 ]
 
 export async function fetchCalendarEvents(providerToken, startDate, endDate) {
