@@ -3,30 +3,31 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  background: #1e1c1a;
-  color: #e8e0d5;
+  background: #faf9f6;
+  color: #1a1a2e;
 }
 
 .library-header {
   padding: 20px 24px 12px;
-  border-bottom: 1px solid #2e2b27;
+  border-bottom: 1px solid #e8e5de;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-shrink: 0;
+  background: #fff;
 }
 
 .library-title {
   font-size: 18px;
   font-weight: 600;
-  color: #e8e0d5;
+  color: #1a1a2e;
   margin: 0 0 2px;
 }
 
 .library-subtitle {
   font-size: 12px;
-  color: #7a6f62;
+  color: #999;
   margin: 0;
 }
 
@@ -35,10 +36,11 @@
   display: flex;
   gap: 2px;
   padding: 10px 16px 0;
-  border-bottom: 1px solid #2e2b27;
+  border-bottom: 1px solid #e8e5de;
   overflow-x: auto;
   scrollbar-width: none;
   flex-shrink: 0;
+  background: #fff;
 }
 
 .library-shelf-tabs::-webkit-scrollbar {
@@ -53,7 +55,7 @@
   border: none;
   border-radius: 6px 6px 0 0;
   background: transparent;
-  color: #7a6f62;
+  color: #999;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -62,14 +64,15 @@
 }
 
 .shelf-tab:hover {
-  background: #2a2724;
-  color: #c9a96e;
+  background: #f5f4f0;
+  color: #1a1a2e;
 }
 
 .shelf-tab.active {
-  background: #2e2b27;
+  background: #faf9f6;
   color: #c9a96e;
   font-weight: 600;
+  border-bottom: 2px solid #c9a96e;
 }
 
 .shelf-badge {
@@ -104,14 +107,14 @@
 }
 
 .empty-state-text {
-  color: #7a6f62;
+  color: #999;
   font-size: 14px;
   margin: 0;
 }
 
 .import-btn {
   background: #c9a96e;
-  color: #1a1814;
+  color: #fff;
   border: none;
   border-radius: 8px;
   padding: 10px 22px;
@@ -137,7 +140,7 @@
 .shelf-empty {
   padding: 32px 0;
   text-align: center;
-  color: #7a6f62;
+  color: #999;
   font-size: 13px;
 }
 
@@ -154,13 +157,14 @@
   justify-content: space-between;
   padding: 9px 12px;
   border-radius: 7px;
-  background: #252220;
+  background: #fff;
+  border: 1px solid #e8e5de;
   transition: background 0.12s;
   min-height: 44px;
 }
 
 .book-row:hover {
-  background: #2d2a26;
+  background: #f5f4f0;
 }
 
 .book-info {
@@ -174,7 +178,7 @@
 .book-title {
   font-size: 13px;
   font-weight: 600;
-  color: #e8e0d5;
+  color: #1a1a2e;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -182,7 +186,7 @@
 
 .book-author {
   font-size: 11px;
-  color: #7a6f62;
+  color: #999;
 }
 
 .book-actions {
@@ -213,7 +217,7 @@
 .delete-book-btn {
   background: none;
   border: none;
-  color: #5a504a;
+  color: #ccc;
   font-size: 12px;
   cursor: pointer;
   padding: 2px 5px;
@@ -232,17 +236,17 @@
   gap: 8px;
   margin-top: 8px;
   padding-top: 12px;
-  border-top: 1px solid #2e2b27;
+  border-top: 1px solid #e8e5de;
   flex-wrap: wrap;
 }
 
 .add-book-input {
   flex: 1;
   min-width: 120px;
-  background: #252220;
-  border: 1px solid #3a3530;
+  background: #fff;
+  border: 1px solid #e8e5de;
   border-radius: 7px;
-  color: #e8e0d5;
+  color: #1a1a2e;
   font-size: 13px;
   padding: 8px 12px;
   outline: none;
@@ -250,16 +254,16 @@
 }
 
 .add-book-input::placeholder {
-  color: #5a504a;
+  color: #bbb;
 }
 
 .add-book-input:focus {
-  border-color: #c9a96e66;
+  border-color: #c9a96e;
 }
 
 .add-book-btn {
-  background: #2e2b27;
-  border: 1px solid #3a3530;
+  background: #fff;
+  border: 1px solid #e8e5de;
   border-radius: 7px;
   color: #c9a96e;
   font-size: 13px;
@@ -271,5 +275,5 @@
 }
 
 .add-book-btn:hover {
-  background: #3a3530;
+  background: #f5f4f0;
 }
