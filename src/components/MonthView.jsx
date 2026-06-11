@@ -101,17 +101,6 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
             >
               <span className={`cell-num ${isToday ? 'today-num' : ''}`}>{cell.day}</span>
 
-              {/* Task count pill */}
-              {!cell.overflow && counts?.total > 0 && (
-                <div className="cell-tasks">
-                  <div
-                    className="cell-task-bar"
-                    style={{ width: `${Math.round((counts.done / counts.total) * 100)}%` }}
-                  />
-                  <span className="cell-task-label">{counts.done}/{counts.total} tasks</span>
-                </div>
-              )}
-
               {/* Google Calendar events */}
               {!cell.overflow && gcalBlocks.slice(0, 3).map(block => (
                 <div
