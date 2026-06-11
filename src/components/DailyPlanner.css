@@ -1094,3 +1094,55 @@
     gap: 6px;
   }
 }
+
+/* iCal Feed Manager */
+.ical-mgr-btn {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: #f0ede6;
+  color: #666;
+  cursor: pointer;
+  border: 1px solid #e0ddd6;
+}
+.ical-mgr-btn:hover { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+
+.ical-manager {
+  background: #fff;
+  border: 1px solid #e8e5de;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ical-manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 13px;
+  color: #1a1a2e;
+}
+.ical-manager-header button { background: none; font-size: 14px; color: #999; cursor: pointer; }
+.ical-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #444;
+  padding: 4px 0;
+  border-bottom: 1px solid #f0ede6;
+}
+.ical-sub-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.ical-sub-name { font-weight: 600; flex-shrink: 0; }
+.ical-sub-url { color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+.ical-sub-error { color: #e05c5c; font-size: 11px; flex-shrink: 0; }
+.ical-sub-del { background: none; color: #ccc; cursor: pointer; font-size: 12px; margin-left: auto; flex-shrink: 0; }
+.ical-sub-del:hover { color: #e05c5c; }
+.ical-add-form { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 4px; }
+.ical-input { flex: 1; min-width: 120px; padding: 5px 8px; border: 1px solid #e0ddd6; border-radius: 5px; font-size: 12px; }
+.ical-color-input { width: 32px; height: 30px; padding: 1px; border: 1px solid #e0ddd6; border-radius: 5px; cursor: pointer; }
+.ical-add-btn { padding: 5px 12px; background: #1a1a2e; color: #fff; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.ical-add-btn:hover { background: #2d2d4e; }

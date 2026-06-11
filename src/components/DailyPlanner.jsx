@@ -42,6 +42,26 @@ function sameDay(a, b) {
 
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 
+function IcalAddForm({ onAdd }) {
+  const [url, setUrl] = useState('')
+  const [name, setName] = useState('')
+  const [color, setColor] = useState('#888888')
+  function submit(e) {
+    e.preventDefault()
+    if (!url.trim() || !name.trim()) return
+    onAdd(url.trim(), name.trim(), color)
+    setUrl(''); setName('')
+  }
+  return (
+    <form className="ical-add-form" onSubmit={submit}>
+      <input placeholder="Feed URL (https://...)" value={url} onChange={e => setUrl(e.target.value)} className="ical-input" />
+      <input placeholder="Calendar name" value={name} onChange={e => setName(e.target.value)} className="ical-input" />
+      <input type="color" value={color} onChange={e => setColor(e.target.value)} className="ical-color-input" />
+      <button type="submit" className="ical-add-btn">Add Feed</button>
+    </form>
+  )
+}
+
 export default function DailyPlanner({
   userId,
   selectedDate, onDateChange,
@@ -65,7 +85,9 @@ export default function DailyPlanner({
   calAuthExpired, onReconnectGoogle, providerToken,
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
   onPushGcuToAsana, gcuPushing,
+  icalSubs, icalEvents, icalLoading, icalErrors, onAddIcalSub, onDeleteIcalSub,
 }) {
+  const [showIcalManager, setShowIcalManager] = useState(false)
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
   const [showTaskAdd, setShowTaskAdd] = useState(false)
@@ -326,8 +348,28 @@ export default function DailyPlanner({
                 style={{ display: 'none' }}
                 onChange={handleIcalImport}
               />
+              <button className="ical-mgr-btn" onClick={() => setShowIcalManager(true)}>📡 Feeds</button>
             </div>
           </div>
+
+          {showIcalManager && (
+            <div className="ical-manager">
+              <div className="ical-manager-header">
+                <span>iCal Feed Subscriptions</span>
+                <button onClick={() => setShowIcalManager(false)}>✕</button>
+              </div>
+              {icalSubs?.map(sub => (
+                <div key={sub.id} className="ical-sub-row">
+                  <span className="ical-sub-dot" style={{ background: sub.color }} />
+                  <span className="ical-sub-name">{sub.name}</span>
+                  <span className="ical-sub-url">{sub.url}</span>
+                  {icalErrors?.[sub.id] && <span className="ical-sub-error">⚠ {icalErrors[sub.id]}</span>}
+                  <button className="ical-sub-del" onClick={() => onDeleteIcalSub(sub.id)}>✕</button>
+                </div>
+              ))}
+              <IcalAddForm onAdd={onAddIcalSub} />
+            </div>
+          )}
 
           <div className="time-grid">
             {HOURS.map(hour => {
