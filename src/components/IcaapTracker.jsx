@@ -642,7 +642,7 @@ function ImportModal({ onClose, onImport }) {
   )
 }
 
-const HOURS_MONTH_KEYS = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan']
+const HOURS_MONTH_KEYS = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun']
 
 function parseHoursCSV(text) {
   const lines = text.trim().split('\n').filter(l => l.trim())
