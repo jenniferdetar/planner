@@ -101,19 +101,19 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
             >
               <span className={`cell-num ${isToday ? 'today-num' : ''}`}>{cell.day}</span>
 
-              {/* Google Calendar events */}
-              {!cell.overflow && gcalBlocks.slice(0, 3).map(block => (
+              {/* Calendar events */}
+              {!cell.overflow && gcalBlocks.slice(0, 4).map(block => (
                 <div
                   key={block.id}
                   className="cell-event"
-                  style={{ background: block.color + '22', borderLeft: `2px solid ${block.color}` }}
+                  style={{ background: block.color ?? '#4a90d9' }}
                 >
-                  {block.startLabel && <span className="cell-event-time">{block.startLabel} </span>}
-                  {block.title || block.text}
+                  {block.startLabel && <span className="cell-event-time">{block.startLabel}</span>}
+                  <span className="cell-event-title">{block.title || block.text}</span>
                 </div>
               ))}
-              {!cell.overflow && gcalBlocks.length > 3 && (
-                <div className="cell-more">+{gcalBlocks.length - 3} more</div>
+              {!cell.overflow && gcalBlocks.length > 4 && (
+                <div className="cell-more">+{gcalBlocks.length - 4} more</div>
               )}
             </div>
           )
