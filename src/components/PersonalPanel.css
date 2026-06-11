@@ -172,6 +172,248 @@
   margin: 0;
 }
 
+/* Goals section */
+.goals-section {
+  padding: 20px 24px 24px;
+  background: #faf9f6;
+  overflow-y: auto;
+}
+
+.goals-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.goals-trophy {
+  font-size: 22px;
+}
+
+.goals-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.goal-card {
+  border: 1px solid #e8e5de;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.goal-card-header {
+  padding: 6px 12px;
+  text-align: center;
+}
+
+.goal-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #1a1a2e;
+}
+
+.goal-card-body {
+  padding: 8px 10px 6px;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.goal-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+  border-bottom: 1px solid #f0ede6;
+}
+
+.goal-item:last-of-type {
+  border-bottom: none;
+}
+
+.goal-text {
+  font-size: 11.5px;
+  color: #444;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.goal-del {
+  font-size: 12px;
+  color: #ddd;
+  padding: 0 2px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+
+.goal-item:hover .goal-del {
+  opacity: 1;
+}
+
+.goal-del:hover {
+  color: #e05c5c;
+}
+
+.goal-add-btn {
+  font-size: 10.5px;
+  color: #ccc;
+  text-align: left;
+  cursor: pointer;
+  padding: 3px 0;
+  margin-top: 2px;
+  transition: color 0.12s;
+}
+
+.goal-add-btn:hover {
+  color: #c9a96e;
+}
+
+.goal-add-form {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.goal-add-input {
+  flex: 1;
+  font-size: 11px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  outline: none;
+  background: transparent;
+  padding: 2px 0;
+  color: #333;
+  min-width: 0;
+}
+
+.goal-add-save {
+  font-size: 11px;
+  color: #5cb85c;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.goal-add-cancel {
+  font-size: 10px;
+  color: #bbb;
+  cursor: pointer;
+}
+
+/* Checklist section */
+.checklist-section {
+  padding: 0 24px 28px;
+  background: #faf9f6;
+}
+
+.checklist-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.checklist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.checklist-table th {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #999;
+  padding: 4px 3px;
+  text-align: center;
+  border-bottom: 1px solid #e8e5de;
+}
+
+.checklist-table th.task-col {
+  text-align: left;
+  padding-left: 6px;
+  min-width: 160px;
+}
+
+.checklist-table td {
+  padding: 3px;
+  text-align: center;
+  border-bottom: 1px solid #f5f4f0;
+}
+
+.checklist-table td.task-name-cell {
+  text-align: left;
+  padding-left: 6px;
+  font-size: 11.5px;
+  color: #444;
+  white-space: nowrap;
+}
+
+.checklist-table tr:hover td {
+  background: #faf9f6;
+}
+
+.checklist-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1.5px solid;
+  display: inline-block;
+  cursor: pointer;
+  transition: background 0.12s;
+  vertical-align: middle;
+}
+
+.checklist-add-row td {
+  padding-top: 8px;
+}
+
+.checklist-new-input {
+  font-size: 11px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  outline: none;
+  padding: 2px 4px;
+  width: 100%;
+  background: transparent;
+  color: #333;
+}
+
+.checklist-add-task-btn {
+  font-size: 10.5px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.12s;
+  padding: 4px 0;
+  display: block;
+}
+
+.checklist-add-task-btn:hover {
+  color: #c9a96e;
+}
+
 /* Sheet embed */
 .sheet-embed {
   width: 100%;
