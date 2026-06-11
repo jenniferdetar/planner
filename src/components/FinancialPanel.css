@@ -534,11 +534,11 @@
 .coins-half { flex: 1; min-width: 0; }
 .coins-half-title { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #aaa; padding: 0 12px 6px; }
 .coins-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.coins-table th { padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #aaa; border-bottom: 2px solid #e8e5de; }
+.coins-table th { padding: 4px 8px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #aaa; border-bottom: 2px solid #e8e5de; }
 .coins-table th:last-child { text-align: right; }
-.coins-row td { border-bottom: 1px solid #f0ede6; padding: 8px 12px; }
-.coins-row .coins-td-count { padding-right: 4px; }
-.coins-row .coins-td-sub { padding-left: 4px; }
+.coins-row td { border-bottom: 1px solid #f0ede6; padding: 4px 8px; }
+.coins-row .coins-td-count { padding-right: 2px; }
+.coins-row .coins-td-sub { padding-left: 2px; }
 .coins-td-name { font-weight: 600; color: #1a1a2e; }
 .coins-td-val { color: #888; font-size: 12px; }
 .coins-td-count { display: flex; align-items: center; gap: 8px; }
@@ -547,7 +547,7 @@
 .coins-input { width: 52px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 3px 4px; font-size: 13px; }
 .coins-td-sub { text-align: right; font-weight: 600; color: #1a1a2e; }
 .coins-section-divider td { padding: 6px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #aaa; background: #f5f4f0; border-top: 2px solid #e8e5de; border-bottom: 1px solid #e8e5de; }
-.coins-total-row td { padding: 10px 12px; font-weight: 700; font-size: 14px; border-top: 2px solid #e8e5de; }
+.coins-total-row td { padding: 5px 8px; font-weight: 700; font-size: 14px; border-top: 2px solid #e8e5de; }
 .coins-td-total-label { color: #1a1a2e; }
 .coins-td-total { text-align: right; color: #5cb85c; font-size: 16px; }
 
