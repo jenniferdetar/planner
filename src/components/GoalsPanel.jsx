@@ -20,6 +20,14 @@ const CATEGORY_COLORS = {
 
 const CATEGORY_ORDER = ['Physical','Mental','Relational','Self-Care','Hobbies','Home','Career','Financial','Organizational','Screen Time','Learn','CSEA']
 
+function contrastColor(hex) {
+  const c = (hex ?? '#c9a96e').replace('#', '')
+  const r = parseInt(c.slice(0,2), 16)
+  const g = parseInt(c.slice(2,4), 16)
+  const b = parseInt(c.slice(4,6), 16)
+  return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1a1a2e' : '#ffffff'
+}
+
 export default function GoalsPanel({ userId, section = 'all' }) {
   const { byCategory, addGoal, deleteGoal } = usePersonalGoals(userId)
   const { tasks: checklistTasks, isChecked, toggle: toggleCheck, addTask: addChecklistTask, deleteTask: deleteChecklistTask } = usePersonalChecklist(userId)
@@ -56,7 +64,7 @@ export default function GoalsPanel({ userId, section = 'all' }) {
             return (
               <div key={category} className="goal-card">
                 <div className="goal-card-header" style={{ background: color }}>
-                  <span className="goal-card-title">{category}</span>
+                  <span className="goal-card-title" style={{ color: contrastColor(color) }}>{category}</span>
                 </div>
                 <div className="goal-card-body">
                   {goals.map(g => (
