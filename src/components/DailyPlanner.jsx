@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
 import './DailyPlanner.css'
 import MonthView from './MonthView'
+import WeekView from './WeekView'
 import CseaTracker from './CseaTracker'
 import FinancialPanel from './FinancialPanel'
 import IcaapTracker from './IcaapTracker'
@@ -66,6 +67,7 @@ export default function DailyPlanner({
   calAuthExpired, onReconnectGoogle, providerToken,
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
   onPushGcuToAsana, gcuPushing,
+  weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -128,37 +130,27 @@ export default function DailyPlanner({
       {/* Tab strip — always visible at top */}
       <div className="planner-tabs-bar">
         <div className="view-tabs">
-          {['csea', 'finance', 'gcu', 'icaap', 'library', 'month', 'personal'].map(v => (
+          {['week', 'month', 'csea', 'finance', 'gcu', 'icaap', 'library', 'personal'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >
-              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v.charAt(0).toUpperCase() + v.slice(1)}
+              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v === 'week' ? 'Week' : v.charAt(0).toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Day hero — large date + nav, only in day view */}
-      {view === 'day' && (
-        <div className="day-hero">
-          <div className="day-hero-left">
-            <button className="nav-btn" onClick={prevDay}>‹</button>
-            <div className="day-hero-date">
-              <span className="day-hero-num">{selectedDate.getDate()}</span>
-              <div className="day-hero-meta">
-                <span className="day-hero-dayname">{DAY_NAMES[selectedDate.getDay()]}</span>
-                <span className="day-hero-monthyear">{MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getFullYear()}</span>
-                {isToday && <span className="today-badge">Today</span>}
-                {!isToday && (
-                  <button className="today-btn" onClick={() => onDateChange(today)}>Today</button>
-                )}
-              </div>
-            </div>
-            <button className="nav-btn" onClick={nextDay}>›</button>
-          </div>
-        </div>
+      {view === 'week' && (
+        <WeekView
+          selectedDate={selectedDate}
+          onDateChange={onDateChange}
+          calendarBlocks={calendarBlocks}
+          tasksByDate={weeklyTasks}
+          onToggleTask={onToggleWeeklyTask}
+          onAddTask={onAddWeeklyTask}
+        />
       )}
 
       {view === 'icaap' && (
@@ -194,7 +186,7 @@ export default function DailyPlanner({
       {view === 'month' && (
         <MonthView
           selectedDate={selectedDate}
-          onDateChange={(d) => { onDateChange(d); onViewChange('day') }}
+          onDateChange={(d) => { onDateChange(d); onViewChange('week') }}
           taskCounts={taskCounts}
           timeBlocks={calendarBlocks || timeBlocks}
           onMonthChange={onMonthChange}
@@ -243,7 +235,7 @@ export default function DailyPlanner({
       )}
 
 
-      <div className="planner-body" style={{ display: (view === 'month' || view === 'csea' || view === 'finance' || view === 'icaap' || view === 'library' || view === 'gcu' || view === 'personal') ? 'none' : undefined }}>
+      <div className="planner-body" style={{ display: 'none' }}>
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { supabase, signOut } from './lib/supabase'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
+import { useWeeklyTasks } from './hooks/useWeeklyTasks'
 import { usePlannerSections } from './hooks/usePlannerSections'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
@@ -53,7 +54,7 @@ export default function App() {
   const today = new Date()
   const { session, user, providerToken, loading, clearProviderToken } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
-  const [view, setView] = useState('month')
+  const [view, setView] = useState('week')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
 
@@ -85,6 +86,7 @@ export default function App() {
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
   const { sections, updateSection } = usePlannerSections(userId)
+  const { tasksByDate: weeklyTasks, toggleTask: toggleWeeklyTask, addTask: addWeeklyTask } = useWeeklyTasks(userId, selectedDate)
 
   const [gcuPushing, setGcuPushing] = useState(false)
   async function handlePushGcuToAsana() {
@@ -287,6 +289,9 @@ export default function App() {
           onPushGcuToAsana={handlePushGcuToAsana}
           gcuPushing={gcuPushing}
           providerToken={providerToken}
+          weeklyTasks={weeklyTasks}
+          onToggleWeeklyTask={toggleWeeklyTask}
+          onAddWeeklyTask={addWeeklyTask}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
