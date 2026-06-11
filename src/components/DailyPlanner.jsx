@@ -229,6 +229,7 @@ export default function DailyPlanner({
           onUpdatePaycheckAmount={onUpdatePaycheckAmount}
           onTogglePaycheckBill={onTogglePaycheckBill}
           onDeletePaycheck={onDeletePaycheck}
+          userId={userId}
         />
       )}
 

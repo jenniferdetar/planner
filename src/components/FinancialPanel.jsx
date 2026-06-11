@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabase'
 import './FinancialPanel.css'
 
 const EXPENSE_CATEGORIES = ['Housing', 'Food', 'Transport', 'Utilities', 'Healthcare', 'Entertainment', 'Shopping', 'Savings', 'Other']
@@ -14,6 +15,7 @@ export default function FinancialPanel({
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   paychecks = [], onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
+  userId,
 }) {
   const [tab, setTab] = useState('tracker')
 
@@ -51,7 +53,7 @@ export default function FinancialPanel({
       {tab === 'bills' && <BillsTab bills={bills} onAdd={onAddBill} onToggle={onToggleBillPaid} onDelete={onDeleteBill} />}
       {tab === 'tracker' && <PaycheckTracker bills={bills} paychecks={paychecks} onAdd={onAddPaycheck} onUpdateAmount={onUpdatePaycheckAmount} onToggleBill={onTogglePaycheckBill} onDelete={onDeletePaycheck} />}
       {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
-      {tab === 'coins' && <CoinsTab />}
+      {tab === 'coins' && <CoinsTab userId={userId} />}
     </div>
   )
 }
@@ -467,15 +469,34 @@ const COIN_TYPES = [
   { name: 'Pennies', value: 0.01, symbol: '1¢' },
 ]
 
-function CoinsTab() {
-  const [counts, setCounts] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('coin_counts') || '{}') } catch { return {} }
-  })
+function CoinsTab({ userId }) {
+  const [counts, setCounts] = useState({})
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('coin_counts').select('coin_name, count').eq('user_id', userId)
+      .then(({ data }) => {
+        if (data) {
+          const obj = {}
+          data.forEach(r => { obj[r.coin_name] = r.count })
+          setCounts(obj)
+        }
+      })
+  }, [userId])
+
+  async function save(next) {
+    if (!userId) return
+    setSaving(true)
+    const upserts = Object.entries(next).map(([coin_name, count]) => ({ user_id: userId, coin_name, count }))
+    await supabase.from('coin_counts').upsert(upserts, { onConflict: 'user_id,coin_name' })
+    setSaving(false)
+  }
 
   function update(name, delta) {
     setCounts(prev => {
       const next = { ...prev, [name]: Math.max(0, (prev[name] || 0) + delta) }
-      localStorage.setItem('coin_counts', JSON.stringify(next))
+      save(next)
       return next
     })
   }
@@ -484,15 +505,15 @@ function CoinsTab() {
     const n = Math.max(0, parseInt(val) || 0)
     setCounts(prev => {
       const next = { ...prev, [name]: n }
-      localStorage.setItem('coin_counts', JSON.stringify(next))
+      save(next)
       return next
     })
   }
 
-  function reset() {
+  async function reset() {
     const empty = {}
-    localStorage.setItem('coin_counts', JSON.stringify(empty))
     setCounts(empty)
+    if (userId) await supabase.from('coin_counts').delete().eq('user_id', userId)
   }
 
   const total = COIN_TYPES.reduce((s, c) => s + (counts[c.name] || 0) * c.value, 0)
@@ -502,6 +523,7 @@ function CoinsTab() {
       <div className="fin-toolbar">
         <span className="fin-toolbar-label">Coin counter</span>
         <span className="coins-total-badge">{fmt(total)}</span>
+        {saving && <span style={{ fontSize: 11, color: '#999' }}>Saving…</span>}
         <button className="fin-cancel" onClick={reset}>Reset</button>
       </div>
       <div className="coins-table-wrap">
