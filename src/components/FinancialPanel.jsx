@@ -537,49 +537,59 @@ function CoinsTab({ userId }) {
         {saving && <span style={{ fontSize: 11, color: '#999' }}>Saving…</span>}
         <button className="fin-cancel" onClick={reset}>Reset</button>
       </div>
-      <div className="coins-table-wrap">
-        <table className="coins-table">
-          <thead>
-            <tr>
-              <th>Denomination</th>
-              <th>Value</th>
-              <th>Count</th>
-              <th>Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ALL_DENOMINATIONS.map((coin, i) => (
-              <>
-                {i === BILL_TYPES.length && (
-                  <tr key="divider" className="coins-section-divider">
-                    <td colSpan={4}>Coins</td>
-                  </tr>
-                )}
+      <div className="coins-split-wrap">
+        <div className="coins-half">
+          <div className="coins-half-title">Bills</div>
+          <table className="coins-table">
+            <thead><tr><th>Denomination</th><th>Count</th><th>Subtotal</th></tr></thead>
+            <tbody>
+              {BILL_TYPES.map(coin => (
                 <tr key={coin.name} className="coins-row">
-                  <td className="coins-td-name">{coin.name}</td>
-                  <td className="coins-td-val">{coin.symbol}</td>
+                  <td className="coins-td-name">{coin.name} <span className="coins-td-val">{coin.symbol}</span></td>
                   <td className="coins-td-count">
                     <button className="coins-btn" onClick={() => update(coin.name, -1)}>−</button>
-                    <input
-                      className="coins-input"
-                      type="number" min="0"
-                      value={counts[coin.name] || 0}
-                      onChange={e => setDirect(coin.name, e.target.value)}
-                    />
+                    <input className="coins-input" type="number" min="0" value={counts[coin.name] || 0} onChange={e => setDirect(coin.name, e.target.value)} />
                     <button className="coins-btn" onClick={() => update(coin.name, 1)}>+</button>
                   </td>
                   <td className="coins-td-sub">{fmt((counts[coin.name] || 0) * coin.value)}</td>
                 </tr>
-              </>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr className="coins-total-row">
-              <td colSpan={3} className="coins-td-total-label">Total</td>
-              <td className="coins-td-total">{fmt(total)}</td>
-            </tr>
-          </tfoot>
-        </table>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="coins-total-row">
+                <td className="coins-td-total-label">Bills Total</td>
+                <td></td>
+                <td className="coins-td-total">{fmt(BILL_TYPES.reduce((s,c) => s + (counts[c.name]||0)*c.value, 0))}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div className="coins-half">
+          <div className="coins-half-title">Coins</div>
+          <table className="coins-table">
+            <thead><tr><th>Denomination</th><th>Count</th><th>Subtotal</th></tr></thead>
+            <tbody>
+              {COIN_TYPES.map(coin => (
+                <tr key={coin.name} className="coins-row">
+                  <td className="coins-td-name">{coin.name} <span className="coins-td-val">{coin.symbol}</span></td>
+                  <td className="coins-td-count">
+                    <button className="coins-btn" onClick={() => update(coin.name, -1)}>−</button>
+                    <input className="coins-input" type="number" min="0" value={counts[coin.name] || 0} onChange={e => setDirect(coin.name, e.target.value)} />
+                    <button className="coins-btn" onClick={() => update(coin.name, 1)}>+</button>
+                  </td>
+                  <td className="coins-td-sub">{fmt((counts[coin.name] || 0) * coin.value)}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="coins-total-row">
+                <td className="coins-td-total-label">Coins Total</td>
+                <td></td>
+                <td className="coins-td-total">{fmt(COIN_TYPES.reduce((s,c) => s + (counts[c.name]||0)*c.value, 0))}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   )
