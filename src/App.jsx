@@ -12,7 +12,6 @@ import { useAsanaTasks } from './hooks/useAsanaTasks'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
-import { useIcalSubscriptions } from './hooks/useIcalSubscriptions'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
 import LoginScreen from './components/LoginScreen'
@@ -86,7 +85,6 @@ export default function App() {
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
   const { sections, updateSection } = usePlannerSections(userId)
-  const { subscriptions: icalSubs, events: icalEvents, loading: icalLoading, errors: icalErrors, addSub: addIcalSub, deleteSub: deleteIcalSub } = useIcalSubscriptions(userId)
 
   const [gcuPushing, setGcuPushing] = useState(false)
   async function handlePushGcuToAsana() {
@@ -161,15 +159,14 @@ export default function App() {
   const dateStr = selectedDate.toISOString().split('T')[0]
   const supabaseBlocks = meetings.map((m) => meetingToBlock(m, BLOCK_COLORS[0]))
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
-  const icalBlocksForDay = icalEvents.filter(e => e.startIso?.startsWith(dateStr))
-  const allTimeBlocks = [...supabaseBlocks, ...gcalBlocksForDay, ...icalBlocksForDay]
+  const allTimeBlocks = [...supabaseBlocks, ...gcalBlocksForDay]
 
   // All timed events for the month calendar grid (Supabase + Google Cal)
   const supabaseBlocksForMonth = rangedMeetings.map((m) => ({
     ...meetingToBlock(m, BLOCK_COLORS[0]),
     startIso: `${m.date}T${m.start_time || '00:00:00'}`,
   }))
-  const allCalendarBlocks = [...supabaseBlocksForMonth, ...calEvents, ...icalEvents]
+  const allCalendarBlocks = [...supabaseBlocksForMonth, ...calEvents]
 
   async function handleAddBlock(hour, text, color, startTime, endTime) {
     await addMeeting(text, hour, color, startTime, endTime)
@@ -290,12 +287,6 @@ export default function App() {
           onPushGcuToAsana={handlePushGcuToAsana}
           gcuPushing={gcuPushing}
           providerToken={providerToken}
-          icalSubs={icalSubs}
-          icalEvents={icalEvents}
-          icalLoading={icalLoading}
-          icalErrors={icalErrors}
-          onAddIcalSub={addIcalSub}
-          onDeleteIcalSub={deleteIcalSub}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>

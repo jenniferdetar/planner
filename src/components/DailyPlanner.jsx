@@ -42,25 +42,6 @@ function sameDay(a, b) {
 
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 
-function IcalAddForm({ onAdd }) {
-  const [url, setUrl] = useState('')
-  const [name, setName] = useState('')
-  const [color, setColor] = useState('#888888')
-  function submit(e) {
-    e.preventDefault()
-    if (!url.trim() || !name.trim()) return
-    onAdd(url.trim(), name.trim(), color)
-    setUrl(''); setName('')
-  }
-  return (
-    <form className="ical-add-form" onSubmit={submit}>
-      <input placeholder="Feed URL (https://...)" value={url} onChange={e => setUrl(e.target.value)} className="ical-input" />
-      <input placeholder="Calendar name" value={name} onChange={e => setName(e.target.value)} className="ical-input" />
-      <input type="color" value={color} onChange={e => setColor(e.target.value)} className="ical-color-input" />
-      <button type="submit" className="ical-add-btn">Add Feed</button>
-    </form>
-  )
-}
 
 export default function DailyPlanner({
   userId,
@@ -85,9 +66,7 @@ export default function DailyPlanner({
   calAuthExpired, onReconnectGoogle, providerToken,
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
   onPushGcuToAsana, gcuPushing,
-  icalSubs, icalEvents, icalLoading, icalErrors, onAddIcalSub, onDeleteIcalSub,
 }) {
-  const [showIcalManager, setShowIcalManager] = useState(false)
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
   const [showTaskAdd, setShowTaskAdd] = useState(false)
@@ -132,68 +111,6 @@ export default function DailyPlanner({
     setBlockStart('')
     setBlockEnd('')
     setAddingBlock(null)
-  }
-
-  const icalInputRef = useRef(null)
-  const [icalImporting, setIcalImporting] = useState(false)
-
-  function parseIcal(text) {
-    const events = []
-    const blocks = text.split('BEGIN:VEVENT')
-    for (let i = 1; i < blocks.length; i++) {
-      const block = blocks[i]
-      const get = (key) => {
-        const m = block.match(new RegExp(`${key}[^:]*:([^\\r\\n]+)`))
-        return m ? m[1].trim() : null
-      }
-      const summary = get('SUMMARY') || '(No title)'
-      const dtstart = get('DTSTART')
-      const dtend = get('DTEND')
-      if (!dtstart) continue
-      // Skip all-day events (date-only format: 8 digits)
-      if (/^\d{8}$/.test(dtstart)) continue
-      const parseIcalDate = (s) => {
-        if (!s) return null
-        // YYYYMMDDTHHMMSS[Z]
-        return new Date(
-          s.slice(0,4)+'-'+s.slice(4,6)+'-'+s.slice(6,8)+'T'+
-          s.slice(9,11)+':'+s.slice(11,13)+':'+s.slice(13,15)+(s.endsWith('Z')?'Z':'')
-        )
-      }
-      const start = parseIcalDate(dtstart)
-      const end = parseIcalDate(dtend)
-      if (!start || !end || isNaN(start)) continue
-      const pad = (n) => String(n).padStart(2,'0')
-      const dateStr = `${start.getFullYear()}-${pad(start.getMonth()+1)}-${pad(start.getDate())}`
-      events.push({
-        title: summary,
-        date: dateStr,
-        start_time: `${pad(start.getHours())}:${pad(start.getMinutes())}:00`,
-        end_time: `${pad(end.getHours())}:${pad(end.getMinutes())}:00`,
-      })
-    }
-    return events
-  }
-
-  async function handleIcalImport(e) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setIcalImporting(true)
-    try {
-      const text = await file.text()
-      const events = parseIcal(text)
-      if (!events.length) {
-        alert('No timed events found in this file.')
-        return
-      }
-      const { added, skipped } = await onBulkAddMeetings(events)
-      alert(`Import complete: ${added} added, ${skipped} skipped (duplicates).`)
-    } catch (err) {
-      alert('Import failed: ' + err.message)
-    } finally {
-      setIcalImporting(false)
-      e.target.value = ''
-    }
   }
 
   function openAddBlock(hour) {
@@ -331,42 +248,7 @@ export default function DailyPlanner({
         <div className="schedule-section">
           <div className="section-label">
             <span>Schedule</span>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <button
-                className="gcal-reconnect-inline"
-                onClick={() => icalInputRef.current?.click()}
-                disabled={icalImporting}
-                title="Import events from an .ics file"
-              >{icalImporting ? 'Importing…' : '📅 Import iCal'}</button>
-              <input
-                ref={icalInputRef}
-                type="file"
-                accept=".ics,text/calendar"
-                style={{ display: 'none' }}
-                onChange={handleIcalImport}
-              />
-              <button className="ical-mgr-btn" onClick={() => setShowIcalManager(true)}>📡 Feeds</button>
-            </div>
           </div>
-
-          {showIcalManager && (
-            <div className="ical-manager">
-              <div className="ical-manager-header">
-                <span>iCal Feed Subscriptions</span>
-                <button onClick={() => setShowIcalManager(false)}>✕</button>
-              </div>
-              {icalSubs?.map(sub => (
-                <div key={sub.id} className="ical-sub-row">
-                  <span className="ical-sub-dot" style={{ background: sub.color }} />
-                  <span className="ical-sub-name">{sub.name}</span>
-                  <span className="ical-sub-url">{sub.url}</span>
-                  {icalErrors?.[sub.id] && <span className="ical-sub-error">⚠ {icalErrors[sub.id]}</span>}
-                  <button className="ical-sub-del" onClick={() => onDeleteIcalSub(sub.id)}>✕</button>
-                </div>
-              ))}
-              <IcalAddForm onAdd={onAddIcalSub} />
-            </div>
-          )}
 
           <div className="time-grid">
             {HOURS.map(hour => {
