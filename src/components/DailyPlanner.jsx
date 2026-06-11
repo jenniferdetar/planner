@@ -131,7 +131,7 @@ export default function DailyPlanner({
       {/* Tab strip — always visible at top */}
       <div className="planner-tabs-bar">
         <div className="view-tabs">
-          {['week', 'month', 'csea', 'finance', 'gcu', 'icaap', 'library', 'personal'].map(v => (
+          {['week', 'month', 'csea', 'finance', 'gcu', 'icaap', 'personal'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
@@ -195,22 +195,22 @@ export default function DailyPlanner({
         />
       )}
 
-      {view === 'personal' && <PersonalPanel userId={userId} selectedDate={selectedDate} />}
+      {view === 'personal' && (
+        <PersonalPanel
+          userId={userId}
+          selectedDate={selectedDate}
+          books={books}
+          onAddBook={onAddBook}
+          onUpdateBookStatus={onUpdateBookStatus}
+          onDeleteBook={onDeleteBook}
+          onImportBooks={onImportBooks}
+        />
+      )}
 
       {view === 'gcu' && (
         <GcuPanel
           onPushToAsana={onPushGcuToAsana}
           pushing={gcuPushing}
-        />
-      )}
-
-      {view === 'library' && (
-        <LibraryPanel
-          books={books || []}
-          onAddBook={onAddBook}
-          onUpdateStatus={onUpdateBookStatus}
-          onDeleteBook={onDeleteBook}
-          onImportBooks={onImportBooks}
         />
       )}
 

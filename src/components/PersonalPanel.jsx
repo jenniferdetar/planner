@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useDailyLog } from '../hooks/useDailyLog'
 import GoalsPanel from './GoalsPanel'
+import LibraryPanel from './LibraryPanel'
 import './PersonalPanel.css'
 
 function formatTime(ts) {
   return new Date(ts).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
 }
 
-export default function PersonalPanel({ userId, selectedDate }) {
+export default function PersonalPanel({ userId, selectedDate, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks }) {
   const dateStr = selectedDate instanceof Date
     ? selectedDate.toISOString().split('T')[0]
     : new Date().toISOString().split('T')[0]
@@ -30,7 +31,7 @@ export default function PersonalPanel({ userId, selectedDate }) {
   return (
     <div className="personal-panel">
       <div className="personal-sub-tabs">
-        {[['log', 'Daily Log'], ['goals', 'My Goals'], ['checklist', 'Monthly Checklist']].map(([key, label]) => (
+        {[['log', 'Daily Log'], ['goals', 'My Goals'], ['checklist', 'Monthly Checklist'], ['library', 'Library']].map(([key, label]) => (
           <button
             key={key}
             className={`personal-sub-tab ${subTab === key ? 'active' : ''}`}
@@ -74,6 +75,15 @@ export default function PersonalPanel({ userId, selectedDate }) {
 
       {subTab === 'goals' && <GoalsPanel userId={userId} section="goals" />}
       {subTab === 'checklist' && <GoalsPanel userId={userId} section="checklist" />}
+      {subTab === 'library' && (
+        <LibraryPanel
+          books={books || []}
+          onAddBook={onAddBook}
+          onUpdateStatus={onUpdateBookStatus}
+          onDeleteBook={onDeleteBook}
+          onImportBooks={onImportBooks}
+        />
+      )}
     </div>
   )
 }
