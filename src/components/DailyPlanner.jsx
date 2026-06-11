@@ -144,6 +144,7 @@ export default function DailyPlanner({
 
       {view === 'week' && (
         <WeekView
+          userId={userId}
           selectedDate={selectedDate}
           onDateChange={onDateChange}
           calendarBlocks={calendarBlocks}

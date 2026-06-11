@@ -123,6 +123,14 @@
   border: 1.5px solid;
   background: transparent;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.1s;
+  padding: 0;
+}
+
+.habit-dot:hover {
+  opacity: 0.75;
+  transform: scale(1.1);
 }
 
 /* Motivational banner */
