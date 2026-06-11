@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from 'react'
 import './DailyPlanner.css'
 import MonthView from './MonthView'
 import WeekView from './WeekView'
+import GoalsPanel from './GoalsPanel'
 import CseaTracker from './CseaTracker'
 import FinancialPanel from './FinancialPanel'
 import IcaapTracker from './IcaapTracker'
@@ -130,13 +131,13 @@ export default function DailyPlanner({
       {/* Tab strip — always visible at top */}
       <div className="planner-tabs-bar">
         <div className="view-tabs">
-          {['week', 'month', 'csea', 'finance', 'gcu', 'icaap', 'library', 'personal'].map(v => (
+          {['week', 'month', 'csea', 'finance', 'goals', 'gcu', 'icaap', 'library', 'personal'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >
-              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v === 'week' ? 'Week' : v.charAt(0).toUpperCase() + v.slice(1)}
+              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v === 'week' ? 'Week' : v === 'goals' ? 'Goals' : v.charAt(0).toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>
@@ -194,6 +195,8 @@ export default function DailyPlanner({
         />
       )}
 
+      {view === 'goals' && <GoalsPanel userId={userId} />}
+
       {view === 'personal' && <PersonalPanel userId={userId} selectedDate={selectedDate} />}
 
       {view === 'gcu' && (
@@ -236,7 +239,7 @@ export default function DailyPlanner({
       )}
 
 
-      <div className="planner-body" style={{ display: 'none' }}>
+      <div className="planner-body" style={{ display: 'none' }} aria-hidden="true">
         {/* Time Schedule */}
         <div className="schedule-section">
           <div className="section-label">
