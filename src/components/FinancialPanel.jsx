@@ -461,21 +461,21 @@ function PaycheckTracker({ bills, paychecks, onAdd, onUpdateAmount, onToggleBill
 }
 
 const BILL_TYPES = [
-  { name: '$100 Bills', value: 100.00, symbol: '$100' },
-  { name: '$50 Bills', value: 50.00, symbol: '$50' },
-  { name: '$20 Bills', value: 20.00, symbol: '$20' },
-  { name: '$10 Bills', value: 10.00, symbol: '$10' },
-  { name: '$5 Bills', value: 5.00, symbol: '$5' },
-  { name: '$2 Bills', value: 2.00, symbol: '$2' },
   { name: '$1 Bills', value: 1.00, symbol: '$1' },
+  { name: '$2 Bills', value: 2.00, symbol: '$2' },
+  { name: '$5 Bills', value: 5.00, symbol: '$5' },
+  { name: '$10 Bills', value: 10.00, symbol: '$10' },
+  { name: '$20 Bills', value: 20.00, symbol: '$20' },
+  { name: '$50 Bills', value: 50.00, symbol: '$50' },
+  { name: '$100 Bills', value: 100.00, symbol: '$100' },
 ]
 
 const COIN_TYPES = [
-  { name: 'Half Dollars', value: 0.50, symbol: '50¢' },
-  { name: 'Quarters', value: 0.25, symbol: '25¢' },
-  { name: 'Dimes', value: 0.10, symbol: '10¢' },
-  { name: 'Nickels', value: 0.05, symbol: '5¢' },
   { name: 'Pennies', value: 0.01, symbol: '1¢' },
+  { name: 'Nickels', value: 0.05, symbol: '5¢' },
+  { name: 'Dimes', value: 0.10, symbol: '10¢' },
+  { name: 'Quarters', value: 0.25, symbol: '25¢' },
+  { name: 'Half Dollars', value: 0.50, symbol: '50¢' },
 ]
 
 const ALL_DENOMINATIONS = [...BILL_TYPES, ...COIN_TYPES]
