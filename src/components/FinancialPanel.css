@@ -530,13 +530,15 @@
   margin-right: auto; margin-left: 12px;
 }
 .coins-table-wrap { flex: 1; overflow-y: auto; padding: 8px 16px; }
-.coins-split-wrap { display: flex; gap: 24px; flex: 1; overflow-y: auto; padding: 8px 16px; }
+.coins-split-wrap { display: flex; gap: 48px; flex: 1; overflow-y: auto; padding: 8px 16px; }
 .coins-half { flex: 1; min-width: 0; }
 .coins-half-title { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #aaa; padding: 0 12px 6px; }
 .coins-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .coins-table th { padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #aaa; border-bottom: 2px solid #e8e5de; }
 .coins-table th:last-child { text-align: right; }
 .coins-row td { border-bottom: 1px solid #f0ede6; padding: 8px 12px; }
+.coins-row .coins-td-count { padding-right: 4px; }
+.coins-row .coins-td-sub { padding-left: 4px; }
 .coins-td-name { font-weight: 600; color: #1a1a2e; }
 .coins-td-val { color: #888; font-size: 12px; }
 .coins-td-count { display: flex; align-items: center; gap: 8px; }
