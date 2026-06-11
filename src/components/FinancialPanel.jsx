@@ -45,7 +45,7 @@ export default function FinancialPanel({
       <div className="fin-tabs">
         {['bills', 'tracker', 'goals', 'coins'].map(t => (
           <button key={t} className={`fin-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
-            {t === 'tracker' ? 'Paycheck' : t.charAt(0).toUpperCase() + t.slice(1)}
+            {t === 'tracker' ? 'Paycheck' : t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
         ))}
       </div>
@@ -460,14 +460,25 @@ function PaycheckTracker({ bills, paychecks, onAdd, onUpdateAmount, onToggleBill
   )
 }
 
+const BILL_TYPES = [
+  { name: '$100 Bills', value: 100.00, symbol: '$100' },
+  { name: '$50 Bills', value: 50.00, symbol: '$50' },
+  { name: '$20 Bills', value: 20.00, symbol: '$20' },
+  { name: '$10 Bills', value: 10.00, symbol: '$10' },
+  { name: '$5 Bills', value: 5.00, symbol: '$5' },
+  { name: '$2 Bills', value: 2.00, symbol: '$2' },
+  { name: '$1 Bills', value: 1.00, symbol: '$1' },
+]
+
 const COIN_TYPES = [
-  { name: 'Dollars', value: 1.00, symbol: '$1' },
-  { name: 'Halves', value: 0.50, symbol: '50¢' },
+  { name: 'Half Dollars', value: 0.50, symbol: '50¢' },
   { name: 'Quarters', value: 0.25, symbol: '25¢' },
   { name: 'Dimes', value: 0.10, symbol: '10¢' },
   { name: 'Nickels', value: 0.05, symbol: '5¢' },
   { name: 'Pennies', value: 0.01, symbol: '1¢' },
 ]
+
+const ALL_DENOMINATIONS = [...BILL_TYPES, ...COIN_TYPES]
 
 function CoinsTab({ userId }) {
   const [counts, setCounts] = useState({})
@@ -516,12 +527,12 @@ function CoinsTab({ userId }) {
     if (userId) await supabase.from('coin_counts').delete().eq('user_id', userId)
   }
 
-  const total = COIN_TYPES.reduce((s, c) => s + (counts[c.name] || 0) * c.value, 0)
+  const total = ALL_DENOMINATIONS.reduce((s, c) => s + (counts[c.name] || 0) * c.value, 0)
 
   return (
     <div className="fin-content">
       <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Coin counter</span>
+        <span className="fin-toolbar-label">Cash on Hand</span>
         <span className="coins-total-badge">{fmt(total)}</span>
         {saving && <span style={{ fontSize: 11, color: '#999' }}>Saving…</span>}
         <button className="fin-cancel" onClick={reset}>Reset</button>
@@ -530,29 +541,36 @@ function CoinsTab({ userId }) {
         <table className="coins-table">
           <thead>
             <tr>
-              <th>Coin</th>
+              <th>Denomination</th>
               <th>Value</th>
               <th>Count</th>
               <th>Subtotal</th>
             </tr>
           </thead>
           <tbody>
-            {COIN_TYPES.map(coin => (
-              <tr key={coin.name} className="coins-row">
-                <td className="coins-td-name">{coin.name}</td>
-                <td className="coins-td-val">{coin.symbol}</td>
-                <td className="coins-td-count">
-                  <button className="coins-btn" onClick={() => update(coin.name, -1)}>−</button>
-                  <input
-                    className="coins-input"
-                    type="number" min="0"
-                    value={counts[coin.name] || 0}
-                    onChange={e => setDirect(coin.name, e.target.value)}
-                  />
-                  <button className="coins-btn" onClick={() => update(coin.name, 1)}>+</button>
-                </td>
-                <td className="coins-td-sub">{fmt((counts[coin.name] || 0) * coin.value)}</td>
-              </tr>
+            {ALL_DENOMINATIONS.map((coin, i) => (
+              <>
+                {i === BILL_TYPES.length && (
+                  <tr key="divider" className="coins-section-divider">
+                    <td colSpan={4}>Coins</td>
+                  </tr>
+                )}
+                <tr key={coin.name} className="coins-row">
+                  <td className="coins-td-name">{coin.name}</td>
+                  <td className="coins-td-val">{coin.symbol}</td>
+                  <td className="coins-td-count">
+                    <button className="coins-btn" onClick={() => update(coin.name, -1)}>−</button>
+                    <input
+                      className="coins-input"
+                      type="number" min="0"
+                      value={counts[coin.name] || 0}
+                      onChange={e => setDirect(coin.name, e.target.value)}
+                    />
+                    <button className="coins-btn" onClick={() => update(coin.name, 1)}>+</button>
+                  </td>
+                  <td className="coins-td-sub">{fmt((counts[coin.name] || 0) * coin.value)}</td>
+                </tr>
+              </>
             ))}
           </tbody>
           <tfoot>
