@@ -110,7 +110,7 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
               <span className={`cell-num ${isToday ? 'today-num' : ''}`}>{cell.day}</span>
 
               {/* Calendar events */}
-              {!cell.overflow && gcalBlocks.slice(0, 4).map(block => (
+              {!cell.overflow && gcalBlocks.map(block => (
                 <div
                   key={block.id}
                   className="cell-event"
@@ -120,9 +120,6 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
                   <span className="cell-event-title">{block.title || block.text}</span>
                 </div>
               ))}
-              {!cell.overflow && gcalBlocks.length > 4 && (
-                <div className="cell-more">+{gcalBlocks.length - 4} more</div>
-              )}
             </div>
           )
         })}

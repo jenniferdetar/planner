@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
   height: 100%;
 }
 
@@ -48,9 +48,9 @@
 .month-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: auto repeat(6, 1fr);
+  grid-template-rows: auto;
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 /* Day-of-week headers */
@@ -79,9 +79,9 @@
   gap: 3px;
   cursor: pointer;
   transition: background 0.12s;
-  overflow: hidden;
+  overflow: visible;
   background: #fff;
-  min-height: 100px;
+  min-height: 80px;
 }
 
 .month-cell:hover:not(.overflow) {
