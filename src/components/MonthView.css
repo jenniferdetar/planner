@@ -83,7 +83,8 @@
   gap: 2px;
   cursor: pointer;
   transition: background 0.12s;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
   background: #fff;
   min-width: 0;
   min-height: 80px;
