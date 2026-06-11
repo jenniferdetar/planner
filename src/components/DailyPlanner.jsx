@@ -13,6 +13,14 @@ import { TASK_AREAS } from './Sidebar'
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
 const BLOCK_COLORS = ['#4a90d9', '#e05c5c', '#5cb85c', '#f0a040', '#9b59b6', '#c9a96e']
 
+function contrastColor(hex) {
+  const c = (hex ?? '#4a90d9').replace('#', '')
+  const r = parseInt(c.slice(0,2), 16)
+  const g = parseInt(c.slice(2,4), 16)
+  const b = parseInt(c.slice(4,6), 16)
+  return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1a1a2e' : '#ffffff'
+}
+
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
@@ -343,23 +351,24 @@ export default function DailyPlanner({
                       <div
                         key={block.id}
                         className={`time-block ${block.source === 'google' ? 'gcal-block' : ''}`}
-                        style={{ background: block.color + '18', borderLeft: `3px solid ${block.color}` }}
+                        style={{ background: block.color ?? '#4a90d9', color: contrastColor(block.color) }}
                       >
                         <div className="block-main">
                           <span className="block-text">{block.title || block.text}</span>
                           {block.startLabel && (
-                            <span className="block-time">{block.startLabel}–{block.endLabel}</span>
+                            <span className="block-time" style={{ opacity: 0.8 }}>{block.startLabel}–{block.endLabel}</span>
                           )}
                         </div>
                         <div className="block-meta">
                           {block.calendarName && (
-                            <span className="block-cal-badge" style={{ color: block.color }}>
+                            <span className="block-cal-badge" style={{ color: 'inherit', opacity: 0.75 }}>
                               {block.calendarName}
                             </span>
                           )}
                           {block.source !== 'google' && (
                             <button
                               className="delete-block-btn"
+                              style={{ color: 'inherit', opacity: 0.7 }}
                               onClick={() => onDeleteBlock(block.id)}
                             >✕</button>
                           )}

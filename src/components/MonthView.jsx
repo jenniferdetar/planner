@@ -14,6 +14,14 @@ const DAY_COLORS = [
   '#7ec8c8', // Saturday – teal
 ]
 
+function contrastColor(hex) {
+  const c = hex?.replace('#', '') ?? '4a90d9'
+  const r = parseInt(c.slice(0,2), 16)
+  const g = parseInt(c.slice(2,4), 16)
+  const b = parseInt(c.slice(4,6), 16)
+  return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1a1a2e' : '#ffffff'
+}
+
 function sameDay(a, b) {
   return a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
@@ -106,7 +114,7 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
                 <div
                   key={block.id}
                   className="cell-event"
-                  style={{ background: block.color ?? '#4a90d9' }}
+                  style={{ background: block.color ?? '#4a90d9', color: contrastColor(block.color) }}
                 >
                   {block.startLabel && <span className="cell-event-time">{block.startLabel}</span>}
                   <span className="cell-event-title">{block.title || block.text}</span>
