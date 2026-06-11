@@ -140,18 +140,19 @@ export default function App() {
   const rangedMeetings = useMeetingsInRange(userId, calFetchStart, calFetchEnd)
 
   async function reconnectGoogle() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        scopes: 'https://www.googleapis.com/auth/calendar.readonly',
-        redirectTo: window.location.origin,
-        queryParams: { prompt: 'consent' },
-        skipBrowserRedirect: true,
-      },
-    })
-    if (error) { alert('Error: ' + error.message); return }
-    if (data?.url) window.location.href = data.url
-    else alert('Could not generate Google login URL.')
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          scopes: 'https://www.googleapis.com/auth/calendar.readonly',
+          redirectTo: window.location.origin,
+          queryParams: { prompt: 'consent' },
+        },
+      })
+      if (error) alert('Google Calendar error: ' + error.message)
+    } catch (e) {
+      alert('Google Calendar error: ' + e.message)
+    }
   }
 
   // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
