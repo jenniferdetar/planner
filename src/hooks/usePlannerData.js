@@ -113,7 +113,7 @@ export function useMeetings(userId, selectedDate) {
     const et = endTime ?? `${pad(Math.min(hour + 1, 23))}:00:00`
     const { data } = await supabase
       .from('opus_meetings')
-      .insert({ title, date: dateStr, start_time: st, end_time: et, user_id: userId })
+      .insert({ title, date: dateStr, start_time: st, end_time: et, color: color ?? null, user_id: userId })
       .select()
       .single()
     if (data) setMeetings((prev) => [...prev, data])

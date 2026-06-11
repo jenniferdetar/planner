@@ -36,13 +36,13 @@ function formatTime(timeStr) {
   return m === 0 ? `${h12} ${suffix}` : `${h12}:${String(m).padStart(2,'0')} ${suffix}`
 }
 
-function meetingToBlock(meeting, color) {
+function meetingToBlock(meeting, fallbackColor) {
   const hour = parseInt(meeting.start_time?.split(':')[0] ?? '9', 10)
   return {
     id: meeting.id,
     hour,
     text: meeting.title,
-    color: color ?? '#4a90d9',
+    color: meeting.color ?? fallbackColor ?? '#4a90d9',
     source: 'supabase',
     startLabel: meeting.start_time ? formatTime(meeting.start_time) : null,
     endLabel: meeting.end_time ? formatTime(meeting.end_time) : null,
