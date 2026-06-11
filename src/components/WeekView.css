@@ -84,12 +84,12 @@
 }
 
 .habit-day-label {
-  width: 16px;
+  width: 14px;
   text-align: center;
   font-size: 9px;
   font-weight: 700;
   color: #bbb;
-  letter-spacing: 0.5px;
+  letter-spacing: 0;
 }
 
 .habit-row {
