@@ -140,8 +140,6 @@ export default function App() {
   const rangedMeetings = useMeetingsInRange(userId, calFetchStart, calFetchEnd)
 
   async function reconnectGoogle() {
-    clearProviderToken()
-    const { supabase } = await import('./lib/supabase')
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
