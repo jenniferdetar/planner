@@ -160,7 +160,7 @@
 
 /* Checklist */
 .checklist-section {
-  padding: 0 24px 32px;
+  padding: 0 24px 16px;
 }
 
 .checklist-title {
@@ -185,7 +185,7 @@
   font-weight: 700;
   letter-spacing: 0.5px;
   color: #999;
-  padding: 4px 3px;
+  padding: 2px 3px;
   text-align: center;
   border-bottom: 1px solid #e8e5de;
 }
@@ -197,7 +197,7 @@
 }
 
 .checklist-table td {
-  padding: 3px;
+  padding: 1px 3px;
   text-align: center;
   border-bottom: 1px solid #f5f4f0;
 }
@@ -208,6 +208,7 @@
   font-size: 11.5px;
   color: #444;
   white-space: nowrap;
+  line-height: 1.6;
 }
 
 .checklist-table tr:hover td {
@@ -215,8 +216,8 @@
 }
 
 .checklist-box {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 3px;
   border: 1.5px solid;
   display: inline-block;
