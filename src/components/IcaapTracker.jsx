@@ -54,6 +54,7 @@ async function getFirstWorkspace(token) {
 
 export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
   const [tab, setTab] = useState('dashboard')
+  const [extraHoursTab, setExtraHoursTab] = useState('profdev')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
@@ -144,8 +145,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
         <button data-t="asana" className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
         <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
-        <button data-t="profdev" className={`icaap-tab ${tab === 'profdev' ? 'active' : ''}`} onClick={() => setTab('profdev')}>Prof. Development 09-27-25</button>
-        <button data-t="winterbreak" className={`icaap-tab ${tab === 'winterbreak' ? 'active' : ''}`} onClick={() => setTab('winterbreak')}>Winter Break 2025–2026</button>
+        <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
       </div>
 
       {/* Dashboard tab */}
@@ -161,9 +161,23 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </div>
       )}
 
-      {/* Note tabs */}
-      {tab === 'profdev' && <IcaapNotePanel userId={userId} noteKey="profdev-09-27-25" title="Professional Development — 09-27-25" color="#7ba7e0" />}
-      {tab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
+      {/* Extra Hours tab */}
+      {tab === 'extrahours' && (
+        <div className="icaap-extrahours">
+          <div className="icaap-extrahours-tabs">
+            <button
+              className={`icaap-extrahours-tab ${extraHoursTab === 'profdev' ? 'active' : ''}`}
+              onClick={() => setExtraHoursTab('profdev')}
+            >Prof. Development 09-27-25</button>
+            <button
+              className={`icaap-extrahours-tab ${extraHoursTab === 'winterbreak' ? 'active' : ''}`}
+              onClick={() => setExtraHoursTab('winterbreak')}
+            >Winter Break 2025–2026</button>
+          </div>
+          {extraHoursTab === 'profdev' && <IcaapNotePanel userId={userId} noteKey="profdev-09-27-25" title="Professional Development — 09-27-25" color="#7ba7e0" />}
+          {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
+        </div>
+      )}
 
       {/* Attendance tab */}
       {tab === 'attendance' && (
@@ -177,7 +191,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       )}
 
       {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'profdev' || tab === 'winterbreak') ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours') ? 'none' : undefined }}>
         {false ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (

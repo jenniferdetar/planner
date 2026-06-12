@@ -1163,6 +1163,46 @@
 
 
 /* Note panels (Prof Dev, Winter Break) */
+.icaap-extrahours {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.icaap-extrahours-tabs {
+  display: flex;
+  gap: 0;
+  background: #f5f4f0;
+  border-bottom: 2px solid #e8e5de;
+  flex-shrink: 0;
+}
+
+.icaap-extrahours-tab {
+  padding: 9px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #aaa;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.icaap-extrahours-tab:hover { color: #555; }
+
+.icaap-extrahours-tab.active {
+  color: #7ba7e0;
+  border-bottom-color: #7ba7e0;
+  background: #fff;
+  font-weight: 700;
+}
+
 .icaap-note-panel {
   flex: 1;
   display: flex;
