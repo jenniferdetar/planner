@@ -8,6 +8,8 @@ const STATUS_COLORS = {
   'read': '#5cb85c',
 }
 
+const PALETTE = ['#e8a0a0', '#7ec8c8', '#e8c97a', '#7ba7e0']
+
 const STATUS_LABELS = {
   'want-to-read': 'Want to Read',
   'reading': 'Reading',
@@ -192,14 +194,16 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
         )}
 
         <div className="book-grid">
-          {shelfBooks.map(book => (
+          {shelfBooks.map((book, idx) => {
+            const paletteColor = PALETTE[idx % PALETTE.length]
+            return (
             <div
               key={book.id}
               className="book-card"
               onMouseEnter={() => setHoveredId(book.id)}
               onMouseLeave={() => setHoveredId(null)}
             >
-              <div className="book-card-spine" style={{ background: STATUS_COLORS[book.status] + '33', borderTopColor: STATUS_COLORS[book.status] }} />
+              <div className="book-card-spine" style={{ background: paletteColor + '33', borderTopColor: paletteColor }} />
               <div className="book-card-body">
                 <span className="book-title">{book.title}</span>
                 {book.author && <span className="book-author">{book.author}</span>}
@@ -224,7 +228,7 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
                 )}
               </div>
             </div>
-          ))}
+          )})}
         </div>
 
         <form className="add-book-form" onSubmit={handleAdd}>

@@ -9,6 +9,7 @@ function fmt(n) {
 }
 
 const FULL_AMOUNT_BILLS = ['Mortgage', 'HOA', 'HELOC (California Credit Union)']
+const PALETTE = ['#e8a0a0', '#7ec8c8', '#e8c97a', '#7ba7e0']
 
 export default function FinancialPanel({
   transactions, onAddTransaction, onDeleteTransaction,
@@ -178,19 +179,20 @@ function BillsTab({ bills, onAdd, onToggle, onDelete }) {
 
       <div className="fin-bill-grid">
         {bills.length === 0 && <p className="fin-empty">No bills added yet</p>}
-        {unpaid.map(b => <BillCard key={b.id} bill={b} onToggle={onToggle} onDelete={onDelete} />)}
+        {unpaid.map((b, i) => <BillCard key={b.id} bill={b} index={i} onToggle={onToggle} onDelete={onDelete} />)}
         {paid.length > 0 && unpaid.length > 0 && <div className="fin-bill-grid-sep">Paid</div>}
-        {paid.map(b => <BillCard key={b.id} bill={b} onToggle={onToggle} onDelete={onDelete} />)}
+        {paid.map((b, i) => <BillCard key={b.id} bill={b} index={unpaid.length + i} onToggle={onToggle} onDelete={onDelete} />)}
       </div>
     </div>
   )
 }
 
-function BillCard({ bill, onToggle, onDelete }) {
+function BillCard({ bill, index, onToggle, onDelete }) {
   const suffix = bill.due_day === 1 ? 'st' : bill.due_day === 2 ? 'nd' : bill.due_day === 3 ? 'rd' : 'th'
+  const color = bill.paid ? '#5cb85c' : PALETTE[index % PALETTE.length]
   return (
     <div className={`fin-bill-card ${bill.paid ? 'paid' : ''}`} onClick={() => onToggle(bill.id)}>
-      <div className="fin-bill-card-top" />
+      <div className="fin-bill-card-top" style={{ background: color }} />
       <button className="fin-bill-card-delete" onClick={e => { e.stopPropagation(); onDelete(bill.id) }}>✕</button>
       <div className="fin-bill-card-amount">{fmt(bill.amount)}</div>
       <div className="fin-bill-card-name">{bill.name}</div>

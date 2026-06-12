@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef } from 'react'
 import { useDailyLog } from '../hooks/useDailyLog'
 import { useMantra } from '../hooks/useMantra'
 import GoalsPanel from './GoalsPanel'
@@ -22,12 +22,30 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
     ? selectedDate.toISOString().split('T')[0]
     : new Date().toISOString().split('T')[0]
 
-  const { entries, addEntry, deleteEntry } = useDailyLog(userId, dateStr)
+  const { entries, addEntry, deleteEntry, updateEntry } = useDailyLog(userId, dateStr)
   const { mantra, setMantra, save, saved } = useMantra(userId)
   const [text, setText] = useState('')
   const [subTab, setSubTab] = useState('log')
   const [mantraEditing, setMantraEditing] = useState(false)
+  const [editingEntryId, setEditingEntryId] = useState(null)
+  const [editingEntryText, setEditingEntryText] = useState('')
   const saveTimer = useRef(null)
+  const editTimers = useRef({})
+
+  function handleEntryEdit(entry) {
+    setEditingEntryId(entry.id)
+    setEditingEntryText(entry.entry)
+  }
+
+  function handleEntryChange(id, val) {
+    setEditingEntryText(val)
+    clearTimeout(editTimers.current[id])
+    editTimers.current[id] = setTimeout(() => updateEntry(id, val), 800)
+  }
+
+  function commitEntryEdit() {
+    setEditingEntryId(null)
+  }
 
   async function handleAdd(e) {
     e.preventDefault()
@@ -81,7 +99,18 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
                 {entries.map(entry => (
                   <li key={entry.id} className="daily-log-item">
                     <span className="daily-log-time">{formatTime(entry.created_at)}</span>
-                    <span className="daily-log-text">{entry.entry}</span>
+                    {editingEntryId === entry.id ? (
+                      <input
+                        autoFocus
+                        className="daily-log-edit-input"
+                        value={editingEntryText}
+                        onChange={e => handleEntryChange(entry.id, e.target.value)}
+                        onBlur={commitEntryEdit}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') commitEntryEdit() }}
+                      />
+                    ) : (
+                      <span className="daily-log-text" onClick={() => handleEntryEdit(entry)}>{entry.entry}</span>
+                    )}
                     <button className="daily-log-del" onClick={() => deleteEntry(entry.id)}>×</button>
                   </li>
                 ))}

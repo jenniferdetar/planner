@@ -683,8 +683,10 @@
 .issue-card.resolved { opacity: 0.55; }
 
 .interaction-group-header {
-  background: #1a1a2e !important;
-  color: #c9a96e !important;
+  background: rgba(201,169,110,0.12) !important;
+  border-bottom: 2px solid #c9a96e;
 }
 
-.interaction-group-header * { color: #c9a96e !important; }
+.interaction-group-name { color: #7a6030 !important; }
+.interaction-group-count { background: rgba(201,169,110,0.2); color: #7a6030 !important; }
+.interaction-group-toggle { color: #c9a96e !important; }

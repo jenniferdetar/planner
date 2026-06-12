@@ -186,6 +186,22 @@
   color: #333;
   flex: 1;
   line-height: 1.4;
+  cursor: text;
+}
+
+.daily-log-text:hover { color: #1a1a2e; }
+
+.daily-log-edit-input {
+  flex: 1;
+  font-size: 13px;
+  color: #333;
+  font-family: inherit;
+  border: none;
+  border-bottom: 1.5px solid #c9a96e;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  line-height: 1.4;
 }
 
 .daily-log-del {

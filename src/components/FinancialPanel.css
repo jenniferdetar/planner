@@ -321,11 +321,8 @@
 
 .fin-bill-card-top {
   height: 5px;
-  background: #e8a0a0;
   flex-shrink: 0;
 }
-
-.fin-bill-card.paid .fin-bill-card-top { background: #5cb85c; }
 
 .fin-bill-card-delete {
   position: absolute;

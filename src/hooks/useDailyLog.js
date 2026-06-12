@@ -29,5 +29,10 @@ export function useDailyLog(userId, date) {
     setEntries(prev => prev.filter(e => e.id !== id))
   }
 
-  return { entries, addEntry, deleteEntry }
+  async function updateEntry(id, text) {
+    await supabase.from('daily_log').update({ entry: text }).eq('id', id)
+    setEntries(prev => prev.map(e => e.id === id ? { ...e, entry: text } : e))
+  }
+
+  return { entries, addEntry, deleteEntry, updateEntry }
 }
