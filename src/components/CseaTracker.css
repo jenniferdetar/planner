@@ -690,3 +690,16 @@
 .interaction-group-name { color: #7a6030 !important; }
 .interaction-group-count { background: rgba(201,169,110,0.2); color: #7a6030 !important; }
 .interaction-group-toggle { color: #c9a96e !important; }
+
+/* ── Goals palette ── */
+.csea-stat:nth-child(1) .csea-stat-num { color: #e8a0a0 !important; }
+.csea-stat:nth-child(2) .csea-stat-num { color: #7ec8c8 !important; }
+.csea-stat:nth-child(3) .csea-stat-num { color: #e8c97a !important; }
+.csea-stat:nth-child(4) .csea-stat-num { color: #7ba7e0 !important; }
+
+.csea-tab.active { border-bottom-color: #e8a0a0; }
+
+.interaction-card:nth-child(odd)  { background: rgba(232,160,160,0.05); border-left: 3px solid #e8a0a0; }
+.interaction-card:nth-child(even) { background: rgba(126,200,200,0.05); border-left: 3px solid #7ec8c8; }
+
+.filter-pill.active { background: #7ba7e0; border-color: #7ba7e0; }

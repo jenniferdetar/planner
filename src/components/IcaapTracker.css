@@ -66,7 +66,7 @@
 .icaap-tab.active {
   color: #1a1a2e;
   background: #fff;
-  border-bottom-color: #9b59b6;
+  border-bottom-color: #7ec8c8;
 }
 
 /* Toolbar */
@@ -104,16 +104,16 @@
 .icaap-add-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #9b59b6;
+  color: #7ec8c8;
   padding: 6px 12px;
-  border: 1px solid #9b59b6;
+  border: 1px solid #7ec8c8;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .icaap-add-btn:hover {
-  background: #9b59b6;
+  background: #7ec8c8;
   color: #fff;
 }
 
@@ -210,7 +210,7 @@
 }
 
 .icaap-input:focus {
-  border-color: #9b59b6;
+  border-color: #7ec8c8;
 }
 
 .icaap-date-input {
@@ -233,7 +233,7 @@
 }
 
 .icaap-textarea:focus {
-  border-color: #9b59b6;
+  border-color: #7ec8c8;
 }
 
 .icaap-form-actions {
@@ -255,7 +255,7 @@
 .icaap-save {
   font-size: 12px;
   font-weight: 600;
-  background: #9b59b6;
+  background: #7ec8c8;
   color: #fff;
   padding: 6px 16px;
   border-radius: 6px;
@@ -736,7 +736,7 @@
   cursor: pointer;
   padding: 0;
 }
-.att-time-btn:hover { color: #9b59b6; }
+.att-time-btn:hover { color: #7ec8c8; }
 
 .att-time-input {
   display: block;
@@ -744,7 +744,7 @@
   margin: 4px auto 0;
   font-size: 11px;
   padding: 2px 4px;
-  border: 1px solid #9b59b6;
+  border: 1px solid #7ec8c8;
   border-radius: 4px;
   text-align: center;
   font-family: inherit;
@@ -1372,3 +1372,19 @@
 .icaap-tab[data-t="attendance"].active{ border-bottom-color: #7ba7e0; color: #4a77b0; }
 .icaap-tab[data-t="profdev"].active   { border-bottom-color: #7ba7e0; color: #4a77b0; }
 .icaap-tab[data-t="winterbreak"].active{border-bottom-color: #7ec8c8; color: #4a9898; }
+
+/* ── Goals palette ── */
+.icaap-stat:nth-child(1) .icaap-stat-num { color: #e8a0a0 !important; }
+.icaap-stat:nth-child(2) .icaap-stat-num { color: #7ec8c8 !important; }
+.icaap-stat:nth-child(3) .icaap-stat-num { color: #e8c97a !important; }
+.icaap-stat:nth-child(4) .icaap-stat-num { color: #7ba7e0 !important; }
+
+.icaap-tab.active { border-bottom-color: #7ec8c8; }
+
+.icaap-card:nth-child(odd)  { background: rgba(232,160,160,0.05); border-left: 3px solid #e8a0a0; }
+.icaap-card:nth-child(even) { background: rgba(126,200,200,0.05); border-left: 3px solid #7ec8c8; }
+
+.att-tr:nth-child(odd)  .att-td-name,
+.att-tr:nth-child(odd)  .att-td-cell { background: rgba(232,160,160,0.05) !important; }
+.att-tr:nth-child(even) .att-td-name,
+.att-tr:nth-child(even) .att-td-cell { background: rgba(126,200,200,0.05) !important; }

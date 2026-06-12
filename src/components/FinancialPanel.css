@@ -705,3 +705,15 @@
 .goals-table tbody tr:nth-child(odd)  td { background: rgba(232,160,160,0.07); }
 .goals-table tbody tr:nth-child(even) td { background: rgba(126,200,200,0.07); }
 .goals-th-name, .goals-th-col { background: #1a1a2e !important; color: #c9a96e !important; }
+
+/* ── Goals palette ── */
+.fin-stat:nth-child(1) .fin-stat-num:not(.income):not(.expense) { color: #e8a0a0 !important; }
+.fin-stat:nth-child(2) .fin-stat-num:not(.income):not(.expense) { color: #7ec8c8 !important; }
+.fin-stat:nth-child(3) .fin-stat-num:not(.income):not(.expense) { color: #e8c97a !important; }
+.fin-stat:nth-child(4) .fin-stat-num:not(.income):not(.expense) { color: #7ba7e0 !important; }
+
+.fin-txn:nth-child(odd)  { background: rgba(232,160,160,0.05); border-left: 3px solid #e8a0a0; }
+.fin-txn:nth-child(even) { background: rgba(126,200,200,0.05); border-left: 3px solid #7ec8c8; }
+
+.fin-goal:nth-child(odd)  { border-left: 3px solid #e8c97a; }
+.fin-goal:nth-child(even) { border-left: 3px solid #7ba7e0; }
