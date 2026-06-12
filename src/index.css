@@ -40,5 +40,5 @@ input, textarea {
   border-radius: 2px;
 }
 
-/* ── Global font size ── */
-* { font-size: 14px !important; }
+/* ── Global font size & weight ── */
+* { font-size: 14px !important; font-weight: 400 !important; }
