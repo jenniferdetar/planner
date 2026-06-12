@@ -58,22 +58,22 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #aaa;
+  color: #1a1a2e;
   transition: all 0.15s;
   cursor: pointer;
   border-radius: 20px;
-  border: 1.5px solid #e0ddd7;
-  background: #fff;
+  border: none;
   text-align: center;
+  opacity: 0.55;
+  font-family: 'Indie Flower', cursive !important;
 }
 
-.csea-tab:nth-child(1).active { background: #e8a0a0; border-color: #e8a0a0; color: #fff; }
-.csea-tab:nth-child(2).active { background: #7ec8c8; border-color: #7ec8c8; color: #fff; }
-.csea-tab:nth-child(3).active { background: #e8c97a; border-color: #e8c97a; color: #fff; }
+.csea-tab:hover { opacity: 0.8; }
+.csea-tab.active { opacity: 1; }
 
-.csea-tab:nth-child(1):hover:not(.active) { border-color: #e8a0a0; color: #e8a0a0; }
-.csea-tab:nth-child(2):hover:not(.active) { border-color: #7ec8c8; color: #7ec8c8; }
-.csea-tab:nth-child(3):hover:not(.active) { border-color: #e8c97a; color: #e8c97a; }
+.csea-tab:nth-child(1) { background: #e8a0a0; }
+.csea-tab:nth-child(2) { background: #7ec8c8; }
+.csea-tab:nth-child(3) { background: #e8c97a; }
 
 .csea-panel {
   flex: 1;
