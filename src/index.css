@@ -41,11 +41,4 @@ input, textarea {
 }
 
 /* ── Global font size ── */
-* { font-size: 10pt !important; }
-
-h1, h2, h3, h4, h5, h6,
-[class*="-title"], [class*="-heading"],
-[class*="-header"] span,
-[class*="group-label"], [class*="-label"]:not([class*="stat-lbl"]):not([class*="day-label"]):not([class*="tab"]):not([class*="pill"]):not([class*="badge"]):not([class*="lbl"]) {
-  font-size: 14pt !important;
-}
+* { font-size: 14px !important; }
