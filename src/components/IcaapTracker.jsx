@@ -889,9 +889,9 @@ function IcaapDashboard() {
 
       <div className="dash-summary">
         <div className="dash-stat-spacer" />
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#e8a0a0' }}>{submitted}/{total}</span><span className="dash-stat-lbl">Hours Worked</span></div>
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#7ec8c8' }}>{paylogged}/{total}</span><span className="dash-stat-lbl">Paylog Submitted</span></div>
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#e8c97a' }}>{approved}/{total}</span><span className="dash-stat-lbl">Approved</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#8B2B3A' }}>{submitted}/{total}</span><span className="dash-stat-lbl">Hours Worked</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#6E2232' }}>{paylogged}/{total}</span><span className="dash-stat-lbl">Paylog Submitted</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#501A28' }}>{approved}/{total}</span><span className="dash-stat-lbl">Approved</span></div>
       </div>
 
       {loading ? (
@@ -902,9 +902,9 @@ function IcaapDashboard() {
             <thead>
               <tr>
                 <th className="dash-th-name">Employee</th>
-                <th className="dash-th" style={{ color: '#e8a0a0' }}>Hours Worked</th>
-                <th className="dash-th" style={{ color: '#7ec8c8' }}>Paylog Submitted</th>
-                <th className="dash-th" style={{ color: '#e8c97a' }}>Approved</th>
+                <th className="dash-th" style={{ color: '#AAAA9E' }}>Hours Worked</th>
+                <th className="dash-th" style={{ color: '#AAAA9E' }}>Paylog Submitted</th>
+                <th className="dash-th" style={{ color: '#AAAA9E' }}>Approved</th>
               </tr>
             </thead>
             <tbody>
