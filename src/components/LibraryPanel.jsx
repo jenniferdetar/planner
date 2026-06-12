@@ -8,7 +8,7 @@ const STATUS_COLORS = {
   'read': '#5cb85c',
 }
 
-const PALETTE = ['#8B2B3A', '#6E2232', '#501A28', '#2F1019']
+const PALETTE = ['#e8a0a0', '#7ec8c8', '#e8c97a', '#7ba7e0']
 
 const STATUS_LABELS = {
   'want-to-read': 'Want to Read',

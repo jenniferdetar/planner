@@ -9,7 +9,7 @@ function fmt(n) {
 }
 
 const FULL_AMOUNT_BILLS = ['Mortgage', 'HOA', 'HELOC (California Credit Union)']
-const PALETTE = ['#8B2B3A', '#6E2232', '#501A28', '#2F1019']
+const PALETTE = ['#e8a0a0', '#7ec8c8', '#e8c97a', '#7ba7e0']
 
 export default function FinancialPanel({
   transactions, onAddTransaction, onDeleteTransaction,

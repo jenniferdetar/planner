@@ -135,7 +135,7 @@
 
 /* Motivational banner */
 .week-banner {
-  background: #8B2B3A;
+  background: #e8a0a0;
   color: #fff;
   text-align: center;
   font-size: 11px;
@@ -232,7 +232,7 @@
 }
 
 .week-add-btn:hover {
-  color: #8B2B3A;
+  color: #e8a0a0;
 }
 
 .week-add-form {
@@ -347,8 +347,8 @@
 }
 
 /* ── Palette alternating day rows ── */
-.week-day-row:nth-child(odd)  { background: rgba(139,43,58,0.05); }
-.week-day-row:nth-child(even) { background: rgba(110,34,50,0.05); }
+.week-day-row:nth-child(odd)  { background: rgba(232,160,160,0.05); }
+.week-day-row:nth-child(even) { background: rgba(126,200,200,0.05); }
 .week-day-row.week-day-today  { background: #fffdf7 !important; }
 
 /* ── Left panel bold ── */
