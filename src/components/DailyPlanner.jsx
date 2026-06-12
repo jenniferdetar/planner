@@ -134,6 +134,7 @@ export default function DailyPlanner({
           {['month', 'csea', 'finance', 'gcu', 'icaap', 'personal'].map(v => (
             <button
               key={v}
+              data-v={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
               onClick={() => onViewChange(v)}
             >

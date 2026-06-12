@@ -157,30 +157,6 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
       {/* Motivational banner */}
       <div className="week-banner">✦ ENJOY YOUR FAMILY ♥</div>
 
-      {/* Monthly tasks */}
-      {monthlyTasks.length > 0 && (
-        <div className="week-monthly-tasks">
-          <div className="week-monthly-header">
-            <span className="week-monthly-title">Monthly Tasks — {MONTH_NAMES[weekStart.getMonth()]}</span>
-          </div>
-          <div className="week-monthly-list">
-            {monthlyTasks.map(task => {
-              const checked = isMonthChecked(task.id, weekMonth)
-              return (
-                <button
-                  key={task.id}
-                  className={`week-monthly-item ${checked ? 'checked' : ''}`}
-                  onClick={() => toggleMonthTask(task.id, weekMonth)}
-                >
-                  <span className="week-monthly-check" style={{ borderColor: checked ? '#c9a96e' : '#ccc', background: checked ? '#c9a96e' : 'transparent' }} />
-                  <span className="week-monthly-text">{task.task_name}</span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
       {/* Daily rows */}
       <div className="week-days">
         {days.map((day, i) => {

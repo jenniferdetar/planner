@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useDailyLog } from '../hooks/useDailyLog'
+import { useMantra } from '../hooks/useMantra'
 import GoalsPanel from './GoalsPanel'
 import LibraryPanel from './LibraryPanel'
 import './PersonalPanel.css'
@@ -8,14 +9,24 @@ function formatTime(ts) {
   return new Date(ts).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
 }
 
+const SUB_TABS = [
+  { key: 'log',       label: 'Daily Log',         color: '#e8a0a0' },
+  { key: 'goals',     label: 'My Goals',           color: '#e8c97a' },
+  { key: 'checklist', label: 'Monthly Checklist',  color: '#7ec8c8' },
+  { key: 'library',   label: 'Library',            color: '#7ba7e0' },
+  { key: 'mantra',    label: 'My Mantra',          color: '#e8a0a0' },
+]
+
 export default function PersonalPanel({ userId, selectedDate, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks }) {
   const dateStr = selectedDate instanceof Date
     ? selectedDate.toISOString().split('T')[0]
     : new Date().toISOString().split('T')[0]
 
   const { entries, addEntry, deleteEntry } = useDailyLog(userId, dateStr)
+  const { mantra, setMantra, save, saved } = useMantra(userId)
   const [text, setText] = useState('')
   const [subTab, setSubTab] = useState('log')
+  const saveTimer = useRef(null)
 
   async function handleAdd(e) {
     e.preventDefault()
@@ -24,17 +35,26 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
     setText('')
   }
 
+  function handleMantraChange(val) {
+    setMantra(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => save(val), 900)
+  }
+
   const displayDate = selectedDate instanceof Date
     ? selectedDate.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })
     : new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })
 
+  const activeColor = SUB_TABS.find(t => t.key === subTab)?.color || '#c9a96e'
+
   return (
     <div className="personal-panel">
       <div className="personal-sub-tabs">
-        {[['log', 'Daily Log'], ['goals', 'My Goals'], ['checklist', 'Monthly Checklist'], ['library', 'Library']].map(([key, label]) => (
+        {SUB_TABS.map(({ key, label, color }) => (
           <button
             key={key}
             className={`personal-sub-tab ${subTab === key ? 'active' : ''}`}
+            style={subTab === key ? { color, borderBottomColor: color } : {}}
             onClick={() => setSubTab(key)}
           >{label}</button>
         ))}
@@ -83,6 +103,21 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
           onDeleteBook={onDeleteBook}
           onImportBooks={onImportBooks}
         />
+      )}
+      {subTab === 'mantra' && (
+        <div className="mantra-section">
+          <div className="mantra-header">
+            <h3 className="mantra-title" style={{ color: activeColor }}>My Personal Mantra</h3>
+            {saved && <span className="mantra-saved">Saved ✓</span>}
+          </div>
+          <textarea
+            className="mantra-textarea"
+            style={{ '--mantra-color': activeColor }}
+            value={mantra}
+            onChange={e => handleMantraChange(e.target.value)}
+            placeholder="Write your personal mantra here… what words center and inspire you?"
+          />
+        </div>
       )}
     </div>
   )

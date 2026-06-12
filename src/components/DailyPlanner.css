@@ -256,26 +256,37 @@
 
 .view-tabs {
   display: flex;
-  background: #f0ede6;
-  border-radius: 8px;
-  padding: 3px;
-  gap: 2px;
+  gap: 0;
+  background: transparent;
+  padding: 0;
 }
 
 .view-tab {
-  font-size: 13px;
-  font-weight: 500;
-  padding: 6px 16px;
-  border-radius: 6px;
-  color: #888;
-  transition: all 0.15s;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  color: #aaa;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
   cursor: pointer;
+  white-space: nowrap;
 }
 
+.view-tab:hover {
+  color: #555;
+}
+
+.view-tab[data-v="month"].active   { color: #e8a0a0; border-bottom-color: #e8a0a0; }
+.view-tab[data-v="csea"].active    { color: #00326b; border-bottom-color: #00326b; }
+.view-tab[data-v="finance"].active { color: #e8c97a; border-bottom-color: #e8c97a; }
+.view-tab[data-v="gcu"].active     { color: #7ec8c8; border-bottom-color: #7ec8c8; }
+.view-tab[data-v="icaap"].active   { color: #7ba7e0; border-bottom-color: #7ba7e0; }
+.view-tab[data-v="personal"].active{ color: #e8a0a0; border-bottom-color: #e8a0a0; }
+
 .view-tab.active {
-  background: #fff;
-  color: #1a1a2e;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: 700;
 }
 
 .planner-body {
