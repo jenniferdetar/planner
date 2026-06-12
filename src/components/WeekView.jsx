@@ -29,6 +29,20 @@ function contrastColor(hex) {
   return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1a1a2e' : '#ffffff'
 }
 
+function normalizeTitle(t) {
+  return (t || '').replace(/^\d{1,2}(:\d{2})?\s*(AM|PM)?\s*/i, '').toLowerCase().trim()
+}
+
+function dedupeEvents(events) {
+  const seen = new Set()
+  return events.filter(e => {
+    const key = normalizeTitle(e.title || e.text)
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
+
 function toDateStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 }
@@ -176,7 +190,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
               startLabel: m.start_time ? m.start_time.slice(0, 5) : null,
             }))
           const calEvents = (calendarBlocks || []).filter(b => b.startIso?.startsWith(dateStr))
-          const events = [...meetingEvents, ...calEvents]
+          const events = dedupeEvents([...meetingEvents, ...calEvents])
           const isToday = day.getTime() === today.getTime()
 
           return (
