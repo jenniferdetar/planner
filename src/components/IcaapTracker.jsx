@@ -326,7 +326,7 @@ function AttendancePanel({ date, onDateChange, records, onUpsert, onUpdateNotes 
         <table className="att-table">
           <thead>
             <tr>
-              <th className="att-th-name">Member</th>
+              <th className="att-th-name" style={{ color: '#AAAA9E' }}>Member</th>
               {weekDates.map(d => {
                 const { day, date: dt } = fmtWeekDay(d)
                 return (
@@ -901,7 +901,7 @@ function IcaapDashboard() {
           <table className="dash-table">
             <thead>
               <tr>
-                <th className="dash-th-name">Employee</th>
+                <th className="dash-th-name" style={{ color: '#AAAA9E' }}>Employee</th>
                 <th className="dash-th" style={{ color: '#AAAA9E' }}>Hours Worked</th>
                 <th className="dash-th" style={{ color: '#AAAA9E' }}>Paylog Submitted</th>
                 <th className="dash-th" style={{ color: '#AAAA9E' }}>Approved</th>
