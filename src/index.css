@@ -42,3 +42,14 @@ input, textarea {
 
 /* ── Global font size & weight ── */
 * { font-size: 14px !important; font-weight: 400 !important; }
+
+/* ── Indie Flower for all pills ── */
+.filter-pill, .type-btn, .priority-btn, .status-btn,
+.status-change-btn, .csea-add-btn, .icaap-add-btn,
+.fin-add-btn, .fin-type-btn, .week-add-btn,
+.view-tab, .csea-tab, .fin-tab, .icaap-tab, .personal-sub-tab,
+.today-badge, .today-btn, .csea-tab-badge, .icaap-tab-badge,
+.asana-push-btn, .asana-synced-badge, .coins-btn,
+.icaap-extrahours-tab, .att-week-btn {
+  font-family: 'Indie Flower', cursive !important;
+}
