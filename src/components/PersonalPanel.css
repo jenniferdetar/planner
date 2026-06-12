@@ -57,7 +57,7 @@
 }
 
 .personal-title {
-  font-family: 'Shadows Into Light', cursive;
+  font-family: 'Indie Flower', cursive;
   font-size: 20px;
   font-weight: 600;
   color: #1a1a2e;
@@ -266,7 +266,7 @@
 .mantra-edit-btn:hover { color: #555; border-color: #aaa; }
 
 .mantra-title {
-  font-family: 'Shadows Into Light', cursive;
+  font-family: 'Indie Flower', cursive;
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 2px;
@@ -285,7 +285,7 @@
   flex: 1;
   min-height: 260px;
   padding: 20px 24px;
-  font-family: 'Shadows Into Light', cursive;
+  font-family: 'Indie Flower', cursive;
   font-size: 18px;
   line-height: 1.9;
   font-style: normal;
@@ -321,7 +321,7 @@
 }
 
 .mantra-paragraph {
-  font-family: 'Shadows Into Light', cursive;
+  font-family: 'Indie Flower', cursive;
   font-size: 16px;
   line-height: 2;
   font-style: normal;
@@ -351,7 +351,7 @@
 }
 
 .goals-title {
-  font-family: 'Shadows Into Light', cursive;
+  font-family: 'Indie Flower', cursive;
   font-size: 17px;
   font-weight: 600;
   color: #1a1a2e;
@@ -484,7 +484,7 @@
 }
 
 .checklist-title {
-  font-family: 'Shadows Into Light', cursive;
+  font-family: 'Indie Flower', cursive;
   font-size: 14px;
   font-weight: 600;
   color: #1a1a2e;
@@ -601,7 +601,7 @@
 }
 
 .sheet-launcher-title {
-  font-family: 'Shadows Into Light', cursive;
+  font-family: 'Indie Flower', cursive;
   font-size: 20px;
   font-weight: 600;
   color: #1a1a2e;
