@@ -1175,6 +1175,7 @@
 .icaap-note-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
   margin-bottom: 16px;
   padding-left: 12px;
@@ -1219,6 +1220,58 @@
 
 .icaap-note-textarea:focus {
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.icaap-note-edit-btn {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #aaa;
+  border: 1px solid #e0ddd7;
+  border-radius: 5px;
+  padding: 3px 9px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.icaap-note-edit-btn:hover { color: #555; border-color: #aaa; }
+
+.icaap-table-wrap {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #e8e5de;
+  border-radius: 8px;
+}
+
+.icaap-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.icaap-data-table thead th {
+  background: #1a1a2e;
+  color: #c9a96e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 2px solid;
+  white-space: nowrap;
+}
+
+.icaap-data-table tbody tr:nth-child(odd)  td { background: rgba(123,167,224,0.06); }
+.icaap-data-table tbody tr:nth-child(even) td { background: #fff; }
+.icaap-data-table tbody tr:hover td { background: rgba(123,167,224,0.14); }
+
+.icaap-data-table tbody td {
+  padding: 8px 14px;
+  color: #333;
+  border-bottom: 1px solid #f0ede6;
+  white-space: nowrap;
 }
 
 /* ── Palette alternating rows ── */

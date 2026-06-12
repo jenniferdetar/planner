@@ -917,21 +917,62 @@ function IcaapDashboard() {
   )
 }
 
+function parseTable(content) {
+  const lines = content.split('\n').filter(l => l.trim())
+  if (lines.length < 2) return null
+  const headers = lines[0].split('\t').map(h => h.trim())
+  const rows = lines.slice(1).map(l => l.split('\t').map(c => c.trim()))
+  return { headers, rows }
+}
+
 function IcaapNotePanel({ userId, noteKey, title, color }) {
   const { content, handleChange, saved } = useIcaapNote(userId, noteKey)
+  const [editing, setEditing] = useState(false)
+  const table = parseTable(content)
+
   return (
     <div className="icaap-note-panel">
       <div className="icaap-note-header" style={{ borderLeftColor: color }}>
         <span className="icaap-note-title" style={{ color }}>{title}</span>
-        {saved && <span className="icaap-note-saved">Saved ✓</span>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {saved && <span className="icaap-note-saved">Saved ✓</span>}
+          <button className="icaap-note-edit-btn" onClick={() => setEditing(e => !e)}>
+            {editing ? 'View Table' : 'Edit'}
+          </button>
+        </div>
       </div>
-      <textarea
-        className="icaap-note-textarea"
-        style={{ '--note-color': color }}
-        value={content}
-        onChange={e => handleChange(e.target.value)}
-        placeholder="Add notes, agenda items, action points…"
-      />
+
+      {editing || !table ? (
+        <textarea
+          className="icaap-note-textarea"
+          style={{ '--note-color': color }}
+          value={content}
+          onChange={e => handleChange(e.target.value)}
+          placeholder="Paste tab-separated data (first row = headers)…"
+          autoFocus={editing}
+        />
+      ) : (
+        <div className="icaap-table-wrap">
+          <table className="icaap-data-table">
+            <thead>
+              <tr>
+                {table.headers.map((h, i) => (
+                  <th key={i} style={{ borderBottomColor: color }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {table.rows.map((row, ri) => (
+                <tr key={ri}>
+                  {table.headers.map((_, ci) => (
+                    <td key={ci}>{row[ci] ?? ''}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
