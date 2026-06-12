@@ -286,64 +286,110 @@
 .fin-delete-btn:hover { color: #e05c5c; border-color: #e05c5c; }
 
 /* Bills */
-.fin-bill-list {
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.fin-bill-grid {
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  align-content: start;
 }
 
-.fin-section-sep {
+.fin-bill-grid-sep {
+  grid-column: 1 / -1;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: #ccc;
-  padding: 6px 0 2px;
+  padding: 4px 0 0;
 }
 
-.fin-bill {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.fin-bill-card {
   background: #fff;
   border: 1px solid #e8e5de;
-  border-radius: 8px;
-  padding: 8px 12px;
-  transition: opacity 0.15s;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.15s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 110px;
 }
 
-.fin-bill.paid { opacity: 0.5; }
+.fin-bill-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.09); transform: translateY(-2px); }
 
-.fin-bill-check {
-  font-size: 12px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 1.5px solid #c9a96e;
-  color: #c9a96e;
+.fin-bill-card-top {
+  height: 5px;
+  background: #e8a0a0;
+  flex-shrink: 0;
+}
+
+.fin-bill-card.paid .fin-bill-card-top { background: #5cb85c; }
+
+.fin-bill-card-delete {
+  position: absolute;
+  top: 8px;
+  right: 7px;
+  font-size: 9px;
+  color: #ccc;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #e8e5de;
+  border-radius: 3px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   transition: all 0.15s;
+  background: #fff;
 }
 
-.fin-bill-check.checked { background: #c9a96e; color: #fff; }
+.fin-bill-card-delete:hover { color: #e05c5c; border-color: #e05c5c; }
 
-.fin-bill-info {
+.fin-bill-card-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a2e;
+  padding: 10px 10px 2px;
+  line-height: 1;
+}
+
+.fin-bill-card.paid .fin-bill-card-amount { color: #aaa; }
+
+.fin-bill-card-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  padding: 2px 10px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
 }
 
-.fin-bill-name { font-size: 13px; font-weight: 600; color: #333; }
-.fin-bill-due { font-size: 10px; color: #aaa; }
-.fin-bill-amount { font-size: 13px; font-weight: 700; color: #1a1a2e; flex-shrink: 0; }
-.fin-bill-method { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+.fin-bill-card.paid .fin-bill-card-name { color: #bbb; text-decoration: line-through; }
+
+.fin-bill-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px 8px;
+  font-size: 9px;
+  color: #bbb;
+}
+
+.fin-bill-card-paid-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #5cb85c;
+  letter-spacing: 0.5px;
+}
+
+.fin-bill-method { font-size: 9px; font-weight: 600; padding: 1px 5px; border-radius: 3px; }
 .fin-bill-method.billpay { background: #e8f0fb; color: #4a90d9; }
 .fin-bill-method.cash { background: #eaf7ea; color: #5cb85c; }
 

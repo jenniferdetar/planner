@@ -176,37 +176,29 @@ function BillsTab({ bills, onAdd, onToggle, onDelete }) {
         </form>
       )}
 
-      <div className="fin-bill-list">
+      <div className="fin-bill-grid">
         {bills.length === 0 && <p className="fin-empty">No bills added yet</p>}
-        {unpaid.map(b => <BillRow key={b.id} bill={b} onToggle={onToggle} onDelete={onDelete} />)}
-        {paid.length > 0 && (
-          <>
-            <div className="fin-section-sep">Paid</div>
-            {paid.map(b => <BillRow key={b.id} bill={b} onToggle={onToggle} onDelete={onDelete} />)}
-          </>
-        )}
+        {unpaid.map(b => <BillCard key={b.id} bill={b} onToggle={onToggle} onDelete={onDelete} />)}
+        {paid.length > 0 && unpaid.length > 0 && <div className="fin-bill-grid-sep">Paid</div>}
+        {paid.map(b => <BillCard key={b.id} bill={b} onToggle={onToggle} onDelete={onDelete} />)}
       </div>
     </div>
   )
 }
 
-function BillRow({ bill, onToggle, onDelete }) {
+function BillCard({ bill, onToggle, onDelete }) {
+  const suffix = bill.due_day === 1 ? 'st' : bill.due_day === 2 ? 'nd' : bill.due_day === 3 ? 'rd' : 'th'
   return (
-    <div className={`fin-bill ${bill.paid ? 'paid' : ''}`}>
-      <button className={`fin-bill-check ${bill.paid ? 'checked' : ''}`} onClick={() => onToggle(bill.id)}>
-        {bill.paid ? '✓' : '○'}
-      </button>
-      <div className="fin-bill-info">
-        <span className="fin-bill-name">{bill.name}</span>
-        {bill.due_day && <span className="fin-bill-due">Due {bill.due_day}{bill.due_day === 1 ? 'st' : bill.due_day === 2 ? 'nd' : bill.due_day === 3 ? 'rd' : 'th'}</span>}
+    <div className={`fin-bill-card ${bill.paid ? 'paid' : ''}`} onClick={() => onToggle(bill.id)}>
+      <div className="fin-bill-card-top" />
+      <button className="fin-bill-card-delete" onClick={e => { e.stopPropagation(); onDelete(bill.id) }}>✕</button>
+      <div className="fin-bill-card-amount">{fmt(bill.amount)}</div>
+      <div className="fin-bill-card-name">{bill.name}</div>
+      <div className="fin-bill-card-meta">
+        {bill.due_day && <span>Due {bill.due_day}{suffix}</span>}
+        {bill.payment_method && <span className={`fin-bill-method ${bill.payment_method === 'Cash' ? 'cash' : 'billpay'}`}>{bill.payment_method}</span>}
       </div>
-      <span className="fin-bill-amount">{fmt(bill.amount)}</span>
-      {bill.payment_method && (
-        <span className={`fin-bill-method ${bill.payment_method === 'Cash' ? 'cash' : 'billpay'}`}>
-          {bill.payment_method}
-        </span>
-      )}
-      <button className="fin-delete-btn" onClick={() => onDelete(bill.id)}>✕</button>
+      {bill.paid && <div className="fin-bill-card-paid-badge">✓ Paid</div>}
     </div>
   )
 }
