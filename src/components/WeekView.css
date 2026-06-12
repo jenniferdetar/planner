@@ -350,3 +350,11 @@
 .week-day-row:nth-child(odd)  { background: rgba(232,160,160,0.05); }
 .week-day-row:nth-child(even) { background: rgba(126,200,200,0.05); }
 .week-day-row.week-day-today  { background: #fffdf7 !important; }
+
+/* ── Left panel bold ── */
+.week-day-tasks .week-day-label,
+.week-day-tasks .week-day-date,
+.week-day-tasks .week-task-text,
+.week-day-tasks .week-add-btn {
+  font-weight: 700 !important;
+}
