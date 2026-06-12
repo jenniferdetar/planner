@@ -70,14 +70,14 @@
 
 .shelf-tab.active {
   background: #faf9f6;
-  color: #e8a0a0;
+  color: #8B2B3A;
   font-weight: 600;
-  border-bottom: 2px solid #e8a0a0;
+  border-bottom: 2px solid #8B2B3A;
 }
 
 .shelf-badge {
-  background: #e8a0a033;
-  color: #e8a0a0;
+  background: #8B2B3A33;
+  color: #8B2B3A;
   border-radius: 10px;
   font-size: 10px;
   font-weight: 600;
@@ -113,7 +113,7 @@
 }
 
 .import-btn {
-  background: #e8a0a0;
+  background: #8B2B3A;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -261,14 +261,14 @@
 }
 
 .add-book-input:focus {
-  border-color: #e8a0a0;
+  border-color: #8B2B3A;
 }
 
 .add-book-btn {
   background: #fff;
   border: 1px solid #e8e5de;
   border-radius: 7px;
-  color: #e8a0a0;
+  color: #8B2B3A;
   font-size: 13px;
   font-weight: 500;
   padding: 8px 16px;

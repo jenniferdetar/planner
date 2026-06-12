@@ -10,13 +10,13 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 const DAY_COLORS = [
-  '#e8a0a0', // Sunday
-  '#e8c97a', // Monday
-  '#7ec8c8', // Tuesday
-  '#7ba7e0', // Wednesday
-  '#e8a0a0', // Thursday
-  '#e8c97a', // Friday
-  '#7ec8c8', // Saturday
+  '#8B2B3A', // Sunday
+  '#501A28', // Monday
+  '#6E2232', // Tuesday
+  '#2F1019', // Wednesday
+  '#8B2B3A', // Thursday
+  '#501A28', // Friday
+  '#6E2232', // Saturday
 ]
 
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
@@ -62,10 +62,10 @@ const HABITS = {
 }
 
 const HABIT_COLORS = {
-  'Home Care': '#e8a0a0',
-  'Self Care': '#7ec8c8',
-  'Week Days': '#e8c97a',
-  'Weekends': '#7ba7e0',
+  'Home Care': '#8B2B3A',
+  'Self Care': '#6E2232',
+  'Week Days': '#501A28',
+  'Weekends': '#2F1019',
 }
 
 export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks }) {

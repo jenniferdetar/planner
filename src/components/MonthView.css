@@ -109,7 +109,7 @@
 
 .month-cell.selected {
   background: #f5f1e8;
-  outline: 2px solid #e8a0a0;
+  outline: 2px solid #8B2B3A;
   outline-offset: -2px;
 }
 
@@ -128,7 +128,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #e8a0a0;
+  background: #8B2B3A;
   color: #fff;
   font-weight: 700;
   font-size: 12px;
@@ -151,7 +151,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  background: #e8a0a0;
+  background: #8B2B3A;
   border-radius: 3px;
   transition: width 0.3s;
 }
