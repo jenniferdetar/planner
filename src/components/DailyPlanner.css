@@ -46,7 +46,7 @@
 }
 
 .day-hero-num {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 72px;
   font-weight: 700;
   line-height: 1;
@@ -149,12 +149,12 @@
 
 .mini-cell.today {
   background: rgba(201, 169, 110, 0.18);
-  color: #8a7860;
+  color: #8B2B3A;
   font-weight: 700;
 }
 
 .mini-cell.selected {
-  background: #8a7860;
+  background: #8B2B3A;
   color: #fff;
   font-weight: 700;
 }
@@ -207,14 +207,14 @@
 }
 
 .date-main {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 22px;
   font-weight: 600;
   color: #1a1a2e;
 }
 
 .today-badge {
-  background: #8a7860;
+  background: #8B2B3A;
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -225,17 +225,17 @@
 
 .today-btn {
   font-size: 12px;
-  color: #8a7860;
+  color: #8B2B3A;
   font-weight: 600;
   padding: 6px 12px;
-  border: 1px solid #8a7860;
+  border: 1px solid #8B2B3A;
   border-radius: 6px;
   transition: all 0.15s;
   cursor: pointer;
 }
 
 .today-btn:hover {
-  background: #8a7860;
+  background: #8B2B3A;
   color: #fff;
 }
 
@@ -274,19 +274,19 @@
   transition: all 0.15s;
   cursor: pointer;
   white-space: nowrap;
-  font-family: 'Indie Flower', cursive !important;
+  font-family: 'Nunito', sans-serif !important;
 }
 
 .view-tab:hover { opacity: 0.8; }
 .view-tab.active { opacity: 1; }
 
-.view-tab[data-v="month"]   { background: #3d3228; }
-.view-tab[data-v="week"]    { background: #4c3040; }
-.view-tab[data-v="csea"]    { background: #484c30; }
-.view-tab[data-v="finance"] { background: #555938; color: #fff; }
-.view-tab[data-v="gcu"]     { background: #3d3228; }
-.view-tab[data-v="icaap"]   { background: #4c3040; }
-.view-tab[data-v="personal"]{ background: #484c30; }
+.view-tab[data-v="month"]   { background: #8B2B3A; }
+.view-tab[data-v="week"]    { background: #6E2232; }
+.view-tab[data-v="csea"]    { background: #501A28; }
+.view-tab[data-v="finance"] { background: #2F1019; color: #fff; }
+.view-tab[data-v="gcu"]     { background: #8B2B3A; }
+.view-tab[data-v="icaap"]   { background: #6E2232; }
+.view-tab[data-v="personal"]{ background: #501A28; }
 
 .planner-body {
   flex: 1;
@@ -430,8 +430,8 @@
 }
 
 .asana-circle.checked {
-  background: #8a7860;
-  border-color: #8a7860;
+  background: #8B2B3A;
+  border-color: #8B2B3A;
 }
 
 .asana-circle.checked::after {
@@ -491,7 +491,7 @@
 }
 
 .asana-delete-btn:hover { color: #e05c5c; }
-.asana-notes-btn:hover  { color: #8a7860; }
+.asana-notes-btn:hover  { color: #8B2B3A; }
 
 .check-box {
   width: 16px;
@@ -537,7 +537,7 @@
 }
 
 .task-notes-input:focus {
-  border-color: #8a7860;
+  border-color: #8B2B3A;
   background: #fff;
 }
 
@@ -632,7 +632,7 @@
 }
 
 .add-daily-task-btn:hover {
-  color: #8a7860;
+  color: #8B2B3A;
 }
 
 /* Schedule */
@@ -653,7 +653,7 @@
 }
 
 .time-row.current-hour .hour-label {
-  color: #8a7860;
+  color: #8B2B3A;
   font-weight: 600;
 }
 
@@ -834,7 +834,7 @@
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  background: #8a7860;
+  background: #8B2B3A;
   padding: 3px 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -867,7 +867,7 @@
 }
 
 .add-block-btn:hover {
-  background: #8a7860;
+  background: #8B2B3A;
   color: #fff;
 }
 
@@ -902,14 +902,14 @@
 }
 
 .task-hub-filter-btn:hover {
-  border-color: #8a7860;
-  color: #8a7860;
+  border-color: #8B2B3A;
+  color: #8B2B3A;
 }
 
 .task-hub-filter-btn.active {
-  background: #8a7860;
+  background: #8B2B3A;
   color: #fff;
-  border-color: #8a7860;
+  border-color: #8B2B3A;
   font-weight: 700;
 }
 
@@ -972,8 +972,8 @@
 
 .task-hub-area-tag {
   font-size: 9px;
-  background: rgba(138,120,96,0.12);
-  color: #8a7860;
+  background: rgba(139,43,58,0.12);
+  color: #8B2B3A;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
@@ -1158,4 +1158,4 @@
 .ical-add-btn { padding: 5px 12px; background: #1a1a2e; color: #fff; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .ical-add-btn:hover { background: #2d2d4e; }
 
-.view-tab { font-family: 'Indie Flower', cursive !important; }
+.view-tab { font-family: 'Nunito', sans-serif !important; }

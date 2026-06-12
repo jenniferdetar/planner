@@ -4,24 +4,24 @@ import { usePersonalChecklist } from '../hooks/usePersonalChecklist'
 import './GoalsPanel.css'
 
 const CATEGORY_COLORS = {
-  'Physical':       '#e8a0a0',
-  'Mental':         '#7ec8c8',
-  'Relational':     '#e8c97a',
-  'Self-Care':      '#e8a0a0',
-  'Hobbies':        '#7ba7e0',
-  'Home':           '#7ec8c8',
-  'Career':         '#e8c97a',
-  'Financial':      '#7ba7e0',
-  'Organizational': '#e8a0a0',
-  'Screen Time':    '#7ec8c8',
-  'Learn':          '#e8c97a',
+  'Physical':       '#8B2B3A',
+  'Mental':         '#6E2232',
+  'Relational':     '#501A28',
+  'Self-Care':      '#8B2B3A',
+  'Hobbies':        '#2F1019',
+  'Home':           '#6E2232',
+  'Career':         '#501A28',
+  'Financial':      '#2F1019',
+  'Organizational': '#8B2B3A',
+  'Screen Time':    '#6E2232',
+  'Learn':          '#501A28',
   'CSEA':           '#00326b',
 }
 
 const CATEGORY_ORDER = ['Physical','Mental','Relational','Self-Care','Hobbies','Home','Career','Financial','Organizational','Screen Time','Learn','CSEA']
 
 function contrastColor(hex) {
-  const c = (hex ?? '#c9a96e').replace('#', '')
+  const c = (hex ?? '#8B2B3A').replace('#', '')
   const r = parseInt(c.slice(0,2), 16)
   const g = parseInt(c.slice(2,4), 16)
   const b = parseInt(c.slice(4,6), 16)
@@ -59,7 +59,7 @@ export default function GoalsPanel({ userId, section = 'all' }) {
         </div>
         <div className="goals-grid">
           {orderedCategories.map(category => {
-            const color = CATEGORY_COLORS[category] || '#c9a96e'
+            const color = CATEGORY_COLORS[category] || '#8B2B3A'
             const goals = byCategory[category] || []
             return (
               <div key={category} className="goal-card">
@@ -116,7 +116,7 @@ export default function GoalsPanel({ userId, section = 'all' }) {
           </thead>
           <tbody>
             {checklistTasks.map((task, rowIdx) => {
-              const colors = ['#e8a0a0','#e8c97a','#7ec8c8','#7ba7e0']
+              const colors = ['#8B2B3A','#501A28','#6E2232','#2F1019']
               const color = colors[rowIdx % colors.length]
               return (
                 <tr key={task.id}>

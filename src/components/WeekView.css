@@ -20,7 +20,7 @@
 }
 
 .week-title {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 15px;
   font-weight: 600;
   color: #fff;
@@ -135,7 +135,7 @@
 
 /* Motivational banner */
 .week-banner {
-  background: #3d3228;
+  background: #8B2B3A;
   color: #fff;
   text-align: center;
   font-size: 11px;
@@ -232,7 +232,7 @@
 }
 
 .week-add-btn:hover {
-  color: #8a7860;
+  color: #8B2B3A;
 }
 
 .week-add-form {
@@ -307,7 +307,7 @@
 .week-event-pill {
   padding: 2px 8px;
   border-radius: 4px;
-  font-family: 'Indie Flower', cursive !important;
+  font-family: 'Nunito', sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   display: flex;
@@ -318,7 +318,7 @@
 }
 
 .week-event-time {
-  font-family: 'Indie Flower', cursive !important;
+  font-family: 'Nunito', sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   opacity: 0.88;
@@ -347,8 +347,8 @@
 }
 
 /* ── Palette alternating day rows ── */
-.week-day-row:nth-child(odd)  { background: rgba(61,50,40,0.05); }
-.week-day-row:nth-child(even) { background: rgba(76,48,64,0.05); }
+.week-day-row:nth-child(odd)  { background: rgba(139,43,58,0.05); }
+.week-day-row:nth-child(even) { background: rgba(110,34,50,0.05); }
 .week-day-row.week-day-today  { background: #fffdf7 !important; }
 
 /* ── Left panel bold ── */

@@ -10,7 +10,7 @@ html, body, #root {
 }
 
 body {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   background: #f5f4f0;
   color: #1a1a2e;
   overflow: hidden;
@@ -51,5 +51,5 @@ input, textarea {
 .today-badge, .today-btn, .csea-tab-badge, .icaap-tab-badge,
 .asana-push-btn, .asana-synced-badge, .coins-btn,
 .icaap-extrahours-tab, .att-week-btn {
-  font-family: 'Indie Flower', cursive !important;
+  font-family: 'Nunito', sans-serif !important;
 }

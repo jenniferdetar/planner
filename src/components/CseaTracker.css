@@ -65,15 +65,15 @@
   border: none;
   text-align: center;
   opacity: 0.55;
-  font-family: 'Indie Flower', cursive !important;
+  font-family: 'Nunito', sans-serif !important;
 }
 
 .csea-tab:hover { opacity: 0.8; }
 .csea-tab.active { opacity: 1; }
 
-.csea-tab:nth-child(1) { background: #3d3228; }
-.csea-tab:nth-child(2) { background: #4c3040; }
-.csea-tab:nth-child(3) { background: #484c30; }
+.csea-tab:nth-child(1) { background: #8B2B3A; }
+.csea-tab:nth-child(2) { background: #6E2232; }
+.csea-tab:nth-child(3) { background: #501A28; }
 
 .csea-panel {
   flex: 1;
@@ -124,16 +124,16 @@
 .csea-add-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #8a7860;
+  color: #8B2B3A;
   padding: 6px 12px;
-  border: 1px solid #8a7860;
+  border: 1px solid #8B2B3A;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .csea-add-btn:hover {
-  background: #8a7860;
+  background: #8B2B3A;
   color: #fff;
 }
 
@@ -210,7 +210,7 @@
 }
 
 .csea-input:focus {
-  border-color: #8a7860;
+  border-color: #8B2B3A;
 }
 
 .csea-textarea {
@@ -228,7 +228,7 @@
 }
 
 .csea-textarea:focus {
-  border-color: #8a7860;
+  border-color: #8B2B3A;
 }
 
 .csea-form-actions {
@@ -248,7 +248,7 @@
 .csea-save {
   font-size: 12px;
   font-weight: 600;
-  background: #8a7860;
+  background: #8B2B3A;
   color: #fff;
   padding: 6px 16px;
   border-radius: 6px;
@@ -685,30 +685,30 @@
 }
 
 /* ── Palette alternating rows ── */
-.issue-card:nth-child(odd)  { background: rgba(61,50,40,0.07); border-left: 3px solid #3d3228; }
-.issue-card:nth-child(even) { background: rgba(76,48,64,0.07); border-left: 3px solid #4c3040; }
+.issue-card:nth-child(odd)  { background: rgba(139,43,58,0.07); border-left: 3px solid #8B2B3A; }
+.issue-card:nth-child(even) { background: rgba(110,34,50,0.07); border-left: 3px solid #6E2232; }
 .issue-card.resolved { opacity: 0.55; }
 
 .interaction-group-header {
-  background: rgba(138,120,96,0.12) !important;
-  border-bottom: 2px solid #8a7860;
+  background: rgba(139,43,58,0.12) !important;
+  border-bottom: 2px solid #8B2B3A;
 }
 
 .interaction-group-name { color: #7a6030 !important; }
-.interaction-group-count { background: rgba(138,120,96,0.2); color: #7a6030 !important; }
-.interaction-group-toggle { color: #8a7860 !important; }
+.interaction-group-count { background: rgba(139,43,58,0.2); color: #7a6030 !important; }
+.interaction-group-toggle { color: #8B2B3A !important; }
 
 /* ── Goals palette ── */
-.csea-stat:nth-child(1) .csea-stat-num { color: #3d3228 !important; }
-.csea-stat:nth-child(2) .csea-stat-num { color: #4c3040 !important; }
-.csea-stat:nth-child(3) .csea-stat-num { color: #484c30 !important; }
-.csea-stat:nth-child(4) .csea-stat-num { color: #555938 !important; }
+.csea-stat:nth-child(1) .csea-stat-num { color: #8B2B3A !important; }
+.csea-stat:nth-child(2) .csea-stat-num { color: #6E2232 !important; }
+.csea-stat:nth-child(3) .csea-stat-num { color: #501A28 !important; }
+.csea-stat:nth-child(4) .csea-stat-num { color: #2F1019 !important; }
 
-.csea-tab.active { border-bottom-color: #3d3228; }
+.csea-tab.active { border-bottom-color: #8B2B3A; }
 
-.interaction-card:nth-child(odd)  { background: rgba(61,50,40,0.05); border-left: 3px solid #3d3228; }
-.interaction-card:nth-child(even) { background: rgba(76,48,64,0.05); border-left: 3px solid #4c3040; }
+.interaction-card:nth-child(odd)  { background: rgba(139,43,58,0.05); border-left: 3px solid #8B2B3A; }
+.interaction-card:nth-child(even) { background: rgba(110,34,50,0.05); border-left: 3px solid #6E2232; }
 
-.filter-pill.active { background: #555938; border-color: #555938; }
+.filter-pill.active { background: #2F1019; border-color: #2F1019; }
 
-.csea-tab { font-family: 'Indie Flower', cursive !important; }
+.csea-tab { font-family: 'Nunito', sans-serif !important; }

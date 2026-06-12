@@ -57,7 +57,7 @@
 }
 
 .personal-title {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 20px;
   font-weight: 600;
   color: #1a1a2e;
@@ -82,17 +82,17 @@
   transition: all 0.15s;
   cursor: pointer;
   opacity: 0.55;
-  font-family: 'Indie Flower', cursive !important;
+  font-family: 'Nunito', sans-serif !important;
 }
 
 .personal-sub-tab:hover { opacity: 0.8; }
 .personal-sub-tab.active { opacity: 1; }
 
-.personal-sub-tab:nth-child(1) { background: #3d3228; }
-.personal-sub-tab:nth-child(2) { background: #4c3040; }
-.personal-sub-tab:nth-child(3) { background: #484c30; }
-.personal-sub-tab:nth-child(4) { background: #555938; color: #fff; }
-.personal-sub-tab:nth-child(5) { background: #3d3228; }
+.personal-sub-tab:nth-child(1) { background: #8B2B3A; }
+.personal-sub-tab:nth-child(2) { background: #6E2232; }
+.personal-sub-tab:nth-child(3) { background: #501A28; }
+.personal-sub-tab:nth-child(4) { background: #2F1019; color: #fff; }
+.personal-sub-tab:nth-child(5) { background: #8B2B3A; }
 
 .personal-body {
   flex: 1;
@@ -120,7 +120,7 @@
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #3d3228;
+  color: #8B2B3A;
 }
 
 .daily-log-form {
@@ -142,7 +142,7 @@
 }
 
 .daily-log-input:focus {
-  border-color: #8a7860;
+  border-color: #8B2B3A;
 }
 
 .daily-log-add-btn {
@@ -150,7 +150,7 @@
   font-size: 12px;
   font-weight: 600;
   color: #fff;
-  background: #4c3040;
+  background: #6E2232;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -178,11 +178,11 @@
   padding: 5px 8px;
   border-radius: 6px;
   background: #faf9f6;
-  border-left: 3px solid #3d3228;
+  border-left: 3px solid #8B2B3A;
 }
 
-.daily-log-item:nth-child(even) { border-left-color: #4c3040; background: rgba(76,48,64,0.05); }
-.daily-log-item:nth-child(odd)  { border-left-color: #3d3228; background: rgba(61,50,40,0.05); }
+.daily-log-item:nth-child(even) { border-left-color: #6E2232; background: rgba(110,34,50,0.05); }
+.daily-log-item:nth-child(odd)  { border-left-color: #8B2B3A; background: rgba(139,43,58,0.05); }
 
 .daily-log-time {
   font-size: 10px;
@@ -206,7 +206,7 @@
   color: #333;
   font-family: inherit;
   border: none;
-  border-bottom: 1.5px solid #8a7860;
+  border-bottom: 1.5px solid #8B2B3A;
   outline: none;
   background: transparent;
   padding: 0;
@@ -275,7 +275,7 @@
 .mantra-edit-btn:hover { color: #555; border-color: #aaa; }
 
 .mantra-title {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 2px;
@@ -285,7 +285,7 @@
 
 .mantra-saved {
   font-size: 11px;
-  color: #4c3040;
+  color: #6E2232;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
@@ -294,14 +294,14 @@
   flex: 1;
   min-height: 260px;
   padding: 20px 24px;
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 18px;
   line-height: 1.9;
   font-style: normal;
   color: #2a2520;
   background: #fff;
   border: 1px solid #e8e5de;
-  border-top: 4px solid var(--mantra-color, #3d3228);
+  border-top: 4px solid var(--mantra-color, #8B2B3A);
   border-radius: 8px;
   outline: none;
   resize: none;
@@ -316,7 +316,7 @@
 .mantra-textarea:focus {
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
   border-color: #e8e5de;
-  border-top-color: var(--mantra-color, #3d3228);
+  border-top-color: var(--mantra-color, #8B2B3A);
 }
 
 .mantra-content {
@@ -324,13 +324,13 @@
   overflow-y: auto;
   background: #fff;
   border: 1px solid #e8e5de;
-  border-top: 4px solid var(--mantra-color, #3d3228);
+  border-top: 4px solid var(--mantra-color, #8B2B3A);
   border-radius: 8px;
   padding: 28px 32px;
 }
 
 .mantra-paragraph {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 16px;
   line-height: 2;
   font-style: normal;
@@ -360,7 +360,7 @@
 }
 
 .goals-title {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 17px;
   font-weight: 600;
   color: #1a1a2e;
@@ -451,7 +451,7 @@
 }
 
 .goal-add-btn:hover {
-  color: #8a7860;
+  color: #8B2B3A;
 }
 
 .goal-add-form {
@@ -493,7 +493,7 @@
 }
 
 .checklist-title {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #1a1a2e;
@@ -579,7 +579,7 @@
 }
 
 .checklist-add-task-btn:hover {
-  color: #8a7860;
+  color: #8B2B3A;
 }
 
 /* Sheet embed */
@@ -610,7 +610,7 @@
 }
 
 .sheet-launcher-title {
-  font-family: 'Indie Flower', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 20px;
   font-weight: 600;
   color: #1a1a2e;
@@ -655,4 +655,4 @@
   }
 }
 
-.personal-sub-tab { font-family: 'Indie Flower', cursive !important; }
+.personal-sub-tab { font-family: 'Nunito', sans-serif !important; }
