@@ -343,3 +343,8 @@
     padding: 8px 14px 12px;
   }
 }
+
+/* ── Palette alternating day rows ── */
+.week-day-row:nth-child(odd)  { background: rgba(232,160,160,0.05); }
+.week-day-row:nth-child(even) { background: rgba(126,200,200,0.05); }
+.week-day-row.week-day-today  { background: #fffdf7 !important; }

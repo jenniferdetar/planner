@@ -1161,3 +1161,93 @@
   align-self: flex-start;
 }
 
+
+/* Note panels (Prof Dev, Winter Break) */
+.icaap-note-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px;
+  background: #faf9f6;
+  overflow-y: auto;
+}
+
+.icaap-note-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding-left: 12px;
+  border-left: 4px solid;
+}
+
+.icaap-note-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.icaap-note-saved {
+  font-size: 11px;
+  color: #7ec8c8;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.icaap-note-textarea {
+  flex: 1;
+  min-height: 300px;
+  padding: 18px 20px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #2a2520;
+  background: #fff;
+  border: 1px solid #e8e5de;
+  border-top: 4px solid var(--note-color, #7ba7e0);
+  border-radius: 8px;
+  outline: none;
+  resize: none;
+  transition: box-shadow 0.15s;
+}
+
+.icaap-note-textarea::placeholder {
+  color: #bbb;
+  font-style: italic;
+}
+
+.icaap-note-textarea:focus {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+/* ── Palette alternating rows ── */
+/* iCAAP item list */
+.icaap-list > *:nth-child(odd)  { background: rgba(232,160,160,0.10); }
+.icaap-list > *:nth-child(even) { background: rgba(126,200,200,0.10); }
+
+/* Attendance table */
+.att-tr:nth-child(odd)  .att-td-name,
+.att-tr:nth-child(odd)  .att-td-cell { background: rgba(232,160,160,0.08); }
+.att-tr:nth-child(even) .att-td-name,
+.att-tr:nth-child(even) .att-td-cell { background: rgba(126,200,200,0.08); }
+
+/* Attendance header */
+.att-th-name, .att-th-cell {
+  background: #1a1a2e !important;
+  color: #c9a96e !important;
+}
+
+/* Dashboard table */
+.dash-tr:nth-child(odd)  .dash-td-name,
+.dash-tr:nth-child(odd)  .dash-cell { background: rgba(232,201,122,0.10); }
+.dash-tr:nth-child(even) .dash-td-name,
+.dash-tr:nth-child(even) .dash-cell { background: rgba(123,167,224,0.10); }
+
+/* iCAAP sub-tab active colors */
+.icaap-tab[data-t="dashboard"].active { border-bottom-color: #e8a0a0; color: #c85050; }
+.icaap-tab[data-t="list"].active      { border-bottom-color: #e8c97a; color: #b8924a; }
+.icaap-tab[data-t="asana"].active     { border-bottom-color: #7ec8c8; color: #4a9898; }
+.icaap-tab[data-t="attendance"].active{ border-bottom-color: #7ba7e0; color: #4a77b0; }
+.icaap-tab[data-t="profdev"].active   { border-bottom-color: #7ba7e0; color: #4a77b0; }
+.icaap-tab[data-t="winterbreak"].active{border-bottom-color: #7ec8c8; color: #4a9898; }

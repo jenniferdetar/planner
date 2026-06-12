@@ -251,3 +251,9 @@
 .checklist-add-task-btn:hover {
   color: #c9a96e;
 }
+
+/* ── Palette alternating rows ── */
+.checklist-table tbody tr:nth-child(odd)  td { background: rgba(232,160,160,0.07); }
+.checklist-table tbody tr:nth-child(even) td { background: rgba(126,200,200,0.07); }
+.checklist-table thead th { background: #1a1a2e; color: #c9a96e; }
+.checklist-table thead th.task-col { background: #1a1a2e; color: #c9a96e; }

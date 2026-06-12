@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
+import { useIcaapNote } from '../hooks/useIcaapNote'
 
 const CATEGORIES = ['Task', 'Meeting', 'Research', 'Review', 'Report', 'Follow-up', 'Other']
 const PRIORITIES = ['Low', 'Medium', 'High']
@@ -51,7 +52,7 @@ async function getFirstWorkspace(token) {
   return data[0]?.gid ?? null
 }
 
-export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
+export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
   const [tab, setTab] = useState('dashboard')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
@@ -140,10 +141,12 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
 
       {/* Sub-tabs */}
       <div className="icaap-tabs">
-        <button className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
-        <button className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>List</button>
-        <button className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
-        <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
+        <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
+        <button data-t="list" className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>List</button>
+        <button data-t="asana" className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
+        <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
+        <button data-t="profdev" className={`icaap-tab ${tab === 'profdev' ? 'active' : ''}`} onClick={() => setTab('profdev')}>Prof. Development 09-27-25</button>
+        <button data-t="winterbreak" className={`icaap-tab ${tab === 'winterbreak' ? 'active' : ''}`} onClick={() => setTab('winterbreak')}>Winter Break 2025–2026</button>
       </div>
 
       {/* Dashboard tab */}
@@ -159,6 +162,10 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
         </div>
       )}
 
+      {/* Note tabs */}
+      {tab === 'profdev' && <IcaapNotePanel userId={userId} noteKey="profdev-09-27-25" title="Professional Development — 09-27-25" color="#7ba7e0" />}
+      {tab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
+
       {/* Attendance tab */}
       {tab === 'attendance' && (
         <AttendancePanel
@@ -171,7 +178,7 @@ export default function IcaapTracker({ items, onAddItem, onUpdateItem, onDeleteI
       )}
 
       {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance') ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'profdev' || tab === 'winterbreak') ? 'none' : undefined }}>
         {tab === 'list' ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (
@@ -906,6 +913,25 @@ function IcaapDashboard() {
           </table>
         </div>
       )}
+    </div>
+  )
+}
+
+function IcaapNotePanel({ userId, noteKey, title, color }) {
+  const { content, handleChange, saved } = useIcaapNote(userId, noteKey)
+  return (
+    <div className="icaap-note-panel">
+      <div className="icaap-note-header" style={{ borderLeftColor: color }}>
+        <span className="icaap-note-title" style={{ color }}>{title}</span>
+        {saved && <span className="icaap-note-saved">Saved ✓</span>}
+      </div>
+      <textarea
+        className="icaap-note-textarea"
+        style={{ '--note-color': color }}
+        value={content}
+        onChange={e => handleChange(e.target.value)}
+        placeholder="Add notes, agenda items, action points…"
+      />
     </div>
   )
 }

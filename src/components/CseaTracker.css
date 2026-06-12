@@ -676,3 +676,15 @@
   color: #aaa;
   flex-shrink: 0;
 }
+
+/* ── Palette alternating rows ── */
+.issue-card:nth-child(odd)  { background: rgba(232,160,160,0.07); border-left: 3px solid #e8a0a0; }
+.issue-card:nth-child(even) { background: rgba(126,200,200,0.07); border-left: 3px solid #7ec8c8; }
+.issue-card.resolved { opacity: 0.55; }
+
+.interaction-group-header {
+  background: #1a1a2e !important;
+  color: #c9a96e !important;
+}
+
+.interaction-group-header * { color: #c9a96e !important; }

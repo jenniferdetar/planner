@@ -648,3 +648,17 @@
   outline: none;
   font-family: inherit;
 }
+
+/* ── Palette alternating rows ── */
+.pc-table tbody tr:nth-child(odd)  td { background: rgba(232,160,160,0.07); }
+.pc-table tbody tr:nth-child(even) td { background: rgba(126,200,200,0.07); }
+.pc-table tbody tr:nth-child(odd)  .pc-td-account { background: rgba(232,160,160,0.12); }
+.pc-table tbody tr:nth-child(even) .pc-td-account { background: rgba(126,200,200,0.12); }
+
+.coins-table th { background: #1a1a2e; color: #c9a96e; }
+.coins-row:nth-child(odd)  td { background: rgba(232,201,122,0.09); }
+.coins-row:nth-child(even) td { background: rgba(123,167,224,0.09); }
+
+.goals-table tbody tr:nth-child(odd)  td { background: rgba(232,160,160,0.07); }
+.goals-table tbody tr:nth-child(even) td { background: rgba(126,200,200,0.07); }
+.goals-th-name, .goals-th-col { background: #1a1a2e !important; color: #c9a96e !important; }

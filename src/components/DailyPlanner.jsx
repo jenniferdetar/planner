@@ -158,6 +158,7 @@ export default function DailyPlanner({
 
       {view === 'icaap' && (
         <IcaapTracker
+          userId={userId}
           items={icaapItems || []}
           onAddItem={onAddIcaapItem}
           onUpdateItem={onUpdateIcaapItem}
