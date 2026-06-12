@@ -844,7 +844,7 @@
 
 .dash-month-pill.active {
   background: #1a1a2e;
-  color: #fff;
+  color: #c9a96e;
   border-color: #1a1a2e;
 }
 
@@ -864,7 +864,7 @@
 .dash-summary {
   display: flex;
   border-bottom: 1px solid #e8e5de;
-  background: #faf9f6;
+  background: #fff;
   flex-shrink: 0;
 }
 
@@ -914,13 +914,14 @@
 .dash-th-name, .dash-th {
   position: sticky;
   top: 0;
-  background: #f5f4f0;
-  padding: 5px 10px;
+  background: #1a1a2e;
+  color: #c9a96e !important;
+  padding: 9px 12px;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.7px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  border-bottom: 2px solid #e8e5de;
+  border-bottom: 2px solid #0d0d1a;
   z-index: 1;
 }
 
@@ -943,8 +944,11 @@
 
 .dash-tr:nth-child(even) .dash-td-name,
 .dash-tr:nth-child(even) .dash-cell {
-  background: #ddd8cc;
+  background: transparent;
 }
+
+.dash-tr:hover .dash-td-name,
+.dash-tr:hover .dash-cell { background: rgba(201,169,110,0.1); }
 
 .dash-done {
   color: #5cb85c;
@@ -1197,11 +1201,14 @@
 .icaap-extrahours-tab:hover { color: #555; }
 
 .icaap-extrahours-tab.active {
-  color: #7ba7e0;
-  border-bottom-color: #7ba7e0;
+  color: #1a1a2e;
+  border-bottom-color: #c9a96e;
   background: #fff;
   font-weight: 700;
 }
+
+.icaap-extrahours-tabs .icaap-extrahours-tab:nth-child(1).active { border-bottom-color: #7ba7e0; color: #4a77b0; }
+.icaap-extrahours-tabs .icaap-extrahours-tab:nth-child(2).active { border-bottom-color: #7ec8c8; color: #4a9898; }
 
 .icaap-note-panel {
   flex: 1;
@@ -1322,9 +1329,9 @@
   white-space: nowrap;
 }
 
-.icaap-data-table tbody tr:nth-child(odd)  td { background: rgba(123,167,224,0.06); }
-.icaap-data-table tbody tr:nth-child(even) td { background: #fff; }
-.icaap-data-table tbody tr:hover td { background: rgba(123,167,224,0.14); }
+.icaap-data-table tbody tr:nth-child(odd)  td { background: rgba(232,160,160,0.07); }
+.icaap-data-table tbody tr:nth-child(even) td { background: rgba(126,200,200,0.07); }
+.icaap-data-table tbody tr:hover td { background: rgba(201,169,110,0.12); }
 
 .icaap-data-table tbody td {
   padding: 8px 14px;
@@ -1350,11 +1357,13 @@
   color: #c9a96e !important;
 }
 
-/* Dashboard table */
+/* Dashboard table — pink/teal alternating like Goals cards */
 .dash-tr:nth-child(odd)  .dash-td-name,
-.dash-tr:nth-child(odd)  .dash-cell { background: rgba(232,201,122,0.10); }
+.dash-tr:nth-child(odd)  .dash-cell { background: rgba(232,160,160,0.07); }
 .dash-tr:nth-child(even) .dash-td-name,
-.dash-tr:nth-child(even) .dash-cell { background: rgba(123,167,224,0.10); }
+.dash-tr:nth-child(even) .dash-cell { background: rgba(126,200,200,0.07); }
+.dash-tr:hover .dash-td-name,
+.dash-tr:hover .dash-cell           { background: rgba(201,169,110,0.12) !important; }
 
 /* iCAAP sub-tab active colors */
 .icaap-tab[data-t="dashboard"].active { border-bottom-color: #e8a0a0; color: #c85050; }
