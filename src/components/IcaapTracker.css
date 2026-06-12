@@ -903,19 +903,23 @@
 .dash-table-wrap {
   flex: 1;
   overflow: auto;
+  padding: 12px;
 }
 
 .dash-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
+  border: 1px solid #e8e5de;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .dash-th-name, .dash-th {
   position: sticky;
   top: 0;
   background: #f5f4f0;
-  padding: 5px 10px;
+  padding: 5px 6px;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.7px;
@@ -928,14 +932,14 @@
 .dash-th { text-align: center; width: 21.6%; }
 
 .dash-td-name {
-  padding: 3px 10px;
+  padding: 3px 6px;
   font-size: 12px;
   color: #333;
   border-bottom: 1px solid #f0ede6;
 }
 
 .dash-cell {
-  padding: 3px 10px;
+  padding: 3px 6px;
   text-align: center;
   border-bottom: 1px solid #f0ede6;
   font-size: 11px;
