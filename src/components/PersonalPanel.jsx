@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useDailyLog } from '../hooks/useDailyLog'
 import { useMantra } from '../hooks/useMantra'
 import GoalsPanel from './GoalsPanel'
@@ -26,6 +26,7 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
   const { mantra, setMantra, save, saved } = useMantra(userId)
   const [text, setText] = useState('')
   const [subTab, setSubTab] = useState('log')
+  const [mantraEditing, setMantraEditing] = useState(false)
   const saveTimer = useRef(null)
 
   async function handleAdd(e) {
@@ -108,15 +109,29 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
         <div className="mantra-section">
           <div className="mantra-header">
             <h3 className="mantra-title" style={{ color: activeColor }}>My Personal Mantra</h3>
-            {saved && <span className="mantra-saved">Saved ✓</span>}
+            <div className="mantra-header-right">
+              {saved && <span className="mantra-saved">Saved ✓</span>}
+              <button className="mantra-edit-btn" onClick={() => setMantraEditing(e => !e)}>
+                {mantraEditing ? 'View' : 'Edit'}
+              </button>
+            </div>
           </div>
-          <textarea
-            className="mantra-textarea"
-            style={{ '--mantra-color': activeColor }}
-            value={mantra}
-            onChange={e => handleMantraChange(e.target.value)}
-            placeholder="Write your personal mantra here… what words center and inspire you?"
-          />
+          {mantraEditing || !mantra.trim() ? (
+            <textarea
+              className="mantra-textarea"
+              style={{ '--mantra-color': activeColor }}
+              value={mantra}
+              onChange={e => handleMantraChange(e.target.value)}
+              placeholder="Write your personal mantra here… what words center and inspire you?"
+              autoFocus={mantraEditing}
+            />
+          ) : (
+            <div className="mantra-content" style={{ '--mantra-color': activeColor }}>
+              {mantra.split('\n\n').filter(p => p.trim()).map((para, i) => (
+                <p key={i} className="mantra-paragraph">{para.trim()}</p>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

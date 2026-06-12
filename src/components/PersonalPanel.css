@@ -224,9 +224,30 @@
 .mantra-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
   margin-bottom: 20px;
 }
+
+.mantra-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mantra-edit-btn {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #aaa;
+  border: 1px solid #e0ddd7;
+  border-radius: 5px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.mantra-edit-btn:hover { color: #555; border-color: #aaa; }
 
 .mantra-title {
   font-family: 'Playfair Display', serif;
@@ -272,6 +293,27 @@
   border-color: #e8e5de;
   border-top-color: var(--mantra-color, #e8a0a0);
 }
+
+.mantra-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e8e5de;
+  border-top: 4px solid var(--mantra-color, #e8a0a0);
+  border-radius: 8px;
+  padding: 28px 32px;
+}
+
+.mantra-paragraph {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  line-height: 2;
+  font-style: italic;
+  color: #2a2520;
+  margin: 0 0 1.6em;
+}
+
+.mantra-paragraph:last-child { margin-bottom: 0; }
 
 /* Goals section */
 .goals-section {
