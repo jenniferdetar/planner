@@ -928,7 +928,7 @@
   position: sticky;
   top: 0;
   background: #1a1a2e;
-  color: #8B2B3A !important;
+  color: #AAAA9E !important;
   padding: 9px 12px;
   font-size: 10px;
   font-weight: 700;
@@ -1368,7 +1368,7 @@
 /* Attendance header */
 .att-th-name, .att-th-cell {
   background: #1a1a2e !important;
-  color: #8B2B3A !important;
+  color: #AAAA9E !important;
 }
 
 /* Dashboard table — pink/teal alternating like Goals cards */
