@@ -256,9 +256,9 @@
 
 .view-tabs {
   display: flex;
-  gap: 0;
+  gap: 8px;
   background: transparent;
-  padding: 0;
+  padding: 6px 16px;
 }
 
 .view-tab {
@@ -266,28 +266,33 @@
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  padding: 8px 16px;
+  padding: 5px 14px;
   color: #aaa;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
+  border: 1.5px solid #e0ddd7;
+  border-radius: 20px;
+  background: #fff;
+  transition: all 0.15s;
   cursor: pointer;
   white-space: nowrap;
 }
 
-.view-tab:hover {
-  color: #555;
-}
+.view-tab:hover { color: #555; border-color: #bbb; }
 
-.view-tab[data-v="month"].active   { color: #e8a0a0; border-bottom-color: #e8a0a0; }
-.view-tab[data-v="csea"].active    { color: #00326b; border-bottom-color: #00326b; }
-.view-tab[data-v="finance"].active { color: #e8c97a; border-bottom-color: #e8c97a; }
-.view-tab[data-v="gcu"].active     { color: #512A94; border-bottom-color: #512A94; }
-.view-tab[data-v="icaap"].active   { color: #7ba7e0; border-bottom-color: #7ba7e0; }
-.view-tab[data-v="personal"].active{ color: #e8a0a0; border-bottom-color: #e8a0a0; }
+.view-tab[data-v="month"].active   { background: #e8a0a0; border-color: #e8a0a0; color: #fff; }
+.view-tab[data-v="week"].active    { background: #7ec8c8; border-color: #7ec8c8; color: #fff; }
+.view-tab[data-v="csea"].active    { background: #e8c97a; border-color: #e8c97a; color: #fff; }
+.view-tab[data-v="finance"].active { background: #7ba7e0; border-color: #7ba7e0; color: #fff; }
+.view-tab[data-v="gcu"].active     { background: #e8a0a0; border-color: #e8a0a0; color: #fff; }
+.view-tab[data-v="icaap"].active   { background: #7ec8c8; border-color: #7ec8c8; color: #fff; }
+.view-tab[data-v="personal"].active{ background: #e8c97a; border-color: #e8c97a; color: #fff; }
 
-.view-tab.active {
-  font-weight: 700;
-}
+.view-tab[data-v="month"]:hover:not(.active)   { border-color: #e8a0a0; color: #e8a0a0; }
+.view-tab[data-v="week"]:hover:not(.active)    { border-color: #7ec8c8; color: #7ec8c8; }
+.view-tab[data-v="csea"]:hover:not(.active)    { border-color: #e8c97a; color: #e8c97a; }
+.view-tab[data-v="finance"]:hover:not(.active) { border-color: #7ba7e0; color: #7ba7e0; }
+.view-tab[data-v="gcu"]:hover:not(.active)     { border-color: #e8a0a0; color: #e8a0a0; }
+.view-tab[data-v="icaap"]:hover:not(.active)   { border-color: #7ec8c8; color: #7ec8c8; }
+.view-tab[data-v="personal"]:hover:not(.active){ border-color: #e8c97a; color: #e8c97a; }
 
 .planner-body {
   flex: 1;

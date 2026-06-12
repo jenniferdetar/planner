@@ -66,28 +66,37 @@
 
 .personal-sub-tabs {
   display: flex;
-  gap: 2px;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f5f4f0;
+  border-bottom: 1px solid #e8e5de;
 }
 
 .personal-sub-tab {
   font-size: 13px;
   font-weight: 500;
-  padding: 8px 18px;
-  color: #999;
-  border-bottom: 2px solid transparent;
+  padding: 6px 14px;
+  color: #aaa;
+  border-radius: 20px;
+  border: 1.5px solid #e0ddd7;
+  background: #fff;
   transition: all 0.15s;
   cursor: pointer;
 }
 
-.personal-sub-tab:hover {
-  color: #1a1a2e;
-}
+.personal-sub-tab:hover { color: #555; border-color: #bbb; }
 
-.personal-sub-tab.active {
-  color: #c9a96e;
-  border-bottom-color: #c9a96e;
-  font-weight: 600;
-}
+.personal-sub-tab:nth-child(1).active { background: #e8a0a0; border-color: #e8a0a0; color: #fff; }
+.personal-sub-tab:nth-child(2).active { background: #7ec8c8; border-color: #7ec8c8; color: #fff; }
+.personal-sub-tab:nth-child(3).active { background: #e8c97a; border-color: #e8c97a; color: #fff; }
+.personal-sub-tab:nth-child(4).active { background: #7ba7e0; border-color: #7ba7e0; color: #fff; }
+.personal-sub-tab:nth-child(5).active { background: #e8a0a0; border-color: #e8a0a0; color: #fff; }
+
+.personal-sub-tab:nth-child(1):hover:not(.active) { border-color: #e8a0a0; color: #e8a0a0; }
+.personal-sub-tab:nth-child(2):hover:not(.active) { border-color: #7ec8c8; color: #7ec8c8; }
+.personal-sub-tab:nth-child(3):hover:not(.active) { border-color: #e8c97a; color: #e8c97a; }
+.personal-sub-tab:nth-child(4):hover:not(.active) { border-color: #7ba7e0; color: #7ba7e0; }
+.personal-sub-tab:nth-child(5):hover:not(.active) { border-color: #e8a0a0; color: #e8a0a0; }
 
 .personal-body {
   flex: 1;

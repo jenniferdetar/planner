@@ -49,25 +49,34 @@
   background: #f5f4f0;
   border-bottom: 1px solid #e8e5de;
   flex-shrink: 0;
+  padding: 8px 12px;
+  gap: 8px;
 }
 
 .icaap-tab {
   flex: 1;
-  padding: 10px;
+  padding: 6px 10px;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #999;
+  color: #aaa;
   transition: all 0.15s;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
+  border-radius: 20px;
+  border: 1.5px solid #e0ddd7;
+  background: #fff;
+  text-align: center;
 }
 
-.icaap-tab.active {
-  color: #1a1a2e;
-  background: #fff;
-  border-bottom-color: #7ec8c8;
-}
+.icaap-tab:nth-child(1).active { background: #e8a0a0; border-color: #e8a0a0; color: #fff; }
+.icaap-tab:nth-child(2).active { background: #7ec8c8; border-color: #7ec8c8; color: #fff; }
+.icaap-tab:nth-child(3).active { background: #e8c97a; border-color: #e8c97a; color: #fff; }
+.icaap-tab:nth-child(4).active { background: #7ba7e0; border-color: #7ba7e0; color: #fff; }
+
+.icaap-tab:nth-child(1):hover:not(.active) { border-color: #e8a0a0; color: #e8a0a0; }
+.icaap-tab:nth-child(2):hover:not(.active) { border-color: #7ec8c8; color: #7ec8c8; }
+.icaap-tab:nth-child(3):hover:not(.active) { border-color: #e8c97a; color: #e8c97a; }
+.icaap-tab:nth-child(4):hover:not(.active) { border-color: #7ba7e0; color: #7ba7e0; }
 
 /* Toolbar */
 .icaap-toolbar {
