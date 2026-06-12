@@ -2,6 +2,8 @@ import { useState } from 'react'
 import './WeekView.css'
 import { useHabitCompletions } from '../hooks/useHabitCompletions'
 import { usePersonalChecklist } from '../hooks/usePersonalChecklist'
+import { useMeetingsInRange } from '../hooks/usePlannerData'
+import { useWeeklyTasks } from '../hooks/useWeeklyTasks'
 
 const DAY_NAMES_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
@@ -52,7 +54,7 @@ const HABIT_COLORS = {
   'Weekends': '#7ba7e0',
 }
 
-export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks, tasksByDate, onToggleTask, onAddTask }) {
+export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks }) {
   const [weekStart, setWeekStart] = useState(() => getWeekStart(selectedDate))
   const [addingDay, setAddingDay] = useState(null)
   const [newTaskText, setNewTaskText] = useState('')
@@ -62,6 +64,8 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
   weekEnd.setDate(weekStart.getDate() + 6)
 
   const { isCompleted, toggle: toggleHabit } = useHabitCompletions(userId, weekStart, weekEnd)
+  const weekMeetings = useMeetingsInRange(userId, weekStart, weekEnd)
+  const { tasksByDate, toggleTask, addTask: addWeekTask } = useWeeklyTasks(userId, weekStart)
   const { tasks: monthlyTasks, isChecked: isMonthChecked, toggle: toggleMonthTask } = usePersonalChecklist(userId)
   const weekMonth = weekStart.getMonth() + 1
 
@@ -97,7 +101,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
 
   async function handleAddTask(dateStr) {
     if (!newTaskText.trim()) return
-    await onAddTask(dateStr, newTaskText.trim(), newTaskPriority)
+    await addWeekTask(dateStr, newTaskText.trim(), newTaskPriority)
     setNewTaskText('')
     setNewTaskPriority('medium')
     setAddingDay(null)
@@ -162,8 +166,17 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
         {days.map((day, i) => {
           const dateStr = toDateStr(day)
           const dayColor = DAY_COLORS[i]
-          const tasks = tasksByDate?.[dateStr] || []
-          const events = (calendarBlocks || []).filter(b => b.startIso?.startsWith(dateStr))
+          const tasks = tasksByDate[dateStr] || []
+          const meetingEvents = weekMeetings
+            .filter(m => m.date === dateStr)
+            .map(m => ({
+              id: m.id,
+              title: m.title,
+              color: m.color || '#00326b',
+              startLabel: m.start_time ? m.start_time.slice(0, 5) : null,
+            }))
+          const calEvents = (calendarBlocks || []).filter(b => b.startIso?.startsWith(dateStr))
+          const events = [...meetingEvents, ...calEvents]
           const isToday = day.getTime() === today.getTime()
 
           return (
@@ -179,7 +192,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                     <div
                       key={task.id}
                       className={`week-task-row ${task.completed ? 'done' : ''}`}
-                      onClick={() => onToggleTask(task.id, dateStr)}
+                      onClick={() => toggleTask(task.id, dateStr)}
                     >
                       <span
                         className="week-task-check"
