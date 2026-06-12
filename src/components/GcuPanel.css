@@ -1,3 +1,11 @@
+:root {
+  --gcu: #512A94;
+  --gcu-light: rgba(81,42,148,0.08);
+  --gcu-mid:   rgba(81,42,148,0.15);
+  --gcu-dark:  #3b1e6e;
+  --gcu-gold:  #c9a96e;
+}
+
 .gcu-panel {
   display: flex;
   flex-direction: column;
@@ -6,10 +14,11 @@
   background: #faf9f6;
 }
 
+/* ── Header ── */
 .gcu-header {
   padding: 20px 32px 16px;
-  background: #fff;
-  border-bottom: 1px solid #e8e5de;
+  background: var(--gcu);
+  border-bottom: 3px solid var(--gcu-dark);
   flex-shrink: 0;
 }
 
@@ -24,101 +33,110 @@
 .gcu-title {
   font-family: 'Playfair Display', serif;
   font-size: 20px;
-  font-weight: 600;
-  color: #1a1a2e;
+  font-weight: 700;
+  color: #fff;
   margin: 0 0 4px;
+  letter-spacing: 0.5px;
 }
 
 .gcu-subtitle {
   font-size: 12px;
-  color: #999;
+  color: rgba(255,255,255,0.65);
   margin: 0;
+  letter-spacing: 0.3px;
 }
 
 .gcu-asana-btn {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.5px;
   padding: 8px 16px;
   border-radius: 8px;
-  background: #f86336;
+  background: rgba(255,255,255,0.15);
   color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
   cursor: pointer;
   white-space: nowrap;
-  transition: opacity 0.15s;
+  transition: background 0.15s;
   flex-shrink: 0;
+}
+
+.gcu-asana-btn:not(:disabled):hover {
+  background: rgba(255,255,255,0.28);
 }
 
 .gcu-asana-btn:disabled,
 .gcu-asana-btn.pushing {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: default;
 }
 
-.gcu-asana-btn:not(:disabled):hover {
-  opacity: 0.85;
-}
-
 .gcu-progress-bar-wrap {
-  height: 5px;
-  background: #eee;
+  height: 6px;
+  background: rgba(255,255,255,0.2);
   border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 }
 
 .gcu-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #c9a96e, #8bc34a);
+  background: linear-gradient(90deg, var(--gcu-gold), #a4d65e);
   border-radius: 3px;
   transition: width 0.4s ease;
 }
 
 .gcu-progress-label {
   font-size: 11px;
-  color: #999;
+  color: rgba(255,255,255,0.7);
   letter-spacing: 0.3px;
 }
 
+/* ── Body ── */
 .gcu-body {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 32px 24px;
+  padding: 20px 32px 28px;
 }
 
+/* ── Course group ── */
 .gcu-group {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  border: 1px solid #e8e5de;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 
 .gcu-group-label {
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-weight: 800;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: #aaa;
-  margin-bottom: 8px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #ede9e2;
+  color: #fff;
+  background: var(--gcu);
+  padding: 10px 16px;
 }
 
+/* ── Course rows ── */
 .gcu-course-row {
-  border-radius: 8px;
-  transition: background 0.15s;
-  margin-bottom: 2px;
+  border-bottom: 1px solid #f0ede6;
+  transition: background 0.12s;
 }
 
-.gcu-course-row:hover {
-  background: #f5f4f0;
-}
+.gcu-course-row:last-child { border-bottom: none; }
 
-.gcu-course-row.open {
-  background: #f5f4f0;
-}
+.gcu-course-row:nth-child(odd)  { background: #fff; }
+.gcu-course-row:nth-child(even) { background: var(--gcu-light); }
+
+.gcu-course-row:hover  { background: var(--gcu-mid); }
+.gcu-course-row.open   { background: var(--gcu-mid) !important; border-left: 3px solid var(--gcu); }
 
 .gcu-course-main {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 10px;
+  padding: 10px 14px;
   cursor: pointer;
 }
 
@@ -133,29 +151,27 @@
   padding: 0;
 }
 
-.gcu-status-dot:hover {
-  transform: scale(1.3);
-}
+.gcu-status-dot:hover { transform: scale(1.3); }
 
 .gcu-course-info {
   flex: 1;
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
 }
 
 .gcu-course-code {
   font-size: 11px;
   font-weight: 700;
-  color: #c9a96e;
+  color: var(--gcu);
   letter-spacing: 0.5px;
   white-space: nowrap;
 }
 
 .gcu-course-name {
   font-size: 13px;
-  color: #333;
+  color: #2a2520;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -163,46 +179,43 @@
 
 .gcu-credits {
   font-size: 11px;
+  font-weight: 600;
   color: #bbb;
   white-space: nowrap;
   flex-shrink: 0;
+  background: #f5f4f0;
+  padding: 1px 7px;
+  border-radius: 10px;
 }
 
 .gcu-status-label {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .gcu-chevron {
   font-size: 10px;
-  color: #ccc;
+  color: var(--gcu);
   flex-shrink: 0;
+  opacity: 0.6;
 }
 
 .gcu-course-desc {
   font-size: 12px;
-  color: #666;
-  line-height: 1.6;
-  padding: 4px 10px 12px 31px;
+  color: #555;
+  line-height: 1.7;
+  padding: 6px 16px 14px 35px;
+  border-top: 1px solid rgba(81,42,148,0.1);
+  background: rgba(81,42,148,0.04);
 }
 
 @media (max-width: 768px) {
-  .gcu-header {
-    padding: 14px 16px 12px;
-  }
-
-  .gcu-body {
-    padding: 12px 16px 20px;
-  }
-
-  .gcu-title {
-    font-size: 17px;
-  }
-
-  .gcu-course-name {
-    white-space: normal;
-  }
+  .gcu-header { padding: 14px 16px 12px; }
+  .gcu-body   { padding: 12px 16px 20px; }
+  .gcu-title  { font-size: 17px; }
+  .gcu-course-name { white-space: normal; }
 }

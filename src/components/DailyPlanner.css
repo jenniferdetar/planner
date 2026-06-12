@@ -281,7 +281,7 @@
 .view-tab[data-v="month"].active   { color: #e8a0a0; border-bottom-color: #e8a0a0; }
 .view-tab[data-v="csea"].active    { color: #00326b; border-bottom-color: #00326b; }
 .view-tab[data-v="finance"].active { color: #e8c97a; border-bottom-color: #e8c97a; }
-.view-tab[data-v="gcu"].active     { color: #7ec8c8; border-bottom-color: #7ec8c8; }
+.view-tab[data-v="gcu"].active     { color: #512A94; border-bottom-color: #512A94; }
 .view-tab[data-v="icaap"].active   { color: #7ba7e0; border-bottom-color: #7ba7e0; }
 .view-tab[data-v="personal"].active{ color: #e8a0a0; border-bottom-color: #e8a0a0; }
 
