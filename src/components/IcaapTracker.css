@@ -328,7 +328,7 @@
 .icaap-empty {
   font-size: 13px;
   color: #ccc;
-  font-style: italic;
+  font-style: normal;
   text-align: center;
   padding: 32px 0;
 }
@@ -1262,7 +1262,7 @@
 
 .icaap-note-textarea::placeholder {
   color: #bbb;
-  font-style: italic;
+  font-style: normal;
 }
 
 .icaap-note-textarea:focus {

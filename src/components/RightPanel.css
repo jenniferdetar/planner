@@ -190,7 +190,7 @@
 .summary-empty {
   font-size: 12px;
   color: #ccc;
-  font-style: italic;
+  font-style: normal;
   text-align: center;
   padding: 8px 0;
 }

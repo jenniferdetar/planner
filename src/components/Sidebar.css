@@ -78,7 +78,7 @@
 
 .quote-text {
   font-family: 'Ink Free', cursive;
-  font-style: italic;
+  font-style: normal;
   font-size: 12px;
   line-height: 1.6;
   color: #f0ead8;
@@ -173,7 +173,7 @@
   color: rgba(255,255,255,0.45);
   text-align: center;
   padding: 24px 12px;
-  font-style: italic;
+  font-style: normal;
 }
 
 .add-task-form {
@@ -601,7 +601,7 @@
 
 .section-page .section-textarea::placeholder {
   color: #ccc;
-  font-style: italic;
+  font-style: normal;
 }
 
 .section-page-footer {
@@ -656,7 +656,7 @@
 
 .section-textarea::placeholder {
   color: rgba(255,255,255,0.25);
-  font-style: italic;
+  font-style: normal;
 }
 
 .section-textarea:focus {
