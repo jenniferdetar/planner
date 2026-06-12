@@ -1116,7 +1116,7 @@
   cursor: pointer;
   border: 1px solid #e0ddd6;
 }
-.ical-mgr-btn:hover { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+.ical-mgr-btn:hover { background: #1a1a2e; color: #AAAA9E; border-color: #1a1a2e; }
 
 .ical-manager {
   background: #fff;
@@ -1155,7 +1155,7 @@
 .ical-add-form { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 4px; }
 .ical-input { flex: 1; min-width: 120px; padding: 5px 8px; border: 1px solid #e0ddd6; border-radius: 5px; font-size: 12px; }
 .ical-color-input { width: 32px; height: 30px; padding: 1px; border: 1px solid #e0ddd6; border-radius: 5px; cursor: pointer; }
-.ical-add-btn { padding: 5px 12px; background: #1a1a2e; color: #fff; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.ical-add-btn { padding: 5px 12px; background: #1a1a2e; color: #AAAA9E; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .ical-add-btn:hover { background: #2d2d4e; }
 
 .view-tab { font-family: 'Nunito', sans-serif !important; }

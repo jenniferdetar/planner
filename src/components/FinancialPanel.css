@@ -490,7 +490,7 @@
 
 .pc-th-account {
   position: sticky; left: 0; z-index: 2;
-  background: #1a1a2e; color: #fff;
+  background: #1a1a2e; color: #AAAA9E;
   text-align: left; padding: 8px 12px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
   min-width: 180px;
@@ -498,7 +498,7 @@
 }
 
 .pc-th-date {
-  background: #1a1a2e; color: #8B2B3A;
+  background: #1a1a2e; color: #AAAA9E;
   padding: 6px 10px; text-align: center;
   font-size: 11px; font-weight: 600;
   min-width: 100px;
@@ -707,13 +707,13 @@
 .pc-table tbody tr:nth-child(odd)  .pc-td-account { background: rgba(139,43,58,0.12); }
 .pc-table tbody tr:nth-child(even) .pc-td-account { background: rgba(110,34,50,0.12); }
 
-.coins-table th { background: #1a1a2e; color: #8B2B3A; }
+.coins-table th { background: #1a1a2e; color: #AAAA9E; }
 .coins-row:nth-child(odd)  td { background: rgba(80,26,40,0.09); }
 .coins-row:nth-child(even) td { background: rgba(47,16,25,0.09); }
 
 .goals-table tbody tr:nth-child(odd)  td { background: rgba(139,43,58,0.07); }
 .goals-table tbody tr:nth-child(even) td { background: rgba(110,34,50,0.07); }
-.goals-th-name, .goals-th-col { background: #1a1a2e !important; color: #8B2B3A !important; }
+.goals-th-name, .goals-th-col { background: #1a1a2e !important; color: #AAAA9E !important; }
 
 /* ── Goals palette ── */
 .fin-stat:nth-child(1) .fin-stat-num:not(.income):not(.expense) { color: #8B2B3A !important; }
