@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './WeekView.css'
 import { useHabitCompletions } from '../hooks/useHabitCompletions'
+import { usePersonalChecklist } from '../hooks/usePersonalChecklist'
 
 const DAY_NAMES_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
@@ -61,6 +62,8 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
   weekEnd.setDate(weekStart.getDate() + 6)
 
   const { isCompleted, toggle: toggleHabit } = useHabitCompletions(userId, weekStart, weekEnd)
+  const { tasks: monthlyTasks, isChecked: isMonthChecked, toggle: toggleMonthTask } = usePersonalChecklist(userId)
+  const weekMonth = weekStart.getMonth() + 1
 
   const days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart)
@@ -153,6 +156,30 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
 
       {/* Motivational banner */}
       <div className="week-banner">✦ ENJOY YOUR FAMILY ♥</div>
+
+      {/* Monthly tasks */}
+      {monthlyTasks.length > 0 && (
+        <div className="week-monthly-tasks">
+          <div className="week-monthly-header">
+            <span className="week-monthly-title">Monthly Tasks — {MONTH_NAMES[weekStart.getMonth()]}</span>
+          </div>
+          <div className="week-monthly-list">
+            {monthlyTasks.map(task => {
+              const checked = isMonthChecked(task.id, weekMonth)
+              return (
+                <button
+                  key={task.id}
+                  className={`week-monthly-item ${checked ? 'checked' : ''}`}
+                  onClick={() => toggleMonthTask(task.id, weekMonth)}
+                >
+                  <span className="week-monthly-check" style={{ borderColor: checked ? '#c9a96e' : '#ccc', background: checked ? '#c9a96e' : 'transparent' }} />
+                  <span className="week-monthly-text">{task.task_name}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Daily rows */}
       <div className="week-days">
