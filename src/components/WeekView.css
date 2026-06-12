@@ -307,8 +307,9 @@
 .week-event-pill {
   padding: 2px 8px;
   border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
+  font-family: 'Caveat', cursive !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -317,8 +318,9 @@
 }
 
 .week-event-time {
-  font-size: 10px;
-  font-weight: 700;
+  font-family: 'Caveat', cursive !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
   opacity: 0.88;
   flex-shrink: 0;
 }

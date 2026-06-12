@@ -171,8 +171,9 @@
 .cell-event {
   padding: 1px 4px;
   border-radius: 3px;
-  font-size: 10px;
-  font-weight: 600;
+  font-family: 'Caveat', cursive !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
@@ -186,8 +187,9 @@
 }
 
 .cell-event-time {
-  font-size: 9.5px;
-  font-weight: 700;
+  font-family: 'Caveat', cursive !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
   opacity: 0.88;
   flex-shrink: 0;
 }
