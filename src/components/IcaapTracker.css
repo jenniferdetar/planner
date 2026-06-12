@@ -1236,6 +1236,25 @@
 
 .icaap-note-edit-btn:hover { color: #555; border-color: #aaa; }
 
+.icaap-table-preamble {
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid #e8e5de;
+  background: #faf9f6;
+}
+
+.icaap-table-preamble p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.icaap-table-preamble p:first-child {
+  font-weight: 700;
+  font-size: 13px;
+  color: #1a1a2e;
+}
+
 .icaap-table-wrap {
   flex: 1;
   overflow: auto;

@@ -142,7 +142,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       {/* Sub-tabs */}
       <div className="icaap-tabs">
         <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
-        <button data-t="list" className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>List</button>
         <button data-t="asana" className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
         <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button data-t="profdev" className={`icaap-tab ${tab === 'profdev' ? 'active' : ''}`} onClick={() => setTab('profdev')}>Prof. Development 09-27-25</button>
@@ -179,7 +178,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
 
       {/* Toolbar */}
       <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'profdev' || tab === 'winterbreak') ? 'none' : undefined }}>
-        {tab === 'list' ? (
+        {false ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (
               <button key={f} className={`filter-pill ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
@@ -920,9 +919,12 @@ function IcaapDashboard() {
 function parseTable(content) {
   const lines = content.split('\n').filter(l => l.trim())
   if (lines.length < 2) return null
-  const headers = lines[0].split('\t').map(h => h.trim())
-  const rows = lines.slice(1).map(l => l.split('\t').map(c => c.trim()))
-  return { headers, rows }
+  const firstTableLine = lines.findIndex(l => l.includes('\t'))
+  if (firstTableLine === -1) return null
+  const preamble = lines.slice(0, firstTableLine)
+  const headers = lines[firstTableLine].split('\t').map(h => h.trim())
+  const rows = lines.slice(firstTableLine + 1).map(l => l.split('\t').map(c => c.trim()))
+  return { preamble, headers, rows }
 }
 
 function IcaapNotePanel({ userId, noteKey, title, color }) {
@@ -953,6 +955,11 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
         />
       ) : (
         <div className="icaap-table-wrap">
+          {table.preamble.length > 0 && (
+            <div className="icaap-table-preamble">
+              {table.preamble.map((line, i) => <p key={i}>{line}</p>)}
+            </div>
+          )}
           <table className="icaap-data-table">
             <thead>
               <tr>
