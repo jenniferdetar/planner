@@ -727,3 +727,95 @@
 .fin-goal:nth-child(even) { border-left: 3px solid #7ba7e0; }
 
 .fin-tab { font-family: 'Indie Flower', cursive !important; }
+
+/* ── Goal Cards ── */
+.fin-goals-grid {
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  align-content: start;
+}
+
+.goal-card {
+  background: #fff;
+  border: 1px solid #e8e5de;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.goal-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.09); transform: translateY(-2px); }
+
+.goal-card-top { height: 5px; flex-shrink: 0; }
+
+.goal-card-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  padding: 8px 10px 4px;
+}
+
+.goal-card-body {
+  padding: 4px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.goal-card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.goal-card-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #bbb;
+}
+
+.goal-card-amounts {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.goal-card-saved { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+.goal-card-target { font-size: 10px; color: #aaa; }
+
+.goal-card-bar {
+  height: 4px;
+  background: #f0ede6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.goal-card-fill {
+  height: 100%;
+  background: #c9a96e;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.goal-card-pct {
+  font-size: 9px;
+  color: #bbb;
+  text-align: right;
+}
+
+.goal-card-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #c9a96e;
+  outline: none;
+  font-size: 13px;
+  font-family: inherit;
+  background: transparent;
+  padding: 1px 0;
+}

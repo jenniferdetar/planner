@@ -221,12 +221,8 @@ function GoalsTab({ goals, onUpdate }) {
   })
   const sortedRows = Object.values(rows).sort((a, b) => a.name.localeCompare(b.name))
 
-  const total3 = sortedRows.reduce((s, r) => s + Number(r.mo3?.current_amount || 0), 0)
-  const total6 = sortedRows.reduce((s, r) => s + Number(r.mo6?.current_amount || 0), 0)
-  const target3 = sortedRows.reduce((s, r) => s + Number(r.mo3?.target_amount || 0), 0)
-  const target6 = sortedRows.reduce((s, r) => s + Number(r.mo6?.target_amount || 0), 0)
-
-  function startEdit(goal) {
+  function startEdit(goal, e) {
+    e.stopPropagation()
     setEditing(goal.id)
     setEditVal(String(goal.current_amount))
   }
@@ -237,15 +233,16 @@ function GoalsTab({ goals, onUpdate }) {
     setEditing(null)
   }
 
-  function GoalCell({ goal }) {
-    if (!goal) return <td className="goals-cell empty">—</td>
+  function GoalBar({ goal, label }) {
+    if (!goal) return null
     const pct = goal.target_amount > 0 ? Math.min(100, Math.round((goal.current_amount / goal.target_amount) * 100)) : 0
     const isEditing = editing === goal.id
     return (
-      <td className="goals-cell" onClick={() => !isEditing && startEdit(goal)}>
+      <div className="goal-card-row">
+        <span className="goal-card-label">{label}</span>
         {isEditing ? (
           <input
-            className="goals-cell-input"
+            className="goal-card-input"
             type="number" step="0.01" min="0"
             value={editVal}
             onChange={e => setEditVal(e.target.value)}
@@ -255,53 +252,35 @@ function GoalsTab({ goals, onUpdate }) {
             onClick={e => e.stopPropagation()}
           />
         ) : (
-          <>
-            <span className="goals-saved">{fmt(goal.current_amount)}</span>
-            <span className="goals-target">/ {fmt(goal.target_amount)}</span>
-            <div className="goals-bar"><div className="goals-fill" style={{ width: `${pct}%` }} /></div>
-          </>
+          <span className="goal-card-amounts" onClick={e => startEdit(goal, e)}>
+            <span className="goal-card-saved">{fmt(goal.current_amount)}</span>
+            <span className="goal-card-target">/ {fmt(goal.target_amount)}</span>
+          </span>
         )}
-      </td>
+        <div className="goal-card-bar">
+          <div className="goal-card-fill" style={{ width: `${pct}%`, background: pct >= 100 ? '#5cb85c' : undefined }} />
+        </div>
+        <span className="goal-card-pct">{pct}%</span>
+      </div>
     )
   }
 
   return (
     <div className="fin-content">
-      <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Emergency fund targets — click a cell to update saved amount</span>
-      </div>
-      <div className="goals-table-wrap">
-        <table className="goals-table">
-          <thead>
-            <tr>
-              <th className="goals-th-name">Bill</th>
-              <th className="goals-th-col mo3">3 Months</th>
-              <th className="goals-th-col mo6">6 Months</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedRows.map(row => (
-              <tr key={row.name}>
-                <td className="goals-name">{row.name}</td>
-                <GoalCell goal={row.mo3} />
-                <GoalCell goal={row.mo6} />
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr className="goals-total-row">
-              <td className="goals-name">Total</td>
-              <td className="goals-cell total">
-                <span className="goals-saved">{fmt(total3)}</span>
-                <span className="goals-target">/ {fmt(target3)}</span>
-              </td>
-              <td className="goals-cell total">
-                <span className="goals-saved">{fmt(total6)}</span>
-                <span className="goals-target">/ {fmt(target6)}</span>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+      <div className="fin-goals-grid">
+        {sortedRows.map((row, idx) => {
+          const color = PALETTE[idx % PALETTE.length]
+          return (
+            <div key={row.name} className="goal-card">
+              <div className="goal-card-top" style={{ background: color }} />
+              <div className="goal-card-name">{row.name}</div>
+              <div className="goal-card-body">
+                <GoalBar goal={row.mo3} label="3 mo" />
+                <GoalBar goal={row.mo6} label="6 mo" />
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
