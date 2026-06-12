@@ -59,7 +59,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #1a1a2e;
+  color: #fff;
   transition: all 0.15s;
   cursor: pointer;
   border-radius: 20px;
@@ -72,10 +72,10 @@
 .icaap-tab:hover { opacity: 0.8; }
 .icaap-tab.active { opacity: 1; }
 
-.icaap-tab:nth-child(1) { background: #e8a0a0; }
-.icaap-tab:nth-child(2) { background: #7ec8c8; }
-.icaap-tab:nth-child(3) { background: #e8c97a; }
-.icaap-tab:nth-child(4) { background: #7ba7e0; color: #fff; }
+.icaap-tab:nth-child(1) { background: #3d3228; }
+.icaap-tab:nth-child(2) { background: #4c3040; }
+.icaap-tab:nth-child(3) { background: #484c30; }
+.icaap-tab:nth-child(4) { background: #555938; color: #fff; }
 
 /* Toolbar */
 .icaap-toolbar {
@@ -112,16 +112,16 @@
 .icaap-add-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #7ec8c8;
+  color: #4c3040;
   padding: 6px 12px;
-  border: 1px solid #7ec8c8;
+  border: 1px solid #4c3040;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .icaap-add-btn:hover {
-  background: #7ec8c8;
+  background: #4c3040;
   color: #fff;
 }
 
@@ -218,7 +218,7 @@
 }
 
 .icaap-input:focus {
-  border-color: #7ec8c8;
+  border-color: #4c3040;
 }
 
 .icaap-date-input {
@@ -241,7 +241,7 @@
 }
 
 .icaap-textarea:focus {
-  border-color: #7ec8c8;
+  border-color: #4c3040;
 }
 
 .icaap-form-actions {
@@ -263,7 +263,7 @@
 .icaap-save {
   font-size: 12px;
   font-weight: 600;
-  background: #7ec8c8;
+  background: #4c3040;
   color: #fff;
   padding: 6px 16px;
   border-radius: 6px;
@@ -687,7 +687,7 @@
 }
 
 .att-th-day {
-  background: #1a1a2e; color: #c9a96e;
+  background: #1a1a2e; color: #8a7860;
   text-align: center; padding: 6px 10px;
   min-width: 110px;
   border-right: 1px solid #333;
@@ -744,7 +744,7 @@
   cursor: pointer;
   padding: 0;
 }
-.att-time-btn:hover { color: #7ec8c8; }
+.att-time-btn:hover { color: #4c3040; }
 
 .att-time-input {
   display: block;
@@ -752,7 +752,7 @@
   margin: 4px auto 0;
   font-size: 11px;
   padding: 2px 4px;
-  border: 1px solid #7ec8c8;
+  border: 1px solid #4c3040;
   border-radius: 4px;
   text-align: center;
   font-family: inherit;
@@ -774,7 +774,7 @@
   text-overflow: ellipsis;
   max-width: 120px;
 }
-.att-notes-btn:hover { color: #c9a96e; }
+.att-notes-btn:hover { color: #8a7860; }
 
 .att-notes-input {
   display: block;
@@ -782,7 +782,7 @@
   margin-top: 4px;
   font-size: 11px;
   padding: 3px 5px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #8a7860;
   border-radius: 4px;
   font-family: inherit;
   resize: vertical;
@@ -852,7 +852,7 @@
 
 .dash-month-pill.active {
   background: #1a1a2e;
-  color: #c9a96e;
+  color: #8a7860;
   border-color: #1a1a2e;
 }
 
@@ -867,7 +867,7 @@
   align-self: flex-end;
 }
 
-.dash-search:focus { border-color: #c9a96e; }
+.dash-search:focus { border-color: #8a7860; }
 
 .dash-summary {
   display: flex;
@@ -923,7 +923,7 @@
   position: sticky;
   top: 0;
   background: #1a1a2e;
-  color: #c9a96e !important;
+  color: #8a7860 !important;
   padding: 9px 12px;
   font-size: 10px;
   font-weight: 700;
@@ -956,7 +956,7 @@
 }
 
 .dash-tr:hover .dash-td-name,
-.dash-tr:hover .dash-cell { background: rgba(201,169,110,0.1); }
+.dash-tr:hover .dash-cell { background: rgba(138,120,96,0.1); }
 
 .dash-done {
   color: #5cb85c;
@@ -977,9 +977,9 @@
 .dash-import-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #c9a96e;
+  color: #8a7860;
   padding: 5px 12px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #8a7860;
   border-radius: 6px;
   cursor: pointer;
   background: none;
@@ -988,7 +988,7 @@
 }
 
 .dash-import-btn:hover {
-  background: #c9a96e;
+  background: #8a7860;
   color: #fff;
 }
 
@@ -1060,7 +1060,7 @@
   box-sizing: border-box;
 }
 
-.import-textarea:focus { border-color: #c9a96e; }
+.import-textarea:focus { border-color: #8a7860; }
 
 .import-parse-btn {
   font-size: 12px;
@@ -1135,7 +1135,7 @@
 .import-confirm-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #c9a96e;
+  background: #8a7860;
   color: #fff;
   padding: 7px 18px;
   border-radius: 6px;
@@ -1210,13 +1210,13 @@
 
 .icaap-extrahours-tab.active {
   color: #1a1a2e;
-  border-bottom-color: #c9a96e;
+  border-bottom-color: #8a7860;
   background: #fff;
   font-weight: 700;
 }
 
-.icaap-extrahours-tabs .icaap-extrahours-tab:nth-child(1).active { border-bottom-color: #7ba7e0; color: #4a77b0; }
-.icaap-extrahours-tabs .icaap-extrahours-tab:nth-child(2).active { border-bottom-color: #7ec8c8; color: #4a9898; }
+.icaap-extrahours-tabs .icaap-extrahours-tab:nth-child(1).active { border-bottom-color: #555938; color: #4a77b0; }
+.icaap-extrahours-tabs .icaap-extrahours-tab:nth-child(2).active { border-bottom-color: #4c3040; color: #4a9898; }
 
 .icaap-note-panel {
   flex: 1;
@@ -1246,7 +1246,7 @@
 
 .icaap-note-saved {
   font-size: 11px;
-  color: #7ec8c8;
+  color: #4c3040;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
@@ -1261,7 +1261,7 @@
   color: #2a2520;
   background: #fff;
   border: 1px solid #e8e5de;
-  border-top: 4px solid var(--note-color, #7ba7e0);
+  border-top: 4px solid var(--note-color, #555938);
   border-radius: 8px;
   outline: none;
   resize: none;
@@ -1326,7 +1326,7 @@
 
 .icaap-data-table thead th {
   background: #1a1a2e;
-  color: #c9a96e;
+  color: #8a7860;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;
@@ -1337,9 +1337,9 @@
   white-space: nowrap;
 }
 
-.icaap-data-table tbody tr:nth-child(odd)  td { background: rgba(232,160,160,0.07); }
-.icaap-data-table tbody tr:nth-child(even) td { background: rgba(126,200,200,0.07); }
-.icaap-data-table tbody tr:hover td { background: rgba(201,169,110,0.12); }
+.icaap-data-table tbody tr:nth-child(odd)  td { background: rgba(61,50,40,0.07); }
+.icaap-data-table tbody tr:nth-child(even) td { background: rgba(76,48,64,0.07); }
+.icaap-data-table tbody tr:hover td { background: rgba(138,120,96,0.12); }
 
 .icaap-data-table tbody td {
   padding: 8px 14px;
@@ -1350,51 +1350,51 @@
 
 /* ── Palette alternating rows ── */
 /* iCAAP item list */
-.icaap-list > *:nth-child(odd)  { background: rgba(232,160,160,0.10); }
-.icaap-list > *:nth-child(even) { background: rgba(126,200,200,0.10); }
+.icaap-list > *:nth-child(odd)  { background: rgba(61,50,40,0.10); }
+.icaap-list > *:nth-child(even) { background: rgba(76,48,64,0.10); }
 
 /* Attendance table */
 .att-tr:nth-child(odd)  .att-td-name,
-.att-tr:nth-child(odd)  .att-td-cell { background: rgba(232,160,160,0.08); }
+.att-tr:nth-child(odd)  .att-td-cell { background: rgba(61,50,40,0.08); }
 .att-tr:nth-child(even) .att-td-name,
-.att-tr:nth-child(even) .att-td-cell { background: rgba(126,200,200,0.08); }
+.att-tr:nth-child(even) .att-td-cell { background: rgba(76,48,64,0.08); }
 
 /* Attendance header */
 .att-th-name, .att-th-cell {
   background: #1a1a2e !important;
-  color: #c9a96e !important;
+  color: #8a7860 !important;
 }
 
 /* Dashboard table — pink/teal alternating like Goals cards */
 .dash-tr:nth-child(odd)  .dash-td-name,
-.dash-tr:nth-child(odd)  .dash-cell { background: rgba(232,160,160,0.07); }
+.dash-tr:nth-child(odd)  .dash-cell { background: rgba(61,50,40,0.07); }
 .dash-tr:nth-child(even) .dash-td-name,
-.dash-tr:nth-child(even) .dash-cell { background: rgba(126,200,200,0.07); }
+.dash-tr:nth-child(even) .dash-cell { background: rgba(76,48,64,0.07); }
 .dash-tr:hover .dash-td-name,
-.dash-tr:hover .dash-cell           { background: rgba(201,169,110,0.12) !important; }
+.dash-tr:hover .dash-cell           { background: rgba(138,120,96,0.12) !important; }
 
 /* iCAAP sub-tab active colors */
-.icaap-tab[data-t="dashboard"].active { border-bottom-color: #e8a0a0; color: #c85050; }
-.icaap-tab[data-t="list"].active      { border-bottom-color: #e8c97a; color: #b8924a; }
-.icaap-tab[data-t="asana"].active     { border-bottom-color: #7ec8c8; color: #4a9898; }
-.icaap-tab[data-t="attendance"].active{ border-bottom-color: #7ba7e0; color: #4a77b0; }
-.icaap-tab[data-t="profdev"].active   { border-bottom-color: #7ba7e0; color: #4a77b0; }
-.icaap-tab[data-t="winterbreak"].active{border-bottom-color: #7ec8c8; color: #4a9898; }
+.icaap-tab[data-t="dashboard"].active { border-bottom-color: #3d3228; color: #c85050; }
+.icaap-tab[data-t="list"].active      { border-bottom-color: #484c30; color: #b8924a; }
+.icaap-tab[data-t="asana"].active     { border-bottom-color: #4c3040; color: #4a9898; }
+.icaap-tab[data-t="attendance"].active{ border-bottom-color: #555938; color: #4a77b0; }
+.icaap-tab[data-t="profdev"].active   { border-bottom-color: #555938; color: #4a77b0; }
+.icaap-tab[data-t="winterbreak"].active{border-bottom-color: #4c3040; color: #4a9898; }
 
 /* ── Goals palette ── */
-.icaap-stat:nth-child(1) .icaap-stat-num { color: #e8a0a0 !important; }
-.icaap-stat:nth-child(2) .icaap-stat-num { color: #7ec8c8 !important; }
-.icaap-stat:nth-child(3) .icaap-stat-num { color: #e8c97a !important; }
-.icaap-stat:nth-child(4) .icaap-stat-num { color: #7ba7e0 !important; }
+.icaap-stat:nth-child(1) .icaap-stat-num { color: #3d3228 !important; }
+.icaap-stat:nth-child(2) .icaap-stat-num { color: #4c3040 !important; }
+.icaap-stat:nth-child(3) .icaap-stat-num { color: #484c30 !important; }
+.icaap-stat:nth-child(4) .icaap-stat-num { color: #555938 !important; }
 
-.icaap-tab.active { border-bottom-color: #7ec8c8; }
+.icaap-tab.active { border-bottom-color: #4c3040; }
 
-.icaap-card:nth-child(odd)  { background: rgba(232,160,160,0.05); border-left: 3px solid #e8a0a0; }
-.icaap-card:nth-child(even) { background: rgba(126,200,200,0.05); border-left: 3px solid #7ec8c8; }
+.icaap-card:nth-child(odd)  { background: rgba(61,50,40,0.05); border-left: 3px solid #3d3228; }
+.icaap-card:nth-child(even) { background: rgba(76,48,64,0.05); border-left: 3px solid #4c3040; }
 
 .att-tr:nth-child(odd)  .att-td-name,
-.att-tr:nth-child(odd)  .att-td-cell { background: rgba(232,160,160,0.05) !important; }
+.att-tr:nth-child(odd)  .att-td-cell { background: rgba(61,50,40,0.05) !important; }
 .att-tr:nth-child(even) .att-td-name,
-.att-tr:nth-child(even) .att-td-cell { background: rgba(126,200,200,0.05) !important; }
+.att-tr:nth-child(even) .att-td-cell { background: rgba(76,48,64,0.05) !important; }
 
 .icaap-tab { font-family: 'Indie Flower', cursive !important; }

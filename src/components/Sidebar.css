@@ -21,7 +21,7 @@
 }
 
 .logo-icon {
-  color: #c9a96e;
+  color: #8a7860;
   font-size: 14px;
 }
 
@@ -62,16 +62,16 @@
 }
 
 .sidebar-tab.active {
-  color: #c9a96e;
-  border-color: rgba(201,169,110,0.3);
-  background: rgba(201,169,110,0.08);
+  color: #8a7860;
+  border-color: rgba(138,120,96,0.3);
+  background: rgba(138,120,96,0.08);
 }
 
 .quote-box {
   margin: 20px 20px 8px;
   padding: 14px 16px;
   background: rgba(201, 169, 110, 0.1);
-  border-left: 3px solid #c9a96e;
+  border-left: 3px solid #8a7860;
   border-radius: 0 6px 6px 0;
   flex-shrink: 0;
 }
@@ -86,7 +86,7 @@
 
 .quote-author {
   font-size: 10px;
-  color: #c9a96e;
+  color: #8a7860;
   margin-top: 6px;
   letter-spacing: 0.5px;
 }
@@ -290,7 +290,7 @@
 
 .btn-save {
   font-size: 12px;
-  background: #c9a96e;
+  background: #8a7860;
   color: #12122b;
   font-weight: 700;
   padding: 4px 12px;
@@ -315,7 +315,7 @@
 }
 
 .add-btn:hover {
-  color: #c9a96e;
+  color: #8a7860;
   border-color: rgba(201, 169, 110, 0.45);
   background: rgba(201, 169, 110, 0.06);
 }
@@ -350,7 +350,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #c9a96e;
+  background: #8a7860;
   color: #12122b;
   font-size: 13px;
   font-weight: 700;
@@ -403,7 +403,7 @@
 .stat-num {
   font-size: 20px;
   font-weight: 600;
-  color: #c9a96e;
+  color: #8a7860;
   line-height: 1;
 }
 
@@ -428,7 +428,7 @@
 }
 
 .asana-badge.syncing {
-  color: #c9a96e;
+  color: #8a7860;
   background: rgba(201, 169, 110, 0.15);
 }
 
@@ -660,7 +660,7 @@
 }
 
 .section-textarea:focus {
-  box-shadow: inset 2px 0 0 var(--ac, #c9a96e);
+  box-shadow: inset 2px 0 0 var(--ac, #8a7860);
 }
 
 .journal-panel {
