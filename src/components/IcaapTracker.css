@@ -679,18 +679,22 @@
 
 .att-th-name {
   position: sticky; left: 0; z-index: 2;
-  background: #1a1a2e; color: #fff;
+  background: #f5f0e8; color: #1a1a2e;
   text-align: left; padding: 8px 14px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
   min-width: 160px;
-  border-right: 2px solid #333;
+  border-right: 2px solid #1a1a2e;
+  border-bottom: 2px solid #1a1a2e;
+  border-top: 2px solid #1a1a2e;
 }
 
 .att-th-day {
-  background: #1a1a2e; color: #8B2B3A;
+  background: #f5f0e8; color: #8B2B3A;
   text-align: center; padding: 6px 10px;
   min-width: 110px;
-  border-right: 1px solid #333;
+  border-right: 1px solid #1a1a2e;
+  border-bottom: 2px solid #1a1a2e;
+  border-top: 2px solid #1a1a2e;
 }
 .att-th-weekday { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
 .att-th-date    { display: block; font-size: 10px; font-weight: 400; color: #aaa; margin-top: 1px; }
@@ -1325,15 +1329,16 @@
 }
 
 .icaap-data-table thead th {
-  background: #1a1a2e;
-  color: #8B2B3A;
+  background: #f5f0e8;
+  color: #1a1a2e;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   padding: 10px 14px;
   text-align: left;
-  border-bottom: 2px solid;
+  border-bottom: 2px solid #1a1a2e;
+  border-top: 2px solid #1a1a2e;
   white-space: nowrap;
 }
 
