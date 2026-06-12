@@ -49,34 +49,25 @@
   background: #f5f4f0;
   border-bottom: 1px solid #e8e5de;
   flex-shrink: 0;
-  padding: 8px 12px;
-  gap: 8px;
 }
 
 .icaap-tab {
   flex: 1;
-  padding: 6px 10px;
+  padding: 10px;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #fff;
+  color: #999;
   transition: all 0.15s;
   cursor: pointer;
-  border-radius: 20px;
-  border: none;
-  text-align: center;
-  opacity: 0.55;
-  font-family: 'Nunito', sans-serif !important;
+  border-bottom: 2px solid transparent;
 }
 
-.icaap-tab:hover { opacity: 0.8; }
-.icaap-tab.active { opacity: 1; }
-
-.icaap-tab:nth-child(1) { background: #8B2B3A; }
-.icaap-tab:nth-child(2) { background: #6E2232; }
-.icaap-tab:nth-child(3) { background: #501A28; }
-.icaap-tab:nth-child(4) { background: #2F1019; }
-
+.icaap-tab.active {
+  color: #1a1a2e;
+  background: #fff;
+  border-bottom-color: #9b59b6;
+}
 
 /* Toolbar */
 .icaap-toolbar {
@@ -113,16 +104,16 @@
 .icaap-add-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #6E2232;
+  color: #9b59b6;
   padding: 6px 12px;
-  border: 1px solid #6E2232;
+  border: 1px solid #9b59b6;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .icaap-add-btn:hover {
-  background: #6E2232;
+  background: #9b59b6;
   color: #fff;
 }
 
@@ -219,7 +210,7 @@
 }
 
 .icaap-input:focus {
-  border-color: #6E2232;
+  border-color: #9b59b6;
 }
 
 .icaap-date-input {
@@ -242,7 +233,7 @@
 }
 
 .icaap-textarea:focus {
-  border-color: #6E2232;
+  border-color: #9b59b6;
 }
 
 .icaap-form-actions {
@@ -264,7 +255,7 @@
 .icaap-save {
   font-size: 12px;
   font-weight: 600;
-  background: #6E2232;
+  background: #9b59b6;
   color: #fff;
   padding: 6px 16px;
   border-radius: 6px;
@@ -337,7 +328,7 @@
 .icaap-empty {
   font-size: 13px;
   color: #ccc;
-  font-style: normal;
+  font-style: italic;
   text-align: center;
   padding: 32px 0;
 }
@@ -680,22 +671,18 @@
 
 .att-th-name {
   position: sticky; left: 0; z-index: 2;
-  background: #1a1a2e; color: #AAAA9E;
+  background: #1a1a2e; color: #fff;
   text-align: left; padding: 8px 14px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
   min-width: 160px;
-  border-right: 2px solid #000;
-  border-bottom: 2px solid #000;
-  border-top: 2px solid #000;
+  border-right: 2px solid #333;
 }
 
 .att-th-day {
-  background: #1a1a2e; color: #AAAA9E;
+  background: #1a1a2e; color: #c9a96e;
   text-align: center; padding: 6px 10px;
   min-width: 110px;
   border-right: 1px solid #333;
-  border-bottom: 2px solid #000;
-  border-top: 2px solid #000;
 }
 .att-th-weekday { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
 .att-th-date    { display: block; font-size: 10px; font-weight: 400; color: #aaa; margin-top: 1px; }
@@ -749,7 +736,7 @@
   cursor: pointer;
   padding: 0;
 }
-.att-time-btn:hover { color: #6E2232; }
+.att-time-btn:hover { color: #9b59b6; }
 
 .att-time-input {
   display: block;
@@ -757,7 +744,7 @@
   margin: 4px auto 0;
   font-size: 11px;
   padding: 2px 4px;
-  border: 1px solid #6E2232;
+  border: 1px solid #9b59b6;
   border-radius: 4px;
   text-align: center;
   font-family: inherit;
@@ -779,7 +766,7 @@
   text-overflow: ellipsis;
   max-width: 120px;
 }
-.att-notes-btn:hover { color: #8B2B3A; }
+.att-notes-btn:hover { color: #c9a96e; }
 
 .att-notes-input {
   display: block;
@@ -787,7 +774,7 @@
   margin-top: 4px;
   font-size: 11px;
   padding: 3px 5px;
-  border: 1px solid #8B2B3A;
+  border: 1px solid #c9a96e;
   border-radius: 4px;
   font-family: inherit;
   resize: vertical;
@@ -857,7 +844,7 @@
 
 .dash-month-pill.active {
   background: #1a1a2e;
-  color: #8B2B3A;
+  color: #fff;
   border-color: #1a1a2e;
 }
 
@@ -872,12 +859,12 @@
   align-self: flex-end;
 }
 
-.dash-search:focus { border-color: #8B2B3A; }
+.dash-search:focus { border-color: #c9a96e; }
 
 .dash-summary {
   display: flex;
   border-bottom: 1px solid #e8e5de;
-  background: #fff;
+  background: #faf9f6;
   flex-shrink: 0;
 }
 
@@ -916,25 +903,28 @@
 .dash-table-wrap {
   flex: 1;
   overflow: auto;
+  padding: 12px;
 }
 
 .dash-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
+  border: 1px solid #e8e5de;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .dash-th-name, .dash-th {
   position: sticky;
   top: 0;
-  background: #1a1a2e;
-  color: #AAAA9E !important;
-  padding: 9px 12px;
+  background: #f5f4f0;
+  padding: 5px 6px;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.7px;
   text-transform: uppercase;
-  border-bottom: 2px solid #0d0d1a;
+  border-bottom: 2px solid #e8e5de;
   z-index: 1;
 }
 
@@ -942,14 +932,14 @@
 .dash-th { text-align: center; width: 21.6%; }
 
 .dash-td-name {
-  padding: 3px 10px;
+  padding: 3px 6px;
   font-size: 12px;
   color: #333;
   border-bottom: 1px solid #f0ede6;
 }
 
 .dash-cell {
-  padding: 3px 10px;
+  padding: 3px 6px;
   text-align: center;
   border-bottom: 1px solid #f0ede6;
   font-size: 11px;
@@ -957,11 +947,8 @@
 
 .dash-tr:nth-child(even) .dash-td-name,
 .dash-tr:nth-child(even) .dash-cell {
-  background: transparent;
+  background: #ddd8cc;
 }
-
-.dash-tr:hover .dash-td-name,
-.dash-tr:hover .dash-cell { background: rgba(139,43,58,0.1); }
 
 .dash-done {
   color: #5cb85c;
@@ -982,9 +969,9 @@
 .dash-import-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #8B2B3A;
+  color: #c9a96e;
   padding: 5px 12px;
-  border: 1px solid #8B2B3A;
+  border: 1px solid #c9a96e;
   border-radius: 6px;
   cursor: pointer;
   background: none;
@@ -993,7 +980,7 @@
 }
 
 .dash-import-btn:hover {
-  background: #8B2B3A;
+  background: #c9a96e;
   color: #fff;
 }
 
@@ -1065,7 +1052,7 @@
   box-sizing: border-box;
 }
 
-.import-textarea:focus { border-color: #8B2B3A; }
+.import-textarea:focus { border-color: #c9a96e; }
 
 .import-parse-btn {
   font-size: 12px;
@@ -1140,7 +1127,7 @@
 .import-confirm-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #8B2B3A;
+  background: #c9a96e;
   color: #fff;
   padding: 7px 18px;
   border-radius: 6px;
@@ -1178,229 +1165,3 @@
   align-self: flex-start;
 }
 
-
-/* Note panels (Prof Dev, Winter Break) */
-.icaap-extrahours {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.icaap-extrahours-tabs {
-  display: flex;
-  gap: 0;
-  background: #f5f4f0;
-  border-bottom: 2px solid #e8e5de;
-  flex-shrink: 0;
-}
-
-.icaap-extrahours-tab {
-  padding: 9px 20px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #aaa;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s;
-}
-
-.icaap-extrahours-tab:hover { color: #555; }
-
-.icaap-extrahours-tab.active {
-  color: #1a1a2e;
-  border-bottom-color: #8B2B3A;
-  background: #fff;
-  font-weight: 700;
-}
-
-.icaap-extrahours-tabs .icaap-extrahours-tab:nth-child(1).active { border-bottom-color: #2F1019; color: #4a77b0; }
-.icaap-extrahours-tabs .icaap-extrahours-tab:nth-child(2).active { border-bottom-color: #6E2232; color: #4a9898; }
-
-.icaap-note-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 24px 28px;
-  background: #faf9f6;
-  overflow-y: auto;
-}
-
-.icaap-note-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 16px;
-  padding-left: 12px;
-  border-left: 4px solid;
-}
-
-.icaap-note-title {
-  font-family: 'Nunito', sans-serif;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-.icaap-note-saved {
-  font-size: 11px;
-  color: #6E2232;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.icaap-note-textarea {
-  flex: 1;
-  min-height: 300px;
-  padding: 18px 20px;
-  font-family: inherit;
-  font-size: 14px;
-  line-height: 1.8;
-  color: #2a2520;
-  background: #fff;
-  border: 1px solid #e8e5de;
-  border-top: 4px solid var(--note-color, #2F1019);
-  border-radius: 8px;
-  outline: none;
-  resize: none;
-  transition: box-shadow 0.15s;
-}
-
-.icaap-note-textarea::placeholder {
-  color: #bbb;
-  font-style: normal;
-}
-
-.icaap-note-textarea:focus {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-}
-
-.icaap-note-edit-btn {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #aaa;
-  border: 1px solid #e0ddd7;
-  border-radius: 5px;
-  padding: 3px 9px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.icaap-note-edit-btn:hover { color: #555; border-color: #aaa; }
-
-.icaap-table-preamble {
-  padding: 12px 16px 10px;
-  border-bottom: 1px solid #e8e5de;
-  background: #faf9f6;
-}
-
-.icaap-table-preamble p {
-  margin: 0;
-  font-size: 12px;
-  color: #666;
-  line-height: 1.6;
-}
-
-.icaap-table-preamble p:first-child {
-  font-weight: 700;
-  font-size: 13px;
-  color: #1a1a2e;
-}
-
-.icaap-table-wrap {
-  flex: 1;
-  overflow: auto;
-  background: #fff;
-  border: 1px solid #e8e5de;
-  border-radius: 8px;
-}
-
-.icaap-data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-.icaap-data-table thead th {
-  background: #1a1a2e !important;
-  color: #AAAA9E !important;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  padding: 10px 14px;
-  text-align: left;
-  border-bottom: 2px solid #000;
-  border-top: 2px solid #000;
-  white-space: nowrap;
-}
-
-.icaap-data-table tbody tr:nth-child(odd)  td { background: rgba(139,43,58,0.07); }
-.icaap-data-table tbody tr:nth-child(even) td { background: rgba(110,34,50,0.07); }
-.icaap-data-table tbody tr:hover td { background: rgba(139,43,58,0.12); }
-
-.icaap-data-table tbody td {
-  padding: 8px 14px;
-  color: #333;
-  border-bottom: 1px solid #f0ede6;
-  white-space: nowrap;
-}
-
-/* ── Palette alternating rows ── */
-/* iCAAP item list */
-.icaap-list > *:nth-child(odd)  { background: rgba(139,43,58,0.10); }
-.icaap-list > *:nth-child(even) { background: rgba(110,34,50,0.10); }
-
-/* Attendance table */
-.att-tr:nth-child(odd)  .att-td-name,
-.att-tr:nth-child(odd)  .att-td-cell { background: rgba(139,43,58,0.08); }
-.att-tr:nth-child(even) .att-td-name,
-.att-tr:nth-child(even) .att-td-cell { background: rgba(110,34,50,0.08); }
-
-/* Attendance header */
-.att-th-name, .att-th-cell {
-  background: #1a1a2e !important;
-  color: #AAAA9E !important;
-}
-
-/* Dashboard table — pink/teal alternating like Goals cards */
-.dash-tr:nth-child(odd)  .dash-td-name,
-.dash-tr:nth-child(odd)  .dash-cell { background: rgba(139,43,58,0.07); }
-.dash-tr:nth-child(even) .dash-td-name,
-.dash-tr:nth-child(even) .dash-cell { background: rgba(110,34,50,0.07); }
-.dash-tr:hover .dash-td-name,
-.dash-tr:hover .dash-cell           { background: rgba(139,43,58,0.12) !important; }
-
-/* iCAAP sub-tab active colors */
-.icaap-tab[data-t="dashboard"].active { border-bottom-color: #8B2B3A; color: #c85050; }
-.icaap-tab[data-t="list"].active      { border-bottom-color: #501A28; color: #b8924a; }
-.icaap-tab[data-t="asana"].active     { border-bottom-color: #6E2232; color: #4a9898; }
-.icaap-tab[data-t="attendance"].active{ border-bottom-color: #2F1019; color: #4a77b0; }
-.icaap-tab[data-t="profdev"].active   { border-bottom-color: #2F1019; color: #4a77b0; }
-.icaap-tab[data-t="winterbreak"].active{border-bottom-color: #6E2232; color: #4a9898; }
-
-/* ── Goals palette ── */
-.icaap-stat:nth-child(1) .icaap-stat-num { color: #8B2B3A !important; }
-.icaap-stat:nth-child(2) .icaap-stat-num { color: #6E2232 !important; }
-.icaap-stat:nth-child(3) .icaap-stat-num { color: #501A28 !important; }
-.icaap-stat:nth-child(4) .icaap-stat-num { color: #2F1019 !important; }
-
-.icaap-tab.active { border-bottom-color: #6E2232; }
-
-.icaap-card:nth-child(odd)  { background: rgba(139,43,58,0.05); border-left: 3px solid #8B2B3A; }
-.icaap-card:nth-child(even) { background: rgba(110,34,50,0.05); border-left: 3px solid #6E2232; }
-
-.att-tr:nth-child(odd)  .att-td-name,
-.att-tr:nth-child(odd)  .att-td-cell { background: rgba(139,43,58,0.05) !important; }
-.att-tr:nth-child(even) .att-td-name,
-.att-tr:nth-child(even) .att-td-cell { background: rgba(110,34,50,0.05) !important; }
-
-.icaap-tab { font-family: 'Nunito', sans-serif !important; }
