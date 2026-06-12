@@ -11,8 +11,8 @@ export function useMantra(userId) {
       .from('personal_mantra')
       .select('mantra_text')
       .eq('user_id', userId)
-      .single()
-      .then(({ data }) => { if (data) setMantra(data.mantra_text) })
+      .maybeSingle()
+      .then(({ data }) => { if (data?.mantra_text) setMantra(data.mantra_text) })
   }, [userId])
 
   async function save(text) {
