@@ -131,7 +131,7 @@ export default function DailyPlanner({
       {/* Tab strip — always visible at top */}
       <div className="planner-tabs-bar">
         <div className="view-tabs">
-          {['week', 'month', 'csea', 'finance', 'gcu', 'icaap', 'personal'].map(v => (
+          {['month', 'csea', 'finance', 'gcu', 'icaap', 'personal'].map(v => (
             <button
               key={v}
               className={`view-tab ${view === v ? 'active' : ''}`}
