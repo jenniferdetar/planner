@@ -191,19 +191,20 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
           </div>
         )}
 
-        <div className="book-list">
+        <div className="book-grid">
           {shelfBooks.map(book => (
             <div
               key={book.id}
-              className="book-row"
+              className="book-card"
               onMouseEnter={() => setHoveredId(book.id)}
               onMouseLeave={() => setHoveredId(null)}
             >
-              <div className="book-info">
+              <div className="book-card-spine" style={{ background: STATUS_COLORS[book.status] + '33', borderTopColor: STATUS_COLORS[book.status] }} />
+              <div className="book-card-body">
                 <span className="book-title">{book.title}</span>
                 {book.author && <span className="book-author">{book.author}</span>}
               </div>
-              <div className="book-actions">
+              <div className="book-card-footer">
                 <button
                   className="status-pill"
                   style={{ background: STATUS_COLORS[book.status] + '22', color: STATUS_COLORS[book.status], borderColor: STATUS_COLORS[book.status] + '55' }}
