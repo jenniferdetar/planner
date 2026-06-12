@@ -47,6 +47,13 @@ input, textarea {
 /* ── Global font size & weight ── */
 * { font-size: 14px !important; font-weight: 400 !important; }
 
+/* ── Global heading colors ── */
+h1 { color: #1a1a2e !important; }
+h2 { color: #8B2B3A !important; }
+h3 { color: #6E2232 !important; }
+h4 { color: #501A28 !important; }
+h5, h6 { color: #2F1019 !important; }
+
 /* ── Indie Flower for all pills ── */
 .filter-pill, .type-btn, .priority-btn, .status-btn,
 .status-change-btn, .csea-add-btn, .icaap-add-btn,
