@@ -1163,3 +1163,5 @@
 .ical-color-input { width: 32px; height: 30px; padding: 1px; border: 1px solid #e0ddd6; border-radius: 5px; cursor: pointer; }
 .ical-add-btn { padding: 5px 12px; background: #1a1a2e; color: #fff; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .ical-add-btn:hover { background: #2d2d4e; }
+
+.view-tab { font-family: 'Indie Flower', cursive !important; }

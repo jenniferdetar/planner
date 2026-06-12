@@ -710,3 +710,5 @@
 .interaction-card:nth-child(even) { background: rgba(126,200,200,0.05); border-left: 3px solid #7ec8c8; }
 
 .filter-pill.active { background: #7ba7e0; border-color: #7ba7e0; }
+
+.csea-tab { font-family: 'Indie Flower', cursive !important; }

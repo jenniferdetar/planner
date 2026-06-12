@@ -1397,3 +1397,5 @@
 .att-tr:nth-child(odd)  .att-td-cell { background: rgba(232,160,160,0.05) !important; }
 .att-tr:nth-child(even) .att-td-name,
 .att-tr:nth-child(even) .att-td-cell { background: rgba(126,200,200,0.05) !important; }
+
+.icaap-tab { font-family: 'Indie Flower', cursive !important; }

@@ -726,3 +726,5 @@
 
 .fin-goal:nth-child(odd)  { border-left: 3px solid #e8c97a; }
 .fin-goal:nth-child(even) { border-left: 3px solid #7ba7e0; }
+
+.fin-tab { font-family: 'Indie Flower', cursive !important; }
