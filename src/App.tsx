@@ -1,0 +1,313 @@
+import { useState, useEffect } from 'react'
+import { useAuth } from './hooks/useAuth'
+import { supabase } from './lib/supabase'
+import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
+import { useWeeklyTasks } from './hooks/useWeeklyTasks'
+import { usePlannerSections } from './hooks/usePlannerSections'
+import { useCalendarEvents } from './hooks/useCalendarEvents'
+import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
+import { useIcaapItems } from './hooks/useIcaapData'
+import { useIcaapAttendance } from './hooks/useIcaapAttendance'
+import { useTransactions, useBills, useFinancialGoals, usePaychecks } from './hooks/useFinancialData'
+import { useAsanaTasks } from './hooks/useAsanaTasks'
+import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
+import { GCU_COURSES } from './components/GcuPanel'
+import { useLibrary } from './hooks/useLibrary'
+import Sidebar from './components/Sidebar'
+import DailyPlanner from './components/DailyPlanner'
+import LoginScreen from './components/LoginScreen'
+import './App.css'
+
+const QUOTES = [
+  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { text: "Focus on being productive instead of busy.", author: "Tim Ferriss" },
+  { text: "It's not about having time, it's about making time.", author: "Unknown" },
+  { text: "Done is better than perfect.", author: "Sheryl Sandberg" },
+  { text: "Small steps every day.", author: "Unknown" },
+]
+
+// Color palette for Supabase-created time blocks
+const BLOCK_COLORS = ['#2d7a4f', '#1e4d31', '#4a90d9', '#e05c5c', '#f0a040', '#9b59b6']
+
+function formatTime(timeStr: string | null | undefined): string {
+  if (!timeStr) return ''
+  const [h, m] = timeStr.split(':').map(Number)
+  const suffix = h >= 12 ? 'PM' : 'AM'
+  const h12 = h % 12 || 12
+  return m === 0 ? `${h12} ${suffix}` : `${h12}:${String(m).padStart(2,'0')} ${suffix}`
+}
+
+function meetingToBlock(meeting: any, fallbackColor?: string) {
+  const hour = parseInt(meeting.start_time?.split(':')[0] ?? '9', 10)
+  return {
+    id: meeting.id,
+    hour,
+    text: meeting.title,
+    color: meeting.color ?? fallbackColor ?? '#4a90d9',
+    source: 'supabase',
+    startLabel: meeting.start_time ? formatTime(meeting.start_time) : null,
+    endLabel: meeting.end_time ? formatTime(meeting.end_time) : null,
+  }
+}
+
+export default function App() {
+  const today = new Date()
+  const { session, user, providerToken, loading, clearProviderToken } = useAuth()
+  const [selectedDate, setSelectedDate] = useState<Date>(today)
+  const [view, setView] = useState<string>('week')
+  const [calViewYear, setCalViewYear] = useState<number>(today.getFullYear())
+  const [calViewMonth, setCalViewMonth] = useState<number>(today.getMonth())
+
+  const userId = user?.id ?? null
+  const quote = QUOTES[today.getDate() % QUOTES.length]
+
+  const [mobilePanel, setMobilePanel] = useState<string>('main') // 'sidebar' | 'main' | 'right'
+  const [isMobile, setIsMobile] = useState<boolean>(() => window.innerWidth <= 768)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  const { tasks: masterTasks, addTask: addMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
+  const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask, updateTaskDescription } = useDailyTasks(userId, selectedDate)
+  const { meetings, addMeeting, bulkAddMeetings, deleteMeeting } = useMeetings(userId, selectedDate)
+  const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
+  const taskCounts = useTaskCounts(userId)
+  const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
+  const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction } = useMemberInteractions(userId)
+  const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
+  const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
+  const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
+  const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
+  const { paychecks, addPaycheck, updatePaycheckAmount, togglePaycheckBill, deletePaycheck } = usePaychecks(userId)
+  const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
+  const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
+  const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
+  const { sections, updateSection } = usePlannerSections(userId)
+  const { tasksByDate: weeklyTasks, toggleTask: toggleWeeklyTask, addTask: addWeeklyTask } = useWeeklyTasks(userId, selectedDate)
+
+  const [gcuPushing, setGcuPushing] = useState<boolean>(false)
+  async function handlePushGcuToAsana() {
+    const token = import.meta.env.VITE_ASANA_TOKEN as string
+    if (!token) { alert('Asana token not configured'); return }
+    setGcuPushing(true)
+    try {
+      const workspaces = await fetchWorkspaces(token)
+      if (!workspaces.length) throw new Error('No Asana workspaces found')
+      const wsGid = workspaces[0].gid
+      const project = await findOrCreateProject(token, wsGid, 'GCU – MPA Government & Policy')
+      for (const course of GCU_COURSES) {
+        await createTask(token, wsGid, project.gid, `${course.code}: ${course.name}`, course.description)
+      }
+      alert(`✓ ${GCU_COURSES.length} courses pushed to Asana project "GCU – MPA Government & Policy"`)
+    } catch (err: any) {
+      console.error('GCU Asana push failed:', err)
+      alert(`Failed to push to Asana: ${err.message}`)
+    } finally {
+      setGcuPushing(false)
+    }
+  }
+
+  // Merge Asana tasks into local lists (read-only, source='asana')
+  const allMasterTasks = masterTasks
+  const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
+
+  // Fetch Google Calendar events: full month grid when in month view, else current week
+  const calFetchStart = (() => {
+    if (view === 'month') {
+      const d = new Date(calViewYear, calViewMonth, 1)
+      d.setDate(d.getDate() - d.getDay()) // back to Sunday
+      return d
+    }
+    const d = new Date(selectedDate)
+    d.setDate(d.getDate() - d.getDay())
+    return d
+  })()
+  const calFetchEnd = (() => {
+    if (view === 'month') {
+      const d = new Date(calViewYear, calViewMonth, 1)
+      d.setDate(d.getDate() - d.getDay() + 41) // 6 weeks of grid
+      return d
+    }
+    const d = new Date(calFetchStart)
+    d.setDate(d.getDate() + 6)
+    return d
+  })()
+
+  const { events: calEvents, authExpired: calAuthExpired } = useCalendarEvents(providerToken, calFetchStart, calFetchEnd, clearProviderToken)
+
+  // Fetch all Supabase meetings in the calendar view range for the month grid
+  const rangedMeetings = useMeetingsInRange(userId, calFetchStart, calFetchEnd)
+
+  async function reconnectGoogle() {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          scopes: 'https://www.googleapis.com/auth/calendar.readonly',
+          redirectTo: window.location.origin,
+          queryParams: { prompt: 'consent' },
+        },
+      })
+      if (error) alert('Google Calendar error: ' + error.message)
+    } catch (e: any) {
+      alert('Google Calendar error: ' + e.message)
+    }
+  }
+
+  // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
+  const dateStr = selectedDate.toISOString().split('T')[0]
+  const supabaseBlocks = meetings.map((m: any) => meetingToBlock(m, BLOCK_COLORS[0]))
+  const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
+  const allTimeBlocks = [...supabaseBlocks, ...gcalBlocksForDay]
+
+  // All timed events for the month calendar grid (Supabase + Google Cal)
+  const supabaseBlocksForMonth = rangedMeetings.map((m: any) => ({
+    ...meetingToBlock(m, BLOCK_COLORS[0]),
+    startIso: `${m.date}T${m.start_time || '00:00:00'}`,
+  }))
+  const allCalendarBlocks = [...supabaseBlocksForMonth, ...calEvents]
+
+  async function handleAddBlock(hour: number, text: string, color: string, startTime: string, endTime: string) {
+    await addMeeting(text, hour, color, startTime, endTime)
+  }
+
+  async function handleToggleDailyTask(id: any) {
+    if (String(id).startsWith('asana_')) return completeAsanaTask(id)
+    return toggleDailyTask(id)
+  }
+
+  async function handleDeleteDailyTask(id: any) {
+    if (String(id).startsWith('asana_')) return completeAsanaTask(id)
+    return deleteDailyTask(id)
+  }
+
+  async function handleUpdateTaskNotes(id: any, notes: string) {
+    if (String(id).startsWith('asana_')) return updateAsanaNotes(id, notes)
+    return updateTaskDescription(id, notes)
+  }
+
+  async function handleDeleteBlock(id: any) {
+    if (String(id).startsWith('gcal_')) return // Google Calendar events are read-only
+    await deleteMeeting(id)
+  }
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#f5f4f0', fontFamily: 'Inter, sans-serif', color: '#aaa', fontSize: 14 }}>
+        Loading…
+      </div>
+    )
+  }
+
+  if (!session) return <LoginScreen />
+
+  const mp = isMobile ? mobilePanel : null
+
+  return (
+    <div className="app">
+      <div className={mp === 'sidebar' ? 'mobile-active' : undefined}>
+        <Sidebar
+          asanaTasks={asanaTasks as any}
+          asanaProjects={asanaProjects}
+          asanaStatus={asanaStatus}
+          onAddAsanaTask={addAsanaTask as any}
+          onCompleteAsanaTask={completeAsanaTask}
+          onRefreshAsana={refreshAsana}
+          user={user}
+          sections={sections}
+          onUpdateSection={updateSection}
+        />
+      </div>
+      <div className={mp === null || mp === 'main' ? 'mobile-active' : undefined}>
+        <DailyPlanner
+          userId={userId}
+          selectedDate={selectedDate}
+          onDateChange={setSelectedDate}
+          masterTasks={masterTasks}
+          onDeleteMasterTask={deleteMasterTask}
+          dailyTasks={allDailyTasks}
+          timeBlocks={allTimeBlocks}
+          calendarBlocks={allCalendarBlocks}
+          onAddTask={addDailyTask}
+          onToggleTask={handleToggleDailyTask}
+          onDeleteTask={handleDeleteDailyTask}
+          onUpdateTaskNotes={handleUpdateTaskNotes}
+          onAddBlock={handleAddBlock}
+          onBulkAddMeetings={bulkAddMeetings}
+          onDeleteBlock={handleDeleteBlock}
+          view={view}
+          onViewChange={(v: string) => {
+            if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
+            setView(v)
+          }}
+          taskCounts={taskCounts}
+          cseaIssues={cseaIssues}
+          onAddCseaIssue={addCseaIssue}
+          onUpdateCseaStatus={updateCseaStatus}
+          onDeleteCseaIssue={deleteCseaIssue}
+          cseaInteractions={cseaInteractions}
+          onAddCseaInteraction={addCseaInteraction}
+          onUpdateCseaInteraction={updateCseaInteraction}
+          asanaCseaTasks={asanaCseaTasks}
+          asanaIcaapTasks={asanaIcaapTasks}
+          onCompleteAsanaTask={completeAsanaTask}
+          onUpdateAsanaTaskNotes={updateAsanaNotes}
+          onMonthChange={(y: number, m: number) => { setCalViewYear(y); setCalViewMonth(m) }}
+          transactions={transactions}
+          onAddTransaction={addTransaction}
+          onDeleteTransaction={deleteTransaction}
+          bills={bills}
+          onAddBill={addBill}
+          onToggleBillPaid={toggleBillPaid}
+          onDeleteBill={deleteBill}
+          goals={goals}
+          onAddGoal={addGoal}
+          onUpdateGoalAmount={updateGoalAmount}
+          onDeleteGoal={deleteGoal}
+          paychecks={paychecks}
+          onAddPaycheck={addPaycheck}
+          onUpdatePaycheckAmount={updatePaycheckAmount}
+          onTogglePaycheckBill={togglePaycheckBill}
+          onDeletePaycheck={deletePaycheck}
+          icaapItems={icaapItems}
+          onAddIcaapItem={addIcaapItem}
+          onUpdateIcaapItem={updateIcaapItem}
+          onDeleteIcaapItem={deleteIcaapItem}
+          attendanceRecords={attendanceRecords}
+          onUpsertAttendance={upsertAttendance}
+          onUpdateAttendanceNotes={updateAttendanceNotes}
+          calAuthExpired={calAuthExpired}
+          onReconnectGoogle={reconnectGoogle}
+          books={books}
+          onAddBook={addBook}
+          onUpdateBookStatus={updateBookStatus}
+          onDeleteBook={deleteBook}
+          onImportBooks={importBooks}
+          onPushGcuToAsana={handlePushGcuToAsana}
+          gcuPushing={gcuPushing}
+          providerToken={providerToken}
+          weeklyTasks={weeklyTasks}
+          onToggleWeeklyTask={toggleWeeklyTask}
+          onAddWeeklyTask={addWeeklyTask}
+        />
+      </div>
+      <div className={mp === 'right' ? 'mobile-active' : undefined}>
+      </div>
+      {isMobile && (
+        <nav className="mobile-nav">
+          <button className={`mobile-nav-btn${mobilePanel === 'sidebar' ? ' active' : ''}`} onClick={() => setMobilePanel('sidebar')}>
+            <span className="mobile-nav-icon">☰</span>
+            Tasks
+          </button>
+          <button className={`mobile-nav-btn${mobilePanel === 'main' ? ' active' : ''}`} onClick={() => setMobilePanel('main')}>
+            <span className="mobile-nav-icon">📅</span>
+            Planner
+          </button>
+        </nav>
+      )}
+    </div>
+  )
+}
