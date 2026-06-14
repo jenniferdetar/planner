@@ -15,7 +15,7 @@ const SUB_TABS = [
   { key: 'checklist', label: 'Monthly Checklist',  color: '#7ec8c8' },
   { key: 'library',   label: 'Library',            color: '#7ba7e0' },
   { key: 'mantra',    label: 'My Mantra',          color: '#e8a0a0' },
-  { key: 'budget',    label: 'Budget',             color: '#8B2B3A' },
+  { key: 'budget',    label: 'Wants',              color: '#8B2B3A' },
 ]
 
 export default function PersonalPanel({ userId, selectedDate, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks }) {
