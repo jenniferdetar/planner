@@ -58,7 +58,7 @@ export default function FinancialPanel({
       {tab === 'budget' && (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <iframe
-            src="https://docs.google.com/spreadsheets/d/1_-1r2v-WwiPBlDeiVUm80moqRLXrqzJVh4L0-N0t5uQ/pub?embedded=true"
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTCh6J8zSi8C8EwjSPF9Y8YoT3UiDVpXi64W8oe3Y0sQeVIKcfEN9gXvCo8GjayN1-UNp4BnfA4DiNH/pubhtml"
             className="sheet-embed"
             title="Budget"
           />
