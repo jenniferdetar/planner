@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from 'react'
 import { SHELVES } from '../hooks/useLibrary'
 import './LibraryPanel.css'

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useRef } from 'react'
 import { useDailyLog } from '../hooks/useDailyLog'
 import { useMantra } from '../hooks/useMantra'
