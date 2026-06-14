@@ -928,3 +928,185 @@
   outline: none;
 }
 .fin-budget-new-input:focus { border-color: #8B2B3A; }
+
+/* ── Budget Tab (Personal Finance Tracker) ── */
+.budget-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background: #faf9f6;
+}
+
+.budget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px 10px;
+  background: #1a1a2e;
+  flex-shrink: 0;
+}
+
+.budget-title {
+  color: #AAAA9E;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.budget-month-sel {
+  background: #2a2a3e;
+  color: #AAAA9E;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.budget-summary-bar {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border-bottom: 2px solid #e8e5de;
+  flex-shrink: 0;
+}
+
+.budget-summary-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px;
+  border-right: 1px solid #e8e5de;
+}
+.budget-summary-item:last-child { border-right: none; }
+
+.budget-summary-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+
+.budget-summary-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+.budget-summary-val.income { color: #2a7a2a; }
+.budget-summary-val.expense { color: #8B2B3A; }
+
+.budget-table-wrap {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.budget-th {
+  background: #1a1a2e !important;
+  color: #AAAA9E !important;
+  padding: 7px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-align: right;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 2px solid #000;
+}
+.budget-th.cat { text-align: left; }
+.budget-th.del-col { width: 28px; }
+
+.budget-section-hd {
+  color: #fff !important;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 6px 12px;
+}
+
+.budget-section-total td {
+  background: #f5f4f0;
+  font-weight: 700;
+  border-top: 1px solid #e8e5de;
+  border-bottom: 2px solid #e8e5de;
+}
+
+.budget-row:nth-child(odd) { background: #fff; }
+.budget-row:nth-child(even) { background: rgba(139,43,58,0.03); }
+.budget-row:hover td { background: rgba(139,43,58,0.07); }
+
+.budget-td {
+  padding: 7px 12px;
+  border-bottom: 1px solid #f0ede6;
+  font-size: 12px;
+  color: #333;
+  vertical-align: middle;
+}
+.budget-td.cat { text-align: left; color: #1a1a2e; }
+.budget-td.num { text-align: right; }
+.budget-td.del-col { text-align: center; width: 28px; }
+
+.budget-cell-val { cursor: pointer; }
+.budget-cell-val:hover { color: #8B2B3A; }
+.budget-empty { color: #ccc; }
+
+.budget-input {
+  width: 80px;
+  padding: 2px 5px;
+  border: 1px solid #8B2B3A;
+  border-radius: 3px;
+  font-size: 12px;
+  text-align: right;
+  outline: none;
+}
+
+.total-val { color: #1a1a2e; font-size: 12px; }
+
+.budget-net-row td {
+  background: #1a1a2e;
+  color: #AAAA9E;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 9px 12px;
+  border-top: 2px solid #000;
+}
+.budget-net-row .budget-td.cat { color: #AAAA9E; text-align: left; }
+.budget-net-row .net-val { text-align: right; }
+
+.budget-add-row-tr td { padding: 4px 12px; }
+.budget-add-cat {
+  font-size: 11px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.12s;
+}
+.budget-add-cat:hover { color: #8B2B3A; }
+.budget-new-input {
+  padding: 4px 7px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  outline: none;
+}
+.budget-new-input:focus { border-color: #8B2B3A; }
+.budget-del {
+  color: #ccc;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0 3px;
+  transition: color 0.12s;
+}
+.budget-del:hover { color: #e05c5c; }

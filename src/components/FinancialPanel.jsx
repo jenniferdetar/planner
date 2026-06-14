@@ -569,136 +569,226 @@ function CoinsTab({ userId }) {
   )
 }
 
-const DEFAULT_CATEGORIES = ['Bills', 'Food', 'Transport', 'Utilities', 'Healthcare', 'Entertainment', 'Shopping', 'Savings', 'Other']
+const BUDGET_SECTIONS = [
+  { key: 'Income',    label: 'INCOME',             color: '#2a7a2a' },
+  { key: 'Fixed',     label: 'FIXED EXPENSES',     color: '#8B2B3A' },
+  { key: 'Variable',  label: 'VARIABLE EXPENSES',  color: '#6E2232' },
+  { key: 'Savings',   label: 'SAVINGS & DEBT',     color: '#501A28' },
+]
+
+const DEFAULT_ROWS = [
+  { section: 'Income',   category: 'Salary / Wages',         budgeted: 0, sort_order: 0 },
+  { section: 'Income',   category: 'Other Income',            budgeted: 0, sort_order: 1 },
+  { section: 'Fixed',    category: 'Bills',                   budgeted: 0, sort_order: 2 },
+  { section: 'Fixed',    category: 'Mortgage / Rent',         budgeted: 0, sort_order: 3 },
+  { section: 'Fixed',    category: 'Insurance',               budgeted: 0, sort_order: 4 },
+  { section: 'Variable', category: 'Food & Groceries',        budgeted: 0, sort_order: 5 },
+  { section: 'Variable', category: 'Transport',               budgeted: 0, sort_order: 6 },
+  { section: 'Variable', category: 'Healthcare',              budgeted: 0, sort_order: 7 },
+  { section: 'Variable', category: 'Entertainment',           budgeted: 0, sort_order: 8 },
+  { section: 'Variable', category: 'Personal / Shopping',     budgeted: 0, sort_order: 9 },
+  { section: 'Variable', category: 'Other',                   budgeted: 0, sort_order: 10 },
+  { section: 'Savings',  category: 'Savings',                 budgeted: 0, sort_order: 11 },
+  { section: 'Savings',  category: 'Debt Payments',           budgeted: 0, sort_order: 12 },
+]
 
 function BudgetTab({ bills, userId }) {
+  const months = Array.from({ length: 12 }, (_, i) => {
+    const d = new Date(); d.setMonth(d.getMonth() - 3 + i)
+    return d.toISOString().slice(0, 7)
+  })
+  const [month, setMonth] = useState(new Date().toISOString().slice(0, 7))
   const [rows, setRows] = useState([])
-  const [editing, setEditing] = useState({})
+  const [editBudget, setEditBudget] = useState({})
+  const [editActual, setEditActual] = useState({})
+  const [adding, setAdding] = useState(null)
   const [newCat, setNewCat] = useState('')
-  const [adding, setAdding] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
   const billsTotal = bills.reduce((s, b) => s + Number(b.amount), 0)
 
   useEffect(() => {
     if (!userId) return
-    supabase.from('budget_categories').select('*').eq('user_id', userId).order('sort_order').then(({ data }) => {
-      if (data && data.length > 0) {
-        setRows(data)
-      } else {
-        const defaults = DEFAULT_CATEGORIES.map((category, i) => ({
-          id: null, user_id: userId, category, budgeted: 0, sort_order: i
-        }))
-        setRows(defaults)
-      }
-    })
-  }, [userId])
+    setLoaded(false)
+    supabase.from('budget_categories').select('*')
+      .eq('user_id', userId).eq('month', month).order('sort_order')
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setRows(data)
+        } else {
+          setRows(DEFAULT_ROWS.map(r => ({ ...r, id: null, user_id: userId, actual: 0, month })))
+        }
+        setLoaded(true)
+      })
+  }, [userId, month])
 
-  async function saveBudget(row, value) {
-    const budgeted = parseFloat(value) || 0
-    if (row.id) {
-      await supabase.from('budget_categories').update({ budgeted }).eq('id', row.id)
-    } else {
-      const { data } = await supabase.from('budget_categories').insert({ user_id: userId, category: row.category, budgeted, sort_order: row.sort_order }).select().single()
-      if (data) setRows(r => r.map(x => x.category === row.category ? data : x))
-    }
-    setRows(r => r.map(x => x.category === row.category ? { ...x, budgeted } : x))
-    setEditing(e => ({ ...e, [row.category]: undefined }))
+  function getActual(row) {
+    if (row.category === 'Bills') return billsTotal
+    return Number(row.actual) || 0
   }
 
-  async function addCategory() {
+  async function saveField(row, field, value) {
+    const val = parseFloat(value) || 0
+    const updated = { ...row, [field]: val }
+    if (row.id) {
+      await supabase.from('budget_categories').update({ [field]: val }).eq('id', row.id)
+      setRows(r => r.map(x => x.category === row.category && x.section === row.section ? updated : x))
+    } else {
+      const { data } = await supabase.from('budget_categories')
+        .insert({ user_id: userId, category: row.category, section: row.section, budgeted: updated.budgeted, actual: updated.actual, sort_order: row.sort_order, month })
+        .select().single()
+      if (data) setRows(r => r.map(x => x.category === row.category && x.section === row.section ? data : x))
+    }
+    setEditBudget(e => ({ ...e, [row.category]: undefined }))
+    setEditActual(e => ({ ...e, [row.category]: undefined }))
+  }
+
+  async function addRow(section) {
     if (!newCat.trim()) return
-    const sort_order = rows.length
-    const { data } = await supabase.from('budget_categories').insert({ user_id: userId, category: newCat.trim(), budgeted: 0, sort_order }).select().single()
+    const sort_order = rows.filter(r => r.section === section).length + rows.indexOf(rows.filter(r => r.section === section).slice(-1)[0])
+    const newRow = { user_id: userId, category: newCat.trim(), section, budgeted: 0, actual: 0, sort_order, month }
+    const { data } = await supabase.from('budget_categories').insert(newRow).select().single()
     if (data) setRows(r => [...r, data])
-    setNewCat('')
-    setAdding(false)
+    setNewCat(''); setAdding(null)
   }
 
   async function deleteRow(row) {
     if (row.id) await supabase.from('budget_categories').delete().eq('id', row.id)
-    setRows(r => r.filter(x => x.category !== row.category))
+    setRows(r => r.filter(x => !(x.category === row.category && x.section === row.section)))
   }
 
-  const totalBudgeted = rows.reduce((s, r) => s + Number(r.budgeted), 0)
+  const monthLabel = m => { const [y, mo] = m.split('-'); return new Date(y, mo - 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) }
+
+  const totalIncome = rows.filter(r => r.section === 'Income').reduce((s, r) => s + Number(r.budgeted), 0)
+  const totalExpenses = rows.filter(r => r.section !== 'Income').reduce((s, r) => s + Number(r.budgeted), 0)
+  const netBudget = totalIncome - totalExpenses
+  const totalActualIncome = rows.filter(r => r.section === 'Income').reduce((s, r) => s + getActual(r), 0)
+  const totalActualExpenses = rows.filter(r => r.section !== 'Income').reduce((s, r) => s + getActual(r), 0)
+  const netActual = totalActualIncome - totalActualExpenses
 
   return (
-    <div className="fin-content" style={{ overflowY: 'auto' }}>
-      <table className="fin-budget-table">
-        <thead>
-          <tr>
-            <th className="fin-budget-th cat-col">Category</th>
-            <th className="fin-budget-th">Budget</th>
-            <th className="fin-budget-th">Actual</th>
-            <th className="fin-budget-th">Remaining</th>
-            <th className="fin-budget-th"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map(row => {
-            const actual = row.category === 'Bills' ? billsTotal : 0
-            const budgeted = Number(row.budgeted)
-            const remaining = budgeted - actual
-            const pct = budgeted > 0 ? Math.min((actual / budgeted) * 100, 100) : 0
-            const over = actual > budgeted && budgeted > 0
-            return (
-              <tr key={row.category} className="fin-budget-row">
-                <td className="fin-budget-td cat-col">{row.category}</td>
-                <td className="fin-budget-td">
-                  {editing[row.category] !== undefined ? (
-                    <input
-                      className="fin-budget-input"
-                      type="number"
-                      autoFocus
-                      value={editing[row.category]}
-                      onChange={e => setEditing(ed => ({ ...ed, [row.category]: e.target.value }))}
-                      onBlur={() => saveBudget(row, editing[row.category])}
-                      onKeyDown={e => { if (e.key === 'Enter') saveBudget(row, editing[row.category]) }}
-                      min="0" step="0.01"
-                    />
-                  ) : (
-                    <span className="fin-budget-amount" onClick={() => setEditing(ed => ({ ...ed, [row.category]: row.budgeted }))}>
-                      {budgeted > 0 ? fmt(budgeted) : <span style={{ color: '#ccc' }}>Set budget</span>}
-                    </span>
-                  )}
-                </td>
-                <td className="fin-budget-td">
-                  <div>{fmt(actual)}</div>
-                  {budgeted > 0 && (
-                    <div className="fin-budget-bar-wrap">
-                      <div className="fin-budget-bar" style={{ width: `${pct}%`, background: over ? '#e05c5c' : '#8B2B3A' }} />
-                    </div>
-                  )}
-                </td>
-                <td className="fin-budget-td" style={{ color: over ? '#e05c5c' : remaining === 0 ? '#999' : '#2a7a2a' }}>
-                  {budgeted > 0 ? fmt(remaining) : '—'}
-                </td>
-                <td className="fin-budget-td">
-                  <button className="fin-budget-del" onClick={() => deleteRow(row)}>×</button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-        <tfoot>
-          <tr className="fin-budget-total-row">
-            <td className="fin-budget-td cat-col">Total</td>
-            <td className="fin-budget-td">{fmt(totalBudgeted)}</td>
-            <td className="fin-budget-td">{fmt(billsTotal)}</td>
-            <td className="fin-budget-td" style={{ color: billsTotal > totalBudgeted ? '#e05c5c' : '#2a7a2a' }}>{fmt(totalBudgeted - billsTotal)}</td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-      <div className="fin-budget-add-row">
-        {adding ? (
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <input className="fin-budget-new-input" value={newCat} onChange={e => setNewCat(e.target.value)} placeholder="Category name" autoFocus onKeyDown={e => { if (e.key === 'Enter') addCategory() }} />
-            <button className="fin-add-btn" onClick={addCategory}>Add</button>
-            <button className="fin-budget-del" onClick={() => setAdding(false)}>×</button>
-          </div>
-        ) : (
-          <button className="fin-budget-add-cat" onClick={() => setAdding(true)}>+ Add category</button>
-        )}
+    <div className="budget-wrap">
+      <div className="budget-header">
+        <h2 className="budget-title">Personal Finance Tracker</h2>
+        <select className="budget-month-sel" value={month} onChange={e => setMonth(e.target.value)}>
+          {months.map(m => <option key={m} value={m}>{monthLabel(m)}</option>)}
+        </select>
+      </div>
+
+      <div className="budget-summary-bar">
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Income</span>
+          <span className="budget-summary-val income">{fmt(totalActualIncome)}</span>
+        </div>
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Expenses</span>
+          <span className="budget-summary-val expense">{fmt(totalActualExpenses)}</span>
+        </div>
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Net</span>
+          <span className="budget-summary-val" style={{ color: netActual >= 0 ? '#2a7a2a' : '#e05c5c' }}>{fmt(netActual)}</span>
+        </div>
+      </div>
+
+      <div className="budget-table-wrap">
+        <table className="budget-table">
+          <thead>
+            <tr>
+              <th className="budget-th cat">Category</th>
+              <th className="budget-th">Budgeted</th>
+              <th className="budget-th">Actual</th>
+              <th className="budget-th">Difference</th>
+              <th className="budget-th del-col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {BUDGET_SECTIONS.map(sec => {
+              const secRows = rows.filter(r => r.section === sec.key)
+              const secBudget = secRows.reduce((s, r) => s + Number(r.budgeted), 0)
+              const secActual = secRows.reduce((s, r) => s + getActual(r), 0)
+              const secDiff = sec.key === 'Income' ? secActual - secBudget : secBudget - secActual
+              return [
+                <tr key={`hd-${sec.key}`} className="budget-section-row">
+                  <td colSpan={5} className="budget-section-hd" style={{ background: sec.color }}>
+                    {sec.label}
+                  </td>
+                </tr>,
+                ...secRows.map(row => {
+                  const actual = getActual(row)
+                  const budgeted = Number(row.budgeted)
+                  const diff = sec.key === 'Income' ? actual - budgeted : budgeted - actual
+                  const diffColor = diff >= 0 ? '#2a7a2a' : '#e05c5c'
+                  return (
+                    <tr key={`${sec.key}-${row.category}`} className="budget-row">
+                      <td className="budget-td cat">{row.category}</td>
+                      <td className="budget-td num">
+                        {editBudget[row.category] !== undefined ? (
+                          <input className="budget-input" type="number" autoFocus value={editBudget[row.category]}
+                            onChange={e => setEditBudget(ed => ({ ...ed, [row.category]: e.target.value }))}
+                            onBlur={() => saveField(row, 'budgeted', editBudget[row.category])}
+                            onKeyDown={e => e.key === 'Enter' && saveField(row, 'budgeted', editBudget[row.category])}
+                            min="0" step="0.01" />
+                        ) : (
+                          <span className="budget-cell-val" onClick={() => setEditBudget(ed => ({ ...ed, [row.category]: row.budgeted }))}>
+                            {budgeted > 0 ? fmt(budgeted) : <span className="budget-empty">—</span>}
+                          </span>
+                        )}
+                      </td>
+                      <td className="budget-td num">
+                        {row.category === 'Bills' ? (
+                          <span>{fmt(actual)}</span>
+                        ) : editActual[row.category] !== undefined ? (
+                          <input className="budget-input" type="number" autoFocus value={editActual[row.category]}
+                            onChange={e => setEditActual(ed => ({ ...ed, [row.category]: e.target.value }))}
+                            onBlur={() => saveField(row, 'actual', editActual[row.category])}
+                            onKeyDown={e => e.key === 'Enter' && saveField(row, 'actual', editActual[row.category])}
+                            min="0" step="0.01" />
+                        ) : (
+                          <span className="budget-cell-val" onClick={() => setEditActual(ed => ({ ...ed, [row.category]: row.actual }))}>
+                            {actual > 0 ? fmt(actual) : <span className="budget-empty">—</span>}
+                          </span>
+                        )}
+                      </td>
+                      <td className="budget-td num" style={{ color: diffColor, fontWeight: 600 }}>
+                        {budgeted > 0 || actual > 0 ? fmt(Math.abs(diff)) : '—'}
+                      </td>
+                      <td className="budget-td del-col">
+                        <button className="budget-del" onClick={() => deleteRow(row)}>×</button>
+                      </td>
+                    </tr>
+                  )
+                }),
+                <tr key={`ft-${sec.key}`} className="budget-section-total">
+                  <td className="budget-td cat">Total {sec.label.split(' ')[0] === 'INCOME' ? 'Income' : sec.label.replace('EXPENSES','').replace('&','&').trim().split(' ').map(w=>w[0]+w.slice(1).toLowerCase()).join(' ')}</td>
+                  <td className="budget-td num total-val">{fmt(secBudget)}</td>
+                  <td className="budget-td num total-val">{fmt(secActual)}</td>
+                  <td className="budget-td num total-val" style={{ color: secDiff >= 0 ? '#2a7a2a' : '#e05c5c' }}>{fmt(Math.abs(secDiff))}</td>
+                  <td></td>
+                </tr>,
+                <tr key={`add-${sec.key}`} className="budget-add-row-tr">
+                  <td colSpan={5} className="budget-td">
+                    {adding === sec.key ? (
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <input className="budget-new-input" value={newCat} onChange={e => setNewCat(e.target.value)}
+                          placeholder="New category" autoFocus onKeyDown={e => e.key === 'Enter' && addRow(sec.key)} />
+                        <button className="fin-add-btn" onClick={() => addRow(sec.key)}>Add</button>
+                        <button className="budget-del" onClick={() => { setAdding(null); setNewCat('') }}>×</button>
+                      </div>
+                    ) : (
+                      <button className="budget-add-cat" onClick={() => setAdding(sec.key)}>+ Add row</button>
+                    )}
+                  </td>
+                </tr>
+              ]
+            })}
+            <tr className="budget-net-row">
+              <td className="budget-td cat">NET (Income − Expenses)</td>
+              <td className="budget-td num net-val" style={{ color: netBudget >= 0 ? '#2a7a2a' : '#e05c5c' }}>{fmt(netBudget)}</td>
+              <td className="budget-td num net-val" style={{ color: netActual >= 0 ? '#2a7a2a' : '#e05c5c' }}>{fmt(netActual)}</td>
+              <td colSpan={2}></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   )
