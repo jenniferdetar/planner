@@ -56,12 +56,17 @@ export default function FinancialPanel({
       {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
       {tab === 'coins' && <CoinsTab userId={userId} />}
       {tab === 'budget' && (
-        <iframe
-          src="https://docs.google.com/spreadsheets/d/1_-1r2v-WwiPBlDeiVUm80moqRLXrqzJVh4L0-N0t5uQ/edit?usp=drivesdk"
-          className="sheet-embed"
-          title="Budget"
-          allow="clipboard-read; clipboard-write"
-        />
+        <div className="sheet-launcher">
+          <div className="sheet-launcher-icon">📊</div>
+          <h3 className="sheet-launcher-title">Budget</h3>
+          <p className="sheet-launcher-desc">Opens your budget spreadsheet in Google Sheets.</p>
+          <a
+            href="https://docs.google.com/spreadsheets/d/1_-1r2v-WwiPBlDeiVUm80moqRLXrqzJVh4L0-N0t5uQ/edit?usp=drivesdk"
+            target="_blank"
+            rel="noreferrer"
+            className="sheet-launch-btn"
+          >Open Budget →</a>
+        </div>
       )}
     </div>
   )
