@@ -136,16 +136,12 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
         />
       )}
       {subTab === 'budget' && (
-        <div className="sheet-launcher">
-          <div className="sheet-launcher-icon">🛍️</div>
-          <h3 className="sheet-launcher-title">Wants</h3>
-          <p className="sheet-launcher-desc">Opens your Wants spreadsheet in Google Sheets.</p>
-          <a
-            href="https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/edit?usp=drivesdk"
-            target="_blank"
-            rel="noreferrer"
-            className="sheet-launch-btn"
-          >Open Wants →</a>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/pub?embedded=true"
+            className="sheet-embed"
+            title="Wants"
+          />
         </div>
       )}
 
