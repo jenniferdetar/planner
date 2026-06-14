@@ -821,3 +821,110 @@
   background: transparent;
   padding: 1px 0;
 }
+
+/* ── Budget Tab ── */
+.fin-budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.fin-budget-th {
+  background: #1a1a2e !important;
+  color: #AAAA9E !important;
+  padding: 8px 12px;
+  text-align: right;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #000;
+  border-top: 2px solid #000;
+}
+
+.fin-budget-th.cat-col { text-align: left; }
+
+.fin-budget-row:nth-child(odd)  { background: rgba(139,43,58,0.04); }
+.fin-budget-row:nth-child(even) { background: #fff; }
+.fin-budget-row:hover td { background: rgba(139,43,58,0.08); }
+
+.fin-budget-td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0ede6;
+  vertical-align: middle;
+  text-align: right;
+  font-size: 13px;
+  color: #333;
+}
+
+.fin-budget-td.cat-col {
+  text-align: left;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.fin-budget-amount { cursor: pointer; }
+.fin-budget-amount:hover { color: #8B2B3A; }
+
+.fin-budget-input {
+  width: 90px;
+  padding: 3px 6px;
+  border: 1px solid #8B2B3A;
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: right;
+  outline: none;
+}
+
+.fin-budget-bar-wrap {
+  height: 3px;
+  background: #f0ede6;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+.fin-budget-bar {
+  height: 3px;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.fin-budget-del {
+  color: #ccc;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.12s;
+}
+.fin-budget-del:hover { color: #e05c5c; }
+
+.fin-budget-total-row td {
+  font-weight: 700;
+  border-top: 2px solid #e8e5de;
+  background: #faf9f6;
+  padding: 10px 12px;
+  text-align: right;
+  font-size: 13px;
+}
+.fin-budget-total-row .cat-col { text-align: left; color: #1a1a2e; }
+
+.fin-budget-add-row {
+  padding: 12px 12px;
+}
+
+.fin-budget-add-cat {
+  font-size: 12px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.12s;
+}
+.fin-budget-add-cat:hover { color: #8B2B3A; }
+
+.fin-budget-new-input {
+  padding: 5px 8px;
+  border: 1px solid #e8e5de;
+  border-radius: 5px;
+  font-size: 13px;
+  outline: none;
+}
+.fin-budget-new-input:focus { border-color: #8B2B3A; }
