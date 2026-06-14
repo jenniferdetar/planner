@@ -4,13 +4,15 @@
   padding: 0;
 }
 
-html {
-  zoom: 0.8;
-}
-
 html, body, #root {
   height: 100%;
   width: 100%;
+}
+
+@media (min-width: 769px) {
+  html {
+    zoom: 0.8;
+  }
 }
 
 body {
