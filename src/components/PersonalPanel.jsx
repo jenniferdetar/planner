@@ -15,6 +15,7 @@ const SUB_TABS = [
   { key: 'checklist', label: 'Monthly Checklist',  color: '#7ec8c8' },
   { key: 'library',   label: 'Library',            color: '#7ba7e0' },
   { key: 'mantra',    label: 'My Mantra',          color: '#e8a0a0' },
+  { key: 'budget',    label: 'Budget',             color: '#8B2B3A' },
 ]
 
 export default function PersonalPanel({ userId, selectedDate, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks }) {
@@ -134,6 +135,17 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
           onImportBooks={onImportBooks}
         />
       )}
+      {subTab === 'budget' && (
+        <div className="personal-body" style={{ padding: '0', overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/edit?usp=drivesdk"
+            className="sheet-embed"
+            title="Budget"
+            allow="clipboard-read; clipboard-write"
+          />
+        </div>
+      )}
+
       {subTab === 'mantra' && (
         <div className="mantra-section">
           <div className="mantra-header">
