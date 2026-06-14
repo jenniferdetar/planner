@@ -44,7 +44,7 @@ export default function FinancialPanel({
       </div>
 
       <div className="fin-tabs">
-        {['bills', 'tracker', 'goals', 'coins'].map(t => (
+        {['bills', 'tracker', 'goals', 'coins', 'budget'].map(t => (
           <button key={t} className={`fin-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
             {t === 'tracker' ? 'Paycheck' : t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
@@ -55,6 +55,14 @@ export default function FinancialPanel({
       {tab === 'tracker' && <PaycheckTracker bills={bills} paychecks={paychecks} onAdd={onAddPaycheck} onUpdateAmount={onUpdatePaycheckAmount} onToggleBill={onTogglePaycheckBill} onDelete={onDeletePaycheck} />}
       {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
       {tab === 'coins' && <CoinsTab userId={userId} />}
+      {tab === 'budget' && (
+        <iframe
+          src="https://docs.google.com/spreadsheets/d/1_-1r2v-WwiPBlDeiVUm80moqRLXrqzJVh4L0-N0t5uQ/edit?usp=drivesdk"
+          className="sheet-embed"
+          title="Budget"
+          allow="clipboard-read; clipboard-write"
+        />
+      )}
     </div>
   )
 }
