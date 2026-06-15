@@ -28,7 +28,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 17px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #1e3342;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0;
@@ -57,7 +57,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 
 .goal-card-body {
@@ -120,7 +120,7 @@
 }
 
 .goal-add-btn:hover {
-  color: #8B2B3A;
+  color: #4a7a6a;
 }
 
 .goal-add-form {
@@ -168,7 +168,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #1e3342;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0 0 10px;
@@ -250,11 +250,11 @@
 }
 
 .checklist-add-task-btn:hover {
-  color: #8B2B3A;
+  color: #4a7a6a;
 }
 
 /* ── Palette alternating rows ── */
-.checklist-table tbody tr:nth-child(odd)  td { background: rgba(139,43,58,0.07); }
+.checklist-table tbody tr:nth-child(odd)  td { background: rgba(74,122,106,0.07); }
 .checklist-table tbody tr:nth-child(even) td { background: rgba(110,34,50,0.07); }
-.checklist-table thead th { background: #1a1a2e; color: #8B2B3A; }
-.checklist-table thead th.task-col { background: #1a1a2e; color: #8B2B3A; }
+.checklist-table thead th { background: #1e3342; color: #4a7a6a; }
+.checklist-table thead th.task-col { background: #1e3342; color: #4a7a6a; }

@@ -15,7 +15,7 @@ const SUB_TABS = [
   { key: 'checklist', label: 'Monthly Checklist',  color: '#7ec8c8' },
   { key: 'library',   label: 'Library',            color: '#7ba7e0' },
   { key: 'mantra',    label: 'My Mantra',          color: '#e8a0a0' },
-  { key: 'budget',    label: 'Wants',              color: '#8B2B3A' },
+  { key: 'budget',    label: 'Wants',              color: '#4a7a6a' },
 ]
 
 export default function PersonalPanel({ userId, selectedDate, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks, subTab = 'log', onSubTabChange }) {
@@ -64,7 +64,7 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
     ? selectedDate.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })
     : new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })
 
-  const activeColor = SUB_TABS.find(t => t.key === subTab)?.color || '#c9a96e'
+  const activeColor = SUB_TABS.find(t => t.key === subTab)?.color || '#73a882'
 
   return (
     <div className="personal-panel">
