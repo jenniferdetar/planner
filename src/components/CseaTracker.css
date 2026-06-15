@@ -65,7 +65,7 @@
   border: none;
   text-align: center;
   opacity: 0.55;
-  font-family: 'Nunito', sans-serif !important;
+  font-family: 'Give Your Glory', cursive !important;
 }
 
 .csea-tab:hover { opacity: 0.8; }
@@ -711,4 +711,4 @@
 
 .filter-pill.active { background: #1e3342; border-color: #1e3342; }
 
-.csea-tab { font-family: 'Nunito', sans-serif !important; }
+.csea-tab { font-family: 'Give Your Glory', cursive !important; }

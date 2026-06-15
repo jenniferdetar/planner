@@ -21,7 +21,7 @@
 }
 
 .week-title {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Give Your Glory', cursive;
   font-size: 15px;
   font-weight: 600;
   color: #fff;
@@ -308,7 +308,7 @@
 .week-event-pill {
   padding: 2px 8px;
   border-radius: 4px;
-  font-family: 'Nunito', sans-serif !important;
+  font-family: 'Give Your Glory', cursive !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   display: flex;
@@ -319,7 +319,7 @@
 }
 
 .week-event-time {
-  font-family: 'Nunito', sans-serif !important;
+  font-family: 'Give Your Glory', cursive !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   opacity: 0.88;

@@ -20,7 +20,7 @@
 }
 
 .month-title {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Give Your Glory', cursive;
   font-size: 20px;
   font-weight: 600;
   color: #1e3342;
@@ -171,7 +171,7 @@
 .cell-event {
   padding: 1px 4px;
   border-radius: 3px;
-  font-family: 'Nunito', sans-serif !important;
+  font-family: 'Give Your Glory', cursive !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   color: #fff;
@@ -187,7 +187,7 @@
 }
 
 .cell-event-time {
-  font-family: 'Nunito', sans-serif !important;
+  font-family: 'Give Your Glory', cursive !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   opacity: 0.88;
