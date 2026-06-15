@@ -383,6 +383,54 @@
 }
 .zbb-add-pc-btn:hover { background: #fdf0f0; }
 
+/* ── Bills section ── */
+.zbb-bills-section {
+  margin-top: 16px;
+  border-top: 1px solid #e8e5de;
+  padding-top: 12px;
+}
+
+.zbb-panel-heading.sm {
+  font-size: 11px;
+  padding: 0 0 8px;
+}
+
+.zbb-bill-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 0;
+  border-bottom: 1px solid #f0ede8;
+  font-size: 12.5px;
+}
+
+.zbb-bill-row.paid .zbb-bill-name {
+  text-decoration: line-through;
+  color: #bbb;
+}
+
+.zbb-bill-name {
+  flex: 1;
+  color: #2a2520;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zbb-bill-due {
+  font-size: 10.5px;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.zbb-bill-amount {
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+  min-width: 60px;
+  text-align: right;
+}
+
 /* ── Envelopes panel ── */
 .zbb-envelopes-panel {
   flex: 1;
