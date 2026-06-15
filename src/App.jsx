@@ -132,7 +132,7 @@ export default function App() {
       return d
     }
     const d = new Date(calFetchStart)
-    d.setDate(d.getDate() + 6)
+    d.setDate(d.getDate() + 34) // 5 weeks so week-view navigation shows future events
     return d
   })()
 
