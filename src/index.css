@@ -10,7 +10,7 @@ html, body, #root {
 }
 
 body {
-  font-family: 'Give Your Glory', cursive;
+  font-family: 'Give You Glory', cursive;
   background: #f5f4f0;
   color: #1e3342;
   overflow: hidden;
@@ -58,5 +58,5 @@ h5, h6 { color: #1e3342; }
 .today-badge, .today-btn, .csea-tab-badge, .icaap-tab-badge,
 .asana-push-btn, .asana-synced-badge, .coins-btn,
 .icaap-extrahours-tab, .att-week-btn {
-  font-family: 'Give Your Glory', cursive !important;
+  font-family: 'Give You Glory', cursive !important;
 }

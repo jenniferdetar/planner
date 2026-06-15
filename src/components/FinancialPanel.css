@@ -65,7 +65,7 @@
   transition: all 0.15s;
   text-align: center;
   opacity: 0.55;
-  font-family: 'Give Your Glory', cursive !important;
+  font-family: 'Give You Glory', cursive !important;
 }
 
 .fin-tab:hover { opacity: 0.8; }
@@ -728,7 +728,7 @@
 .fin-goal:nth-child(odd)  { border-left: 3px solid #2d5560; }
 .fin-goal:nth-child(even) { border-left: 3px solid #1e3342; }
 
-.fin-tab { font-family: 'Give Your Glory', cursive !important; }
+.fin-tab { font-family: 'Give You Glory', cursive !important; }
 
 /* ── Goal Cards ── */
 .fin-goals-grid {
