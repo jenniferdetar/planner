@@ -41,14 +41,14 @@ input, textarea {
 }
 
 /* ── Global font size & weight ── */
-* { font-size: 14px !important; font-weight: 400 !important; }
+* { font-size: 14px; font-weight: 400; }
 
-/* ── Global heading colors ── */
-h1 { color: #1a1a2e !important; }
-h2 { color: #8B2B3A !important; }
-h3 { color: #6E2232 !important; }
-h4 { color: #501A28 !important; }
-h5, h6 { color: #2F1019 !important; }
+/* ── Global heading colors (component-level overrides take precedence) ── */
+h1 { color: #1a1a2e; }
+h2 { color: #8B2B3A; }
+h3 { color: #6E2232; }
+h4 { color: #501A28; }
+h5, h6 { color: #2F1019; }
 
 /* ── Indie Flower for all pills ── */
 .filter-pill, .type-btn, .priority-btn, .status-btn,
