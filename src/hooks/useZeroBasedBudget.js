@@ -1,12 +1,71 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
+// [name, default_monthly_amount]
 const DEFAULT_SECTIONS = [
-  { section: 'Housing', envelopes: ['Rent/Mortgage', 'Utilities', 'Internet'] },
-  { section: 'Food', envelopes: ['Groceries', 'Dining Out'] },
-  { section: 'Transport', envelopes: ['Gas', 'Insurance', 'Car Payment'] },
-  { section: 'Personal', envelopes: ['Clothing', 'Medical', 'Fun Money'] },
-  { section: 'Savings', envelopes: ['Emergency Fund', 'Debt Payments'] },
+  {
+    section: 'Housing',
+    envelopes: [
+      ['Mortgage', 2025],
+      ['HOA', 600],
+      ['HELOC (California Credit Union)', 357],
+      ['Spectrum', 197],
+      ['Verizon', 274],
+      ['DWP', 100],
+      ['ADT', 32],
+      ['Orkin', 50],
+      ['Laundry', 80],
+      ['Amazon Prime', 12],
+      ['Amazon Purchases', 0],
+      ['Ana', 180],
+    ],
+  },
+  {
+    section: 'Transport',
+    envelopes: [
+      ['Auto Loan', 239],
+      ['Gas', 600],
+      ['Mercury Auto Insurance', 175],
+      ['Metrolink Monthly Pass', 107],
+      ['Auto Maintenance', 100],
+      ['Equinox Registration', 34],
+      ['Tahoe Registration', 17],
+      ["Tahoe's Major Repairs", 200],
+    ],
+  },
+  {
+    section: 'Food',
+    envelopes: [['Groceries', 600]],
+  },
+  {
+    section: 'Personal',
+    envelopes: [['Hair (Cheap)', 50], ['Hair (Expensive)', 0], ['Clothing', 0]],
+  },
+  {
+    section: 'Fun Money',
+    envelopes: [['Blow', 200]],
+  },
+  {
+    section: 'Medical',
+    envelopes: [['HSA', 200]],
+  },
+  {
+    section: 'Emergency Fund',
+    envelopes: [['Summer Saver', 400]],
+  },
+  {
+    section: 'Debt Payments',
+    envelopes: [
+      ['Debt Consolidation', 631],
+      ["Jennifer's Student Loans - NelNet", 25],
+      ["Jennifer's Student Loans - Sallie Mae", 202],
+      ['Schools First Loan', 0],
+    ],
+  },
+  {
+    section: 'Savings',
+    envelopes: [['Savings', 0]],
+  },
 ]
 
 export function useZeroBasedBudget(userId, month) {
@@ -42,8 +101,8 @@ export function useZeroBasedBudget(userId, month) {
       const toInsert = []
       let sortOrder = 0
       for (const group of DEFAULT_SECTIONS) {
-        for (const name of group.envelopes) {
-          toInsert.push({ user_id: userId, name, section: group.section, sort_order: sortOrder++ })
+        for (const [name, default_amount] of group.envelopes) {
+          toInsert.push({ user_id: userId, name, section: group.section, sort_order: sortOrder++, default_amount })
         }
       }
       const { data: seeded } = await supabase
