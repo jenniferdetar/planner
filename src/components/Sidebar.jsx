@@ -81,57 +81,60 @@ export default function Sidebar({
           </div>
         </div>
 
-        {/* Nav: PLANNER */}
-        <div className="sidebar-nav-section">
-          <div className="sidebar-nav-label">Planner</div>
-          {navItem('📅', 'Month', 'month')}
-          {navItem('📆', 'Week', 'week')}
-        </div>
+        {/* Scrollable nav area */}
+        <div className="sidebar-nav-scroll">
+          {/* Nav: PLANNER */}
+          <div className="sidebar-nav-section">
+            <div className="sidebar-nav-label">Planner</div>
+            {navItem('📅', 'Month', 'month')}
+            {navItem('📆', 'Week', 'week')}
+          </div>
 
-        {/* Nav: WORK */}
-        <div className="sidebar-nav-section">
-          <div className="sidebar-nav-label">Work</div>
-          {navItem('📋', 'CSEA', 'csea')}
-          {navItem('📊', 'iCAAP', 'icaap')}
-          {navItem('🎓', 'GCU', 'gcu')}
-          {navItem('💰', 'Finance', 'finance')}
-        </div>
+          {/* Nav: WORK */}
+          <div className="sidebar-nav-section">
+            <div className="sidebar-nav-label">Work</div>
+            {navItem('📋', 'CSEA', 'csea')}
+            {navItem('📊', 'iCAAP', 'icaap')}
+            {navItem('🎓', 'GCU', 'gcu')}
+            {navItem('💰', 'Finance', 'finance')}
+          </div>
 
-        {/* Nav: PERSONAL */}
-        <div className="sidebar-nav-section">
-          <div className="sidebar-nav-label">Personal</div>
-          {navItem('📝', 'Daily Log', 'personal', 'log')}
-          {navItem('🎯', 'My Goals', 'personal', 'goals')}
-          {navItem('✅', 'Monthly Checklist', 'personal', 'checklist')}
-          {navItem('📚', 'Library', 'personal', 'library')}
-          {navItem('💭', 'My Mantra', 'personal', 'mantra')}
-          {navItem('🛍️', 'Wants', 'personal', 'budget')}
-        </div>
+          {/* Nav: PERSONAL */}
+          <div className="sidebar-nav-section">
+            <div className="sidebar-nav-label">Personal</div>
+            {navItem('📝', 'Daily Log', 'personal', 'log')}
+            {navItem('🎯', 'My Goals', 'personal', 'goals')}
+            {navItem('✅', 'Monthly Checklist', 'personal', 'checklist')}
+            {navItem('📚', 'Library', 'personal', 'library')}
+            {navItem('💭', 'My Mantra', 'personal', 'mantra')}
+            {navItem('🛍️', 'Wants', 'personal', 'budget')}
+          </div>
 
-        {/* Nav: NOTES (overlays) */}
-        <div className="sidebar-nav-section">
-          <div className="sidebar-nav-label">Notes</div>
-          {SECTION_LINKS.map(sec => sec.key === 'journal' ? (
-            <a
-              key={sec.key}
-              href="https://penzu.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sidebar-nav-item"
-            >
-              <span className="nav-icon">{sec.icon}</span>
-              {sec.label}
-            </a>
-          ) : (
-            <button
-              key={sec.key}
-              className="sidebar-nav-item"
-              onClick={() => setOpenSection(sec.key)}
-            >
-              <span className="nav-icon">{sec.icon}</span>
-              {sec.label}
-            </button>
-          ))}
+          {/* Nav: NOTES (overlays) */}
+          <div className="sidebar-nav-section">
+            <div className="sidebar-nav-label">Notes</div>
+            {SECTION_LINKS.map(sec => sec.key === 'journal' ? (
+              <a
+                key={sec.key}
+                href="https://penzu.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sidebar-nav-item"
+              >
+                <span className="nav-icon">{sec.icon}</span>
+                {sec.label}
+              </a>
+            ) : (
+              <button
+                key={sec.key}
+                className="sidebar-nav-item"
+                onClick={() => setOpenSection(sec.key)}
+              >
+                <span className="nav-icon">{sec.icon}</span>
+                {sec.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="sidebar-footer">
