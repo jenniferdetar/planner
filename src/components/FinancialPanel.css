@@ -27,7 +27,7 @@
 .fin-stat-num {
   font-size: 14px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1e3342;
   line-height: 1;
 }
 
@@ -71,11 +71,11 @@
 .fin-tab:hover { opacity: 0.8; }
 .fin-tab.active { opacity: 1; }
 
-.fin-tab:nth-child(1) { background: #8B2B3A; }
-.fin-tab:nth-child(2) { background: #6E2232; }
-.fin-tab:nth-child(3) { background: #501A28; }
-.fin-tab:nth-child(4) { background: #2F1019; }
-.fin-tab:nth-child(5) { background: #8B2B3A; }
+.fin-tab:nth-child(1) { background: #4a7a6a; }
+.fin-tab:nth-child(2) { background: #3d6a5a; }
+.fin-tab:nth-child(3) { background: #2d5560; }
+.fin-tab:nth-child(4) { background: #1e3342; }
+.fin-tab:nth-child(5) { background: #4a7a6a; }
 
 
 .fin-content {
@@ -106,15 +106,15 @@
 .fin-add-btn {
   font-size: 11px;
   font-weight: 600;
-  color: #8B2B3A;
+  color: #4a7a6a;
   padding: 5px 10px;
-  border: 1px solid #8B2B3A;
+  border: 1px solid #4a7a6a;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
-.fin-add-btn:hover { background: #8B2B3A; color: #fff; }
+.fin-add-btn:hover { background: #4a7a6a; color: #fff; }
 
 /* Form */
 .fin-form {
@@ -148,7 +148,7 @@
   background: #fff;
 }
 
-.fin-input:focus { border-color: #8B2B3A; }
+.fin-input:focus { border-color: #4a7a6a; }
 .fin-input.amount { font-weight: 600; }
 
 .fin-type-toggle {
@@ -185,7 +185,7 @@
   transition: border-color 0.15s;
 }
 
-.fin-color-swatch.active { border-color: #1a1a2e; }
+.fin-color-swatch.active { border-color: #1e3342; }
 
 .fin-form-actions {
   display: flex;
@@ -207,7 +207,7 @@
 .fin-save {
   font-size: 11px;
   font-weight: 600;
-  background: #8B2B3A;
+  background: #4a7a6a;
   color: #fff;
   padding: 5px 14px;
   border-radius: 6px;
@@ -357,7 +357,7 @@
 .fin-bill-card-amount {
   font-size: 16px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1e3342;
   padding: 10px 10px 2px;
   line-height: 1;
 }
@@ -438,7 +438,7 @@
   transition: all 0.15s;
 }
 
-.fin-edit-btn:hover { color: #8B2B3A; border-color: #8B2B3A; }
+.fin-edit-btn:hover { color: #4a7a6a; border-color: #4a7a6a; }
 
 .fin-goal-amounts {
   display: flex;
@@ -491,7 +491,7 @@
 
 .pc-th-account {
   position: sticky; left: 0; z-index: 2;
-  background: #1a1a2e; color: #AAAA9E;
+  background: #1e3342; color: #AAAA9E;
   text-align: left; padding: 8px 12px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
   min-width: 180px;
@@ -499,7 +499,7 @@
 }
 
 .pc-th-date {
-  background: #1a1a2e; color: #AAAA9E;
+  background: #1e3342; color: #AAAA9E;
   padding: 6px 10px; text-align: center;
   font-size: 11px; font-weight: 600;
   min-width: 100px;
@@ -521,17 +521,17 @@
   border-bottom: 1px solid #f0ede6;
   min-width: 180px;
 }
-.pc-td-bill-name { display: block; font-size: 12.5px; color: #1a1a2e; line-height: 1.2; }
+.pc-td-bill-name { display: block; font-size: 12.5px; color: #1e3342; line-height: 1.2; }
 .pc-td-method { font-size: 10px; font-weight: 600; padding: 0px 5px; border-radius: 3px; }
 .pc-td-method.billpay { background: #e8f0fb; color: #4a90d9; }
 .pc-td-method.cash { background: #eaf7ea; color: #5cb85c; }
 
 /* Jennifer's Check row */
 .pc-row-check .pc-td-account { background: #f5f4f0; }
-.pc-td-check-label { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+.pc-td-check-label { font-size: 13px; font-weight: 700; color: #1e3342; }
 .pc-td-check-amount {
   text-align: center; padding: 6px 8px;
-  font-size: 13px; font-weight: 700; color: #1a1a2e;
+  font-size: 13px; font-weight: 700; color: #1e3342;
   cursor: pointer; border-bottom: 2px solid #e8e5de;
   border-right: 1px solid #e8e5de;
   background: #f5f4f0;
@@ -559,17 +559,17 @@
 
 /* Totals */
 .pc-row-total .pc-td-account { background: #f0ede6; font-weight: 700; }
-.pc-td-total-label { font-size: 12px; font-weight: 700; color: #1a1a2e; }
+.pc-td-total-label { font-size: 12px; font-weight: 700; color: #1e3342; }
 .pc-td-total {
   text-align: right; padding: 5px 10px;
-  font-size: 12px; font-weight: 700; color: #1a1a2e;
+  font-size: 12px; font-weight: 700; color: #1e3342;
   background: #f0ede6; border-right: 1px solid #e0ddd7;
   border-bottom: 1px solid #e0ddd7;
 }
 
 /* Left over */
 .pc-row-leftover .pc-td-account { background: #f5f4f0; }
-.pc-td-leftover-label { font-size: 12px; font-weight: 700; color: #1a1a2e; }
+.pc-td-leftover-label { font-size: 12px; font-weight: 700; color: #1e3342; }
 .pc-td-leftover {
   text-align: right; padding: 5px 10px;
   font-size: 12px; font-weight: 700;
@@ -592,16 +592,16 @@
 .coins-row td { border-bottom: 1px solid #f0ede6; padding: 4px 8px; }
 .coins-row .coins-td-count { padding-right: 2px; }
 .coins-row .coins-td-sub { padding-left: 2px; }
-.coins-td-name { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+.coins-td-name { font-weight: 600; color: #1e3342; white-space: nowrap; }
 .coins-td-val { color: #888; font-size: 12px; }
 .coins-td-count { display: flex; align-items: center; gap: 8px; }
 .coins-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; background: #f5f4f0; font-size: 16px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #555; }
 .coins-btn:hover { background: #e8e5de; }
 .coins-input { width: 52px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 3px 4px; font-size: 13px; }
-.coins-td-sub { text-align: right; font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+.coins-td-sub { text-align: right; font-weight: 600; color: #1e3342; white-space: nowrap; }
 .coins-section-divider td { padding: 6px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #aaa; background: #f5f4f0; border-top: 2px solid #e8e5de; border-bottom: 1px solid #e8e5de; }
 .coins-total-row td { padding: 5px 8px; font-weight: 700; font-size: 14px; border-top: 2px solid #e8e5de; }
-.coins-td-total-label { color: #1a1a2e; }
+.coins-td-total-label { color: #1e3342; }
 .coins-td-total { text-align: right; color: #5cb85c; font-size: 16px; }
 
 /* ── Goals Table ── */
@@ -629,7 +629,7 @@
 
 .goals-th-name { text-align: left; width: 45%; }
 .goals-th-col { text-align: center; width: 27.5%; }
-.goals-th-col.mo3 { color: #8B2B3A; }
+.goals-th-col.mo3 { color: #4a7a6a; }
 .goals-th-col.mo6 { color: #5cb85c; }
 
 .goals-name {
@@ -656,7 +656,7 @@
   display: block;
   font-size: 12px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1e3342;
   line-height: 1.2;
 }
 
@@ -677,14 +677,14 @@
 
 .goals-fill {
   height: 100%;
-  background: #8B2B3A;
+  background: #4a7a6a;
   border-radius: 2px;
   transition: width 0.3s;
 }
 
 .goals-total-row .goals-name {
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1e3342;
   border-top: 2px solid #e8e5de;
 }
 
@@ -693,7 +693,7 @@
 .goals-cell-input {
   width: 100%;
   padding: 4px 6px;
-  border: 1px solid #8B2B3A;
+  border: 1px solid #4a7a6a;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
@@ -703,30 +703,30 @@
 }
 
 /* ── Palette alternating rows ── */
-.pc-table tbody tr:nth-child(odd)  td { background: rgba(139,43,58,0.07); }
+.pc-table tbody tr:nth-child(odd)  td { background: rgba(74,122,106,0.07); }
 .pc-table tbody tr:nth-child(even) td { background: rgba(110,34,50,0.07); }
-.pc-table tbody tr:nth-child(odd)  .pc-td-account { background: rgba(139,43,58,0.12); }
+.pc-table tbody tr:nth-child(odd)  .pc-td-account { background: rgba(74,122,106,0.12); }
 .pc-table tbody tr:nth-child(even) .pc-td-account { background: rgba(110,34,50,0.12); }
 
-.coins-table th { background: #1a1a2e; color: #AAAA9E; }
+.coins-table th { background: #1e3342; color: #AAAA9E; }
 .coins-row:nth-child(odd)  td { background: rgba(80,26,40,0.09); }
 .coins-row:nth-child(even) td { background: rgba(47,16,25,0.09); }
 
-.goals-table tbody tr:nth-child(odd)  td { background: rgba(139,43,58,0.07); }
+.goals-table tbody tr:nth-child(odd)  td { background: rgba(74,122,106,0.07); }
 .goals-table tbody tr:nth-child(even) td { background: rgba(110,34,50,0.07); }
-.goals-th-name, .goals-th-col { background: #1a1a2e !important; color: #AAAA9E !important; }
+.goals-th-name, .goals-th-col { background: #1e3342 !important; color: #AAAA9E !important; }
 
 /* ── Goals palette ── */
-.fin-stat:nth-child(1) .fin-stat-num:not(.income):not(.expense) { color: #8B2B3A !important; }
-.fin-stat:nth-child(2) .fin-stat-num:not(.income):not(.expense) { color: #6E2232 !important; }
-.fin-stat:nth-child(3) .fin-stat-num:not(.income):not(.expense) { color: #501A28 !important; }
-.fin-stat:nth-child(4) .fin-stat-num:not(.income):not(.expense) { color: #2F1019 !important; }
+.fin-stat:nth-child(1) .fin-stat-num:not(.income):not(.expense) { color: #4a7a6a !important; }
+.fin-stat:nth-child(2) .fin-stat-num:not(.income):not(.expense) { color: #3d6a5a !important; }
+.fin-stat:nth-child(3) .fin-stat-num:not(.income):not(.expense) { color: #2d5560 !important; }
+.fin-stat:nth-child(4) .fin-stat-num:not(.income):not(.expense) { color: #1e3342 !important; }
 
-.fin-txn:nth-child(odd)  { background: rgba(139,43,58,0.05); border-left: 3px solid #8B2B3A; }
-.fin-txn:nth-child(even) { background: rgba(110,34,50,0.05); border-left: 3px solid #6E2232; }
+.fin-txn:nth-child(odd)  { background: rgba(74,122,106,0.05); border-left: 3px solid #4a7a6a; }
+.fin-txn:nth-child(even) { background: rgba(110,34,50,0.05); border-left: 3px solid #3d6a5a; }
 
-.fin-goal:nth-child(odd)  { border-left: 3px solid #501A28; }
-.fin-goal:nth-child(even) { border-left: 3px solid #2F1019; }
+.fin-goal:nth-child(odd)  { border-left: 3px solid #2d5560; }
+.fin-goal:nth-child(even) { border-left: 3px solid #1e3342; }
 
 .fin-tab { font-family: 'Nunito', sans-serif !important; }
 
@@ -788,7 +788,7 @@
   cursor: pointer;
 }
 
-.goal-card-saved { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+.goal-card-saved { font-size: 14px; font-weight: 700; color: #1e3342; }
 .goal-card-target { font-size: 10px; color: #aaa; }
 
 .goal-card-bar {
@@ -800,7 +800,7 @@
 
 .goal-card-fill {
   height: 100%;
-  background: #8B2B3A;
+  background: #4a7a6a;
   border-radius: 4px;
   transition: width 0.3s;
 }
@@ -814,7 +814,7 @@
 .goal-card-input {
   width: 100%;
   border: none;
-  border-bottom: 1.5px solid #8B2B3A;
+  border-bottom: 1.5px solid #4a7a6a;
   outline: none;
   font-size: 13px;
   font-family: inherit;
@@ -830,7 +830,7 @@
 }
 
 .fin-budget-th {
-  background: #1a1a2e !important;
+  background: #1e3342 !important;
   color: #AAAA9E !important;
   padding: 8px 12px;
   text-align: right;
@@ -844,9 +844,9 @@
 
 .fin-budget-th.cat-col { text-align: left; }
 
-.fin-budget-row:nth-child(odd)  { background: rgba(139,43,58,0.04); }
+.fin-budget-row:nth-child(odd)  { background: rgba(74,122,106,0.04); }
 .fin-budget-row:nth-child(even) { background: #fff; }
-.fin-budget-row:hover td { background: rgba(139,43,58,0.08); }
+.fin-budget-row:hover td { background: rgba(74,122,106,0.08); }
 
 .fin-budget-td {
   padding: 8px 12px;
@@ -860,16 +860,16 @@
 .fin-budget-td.cat-col {
   text-align: left;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 
 .fin-budget-amount { cursor: pointer; }
-.fin-budget-amount:hover { color: #8B2B3A; }
+.fin-budget-amount:hover { color: #4a7a6a; }
 
 .fin-budget-input {
   width: 90px;
   padding: 3px 6px;
-  border: 1px solid #8B2B3A;
+  border: 1px solid #4a7a6a;
   border-radius: 4px;
   font-size: 13px;
   text-align: right;
@@ -906,7 +906,7 @@
   text-align: right;
   font-size: 13px;
 }
-.fin-budget-total-row .cat-col { text-align: left; color: #1a1a2e; }
+.fin-budget-total-row .cat-col { text-align: left; color: #1e3342; }
 
 .fin-budget-add-row {
   padding: 12px 12px;
@@ -918,7 +918,7 @@
   cursor: pointer;
   transition: color 0.12s;
 }
-.fin-budget-add-cat:hover { color: #8B2B3A; }
+.fin-budget-add-cat:hover { color: #4a7a6a; }
 
 .fin-budget-new-input {
   padding: 5px 8px;
@@ -927,7 +927,7 @@
   font-size: 13px;
   outline: none;
 }
-.fin-budget-new-input:focus { border-color: #8B2B3A; }
+.fin-budget-new-input:focus { border-color: #4a7a6a; }
 
 /* ── Budget Tab (Personal Finance Tracker) ── */
 .budget-wrap {
@@ -943,7 +943,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 20px 10px;
-  background: #1a1a2e;
+  background: #1e3342;
   flex-shrink: 0;
 }
 
@@ -997,10 +997,10 @@
 .budget-summary-val {
   font-size: 14px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 .budget-summary-val.income { color: #2a7a2a; }
-.budget-summary-val.expense { color: #8B2B3A; }
+.budget-summary-val.expense { color: #4a7a6a; }
 
 .budget-table-wrap {
   flex: 1;
@@ -1013,7 +1013,7 @@
 }
 
 .budget-th {
-  background: #1a1a2e !important;
+  background: #1e3342 !important;
   color: #AAAA9E !important;
   padding: 7px 12px;
   font-size: 10px;
@@ -1045,8 +1045,8 @@
 }
 
 .budget-row:nth-child(odd) { background: #fff; }
-.budget-row:nth-child(even) { background: rgba(139,43,58,0.03); }
-.budget-row:hover td { background: rgba(139,43,58,0.07); }
+.budget-row:nth-child(even) { background: rgba(74,122,106,0.03); }
+.budget-row:hover td { background: rgba(74,122,106,0.07); }
 
 .budget-td {
   padding: 7px 12px;
@@ -1055,28 +1055,28 @@
   color: #333;
   vertical-align: middle;
 }
-.budget-td.cat { text-align: left; color: #1a1a2e; }
+.budget-td.cat { text-align: left; color: #1e3342; }
 .budget-td.num { text-align: right; }
 .budget-td.del-col { text-align: center; width: 28px; }
 
 .budget-cell-val { cursor: pointer; }
-.budget-cell-val:hover { color: #8B2B3A; }
+.budget-cell-val:hover { color: #4a7a6a; }
 .budget-empty { color: #ccc; }
 
 .budget-input {
   width: 80px;
   padding: 2px 5px;
-  border: 1px solid #8B2B3A;
+  border: 1px solid #4a7a6a;
   border-radius: 3px;
   font-size: 12px;
   text-align: right;
   outline: none;
 }
 
-.total-val { color: #1a1a2e; font-size: 12px; }
+.total-val { color: #1e3342; font-size: 12px; }
 
 .budget-net-row td {
-  background: #1a1a2e;
+  background: #1e3342;
   color: #AAAA9E;
   font-weight: 700;
   font-size: 12px;
@@ -1093,7 +1093,7 @@
   cursor: pointer;
   transition: color 0.12s;
 }
-.budget-add-cat:hover { color: #8B2B3A; }
+.budget-add-cat:hover { color: #4a7a6a; }
 .budget-new-input {
   padding: 4px 7px;
   border: 1px solid #ddd;
@@ -1101,7 +1101,7 @@
   font-size: 12px;
   outline: none;
 }
-.budget-new-input:focus { border-color: #8B2B3A; }
+.budget-new-input:focus { border-color: #4a7a6a; }
 .budget-del {
   color: #ccc;
   font-size: 15px;

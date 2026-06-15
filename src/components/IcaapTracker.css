@@ -30,7 +30,7 @@
 .icaap-stat-num {
   font-size: 24px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1e3342;
   line-height: 1;
 }
 
@@ -64,7 +64,7 @@
 }
 
 .icaap-tab.active {
-  color: #1a1a2e;
+  color: #1e3342;
   background: #fff;
   border-bottom-color: #9b59b6;
 }
@@ -96,9 +96,9 @@
 }
 
 .filter-pill.active {
-  background: #1a1a2e;
+  background: #1e3342;
   color: #fff;
-  border-color: #1a1a2e;
+  border-color: #1e3342;
 }
 
 .icaap-add-btn {
@@ -565,7 +565,7 @@
 .icaap-extrahours-tab:hover { color: #555; }
 
 .icaap-extrahours-tab.active {
-  color: #1a1a2e;
+  color: #1e3342;
   border-bottom-color: #4a7ab5;
 }
 
@@ -605,7 +605,7 @@
 
 .icaap-note-saved {
   font-size: 11px;
-  color: #6E2232;
+  color: #3d6a5a;
   font-weight: 600;
 }
 
@@ -727,7 +727,7 @@
   flex: 1;
   font-size: 13.5px;
   font-weight: 400;
-  color: #1a1a2e;
+  color: #1e3342;
   line-height: 1.4;
   cursor: pointer;
 }
@@ -800,7 +800,7 @@
 .att-week-label {
   font-size: 13px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 
 .att-table-wrap {
@@ -816,7 +816,7 @@
 
 .att-th-name {
   position: sticky; left: 0; z-index: 2;
-  background: #1a1a2e; color: #fff;
+  background: #1e3342; color: #fff;
   text-align: left; padding: 8px 14px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
   min-width: 160px;
@@ -824,7 +824,7 @@
 }
 
 .att-th-day {
-  background: #1a1a2e; color: #c9a96e;
+  background: #1e3342; color: #73a882;
   text-align: center; padding: 6px 10px;
   min-width: 110px;
   border-right: 1px solid #333;
@@ -839,7 +839,7 @@
   position: sticky; left: 0; z-index: 1;
   background: #fff;
   padding: 8px 14px;
-  font-size: 13px; font-weight: 600; color: #1a1a2e;
+  font-size: 13px; font-weight: 600; color: #1e3342;
   border-right: 2px solid #e8e5de;
   border-bottom: 1px solid #f0ede6;
   white-space: nowrap;
@@ -911,7 +911,7 @@
   text-overflow: ellipsis;
   max-width: 120px;
 }
-.att-notes-btn:hover { color: #c9a96e; }
+.att-notes-btn:hover { color: #73a882; }
 
 .att-notes-input {
   display: block;
@@ -919,7 +919,7 @@
   margin-top: 4px;
   font-size: 11px;
   padding: 3px 5px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #73a882;
   border-radius: 4px;
   font-family: inherit;
   resize: vertical;
@@ -988,9 +988,9 @@
 }
 
 .dash-month-pill.active {
-  background: #1a1a2e;
+  background: #1e3342;
   color: #fff;
-  border-color: #1a1a2e;
+  border-color: #1e3342;
 }
 
 .dash-search {
@@ -1004,7 +1004,7 @@
   align-self: flex-end;
 }
 
-.dash-search:focus { border-color: #c9a96e; }
+.dash-search:focus { border-color: #73a882; }
 
 .dash-summary {
   display: flex;
@@ -1114,9 +1114,9 @@
 .dash-import-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #c9a96e;
+  color: #73a882;
   padding: 5px 12px;
-  border: 1px solid #c9a96e;
+  border: 1px solid #73a882;
   border-radius: 6px;
   cursor: pointer;
   background: none;
@@ -1125,7 +1125,7 @@
 }
 
 .dash-import-btn:hover {
-  background: #c9a96e;
+  background: #73a882;
   color: #fff;
 }
 
@@ -1163,7 +1163,7 @@
 .import-modal-title {
   font-size: 15px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 
 .import-modal-close {
@@ -1197,12 +1197,12 @@
   box-sizing: border-box;
 }
 
-.import-textarea:focus { border-color: #c9a96e; }
+.import-textarea:focus { border-color: #73a882; }
 
 .import-parse-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #1a1a2e;
+  background: #1e3342;
   color: #fff;
   padding: 8px 16px;
   border-radius: 6px;
@@ -1272,7 +1272,7 @@
 .import-confirm-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #c9a96e;
+  background: #73a882;
   color: #fff;
   padding: 7px 18px;
   border-radius: 6px;
@@ -1301,7 +1301,7 @@
 .import-done-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #1a1a2e;
+  background: #1e3342;
   color: #fff;
   padding: 7px 18px;
   border-radius: 6px;

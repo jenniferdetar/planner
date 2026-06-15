@@ -23,7 +23,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #1e3342;
   min-width: 200px;
   text-align: center;
 }
@@ -43,7 +43,7 @@
 }
 
 .mnav-btn:hover {
-  background: #1a1a2e;
+  background: #1e3342;
   color: #fff;
 }
 
@@ -109,7 +109,7 @@
 
 .month-cell.selected {
   background: #f5f1e8;
-  outline: 2px solid #8B2B3A;
+  outline: 2px solid #4a7a6a;
   outline-offset: -2px;
 }
 
@@ -128,7 +128,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #8B2B3A;
+  background: #4a7a6a;
   color: #fff;
   font-weight: 700;
   font-size: 12px;
@@ -151,7 +151,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  background: #8B2B3A;
+  background: #4a7a6a;
   border-radius: 3px;
   transition: width 0.3s;
 }

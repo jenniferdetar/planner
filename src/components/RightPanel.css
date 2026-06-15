@@ -34,7 +34,7 @@
 .cal-title {
   font-size: 13px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 
 .cal-nav {
@@ -52,7 +52,7 @@
 
 .cal-nav:hover {
   background: #f0ede6;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 
 .cal-grid {
@@ -89,12 +89,12 @@
 }
 
 .cal-day.today {
-  color: #8B2B3A;
+  color: #4a7a6a;
   font-weight: 700;
 }
 
 .cal-day.selected {
-  background: #1a1a2e !important;
+  background: #1e3342 !important;
   color: #fff !important;
   font-weight: 600;
 }
@@ -107,7 +107,7 @@
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: #8B2B3A;
+  background: #4a7a6a;
 }
 
 /* Weekly Overview */
@@ -139,11 +139,11 @@
 }
 
 .week-day-card.today .week-day-num {
-  color: #8B2B3A;
+  color: #4a7a6a;
 }
 
 .week-day-card.selected {
-  background: #1a1a2e;
+  background: #1e3342;
 }
 
 .week-day-card.selected .week-day-name,
@@ -168,7 +168,7 @@
 
 .week-count {
   font-size: 9px;
-  background: #8B2B3A;
+  background: #4a7a6a;
   color: #fff;
   border-radius: 10px;
   padding: 1px 5px;
@@ -213,7 +213,7 @@
 .summary-num {
   font-size: 22px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #1e3342;
   line-height: 1;
 }
 
@@ -239,7 +239,7 @@
 
 .progress-fill {
   height: 100%;
-  background: #8B2B3A;
+  background: #4a7a6a;
   border-radius: 2px;
   transition: width 0.4s ease;
 }
@@ -277,7 +277,7 @@
 .notes-hint {
   font-size: 9px;
   font-weight: 400;
-  color: #8B2B3A;
+  color: #4a7a6a;
   letter-spacing: 0.5px;
   text-transform: none;
 }

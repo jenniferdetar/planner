@@ -10,13 +10,13 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 const DAY_COLORS = [
-  '#8B2B3A', // Sunday
-  '#501A28', // Monday
-  '#6E2232', // Tuesday
-  '#2F1019', // Wednesday
-  '#8B2B3A', // Thursday
-  '#501A28', // Friday
-  '#6E2232', // Saturday
+  '#4a7a6a', // Sunday
+  '#2d5560', // Monday
+  '#3d6a5a', // Tuesday
+  '#1e3342', // Wednesday
+  '#4a7a6a', // Thursday
+  '#2d5560', // Friday
+  '#3d6a5a', // Saturday
 ]
 
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
@@ -26,7 +26,7 @@ function contrastColor(hex) {
   const r = parseInt(c.slice(0,2), 16)
   const g = parseInt(c.slice(2,4), 16)
   const b = parseInt(c.slice(4,6), 16)
-  return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1a1a2e' : '#ffffff'
+  return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1e3342' : '#ffffff'
 }
 
 function normalizeTitle(t) {
@@ -62,10 +62,10 @@ const HABITS = {
 }
 
 const HABIT_COLORS = {
-  'Home Care': '#8B2B3A',
-  'Self Care': '#6E2232',
-  'Week Days': '#501A28',
-  'Weekends': '#2F1019',
+  'Home Care': '#4a7a6a',
+  'Self Care': '#3d6a5a',
+  'Week Days': '#2d5560',
+  'Weekends': '#1e3342',
 }
 
 export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks }) {

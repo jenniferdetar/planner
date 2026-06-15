@@ -52,7 +52,7 @@
   font-size: 72px;
   font-weight: 700;
   line-height: 1;
-  color: #1a1a2e;
+  color: #1e3342;
   letter-spacing: -2px;
 }
 
@@ -65,7 +65,7 @@
 .day-hero-dayname {
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #1e3342;
   line-height: 1.1;
 }
 
@@ -151,12 +151,12 @@
 
 .mini-cell.today {
   background: rgba(201, 169, 110, 0.18);
-  color: #8B2B3A;
+  color: #4a7a6a;
   font-weight: 700;
 }
 
 .mini-cell.selected {
-  background: #8B2B3A;
+  background: #4a7a6a;
   color: #fff;
   font-weight: 700;
 }
@@ -198,7 +198,7 @@
 }
 
 .nav-btn:hover {
-  background: #1a1a2e;
+  background: #1e3342;
   color: #fff;
 }
 
@@ -212,11 +212,11 @@
   font-family: 'Nunito', sans-serif;
   font-size: 22px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 
 .today-badge {
-  background: #8B2B3A;
+  background: #4a7a6a;
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -227,17 +227,17 @@
 
 .today-btn {
   font-size: 12px;
-  color: #8B2B3A;
+  color: #4a7a6a;
   font-weight: 600;
   padding: 6px 12px;
-  border: 1px solid #8B2B3A;
+  border: 1px solid #4a7a6a;
   border-radius: 6px;
   transition: all 0.15s;
   cursor: pointer;
 }
 
 .today-btn:hover {
-  background: #8B2B3A;
+  background: #4a7a6a;
   color: #fff;
 }
 
@@ -282,13 +282,13 @@
 .view-tab:hover { opacity: 0.8; }
 .view-tab.active { opacity: 1; }
 
-.view-tab[data-v="month"]   { background: #8B2B3A; }
-.view-tab[data-v="week"]    { background: #6E2232; }
-.view-tab[data-v="csea"]    { background: #501A28; }
-.view-tab[data-v="finance"] { background: #2F1019; color: #fff; }
-.view-tab[data-v="gcu"]     { background: #8B2B3A; }
-.view-tab[data-v="icaap"]   { background: #6E2232; }
-.view-tab[data-v="personal"]{ background: #501A28; }
+.view-tab[data-v="month"]   { background: #4a7a6a; }
+.view-tab[data-v="week"]    { background: #3d6a5a; }
+.view-tab[data-v="csea"]    { background: #2d5560; }
+.view-tab[data-v="finance"] { background: #1e3342; color: #fff; }
+.view-tab[data-v="gcu"]     { background: #4a7a6a; }
+.view-tab[data-v="icaap"]   { background: #3d6a5a; }
+.view-tab[data-v="personal"]{ background: #2d5560; }
 
 .planner-body {
   flex: 1;
@@ -432,8 +432,8 @@
 }
 
 .asana-circle.checked {
-  background: #8B2B3A;
-  border-color: #8B2B3A;
+  background: #4a7a6a;
+  border-color: #4a7a6a;
 }
 
 .asana-circle.checked::after {
@@ -493,7 +493,7 @@
 }
 
 .asana-delete-btn:hover { color: #e05c5c; }
-.asana-notes-btn:hover  { color: #8B2B3A; }
+.asana-notes-btn:hover  { color: #4a7a6a; }
 
 .check-box {
   width: 16px;
@@ -539,7 +539,7 @@
 }
 
 .task-notes-input:focus {
-  border-color: #8B2B3A;
+  border-color: #4a7a6a;
   background: #fff;
 }
 
@@ -634,7 +634,7 @@
 }
 
 .add-daily-task-btn:hover {
-  color: #8B2B3A;
+  color: #4a7a6a;
 }
 
 /* Schedule */
@@ -655,7 +655,7 @@
 }
 
 .time-row.current-hour .hour-label {
-  color: #8B2B3A;
+  color: #4a7a6a;
   font-weight: 600;
 }
 
@@ -836,7 +836,7 @@
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  background: #8B2B3A;
+  background: #4a7a6a;
   padding: 3px 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -869,7 +869,7 @@
 }
 
 .add-block-btn:hover {
-  background: #8B2B3A;
+  background: #4a7a6a;
   color: #fff;
 }
 
@@ -904,14 +904,14 @@
 }
 
 .task-hub-filter-btn:hover {
-  border-color: #8B2B3A;
-  color: #8B2B3A;
+  border-color: #4a7a6a;
+  color: #4a7a6a;
 }
 
 .task-hub-filter-btn.active {
-  background: #8B2B3A;
+  background: #4a7a6a;
   color: #fff;
-  border-color: #8B2B3A;
+  border-color: #4a7a6a;
   font-weight: 700;
 }
 
@@ -974,8 +974,8 @@
 
 .task-hub-area-tag {
   font-size: 9px;
-  background: rgba(139,43,58,0.12);
-  color: #8B2B3A;
+  background: rgba(74,122,106,0.12);
+  color: #4a7a6a;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
@@ -1118,7 +1118,7 @@
   cursor: pointer;
   border: 1px solid #e0ddd6;
 }
-.ical-mgr-btn:hover { background: #1a1a2e; color: #AAAA9E; border-color: #1a1a2e; }
+.ical-mgr-btn:hover { background: #1e3342; color: #AAAA9E; border-color: #1e3342; }
 
 .ical-manager {
   background: #fff;
@@ -1136,7 +1136,7 @@
   align-items: center;
   font-weight: 600;
   font-size: 13px;
-  color: #1a1a2e;
+  color: #1e3342;
 }
 .ical-manager-header button { background: none; font-size: 14px; color: #999; cursor: pointer; }
 .ical-sub-row {
@@ -1157,7 +1157,7 @@
 .ical-add-form { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 4px; }
 .ical-input { flex: 1; min-width: 120px; padding: 5px 8px; border: 1px solid #e0ddd6; border-radius: 5px; font-size: 12px; }
 .ical-color-input { width: 32px; height: 30px; padding: 1px; border: 1px solid #e0ddd6; border-radius: 5px; cursor: pointer; }
-.ical-add-btn { padding: 5px 12px; background: #1a1a2e; color: #AAAA9E; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.ical-add-btn { padding: 5px 12px; background: #1e3342; color: #AAAA9E; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .ical-add-btn:hover { background: #2d2d4e; }
 
 .view-tab { font-family: 'Nunito', sans-serif !important; }

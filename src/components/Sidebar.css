@@ -1,5 +1,5 @@
 .sidebar {
-  background: #12122b;
+  background: #1e3342;
   color: #e8e6df;
   display: flex;
   flex-direction: column;
@@ -64,7 +64,7 @@
 }
 
 .logo-icon {
-  color: #8B2B3A;
+  color: #4a7a6a;
   font-size: 14px;
 }
 
@@ -105,16 +105,16 @@
 }
 
 .sidebar-tab.active {
-  color: #8B2B3A;
-  border-color: rgba(139,43,58,0.3);
-  background: rgba(139,43,58,0.08);
+  color: #4a7a6a;
+  border-color: rgba(74,122,106,0.3);
+  background: rgba(74,122,106,0.08);
 }
 
 .quote-box {
   margin: 20px 20px 8px;
   padding: 14px 16px;
   background: rgba(201, 169, 110, 0.1);
-  border-left: 3px solid #8B2B3A;
+  border-left: 3px solid #4a7a6a;
   border-radius: 0 6px 6px 0;
   flex-shrink: 0;
 }
@@ -129,7 +129,7 @@
 
 .quote-author {
   font-size: 10px;
-  color: #8B2B3A;
+  color: #4a7a6a;
   margin-top: 6px;
   letter-spacing: 0.5px;
 }
@@ -288,7 +288,7 @@
 }
 
 .add-task-area-select option {
-  background: #1a1a2e;
+  background: #1e3342;
   color: #fff;
 }
 
@@ -333,8 +333,8 @@
 
 .btn-save {
   font-size: 12px;
-  background: #8B2B3A;
-  color: #12122b;
+  background: #4a7a6a;
+  color: #1e3342;
   font-weight: 700;
   padding: 4px 12px;
   border-radius: 6px;
@@ -358,7 +358,7 @@
 }
 
 .add-btn:hover {
-  color: #8B2B3A;
+  color: #4a7a6a;
   border-color: rgba(201, 169, 110, 0.45);
   background: rgba(201, 169, 110, 0.06);
 }
@@ -393,8 +393,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #8B2B3A;
-  color: #12122b;
+  background: #4a7a6a;
+  color: #1e3342;
   font-size: 13px;
   font-weight: 700;
   display: flex;
@@ -446,7 +446,7 @@
 .stat-num {
   font-size: 20px;
   font-weight: 600;
-  color: #8B2B3A;
+  color: #4a7a6a;
   line-height: 1;
 }
 
@@ -471,7 +471,7 @@
 }
 
 .asana-badge.syncing {
-  color: #8B2B3A;
+  color: #4a7a6a;
   background: rgba(201, 169, 110, 0.15);
 }
 
@@ -563,7 +563,7 @@
   color: #fff;
 }
 .sidebar-nav-item.active {
-  background: rgba(139,43,58,0.5);
+  background: rgba(74,122,106,0.5);
   color: #fff;
   font-weight: 600;
 }
@@ -715,7 +715,7 @@
 }
 
 .section-textarea:focus {
-  box-shadow: inset 2px 0 0 var(--ac, #8B2B3A);
+  box-shadow: inset 2px 0 0 var(--ac, #4a7a6a);
 }
 
 .journal-panel {
@@ -734,7 +734,7 @@
   background: rgba(160, 120, 90, 0.15);
   border: 1px solid rgba(160, 120, 90, 0.35);
   border-radius: 10px;
-  color: #c9a06a;
+  color: #73a882;
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;

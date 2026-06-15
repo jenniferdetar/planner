@@ -889,9 +889,9 @@ function IcaapDashboard() {
 
       <div className="dash-summary">
         <div className="dash-stat-spacer" />
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#8B2B3A' }}>{submitted}/{total}</span></div>
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#6E2232' }}>{paylogged}/{total}</span></div>
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#501A28' }}>{approved}/{total}</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#4a7a6a' }}>{submitted}/{total}</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#3d6a5a' }}>{paylogged}/{total}</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#2d5560' }}>{approved}/{total}</span></div>
       </div>
 
       {loading ? (

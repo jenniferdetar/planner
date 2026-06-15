@@ -10,7 +10,7 @@ function fmt(n) {
 }
 
 const FULL_AMOUNT_BILLS = ['Mortgage', 'HOA', 'HELOC (California Credit Union)']
-const PALETTE = ['#8B2B3A', '#6E2232', '#501A28', '#2F1019']
+const PALETTE = ['#4a7a6a', '#3d6a5a', '#2d5560', '#1e3342']
 
 export default function FinancialPanel({
   transactions, onAddTransaction, onDeleteTransaction,
@@ -571,9 +571,9 @@ function CoinsTab({ userId }) {
 
 const BUDGET_SECTIONS = [
   { key: 'Income',    label: 'INCOME',             color: '#2a7a2a' },
-  { key: 'Fixed',     label: 'FIXED EXPENSES',     color: '#8B2B3A' },
-  { key: 'Variable',  label: 'VARIABLE EXPENSES',  color: '#6E2232' },
-  { key: 'Savings',   label: 'SAVINGS & DEBT',     color: '#501A28' },
+  { key: 'Fixed',     label: 'FIXED EXPENSES',     color: '#4a7a6a' },
+  { key: 'Variable',  label: 'VARIABLE EXPENSES',  color: '#3d6a5a' },
+  { key: 'Savings',   label: 'SAVINGS & DEBT',     color: '#2d5560' },
 ]
 
 const DEFAULT_ROWS = [
