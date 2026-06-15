@@ -357,7 +357,16 @@ function EnvelopeSection({
 
 // ─── ZeroBasedBudget (main) ───────────────────────────────────────────────────
 
-export default function ZeroBasedBudget({ userId }) {
+function dueSuffix(day) {
+  if (!day) return ''
+  const d = Number(day)
+  if (d >= 11 && d <= 13) return `${d}th`
+  const s = ['th','st','nd','rd']
+  const v = d % 10
+  return `${d}${s[v] || 'th'}`
+}
+
+export default function ZeroBasedBudget({ userId, bills = [] }) {
   const today = new Date().toISOString().slice(0, 7)
   const [month, setMonth] = useState(today)
   const [showAddPaycheck, setShowAddPaycheck] = useState(false)
@@ -470,6 +479,25 @@ export default function ZeroBasedBudget({ userId }) {
               />
             ))}
           </div>
+
+          {/* ── Bills ── */}
+          {bills.length > 0 && (
+            <div className="zbb-bills-section">
+              <div className="zbb-panel-heading sm">
+                <span>Bills</span>
+                <span className="zbb-panel-total">
+                  {fmt(bills.reduce((s, b) => s + Number(b.amount), 0))} / mo
+                </span>
+              </div>
+              {bills.sort((a, b) => (a.due_day || 99) - (b.due_day || 99)).map(bill => (
+                <div key={bill.id} className={`zbb-bill-row ${bill.paid ? 'paid' : ''}`}>
+                  <span className="zbb-bill-name">{bill.name}</span>
+                  <span className="zbb-bill-due">{bill.due_day ? `Due ${dueSuffix(bill.due_day)}` : ''}</span>
+                  <span className="zbb-bill-amount">{fmt(bill.amount)}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
           {showAddPaycheck ? (
             <form className="zbb-add-pc-form" onSubmit={handleAddPaycheck}>

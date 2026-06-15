@@ -19,7 +19,7 @@ export default function FinancialPanel({
   paychecks = [], onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   userId,
 }) {
-  const [tab, setTab] = useState('tracker')
+  const [tab, setTab] = useState('budget')
 
   const thisMonth = new Date().toISOString().slice(0, 7)
   const monthlyTxns = transactions.filter(t => t.txn_date?.startsWith(thisMonth))
@@ -45,18 +45,17 @@ export default function FinancialPanel({
       </div>
 
       <div className="fin-tabs">
-        {['bills', 'tracker', 'goals', 'coins', 'budget'].map(t => (
+        {['bills', 'goals', 'coins', 'budget'].map(t => (
           <button key={t} className={`fin-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
-            {t === 'tracker' ? 'Paycheck' : t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
+            {t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
         ))}
       </div>
 
       {tab === 'bills' && <BillsTab bills={bills} onAdd={onAddBill} onToggle={onToggleBillPaid} onDelete={onDeleteBill} />}
-      {tab === 'tracker' && <PaycheckTracker bills={bills} paychecks={paychecks} onAdd={onAddPaycheck} onUpdateAmount={onUpdatePaycheckAmount} onToggleBill={onTogglePaycheckBill} onDelete={onDeletePaycheck} />}
       {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
       {tab === 'coins' && <CoinsTab userId={userId} />}
-      {tab === 'budget' && <ZeroBasedBudget userId={userId} />}
+      {tab === 'budget' && <ZeroBasedBudget userId={userId} bills={bills} />}
     </div>
   )
 }
