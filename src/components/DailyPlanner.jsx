@@ -69,6 +69,7 @@ export default function DailyPlanner({
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
   onPushGcuToAsana, gcuPushing,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
+  personalSubTab, onPersonalSubTabChange,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -128,22 +129,6 @@ export default function DailyPlanner({
 
   return (
     <main className="daily-planner">
-      {/* Tab strip — always visible at top */}
-      <div className="planner-tabs-bar">
-        <div className="view-tabs">
-          {['month', 'csea', 'finance', 'gcu', 'icaap', 'personal'].map(v => (
-            <button
-              key={v}
-              data-v={v}
-              className={`view-tab ${view === v ? 'active' : ''}`}
-              onClick={() => onViewChange(v)}
-            >
-              {v === 'csea' ? 'CSEA' : v === 'icaap' ? 'iCAAP' : v === 'gcu' ? 'GCU' : v === 'personal' ? 'Personal' : v === 'week' ? 'Week' : v.charAt(0).toUpperCase() + v.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {view === 'week' && (
         <WeekView
           userId={userId}
@@ -206,6 +191,8 @@ export default function DailyPlanner({
           onUpdateBookStatus={onUpdateBookStatus}
           onDeleteBook={onDeleteBook}
           onImportBooks={onImportBooks}
+          subTab={personalSubTab}
+          onSubTabChange={onPersonalSubTabChange}
         />
       )}
 
