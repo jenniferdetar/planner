@@ -55,6 +55,7 @@ export default function App() {
   const { session, user, providerToken, loading, clearProviderToken } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
   const [view, setView] = useState('week')
+  const [personalSubTab, setPersonalSubTab] = useState('log')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
 
@@ -219,6 +220,13 @@ export default function App() {
           user={user}
           sections={sections}
           onUpdateSection={updateSection}
+          view={view}
+          onViewChange={(v) => {
+            if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
+            setView(v)
+          }}
+          personalSubTab={personalSubTab}
+          onPersonalSubTabChange={setPersonalSubTab}
         />
       </div>
       <div className={mp === null || mp === 'main' ? 'mobile-active' : undefined}>
@@ -292,6 +300,8 @@ export default function App() {
           weeklyTasks={weeklyTasks}
           onToggleWeeklyTask={toggleWeeklyTask}
           onAddWeeklyTask={addWeeklyTask}
+          personalSubTab={personalSubTab}
+          onPersonalSubTabChange={setPersonalSubTab}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
