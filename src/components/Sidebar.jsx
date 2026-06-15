@@ -20,6 +20,8 @@ const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 export default function Sidebar({
   asanaTasks, asanaProjects, asanaStatus, onAddAsanaTask, onCompleteAsanaTask,
   user, sections = {}, onUpdateSection,
+  view, onViewChange,
+  personalSubTab, onPersonalSubTabChange,
 }) {
   const [newText, setNewText] = useState('')
   const [newProject, setNewProject] = useState('')
@@ -49,6 +51,26 @@ export default function Sidebar({
 
   const activeSectionDef = SECTION_LINKS.find(s => s.key === openSection)
 
+  function navItem(icon, label, targetView, subTab) {
+    const isActive = subTab
+      ? view === targetView && personalSubTab === subTab
+      : view === targetView
+    function handleClick() {
+      onViewChange?.(targetView)
+      if (subTab) onPersonalSubTabChange?.(subTab)
+    }
+    return (
+      <button
+        key={subTab ? `${targetView}-${subTab}` : targetView}
+        className={`sidebar-nav-item${isActive ? ' active' : ''}`}
+        onClick={handleClick}
+      >
+        <span className="nav-icon">{icon}</span>
+        {label}
+      </button>
+    )
+  }
+
   return (
     <>
       <aside className="sidebar">
@@ -59,31 +81,55 @@ export default function Sidebar({
           </div>
         </div>
 
-        {/* Section nav links */}
-        <div className="folder-tabs">
+        {/* Nav: PLANNER */}
+        <div className="sidebar-nav-section">
+          <div className="sidebar-nav-label">Planner</div>
+          {navItem('📅', 'Month', 'month')}
+          {navItem('📆', 'Week', 'week')}
+        </div>
+
+        {/* Nav: WORK */}
+        <div className="sidebar-nav-section">
+          <div className="sidebar-nav-label">Work</div>
+          {navItem('📋', 'CSEA', 'csea')}
+          {navItem('📊', 'iCAAP', 'icaap')}
+          {navItem('🎓', 'GCU', 'gcu')}
+          {navItem('💰', 'Finance', 'finance')}
+        </div>
+
+        {/* Nav: PERSONAL */}
+        <div className="sidebar-nav-section">
+          <div className="sidebar-nav-label">Personal</div>
+          {navItem('📝', 'Daily Log', 'personal', 'log')}
+          {navItem('🎯', 'My Goals', 'personal', 'goals')}
+          {navItem('✅', 'Monthly Checklist', 'personal', 'checklist')}
+          {navItem('📚', 'Library', 'personal', 'library')}
+          {navItem('💭', 'My Mantra', 'personal', 'mantra')}
+          {navItem('🛍️', 'Wants', 'personal', 'budget')}
+        </div>
+
+        {/* Nav: NOTES (overlays) */}
+        <div className="sidebar-nav-section">
+          <div className="sidebar-nav-label">Notes</div>
           {SECTION_LINKS.map(sec => sec.key === 'journal' ? (
             <a
               key={sec.key}
               href="https://penzu.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="folder-tab section-link"
-              style={{ '--fc': sec.color }}
+              className="sidebar-nav-item"
             >
-              <span className="section-link-icon">{sec.icon}</span>
+              <span className="nav-icon">{sec.icon}</span>
               {sec.label}
-              <span className="section-link-arrow">›</span>
             </a>
           ) : (
             <button
               key={sec.key}
-              className="folder-tab section-link"
-              style={{ '--fc': sec.color }}
+              className="sidebar-nav-item"
               onClick={() => setOpenSection(sec.key)}
             >
-              <span className="section-link-icon">{sec.icon}</span>
+              <span className="nav-icon">{sec.icon}</span>
               {sec.label}
-              <span className="section-link-arrow">›</span>
             </button>
           ))}
         </div>

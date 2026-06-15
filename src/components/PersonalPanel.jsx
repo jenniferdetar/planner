@@ -18,7 +18,7 @@ const SUB_TABS = [
   { key: 'budget',    label: 'Wants',              color: '#8B2B3A' },
 ]
 
-export default function PersonalPanel({ userId, selectedDate, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks }) {
+export default function PersonalPanel({ userId, selectedDate, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks, subTab = 'log', onSubTabChange }) {
   const dateStr = selectedDate instanceof Date
     ? selectedDate.toISOString().split('T')[0]
     : new Date().toISOString().split('T')[0]
@@ -26,7 +26,6 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
   const { entries, addEntry, deleteEntry, updateEntry } = useDailyLog(userId, dateStr)
   const { mantra, setMantra, save, saved } = useMantra(userId)
   const [text, setText] = useState('')
-  const [subTab, setSubTab] = useState('log')
   const [mantraEditing, setMantraEditing] = useState(false)
   const [editingEntryId, setEditingEntryId] = useState(null)
   const [editingEntryText, setEditingEntryText] = useState('')
@@ -69,17 +68,6 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
 
   return (
     <div className="personal-panel">
-      <div className="personal-sub-tabs">
-        {SUB_TABS.map(({ key, label, color }) => (
-          <button
-            key={key}
-            className={`personal-sub-tab ${subTab === key ? 'active' : ''}`}
-            style={subTab === key ? { color, borderBottomColor: color } : {}}
-            onClick={() => setSubTab(key)}
-          >{label}</button>
-        ))}
-      </div>
-
       {subTab === 'log' && (
         <div className="personal-body">
           <div className="daily-log-section">
