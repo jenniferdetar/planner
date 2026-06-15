@@ -889,9 +889,9 @@ function IcaapDashboard() {
 
       <div className="dash-summary">
         <div className="dash-stat-spacer" />
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#8B2B3A' }}>{submitted}/{total}</span><span className="dash-stat-lbl">Hours Worked</span></div>
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#6E2232' }}>{paylogged}/{total}</span><span className="dash-stat-lbl">Paylog Submitted</span></div>
-        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#501A28' }}>{approved}/{total}</span><span className="dash-stat-lbl">Approved</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#8B2B3A' }}>{submitted}/{total}</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#6E2232' }}>{paylogged}/{total}</span></div>
+        <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#501A28' }}>{approved}/{total}</span></div>
       </div>
 
       {loading ? (
@@ -949,7 +949,6 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
   return (
     <div className="icaap-note-panel">
       <div className="icaap-note-header" style={{ borderLeftColor: color }}>
-        <span className="icaap-note-title" style={{ color }}>{title}</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {saved && <span className="icaap-note-saved">Saved ✓</span>}
           <button className="icaap-note-edit-btn" onClick={() => setEditing(e => !e)}>
