@@ -29,6 +29,7 @@ export default function Sidebar({
   const [adding, setAdding] = useState(false)
   const [filterProject, setFilterProject] = useState('All')
   const [openSection, setOpenSection] = useState(null)
+  const [collapsed, setCollapsed] = useState(false)
 
   async function handleAdd(e) {
     e.preventDefault()
@@ -64,18 +65,22 @@ export default function Sidebar({
         key={subTab ? `${targetView}-${subTab}` : targetView}
         className={`sidebar-nav-item${isActive ? ' active' : ''}`}
         onClick={handleClick}
+        title={collapsed ? label : undefined}
       >
         <span className="nav-icon">{icon}</span>
-        {label}
+        {!collapsed && label}
       </button>
     )
   }
 
   return (
     <>
-      <aside className="sidebar">
+      <aside className={`sidebar${collapsed ? ' sidebar-collapsed' : ''}`}>
         <div className="sidebar-header">
-          <div className="logo">
+          <button className="sidebar-collapse-btn" onClick={() => setCollapsed(c => !c)} title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+            {collapsed ? '›' : '‹'}
+          </button>
+          <div className="logo" style={{ display: collapsed ? 'none' : 'flex' }}>
             <span className="logo-icon">◆</span>
             <span className="logo-text">My Meridian Planner</span>
           </div>
@@ -85,14 +90,14 @@ export default function Sidebar({
         <div className="sidebar-nav-scroll">
           {/* Nav: PLANNER */}
           <div className="sidebar-nav-section">
-            <div className="sidebar-nav-label">Planner</div>
+            {!collapsed && <div className="sidebar-nav-label">Planner</div>}
             {navItem('📅', 'Month', 'month')}
             {navItem('📆', 'Week', 'week')}
           </div>
 
           {/* Nav: WORK */}
           <div className="sidebar-nav-section">
-            <div className="sidebar-nav-label">Work</div>
+            {!collapsed && <div className="sidebar-nav-label">Work</div>}
             {navItem('📋', 'CSEA', 'csea')}
             {navItem('📊', 'iCAAP', 'icaap')}
             {navItem('🎓', 'GCU', 'gcu')}
@@ -101,7 +106,7 @@ export default function Sidebar({
 
           {/* Nav: PERSONAL */}
           <div className="sidebar-nav-section">
-            <div className="sidebar-nav-label">Personal</div>
+            {!collapsed && <div className="sidebar-nav-label">Personal</div>}
             {navItem('📝', 'Daily Log', 'personal', 'log')}
             {navItem('🎯', 'My Goals', 'personal', 'goals')}
             {navItem('✅', 'Monthly Checklist', 'personal', 'checklist')}
@@ -112,7 +117,7 @@ export default function Sidebar({
 
           {/* Nav: NOTES (overlays) */}
           <div className="sidebar-nav-section">
-            <div className="sidebar-nav-label">Notes</div>
+            {!collapsed && <div className="sidebar-nav-label">Notes</div>}
             {SECTION_LINKS.map(sec => sec.key === 'journal' ? (
               <a
                 key={sec.key}
@@ -120,18 +125,20 @@ export default function Sidebar({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="sidebar-nav-item"
+                title={collapsed ? sec.label : undefined}
               >
                 <span className="nav-icon">{sec.icon}</span>
-                {sec.label}
+                {!collapsed && sec.label}
               </a>
             ) : (
               <button
                 key={sec.key}
                 className="sidebar-nav-item"
                 onClick={() => setOpenSection(sec.key)}
+                title={collapsed ? sec.label : undefined}
               >
                 <span className="nav-icon">{sec.icon}</span>
-                {sec.label}
+                {!collapsed && sec.label}
               </button>
             ))}
           </div>
@@ -140,14 +147,16 @@ export default function Sidebar({
         <div className="sidebar-footer">
           <div className="user-row">
             {avatarUrl ? (
-              <img src={avatarUrl} className="user-avatar" alt="" />
+              <img src={avatarUrl} className="user-avatar" alt={displayName} />
             ) : (
               <div className="user-avatar-placeholder">{displayName[0].toUpperCase()}</div>
             )}
-            <div className="user-info">
-              <span className="user-name">{displayName}</span>
-              <button className="sign-out-btn" onClick={signOut}>Sign out</button>
-            </div>
+            {!collapsed && (
+              <div className="user-info">
+                <span className="user-name">{displayName}</span>
+                <button className="sign-out-btn" onClick={signOut}>Sign out</button>
+              </div>
+            )}
           </div>
         </div>
       </aside>

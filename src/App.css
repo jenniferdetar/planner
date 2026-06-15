@@ -1,12 +1,11 @@
 .app {
-  display: grid;
-  grid-template-columns: 200px 1fr;
+  display: flex;
   height: 100vh;
   overflow: hidden;
   background: #f5f4f0;
 }
 
-/* Wrapper divs are invisible to the grid on desktop */
+/* Wrapper divs are invisible to the flex layout on desktop */
 .app > div {
   display: contents;
 }
