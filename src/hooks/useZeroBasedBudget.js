@@ -4,6 +4,12 @@ import { supabase } from '../lib/supabase'
 // [name, default_monthly_amount]
 const DEFAULT_SECTIONS = [
   {
+    section: 'Giving',
+    envelopes: [
+      ['Tithe', 0],
+    ],
+  },
+  {
     section: 'Housing',
     envelopes: [
       ['Mortgage', 2025],
