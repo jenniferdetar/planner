@@ -530,6 +530,14 @@
 }
 
 /* Extra Hours sub-tabs */
+.icaap-extrahours {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .icaap-extrahours-tabs {
   display: flex;
   gap: 8px;
