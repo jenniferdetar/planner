@@ -529,6 +529,38 @@
   }
 }
 
+/* Extra Hours sub-tabs */
+.icaap-extrahours-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 14px 20px 0;
+  border-bottom: 1px solid #e8e5de;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.icaap-extrahours-tab {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #999;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.icaap-extrahours-tab:hover { color: #555; }
+
+.icaap-extrahours-tab.active {
+  color: #1a1a2e;
+  border-bottom-color: #4a7ab5;
+}
+
 .icaap-tab-badge {
   display: inline-flex;
   align-items: center;
