@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import './FinancialPanel.css'
+import ZeroBasedBudget from './ZeroBasedBudget'
 
 const EXPENSE_CATEGORIES = ['Housing', 'Food', 'Transport', 'Utilities', 'Healthcare', 'Entertainment', 'Shopping', 'Savings', 'Other']
 
@@ -55,7 +56,7 @@ export default function FinancialPanel({
       {tab === 'tracker' && <PaycheckTracker bills={bills} paychecks={paychecks} onAdd={onAddPaycheck} onUpdateAmount={onUpdatePaycheckAmount} onToggleBill={onTogglePaycheckBill} onDelete={onDeletePaycheck} />}
       {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
       {tab === 'coins' && <CoinsTab userId={userId} />}
-      {tab === 'budget' && <BudgetTab bills={bills} userId={userId} />}
+      {tab === 'budget' && <ZeroBasedBudget userId={userId} />}
     </div>
   )
 }

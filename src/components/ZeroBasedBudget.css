@@ -1,0 +1,687 @@
+/* ── Root ── */
+.zbb-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #faf9f6;
+  font-family: 'Nunito', sans-serif;
+}
+
+.zbb-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* ── Header bar ── */
+.zbb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.zbb-month-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zbb-nav-btn {
+  background: none;
+  border: 1px solid #e0ddd7;
+  border-radius: 5px;
+  padding: 2px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #555;
+  transition: all 0.15s;
+}
+.zbb-nav-btn:hover { background: #f5f4f0; }
+
+.zbb-month-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+  min-width: 140px;
+  text-align: center;
+}
+
+.zbb-chips {
+  display: flex;
+  gap: 10px;
+}
+
+.zbb-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  background: #f5f4f0;
+  border-radius: 8px;
+  border: 1px solid #e8e5de;
+  min-width: 90px;
+}
+
+.zbb-chip-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.zbb-chip-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-top: 2px;
+}
+
+.zbb-chip.chip-green .zbb-chip-value { color: #2e7d32; }
+.zbb-chip.chip-red .zbb-chip-value { color: #8B2B3A; }
+.zbb-chip.chip-over .zbb-chip-value { color: #c0392b; }
+
+/* ── Two-column body ── */
+.zbb-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Income panel ── */
+.zbb-income-panel {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e8e5de;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.zbb-panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #888;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+}
+
+.zbb-panel-total {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.zbb-paycheck-list {
+  flex: 1;
+}
+
+.zbb-empty-msg {
+  padding: 16px;
+  font-size: 13px;
+  color: #bbb;
+  text-align: center;
+}
+
+/* ── Paycheck item ── */
+.zbb-paycheck-item {
+  border-bottom: 1px solid #f0ede8;
+}
+
+.zbb-paycheck-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 14px;
+  gap: 8px;
+}
+
+.zbb-paycheck-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.zbb-paycheck-date {
+  font-size: 12px;
+  color: #888;
+  font-weight: 600;
+}
+
+.zbb-paycheck-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.zbb-paycheck-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.zbb-paycheck-assigned {
+  color: #555;
+  font-weight: 600;
+}
+
+.zbb-paycheck-unassigned {
+  color: #8B2B3A;
+  font-weight: 600;
+}
+
+.zbb-paycheck-unassigned.zero { color: #2e7d32; }
+.zbb-paycheck-unassigned.over { color: #c0392b; }
+
+.zbb-paycheck-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.zbb-btn-assign {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 3px 9px;
+  border: 1px solid #8B2B3A;
+  border-radius: 5px;
+  color: #8B2B3A;
+  background: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.zbb-btn-assign:hover { background: #8B2B3A; color: #fff; }
+
+.zbb-btn-delete-sm {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.zbb-btn-delete-sm:hover { color: #c0392b; }
+
+/* ── Allocation form ── */
+.zbb-alloc-form {
+  background: #f5f4f0;
+  border-top: 1px solid #e8e5de;
+  padding: 12px 14px;
+}
+
+.zbb-alloc-summary {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.zbb-alloc-left { color: #8B2B3A; }
+.zbb-alloc-left.zero { color: #2e7d32; }
+.zbb-alloc-left.over { color: #c0392b; font-weight: 700; }
+
+.zbb-alloc-warning {
+  font-size: 11px;
+  color: #c0392b;
+  background: #fdecea;
+  border: 1px solid #f5c6c6;
+  border-radius: 5px;
+  padding: 5px 8px;
+  margin-bottom: 8px;
+}
+
+.zbb-alloc-envelopes {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.zbb-alloc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zbb-alloc-label {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.zbb-alloc-section {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #aaa;
+}
+
+.zbb-alloc-name {
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zbb-alloc-input {
+  width: 70px;
+  padding: 4px 6px;
+  font-size: 12px;
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: right;
+  flex-shrink: 0;
+  outline: none;
+}
+.zbb-alloc-input:focus { border-color: #8B2B3A; }
+
+.zbb-alloc-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ── Shared buttons ── */
+.zbb-btn-save {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: inherit;
+  background: #8B2B3A;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.zbb-btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+.zbb-btn-save:not(:disabled):hover { opacity: 0.85; }
+.zbb-btn-save.sm { padding: 4px 10px; font-size: 11px; }
+
+.zbb-btn-cancel {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  background: none;
+  color: #888;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.zbb-btn-cancel:hover { color: #333; border-color: #aaa; }
+.zbb-btn-cancel.sm { padding: 4px 8px; font-size: 11px; }
+
+/* ── Add paycheck form ── */
+.zbb-add-pc-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 10px 14px;
+  border-top: 1px solid #e8e5de;
+  flex-wrap: wrap;
+}
+
+.zbb-pc-input {
+  flex: 1;
+  min-width: 80px;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+.zbb-pc-input:focus { border-color: #8B2B3A; }
+
+.zbb-add-pc-btn {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8B2B3A;
+  background: none;
+  border: none;
+  border-top: 1px solid #e8e5de;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.zbb-add-pc-btn:hover { background: #fdf0f0; }
+
+/* ── Envelopes panel ── */
+.zbb-envelopes-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-bottom: 16px;
+}
+
+/* Column headers */
+.zbb-env-col-headers {
+  display: grid;
+  grid-template-columns: 1fr 100px 100px 110px 28px;
+  padding: 10px 16px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: #aaa;
+  border-bottom: 1px solid #e8e5de;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.zbb-col-budgeted, .zbb-col-spent, .zbb-col-remaining { text-align: right; }
+
+/* ── Section ── */
+.zbb-section {
+  border-bottom: 1px solid #e8e5de;
+}
+
+.zbb-section-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 8px 16px;
+  background: #f5f4f0;
+}
+
+.zbb-section-name {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.zbb-section-totals {
+  display: grid;
+  grid-template-columns: 100px 100px 110px 28px;
+  text-align: right;
+}
+
+.zbb-section-budgeted, .zbb-section-spent {
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+}
+
+.zbb-section-remaining {
+  font-size: 11px;
+  font-weight: 700;
+  color: #2e7d32;
+}
+.zbb-section-remaining.over { color: #c0392b; }
+
+/* ── Envelope row ── */
+.zbb-envelope-row-wrap {
+  background: #fff;
+}
+
+.zbb-envelope-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 100px 110px 28px;
+  align-items: center;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f5f4f0;
+  transition: background 0.12s;
+}
+.zbb-envelope-row:hover { background: #fdf9f7; }
+
+.zbb-env-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #2a2520;
+  font-weight: 500;
+}
+
+.zbb-env-chevron {
+  font-size: 10px;
+  color: #bbb;
+  flex-shrink: 0;
+}
+
+.zbb-env-budgeted, .zbb-env-spent {
+  font-size: 13px;
+  color: #555;
+  text-align: right;
+}
+
+.zbb-env-remaining {
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+}
+.zbb-env-remaining.ok { color: #2e7d32; }
+.zbb-env-remaining.over { color: #c0392b; }
+.zbb-env-remaining.neutral { color: #aaa; }
+
+.zbb-env-zero { color: #ccc; }
+
+.zbb-bar-track {
+  height: 3px;
+  background: #eee;
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.zbb-bar-fill {
+  height: 100%;
+  background: #4caf50;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+.zbb-bar-fill.over { background: #c0392b; }
+
+.zbb-env-del {
+  text-align: center;
+  font-size: 16px;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.15s;
+  line-height: 1;
+}
+.zbb-env-del:hover { color: #c0392b; }
+
+/* ── Spending section ── */
+.zbb-spend-section {
+  padding: 8px 16px 12px 32px;
+  background: #fdf9f7;
+  border-bottom: 1px solid #f0ede8;
+}
+
+.zbb-spend-empty {
+  font-size: 12px;
+  color: #bbb;
+  margin: 0 0 8px;
+}
+
+.zbb-spend-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid #f5f4f0;
+  font-size: 12px;
+}
+
+.zbb-spend-date {
+  color: #999;
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 48px;
+}
+
+.zbb-spend-desc {
+  flex: 1;
+  color: #444;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zbb-spend-amt {
+  font-weight: 700;
+  color: #8B2B3A;
+  flex-shrink: 0;
+}
+
+.zbb-spend-del {
+  background: none;
+  border: none;
+  color: #ddd;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.zbb-spend-del:hover { color: #c0392b; }
+
+.zbb-spend-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.zbb-spend-input {
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+.zbb-spend-input:focus { border-color: #8B2B3A; }
+.zbb-spend-input.amount { width: 80px; }
+.zbb-spend-input.desc { flex: 1; min-width: 100px; }
+.zbb-spend-input.date { width: 120px; }
+
+.zbb-add-spend-btn {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8B2B3A;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.zbb-add-spend-btn:hover { opacity: 1; }
+
+/* ── Add envelope form ── */
+.zbb-add-env-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 8px 16px;
+  background: #fff;
+}
+
+.zbb-add-env-input {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+.zbb-add-env-input:focus { border-color: #8B2B3A; }
+
+.zbb-add-env-btn {
+  padding: 7px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.15s;
+}
+.zbb-add-env-btn:hover { color: #8B2B3A; }
+
+/* ── Add section ── */
+.zbb-add-section-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f5f4f0;
+  border-top: 1px solid #e8e5de;
+}
+
+.zbb-add-section-input {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 13px;
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+.zbb-add-section-input:focus { border-color: #8B2B3A; }
+
+.zbb-add-section-btn {
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #aaa;
+  background: none;
+  border: none;
+  border-top: 1px solid #e8e5de;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.15s;
+  background: #f5f4f0;
+}
+.zbb-add-section-btn:hover { color: #555; }
