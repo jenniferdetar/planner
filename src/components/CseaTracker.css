@@ -36,10 +36,10 @@
 
 .csea-stat-lbl {
   font-size: 9px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #bbb;
+  color: #888;
   margin-top: 3px;
 }
 
@@ -74,6 +74,7 @@
 .csea-tab:nth-child(1) { background: #4a7a6a; }
 .csea-tab:nth-child(2) { background: #3d6a5a; }
 .csea-tab:nth-child(3) { background: #2d5560; }
+.csea-tab:nth-child(4) { background: #1e3342; }
 
 .csea-panel {
   flex: 1;
@@ -94,10 +95,10 @@
 
 .csea-toolbar-label {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #bbb;
+  color: #4a7a6a;
 }
 
 .csea-filter-pills {
@@ -698,11 +699,15 @@
 .interaction-group-count { background: rgba(74,122,106,0.2); color: #7a6030 !important; }
 .interaction-group-toggle { color: #4a7a6a !important; }
 
-/* ── Goals palette ── */
+/* ── Stat palette ── */
 .csea-stat:nth-child(1) .csea-stat-num { color: #4a7a6a !important; }
 .csea-stat:nth-child(2) .csea-stat-num { color: #3d6a5a !important; }
 .csea-stat:nth-child(3) .csea-stat-num { color: #2d5560 !important; }
 .csea-stat:nth-child(4) .csea-stat-num { color: #1e3342 !important; }
+.csea-stat:nth-child(1) .csea-stat-lbl { color: #4a7a6a; }
+.csea-stat:nth-child(2) .csea-stat-lbl { color: #3d6a5a; }
+.csea-stat:nth-child(3) .csea-stat-lbl { color: #2d5560; }
+.csea-stat:nth-child(4) .csea-stat-lbl { color: #1e3342; }
 
 .csea-tab.active { border-bottom-color: #4a7a6a; }
 
