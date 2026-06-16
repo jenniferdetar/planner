@@ -12,8 +12,8 @@ const GENERATIONS = [
 
 const RELATIONSHIPS = [
   'self', 'spouse', 'parent', 'step-parent', 'grandmother', 'grandfather', 'great-grandparent',
-  'sibling', 'half-sibling', 'step-sibling', 'brother-in-law', 'sister-in-law',
-  'aunt/uncle', 'niece', 'nephew', 'cousin', 'child', 'step-child', 'grandchild', 'other',
+  'brother', 'sister', 'half-sibling', 'step-sibling', 'brother-in-law', 'sister-in-law',
+  'aunt', 'uncle', 'niece', 'nephew', 'cousin', 'child', 'step-child', 'grandchild', 'other',
 ]
 
 // Samples-Detar Family Tree seed data from Ancestry.com
@@ -28,29 +28,29 @@ const SAMPLES_DETAR_DEFAULTS = [
   // ── Parents' generation (generation -1) ──
   { name: 'Terry Allen Samples', birth_year: '1954', death_year: '', relationship: 'parent', generation: -1, side: 'Paternal (Samples)', sort_order: 1 },
   { name: 'Gayle Marie Gramenz', birth_year: '1955', death_year: '', relationship: 'parent', generation: -1, side: 'Maternal (Gramenz)', sort_order: 2 },
-  { name: 'Paul Victor Samples Jr', birth_year: '1953', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Paternal (Samples)', sort_order: 3 },
-  { name: 'Lynda Ann Carpenter', birth_year: '1953', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Paternal (Samples)', sort_order: 4 },
-  { name: 'James M Samples', birth_year: '1965', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Paternal (Samples)', sort_order: 5 },
-  { name: 'Rosa Maria Gonzalez', birth_year: '1965', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Paternal (Samples)', sort_order: 6 },
-  { name: 'John T Kersey', birth_year: '1945', death_year: '2020', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 7 },
-  { name: 'Merriellan E Gramenz', birth_year: '1943', death_year: '2016', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 8 },
-  { name: 'Dennison L Strong', birth_year: '1947', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 9 },
-  { name: 'Dianne E Gramenz', birth_year: '1945', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 10 },
-  { name: 'Norman K Todd', birth_year: '1942', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 11 },
-  { name: 'Maureen A Gallagher', birth_year: '1955', death_year: '2022', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 12 },
-  { name: 'Gary James Gramenz', birth_year: '1961', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 13 },
-  { name: 'Patrice M Grimm', birth_year: '1954', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 14 },
-  { name: 'Christopher Giampletro', birth_year: '1958', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 15 },
-  { name: 'Christine T Gramenz', birth_year: '1962', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 16 },
-  { name: 'Christopher Nelson', birth_year: '1971', death_year: '', relationship: 'aunt/uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 17 },
+  { name: 'Paul Victor Samples Jr', birth_year: '1953', death_year: '', relationship: 'uncle', generation: -1, side: 'Paternal (Samples)', sort_order: 3 },
+  { name: 'Lynda Ann Carpenter', birth_year: '1953', death_year: '', relationship: 'aunt', generation: -1, side: 'Paternal (Samples)', sort_order: 4 },
+  { name: 'James M Samples', birth_year: '1965', death_year: '', relationship: 'uncle', generation: -1, side: 'Paternal (Samples)', sort_order: 5 },
+  { name: 'Rosa Maria Gonzalez', birth_year: '1965', death_year: '', relationship: 'aunt', generation: -1, side: 'Paternal (Samples)', sort_order: 6 },
+  { name: 'John T Kersey', birth_year: '1945', death_year: '2020', relationship: 'uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 7 },
+  { name: 'Merriellan E Gramenz', birth_year: '1943', death_year: '2016', relationship: 'aunt', generation: -1, side: 'Maternal (Gramenz)', sort_order: 8 },
+  { name: 'Dennison L Strong', birth_year: '1947', death_year: '', relationship: 'uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 9 },
+  { name: 'Dianne E Gramenz', birth_year: '1945', death_year: '', relationship: 'aunt', generation: -1, side: 'Maternal (Gramenz)', sort_order: 10 },
+  { name: 'Norman K Todd', birth_year: '1942', death_year: '', relationship: 'uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 11 },
+  { name: 'Maureen A Gallagher', birth_year: '1955', death_year: '2022', relationship: 'aunt', generation: -1, side: 'Maternal (Gramenz)', sort_order: 12 },
+  { name: 'Gary James Gramenz', birth_year: '1961', death_year: '', relationship: 'uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 13 },
+  { name: 'Patrice M Grimm', birth_year: '1954', death_year: '', relationship: 'aunt', generation: -1, side: 'Maternal (Gramenz)', sort_order: 14 },
+  { name: 'Christopher Giampletro', birth_year: '1958', death_year: '', relationship: 'uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 15 },
+  { name: 'Christine T Gramenz', birth_year: '1962', death_year: '', relationship: 'aunt', generation: -1, side: 'Maternal (Gramenz)', sort_order: 16 },
+  { name: 'Christopher Nelson', birth_year: '1971', death_year: '', relationship: 'uncle', generation: -1, side: 'Maternal (Gramenz)', sort_order: 17 },
 
   // ── My generation (generation 0) ──
   { name: 'Jennifer M Samples Detar', birth_year: '1977', death_year: '', relationship: 'self', generation: 0, side: '', sort_order: 1 },
   { name: 'Jeffery W Detar', birth_year: '1974', death_year: '', relationship: 'spouse', generation: 0, side: '', sort_order: 2 },
-  { name: 'Christopher Plant', birth_year: '1979', death_year: '', relationship: 'sibling', generation: 0, side: '', sort_order: 3 },
-  { name: 'Jana Lynn Samples', birth_year: '1979', death_year: '', relationship: 'sibling', generation: 0, side: '', sort_order: 4 },
-  { name: 'Chris S Sikorowski', birth_year: '1976', death_year: '', relationship: 'sibling', generation: 0, side: '', sort_order: 5 },
-  { name: 'Allison Ann Samples', birth_year: '1981', death_year: '', relationship: 'sibling', generation: 0, side: '', sort_order: 6 },
+  { name: 'Christopher Plant', birth_year: '1979', death_year: '', relationship: 'brother', generation: 0, side: '', sort_order: 3 },
+  { name: 'Jana Lynn Samples', birth_year: '1979', death_year: '', relationship: 'sister', generation: 0, side: '', sort_order: 4 },
+  { name: 'Chris S Sikorowski', birth_year: '1976', death_year: '', relationship: 'brother', generation: 0, side: '', sort_order: 5 },
+  { name: 'Allison Ann Samples', birth_year: '1981', death_year: '', relationship: 'sister', generation: 0, side: '', sort_order: 6 },
 
   // ── Nieces & Nephews (generation 1) ──
   { name: 'Jacee Lynn Plant', birth_year: '2008', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 1, likes: 'Old vinyl records, musicals, the beach, seashells, jewelry, make up, hair products, clothes, Dutch Bros, Starbucks' },
@@ -61,7 +61,7 @@ const SAMPLES_DETAR_DEFAULTS = [
   { name: 'Jacob Sikorowski', birth_year: '2018', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 6 },
 ]
 
-const BLANK = { name: '', birth_year: '', death_year: '', relationship: 'sibling', generation: 0, side: '', notes: '', likes: '', dislikes: '' }
+const BLANK = { name: '', birth_year: '', death_year: '', relationship: 'brother', generation: 0, side: '', notes: '', likes: '', dislikes: '' }
 
 export default function FamilyTreePanel({ members = [], onAddMember, onUpdateMember, onDeleteMember, onImportDefaults }) {
   const [showModal, setShowModal] = useState(false)
@@ -211,9 +211,9 @@ function relClass(rel) {
   if (['parent', 'step-parent'].includes(rel)) return 'ft-rel-parent'
   if (['grandmother', 'grandfather', 'grandparent'].includes(rel)) return 'ft-rel-grandparent'
   if (rel === 'great-grandparent') return 'ft-rel-great-gp'
-  if (['sibling', 'half-sibling', 'step-sibling'].includes(rel)) return 'ft-rel-sibling'
+  if (['brother', 'sister', 'half-sibling', 'step-sibling'].includes(rel)) return 'ft-rel-sibling'
   if (['brother-in-law', 'sister-in-law'].includes(rel)) return 'ft-rel-in-law'
-  if (rel === 'aunt/uncle') return 'ft-rel-aunt-uncle'
+  if (['aunt', 'uncle'].includes(rel)) return 'ft-rel-aunt-uncle'
   if (['niece', 'nephew', 'niece/nephew'].includes(rel)) return 'ft-rel-niece-neph'
   if (['child', 'step-child'].includes(rel)) return 'ft-rel-child'
   if (rel === 'grandchild') return 'ft-rel-grandchild'
