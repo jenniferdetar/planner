@@ -71,7 +71,7 @@ export default function DailyPlanner({
   onPushGcuToAsana, gcuPushing,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
   personalSubTab, onPersonalSubTabChange,
-  familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember,
+  familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -233,6 +233,7 @@ export default function DailyPlanner({
           onAddMember={onAddFamilyMember}
           onUpdateMember={onUpdateFamilyMember}
           onDeleteMember={onDeleteFamilyMember}
+          onImportDefaults={onImportFamilyDefaults}
         />
       )}
 

@@ -87,7 +87,7 @@ export default function App() {
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
-  const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember } = useFamilyTree(userId)
+  const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
   const { tasksByDate: weeklyTasks, toggleTask: toggleWeeklyTask, addTask: addWeeklyTask } = useWeeklyTasks(userId, selectedDate)
 
@@ -308,6 +308,7 @@ export default function App() {
           onAddFamilyMember={addFamilyMember}
           onUpdateFamilyMember={updateFamilyMember}
           onDeleteFamilyMember={deleteFamilyMember}
+          onImportFamilyDefaults={importFamilyDefaults}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
