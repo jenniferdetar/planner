@@ -113,6 +113,7 @@ export default function Sidebar({
             {navItem('📚', 'Library', 'personal', 'library')}
             {navItem('💭', 'My Mantra', 'personal', 'mantra')}
             {navItem('🛍️', 'Wants', 'personal', 'budget')}
+            {navItem('🌳', 'Family Tree', 'family')}
           </div>
 
           {/* Nav: NOTES (overlays) */}

@@ -13,6 +13,7 @@ import { useAsanaTasks } from './hooks/useAsanaTasks'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
+import { useFamilyTree } from './hooks/useFamilyTree'
 import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
 import LoginScreen from './components/LoginScreen'
@@ -86,6 +87,7 @@ export default function App() {
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
+  const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
   const { tasksByDate: weeklyTasks, toggleTask: toggleWeeklyTask, addTask: addWeeklyTask } = useWeeklyTasks(userId, selectedDate)
 
@@ -302,6 +304,10 @@ export default function App() {
           onAddWeeklyTask={addWeeklyTask}
           personalSubTab={personalSubTab}
           onPersonalSubTabChange={setPersonalSubTab}
+          familyMembers={familyMembers}
+          onAddFamilyMember={addFamilyMember}
+          onUpdateFamilyMember={updateFamilyMember}
+          onDeleteFamilyMember={deleteFamilyMember}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>

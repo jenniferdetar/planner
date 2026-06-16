@@ -9,6 +9,7 @@ import IcaapTracker from './IcaapTracker'
 import LibraryPanel from './LibraryPanel'
 import GcuPanel from './GcuPanel'
 import PersonalPanel from './PersonalPanel'
+import FamilyTreePanel from './FamilyTreePanel'
 import { TASK_AREAS } from './Sidebar'
 
 
@@ -70,6 +71,7 @@ export default function DailyPlanner({
   onPushGcuToAsana, gcuPushing,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
   personalSubTab, onPersonalSubTabChange,
+  familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -222,6 +224,15 @@ export default function DailyPlanner({
           onTogglePaycheckBill={onTogglePaycheckBill}
           onDeletePaycheck={onDeletePaycheck}
           userId={userId}
+        />
+      )}
+
+      {view === 'family' && (
+        <FamilyTreePanel
+          members={familyMembers || []}
+          onAddMember={onAddFamilyMember}
+          onUpdateMember={onUpdateFamilyMember}
+          onDeleteMember={onDeleteFamilyMember}
         />
       )}
 
