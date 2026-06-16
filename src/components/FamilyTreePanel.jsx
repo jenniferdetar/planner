@@ -11,19 +11,19 @@ const GENERATIONS = [
 ]
 
 const RELATIONSHIPS = [
-  'self', 'spouse', 'parent', 'step-parent', 'grandparent', 'great-grandparent',
+  'self', 'spouse', 'parent', 'step-parent', 'grandmother', 'grandfather', 'great-grandparent',
   'sibling', 'half-sibling', 'step-sibling', 'brother-in-law', 'sister-in-law',
-  'aunt/uncle', 'niece/nephew', 'cousin', 'child', 'step-child', 'grandchild', 'other',
+  'aunt/uncle', 'niece', 'nephew', 'cousin', 'child', 'step-child', 'grandchild', 'other',
 ]
 
 // Samples-Detar Family Tree seed data from Ancestry.com
 const SAMPLES_DETAR_DEFAULTS = [
   // ── Grandparents (generation -2) ──
-  { name: 'Paul Victor Samples Sr', birth_year: '1932', death_year: '2025', relationship: 'grandparent', generation: -2, side: 'Paternal (Samples)', sort_order: 1 },
-  { name: 'Mary Emma Frazier', birth_year: '1943', death_year: '2020', relationship: 'grandparent', generation: -2, side: 'Paternal (Samples)', sort_order: 2 },
-  { name: 'James Milo Gramenz', birth_year: '1923', death_year: '2009', relationship: 'grandparent', generation: -2, side: 'Maternal (Gramenz)', sort_order: 3 },
-  { name: 'Lois Marie Ebeling', birth_year: '1925', death_year: '2024', relationship: 'grandparent', generation: -2, side: 'Maternal (Gramenz)', sort_order: 4 },
-  { name: 'Wilber A Hewitt II', birth_year: '1924', death_year: '1996', relationship: 'grandparent', generation: -2, side: 'Maternal (Gramenz)', sort_order: 5 },
+  { name: 'Paul Victor Samples Sr', birth_year: '1932', death_year: '2025', relationship: 'grandfather', generation: -2, side: 'Paternal (Samples)', sort_order: 1 },
+  { name: 'Mary Emma Frazier', birth_year: '1943', death_year: '2020', relationship: 'grandmother', generation: -2, side: 'Paternal (Samples)', sort_order: 2 },
+  { name: 'James Milo Gramenz', birth_year: '1923', death_year: '2009', relationship: 'grandfather', generation: -2, side: 'Maternal (Gramenz)', sort_order: 3 },
+  { name: 'Lois Marie Ebeling', birth_year: '1925', death_year: '2024', relationship: 'grandmother', generation: -2, side: 'Maternal (Gramenz)', sort_order: 4 },
+  { name: 'Wilber A Hewitt II', birth_year: '1924', death_year: '1996', relationship: 'grandfather', generation: -2, side: 'Maternal (Gramenz)', sort_order: 5 },
 
   // ── Parents' generation (generation -1) ──
   { name: 'Terry Allen Samples', birth_year: '1954', death_year: '', relationship: 'parent', generation: -1, side: 'Paternal (Samples)', sort_order: 1 },
@@ -53,12 +53,12 @@ const SAMPLES_DETAR_DEFAULTS = [
   { name: 'Allison Ann Samples', birth_year: '1981', death_year: '', relationship: 'sibling', generation: 0, side: '', sort_order: 6 },
 
   // ── Nieces & Nephews (generation 1) ──
-  { name: 'Jacee Lynn Plant', birth_year: '2008', death_year: '', relationship: 'niece/nephew', generation: 1, side: "Christopher Plant's", sort_order: 1 },
-  { name: 'Jaelyn Rae Plant', birth_year: '2009', death_year: '', relationship: 'niece/nephew', generation: 1, side: "Christopher Plant's", sort_order: 2 },
-  { name: 'Joie A M Plant', birth_year: '2016', death_year: '', relationship: 'niece/nephew', generation: 1, side: "Christopher Plant's", sort_order: 3 },
-  { name: 'Elias Sikorowski', birth_year: '2013', death_year: '', relationship: 'niece/nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 4 },
-  { name: 'Brasen J Sikorowski', birth_year: '2016', death_year: '', relationship: 'niece/nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 5 },
-  { name: 'Jacob Sikorowski', birth_year: '2018', death_year: '', relationship: 'niece/nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 6 },
+  { name: 'Jacee Lynn Plant', birth_year: '2008', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 1 },
+  { name: 'Jaelyn Rae Plant', birth_year: '2009', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 2 },
+  { name: 'Joie A M Plant', birth_year: '2016', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 3 },
+  { name: 'Elias Sikorowski', birth_year: '2013', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 4 },
+  { name: 'Brasen J Sikorowski', birth_year: '2016', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 5 },
+  { name: 'Jacob Sikorowski', birth_year: '2018', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 6 },
 ]
 
 const BLANK = { name: '', birth_year: '', death_year: '', relationship: 'sibling', generation: 0, side: '', notes: '', likes: '', dislikes: '' }
@@ -209,12 +209,12 @@ function relClass(rel) {
   if (rel === 'self') return 'ft-self'
   if (rel === 'spouse') return 'ft-spouse'
   if (['parent', 'step-parent'].includes(rel)) return 'ft-rel-parent'
-  if (rel === 'grandparent') return 'ft-rel-grandparent'
+  if (['grandmother', 'grandfather', 'grandparent'].includes(rel)) return 'ft-rel-grandparent'
   if (rel === 'great-grandparent') return 'ft-rel-great-gp'
   if (['sibling', 'half-sibling', 'step-sibling'].includes(rel)) return 'ft-rel-sibling'
   if (['brother-in-law', 'sister-in-law'].includes(rel)) return 'ft-rel-in-law'
   if (rel === 'aunt/uncle') return 'ft-rel-aunt-uncle'
-  if (rel === 'niece/nephew') return 'ft-rel-niece-neph'
+  if (['niece', 'nephew', 'niece/nephew'].includes(rel)) return 'ft-rel-niece-neph'
   if (['child', 'step-child'].includes(rel)) return 'ft-rel-child'
   if (rel === 'grandchild') return 'ft-rel-grandchild'
   return ''
