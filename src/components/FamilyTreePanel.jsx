@@ -12,7 +12,7 @@ const GENERATIONS = [
 
 const RELATIONSHIPS = [
   'self', 'spouse', 'parent', 'step-parent', 'grandparent', 'great-grandparent',
-  'sibling', 'half-sibling', 'step-sibling', 'sibling-in-law',
+  'sibling', 'half-sibling', 'step-sibling', 'brother-in-law', 'sister-in-law',
   'aunt/uncle', 'niece/nephew', 'cousin', 'child', 'step-child', 'grandchild', 'other',
 ]
 
