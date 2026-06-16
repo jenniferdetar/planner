@@ -61,7 +61,7 @@ const SAMPLES_DETAR_DEFAULTS = [
   { name: 'Jacob Sikorowski', birth_year: '2018', death_year: '', relationship: 'niece/nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 6 },
 ]
 
-const BLANK = { name: '', birth_year: '', death_year: '', relationship: 'sibling', generation: 0, side: '', notes: '' }
+const BLANK = { name: '', birth_year: '', death_year: '', relationship: 'sibling', generation: 0, side: '', notes: '', likes: '', dislikes: '' }
 
 export default function FamilyTreePanel({ members = [], onAddMember, onUpdateMember, onDeleteMember, onImportDefaults }) {
   const [showModal, setShowModal] = useState(false)
@@ -72,7 +72,7 @@ export default function FamilyTreePanel({ members = [], onAddMember, onUpdateMem
   function openAdd() { setEditing(null); setForm(BLANK); setShowModal(true) }
   function openEdit(m) {
     setEditing(m.id)
-    setForm({ name: m.name, birth_year: m.birth_year || '', death_year: m.death_year || '', relationship: m.relationship, generation: m.generation, side: m.side || '', notes: m.notes || '' })
+    setForm({ name: m.name, birth_year: m.birth_year || '', death_year: m.death_year || '', relationship: m.relationship, generation: m.generation, side: m.side || '', notes: m.notes || '', likes: m.likes || '', dislikes: m.dislikes || '' })
     setShowModal(true)
   }
   function closeModal() { setShowModal(false); setEditing(null) }
@@ -180,6 +180,16 @@ export default function FamilyTreePanel({ members = [], onAddMember, onUpdateMem
             </div>
 
             <div className="ft-form-row">
+              <label>❤️ Likes</label>
+              <textarea value={form.likes} onChange={e => setForm(f => ({ ...f, likes: e.target.value }))} placeholder="Things they love, hobbies, favorites…" />
+            </div>
+
+            <div className="ft-form-row">
+              <label>👎 Dislikes</label>
+              <textarea value={form.dislikes} onChange={e => setForm(f => ({ ...f, dislikes: e.target.value }))} placeholder="Things they don't like…" />
+            </div>
+
+            <div className="ft-form-row">
               <label>Notes</label>
               <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Additional details…" />
             </div>
@@ -212,6 +222,22 @@ function MemberCard({ member: m, onEdit, onDelete }) {
       {yearsLabel && <div className="ft-card-years">{yearsLabel}</div>}
       <div className="ft-card-rel">{m.relationship}</div>
       {m.side && <div style={{ fontSize: 10, color: '#aaa', marginBottom: 4 }}>{m.side}</div>}
+      {(m.likes || m.dislikes) && (
+        <div className="ft-card-ld">
+          {m.likes && (
+            <div className="ft-card-ld-row ft-likes">
+              <span className="ft-ld-icon">❤️</span>
+              <span>{m.likes}</span>
+            </div>
+          )}
+          {m.dislikes && (
+            <div className="ft-card-ld-row ft-dislikes">
+              <span className="ft-ld-icon">👎</span>
+              <span>{m.dislikes}</span>
+            </div>
+          )}
+        </div>
+      )}
       {m.notes && <div className="ft-card-notes">{m.notes}</div>}
     </div>
   )
