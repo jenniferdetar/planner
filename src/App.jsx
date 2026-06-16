@@ -5,7 +5,7 @@ import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, us
 import { useWeeklyTasks } from './hooks/useWeeklyTasks'
 import { usePlannerSections } from './hooks/usePlannerSections'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
-import { useCseaIssues, useMemberInteractions } from './hooks/useCseaData'
+import { useCseaIssues, useMemberInteractions, useCseaNotes } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useTransactions, useBills, useFinancialGoals, usePaychecks } from './hooks/useFinancialData'
@@ -79,6 +79,7 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction } = useMemberInteractions(userId)
+  const { notes: cseaNotes, addNote: addCseaNote, deleteNote: deleteCseaNote } = useCseaNotes(userId)
   const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
@@ -261,6 +262,9 @@ export default function App() {
           cseaInteractions={cseaInteractions}
           onAddCseaInteraction={addCseaInteraction}
           onUpdateCseaInteraction={updateCseaInteraction}
+          cseaNotes={cseaNotes}
+          onAddCseaNote={addCseaNote}
+          onDeleteCseaNote={deleteCseaNote}
           asanaCseaTasks={asanaCseaTasks}
           asanaIcaapTasks={asanaIcaapTasks}
           onCompleteAsanaTask={completeAsanaTask}

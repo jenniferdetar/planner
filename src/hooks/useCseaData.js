@@ -118,3 +118,33 @@ export function useMemberInteractions(userId) {
 
   return { interactions, addInteraction, updateInteraction }
 }
+
+export function useCseaNotes(userId) {
+  const [notes, setNotes] = useState([])
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('csea_notes')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => setNotes(data || []))
+  }, [userId])
+
+  async function addNote(note, source) {
+    const { data } = await supabase
+      .from('csea_notes')
+      .insert({ note, source: source || null, user_id: userId })
+      .select()
+      .single()
+    if (data) setNotes((prev) => [data, ...prev])
+  }
+
+  async function deleteNote(id) {
+    await supabase.from('csea_notes').delete().eq('id', id)
+    setNotes((prev) => prev.filter((n) => n.id !== id))
+  }
+
+  return { notes, addNote, deleteNote }
+}
