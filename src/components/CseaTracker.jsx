@@ -56,12 +56,14 @@ const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes }) {
+export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote }) {
   const workLocations = useWorkLocations()
   const [tab, setTab] = useState('issues')
   const [showAddIssue, setShowAddIssue] = useState(false)
   const [showAddInteraction, setShowAddInteraction] = useState(false)
   const [filter, setFilter] = useState('active')
+  const [noteText, setNoteText] = useState('')
+  const [noteSource, setNoteSource] = useState('')
 
   const [issueForm, setIssueForm] = useState({
     issue_type: 'Grievance', member_name: '', work_location: '',
@@ -126,6 +128,7 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
       <div className="csea-tabs">
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions</button>
+        <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {cseaNotes.length > 0 && <span className="csea-tab-badge">{cseaNotes.length}</span>}</button>
         <button className={`csea-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="csea-tab-badge">{asanaTasks.length}</span>}</button>
       </div>
 
@@ -203,6 +206,51 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
             )}
             {displayIssues.map(issue => (
               <IssueCard key={issue.id} issue={issue} onUpdateStatus={onUpdateStatus} onDelete={onDeleteIssue} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === 'notes' && (
+        <div className="csea-panel">
+          <div className="csea-toolbar">
+            <span className="csea-toolbar-label">One-off notes &amp; reminders</span>
+          </div>
+          <form className="csea-notes-form" onSubmit={async (e) => {
+            e.preventDefault()
+            if (!noteText.trim()) return
+            await onAddCseaNote?.(noteText.trim(), noteSource.trim())
+            setNoteText('')
+            setNoteSource('')
+          }}>
+            <textarea
+              className="csea-textarea"
+              placeholder="Note *"
+              rows={2}
+              value={noteText}
+              onChange={e => setNoteText(e.target.value)}
+            />
+            <div className="csea-notes-form-row">
+              <input
+                className="csea-input"
+                placeholder="Source (optional)"
+                value={noteSource}
+                onChange={e => setNoteSource(e.target.value)}
+              />
+              <button type="submit" className="csea-save">Add</button>
+            </div>
+          </form>
+          <div className="csea-issue-list">
+            {cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
+            {cseaNotes.map(n => (
+              <div key={n.id} className="csea-note-row">
+                <div className="csea-note-meta">
+                  <span className="csea-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
+                  {n.source && <span className="csea-note-source">{n.source}</span>}
+                </div>
+                <div className="csea-note-text">{n.note}</div>
+                <button className="csea-note-delete" onClick={() => onDeleteCseaNote?.(n.id)} title="Delete">×</button>
+              </div>
             ))}
           </div>
         </div>
