@@ -5,6 +5,17 @@
   --ft-green-dark: #1d5236;
   --ft-gold: #d4a030;
   --ft-bark: #6b4226;
+
+  /* Relationship group colors */
+  --ft-parent:      #b86a14;
+  --ft-grandparent: #6b3fa0;
+  --ft-great-gp:    #3d2470;
+  --ft-sibling:     #1a7a7a;
+  --ft-in-law:      #2f5e9e;
+  --ft-aunt-uncle:  #b84040;
+  --ft-niece-neph:  #9e2f6a;
+  --ft-child:       #3a8a3a;
+  --ft-grandchild:  #2a8f7a;
 }
 
 .ft-panel {
@@ -132,6 +143,27 @@
 
 .ft-card.ft-spouse .ft-card-name { color: var(--ft-bark); }
 .ft-card.ft-spouse .ft-card-rel { color: var(--ft-gold); background: rgba(212,160,48,0.12); }
+
+/* ── Relationship group card themes ── */
+.ft-card.ft-rel-parent      { border-color: var(--ft-parent);      background: rgba(184,106,20,0.06); }
+.ft-card.ft-rel-grandparent { border-color: var(--ft-grandparent); background: rgba(107,63,160,0.06); }
+.ft-card.ft-rel-great-gp    { border-color: var(--ft-great-gp);    background: rgba(61,36,112,0.07); }
+.ft-card.ft-rel-sibling     { border-color: var(--ft-sibling);     background: rgba(26,122,122,0.06); }
+.ft-card.ft-rel-in-law      { border-color: var(--ft-in-law);      background: rgba(47,94,158,0.06); }
+.ft-card.ft-rel-aunt-uncle  { border-color: var(--ft-aunt-uncle);  background: rgba(184,64,64,0.06); }
+.ft-card.ft-rel-niece-neph  { border-color: var(--ft-niece-neph);  background: rgba(158,47,106,0.06); }
+.ft-card.ft-rel-child       { border-color: var(--ft-child);       background: rgba(58,138,58,0.06); }
+.ft-card.ft-rel-grandchild  { border-color: var(--ft-grandchild);  background: rgba(42,143,122,0.06); }
+
+.ft-card.ft-rel-parent      .ft-card-rel { color: var(--ft-parent);      background: rgba(184,106,20,0.1); }
+.ft-card.ft-rel-grandparent .ft-card-rel { color: var(--ft-grandparent); background: rgba(107,63,160,0.1); }
+.ft-card.ft-rel-great-gp    .ft-card-rel { color: var(--ft-great-gp);    background: rgba(61,36,112,0.1); }
+.ft-card.ft-rel-sibling     .ft-card-rel { color: var(--ft-sibling);     background: rgba(26,122,122,0.1); }
+.ft-card.ft-rel-in-law      .ft-card-rel { color: var(--ft-in-law);      background: rgba(47,94,158,0.1); }
+.ft-card.ft-rel-aunt-uncle  .ft-card-rel { color: var(--ft-aunt-uncle);  background: rgba(184,64,64,0.1); }
+.ft-card.ft-rel-niece-neph  .ft-card-rel { color: var(--ft-niece-neph);  background: rgba(158,47,106,0.1); }
+.ft-card.ft-rel-child       .ft-card-rel { color: var(--ft-child);       background: rgba(58,138,58,0.1); }
+.ft-card.ft-rel-grandchild  .ft-card-rel { color: var(--ft-grandchild);  background: rgba(42,143,122,0.1); }
 
 .ft-card-name {
   font-family: 'Give You Glory', cursive;
