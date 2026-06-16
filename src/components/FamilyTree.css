@@ -40,7 +40,7 @@
 }
 
 .ft-title {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 22px;
   color: #fff;
   margin: 0 0 3px;
@@ -166,7 +166,7 @@
 .ft-card.ft-rel-grandchild  .ft-card-rel { color: var(--ft-grandchild);  background: rgba(42,143,122,0.1); }
 
 .ft-card-name {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 15px;
   color: #2a2520;
   margin: 0 0 3px;
@@ -280,7 +280,7 @@
 }
 
 .ft-modal h3 {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 18px;
   color: var(--ft-green);
   margin: 0 0 18px;
@@ -308,7 +308,7 @@
   border-radius: 6px;
   padding: 7px 10px;
   font-size: 13px;
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   color: #2a2520;
   background: #faf9f6;
   box-sizing: border-box;
@@ -342,7 +342,7 @@
   padding: 8px 20px;
   border-radius: 8px;
   font-size: 13px;
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   cursor: pointer;
   border: none;
   transition: background 0.15s;

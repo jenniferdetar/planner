@@ -58,7 +58,7 @@
 }
 
 .personal-title {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 20px;
   font-weight: 600;
   color: #1e3342;
@@ -83,7 +83,7 @@
   transition: all 0.15s;
   cursor: pointer;
   opacity: 0.55;
-  font-family: 'Give You Glory', cursive !important;
+  font-family: 'Nunito', sans-serif !important;
 }
 
 .personal-sub-tab:hover { opacity: 0.8; }
@@ -278,7 +278,7 @@
 .mantra-edit-btn:hover { color: #555; border-color: #aaa; }
 
 .mantra-title {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 2px;
@@ -297,7 +297,7 @@
   flex: 1;
   min-height: 260px;
   padding: 20px 24px;
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 18px;
   line-height: 1.9;
   font-style: normal;
@@ -333,7 +333,7 @@
 }
 
 .mantra-paragraph {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 16px;
   line-height: 2;
   font-style: normal;
@@ -363,7 +363,7 @@
 }
 
 .goals-title {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 17px;
   font-weight: 600;
   color: #1e3342;
@@ -496,7 +496,7 @@
 }
 
 .checklist-title {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #1e3342;
@@ -616,7 +616,7 @@
 }
 
 .sheet-launcher-title {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 20px;
   font-weight: 600;
   color: #1e3342;
@@ -661,4 +661,4 @@
   }
 }
 
-.personal-sub-tab { font-family: 'Give You Glory', cursive !important; }
+.personal-sub-tab { font-family: 'Nunito', sans-serif !important; }
