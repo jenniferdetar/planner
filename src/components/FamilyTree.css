@@ -57,6 +57,16 @@
 
 .ft-add-btn:hover { background: rgba(255,255,255,0.28); }
 
+.ft-import-btn {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.ft-import-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
 /* ── Body ── */
 .ft-body {
   flex: 1;
@@ -114,6 +124,14 @@
   border-color: var(--ft-green);
   background: var(--ft-green-light);
 }
+
+.ft-card.ft-spouse {
+  border-color: var(--ft-gold);
+  background: rgba(212,160,48,0.07);
+}
+
+.ft-card.ft-spouse .ft-card-name { color: var(--ft-bark); }
+.ft-card.ft-spouse .ft-card-rel { color: var(--ft-gold); background: rgba(212,160,48,0.12); }
 
 .ft-card-name {
   font-family: 'Give You Glory', cursive;

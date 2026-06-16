@@ -36,5 +36,14 @@ export function useFamilyTree(userId) {
     setMembers(prev => prev.filter(m => m.id !== id))
   }, [])
 
-  return { members, addMember, updateMember, deleteMember }
+  const importDefaults = useCallback(async (defaults, existing) => {
+    const existingNames = new Set((existing || []).map(m => m.name.toLowerCase()))
+    const missing = defaults.filter(m => !existingNames.has(m.name.toLowerCase()))
+    if (!missing.length) return
+    const rows = missing.map(m => ({ ...m, user_id: userId }))
+    const { data } = await supabase.from('family_members').insert(rows).select()
+    if (data) setMembers(prev => [...prev, ...data])
+  }, [userId])
+
+  return { members, addMember, updateMember, deleteMember, importDefaults }
 }
