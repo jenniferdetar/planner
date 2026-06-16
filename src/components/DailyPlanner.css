@@ -48,7 +48,7 @@
 }
 
 .day-hero-num {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 72px;
   font-weight: 700;
   line-height: 1;
@@ -209,7 +209,7 @@
 }
 
 .date-main {
-  font-family: 'Give You Glory', cursive;
+  font-family: 'Nunito', sans-serif;
   font-size: 22px;
   font-weight: 600;
   color: #1e3342;
@@ -276,7 +276,7 @@
   transition: all 0.15s;
   cursor: pointer;
   white-space: nowrap;
-  font-family: 'Give You Glory', cursive !important;
+  font-family: 'Nunito', sans-serif !important;
 }
 
 .view-tab:hover { opacity: 0.8; }
@@ -1160,4 +1160,4 @@
 .ical-add-btn { padding: 5px 12px; background: #1e3342; color: #AAAA9E; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .ical-add-btn:hover { background: #2d2d4e; }
 
-.view-tab { font-family: 'Give You Glory', cursive !important; }
+.view-tab { font-family: 'Nunito', sans-serif !important; }
