@@ -205,15 +205,28 @@ export default function FamilyTreePanel({ members = [], onAddMember, onUpdateMem
   )
 }
 
+function relClass(rel) {
+  if (rel === 'self') return 'ft-self'
+  if (rel === 'spouse') return 'ft-spouse'
+  if (['parent', 'step-parent'].includes(rel)) return 'ft-rel-parent'
+  if (rel === 'grandparent') return 'ft-rel-grandparent'
+  if (rel === 'great-grandparent') return 'ft-rel-great-gp'
+  if (['sibling', 'half-sibling', 'step-sibling'].includes(rel)) return 'ft-rel-sibling'
+  if (['brother-in-law', 'sister-in-law'].includes(rel)) return 'ft-rel-in-law'
+  if (rel === 'aunt/uncle') return 'ft-rel-aunt-uncle'
+  if (rel === 'niece/nephew') return 'ft-rel-niece-neph'
+  if (['child', 'step-child'].includes(rel)) return 'ft-rel-child'
+  if (rel === 'grandchild') return 'ft-rel-grandchild'
+  return ''
+}
+
 function MemberCard({ member: m, onEdit, onDelete }) {
-  const isSelf = m.relationship === 'self'
-  const isSpouse = m.relationship === 'spouse'
   const yearsLabel = m.birth_year
     ? `${m.birth_year}–${m.death_year || 'Living'}`
     : m.death_year ? `?–${m.death_year}` : null
 
   return (
-    <div className={`ft-card${isSelf ? ' ft-self' : isSpouse ? ' ft-spouse' : ''}`}>
+    <div className={`ft-card ${relClass(m.relationship)}`}>
       <div className="ft-card-actions">
         <button className="ft-card-btn" onClick={() => onEdit(m)} title="Edit">✏️</button>
         <button className="ft-card-btn delete" onClick={() => onDelete(m.id)} title="Delete">✕</button>
