@@ -53,9 +53,9 @@ const SAMPLES_DETAR_DEFAULTS = [
   { name: 'Allison Ann Samples', birth_year: '1981', death_year: '', relationship: 'sibling', generation: 0, side: '', sort_order: 6 },
 
   // ── Nieces & Nephews (generation 1) ──
-  { name: 'Jacee Lynn Plant', birth_year: '2008', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 1 },
-  { name: 'Jaelyn Rae Plant', birth_year: '2009', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 2 },
-  { name: 'Joie A M Plant', birth_year: '2016', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 3 },
+  { name: 'Jacee Lynn Plant', birth_year: '2008', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 1, likes: 'Old vinyl records, musicals, the beach, seashells, jewelry, make up, hair products, clothes, Dutch Bros, Starbucks' },
+  { name: 'Jaelyn Rae Plant', birth_year: '2009', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 2, likes: 'Playing the guitar, jewelry, makeup products, clothes, Needo squish balls, Dutch Bros, Starbucks, the beach' },
+  { name: 'Joie A M Plant', birth_year: '2016', death_year: '', relationship: 'niece', generation: 1, side: "Christopher Plant's", sort_order: 3, likes: 'Stitch (from Lilo and Stitch), make up beauty products, clothes, Needo squish balls' },
   { name: 'Elias Sikorowski', birth_year: '2013', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 4 },
   { name: 'Brasen J Sikorowski', birth_year: '2016', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 5 },
   { name: 'Jacob Sikorowski', birth_year: '2018', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 6 },
