@@ -603,6 +603,37 @@ function ItemCard({ item, onUpdateItem, onDeleteItem, onPushToAsana, pushing, pu
 
 // ── iCAAP Dashboard ───────────────────────────────────────────────────────────
 
+function DashCell({ value, onSave, type = 'text' }) {
+  const [editing, setEditing] = useState(false)
+  const [val, setVal] = useState(value ?? '')
+
+  if (!editing && val !== (value ?? '')) setVal(value ?? '')
+
+  function commit(v) {
+    setEditing(false)
+    if (v !== (value ?? '')) onSave(v)
+  }
+
+  return editing ? (
+    <input
+      className="dash-cell-input"
+      type={type}
+      value={val}
+      onChange={e => setVal(e.target.value)}
+      onBlur={() => commit(val)}
+      onKeyDown={e => {
+        if (e.key === 'Enter') commit(val)
+        if (e.key === 'Escape') { setVal(value ?? ''); setEditing(false) }
+      }}
+      autoFocus
+    />
+  ) : (
+    <span className="dash-cell-view" onClick={() => setEditing(true)}>
+      {value || '—'}
+    </span>
+  )
+}
+
 const CURRENT_MONTH = (() => {
   const keys = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   return keys[new Date().getMonth()]
@@ -890,7 +921,7 @@ function ImportHoursModal({ onClose, onImport }) {
 }
 
 function IcaapDashboard() {
-  const { rows, loading, importPaylogRows, importHoursRows } = useIcaapDashboard()
+  const { rows, loading, importPaylogRows, importHoursRows, updateHoursWorked, updateApprovalDate, updatePaylogDate } = useIcaapDashboard()
   const [selectedMonth, setSelectedMonth] = useState(CURRENT_MONTH)
   const [search, setSearch] = useState('')
   const [showImport, setShowImport] = useState(false)
@@ -965,13 +996,23 @@ function IcaapDashboard() {
                 <tr key={r.name} className="dash-tr">
                   <td className="dash-td-name">{r.name}</td>
                   <td className={`dash-cell ${r.hw[month?.key] ? 'dash-done' : 'dash-missing'}`}>
-                    {r.hw[month?.key] || '—'}
+                    <DashCell
+                      value={r.hw[month?.key] ?? ''}
+                      type="number"
+                      onSave={v => updateHoursWorked(r.name, month?.key, v)}
+                    />
                   </td>
                   <td className={`dash-cell ${r.ps[month?.paylogKey] ? 'dash-done' : 'dash-missing'}`}>
-                    {r.ps[month?.paylogKey] || '—'}
+                    <DashCell
+                      value={r.ps[month?.paylogKey] ?? ''}
+                      onSave={v => updatePaylogDate(r.name, month?.paylogKey, v)}
+                    />
                   </td>
                   <td className={`dash-cell ${r.ad[month?.key] ? 'dash-done' : 'dash-missing'}`}>
-                    {r.ad[month?.key] || '—'}
+                    <DashCell
+                      value={r.ad[month?.key] ?? ''}
+                      onSave={v => updateApprovalDate(r.name, month?.key, v)}
+                    />
                   </td>
                 </tr>
               ))}

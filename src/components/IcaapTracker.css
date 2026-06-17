@@ -1137,6 +1137,29 @@
   font-size: 11px;
 }
 
+.dash-cell-view {
+  display: block;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 2px 4px;
+  min-height: 1.2em;
+}
+.dash-cell-view:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.dash-cell-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 11px;
+  border: 1px solid #4a7a6a;
+  border-radius: 3px;
+  padding: 2px 4px;
+  background: #fff;
+  outline: none;
+  text-align: center;
+}
+
 .dash-tr:nth-child(even) .dash-td-name,
 .dash-tr:nth-child(even) .dash-cell {
   background: #ddd8cc;
