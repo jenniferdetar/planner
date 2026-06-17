@@ -10,6 +10,7 @@ import LibraryPanel from './LibraryPanel'
 import GcuPanel from './GcuPanel'
 import PersonalPanel from './PersonalPanel'
 import FamilyTreePanel from './FamilyTreePanel'
+import WhileYouWereOut from './WhileYouWereOut'
 import { TASK_AREAS } from './Sidebar'
 
 
@@ -233,6 +234,10 @@ export default function DailyPlanner({
           onDeletePaycheck={onDeletePaycheck}
           userId={userId}
         />
+      )}
+
+      {view === 'wywo' && (
+        <WhileYouWereOut userId={userId} />
       )}
 
       {view === 'family' && (
