@@ -598,13 +598,20 @@
 
 .icaap-note-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 8px 20px;
   border-left: 3px solid transparent;
   border-bottom: 1px solid #e8e5de;
   background: #fff;
   flex-shrink: 0;
+}
+
+.icaap-note-panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  letter-spacing: 0.01em;
 }
 
 .icaap-note-edit-btn {
