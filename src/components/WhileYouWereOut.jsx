@@ -85,7 +85,7 @@ export default function WhileYouWereOut({ userId }) {
       </div>`
 
     const pad = `
-      <div style="background:#f9cfc8;border:3px solid #1a1a1a;border-radius:10px;padding:20px 22px 18px;width:460px;font-family:Arial,sans-serif;color:#1a1a1a;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box">
+      <div style="background:#f9cfc8;border:3px solid #1a1a1a;border-radius:10px;padding:20px 22px 18px;width:100%;font-family:Arial,sans-serif;color:#1a1a1a;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
           <div style="display:flex;align-items:baseline;gap:6px;flex:1">
             <span style="font-size:14px;font-weight:700;min-width:36px">To</span>
@@ -130,7 +130,7 @@ export default function WhileYouWereOut({ userId }) {
     // Inject a print-only style. ID selector (0,1,0,0) beats body>* (0,0,0,2),
     // so !important here overrides the existing body>*{display:none!important} rule.
     const style = document.createElement('style')
-    style.textContent = `@media print { #wywo-print-frame { display: flex !important; justify-content: center; padding: 20px; background: white; position: fixed; inset: 0; z-index: 99999; } }`
+    style.textContent = `@media print { #wywo-print-frame { display: block !important; padding: 16px; background: white; position: fixed; inset: 0; z-index: 99999; } }`
     document.head.appendChild(style)
 
     const frame = document.createElement('div')
