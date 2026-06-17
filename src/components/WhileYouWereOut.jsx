@@ -76,10 +76,10 @@ export default function WhileYouWereOut({ userId }) {
 
   function handlePrint() {
     const f = form
-    const check = (v) => v ? '☑' : '☐'
-    const win = window.open('', '_blank', 'width=520,height=720')
-    win.document.write(`<!DOCTYPE html>
-<html><head><title>While You Were Out</title>
+    const check = (v) => v ? '&#9745;' : '&#9744;'
+    const esc = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>While You Were Out</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #fff; display: flex; justify-content: center; padding: 24px; font-family: Arial, sans-serif; }
@@ -87,12 +87,9 @@ export default function WhileYouWereOut({ userId }) {
   .row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px; }
   .lbl { font-size: 14px; font-weight: 700; white-space: nowrap; min-width: 36px; }
   .line { flex: 1; border-bottom: 1.5px solid #1a1a1a; padding: 2px 4px; font-size: 13px; min-height: 20px; }
-  .title { text-align: center; font-size: 20px; font-weight: 900; margin: 6px 0 12px; }
-  .urgent-box { border: 2px solid #1a1a1a; width: 16px; height: 16px; display: inline-block; margin-right: 4px; vertical-align: middle; }
-  .urgent-checked { background: #1a1a1a; }
-  .sub { font-size: 10px; text-align: center; margin-top: 2px; color: #333; }
-  .phone-group { display: flex; gap: 10px; flex: 1; }
-  .phone-cell { display: flex; flex-direction: column; flex: 1; }
+  .title { text-align: center; font-size: 20px; font-weight: 900; margin: 6px 0 12px; text-transform: uppercase; }
+  .urgent-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .urgent-label { font-size: 14px; font-weight: 700; white-space: nowrap; }
   .checks { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid #1a1a1a; margin: 12px 0; }
   .checks-col { display: flex; flex-direction: column; }
   .checks-col:first-child { border-right: 2px solid #1a1a1a; }
@@ -104,26 +101,20 @@ export default function WhileYouWereOut({ userId }) {
 </style>
 </head><body>
 <div class="pad">
-  <div class="row">
-    <span class="lbl">To</span><span class="line">${f.to}</span>
-    <span style="font-size:14px;font-weight:700;white-space:nowrap;margin-left:8px">
-      <span class="urgent-box${f.urgent ? ' urgent-checked' : ''}"></span> URGENT
-    </span>
+  <div class="urgent-row">
+    <div class="row" style="flex:1;margin-bottom:0"><span class="lbl">To</span><span class="line">${esc(f.to)}</span></div>
+    <span class="urgent-label" style="margin-left:12px">${check(f.urgent)} URGENT</span>
   </div>
   <div class="row">
-    <span class="lbl">Date</span><span class="line" style="flex:1.2">${f.date}</span>
-    <span class="lbl" style="margin-left:8px">Time</span><span class="line" style="flex:1.2">${f.time}</span>
-    <span style="font-size:12px;font-weight:600;margin-left:6px;white-space:nowrap">${f.ampm}</span>
+    <span class="lbl">Date</span><span class="line" style="flex:1.2">${esc(f.date)}</span>
+    <span class="lbl" style="margin-left:8px">Time</span><span class="line" style="flex:1.2">${esc(f.time)}</span>
+    <span style="font-size:12px;font-weight:600;margin-left:6px;white-space:nowrap">${esc(f.ampm)}</span>
   </div>
-  <div class="title">WHILE YOU WERE OUT</div>
-  <div class="row"><span class="lbl">From</span><span class="line">${f.from}</span></div>
-  <div class="row"><span class="lbl">of</span><span class="line">${f.of}</span></div>
-  <div class="row">
-    <span class="lbl">Phone</span><span class="line">${f.phone}</span>
-  </div>
-  <div class="row">
-    <span class="lbl">Fax</span><span class="line">${f.fax}</span>
-  </div>
+  <div class="title">While You Were Out</div>
+  <div class="row"><span class="lbl">From</span><span class="line">${esc(f.from)}</span></div>
+  <div class="row"><span class="lbl">of</span><span class="line">${esc(f.of)}</span></div>
+  <div class="row"><span class="lbl">Phone</span><span class="line">${esc(f.phone)}</span></div>
+  <div class="row"><span class="lbl">Fax</span><span class="line">${esc(f.fax)}</span></div>
   <div class="checks">
     <div class="checks-col">
       <div class="check-row"><span>Telephoned</span><span>${check(f.telephoned)}</span></div>
@@ -137,13 +128,17 @@ export default function WhileYouWereOut({ userId }) {
     </div>
   </div>
   <div class="row" style="align-items:flex-start">
-    <span class="lbl">Message</span><div class="msg-area">${f.message}</div>
+    <span class="lbl">Message</span><div class="msg-area">${esc(f.message)}</div>
   </div>
-  <div class="row signed-row"><span class="lbl">Signed</span><span class="line">${f.signed}</span></div>
+  <div class="row signed-row"><span class="lbl">Signed</span><span class="line">${esc(f.signed)}</span></div>
 </div>
 <script>window.onload = function(){ window.print(); }<\/script>
-</body></html>`)
-    win.document.close()
+</body></html>`
+    const blob = new Blob([html], { type: 'text/html' })
+    const url = URL.createObjectURL(blob)
+    const tab = window.open(url, '_blank')
+    if (!tab) alert('Please allow popups/new tabs for this site to print.')
+    setTimeout(() => URL.revokeObjectURL(url), 60000)
   }
 
   if (!messages) return <div className="wywo-loading">Loading…</div>
