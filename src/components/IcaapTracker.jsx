@@ -303,14 +303,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           <div className="icaap-note-list">
             {icaapNotes.length === 0 && <p className="icaap-empty">No notes yet</p>}
             {icaapNotes.map(n => (
-              <div key={n.id} className="icaap-note-row">
-                <div className="icaap-note-meta">
-                  <span className="icaap-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
-                  {n.source && <span className="icaap-note-source">{n.source}</span>}
-                </div>
-                <div className="icaap-note-text">{n.note}</div>
-                <button className="icaap-note-delete" onClick={() => onDeleteIcaapNote?.(n.id)} title="Delete">×</button>
-              </div>
+              <IcaapNoteRowItem key={n.id} note={n} onDelete={onDeleteIcaapNote} />
             ))}
           </div>
         </div>
