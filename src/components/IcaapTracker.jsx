@@ -185,6 +185,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
           {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#a0c878" />}
 <<<<<<< HEAD
+<<<<<<< HEAD
         </div>
       )}
 
@@ -267,6 +268,8 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           </div>
 =======
 >>>>>>> 80c2402 (Add May 2026 tab to iCAAP Extra Hours with mentor hours data)
+=======
+>>>>>>> a149b5f (Fix leftover merge conflict markers in IcaapTracker.jsx)
         </div>
       )}
 
