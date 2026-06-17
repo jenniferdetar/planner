@@ -102,16 +102,7 @@ export default function Sidebar({
             {navItem('📊', 'iCAAP', 'icaap')}
             {navItem('🎓', 'GCU', 'gcu')}
             {navItem('💰', 'Finance', 'finance')}
-            <a
-              href="https://www.quill.com/quill-brand-while-you-were-out-message-pads-5-1-2-x-4-1-4-50-sheets-pad-12-pads/cbs/010858.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sidebar-nav-item"
-              title={collapsed ? 'Message Pads' : undefined}
-            >
-              <span className="nav-icon">🗒️</span>
-              {!collapsed && 'Message Pads'}
-            </a>
+            {navItem('🗒️', 'While You Were Out', 'wywo')}
           </div>
 
           {/* Nav: PERSONAL */}
