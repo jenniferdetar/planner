@@ -1,6 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useIcaapNote } from '../hooks/useIcaapNote'
 import './WhileYouWereOut.css'
+
+const TO_CONTACTS = [
+  { name: 'Patricia Pernin',    email: 'patricia.pernin@lausd.net' },
+  { name: 'Bonnie Ratner',      email: 'bonnie.ratner@lausd.net' },
+  { name: 'Stephen Maccarone', email: 'snm3706@lausd.net' },
+  { name: 'Maikai Estell',      email: 'mcarson@lausd.net' },
+  { name: 'Eberardo Rodriguez', email: 'exr6140@lausd.net' },
+  { name: 'Rene Gaudet',        email: 'rene.gaudet@lausd.net' },
+]
 
 const BLANK = {
   to: '', urgent: false,
@@ -81,10 +90,10 @@ export default function WhileYouWereOut({ userId }) {
           <form className="wywo-pad" onSubmit={handleSubmit}>
             {/* TO + URGENT */}
             <div className="wywo-row wywo-to-row">
-              <label className="wywo-label-inline">
+              <div className="wywo-label-inline">
                 <span className="wywo-field-label">To</span>
-                <input className="wywo-underline" value={form.to} onChange={e => set('to', e.target.value)} />
-              </label>
+                <ToTypeahead value={form.to} onChange={v => set('to', v)} />
+              </div>
               <label className="wywo-urgent-label">
                 <input type="checkbox" checked={form.urgent} onChange={e => set('urgent', e.target.checked)} />
                 <span className="wywo-urgent-text">URGENT</span>
@@ -228,6 +237,51 @@ export default function WhileYouWereOut({ userId }) {
             </>
           )}
         </div>
+      )}
+    </div>
+  )
+}
+
+function ToTypeahead({ value, onChange }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  const matches = value.trim()
+    ? TO_CONTACTS.filter(c =>
+        c.name.toLowerCase().includes(value.toLowerCase())
+      )
+    : []
+
+  useEffect(() => {
+    function onDown(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [])
+
+  return (
+    <div className="wywo-typeahead" ref={ref}>
+      <input
+        className="wywo-underline"
+        value={value}
+        onChange={e => { onChange(e.target.value); setOpen(true) }}
+        onFocus={() => value.trim() && setOpen(true)}
+        autoComplete="off"
+      />
+      {open && matches.length > 0 && (
+        <ul className="wywo-suggestions">
+          {matches.map(c => (
+            <li
+              key={c.email}
+              className="wywo-suggestion"
+              onMouseDown={() => { onChange(c.name); setOpen(false) }}
+            >
+              <span className="wywo-sug-name">{c.name}</span>
+              <span className="wywo-sug-email">{c.email}</span>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   )
