@@ -6,13 +6,19 @@ const BLANK = {
   to: '', urgent: false,
   date: '', time: '', ampm: 'A.M.',
   from: '', of: '',
-  phoneArea: '', phoneNum: '', phoneExt: '',
-  faxArea: '', faxNum: '',
+  phone: '', fax: '',
   telephoned: false, pleaseCall: false,
   cameToSeeYou: false, wantsToSeeYou: false,
   returnedYourCall: false, willCallAgain: false,
   message: '',
   signed: '',
+}
+
+function fmtPhone(raw) {
+  const d = raw.replace(/\D/g, '').slice(0, 10)
+  if (d.length < 4) return d
+  if (d.length < 7) return `(${d.slice(0,3)}) ${d.slice(3)}`
+  return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`
 }
 
 function stamp() {
@@ -122,36 +128,30 @@ export default function WhileYouWereOut({ userId }) {
 
             {/* PHONE */}
             <div className="wywo-row">
-              <span className="wywo-field-label">Phone</span>
-              <div className="wywo-phone-group">
-                <div className="wywo-phone-cell">
-                  <input className="wywo-underline" value={form.phoneArea} onChange={e => set('phoneArea', e.target.value)} />
-                  <span className="wywo-sub-label">Area Code</span>
-                </div>
-                <div className="wywo-phone-cell">
-                  <input className="wywo-underline" value={form.phoneNum} onChange={e => set('phoneNum', e.target.value)} />
-                  <span className="wywo-sub-label">Number</span>
-                </div>
-                <div className="wywo-phone-cell wywo-phone-ext">
-                  <input className="wywo-underline" value={form.phoneExt} onChange={e => set('phoneExt', e.target.value)} />
-                  <span className="wywo-sub-label">Ext.</span>
-                </div>
-              </div>
+              <label className="wywo-label-inline">
+                <span className="wywo-field-label">Phone</span>
+                <input
+                  className="wywo-underline"
+                  value={form.phone}
+                  onChange={e => set('phone', fmtPhone(e.target.value))}
+                  placeholder="(___) ___-____"
+                  inputMode="tel"
+                />
+              </label>
             </div>
 
             {/* FAX */}
             <div className="wywo-row">
-              <span className="wywo-field-label">Fax</span>
-              <div className="wywo-phone-group">
-                <div className="wywo-phone-cell">
-                  <input className="wywo-underline" value={form.faxArea} onChange={e => set('faxArea', e.target.value)} />
-                  <span className="wywo-sub-label">Area Code</span>
-                </div>
-                <div className="wywo-phone-cell">
-                  <input className="wywo-underline" value={form.faxNum} onChange={e => set('faxNum', e.target.value)} />
-                  <span className="wywo-sub-label">Number</span>
-                </div>
-              </div>
+              <label className="wywo-label-inline">
+                <span className="wywo-field-label">Fax</span>
+                <input
+                  className="wywo-underline"
+                  value={form.fax}
+                  onChange={e => set('fax', fmtPhone(e.target.value))}
+                  placeholder="(___) ___-____"
+                  inputMode="tel"
+                />
+              </label>
             </div>
 
             {/* CHECKBOXES */}
@@ -210,9 +210,8 @@ export default function WhileYouWereOut({ userId }) {
                       <button className="wywo-log-del" onClick={() => handleDelete(m.id)} title="Delete">✕</button>
                     </div>
                     <div className="wywo-log-from">From: <strong>{m.from || '—'}</strong>{m.of ? ` of ${m.of}` : ''}</div>
-                    {(m.phoneNum || m.phoneArea) && (
-                      <div className="wywo-log-phone">Phone: ({m.phoneArea}) {m.phoneNum}{m.phoneExt ? ` x${m.phoneExt}` : ''}</div>
-                    )}
+                    {m.phone && <div className="wywo-log-phone">Phone: {m.phone}</div>}
+                    {m.fax && <div className="wywo-log-phone">Fax: {m.fax}</div>}
                     <div className="wywo-log-tags">
                       {m.telephoned && <span className="wywo-tag">Telephoned</span>}
                       {m.pleaseCall && <span className="wywo-tag">Please Call</span>}
