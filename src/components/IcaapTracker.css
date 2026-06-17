@@ -674,6 +674,28 @@
   border-bottom: 1px solid #eee;
 }
 
+.icaap-row-delete-cell {
+  padding: 0 6px !important;
+  width: 28px;
+}
+
+.icaap-row-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #ccc;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.12s, background 0.12s;
+}
+
+.icaap-row-delete-btn:hover {
+  color: #e05c5c;
+  background: #fce8e8;
+}
+
 .icaap-tab-badge {
   display: inline-flex;
   align-items: center;
