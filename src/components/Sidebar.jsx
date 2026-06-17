@@ -102,7 +102,6 @@ export default function Sidebar({
             {navItem('📊', 'iCAAP', 'icaap')}
             {navItem('🎓', 'GCU', 'gcu')}
             {navItem('💰', 'Finance', 'finance')}
-            {navItem('💬', 'MessageDesk Pro', 'messagedesk')}
           </div>
 
           {/* Nav: PERSONAL */}
