@@ -142,6 +142,13 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </div>
       </div>
 
+      {/* Reference link */}
+      <div className="icaap-ref-row">
+        <a className="icaap-ref-link" href="https://lausd-my.sharepoint.com/:x:/r/personal/jennifer_detar_lausd_net/Documents/2025-2026%20Transcripts.xlsx?d=wf58c588a79ec4907a35067c636778268&csf=1&web=1&e=3WYEai" target="_blank" rel="noreferrer">
+          📄 2025–2026 Transcripts
+        </a>
+      </div>
+
       {/* Sub-tabs */}
       <div className="icaap-tabs">
         <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>

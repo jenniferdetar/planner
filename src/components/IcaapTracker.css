@@ -6,6 +6,24 @@
   background: #faf9f6;
 }
 
+/* Reference link */
+.icaap-ref-row {
+  padding: 5px 12px;
+  background: #f5f3ee;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+}
+.icaap-ref-link {
+  font-size: 12px;
+  color: #4a7a6a;
+  text-decoration: none;
+  opacity: 0.85;
+}
+.icaap-ref-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
 /* Stats */
 .icaap-stats {
   display: flex;
