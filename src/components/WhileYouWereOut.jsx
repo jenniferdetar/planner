@@ -76,69 +76,75 @@ export default function WhileYouWereOut({ userId }) {
 
   function handlePrint() {
     const f = form
-    const check = (v) => v ? '&#9745;' : '&#9744;'
-    const esc = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    const html = `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>While You Were Out</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #fff; display: flex; justify-content: center; padding: 24px; font-family: Arial, sans-serif; }
-  .pad { background: #f9cfc8; border: 3px solid #1a1a1a; border-radius: 10px; padding: 20px 22px 18px; width: 460px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px; }
-  .lbl { font-size: 14px; font-weight: 700; white-space: nowrap; min-width: 36px; }
-  .line { flex: 1; border-bottom: 1.5px solid #1a1a1a; padding: 2px 4px; font-size: 13px; min-height: 20px; }
-  .title { text-align: center; font-size: 20px; font-weight: 900; margin: 6px 0 12px; text-transform: uppercase; }
-  .urgent-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .urgent-label { font-size: 14px; font-weight: 700; white-space: nowrap; }
-  .checks { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid #1a1a1a; margin: 12px 0; }
-  .checks-col { display: flex; flex-direction: column; }
-  .checks-col:first-child { border-right: 2px solid #1a1a1a; }
-  .check-row { display: flex; justify-content: space-between; padding: 6px 8px; font-size: 13px; font-weight: 600; border-bottom: 1.5px solid #1a1a1a; gap: 8px; }
-  .check-row:last-child { border-bottom: none; }
-  .msg-area { flex: 1; min-height: 110px; border-bottom: 1.5px solid #1a1a1a; padding: 2px 4px; font-size: 13px; line-height: 2.2; background-image: repeating-linear-gradient(to bottom, transparent, transparent calc(2.2em - 1px), #1a1a1a calc(2.2em - 1px), #1a1a1a 2.2em); white-space: pre-wrap; word-break: break-word; }
-  .signed-row { margin-top: 14px; }
-  @media print { body { padding: 0; } }
-</style>
-</head><body>
-<div class="pad">
-  <div class="urgent-row">
-    <div class="row" style="flex:1;margin-bottom:0"><span class="lbl">To</span><span class="line">${esc(f.to)}</span></div>
-    <span class="urgent-label" style="margin-left:12px">${check(f.urgent)} URGENT</span>
-  </div>
-  <div class="row">
-    <span class="lbl">Date</span><span class="line" style="flex:1.2">${esc(f.date)}</span>
-    <span class="lbl" style="margin-left:8px">Time</span><span class="line" style="flex:1.2">${esc(f.time)}</span>
-    <span style="font-size:12px;font-weight:600;margin-left:6px;white-space:nowrap">${esc(f.ampm)}</span>
-  </div>
-  <div class="title">While You Were Out</div>
-  <div class="row"><span class="lbl">From</span><span class="line">${esc(f.from)}</span></div>
-  <div class="row"><span class="lbl">of</span><span class="line">${esc(f.of)}</span></div>
-  <div class="row"><span class="lbl">Phone</span><span class="line">${esc(f.phone)}</span></div>
-  <div class="row"><span class="lbl">Fax</span><span class="line">${esc(f.fax)}</span></div>
-  <div class="checks">
-    <div class="checks-col">
-      <div class="check-row"><span>Telephoned</span><span>${check(f.telephoned)}</span></div>
-      <div class="check-row"><span>Came to see you</span><span>${check(f.cameToSeeYou)}</span></div>
-      <div class="check-row"><span>Returned your call</span><span>${check(f.returnedYourCall)}</span></div>
-    </div>
-    <div class="checks-col">
-      <div class="check-row"><span>Please Call</span><span>${check(f.pleaseCall)}</span></div>
-      <div class="check-row"><span>Wants to see you</span><span>${check(f.wantsToSeeYou)}</span></div>
-      <div class="check-row"><span>Will call again</span><span>${check(f.willCallAgain)}</span></div>
-    </div>
-  </div>
-  <div class="row" style="align-items:flex-start">
-    <span class="lbl">Message</span><div class="msg-area">${esc(f.message)}</div>
-  </div>
-  <div class="row signed-row"><span class="lbl">Signed</span><span class="line">${esc(f.signed)}</span></div>
-</div>
-<script>window.onload = function(){ window.print(); }<\/script>
-</body></html>`
-    const blob = new Blob([html], { type: 'text/html' })
-    const url = URL.createObjectURL(blob)
-    const tab = window.open(url, '_blank')
-    if (!tab) alert('Please allow popups/new tabs for this site to print.')
-    setTimeout(() => URL.revokeObjectURL(url), 60000)
+    const chk = v => v ? '&#9745;' : '&#9744;'
+    const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    const frow = (lbl, val, flex = '1') =>
+      `<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:10px">
+        <span style="font-size:14px;font-weight:700;white-space:nowrap;min-width:36px">${lbl}</span>
+        <span style="flex:${flex};border-bottom:1.5px solid #1a1a1a;padding:2px 4px;font-size:13px;min-height:18px;display:block">${esc(val)}</span>
+      </div>`
+
+    const pad = `
+      <div style="background:#f9cfc8;border:3px solid #1a1a1a;border-radius:10px;padding:20px 22px 18px;width:460px;font-family:Arial,sans-serif;color:#1a1a1a;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="display:flex;align-items:baseline;gap:6px;flex:1">
+            <span style="font-size:14px;font-weight:700;min-width:36px">To</span>
+            <span style="flex:1;border-bottom:1.5px solid #1a1a1a;padding:2px 4px;font-size:13px;min-height:18px">${esc(f.to)}</span>
+          </div>
+          <span style="font-size:14px;font-weight:700;white-space:nowrap;margin-left:10px">${chk(f.urgent)} URGENT</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:10px">
+          <span style="font-size:14px;font-weight:700;min-width:36px">Date</span>
+          <span style="flex:1.2;border-bottom:1.5px solid #1a1a1a;padding:2px 4px;font-size:13px;min-height:18px">${esc(f.date)}</span>
+          <span style="font-size:14px;font-weight:700;white-space:nowrap;margin-left:8px;min-width:36px">Time</span>
+          <span style="flex:1.2;border-bottom:1.5px solid #1a1a1a;padding:2px 4px;font-size:13px;min-height:18px">${esc(f.time)}</span>
+          <span style="font-size:12px;font-weight:600;margin-left:4px;white-space:nowrap">${esc(f.ampm)}</span>
+        </div>
+        <div style="text-align:center;font-size:20px;font-weight:900;margin:6px 0 12px;text-transform:uppercase">WHILE YOU WERE OUT</div>
+        ${frow('From', f.from)}
+        ${frow('of', f.of)}
+        ${frow('Phone', f.phone)}
+        ${frow('Fax', f.fax)}
+        <div style="display:grid;grid-template-columns:1fr 1fr;border:2px solid #1a1a1a;margin:12px 0;border-radius:2px">
+          <div style="border-right:2px solid #1a1a1a">
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;font-size:13px;font-weight:600;border-bottom:1.5px solid #1a1a1a"><span>Telephoned</span><span>${chk(f.telephoned)}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;font-size:13px;font-weight:600;border-bottom:1.5px solid #1a1a1a"><span>Came to see you</span><span>${chk(f.cameToSeeYou)}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;font-size:13px;font-weight:600"><span>Returned your call</span><span>${chk(f.returnedYourCall)}</span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;font-size:13px;font-weight:600;border-bottom:1.5px solid #1a1a1a"><span>Please Call</span><span>${chk(f.pleaseCall)}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;font-size:13px;font-weight:600;border-bottom:1.5px solid #1a1a1a"><span>Wants to see you</span><span>${chk(f.wantsToSeeYou)}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 8px;font-size:13px;font-weight:600"><span>Will call again</span><span>${chk(f.willCallAgain)}</span></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:10px">
+          <span style="font-size:14px;font-weight:700;min-width:36px">Message</span>
+          <div style="flex:1;min-height:110px;border-bottom:1.5px solid #1a1a1a;padding:2px 4px;font-size:13px;line-height:2.2;background-image:repeating-linear-gradient(to bottom,transparent,transparent calc(2.2em - 1px),#1a1a1a calc(2.2em - 1px),#1a1a1a 2.2em);white-space:pre-wrap;word-break:break-word">${esc(f.message)}</div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-top:14px">
+          <span style="font-size:14px;font-weight:700;min-width:36px">Signed</span>
+          <span style="flex:1;border-bottom:1.5px solid #1a1a1a;padding:2px 4px;font-size:13px;min-height:18px">${esc(f.signed)}</span>
+        </div>
+      </div>`
+
+    // Inject a print-only style. ID selector (0,1,0,0) beats body>* (0,0,0,2),
+    // so !important here overrides the existing body>*{display:none!important} rule.
+    const style = document.createElement('style')
+    style.textContent = `@media print { #wywo-print-frame { display: flex !important; justify-content: center; padding: 20px; background: white; position: fixed; inset: 0; z-index: 99999; } }`
+    document.head.appendChild(style)
+
+    const frame = document.createElement('div')
+    frame.id = 'wywo-print-frame'
+    frame.style.display = 'none'
+    frame.innerHTML = pad
+    document.body.appendChild(frame)
+
+    window.addEventListener('afterprint', () => {
+      frame.remove()
+      style.remove()
+    }, { once: true })
+
+    window.print()
   }
 
   if (!messages) return <div className="wywo-loading">Loading…</div>
