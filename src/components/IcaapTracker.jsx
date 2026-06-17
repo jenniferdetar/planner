@@ -268,6 +268,52 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </div>
       )}
 
+      {/* Notes tab */}
+      {tab === 'notes' && (
+        <div className="icaap-notes-section">
+          <div className="icaap-toolbar">
+            <span className="icaap-toolbar-label">One-off notes &amp; reminders</span>
+          </div>
+          <form className="icaap-notes-form" onSubmit={async (e) => {
+            e.preventDefault()
+            if (!noteText.trim()) return
+            await onAddIcaapNote?.(noteText.trim(), noteSource.trim())
+            setNoteText('')
+            setNoteSource('')
+          }}>
+            <textarea
+              className="icaap-textarea"
+              placeholder="Note *"
+              rows={2}
+              value={noteText}
+              onChange={e => setNoteText(e.target.value)}
+            />
+            <div className="icaap-notes-form-row">
+              <input
+                className="icaap-input"
+                placeholder="Source (optional)"
+                value={noteSource}
+                onChange={e => setNoteSource(e.target.value)}
+              />
+              <button type="submit" className="icaap-save">Add</button>
+            </div>
+          </form>
+          <div className="icaap-note-list">
+            {icaapNotes.length === 0 && <p className="icaap-empty">No notes yet</p>}
+            {icaapNotes.map(n => (
+              <div key={n.id} className="icaap-note-row">
+                <div className="icaap-note-meta">
+                  <span className="icaap-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
+                  {n.source && <span className="icaap-note-source">{n.source}</span>}
+                </div>
+                <div className="icaap-note-text">{n.note}</div>
+                <button className="icaap-note-delete" onClick={() => onDeleteIcaapNote?.(n.id)} title="Delete">×</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Attendance tab */}
       {tab === 'attendance' && (
         <AttendancePanel
