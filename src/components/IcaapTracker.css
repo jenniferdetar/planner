@@ -598,13 +598,20 @@
 
 .icaap-note-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 8px 20px;
   border-left: 3px solid transparent;
   border-bottom: 1px solid #e8e5de;
   background: #fff;
   flex-shrink: 0;
+}
+
+.icaap-note-panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  letter-spacing: 0.01em;
 }
 
 .icaap-note-edit-btn {
@@ -1128,6 +1135,29 @@
   text-align: center;
   border-bottom: 1px solid #f0ede6;
   font-size: 11px;
+}
+
+.dash-cell-view {
+  display: block;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 2px 4px;
+  min-height: 1.2em;
+}
+.dash-cell-view:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.dash-cell-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 11px;
+  border: 1px solid #4a7a6a;
+  border-radius: 3px;
+  padding: 2px 4px;
+  background: #fff;
+  outline: none;
+  text-align: center;
 }
 
 .dash-tr:nth-child(even) .dash-td-name,

@@ -142,19 +142,13 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </div>
       </div>
 
-      {/* Reference link */}
-      <div className="icaap-ref-row">
-        <a className="icaap-ref-link" href="https://lausd-my.sharepoint.com/:x:/r/personal/jennifer_detar_lausd_net/Documents/2025-2026%20Transcripts.xlsx?d=wf58c588a79ec4907a35067c636778268&csf=1&web=1&e=3WYEai" target="_blank" rel="noreferrer">
-          📄 2025–2026 Transcripts
-        </a>
-      </div>
-
       {/* Sub-tabs */}
       <div className="icaap-tabs">
         <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
         <button data-t="asana" className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
         <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
+        <button data-t="transcripts" className={`icaap-tab ${tab === 'transcripts' ? 'active' : ''}`} onClick={() => setTab('transcripts')}>Transcripts</button>
         <button data-t="notes" className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
       </div>
 
@@ -192,6 +186,11 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
           {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#a0c878" />}
         </div>
+      )}
+
+      {/* Transcripts tab */}
+      {tab === 'transcripts' && (
+        <IcaapNotePanel userId={userId} noteKey="transcripts-2025-2026" title="Transcripts 2025–2026" color="#5c8ac8" />
       )}
 
       {/* Notes tab */}
@@ -245,7 +244,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       )}
 
       {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'notes') ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'transcripts' || tab === 'notes') ? 'none' : undefined }}>
         {false ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (
@@ -259,7 +258,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       </div>
 
       {/* Add form — hidden on Asana/Attendance tabs */}
-      {showForm && tab !== 'asana' && tab !== 'attendance' && tab !== 'notes' && (
+      {showForm && tab !== 'asana' && tab !== 'attendance' && tab !== 'transcripts' && tab !== 'notes' && (
         <form className="icaap-form" onSubmit={handleAdd}>
           <input className="icaap-input" placeholder="Title *" value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))} autoFocus />
@@ -604,6 +603,37 @@ function ItemCard({ item, onUpdateItem, onDeleteItem, onPushToAsana, pushing, pu
 
 // ── iCAAP Dashboard ───────────────────────────────────────────────────────────
 
+function DashCell({ value, onSave, type = 'text' }) {
+  const [editing, setEditing] = useState(false)
+  const [val, setVal] = useState(value ?? '')
+
+  if (!editing && val !== (value ?? '')) setVal(value ?? '')
+
+  function commit(v) {
+    setEditing(false)
+    if (v !== (value ?? '')) onSave(v)
+  }
+
+  return editing ? (
+    <input
+      className="dash-cell-input"
+      type={type}
+      value={val}
+      onChange={e => setVal(e.target.value)}
+      onBlur={() => commit(val)}
+      onKeyDown={e => {
+        if (e.key === 'Enter') commit(val)
+        if (e.key === 'Escape') { setVal(value ?? ''); setEditing(false) }
+      }}
+      autoFocus
+    />
+  ) : (
+    <span className="dash-cell-view" onClick={() => setEditing(true)}>
+      {value || '—'}
+    </span>
+  )
+}
+
 const CURRENT_MONTH = (() => {
   const keys = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   return keys[new Date().getMonth()]
@@ -891,7 +921,7 @@ function ImportHoursModal({ onClose, onImport }) {
 }
 
 function IcaapDashboard() {
-  const { rows, loading, importPaylogRows, importHoursRows } = useIcaapDashboard()
+  const { rows, loading, importPaylogRows, importHoursRows, updateHoursWorked, updateApprovalDate, updatePaylogDate } = useIcaapDashboard()
   const [selectedMonth, setSelectedMonth] = useState(CURRENT_MONTH)
   const [search, setSearch] = useState('')
   const [showImport, setShowImport] = useState(false)
@@ -966,13 +996,23 @@ function IcaapDashboard() {
                 <tr key={r.name} className="dash-tr">
                   <td className="dash-td-name">{r.name}</td>
                   <td className={`dash-cell ${r.hw[month?.key] ? 'dash-done' : 'dash-missing'}`}>
-                    {r.hw[month?.key] || '—'}
+                    <DashCell
+                      value={r.hw[month?.key] ?? ''}
+                      type="number"
+                      onSave={v => updateHoursWorked(r.name, month?.key, v)}
+                    />
                   </td>
                   <td className={`dash-cell ${r.ps[month?.paylogKey] ? 'dash-done' : 'dash-missing'}`}>
-                    {r.ps[month?.paylogKey] || '—'}
+                    <DashCell
+                      value={r.ps[month?.paylogKey] ?? ''}
+                      onSave={v => updatePaylogDate(r.name, month?.paylogKey, v)}
+                    />
                   </td>
                   <td className={`dash-cell ${r.ad[month?.key] ? 'dash-done' : 'dash-missing'}`}>
-                    {r.ad[month?.key] || '—'}
+                    <DashCell
+                      value={r.ad[month?.key] ?? ''}
+                      onSave={v => updateApprovalDate(r.name, month?.key, v)}
+                    />
                   </td>
                 </tr>
               ))}
@@ -1034,6 +1074,7 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
   return (
     <div className="icaap-note-panel">
       <div className="icaap-note-header" style={{ borderLeftColor: color }}>
+        {title && <span className="icaap-note-panel-title">{title}</span>}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {saved && <span className="icaap-note-saved">Saved ✓</span>}
           <button className="icaap-note-edit-btn" onClick={() => setEditing(e => !e)}>
@@ -1048,7 +1089,7 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
           style={{ '--note-color': color }}
           value={content}
           onChange={e => handleChange(e.target.value)}
-          placeholder="Paste tab-separated data (first row = headers)…"
+          placeholder="Paste data from Excel or a web table (tab-separated, first row = column headers)…"
           autoFocus={editing}
         />
       ) : (

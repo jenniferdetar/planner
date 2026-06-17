@@ -95,5 +95,24 @@ export function useIcaapDashboard() {
     return errors
   }
 
-  return { rows, loading, importPaylogRows, importHoursRows, refresh: fetchAll }
+  async function updateHoursWorked(name, monthKey, rawValue) {
+    const val = rawValue === '' ? null : parseFloat(rawValue)
+    const numeric = isNaN(val) ? null : val
+    await supabase.from('hours_worked').update({ [monthKey]: numeric }).eq('Name', name)
+    setHoursWorked(prev => prev.map(r => r['Name'] === name ? { ...r, [monthKey]: numeric } : r))
+  }
+
+  async function updateApprovalDate(name, monthKey, rawValue) {
+    const val = rawValue?.trim() || null
+    await supabase.from('approval_dates').update({ [monthKey]: val }).eq('Name', name)
+    setApprovalDates(prev => prev.map(r => r['Name'] === name ? { ...r, [monthKey]: val } : r))
+  }
+
+  async function updatePaylogDate(name, paylogKey, rawValue) {
+    const val = rawValue?.trim() || null
+    await supabase.from('paylog submission').update({ [paylogKey]: val }).eq('Employee Name', name)
+    setPaylogSubmission(prev => prev.map(r => r['Employee Name'] === name ? { ...r, [paylogKey]: val } : r))
+  }
+
+  return { rows, loading, importPaylogRows, importHoursRows, updateHoursWorked, updateApprovalDate, updatePaylogDate, refresh: fetchAll }
 }
