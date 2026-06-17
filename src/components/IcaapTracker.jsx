@@ -1047,12 +1047,29 @@ function IcaapNoteRowItem({ note: n, onDelete }) {
 
 // ── Transcripts ───────────────────────────────────────────────────────────────
 
+const PROGRAM_ADVISERS = {
+  'AA/ASD': 'Eberardo Rodriguez',
+  'AA/BiLAA': 'Zina Dixon',
+  'AA/ECSE (Year 2 only)': 'Eberardo Rodriguez',
+  'AA/RLAA': 'Wendy Marrero & Rene Gaudet',
+  'CENTSE': 'Eberardo Rodriguez',
+  'Induction Program': 'Maikai Finnell & Wendy Marrero',
+  'Portfolio (Preliminary Clinical Practice)': 'Stephen Maccarone',
+  'Preliminary Added Specialty Programs': 'Eberardo Rodriguez',
+  'Preliminary ECSE': 'Eberardo Rodriguez',
+  'Preliminary MMSN/MMD': 'Eberardo Rodriguez',
+  'Preliminary MOD/ESN': 'Eberardo Rodriguez',
+  'Preliminary Multiple Subject': 'Rene Gaudet',
+  'Preliminary Single Subject': 'Zina Dixon',
+  'TPSL': 'Eberardo Rodriguez',
+}
+
 const TRANSCRIPT_COL_WIDTHS = {
   'en': 75,
   "teacher's name": 150,
   'request from': 100,
   'date request received': 115,
-  'program': 130,
+  'program': 140,
   'nature of inquiry': 200,
   'sent to icaap program adviser': 155,
   'date sent': 100,
@@ -1073,6 +1090,19 @@ function colWidth(header) {
 
 function isLongCol(header) {
   return /inquiry|nature|notes/i.test(header)
+}
+
+function fmtDateLong(iso) {
+  if (!iso) return ''
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const [y, m, d] = iso.split('-').map(Number)
+  return `${months[m - 1]} ${String(d).padStart(2, '0')} ${y}`
+}
+
+const BLANK_ENTRY = {
+  en: '', name: '', requestFrom: 'Teacher', dateReceived: '',
+  program: '', adviser: '', inquiry: '', dateSent: '',
+  by: 'J. Detar', notes: '', dateReturn: '', dateReturnedSAU: '', sentTo: '',
 }
 
 function TranscriptsCell({ value, onChange, long }) {
@@ -1125,32 +1155,51 @@ function TranscriptsCell({ value, onChange, long }) {
 
 function TranscriptsPanel({ userId }) {
   const { content, handleChange, saved } = useIcaapNote(userId, 'transcripts-2025-2026')
+  const [showForm, setShowForm] = useState(false)
   const [pasteMode, setPasteMode] = useState(false)
+  const [entry, setEntry] = useState(BLANK_ENTRY)
   const table = parseTable(content)
 
   function saveTable(headers, rows) {
     handleChange([headers.join('\t'), ...rows.map(r => r.join('\t'))].join('\n'))
   }
 
+  function setField(key, value) {
+    setEntry(prev => {
+      const next = { ...prev, [key]: value }
+      if (key === 'program') next.adviser = PROGRAM_ADVISERS[value] || ''
+      return next
+    })
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (!table) return
+    const newRow = [
+      entry.en, entry.name, entry.requestFrom,
+      fmtDateLong(entry.dateReceived), entry.program, entry.inquiry,
+      entry.adviser, fmtDateLong(entry.dateSent), entry.by,
+      entry.notes, fmtDateLong(entry.dateReturn),
+      fmtDateLong(entry.dateReturnedSAU), entry.sentTo,
+    ]
+    saveTable(table.headers, [...table.rows, newRow])
+    setEntry(BLANK_ENTRY)
+    setShowForm(false)
+  }
+
   function updateCell(ri, ci, value) {
     if (!table) return
-    const newRows = table.rows.map((row, i) => {
+    saveTable(table.headers, table.rows.map((row, i) => {
       if (i !== ri) return row
       const updated = [...row]
       updated[ci] = value
       return updated
-    })
-    saveTable(table.headers, newRows)
+    }))
   }
 
   function deleteRow(ri) {
     if (!table) return
     saveTable(table.headers, table.rows.filter((_, i) => i !== ri))
-  }
-
-  function addRow() {
-    if (!table) return
-    saveTable(table.headers, [...table.rows, table.headers.map(() => '')])
   }
 
   return (
@@ -1159,23 +1208,112 @@ function TranscriptsPanel({ userId }) {
         <span className="tr-title">2025–2026 Transcripts</span>
         <div className="tr-toolbar-right">
           {saved && <span className="icaap-note-saved">Saved ✓</span>}
-          {table && !pasteMode && (
-            <button className="tr-add-btn" onClick={addRow}>+ Add Row</button>
+          {!pasteMode && (
+            <button className="tr-add-btn" onClick={() => { setShowForm(f => !f); setPasteMode(false) }}>
+              {showForm ? '✕ Cancel' : '+ New Entry'}
+            </button>
           )}
-          <button className="icaap-note-edit-btn" onClick={() => setPasteMode(m => !m)}>
+          <button className="icaap-note-edit-btn" onClick={() => { setPasteMode(m => !m); setShowForm(false) }}>
             {pasteMode ? 'View Table' : 'Paste from Excel'}
           </button>
         </div>
       </div>
 
-      {pasteMode || !table ? (
+      {showForm && !pasteMode && (
+        <form className="tr-form" onSubmit={handleSubmit}>
+          <div className="tr-form-row">
+            <label className="tr-fg tr-fg-sm">
+              <span>EN</span>
+              <input className="tr-fi" value={entry.en} onChange={e => setField('en', e.target.value)} placeholder="Employee #" />
+            </label>
+            <label className="tr-fg tr-fg-lg">
+              <span>Teacher's Name</span>
+              <input className="tr-fi" value={entry.name} onChange={e => setField('name', e.target.value)} placeholder="Full name" required />
+            </label>
+            <label className="tr-fg">
+              <span>Request From</span>
+              <select className="tr-fi" value={entry.requestFrom} onChange={e => setField('requestFrom', e.target.value)}>
+                <option>Teacher</option>
+                <option>Salary Credit Assistant</option>
+              </select>
+            </label>
+            <label className="tr-fg">
+              <span>Date Received</span>
+              <input className="tr-fi" type="date" value={entry.dateReceived} onChange={e => setField('dateReceived', e.target.value)} />
+            </label>
+          </div>
+
+          <div className="tr-form-row">
+            <label className="tr-fg tr-fg-lg">
+              <span>Program</span>
+              <select className="tr-fi" value={entry.program} onChange={e => setField('program', e.target.value)} required>
+                <option value="">— Select Program —</option>
+                {Object.keys(PROGRAM_ADVISERS).map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </label>
+            <label className="tr-fg tr-fg-lg">
+              <span>iCAAP Programme Adviser</span>
+              <input className="tr-fi tr-fi-adviser" value={entry.adviser} onChange={e => setField('adviser', e.target.value)} placeholder="Auto-filled from Program" readOnly={!!PROGRAM_ADVISERS[entry.program]} />
+            </label>
+          </div>
+
+          <div className="tr-form-row">
+            <label className="tr-fg tr-fg-full">
+              <span>Nature of Inquiry</span>
+              <textarea className="tr-fi tr-fi-ta" rows={3} value={entry.inquiry} onChange={e => setField('inquiry', e.target.value)} placeholder="Describe the request…" />
+            </label>
+          </div>
+
+          <div className="tr-form-row">
+            <label className="tr-fg">
+              <span>Date Sent</span>
+              <input className="tr-fi" type="date" value={entry.dateSent} onChange={e => setField('dateSent', e.target.value)} />
+            </label>
+            <label className="tr-fg tr-fg-sm">
+              <span>By</span>
+              <input className="tr-fi" value={entry.by} onChange={e => setField('by', e.target.value)} />
+            </label>
+            <label className="tr-fg tr-fg-lg">
+              <span>Notes</span>
+              <input className="tr-fi" value={entry.notes} onChange={e => setField('notes', e.target.value)} placeholder="e.g. Sent to email@example.com" />
+            </label>
+          </div>
+
+          <div className="tr-form-row">
+            <label className="tr-fg">
+              <span>Date Return from Adviser</span>
+              <input className="tr-fi" type="date" value={entry.dateReturn} onChange={e => setField('dateReturn', e.target.value)} />
+            </label>
+            <label className="tr-fg">
+              <span>Date Returned to SAU</span>
+              <input className="tr-fi" type="date" value={entry.dateReturnedSAU} onChange={e => setField('dateReturnedSAU', e.target.value)} />
+            </label>
+            <label className="tr-fg tr-fg-lg">
+              <span>Sent To Whom</span>
+              <input className="tr-fi" value={entry.sentTo} onChange={e => setField('sentTo', e.target.value)} placeholder="Institution or email" />
+            </label>
+          </div>
+
+          <div className="tr-form-actions">
+            <button type="button" className="tr-cancel-btn" onClick={() => { setShowForm(false); setEntry(BLANK_ENTRY) }}>Cancel</button>
+            <button type="submit" className="tr-submit-btn">Add Entry</button>
+          </div>
+        </form>
+      )}
+
+      {pasteMode ? (
         <textarea
           className="icaap-note-textarea"
           value={content}
           onChange={e => handleChange(e.target.value)}
           placeholder="Paste data from Excel or a web table (tab-separated, first row = column headers)…"
-          autoFocus={pasteMode}
+          autoFocus
         />
+      ) : !table ? (
+        <div className="tr-empty">
+          <p>No entries yet.</p>
+          <button className="tr-add-btn" onClick={() => setShowForm(true)}>+ New Entry</button>
+        </div>
       ) : (
         <div className="tr-table-wrap">
           <table className="tr-table">
