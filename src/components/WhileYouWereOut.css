@@ -1,5 +1,52 @@
 .wywo-loading { padding: 48px; text-align: center; color: #888; }
 
+/* Typeahead */
+.wywo-typeahead {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.wywo-typeahead .wywo-underline { width: 100%; }
+
+.wywo-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #1a2535;
+  border: 1px solid #2e3d50;
+  border-radius: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  min-width: 220px;
+}
+
+.wywo-suggestion {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.wywo-suggestion:hover { background: #2e3d50; }
+
+.wywo-sug-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8e4d8;
+}
+
+.wywo-sug-email {
+  font-size: 11px;
+  color: #888;
+  margin-top: 1px;
+}
+
 .wywo-wrap {
   padding: 20px;
   min-height: 100%;
