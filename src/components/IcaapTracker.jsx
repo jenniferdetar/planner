@@ -52,9 +52,11 @@ async function getFirstWorkspace(token) {
   return data[0]?.gid ?? null
 }
 
-export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
+export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
   const [tab, setTab] = useState('dashboard')
   const [extraHoursTab, setExtraHoursTab] = useState('profdev')
+  const [noteText, setNoteText] = useState('')
+  const [noteSource, setNoteSource] = useState('')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
@@ -146,6 +148,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button data-t="asana" className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
         <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
+        <button data-t="notes" className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
       </div>
 
       {/* Dashboard tab */}
@@ -173,9 +176,60 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
               className={`icaap-extrahours-tab ${extraHoursTab === 'winterbreak' ? 'active' : ''}`}
               onClick={() => setExtraHoursTab('winterbreak')}
             >Winter Break 2025–2026</button>
+            <button
+              className={`icaap-extrahours-tab ${extraHoursTab === 'may2026' ? 'active' : ''}`}
+              onClick={() => setExtraHoursTab('may2026')}
+            >May 2026</button>
           </div>
           {extraHoursTab === 'profdev' && <IcaapNotePanel userId={userId} noteKey="profdev-09-27-25" title="Professional Development — 09-27-25" color="#7ba7e0" />}
           {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
+          {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#a0c878" />}
+        </div>
+      )}
+
+      {/* Notes tab */}
+      {tab === 'notes' && (
+        <div className="icaap-notes-section">
+          <div className="icaap-toolbar">
+            <span className="icaap-toolbar-label">One-off notes &amp; reminders</span>
+          </div>
+          <form className="icaap-notes-form" onSubmit={async (e) => {
+            e.preventDefault()
+            if (!noteText.trim()) return
+            await onAddIcaapNote?.(noteText.trim(), noteSource.trim())
+            setNoteText('')
+            setNoteSource('')
+          }}>
+            <textarea
+              className="icaap-textarea"
+              placeholder="Note *"
+              rows={2}
+              value={noteText}
+              onChange={e => setNoteText(e.target.value)}
+            />
+            <div className="icaap-notes-form-row">
+              <input
+                className="icaap-input"
+                placeholder="Source (optional)"
+                value={noteSource}
+                onChange={e => setNoteSource(e.target.value)}
+              />
+              <button type="submit" className="icaap-save">Add</button>
+            </div>
+          </form>
+          <div className="icaap-note-list">
+            {icaapNotes.length === 0 && <p className="icaap-empty">No notes yet</p>}
+            {icaapNotes.map(n => (
+              <div key={n.id} className="icaap-note-row">
+                <div className="icaap-note-meta">
+                  <span className="icaap-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
+                  {n.source && <span className="icaap-note-source">{n.source}</span>}
+                </div>
+                <div className="icaap-note-text">{n.note}</div>
+                <button className="icaap-note-delete" onClick={() => onDeleteIcaapNote?.(n.id)} title="Delete">×</button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -191,7 +245,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       )}
 
       {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours') ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'notes') ? 'none' : undefined }}>
         {false ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (
@@ -205,7 +259,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       </div>
 
       {/* Add form — hidden on Asana/Attendance tabs */}
-      {showForm && tab !== 'asana' && tab !== 'attendance' && (
+      {showForm && tab !== 'asana' && tab !== 'attendance' && tab !== 'notes' && (
         <form className="icaap-form" onSubmit={handleAdd}>
           <input className="icaap-input" placeholder="Title *" value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))} autoFocus />

@@ -8,6 +8,7 @@ import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions, useCseaNotes } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
+import { useIcaapNotes } from './hooks/useIcaapNotes'
 import { useTransactions, useBills, useFinancialGoals, usePaychecks } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
@@ -87,6 +88,7 @@ export default function App() {
   const { paychecks, addPaycheck, updatePaycheckAmount, togglePaycheckBill, deletePaycheck } = usePaychecks(userId)
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
+  const { notes: icaapNotes, addNote: addIcaapNote, deleteNote: deleteIcaapNote } = useIcaapNotes(userId)
   const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
   const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
@@ -293,6 +295,9 @@ export default function App() {
           attendanceRecords={attendanceRecords}
           onUpsertAttendance={upsertAttendance}
           onUpdateAttendanceNotes={updateAttendanceNotes}
+          icaapNotes={icaapNotes}
+          onAddIcaapNote={addIcaapNote}
+          onDeleteIcaapNote={deleteIcaapNote}
           calAuthExpired={calAuthExpired}
           onReconnectGoogle={reconnectGoogle}
           books={books}

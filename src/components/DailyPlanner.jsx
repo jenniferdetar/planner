@@ -66,6 +66,7 @@ export default function DailyPlanner({
   paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
+  icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
   calendarBlocks,
   calAuthExpired, onReconnectGoogle, providerToken,
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
@@ -157,6 +158,9 @@ export default function DailyPlanner({
           attendanceRecords={attendanceRecords || []}
           onUpsertAttendance={onUpsertAttendance}
           onUpdateAttendanceNotes={onUpdateAttendanceNotes}
+          icaapNotes={icaapNotes || []}
+          onAddIcaapNote={onAddIcaapNote}
+          onDeleteIcaapNote={onDeleteIcaapNote}
         />
       )}
 
