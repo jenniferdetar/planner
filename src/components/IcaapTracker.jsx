@@ -190,7 +190,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
 
       {/* Transcripts tab */}
       {tab === 'transcripts' && (
-        <IcaapNotePanel userId={userId} noteKey="transcripts-2025-2026" title="Transcripts 2025–2026" color="#5c8ac8" />
+        <TranscriptsPanel userId={userId} />
       )}
 
       {/* Notes tab */}
@@ -1041,6 +1041,173 @@ function IcaapNoteRowItem({ note: n, onDelete }) {
         onClick={e => { e.stopPropagation(); onDelete?.(n.id) }}
         title="Delete"
       >×</button>
+    </div>
+  )
+}
+
+// ── Transcripts ───────────────────────────────────────────────────────────────
+
+const TRANSCRIPT_COL_WIDTHS = {
+  'en': 75,
+  "teacher's name": 150,
+  'request from': 100,
+  'date request received': 115,
+  'program': 130,
+  'nature of inquiry': 200,
+  'sent to icaap program adviser': 155,
+  'date sent': 100,
+  'by': 70,
+  'notes': 170,
+  'date return from the program adviser': 130,
+  'date returned to salary allocation unit': 130,
+  'sent to whom': 145,
+}
+
+function colWidth(header) {
+  const key = header.toLowerCase().trim()
+  for (const [k, w] of Object.entries(TRANSCRIPT_COL_WIDTHS)) {
+    if (key.includes(k) || k.includes(key)) return w
+  }
+  return 120
+}
+
+function isLongCol(header) {
+  return /inquiry|nature|notes/i.test(header)
+}
+
+function TranscriptsCell({ value, onChange, long }) {
+  const [editing, setEditing] = useState(false)
+  const [val, setVal] = useState(value)
+
+  if (!editing && val !== value) setVal(value)
+
+  function commit() {
+    setEditing(false)
+    if (val !== value) onChange(val)
+  }
+
+  if (editing) {
+    return long ? (
+      <textarea
+        className="tr-cell-input tr-cell-input-long"
+        value={val}
+        onChange={e => setVal(e.target.value)}
+        onBlur={commit}
+        onKeyDown={e => { if (e.key === 'Escape') { setVal(value); setEditing(false) } }}
+        autoFocus
+        rows={3}
+      />
+    ) : (
+      <input
+        className="tr-cell-input"
+        value={val}
+        onChange={e => setVal(e.target.value)}
+        onBlur={commit}
+        onKeyDown={e => {
+          if (e.key === 'Enter') commit()
+          if (e.key === 'Escape') { setVal(value); setEditing(false) }
+        }}
+        autoFocus
+      />
+    )
+  }
+
+  return (
+    <span
+      className={`tr-cell-view${long ? ' long' : ''}${!value ? ' empty' : ''}`}
+      onClick={() => setEditing(true)}
+      title={value || undefined}
+    >
+      {value || '—'}
+    </span>
+  )
+}
+
+function TranscriptsPanel({ userId }) {
+  const { content, handleChange, saved } = useIcaapNote(userId, 'transcripts-2025-2026')
+  const [pasteMode, setPasteMode] = useState(false)
+  const table = parseTable(content)
+
+  function saveTable(headers, rows) {
+    handleChange([headers.join('\t'), ...rows.map(r => r.join('\t'))].join('\n'))
+  }
+
+  function updateCell(ri, ci, value) {
+    if (!table) return
+    const newRows = table.rows.map((row, i) => {
+      if (i !== ri) return row
+      const updated = [...row]
+      updated[ci] = value
+      return updated
+    })
+    saveTable(table.headers, newRows)
+  }
+
+  function deleteRow(ri) {
+    if (!table) return
+    saveTable(table.headers, table.rows.filter((_, i) => i !== ri))
+  }
+
+  function addRow() {
+    if (!table) return
+    saveTable(table.headers, [...table.rows, table.headers.map(() => '')])
+  }
+
+  return (
+    <div className="tr-panel">
+      <div className="tr-toolbar">
+        <span className="tr-title">2025–2026 Transcripts</span>
+        <div className="tr-toolbar-right">
+          {saved && <span className="icaap-note-saved">Saved ✓</span>}
+          {table && !pasteMode && (
+            <button className="tr-add-btn" onClick={addRow}>+ Add Row</button>
+          )}
+          <button className="icaap-note-edit-btn" onClick={() => setPasteMode(m => !m)}>
+            {pasteMode ? 'View Table' : 'Paste from Excel'}
+          </button>
+        </div>
+      </div>
+
+      {pasteMode || !table ? (
+        <textarea
+          className="icaap-note-textarea"
+          value={content}
+          onChange={e => handleChange(e.target.value)}
+          placeholder="Paste data from Excel or a web table (tab-separated, first row = column headers)…"
+          autoFocus={pasteMode}
+        />
+      ) : (
+        <div className="tr-table-wrap">
+          <table className="tr-table">
+            <thead>
+              <tr>
+                {table.headers.map((h, i) => (
+                  <th key={i} className="tr-th" style={{ minWidth: colWidth(h) }}>{h}</th>
+                ))}
+                <th className="tr-th tr-th-del" />
+              </tr>
+            </thead>
+            <tbody>
+              {table.rows.map((row, ri) => (
+                <tr key={ri} className="tr-tr">
+                  {table.headers.map((h, ci) => (
+                    <td key={ci} className="tr-td">
+                      <TranscriptsCell
+                        value={row[ci] ?? ''}
+                        onChange={v => updateCell(ri, ci, v)}
+                        long={isLongCol(h)}
+                      />
+                    </td>
+                  ))}
+                  <td className="tr-td tr-td-del">
+                    <button className="icaap-row-delete-btn" onClick={() => deleteRow(ri)}>×</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
