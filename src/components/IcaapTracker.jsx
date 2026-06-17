@@ -1000,6 +1000,16 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
   const [editing, setEditing] = useState(false)
   const table = parseTable(content)
 
+  function deleteRow(rowIndex) {
+    const newRows = table.rows.filter((_, i) => i !== rowIndex)
+    const newContent = [
+      ...table.preamble,
+      table.headers.join('\t'),
+      ...newRows.map(r => r.join('\t')),
+    ].join('\n')
+    handleChange(newContent)
+  }
+
   return (
     <div className="icaap-note-panel">
       <div className="icaap-note-header" style={{ borderLeftColor: color }}>
@@ -1033,6 +1043,7 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
                 {table.headers.map((h, i) => (
                   <th key={i} style={{ borderBottomColor: color }}>{h}</th>
                 ))}
+                <th style={{ borderBottomColor: color }} />
               </tr>
             </thead>
             <tbody>
@@ -1041,6 +1052,9 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
                   {table.headers.map((_, ci) => (
                     <td key={ci}>{row[ci] ?? ''}</td>
                   ))}
+                  <td className="icaap-row-delete-cell">
+                    <button className="icaap-row-delete-btn" onClick={() => deleteRow(ri)} title="Remove row">×</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
