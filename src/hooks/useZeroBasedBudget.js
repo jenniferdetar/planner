@@ -22,7 +22,7 @@ const DEFAULT_SECTIONS = [
       ['Orkin', 50],
       ['Laundry', 80],
       ['Amazon Prime', 12],
-      ['Amazon Purchases', 0],
+      ['Amazon Purchases', 58],
       ['Ana', 180],
     ],
   },
@@ -45,7 +45,7 @@ const DEFAULT_SECTIONS = [
   },
   {
     section: 'Personal',
-    envelopes: [['Hair (Cheap)', 50], ['Hair (Expensive)', 0], ['Clothing', 0]],
+    envelopes: [['Hair (Cheap)', 50], ['Hair (Expensive)', 0]],
   },
   {
     section: 'Fun Money',
@@ -65,12 +65,11 @@ const DEFAULT_SECTIONS = [
       ['Debt Consolidation', 631],
       ["Jennifer's Student Loans - NelNet", 25],
       ["Jennifer's Student Loans - Sallie Mae", 202],
-      ['Schools First Loan', 0],
     ],
   },
   {
     section: 'Savings',
-    envelopes: [['Savings', 0]],
+    envelopes: [['Vacation', 0]],
   },
 ]
 
