@@ -3,6 +3,7 @@ import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
 import { useIcaapNote } from '../hooks/useIcaapNote'
+import { employeeMap } from '../data/employeeLookup'
 
 const CATEGORIES = ['Task', 'Meeting', 'Research', 'Review', 'Report', 'Follow-up', 'Other']
 const PRIORITIES = ['Low', 'Medium', 'High']
@@ -1168,6 +1169,10 @@ function TranscriptsPanel({ userId }) {
     setEntry(prev => {
       const next = { ...prev, [key]: value }
       if (key === 'program') next.adviser = PROGRAM_ADVISERS[value] || ''
+      if (key === 'en') {
+        const found = employeeMap.get(value.trim())
+        if (found) next.name = found
+      }
       return next
     })
   }
@@ -1227,8 +1232,8 @@ function TranscriptsPanel({ userId }) {
               <input className="tr-fi" value={entry.en} onChange={e => setField('en', e.target.value)} placeholder="Employee #" />
             </label>
             <label className="tr-fg tr-fg-lg">
-              <span>Teacher's Name</span>
-              <input className="tr-fi" value={entry.name} onChange={e => setField('name', e.target.value)} placeholder="Full name" required />
+              <span>Teacher's Name{employeeMap.get(entry.en?.trim()) === entry.name && entry.name ? ' ✓' : ''}</span>
+              <input className="tr-fi" value={entry.name} onChange={e => setField('name', e.target.value)} placeholder="Full name (auto-fills from EN)" required />
             </label>
             <label className="tr-fg">
               <span>Request From</span>
