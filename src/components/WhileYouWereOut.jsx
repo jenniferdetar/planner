@@ -75,7 +75,75 @@ export default function WhileYouWereOut({ userId }) {
   }
 
   function handlePrint() {
-    window.print()
+    const f = form
+    const check = (v) => v ? '☑' : '☐'
+    const win = window.open('', '_blank', 'width=520,height=720')
+    win.document.write(`<!DOCTYPE html>
+<html><head><title>While You Were Out</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #fff; display: flex; justify-content: center; padding: 24px; font-family: Arial, sans-serif; }
+  .pad { background: #f9cfc8; border: 3px solid #1a1a1a; border-radius: 10px; padding: 20px 22px 18px; width: 460px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px; }
+  .lbl { font-size: 14px; font-weight: 700; white-space: nowrap; min-width: 36px; }
+  .line { flex: 1; border-bottom: 1.5px solid #1a1a1a; padding: 2px 4px; font-size: 13px; min-height: 20px; }
+  .title { text-align: center; font-size: 20px; font-weight: 900; margin: 6px 0 12px; }
+  .urgent-box { border: 2px solid #1a1a1a; width: 16px; height: 16px; display: inline-block; margin-right: 4px; vertical-align: middle; }
+  .urgent-checked { background: #1a1a1a; }
+  .sub { font-size: 10px; text-align: center; margin-top: 2px; color: #333; }
+  .phone-group { display: flex; gap: 10px; flex: 1; }
+  .phone-cell { display: flex; flex-direction: column; flex: 1; }
+  .checks { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid #1a1a1a; margin: 12px 0; }
+  .checks-col { display: flex; flex-direction: column; }
+  .checks-col:first-child { border-right: 2px solid #1a1a1a; }
+  .check-row { display: flex; justify-content: space-between; padding: 6px 8px; font-size: 13px; font-weight: 600; border-bottom: 1.5px solid #1a1a1a; gap: 8px; }
+  .check-row:last-child { border-bottom: none; }
+  .msg-area { flex: 1; min-height: 110px; border-bottom: 1.5px solid #1a1a1a; padding: 2px 4px; font-size: 13px; line-height: 2.2; background-image: repeating-linear-gradient(to bottom, transparent, transparent calc(2.2em - 1px), #1a1a1a calc(2.2em - 1px), #1a1a1a 2.2em); white-space: pre-wrap; word-break: break-word; }
+  .signed-row { margin-top: 14px; }
+  @media print { body { padding: 0; } }
+</style>
+</head><body>
+<div class="pad">
+  <div class="row">
+    <span class="lbl">To</span><span class="line">${f.to}</span>
+    <span style="font-size:14px;font-weight:700;white-space:nowrap;margin-left:8px">
+      <span class="urgent-box${f.urgent ? ' urgent-checked' : ''}"></span> URGENT
+    </span>
+  </div>
+  <div class="row">
+    <span class="lbl">Date</span><span class="line" style="flex:1.2">${f.date}</span>
+    <span class="lbl" style="margin-left:8px">Time</span><span class="line" style="flex:1.2">${f.time}</span>
+    <span style="font-size:12px;font-weight:600;margin-left:6px;white-space:nowrap">${f.ampm}</span>
+  </div>
+  <div class="title">WHILE YOU WERE OUT</div>
+  <div class="row"><span class="lbl">From</span><span class="line">${f.from}</span></div>
+  <div class="row"><span class="lbl">of</span><span class="line">${f.of}</span></div>
+  <div class="row">
+    <span class="lbl">Phone</span><span class="line">${f.phone}</span>
+  </div>
+  <div class="row">
+    <span class="lbl">Fax</span><span class="line">${f.fax}</span>
+  </div>
+  <div class="checks">
+    <div class="checks-col">
+      <div class="check-row"><span>Telephoned</span><span>${check(f.telephoned)}</span></div>
+      <div class="check-row"><span>Came to see you</span><span>${check(f.cameToSeeYou)}</span></div>
+      <div class="check-row"><span>Returned your call</span><span>${check(f.returnedYourCall)}</span></div>
+    </div>
+    <div class="checks-col">
+      <div class="check-row"><span>Please Call</span><span>${check(f.pleaseCall)}</span></div>
+      <div class="check-row"><span>Wants to see you</span><span>${check(f.wantsToSeeYou)}</span></div>
+      <div class="check-row"><span>Will call again</span><span>${check(f.willCallAgain)}</span></div>
+    </div>
+  </div>
+  <div class="row" style="align-items:flex-start">
+    <span class="lbl">Message</span><div class="msg-area">${f.message}</div>
+  </div>
+  <div class="row signed-row"><span class="lbl">Signed</span><span class="line">${f.signed}</span></div>
+</div>
+<script>window.onload = function(){ window.print(); }<\/script>
+</body></html>`)
+    win.document.close()
   }
 
   if (!messages) return <div className="wywo-loading">Loading…</div>
