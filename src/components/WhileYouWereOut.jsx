@@ -74,6 +74,10 @@ export default function WhileYouWereOut({ userId }) {
     setView('form')
   }
 
+  function handlePrint() {
+    window.print()
+  }
+
   if (!messages) return <div className="wywo-loading">Loading…</div>
 
   return (
@@ -87,7 +91,7 @@ export default function WhileYouWereOut({ userId }) {
 
       {view === 'form' && (
         <div className="wywo-center">
-          <form className="wywo-pad" onSubmit={handleSubmit}>
+          <form className="wywo-pad wywo-print-target" onSubmit={handleSubmit}>
             {/* TO + URGENT */}
             <div className="wywo-row wywo-to-row">
               <div className="wywo-label-inline">
@@ -193,7 +197,10 @@ export default function WhileYouWereOut({ userId }) {
               </label>
             </div>
 
-            <button type="submit" className="wywo-submit">Save Message</button>
+            <div className="wywo-pad-btns">
+              <button type="submit" className="wywo-submit">Save Message</button>
+              <button type="button" className="wywo-print-btn" onClick={handlePrint}>🖨 Print</button>
+            </div>
           </form>
         </div>
       )}

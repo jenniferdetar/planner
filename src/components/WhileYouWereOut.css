@@ -1,5 +1,15 @@
 .wywo-loading { padding: 48px; text-align: center; color: #888; }
 
+/* Root — fills the panel and scrolls */
+.wywo-wrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Typeahead */
 .wywo-typeahead {
   position: relative;
@@ -47,12 +57,6 @@
   margin-top: 1px;
 }
 
-.wywo-wrap {
-  padding: 20px;
-  min-height: 100%;
-  color: #1a1a1a;
-}
-
 /* Tabs */
 .wywo-top-bar {
   display: flex;
@@ -86,6 +90,8 @@
   padding: 1px 7px;
   font-size: 11px;
 }
+
+/* Remove the old .wywo-wrap rule (now at top) */
 
 /* Center the pad */
 .wywo-center {
@@ -300,11 +306,16 @@
 /* SIGNED */
 .wywo-signed-row { margin-top: 14px; }
 
-/* SUBMIT */
-.wywo-submit {
-  display: block;
-  width: 100%;
+/* SUBMIT / PRINT buttons */
+.wywo-pad-btns {
+  display: flex;
+  gap: 8px;
   margin-top: 16px;
+}
+
+.wywo-submit {
+  flex: 1;
+  display: block;
   background: #8b2020;
   border: none;
   color: #fff;
@@ -318,6 +329,21 @@
 }
 
 .wywo-submit:hover { background: #a52828; }
+
+.wywo-print-btn {
+  background: #243040;
+  border: 1px solid #2e3d50;
+  color: #e8e4d8;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.wywo-print-btn:hover { background: #2e3d50; }
 
 /* LOG */
 .wywo-log { max-width: 700px; }
@@ -431,4 +457,52 @@
   color: #555;
   margin-top: 6px;
   font-style: italic;
+}
+
+/* ── PRINT ───────────────────────────────────────────── */
+@media print {
+  /* Hide everything on the page */
+  body > * { display: none !important; }
+
+  /* Show only the pad */
+  body .wywo-print-target {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    padding: 20px;
+    background: #fff;
+    z-index: 99999;
+  }
+
+  .wywo-print-target .wywo-pad {
+    max-width: 100%;
+    box-shadow: none;
+    border: 2px solid #000;
+    background: #f9cfc8 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide UI-only elements */
+  .wywo-pad-btns,
+  .wywo-suggestions {
+    display: none !important;
+  }
+
+  /* Make inputs look like filled-in fields */
+  .wywo-underline {
+    border-bottom: 1.5px solid #000 !important;
+    background: transparent !important;
+  }
+
+  .wywo-message-area {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(2.2em - 1px),
+      #000 calc(2.2em - 1px),
+      #000 2.2em
+    ) !important;
+  }
 }
