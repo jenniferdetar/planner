@@ -10,6 +10,7 @@ import LibraryPanel from './LibraryPanel'
 import GcuPanel from './GcuPanel'
 import PersonalPanel from './PersonalPanel'
 import FamilyTreePanel from './FamilyTreePanel'
+import MessageDeskPro from './MessageDeskPro'
 import { TASK_AREAS } from './Sidebar'
 
 
@@ -243,6 +244,10 @@ export default function DailyPlanner({
           onDeleteMember={onDeleteFamilyMember}
           onImportDefaults={onImportFamilyDefaults}
         />
+      )}
+
+      {view === 'messagedesk' && (
+        <MessageDeskPro userId={userId} />
       )}
 
 
