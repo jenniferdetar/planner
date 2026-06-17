@@ -184,6 +184,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           {extraHoursTab === 'profdev' && <IcaapNotePanel userId={userId} noteKey="profdev-09-27-25" title="Professional Development — 09-27-25" color="#7ba7e0" />}
           {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
           {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#a0c878" />}
+<<<<<<< HEAD
         </div>
       )}
 
@@ -228,6 +229,47 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
                 <div className="icaap-note-text">{n.note}</div>
                 <button className="icaap-note-delete" onClick={() => onDeleteIcaapNote?.(n.id)} title="Delete">×</button>
               </div>
+            ))}
+          </div>
+=======
+>>>>>>> 80c2402 (Add May 2026 tab to iCAAP Extra Hours with mentor hours data)
+        </div>
+      )}
+
+      {/* Notes tab */}
+      {tab === 'notes' && (
+        <div className="icaap-notes-section">
+          <div className="icaap-toolbar">
+            <span className="icaap-toolbar-label">One-off notes &amp; reminders</span>
+          </div>
+          <form className="icaap-notes-form" onSubmit={async (e) => {
+            e.preventDefault()
+            if (!noteText.trim()) return
+            await onAddIcaapNote?.(noteText.trim(), noteSource.trim())
+            setNoteText('')
+            setNoteSource('')
+          }}>
+            <textarea
+              className="icaap-textarea"
+              placeholder="Note *"
+              rows={2}
+              value={noteText}
+              onChange={e => setNoteText(e.target.value)}
+            />
+            <div className="icaap-notes-form-row">
+              <input
+                className="icaap-input"
+                placeholder="Source (optional)"
+                value={noteSource}
+                onChange={e => setNoteSource(e.target.value)}
+              />
+              <button type="submit" className="icaap-save">Add</button>
+            </div>
+          </form>
+          <div className="icaap-note-list">
+            {icaapNotes.length === 0 && <p className="icaap-empty">No notes yet</p>}
+            {icaapNotes.map(n => (
+              <IcaapNoteRowItem key={n.id} note={n} onDelete={onDeleteIcaapNote} />
             ))}
           </div>
         </div>
@@ -980,6 +1022,27 @@ function IcaapDashboard() {
           </table>
         </div>
       )}
+    </div>
+  )
+}
+
+function IcaapNoteRowItem({ note: n, onDelete }) {
+  const [expanded, setExpanded] = useState(false)
+  return (
+    <div
+      className={`icaap-note-row${expanded ? ' expanded' : ''}`}
+      onClick={() => setExpanded(e => !e)}
+    >
+      <div className="icaap-note-meta">
+        <span className="icaap-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
+        {n.source && <span className="icaap-note-source">{n.source}</span>}
+      </div>
+      <div className="icaap-note-text">{n.note}</div>
+      <button
+        className="icaap-note-delete"
+        onClick={e => { e.stopPropagation(); onDelete?.(n.id) }}
+        title="Delete"
+      >×</button>
     </div>
   )
 }

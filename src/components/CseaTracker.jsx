@@ -243,14 +243,7 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
           <div className="csea-issue-list">
             {cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
             {cseaNotes.map(n => (
-              <div key={n.id} className="csea-note-row">
-                <div className="csea-note-meta">
-                  <span className="csea-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
-                  {n.source && <span className="csea-note-source">{n.source}</span>}
-                </div>
-                <div className="csea-note-text">{n.note}</div>
-                <button className="csea-note-delete" onClick={() => onDeleteCseaNote?.(n.id)} title="Delete">×</button>
-              </div>
+              <CseaNoteRowItem key={n.id} note={n} onDelete={onDeleteCseaNote} />
             ))}
           </div>
         </div>
@@ -332,6 +325,27 @@ function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+function CseaNoteRowItem({ note: n, onDelete }) {
+  const [expanded, setExpanded] = useState(false)
+  return (
+    <div
+      className={`csea-note-row${expanded ? ' expanded' : ''}`}
+      onClick={() => setExpanded(e => !e)}
+    >
+      <div className="csea-note-meta">
+        <span className="csea-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
+        {n.source && <span className="csea-note-source">{n.source}</span>}
+      </div>
+      <div className="csea-note-text">{n.note}</div>
+      <button
+        className="csea-note-delete"
+        onClick={e => { e.stopPropagation(); onDelete?.(n.id) }}
+        title="Delete"
+      >×</button>
     </div>
   )
 }
