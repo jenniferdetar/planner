@@ -142,6 +142,13 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </div>
       </div>
 
+      {/* Reference link */}
+      <div className="icaap-ref-row">
+        <a className="icaap-ref-link" href="https://lausd-my.sharepoint.com/:x:/r/personal/jennifer_detar_lausd_net/Documents/2025-2026%20Transcripts.xlsx?d=wf58c588a79ec4907a35067c636778268&csf=1&web=1&e=3WYEai" target="_blank" rel="noreferrer">
+          📄 2025–2026 Transcripts
+        </a>
+      </div>
+
       {/* Sub-tabs */}
       <div className="icaap-tabs">
         <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
@@ -185,6 +192,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
           {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#a0c878" />}
 <<<<<<< HEAD
+<<<<<<< HEAD
         </div>
       )}
 
@@ -226,6 +234,49 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           </div>
 =======
 >>>>>>> 80c2402 (Add May 2026 tab to iCAAP Extra Hours with mentor hours data)
+        </div>
+      )}
+
+      {/* Notes tab */}
+      {tab === 'notes' && (
+        <div className="icaap-notes-section">
+          <div className="icaap-toolbar">
+            <span className="icaap-toolbar-label">One-off notes &amp; reminders</span>
+          </div>
+          <form className="icaap-notes-form" onSubmit={async (e) => {
+            e.preventDefault()
+            if (!noteText.trim()) return
+            await onAddIcaapNote?.(noteText.trim(), noteSource.trim())
+            setNoteText('')
+            setNoteSource('')
+          }}>
+            <textarea
+              className="icaap-textarea"
+              placeholder="Note *"
+              rows={2}
+              value={noteText}
+              onChange={e => setNoteText(e.target.value)}
+            />
+            <div className="icaap-notes-form-row">
+              <input
+                className="icaap-input"
+                placeholder="Source (optional)"
+                value={noteSource}
+                onChange={e => setNoteSource(e.target.value)}
+              />
+              <button type="submit" className="icaap-save">Add</button>
+            </div>
+          </form>
+          <div className="icaap-note-list">
+            {icaapNotes.length === 0 && <p className="icaap-empty">No notes yet</p>}
+            {icaapNotes.map(n => (
+              <IcaapNoteRowItem key={n.id} note={n} onDelete={onDeleteIcaapNote} />
+            ))}
+          </div>
+=======
+>>>>>>> 80c2402 (Add May 2026 tab to iCAAP Extra Hours with mentor hours data)
+=======
+>>>>>>> a149b5f (Fix leftover merge conflict markers in IcaapTracker.jsx)
         </div>
       )}
 
