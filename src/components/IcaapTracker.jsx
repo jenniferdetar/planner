@@ -265,6 +265,8 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
               <IcaapNoteRowItem key={n.id} note={n} onDelete={onDeleteIcaapNote} />
             ))}
           </div>
+=======
+>>>>>>> 80c2402 (Add May 2026 tab to iCAAP Extra Hours with mentor hours data)
         </div>
       )}
 
