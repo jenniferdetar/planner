@@ -102,7 +102,16 @@ export default function Sidebar({
             {navItem('📊', 'iCAAP', 'icaap')}
             {navItem('🎓', 'GCU', 'gcu')}
             {navItem('💰', 'Finance', 'finance')}
-            {navItem('💬', 'MessageDesk Pro', 'messagedesk')}
+            <a
+              href="https://github.com/jenniferdetar/MessageDesk-Pro/tree/claude/blissful-wright-i7qk5e"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sidebar-nav-item"
+              title={collapsed ? 'MessageDesk Pro' : undefined}
+            >
+              <span className="nav-icon">💬</span>
+              {!collapsed && 'MessageDesk Pro'}
+            </a>
           </div>
 
           {/* Nav: PERSONAL */}
