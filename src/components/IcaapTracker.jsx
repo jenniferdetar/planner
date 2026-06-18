@@ -927,6 +927,7 @@ function IcaapDashboard() {
   const [search, setSearch] = useState('')
   const [showImport, setShowImport] = useState(false)
   const [showImportHours, setShowImportHours] = useState(false)
+  const [missingOnly, setMissingOnly] = useState(false)
 
   const month = DASHBOARD_MONTHS.find(m => m.key === selectedMonth)
   const filtered = rows.filter(r => r.name.toLowerCase().includes(search.toLowerCase()))
@@ -935,6 +936,10 @@ function IcaapDashboard() {
   const paylogged = filtered.filter(r => !!r.ps[month?.paylogKey]).length
   const approved  = filtered.filter(r => !!r.ad[month?.key]).length
   const total = filtered.length
+
+  const displayRows = missingOnly
+    ? filtered.filter(r => !r.hw[month?.key] || !r.ps[month?.paylogKey] || !r.ad[month?.key])
+    : filtered
 
   return (
     <div className="dash-panel">
@@ -967,6 +972,13 @@ function IcaapDashboard() {
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
+          <button
+            className={`filter-pill ${missingOnly ? 'active' : ''}`}
+            onClick={() => setMissingOnly(m => !m)}
+            title="Show only employees missing info for this month"
+          >
+            Missing info {missingOnly && `(${displayRows.length})`}
+          </button>
           <button className="dash-import-btn" onClick={() => setShowImportHours(true)}>↑ Import Hours</button>
           <button className="dash-import-btn" onClick={() => setShowImport(true)}>↑ Import Paylog</button>
         </div>
@@ -993,7 +1005,7 @@ function IcaapDashboard() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map(r => (
+              {displayRows.map(r => (
                 <tr key={r.name} className="dash-tr">
                   <td className="dash-td-name">
                     <div>{r.name}</div>
