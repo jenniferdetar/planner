@@ -3,7 +3,7 @@ import './GcuPanel.css'
 
 export const GCU_COURSES = [
   // Core
-  { code: 'UNV-504', name: 'Introduction to Graduate Studies', credits: 4, type: 'core', description: 'Prepares students for graduate-level academic work, research methods, and APA writing.' },
+  { code: 'UNV-504', name: 'Introduction to Graduate Studies', credits: 2, type: 'core', description: 'Prepares students for graduate-level academic work, research methods, and APA writing.' },
   { code: 'ADM-611', name: 'Public Organizational Theory', credits: 4, type: 'core', description: 'Examines organizational behavior, leadership science, and effective public sector management.' },
   { code: 'ADM-614', name: 'Economics for Public Administrators', credits: 4, type: 'core', description: 'Explores the role of government in the economy in the context of market failure and social equity.' },
   { code: 'ADM-624', name: 'Public Governance', credits: 4, type: 'core', description: 'Best practices in public governance, transparency, participation, and accountability.' },
