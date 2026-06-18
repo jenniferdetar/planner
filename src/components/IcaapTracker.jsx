@@ -629,7 +629,7 @@ function DashCell({ value, onSave, type = 'text' }) {
       autoFocus
     />
   ) : (
-    <span className="dash-cell-view" onClick={() => setEditing(true)}>
+    <span className="dash-cell-view" onClick={value ? undefined : () => setEditing(true)} style={value ? { cursor: 'default' } : undefined}>
       {value || '—'}
     </span>
   )
