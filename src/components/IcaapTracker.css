@@ -1352,6 +1352,14 @@
   border-bottom: 1px solid #f0ede6;
 }
 
+.dash-td-ids {
+  display: flex;
+  gap: 8px;
+  font-size: 10px;
+  color: #999;
+  margin-top: 1px;
+}
+
 .dash-cell {
   padding: 3px 6px;
   text-align: center;

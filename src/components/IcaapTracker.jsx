@@ -995,7 +995,15 @@ function IcaapDashboard() {
             <tbody>
               {filtered.map(r => (
                 <tr key={r.name} className="dash-tr">
-                  <td className="dash-td-name">{r.name}</td>
+                  <td className="dash-td-name">
+                    <div>{r.name}</div>
+                    {(r.hw['PERN'] || r.ps['Employee Number']) && (
+                      <div className="dash-td-ids">
+                        {r.hw['PERN'] && <span>PERN {r.hw['PERN']}</span>}
+                        {r.ps['Employee Number'] && <span>EE {r.ps['Employee Number']}</span>}
+                      </div>
+                    )}
+                  </td>
                   <td className={`dash-cell ${r.hw[month?.key] ? 'dash-done' : 'dash-missing'}`}>
                     <DashCell
                       value={r.hw[month?.key] ?? ''}
