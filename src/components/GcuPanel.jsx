@@ -22,7 +22,14 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
   const [statuses, setStatuses] = useState(() =>
     Object.fromEntries(GCU_COURSES.map(c => [c.code, 'not started']))
   )
+  const [grades, setGrades] = useState(() =>
+    Object.fromEntries(GCU_COURSES.map(c => [c.code, '']))
+  )
   const [expanded, setExpanded] = useState(null)
+
+  function setGrade(code, value) {
+    setGrades(prev => ({ ...prev, [code]: value }))
+  }
 
   function cycleStatus(code) {
     setStatuses(prev => {
@@ -63,24 +70,28 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
           label="Core Courses"
           courses={core}
           statuses={statuses}
+          grades={grades}
           expanded={expanded}
           onToggle={setExpanded}
           onCycle={cycleStatus}
+          onGrade={setGrade}
         />
         <CourseGroup
           label="Government &amp; Policy Emphasis"
           courses={emphasis}
           statuses={statuses}
+          grades={grades}
           expanded={expanded}
           onToggle={setExpanded}
           onCycle={cycleStatus}
+          onGrade={setGrade}
         />
       </div>
     </div>
   )
 }
 
-function CourseGroup({ label, courses, statuses, expanded, onToggle, onCycle }) {
+function CourseGroup({ label, courses, statuses, grades, expanded, onToggle, onCycle, onGrade }) {
   return (
     <div className="gcu-group">
       <div className="gcu-group-label" dangerouslySetInnerHTML={{ __html: label }} />
@@ -99,8 +110,17 @@ function CourseGroup({ label, courses, statuses, expanded, onToggle, onCycle }) 
               <div className="gcu-course-info">
                 <span className="gcu-course-code">{course.code}</span>
                 <span className="gcu-course-name">{course.name}</span>
-                {course.start && <span className="gcu-course-dates">{course.start} – {course.end}</span>}
+                {course.end && <span className="gcu-course-due"><span className="gcu-due-label">Due</span> {course.end}</span>}
               </div>
+              <input
+                className="gcu-grade-input"
+                type="text"
+                value={grades[course.code]}
+                onChange={e => onGrade(course.code, e.target.value)}
+                onClick={e => e.stopPropagation()}
+                placeholder="Grade"
+                maxLength={6}
+              />
               <span className="gcu-credits">{course.credits} cr</span>
               <span className="gcu-status-label" style={{ color: STATUS_COLORS[status] }}>{status}</span>
               <span className="gcu-chevron">{isOpen ? '▲' : '▾'}</span>
