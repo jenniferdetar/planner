@@ -2,6 +2,8 @@ import { useState } from 'react'
 import './GcuPanel.css'
 
 export const GCU_COURSES = [
+  // Completed
+  { code: 'UNV-504', name: 'Introduction to Graduate Studies in the Liberal Arts', credits: 2, type: 'completed', start: '5/20/2021', end: '6/16/2021', description: 'Introduction to graduate-level academic expectations, research, and writing in the liberal arts.' },
   // Core Courses — sorted oldest to newest by start date
   { code: 'ADM-624', name: 'Public Governance', credits: 4, type: 'core', start: '7/16/2026', end: '9/9/2026', description: 'Best practices in public governance, transparency, participation, and accountability.' },
   { code: 'ADM-530', name: 'Public and Nonprofit Administration', credits: 4, type: 'core', start: '9/10/2026', end: '11/4/2026', description: 'Principles and practices of managing public and nonprofit organizations; structure, accountability, and service delivery.' },
@@ -39,10 +41,10 @@ function calcGPA(grades) {
 
 export default function GcuPanel({ onPushToAsana, pushing }) {
   const [statuses, setStatuses] = useState(() =>
-    Object.fromEntries(GCU_COURSES.map(c => [c.code, 'not started']))
+    Object.fromEntries(GCU_COURSES.map(c => [c.code, c.type === 'completed' ? 'completed' : 'not started']))
   )
   const [grades, setGrades] = useState(() =>
-    Object.fromEntries(GCU_COURSES.map(c => [c.code, '']))
+    Object.fromEntries(GCU_COURSES.map(c => [c.code, c.type === 'completed' ? 'A' : '']))
   )
   const [expanded, setExpanded] = useState(null)
 
@@ -57,6 +59,7 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
     })
   }
 
+  const completed = GCU_COURSES.filter(c => c.type === 'completed')
   const core = GCU_COURSES.filter(c => c.type === 'core')
   const emphasis = GCU_COURSES.filter(c => c.type === 'emphasis')
   const total = GCU_COURSES.reduce((s, c) => s + c.credits, 0)
@@ -89,6 +92,16 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
       </div>
 
       <div className="gcu-body">
+        <CourseGroup
+          label="Completed"
+          courses={completed}
+          statuses={statuses}
+          grades={grades}
+          expanded={expanded}
+          onToggle={setExpanded}
+          onCycle={cycleStatus}
+          onGrade={setGrade}
+        />
         <CourseGroup
           label="Core Courses"
           courses={core}
