@@ -93,7 +93,6 @@ export function useMemberInteractions(userId) {
       .from('member_interactions')
       .select('*')
       .order('date_spoke', { ascending: false })
-      .limit(20)
       .then(({ data }) => setInteractions(data || []))
   }, [userId])
 
