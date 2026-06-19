@@ -18,6 +18,25 @@ export const GCU_COURSES = [
 const STATUS_CYCLE = ['not started', 'in progress', 'completed']
 const STATUS_COLORS = { 'not started': '#bbb', 'in progress': '#f0a040', 'completed': '#5cb85c' }
 
+const GRADE_POINTS = {
+  'A': 4.0, 'A-': 3.7,
+  'B+': 3.3, 'B': 3.0, 'B-': 2.7,
+  'C+': 2.3, 'C': 2.0, 'C-': 1.7,
+  'D+': 1.3, 'D': 1.0, 'D-': 0.7,
+  'F': 0.0,
+}
+
+function calcGPA(grades) {
+  const graded = GCU_COURSES.filter(c => {
+    const g = grades[c.code]?.trim().toUpperCase()
+    return g && GRADE_POINTS[g] !== undefined
+  })
+  if (!graded.length) return null
+  const totalPoints = graded.reduce((s, c) => s + GRADE_POINTS[grades[c.code].trim().toUpperCase()] * c.credits, 0)
+  const totalCredits = graded.reduce((s, c) => s + c.credits, 0)
+  return (totalPoints / totalCredits).toFixed(2)
+}
+
 export default function GcuPanel({ onPushToAsana, pushing }) {
   const [statuses, setStatuses] = useState(() =>
     Object.fromEntries(GCU_COURSES.map(c => [c.code, 'not started']))
@@ -42,6 +61,7 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
   const emphasis = GCU_COURSES.filter(c => c.type === 'emphasis')
   const total = GCU_COURSES.reduce((s, c) => s + c.credits, 0)
   const done = GCU_COURSES.filter(c => statuses[c.code] === 'completed').reduce((s, c) => s + c.credits, 0)
+  const gpa = calcGPA(grades)
 
   return (
     <div className="gcu-panel">
@@ -62,7 +82,10 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
         <div className="gcu-progress-bar-wrap">
           <div className="gcu-progress-bar" style={{ width: `${(done / total) * 100}%` }} />
         </div>
-        <div className="gcu-progress-label">{done} / {total} credit hours complete</div>
+        <div className="gcu-progress-label">
+          {done} / {total} credit hours complete
+          {gpa !== null && <span className="gcu-gpa-badge">GPA {gpa}</span>}
+        </div>
       </div>
 
       <div className="gcu-body">

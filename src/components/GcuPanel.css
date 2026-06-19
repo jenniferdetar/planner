@@ -91,6 +91,19 @@
   font-size: 11px;
   color: rgba(255,255,255,0.7);
   letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gcu-gpa-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gcu-gold);
+  letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
 }
 
 /* ── Body ── */
