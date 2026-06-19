@@ -18,7 +18,7 @@ const SUB_TABS = [
   { key: 'budget',    label: 'Wants',              color: '#4a7a6a' },
 ]
 
-export default function PersonalPanel({ userId, selectedDate, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks, subTab = 'log', onSubTabChange }) {
+export default function PersonalPanel({ userId, selectedDate, onDateChange, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks, subTab = 'log', onSubTabChange }) {
   const dateStr = selectedDate instanceof Date
     ? selectedDate.toISOString().split('T')[0]
     : new Date().toISOString().split('T')[0]
@@ -64,6 +64,18 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
     ? selectedDate.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })
     : new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })
 
+  function prevDay() {
+    const d = new Date(selectedDate instanceof Date ? selectedDate : new Date())
+    d.setDate(d.getDate() - 1)
+    onDateChange?.(d)
+  }
+
+  function nextDay() {
+    const d = new Date(selectedDate instanceof Date ? selectedDate : new Date())
+    d.setDate(d.getDate() + 1)
+    onDateChange?.(d)
+  }
+
   const activeColor = SUB_TABS.find(t => t.key === subTab)?.color || '#73a882'
 
   return (
@@ -72,7 +84,9 @@ export default function PersonalPanel({ userId, selectedDate, books, onAddBook, 
         <div className="personal-body">
           <div className="daily-log-section">
             <div className="daily-log-header">
+              <button className="day-nav-btn" onClick={prevDay} aria-label="Previous day">‹</button>
               <span className="daily-log-date">{displayDate}</span>
+              <button className="day-nav-btn" onClick={nextDay} aria-label="Next day">›</button>
             </div>
             <form className="daily-log-form" onSubmit={handleAdd}>
               <input
