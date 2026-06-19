@@ -115,15 +115,41 @@
 .daily-log-header {
   display: flex;
   align-items: center;
+  gap: 8px;
   margin-bottom: 10px;
 }
 
 .daily-log-date {
+  flex: 1;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: #4a7a6a;
+  text-align: center;
+}
+
+.day-nav-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #f0ede6;
+  color: #3d6a5a;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  padding: 0;
+}
+
+.day-nav-btn:hover {
+  background: #3d6a5a;
+  color: #fff;
 }
 
 .daily-log-form {

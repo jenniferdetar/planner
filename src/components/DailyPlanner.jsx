@@ -199,6 +199,7 @@ export default function DailyPlanner({
         <PersonalPanel
           userId={userId}
           selectedDate={selectedDate}
+          onDateChange={onDateChange}
           books={books}
           onAddBook={onAddBook}
           onUpdateBookStatus={onUpdateBookStatus}

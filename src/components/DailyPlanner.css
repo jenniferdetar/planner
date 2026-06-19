@@ -533,14 +533,34 @@
   font-family: inherit;
   resize: vertical;
   outline: none;
-  background: #faf9f6;
-  line-height: 1.5;
+  background-color: #fffef0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 17px,
+    #b8d8e0 17px,
+    #b8d8e0 18px
+  );
+  background-size: 100% 18px;
+  background-position: 0 8px;
+  background-attachment: local;
+  line-height: 18px;
   transition: border-color 0.15s;
 }
 
 .task-notes-input:focus {
   border-color: #4a7a6a;
-  background: #fff;
+  background-color: #fffde6;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 17px,
+    #b8d8e0 17px,
+    #b8d8e0 18px
+  );
+  background-size: 100% 18px;
+  background-position: 0 8px;
+  background-attachment: local;
 }
 
 .delete-task-btn:hover {
