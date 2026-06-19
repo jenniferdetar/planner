@@ -79,7 +79,7 @@ export default function App() {
   const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
-  const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction } = useMemberInteractions(userId)
+  const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction, showArchived: showArchivedInteractions, setShowArchived: setShowArchivedInteractions } = useMemberInteractions(userId)
   const { notes: cseaNotes, addNote: addCseaNote, deleteNote: deleteCseaNote } = useCseaNotes(userId)
   const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
@@ -264,6 +264,8 @@ export default function App() {
           cseaInteractions={cseaInteractions}
           onAddCseaInteraction={addCseaInteraction}
           onUpdateCseaInteraction={updateCseaInteraction}
+          showArchivedInteractions={showArchivedInteractions}
+          onToggleArchivedInteractions={() => setShowArchivedInteractions(v => !v)}
           cseaNotes={cseaNotes}
           onAddCseaNote={addCseaNote}
           onDeleteCseaNote={deleteCseaNote}

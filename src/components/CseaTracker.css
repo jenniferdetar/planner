@@ -122,6 +122,23 @@
   border-color: #1e3342;
 }
 
+.csea-archive-toggle {
+  font-size: 11px;
+  font-weight: 600;
+  color: #999;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  background: none;
+  transition: all 0.15s;
+}
+
+.csea-archive-toggle:hover {
+  border-color: #999;
+  color: #555;
+}
+
 .csea-add-btn {
   font-size: 12px;
   font-weight: 600;

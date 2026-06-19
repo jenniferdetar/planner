@@ -86,15 +86,17 @@ export function useCseaIssues(userId) {
 
 export function useMemberInteractions(userId) {
   const [interactions, setInteractions] = useState([])
+  const [showArchived, setShowArchived] = useState(false)
 
   useEffect(() => {
     if (!userId) return
-    supabase
+    let q = supabase
       .from('member_interactions')
       .select('*')
       .order('date_spoke', { ascending: false })
-      .then(({ data }) => setInteractions(data || []))
-  }, [userId])
+    if (!showArchived) q = q.eq('archived', false)
+    q.then(({ data }) => setInteractions(data || []))
+  }, [userId, showArchived])
 
   async function addInteraction(fields) {
     const { data } = await supabase
@@ -115,7 +117,7 @@ export function useMemberInteractions(userId) {
     if (data) setInteractions((prev) => prev.map(i => i.id === id ? data : i))
   }
 
-  return { interactions, addInteraction, updateInteraction }
+  return { interactions, addInteraction, updateInteraction, showArchived, setShowArchived }
 }
 
 export function useCseaNotes(userId) {

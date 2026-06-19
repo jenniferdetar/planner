@@ -56,7 +56,7 @@ const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote }) {
+export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote }) {
   const workLocations = useWorkLocations()
   const [tab, setTab] = useState('issues')
   const [showAddIssue, setShowAddIssue] = useState(false)
@@ -252,7 +252,10 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
       {tab === 'interactions' && (
         <div className="csea-panel">
           <div className="csea-toolbar">
-            <span className="csea-toolbar-label">Recent member contacts</span>
+            <span className="csea-toolbar-label">Member contacts</span>
+            <button className="csea-archive-toggle" onClick={onToggleArchived}>
+              {showArchived ? 'Hide Archived' : 'Show Archived'}
+            </button>
             <button className="csea-add-btn" onClick={() => setShowAddInteraction(true)}>+ Log Contact</button>
           </div>
 
