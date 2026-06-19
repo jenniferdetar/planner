@@ -213,7 +213,7 @@ export default function App() {
   const mp = isMobile ? mobilePanel : null
 
   return (
-    <div className="app">
+    <div className={`app${view === 'month' ? ' month-fullpage' : ''}`}>
       <div className={mp === 'sidebar' ? 'mobile-active' : undefined}>
         <Sidebar
           asanaTasks={asanaTasks}
