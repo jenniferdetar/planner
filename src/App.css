@@ -10,6 +10,13 @@
   display: contents;
 }
 
+/* Month view: hide sidebar on desktop so calendar fills the full page */
+@media (min-width: 769px) {
+  .app.month-fullpage > div:first-child {
+    display: none;
+  }
+}
+
 /* ── Mobile layout ── */
 @media (max-width: 768px) {
   .app {
