@@ -57,7 +57,7 @@ export default function DailyPlanner({
   view, onViewChange,
   taskCounts,
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
-  cseaInteractions, onAddCseaInteraction, onUpdateCseaInteraction,
+  cseaInteractions, onAddCseaInteraction, onUpdateCseaInteraction, showArchivedInteractions, onToggleArchivedInteractions,
   cseaNotes, onAddCseaNote, onDeleteCseaNote,
   asanaCseaTasks, asanaIcaapTasks, onCompleteAsanaTask, onUpdateAsanaTaskNotes,
   onMonthChange,
@@ -174,6 +174,8 @@ export default function DailyPlanner({
           interactions={cseaInteractions || []}
           onAddInteraction={onAddCseaInteraction}
           onUpdateInteraction={onUpdateCseaInteraction}
+          showArchived={showArchivedInteractions}
+          onToggleArchived={onToggleArchivedInteractions}
           asanaTasks={asanaCseaTasks || []}
           onCompleteAsanaTask={onCompleteAsanaTask}
           onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
