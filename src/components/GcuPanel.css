@@ -185,6 +185,47 @@
   flex-shrink: 0;
 }
 
+.gcu-course-due {
+  font-size: 10px;
+  color: #aaa;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.gcu-due-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gcu);
+  font-size: 9px;
+  margin-right: 2px;
+}
+
+.gcu-grade-input {
+  width: 56px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2a2520;
+  text-align: center;
+  border: 1px solid #e0dcd4;
+  border-radius: 6px;
+  padding: 3px 6px;
+  background: #fff;
+  flex-shrink: 0;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.gcu-grade-input:focus {
+  border-color: var(--gcu);
+  box-shadow: 0 0 0 2px rgba(81,42,148,0.12);
+}
+
+.gcu-grade-input::placeholder {
+  color: #ccc;
+  font-weight: 400;
+}
+
 .gcu-credits {
   font-size: 11px;
   font-weight: 600;
