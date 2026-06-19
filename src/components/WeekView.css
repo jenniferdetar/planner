@@ -337,13 +337,52 @@
     grid-template-columns: 1fr;
   }
 
+  /* Keep both columns visible on mobile — left header stays in view */
   .week-day-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 110px 1fr;
+  }
+
+  .week-day-tasks {
+    padding: 8px 8px 8px 10px;
+    border-left-width: 3px;
+  }
+
+  .week-day-label {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  .week-day-date {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .week-task-text {
+    font-size: 10px;
+  }
+
+  .week-add-btn {
+    font-size: 10px;
   }
 
   .week-day-events {
-    border-top: 1px solid #e8e5de;
-    padding: 8px 14px 12px;
+    border-top: none;
+    border-left: 1px solid #e8e5de;
+    padding: 8px 8px 8px 10px;
+  }
+
+  .week-event-pill {
+    font-size: 11px !important;
+    padding: 2px 5px;
+  }
+
+  .week-event-time {
+    font-size: 11px !important;
+  }
+
+  .week-title {
+    font-size: 13px;
+    min-width: 200px;
   }
 }
 
