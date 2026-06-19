@@ -68,6 +68,10 @@ const DEFAULT_SECTIONS = [
     ],
   },
   {
+    section: 'Education',
+    envelopes: [['GCU Tuition', 0]],
+  },
+  {
     section: 'Savings',
     envelopes: [['Vacation', 0]],
   },
