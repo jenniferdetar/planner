@@ -45,7 +45,7 @@ export default function FinancialPanel({
       </div>
 
       <div className="fin-tabs">
-        {['bills', 'goals', 'coins', 'budget'].map(t => (
+        {['bills', 'goals', 'coins', 'budget', 'laundry'].map(t => (
           <button key={t} className={`fin-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
             {t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
@@ -56,6 +56,7 @@ export default function FinancialPanel({
       {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
       {tab === 'coins' && <CoinsTab userId={userId} />}
       {tab === 'budget' && <ZeroBasedBudget userId={userId} bills={bills} />}
+      {tab === 'laundry' && <LaundryTab userId={userId} />}
     </div>
   )
 }
@@ -790,6 +791,191 @@ function BudgetTab({ bills, userId }) {
           </tbody>
         </table>
       </div>
+    </div>
+  )
+}
+
+// ─── Laundry Tracker ────────────────────────────────────────────────────────
+
+const MACHINE_TYPES = [
+  { key: 'top_load', label: 'Top Load Washer', costPerLoad: 1.75, defaultMinutes: 40, type: 'wash' },
+  { key: 'front_load', label: 'Front Load Washer', costPerLoad: 2.00, defaultMinutes: null, type: 'wash' },
+  { key: 'dryer', label: 'Dryer', costPerLoad: 1.75, defaultMinutes: 45, type: 'dry' },
+]
+
+function quartersFor(cost) { return Math.round(cost / 0.25) }
+
+function LaundryTab({ userId }) {
+  const [sessions, setSessions] = useState([])
+  const [showForm, setShowForm] = useState(false)
+  const [form, setForm] = useState({
+    session_date: new Date().toISOString().split('T')[0],
+    type: 'wash',
+    machine_type: 'top_load',
+    loads: 1,
+    quarters: 7,
+    minutes: 40,
+    notes: '',
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('laundry_sessions').select('*').eq('user_id', userId)
+      .order('session_date', { ascending: false }).order('created_at', { ascending: false })
+      .then(({ data }) => { if (data) setSessions(data); setLoading(false) })
+  }, [userId])
+
+  function onMachineChange(machineKey) {
+    const m = MACHINE_TYPES.find(x => x.key === machineKey)
+    setForm(f => ({
+      ...f,
+      machine_type: machineKey,
+      type: m.type,
+      quarters: quartersFor(m.costPerLoad * f.loads),
+      minutes: m.defaultMinutes || f.minutes,
+    }))
+  }
+
+  function onLoadsChange(loads) {
+    const n = parseInt(loads) || 1
+    const m = MACHINE_TYPES.find(x => x.key === form.machine_type)
+    setForm(f => ({ ...f, loads: n, quarters: quartersFor(m.costPerLoad * n) }))
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    const payload = { ...form, user_id: userId, loads: parseInt(form.loads), quarters: parseInt(form.quarters), minutes: parseInt(form.minutes) }
+    const { data } = await supabase.from('laundry_sessions').insert(payload).select().single()
+    if (data) setSessions(s => [data, ...s])
+    setShowForm(false)
+    setForm({ session_date: new Date().toISOString().split('T')[0], type: 'wash', machine_type: 'top_load', loads: 1, quarters: 7, minutes: 40, notes: '' })
+  }
+
+  async function deleteSession(id) {
+    await supabase.from('laundry_sessions').delete().eq('id', id)
+    setSessions(s => s.filter(x => x.id !== id))
+  }
+
+  const byDate = {}
+  sessions.forEach(s => {
+    if (!byDate[s.session_date]) byDate[s.session_date] = []
+    byDate[s.session_date].push(s)
+  })
+  const dates = Object.keys(byDate).sort((a, b) => b.localeCompare(a))
+
+  function fmtDate(d) {
+    const dt = new Date(d + 'T12:00:00')
+    return dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  function machineLabel(key) {
+    return MACHINE_TYPES.find(m => m.key === key)?.label || key
+  }
+
+  return (
+    <div className="fin-content laundry-content">
+      <div className="fin-toolbar">
+        <span className="fin-toolbar-label">Laundry Tracker</span>
+        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Log Load</button>
+      </div>
+
+      <div className="laundry-note">
+        Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75/load (45 min default)
+      </div>
+
+      {showForm && (
+        <form className="fin-form laundry-form" onSubmit={handleSubmit}>
+          <div className="fin-form-row">
+            <input className="fin-input" type="date" value={form.session_date}
+              onChange={e => setForm(f => ({ ...f, session_date: e.target.value }))} required />
+            <select className="fin-input" value={form.machine_type} onChange={e => onMachineChange(e.target.value)}>
+              {MACHINE_TYPES.map(m => <option key={m.key} value={m.key}>{m.label}</option>)}
+            </select>
+          </div>
+          <div className="fin-form-row">
+            <label className="laundry-lbl">
+              <span>Loads</span>
+              <input className="fin-input" type="number" min="1" value={form.loads} onChange={e => onLoadsChange(e.target.value)} />
+            </label>
+            <label className="laundry-lbl">
+              <span>Quarters</span>
+              <input className="fin-input" type="number" min="0" value={form.quarters} onChange={e => setForm(f => ({ ...f, quarters: e.target.value }))} />
+            </label>
+            <label className="laundry-lbl">
+              <span>Minutes</span>
+              <input className="fin-input" type="number" min="0" value={form.minutes} onChange={e => setForm(f => ({ ...f, minutes: e.target.value }))} />
+            </label>
+          </div>
+          <input className="fin-input" placeholder="Notes (optional)" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
+          <div className="fin-form-actions">
+            <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
+            <button type="submit" className="fin-save">Save</button>
+          </div>
+        </form>
+      )}
+
+      {loading && <p className="fin-empty">Loading…</p>}
+      {!loading && sessions.length === 0 && <p className="fin-empty">No laundry sessions yet.</p>}
+
+      {dates.map(date => {
+        const daySessions = byDate[date]
+        const washSessions = daySessions.filter(s => s.type === 'wash')
+        const drySessions = daySessions.filter(s => s.type === 'dry')
+        const totalQuarters = daySessions.reduce((s, x) => s + x.quarters, 0)
+        const totalCost = totalQuarters * 0.25
+
+        return (
+          <div key={date} className="laundry-day">
+            <div className="laundry-day-header">
+              <span className="laundry-day-date">{fmtDate(date)}</span>
+              <span className="laundry-day-total">{totalQuarters} quarters · {fmt(totalCost)}</span>
+            </div>
+
+            {washSessions.length > 0 && (
+              <div className="laundry-section">
+                <div className="laundry-section-title">Washing</div>
+                <table className="laundry-table">
+                  <thead><tr><th>Machine</th><th>Loads</th><th>Quarters</th><th>Minutes</th><th>Cost</th><th></th></tr></thead>
+                  <tbody>
+                    {washSessions.map(s => (
+                      <tr key={s.id} className="laundry-row">
+                        <td>{machineLabel(s.machine_type)}</td>
+                        <td>{s.loads}</td>
+                        <td>{s.quarters}</td>
+                        <td>{s.minutes} min</td>
+                        <td>{fmt(s.quarters * 0.25)}</td>
+                        <td><button className="fin-delete-btn" onClick={() => deleteSession(s.id)}>✕</button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {drySessions.length > 0 && (
+              <div className="laundry-section">
+                <div className="laundry-section-title">Drying</div>
+                <table className="laundry-table">
+                  <thead><tr><th>Machine</th><th>Loads</th><th>Quarters</th><th>Minutes</th><th>Cost</th><th></th></tr></thead>
+                  <tbody>
+                    {drySessions.map(s => (
+                      <tr key={s.id} className="laundry-row">
+                        <td>{machineLabel(s.machine_type)}</td>
+                        <td>{s.loads}</td>
+                        <td>{s.quarters}</td>
+                        <td>{s.minutes} min</td>
+                        <td>{fmt(s.quarters * 0.25)}</td>
+                        <td><button className="fin-delete-btn" onClick={() => deleteSession(s.id)}>✕</button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }
