@@ -54,8 +54,8 @@
 
 .csea-tab {
   flex: 1;
-  padding: 6px 10px;
-  font-size: 12px;
+  padding: 6px 6px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: #fff;
@@ -75,6 +75,7 @@
 .csea-tab:nth-child(2) { background: #3d6a5a; }
 .csea-tab:nth-child(3) { background: #2d5560; }
 .csea-tab:nth-child(4) { background: #1e3342; }
+.csea-tab:nth-child(5) { background: #2a4a5a; }
 
 .csea-panel {
   flex: 1;
