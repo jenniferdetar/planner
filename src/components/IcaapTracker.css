@@ -1333,17 +1333,20 @@
   overflow: hidden;
 }
 
-.dash-th-name, .dash-th {
-  position: sticky;
-  top: 0;
+.dash-col-header-row {
+  display: flex;
   background: #f8f7f5;
+  border-bottom: 2px solid #e8e5de;
+  flex-shrink: 0;
+}
+
+.dash-th-name, .dash-th {
   padding: 5px 6px;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.7px;
   text-transform: uppercase;
-  border-bottom: 2px solid #e8e5de;
-  z-index: 1;
+  color: #AAAA9E;
 }
 
 .dash-th-name { text-align: left; width: 35%; }

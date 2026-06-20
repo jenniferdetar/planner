@@ -984,6 +984,13 @@ function IcaapDashboard() {
         </div>
       </div>
 
+      <div className="dash-col-header-row">
+        <div className="dash-th-name">Employee</div>
+        <div className="dash-th">Hours Worked</div>
+        <div className="dash-th">Paylog Submitted</div>
+        <div className="dash-th">Approved</div>
+      </div>
+
       <div className="dash-summary">
         <div className="dash-stat-spacer" />
         <div className="dash-stat"><span className="dash-stat-num" style={{ color: '#4a7a6a' }}>{submitted}/{total}</span></div>
@@ -996,14 +1003,6 @@ function IcaapDashboard() {
       ) : (
         <div className="dash-table-wrap">
           <table className="dash-table">
-            <thead>
-              <tr>
-                <th className="dash-th-name" style={{ color: '#AAAA9E' }}>Employee</th>
-                <th className="dash-th" style={{ color: '#AAAA9E' }}>Hours Worked</th>
-                <th className="dash-th" style={{ color: '#AAAA9E' }}>Paylog Submitted</th>
-                <th className="dash-th" style={{ color: '#AAAA9E' }}>Approved</th>
-              </tr>
-            </thead>
             <tbody>
               {displayRows.map(r => (
                 <tr key={r.name} className="dash-tr">
