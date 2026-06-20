@@ -70,10 +70,10 @@
 
 .goal-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
   padding: 0;
-  height: 24px;
+  min-height: 24px;
   border-bottom: 1px solid #f0ede6;
 }
 
