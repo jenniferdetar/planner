@@ -16,8 +16,8 @@ body {
     to bottom,
     transparent 0px,
     transparent 23px,
-    rgba(184, 216, 224, 0.5) 23px,
-    rgba(184, 216, 224, 0.5) 24px
+    rgba(184, 216, 224, 0.7) 23px,
+    rgba(184, 216, 224, 0.7) 24px
   );
   background-size: 100% 24px;
   color: #1e3342;
@@ -79,8 +79,8 @@ h5, h6 { color: #1e3342; }
     to bottom,
     transparent 0px,
     transparent 23px,
-    rgba(184, 216, 224, 0.35) 23px,
-    rgba(184, 216, 224, 0.35) 24px
+    rgba(184, 216, 224, 0.65) 23px,
+    rgba(184, 216, 224, 0.65) 24px
   );
   background-size: 100% 24px;
   background-attachment: local;
