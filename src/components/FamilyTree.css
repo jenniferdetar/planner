@@ -87,7 +87,7 @@
 
 /* ── Generation sections ── */
 .ft-generation {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .ft-gen-label {
@@ -96,10 +96,12 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--ft-bark);
-  margin-bottom: 10px;
+  height: 24px;
+  margin-bottom: 0;
   display: flex;
   align-items: center;
   gap: 8px;
+  line-height: 24px;
 }
 
 .ft-gen-label::after {
@@ -113,14 +115,20 @@
 .ft-cards-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0 10px;
 }
 
 .ft-card {
-  background: #fff;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 23px,
+    rgba(184, 216, 224, 0.6) 23px, rgba(184, 216, 224, 0.6) 24px
+  );
+  background-size: 100% 24px;
   border: 1px solid #e0dbd0;
   border-radius: 10px;
-  padding: 12px 14px;
+  padding: 0 14px;
   min-width: 170px;
   max-width: 220px;
   flex: 1;
@@ -133,27 +141,27 @@
 
 .ft-card.ft-self {
   border-color: var(--ft-green);
-  background: var(--ft-green-light);
+  background-color: var(--ft-green-light);
 }
 
 .ft-card.ft-spouse {
   border-color: var(--ft-gold);
-  background: rgba(212,160,48,0.07);
+  background-color: rgba(212,160,48,0.07);
 }
 
 .ft-card.ft-spouse .ft-card-name { color: var(--ft-bark); }
 .ft-card.ft-spouse .ft-card-rel { color: var(--ft-gold); background: rgba(212,160,48,0.12); }
 
 /* ── Relationship group card themes ── */
-.ft-card.ft-rel-parent      { border-color: var(--ft-parent);      background: rgba(184,106,20,0.06); }
-.ft-card.ft-rel-grandparent { border-color: var(--ft-grandparent); background: rgba(107,63,160,0.06); }
-.ft-card.ft-rel-great-gp    { border-color: var(--ft-great-gp);    background: rgba(61,36,112,0.07); }
-.ft-card.ft-rel-sibling     { border-color: var(--ft-sibling);     background: rgba(26,122,122,0.06); }
-.ft-card.ft-rel-in-law      { border-color: var(--ft-in-law);      background: rgba(47,94,158,0.06); }
-.ft-card.ft-rel-aunt-uncle  { border-color: var(--ft-aunt-uncle);  background: rgba(184,64,64,0.06); }
-.ft-card.ft-rel-niece-neph  { border-color: var(--ft-niece-neph);  background: rgba(158,47,106,0.06); }
-.ft-card.ft-rel-child       { border-color: var(--ft-child);       background: rgba(58,138,58,0.06); }
-.ft-card.ft-rel-grandchild  { border-color: var(--ft-grandchild);  background: rgba(42,143,122,0.06); }
+.ft-card.ft-rel-parent      { border-color: var(--ft-parent);      background-color: rgba(184,106,20,0.06); }
+.ft-card.ft-rel-grandparent { border-color: var(--ft-grandparent); background-color: rgba(107,63,160,0.06); }
+.ft-card.ft-rel-great-gp    { border-color: var(--ft-great-gp);    background-color: rgba(61,36,112,0.07); }
+.ft-card.ft-rel-sibling     { border-color: var(--ft-sibling);     background-color: rgba(26,122,122,0.06); }
+.ft-card.ft-rel-in-law      { border-color: var(--ft-in-law);      background-color: rgba(47,94,158,0.06); }
+.ft-card.ft-rel-aunt-uncle  { border-color: var(--ft-aunt-uncle);  background-color: rgba(184,64,64,0.06); }
+.ft-card.ft-rel-niece-neph  { border-color: var(--ft-niece-neph);  background-color: rgba(158,47,106,0.06); }
+.ft-card.ft-rel-child       { border-color: var(--ft-child);       background-color: rgba(58,138,58,0.06); }
+.ft-card.ft-rel-grandchild  { border-color: var(--ft-grandchild);  background-color: rgba(42,143,122,0.06); }
 
 .ft-card.ft-rel-parent      .ft-card-rel { color: var(--ft-parent);      background: rgba(184,106,20,0.1); }
 .ft-card.ft-rel-grandparent .ft-card-rel { color: var(--ft-grandparent); background: rgba(107,63,160,0.1); }
@@ -169,7 +177,8 @@
   font-family: 'Nunito', sans-serif;
   font-size: 15px;
   color: #2a2520;
-  margin: 0 0 3px;
+  margin: 0;
+  line-height: 24px;
 }
 
 .ft-card.ft-self .ft-card-name { color: var(--ft-green); }
@@ -177,7 +186,8 @@
 .ft-card-years {
   font-size: 11px;
   color: #888;
-  margin: 0 0 4px;
+  margin: 0;
+  line-height: 24px;
 }
 
 .ft-card-rel {
@@ -187,35 +197,36 @@
   text-transform: uppercase;
   color: var(--ft-green);
   background: var(--ft-green-light);
-  padding: 2px 8px;
+  padding: 0 8px;
   border-radius: 20px;
   display: inline-block;
-  margin-bottom: 6px;
+  margin-bottom: 0;
+  line-height: 24px;
 }
 
 .ft-card-notes {
   font-size: 11px;
   color: #666;
-  line-height: 1.5;
-  margin-top: 4px;
+  line-height: 24px;
+  margin-top: 0;
   white-space: pre-wrap;
 }
 
 .ft-card-ld {
-  margin-top: 6px;
-  border-top: 1px solid #f0ede6;
-  padding-top: 6px;
+  margin-top: 0;
+  border-top: 1px solid #e0dbd0;
+  padding-top: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
 }
 
 .ft-card-ld-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 5px;
   font-size: 11px;
-  line-height: 1.4;
+  line-height: 24px;
 }
 
 .ft-ld-icon { flex-shrink: 0; font-size: 10px; margin-top: 1px; }

@@ -150,7 +150,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 0 14px;
+  height: 48px;
   cursor: pointer;
 }
 
