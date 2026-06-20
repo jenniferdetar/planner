@@ -148,10 +148,10 @@
 
 .gcu-course-main {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  padding: 0 14px;
-  height: 48px;
+  padding: 12px 14px;
+  min-height: 48px;
   cursor: pointer;
 }
 
@@ -171,9 +171,10 @@
 .gcu-course-info {
   flex: 1;
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 10px;
   min-width: 0;
+  flex-wrap: wrap;
 }
 
 .gcu-course-code {
@@ -187,9 +188,6 @@
 .gcu-course-name {
   font-size: 13px;
   color: #2a2520;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .gcu-course-dates {
