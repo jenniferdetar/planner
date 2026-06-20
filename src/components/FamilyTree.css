@@ -24,7 +24,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background: #faf9f6;
+  background: #fffef0;
 }
 
 /* ── Header ── */
@@ -246,7 +246,7 @@
   transition: background 0.12s, color 0.12s;
 }
 
-.ft-card-btn:hover { background: #f0ede6; color: #555; }
+.ft-card-btn:hover { background: #fff9cc; color: #555; }
 .ft-card-btn.delete:hover { background: #fce8e8; color: #e05c5c; }
 
 /* ── Empty state ── */
@@ -310,7 +310,7 @@
   font-size: 13px;
   font-family: 'Nunito', sans-serif;
   color: #2a2520;
-  background: #faf9f6;
+  background: #fffef0;
   box-sizing: border-box;
   outline: none;
   transition: border-color 0.15s;
@@ -349,7 +349,7 @@
 }
 
 .ft-modal-cancel {
-  background: #f0ede6;
+  background: #fff9cc;
   color: #666;
 }
 

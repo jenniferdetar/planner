@@ -4,7 +4,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background: #faf9f6;
+  background: #fffef0;
 }
 
 .personal-sub-tabs {
@@ -69,7 +69,7 @@
   display: flex;
   gap: 8px;
   padding: 8px 12px;
-  background: #f5f4f0;
+  background: #fffde4;
   border-bottom: 1px solid #e8e5de;
 }
 
@@ -135,7 +135,7 @@
   height: 28px;
   border-radius: 50%;
   border: none;
-  background: #f0ede6;
+  background: #fff9cc;
   color: #3d6a5a;
   font-size: 18px;
   line-height: 1;
@@ -206,7 +206,7 @@
   gap: 8px;
   padding: 5px 8px;
   border-radius: 6px;
-  background: #faf9f6;
+  background: #fffef0;
   border-left: 3px solid #4a7a6a;
 }
 
@@ -271,7 +271,7 @@
   display: flex;
   flex-direction: column;
   padding: 28px 32px;
-  background: #faf9f6;
+  background: #fffef0;
   overflow-y: auto;
 }
 
@@ -372,7 +372,7 @@
 /* Goals section */
 .goals-section {
   padding: 20px 24px 24px;
-  background: #faf9f6;
+  background: #fffef0;
   overflow-y: auto;
 }
 
@@ -518,7 +518,7 @@
 /* Checklist section */
 .checklist-section {
   padding: 0 24px 28px;
-  background: #faf9f6;
+  background: #fffef0;
 }
 
 .checklist-title {
@@ -572,7 +572,7 @@
 }
 
 .checklist-table tr:hover td {
-  background: #faf9f6;
+  background: #fffef0;
 }
 
 .checklist-box {

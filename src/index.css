@@ -11,7 +11,15 @@ html, body, #root {
 
 body {
   font-family: 'Nunito', sans-serif;
-  background: #f5f4f0;
+  background-color: #fffef0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 23px,
+    rgba(184, 216, 224, 0.5) 23px,
+    rgba(184, 216, 224, 0.5) 24px
+  );
+  background-size: 100% 24px;
   color: #1e3342;
   overflow: hidden;
 }
