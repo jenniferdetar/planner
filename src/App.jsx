@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { supabase, signOut } from './lib/supabase'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
+import { useDailyLog } from './hooks/useDailyLog'
 import { useWeeklyTasks } from './hooks/useWeeklyTasks'
 import { usePlannerSections } from './hooks/usePlannerSections'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
@@ -63,6 +64,7 @@ export default function App() {
 
   const userId = user?.id ?? null
   const quote = QUOTES[today.getDate() % QUOTES.length]
+  const dateStr = selectedDate.toISOString().split('T')[0]
 
   const [mobilePanel, setMobilePanel] = useState('main') // 'sidebar' | 'main' | 'right'
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768)
@@ -93,6 +95,7 @@ export default function App() {
   const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
   const { tasksByDate: weeklyTasks, toggleTask: toggleWeeklyTask, addTask: addWeeklyTask } = useWeeklyTasks(userId, selectedDate)
+  const { addEntry: addLogEntry } = useDailyLog(userId, dateStr)
 
   const [gcuPushing, setGcuPushing] = useState(false)
   async function handlePushGcuToAsana() {
@@ -164,7 +167,6 @@ export default function App() {
   }
 
   // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
-  const dateStr = selectedDate.toISOString().split('T')[0]
   const supabaseBlocks = meetings.map((m) => meetingToBlock(m, BLOCK_COLORS[0]))
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
   const allTimeBlocks = [...supabaseBlocks, ...gcalBlocksForDay]
@@ -181,8 +183,21 @@ export default function App() {
   }
 
   async function handleToggleDailyTask(id) {
-    if (String(id).startsWith('asana_')) return completeAsanaTask(id)
+    if (String(id).startsWith('asana_')) {
+      const task = allDailyTasks.find(t => t.id === id)
+      if (task && !task.completed) addLogEntry(`Completed: ${task.title || task.name}`)
+      return completeAsanaTask(id)
+    }
+    const task = allDailyTasks.find(t => t.id === id)
+    if (task && !task.completed) addLogEntry(`Completed: ${task.title}`)
     return toggleDailyTask(id)
+  }
+
+  async function handleToggleWeeklyTask(id, date) {
+    const allWeekly = Object.values(weeklyTasks).flat()
+    const task = allWeekly.find(t => t.id === id)
+    if (task && !task.completed) addLogEntry(`Completed: ${task.title}`)
+    return toggleWeeklyTask(id, date)
   }
 
   async function handleDeleteDailyTask(id) {
@@ -311,7 +326,7 @@ export default function App() {
           gcuPushing={gcuPushing}
           providerToken={providerToken}
           weeklyTasks={weeklyTasks}
-          onToggleWeeklyTask={toggleWeeklyTask}
+          onToggleWeeklyTask={handleToggleWeeklyTask}
           onAddWeeklyTask={addWeeklyTask}
           personalSubTab={personalSubTab}
           onPersonalSubTabChange={setPersonalSubTab}
