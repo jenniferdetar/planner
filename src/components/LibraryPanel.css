@@ -4,7 +4,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background: #faf9f6;
+  background: #fffef0;
   color: #1e3342;
 }
 
@@ -65,12 +65,12 @@
 }
 
 .shelf-tab:hover {
-  background: #f5f4f0;
+  background: #fffde4;
   color: #1e3342;
 }
 
 .shelf-tab.active {
-  background: #faf9f6;
+  background: #fffef0;
   color: #4a7a6a;
   font-weight: 600;
   border-bottom: 2px solid #4a7a6a;
@@ -279,5 +279,5 @@
 }
 
 .add-book-btn:hover {
-  background: #f5f4f0;
+  background: #fffde4;
 }

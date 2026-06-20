@@ -3,11 +3,11 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #f5f4f0;
+  background: #fffde4;
 }
 
 .login-card {
-  background: #fff;
+  background: #fffef0;
   border-radius: 20px;
   padding: 48px 40px;
   width: 380px;
@@ -44,7 +44,7 @@
 
 .login-divider {
   height: 1px;
-  background: #f0ede6;
+  background: #fff9cc;
   margin-bottom: 24px;
 }
 
@@ -62,7 +62,7 @@
   gap: 10px;
   width: 100%;
   padding: 13px 20px;
-  background: #fff;
+  background: #fffef0;
   border: 1.5px solid #e0ddd7;
   border-radius: 10px;
   font-size: 14px;
@@ -74,7 +74,7 @@
 }
 
 .google-btn:hover {
-  background: #f5f4f0;
+  background: #fffde4;
   border-color: #ccc;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }

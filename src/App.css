@@ -2,7 +2,7 @@
   display: flex;
   height: 100vh;
   overflow: hidden;
-  background: #f5f4f0;
+  background: transparent;
 }
 
 /* Wrapper divs are invisible to the flex layout on desktop */
