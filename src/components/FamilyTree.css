@@ -120,13 +120,6 @@
 
 .ft-card {
   background-color: #fff;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px, transparent 23px,
-    rgba(184, 216, 224, 0.6) 23px, rgba(184, 216, 224, 0.6) 24px
-  );
-  background-size: 100% 24px;
-  background-position: 0 2px;
   border: 1px solid #e0dbd0;
   border-radius: 10px;
   padding: 0 14px;
