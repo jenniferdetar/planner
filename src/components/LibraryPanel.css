@@ -155,7 +155,13 @@
 .book-card {
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 23px,
+    rgba(184, 216, 224, 0.6) 23px, rgba(184, 216, 224, 0.6) 24px
+  );
+  background-size: 100% 24px;
   border: 1px solid #e8e5de;
   border-radius: 8px;
   overflow: hidden;
@@ -174,23 +180,24 @@
 }
 
 .book-card-body {
-  padding: 10px 12px 8px;
+  padding: 0 12px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
 }
 
 .book-title {
   font-size: 12px;
   font-weight: 600;
   color: #1e3342;
-  line-height: 1.35;
+  line-height: 24px;
 }
 
 .book-author {
   font-size: 10.5px;
   color: #999;
+  line-height: 24px;
 }
 
 .book-card-footer {

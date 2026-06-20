@@ -165,12 +165,12 @@
 }
 
 .week-day-tasks {
-  padding: 10px 14px 10px 16px;
+  padding: 0 14px 0 16px;
   border-left: 4px solid;
   border-right: 1px solid #e8e5de;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0;
   min-width: 0;
 }
 
@@ -199,7 +199,8 @@
   align-items: center;
   gap: 7px;
   cursor: pointer;
-  padding: 1px 0;
+  height: 24px;
+  padding: 0;
 }
 
 .week-task-row.done .week-task-text {
@@ -219,7 +220,7 @@
 .week-task-text {
   font-size: 12px;
   color: #444;
-  line-height: 1.3;
+  line-height: 24px;
 }
 
 .week-add-btn {
