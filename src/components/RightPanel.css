@@ -286,16 +286,6 @@
   flex: 1;
   width: 100%;
   background-color: #ffffff;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 20px,
-    #b8d8e0 20px,
-    #b8d8e0 21px
-  );
-  background-size: 100% 21px;
-  background-position: 0 12px;
-  background-attachment: local;
   border: none;
   border-radius: 10px;
   padding: 12px;
@@ -314,16 +304,6 @@
 
 .notes-area:focus {
   background-color: #fffde6;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 20px,
-    #b8d8e0 20px,
-    #b8d8e0 21px
-  );
-  background-size: 100% 21px;
-  background-position: 0 12px;
-  background-attachment: local;
 }
 
 .gcal-connect-row {

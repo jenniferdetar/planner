@@ -12,14 +12,6 @@ html, body, #root {
 body {
   font-family: 'Nunito', sans-serif;
   background-color: #ffffff;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 23px,
-    rgba(184, 216, 224, 0.7) 23px,
-    rgba(184, 216, 224, 0.7) 24px
-  );
-  background-size: 100% 24px;
   color: #1e3342;
   overflow: hidden;
 }
@@ -58,31 +50,6 @@ h3 { color: #3d6a5a; }
 h4 { color: #2d5560; }
 h5, h6 { color: #1e3342; }
 
-/* ── Ruled-line background on all major content panels ── */
-.right-panel,
-.gcu-body,
-.fin-content,
-.goals-panel,
-.week-view,
-.planner-body,
-.task-hub-body,
-.csea-panel,
-.mantra-content,
-.zbb-tracker-panel,
-.zbb-alloc-panel,
-.icaap-board,
-.icaap-list,
-.month-cell {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 23px,
-    rgba(184, 216, 224, 0.65) 23px,
-    rgba(184, 216, 224, 0.65) 24px
-  );
-  background-size: 100% 24px;
-  background-attachment: local;
-}
 
 /* ── Indie Flower for all pills ── */
 .filter-pill, .type-btn, .priority-btn, .status-btn,

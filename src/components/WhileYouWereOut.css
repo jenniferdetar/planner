@@ -291,14 +291,6 @@
   line-height: 2.2;
   padding: 2px 4px;
   width: 100%;
-  /* lined look */
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent,
-    transparent calc(2.2em - 1px),
-    #1a1a1a calc(2.2em - 1px),
-    #1a1a1a 2.2em
-  );
 }
 
 .wywo-message-area:focus { background-color: rgba(255,255,255,0.15); }
@@ -496,13 +488,4 @@
     background: transparent !important;
   }
 
-  .wywo-message-area {
-    background-image: repeating-linear-gradient(
-      to bottom,
-      transparent,
-      transparent calc(2.2em - 1px),
-      #000 calc(2.2em - 1px),
-      #000 2.2em
-    ) !important;
-  }
 }

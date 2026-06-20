@@ -119,7 +119,7 @@ export default function WhileYouWereOut({ userId }) {
         </div>
         <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:10px">
           <span style="font-size:14px;font-weight:700;min-width:36px">Message</span>
-          <div style="flex:1;min-height:110px;border-bottom:1.5px solid #1a1a1a;padding:2px 4px;font-size:13px;line-height:2.2;background-image:repeating-linear-gradient(to bottom,transparent,transparent calc(2.2em - 1px),#1a1a1a calc(2.2em - 1px),#1a1a1a 2.2em);white-space:pre-wrap;word-break:break-word">${esc(f.message)}</div>
+          <div style="flex:1;min-height:110px;border-bottom:1.5px solid #1a1a1a;padding:2px 4px;font-size:13px;line-height:2.2;white-space:pre-wrap;word-break:break-word">${esc(f.message)}</div>
         </div>
         <div style="display:flex;align-items:baseline;gap:6px;margin-top:14px">
           <span style="font-size:14px;font-weight:700;min-width:36px">Signed</span>

@@ -297,13 +297,6 @@
   gap: 0;
   min-width: 0;
   overflow-x: hidden;
-  /* Local ruled lines — each pill sits on one line */
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px, transparent 23px,
-    rgba(184, 216, 224, 0.4) 23px, rgba(184, 216, 224, 0.4) 24px
-  );
-  background-size: 100% 24px;
 }
 
 .week-no-events {

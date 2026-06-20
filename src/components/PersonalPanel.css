@@ -329,14 +329,6 @@
   font-style: normal;
   color: #2a2520;
   background-color: #fff;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px, transparent 23px,
-    rgba(184, 216, 224, 0.7) 23px, rgba(184, 216, 224, 0.7) 24px
-  );
-  background-size: 100% 24px;
-  background-position: 0 21px;
-  background-attachment: local;
   border: 1px solid #e8e5de;
   border-top: 4px solid var(--mantra-color, #4a7a6a);
   border-radius: 8px;
@@ -360,7 +352,6 @@
   flex: 1;
   overflow-y: auto;
   background-color: #fff;
-  background-position: 0 29px;
   border: 1px solid #e8e5de;
   border-top: 4px solid var(--mantra-color, #4a7a6a);
   border-radius: 8px;
