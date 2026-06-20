@@ -167,6 +167,7 @@ export default function DailyPlanner({
 
       {view === 'csea' && (
         <CseaTracker
+          userId={userId}
           issues={cseaIssues || []}
           onAddIssue={onAddCseaIssue}
           onUpdateStatus={onUpdateCseaStatus}

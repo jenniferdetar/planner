@@ -829,3 +829,13 @@
   color: #e05c5c;
   background: #fce8e8;
 }
+
+.quick-link-anchor {
+  color: #2c6e5a;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+.quick-link-anchor:hover {
+  text-decoration: underline;
+}
