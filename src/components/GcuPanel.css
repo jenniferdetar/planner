@@ -12,7 +12,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 /* ── Header ── */
@@ -245,7 +245,7 @@
   color: #bbb;
   white-space: nowrap;
   flex-shrink: 0;
-  background: #fffde4;
+  background: #f8f7f5;
   padding: 1px 7px;
   border-radius: 10px;
 }

@@ -7,7 +7,7 @@
   min-width: 0;
   border-left: 1px solid #e8e5de;
   border-right: 1px solid #e8e5de;
-  background: #fffef0;
+  background: #ffffff;
   min-width: 0;
 }
 
@@ -100,7 +100,7 @@
 }
 
 .mini-nav-btn:hover {
-  background: #fff9cc;
+  background: #f0ede6;
   color: #333;
 }
 
@@ -146,7 +146,7 @@
 }
 
 .mini-cell:hover {
-  background: #fff9cc;
+  background: #f0ede6;
 }
 
 .mini-cell.today {
@@ -187,7 +187,7 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #fff9cc;
+  background: #f0ede6;
   font-size: 18px;
   color: #666;
   display: flex;
@@ -252,7 +252,7 @@
 }
 
 .planner-signout-btn:hover {
-  background: #fffde4;
+  background: #f8f7f5;
   color: #e05c5c;
 }
 
@@ -400,7 +400,7 @@
 }
 
 .asana-row-main:hover {
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .asana-row-num {
@@ -533,7 +533,7 @@
   font-family: inherit;
   resize: vertical;
   outline: none;
-  background-color: #fffef0;
+  background-color: #ffffff;
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0px,
@@ -595,7 +595,7 @@
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-  background: #fffde4;
+  background: #f8f7f5;
   border-radius: 8px;
 }
 
@@ -797,7 +797,7 @@
   align-items: center;
   gap: 6px;
   padding: 5px 8px;
-  background: #fffde4;
+  background: #f8f7f5;
   border-radius: 6px;
 }
 
@@ -989,7 +989,7 @@
 }
 
 .task-hub-master-row:hover {
-  background: #fffde4;
+  background: #f8f7f5;
 }
 
 .task-hub-area-tag {
@@ -1133,7 +1133,7 @@
   font-size: 11px;
   padding: 3px 8px;
   border-radius: 5px;
-  background: #fff9cc;
+  background: #f0ede6;
   color: #666;
   cursor: pointer;
   border: 1px solid #e0ddd6;

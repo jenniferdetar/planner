@@ -3,7 +3,7 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .fin-summary {
@@ -45,7 +45,7 @@
 
 .fin-tabs {
   display: flex;
-  background: #fffde4;
+  background: #f8f7f5;
   border-bottom: 1px solid #e8e5de;
   flex-shrink: 0;
   padding: 8px 12px;
@@ -275,7 +275,7 @@
 
 .fin-txn-cat {
   font-size: 9px;
-  background: #fff9cc;
+  background: #f0ede6;
   color: #888;
   padding: 2px 6px;
   border-radius: 10px;
@@ -460,7 +460,7 @@
 
 .fin-progress-bar {
   height: 6px;
-  background: #fff9cc;
+  background: #f0ede6;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -527,14 +527,14 @@
 .pc-td-method.cash { background: #eaf7ea; color: #5cb85c; }
 
 /* Jennifer's Check row */
-.pc-row-check .pc-td-account { background: #fffde4; }
+.pc-row-check .pc-td-account { background: #f8f7f5; }
 .pc-td-check-label { font-size: 13px; font-weight: 700; color: #1e3342; }
 .pc-td-check-amount {
   text-align: center; padding: 6px 8px;
   font-size: 13px; font-weight: 700; color: #1e3342;
   cursor: pointer; border-bottom: 2px solid #e8e5de;
   border-right: 1px solid #e8e5de;
-  background: #fffde4;
+  background: #f8f7f5;
 }
 .pc-td-check-amount:hover { background: #eae9e4; }
 .pc-cell-input {
@@ -558,23 +558,23 @@
 .pc-cell-amt { font-size: 12px; }
 
 /* Totals */
-.pc-row-total .pc-td-account { background: #fff9cc; font-weight: 700; }
+.pc-row-total .pc-td-account { background: #f0ede6; font-weight: 700; }
 .pc-td-total-label { font-size: 12px; font-weight: 700; color: #1e3342; }
 .pc-td-total {
   text-align: right; padding: 5px 10px;
   font-size: 12px; font-weight: 700; color: #1e3342;
-  background: #fff9cc; border-right: 1px solid #e0ddd7;
+  background: #f0ede6; border-right: 1px solid #e0ddd7;
   border-bottom: 1px solid #e0ddd7;
 }
 
 /* Left over */
-.pc-row-leftover .pc-td-account { background: #fffde4; }
+.pc-row-leftover .pc-td-account { background: #f8f7f5; }
 .pc-td-leftover-label { font-size: 12px; font-weight: 700; color: #1e3342; }
 .pc-td-leftover {
   text-align: right; padding: 5px 10px;
   font-size: 12px; font-weight: 700;
   border-right: 1px solid #e0ddd7;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 /* ── Coins Tab ── */
@@ -595,11 +595,11 @@
 .coins-td-name { font-weight: 600; color: #1e3342; white-space: nowrap; }
 .coins-td-val { color: #888; font-size: 12px; }
 .coins-td-count { display: flex; align-items: center; gap: 8px; }
-.coins-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; background: #fffde4; font-size: 16px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #555; }
+.coins-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; background: #f8f7f5; font-size: 16px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #555; }
 .coins-btn:hover { background: #e8e5de; }
 .coins-input { width: 52px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 3px 4px; font-size: 13px; }
 .coins-td-sub { text-align: right; font-weight: 600; color: #1e3342; white-space: nowrap; }
-.coins-section-divider td { padding: 6px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #aaa; background: #fffde4; border-top: 2px solid #e8e5de; border-bottom: 1px solid #e8e5de; }
+.coins-section-divider td { padding: 6px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #aaa; background: #f8f7f5; border-top: 2px solid #e8e5de; border-bottom: 1px solid #e8e5de; }
 .coins-total-row td { padding: 5px 8px; font-weight: 700; font-size: 14px; border-top: 2px solid #e8e5de; }
 .coins-td-total-label { color: #1e3342; }
 .coins-td-total { text-align: right; color: #5cb85c; font-size: 16px; }
@@ -616,7 +616,7 @@
 .goals-th-name, .goals-th-col {
   position: sticky;
   top: 0;
-  background: #fffde4;
+  background: #f8f7f5;
   padding: 5px 10px;
   font-size: 10px;
   font-weight: 700;
@@ -648,7 +648,7 @@
   vertical-align: middle;
 }
 
-.goals-cell:hover { background: #fffef0; }
+.goals-cell:hover { background: #ffffff; }
 .goals-cell.empty { color: #ddd; cursor: default; }
 .goals-cell.total { cursor: default; background: #f9f8f5; }
 
@@ -793,7 +793,7 @@
 
 .goal-card-bar {
   height: 4px;
-  background: #fff9cc;
+  background: #f0ede6;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -878,7 +878,7 @@
 
 .fin-budget-bar-wrap {
   height: 3px;
-  background: #fff9cc;
+  background: #f0ede6;
   border-radius: 2px;
   margin-top: 4px;
 }
@@ -901,7 +901,7 @@
 .fin-budget-total-row td {
   font-weight: 700;
   border-top: 2px solid #e8e5de;
-  background: #fffef0;
+  background: #ffffff;
   padding: 10px 12px;
   text-align: right;
   font-size: 13px;
@@ -935,7 +935,7 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .budget-header {
@@ -1038,7 +1038,7 @@
 }
 
 .budget-section-total td {
-  background: #fffde4;
+  background: #f8f7f5;
   font-weight: 700;
   border-top: 1px solid #e8e5de;
   border-bottom: 2px solid #e8e5de;
