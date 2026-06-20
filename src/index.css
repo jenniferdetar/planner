@@ -58,6 +58,34 @@ h3 { color: #3d6a5a; }
 h4 { color: #2d5560; }
 h5, h6 { color: #1e3342; }
 
+/* ── Ruled-line background on all major content panels ── */
+.right-panel,
+.ft-body,
+.library-body,
+.gcu-body,
+.fin-content,
+.goals-panel,
+.week-view,
+.planner-body,
+.task-hub-body,
+.csea-panel,
+.mantra-content,
+.zbb-tracker-panel,
+.zbb-alloc-panel,
+.icaap-board,
+.icaap-list,
+.month-cell {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 23px,
+    rgba(184, 216, 224, 0.35) 23px,
+    rgba(184, 216, 224, 0.35) 24px
+  );
+  background-size: 100% 24px;
+  background-attachment: local;
+}
+
 /* ── Indie Flower for all pills ── */
 .filter-pill, .type-btn, .priority-btn, .status-btn,
 .status-change-btn, .csea-add-btn, .icaap-add-btn,
