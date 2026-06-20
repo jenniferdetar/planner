@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useCseaMembers, useWorkLocations } from '../hooks/useCseaData'
+import { useQuickLinks } from '../hooks/useQuickLinks'
 import './CseaTracker.css'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
@@ -56,9 +57,12 @@ const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote }) {
+export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote }) {
   const workLocations = useWorkLocations()
+  const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
   const [tab, setTab] = useState('issues')
+  const [linkTitle, setLinkTitle] = useState('')
+  const [linkUrl, setLinkUrl] = useState('')
   const [showAddIssue, setShowAddIssue] = useState(false)
   const [showAddInteraction, setShowAddInteraction] = useState(false)
   const [filter, setFilter] = useState('active')
@@ -129,6 +133,7 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions</button>
         <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {cseaNotes.length > 0 && <span className="csea-tab-badge">{cseaNotes.length}</span>}</button>
+        <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="csea-tab-badge">{quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="csea-tab-badge">{asanaTasks.length}</span>}</button>
       </div>
 
@@ -244,6 +249,50 @@ export default function CseaTracker({ issues, onAddIssue, onUpdateStatus, onDele
             {cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
             {cseaNotes.map(n => (
               <CseaNoteRowItem key={n.id} note={n} onDelete={onDeleteCseaNote} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === 'links' && (
+        <div className="csea-panel">
+          <div className="csea-toolbar">
+            <span className="csea-toolbar-label">Quick Links</span>
+          </div>
+          <form className="csea-notes-form" onSubmit={async (e) => {
+            e.preventDefault()
+            if (!linkTitle.trim() || !linkUrl.trim()) return
+            const url = linkUrl.trim().startsWith('http') ? linkUrl.trim() : 'https://' + linkUrl.trim()
+            await addLink(linkTitle.trim(), url)
+            setLinkTitle('')
+            setLinkUrl('')
+          }}>
+            <input
+              className="csea-input"
+              placeholder="Label *"
+              value={linkTitle}
+              onChange={e => setLinkTitle(e.target.value)}
+            />
+            <div className="csea-notes-form-row">
+              <input
+                className="csea-input"
+                placeholder="URL *"
+                value={linkUrl}
+                onChange={e => setLinkUrl(e.target.value)}
+              />
+              <button type="submit" className="csea-save">Add</button>
+            </div>
+          </form>
+          <div className="csea-issue-list">
+            {quickLinks.length === 0 && <p className="csea-empty">No links yet</p>}
+            {quickLinks.map(l => (
+              <div key={l.id} className="csea-note-row">
+                <div className="csea-note-body">
+                  <a href={l.url} target="_blank" rel="noopener noreferrer" className="quick-link-anchor">{l.title}</a>
+                  <span className="csea-note-source">{l.url}</span>
+                </div>
+                <button className="csea-note-delete" onClick={() => deleteLink(l.id)}>✕</button>
+              </div>
             ))}
           </div>
         </div>

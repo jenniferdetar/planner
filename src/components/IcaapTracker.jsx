@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useQuickLinks } from '../hooks/useQuickLinks'
 import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
@@ -54,10 +55,13 @@ async function getFirstWorkspace(token) {
 }
 
 export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
+  const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'icaap')
   const [tab, setTab] = useState('dashboard')
   const [extraHoursTab, setExtraHoursTab] = useState('profdev')
   const [noteText, setNoteText] = useState('')
   const [noteSource, setNoteSource] = useState('')
+  const [linkTitle, setLinkTitle] = useState('')
+  const [linkUrl, setLinkUrl] = useState('')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
@@ -151,6 +155,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
         <button data-t="transcripts" className={`icaap-tab ${tab === 'transcripts' ? 'active' : ''}`} onClick={() => setTab('transcripts')}>Transcripts</button>
         <button data-t="notes" className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
+        <button data-t="links" className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
       </div>
 
       {/* Dashboard tab */}
@@ -233,6 +238,50 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </div>
       )}
 
+      {tab === 'links' && (
+        <div className="icaap-panel">
+          <div className="icaap-toolbar" style={{ display: 'flex' }}>
+            <span className="icaap-toolbar-label">Quick Links</span>
+          </div>
+          <form className="icaap-notes-form" onSubmit={async (e) => {
+            e.preventDefault()
+            if (!linkTitle.trim() || !linkUrl.trim()) return
+            const url = linkUrl.trim().startsWith('http') ? linkUrl.trim() : 'https://' + linkUrl.trim()
+            await addLink(linkTitle.trim(), url)
+            setLinkTitle('')
+            setLinkUrl('')
+          }}>
+            <input
+              className="icaap-input"
+              placeholder="Label *"
+              value={linkTitle}
+              onChange={e => setLinkTitle(e.target.value)}
+            />
+            <div className="icaap-notes-form-row">
+              <input
+                className="icaap-input"
+                placeholder="URL *"
+                value={linkUrl}
+                onChange={e => setLinkUrl(e.target.value)}
+              />
+              <button type="submit" className="icaap-save">Add</button>
+            </div>
+          </form>
+          <div className="icaap-item-list">
+            {quickLinks.length === 0 && <p className="icaap-empty">No links yet</p>}
+            {quickLinks.map(l => (
+              <div key={l.id} className="csea-note-row">
+                <div className="csea-note-body">
+                  <a href={l.url} target="_blank" rel="noopener noreferrer" className="quick-link-anchor">{l.title}</a>
+                  <span className="csea-note-source">{l.url}</span>
+                </div>
+                <button className="csea-note-delete" onClick={() => deleteLink(l.id)}>✕</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Attendance tab */}
       {tab === 'attendance' && (
         <AttendancePanel
@@ -245,7 +294,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       )}
 
       {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'transcripts' || tab === 'notes') ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'transcripts' || tab === 'notes' || tab === 'links') ? 'none' : undefined }}>
         {false ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (

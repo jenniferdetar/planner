@@ -44,6 +44,7 @@ export function useHabitCompletions(userId, weekStart, weekEnd) {
       await supabase
         .from('habit_completions')
         .insert({ user_id: userId, habit_category: category, habit_name: name, date: dateStr })
+      supabase.from('daily_log').insert({ user_id: userId, date: dateStr, entry: `✓ [${category}] ${name}` })
       setCompletions(prev => new Set([...prev, key]))
     }
   }

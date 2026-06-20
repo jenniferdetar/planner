@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
 export function usePersonalChecklist(userId) {
   const [tasks, setTasks] = useState([])
   const [completions, setCompletions] = useState(new Set())
@@ -38,6 +40,11 @@ export function usePersonalChecklist(userId) {
     } else {
       await supabase.from('personal_checklist_completions')
         .insert({ user_id: userId, task_id: taskId, year, month })
+      const task = tasks.find(t => t.id === taskId)
+      const today = new Date()
+      const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`
+      const monthName = MONTH_NAMES[month - 1] || month
+      supabase.from('daily_log').insert({ user_id: userId, date: dateStr, entry: `✓ [Monthly Checklist] ${task?.task_name || 'Task'} — ${monthName}` })
       setCompletions(prev => new Set([...prev, key]))
     }
   }
