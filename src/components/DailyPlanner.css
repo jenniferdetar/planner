@@ -396,7 +396,8 @@
   align-items: center;
   gap: 0;
   padding: 0;
-  min-height: 40px;
+  height: 40px;
+  overflow: hidden;
 }
 
 .asana-row-main:hover {
@@ -453,6 +454,9 @@
   color: #2d2d2d;
   padding: 10px 8px 10px 0;
   line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .asana-row-meta {

@@ -568,6 +568,9 @@
   padding-left: 6px;
   font-size: 11.5px;
   color: #444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .checklist-table tr:hover td {
