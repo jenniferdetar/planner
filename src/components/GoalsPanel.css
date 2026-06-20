@@ -4,7 +4,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 /* Goals section */
@@ -213,7 +213,7 @@
 }
 
 .checklist-table tr:hover td {
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .checklist-box {

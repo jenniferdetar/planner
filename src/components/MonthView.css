@@ -31,7 +31,7 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #fff9cc;
+  background: #f0ede6;
   font-size: 18px;
   color: #666;
   display: flex;
@@ -92,7 +92,7 @@
 }
 
 .month-cell:hover:not(.overflow) {
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .month-cell.overflow {

@@ -1,5 +1,5 @@
 .right-panel {
-  background: #fffef0;
+  background: #ffffff;
   height: 100vh;
   overflow-y: auto;
   display: flex;
@@ -51,7 +51,7 @@
 }
 
 .cal-nav:hover {
-  background: #fff9cc;
+  background: #f0ede6;
   color: #1e3342;
 }
 
@@ -85,7 +85,7 @@
 }
 
 .cal-day:hover {
-  background: #fff9cc;
+  background: #f0ede6;
 }
 
 .cal-day.today {
@@ -135,7 +135,7 @@
 }
 
 .week-day-card:hover {
-  background: #fffde4;
+  background: #f8f7f5;
 }
 
 .week-day-card.today .week-day-num {
@@ -206,7 +206,7 @@
   flex-direction: column;
   align-items: center;
   padding: 8px;
-  background: #fffde4;
+  background: #f8f7f5;
   border-radius: 8px;
 }
 
@@ -232,7 +232,7 @@
 
 .progress-bar {
   height: 4px;
-  background: #fff9cc;
+  background: #f0ede6;
   border-radius: 2px;
   overflow: hidden;
 }
@@ -285,7 +285,7 @@
 .notes-area {
   flex: 1;
   width: 100%;
-  background-color: #fffef0;
+  background-color: #ffffff;
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0px,
@@ -345,7 +345,7 @@
 }
 
 .gcal-reconnect-btn:hover {
-  background: #fffde4;
+  background: #f8f7f5;
   color: #555;
   border-color: #bbb;
 }
@@ -467,7 +467,7 @@
 }
 
 .day-task-item:hover {
-  background: #fff9cc;
+  background: #f0ede6;
 }
 
 .day-task-item.done {

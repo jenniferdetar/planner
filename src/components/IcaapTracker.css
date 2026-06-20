@@ -3,7 +3,7 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 /* Reference link */
@@ -64,7 +64,7 @@
 /* Sub-tabs */
 .icaap-tabs {
   display: flex;
-  background: #fffde4;
+  background: #f8f7f5;
   border-bottom: 1px solid #e8e5de;
   flex-shrink: 0;
 }
@@ -595,7 +595,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .tr-toolbar {
@@ -748,7 +748,7 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #fff9cc;
+  background: #f0ede6;
   border-bottom: 2px solid #d8d4cc;
   border-right: 1px solid #e8e5de;
   padding: 6px 8px;
@@ -866,7 +866,7 @@
   border: none;
   outline: none;
   resize: none;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .icaap-table-wrap {
@@ -911,7 +911,7 @@
 }
 
 .icaap-data-table tbody tr:nth-child(even) {
-  background: #fffde4;
+  background: #f8f7f5;
 }
 
 .icaap-data-table tbody td {
@@ -1064,7 +1064,7 @@
   display: flex; align-items: center; justify-content: center;
   line-height: 1;
 }
-.att-week-btn:hover { background: #fff9cc; color: #333; }
+.att-week-btn:hover { background: #f0ede6; color: #333; }
 
 .att-week-label {
   font-size: 13px;
@@ -1101,8 +1101,8 @@
 .att-th-weekday { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
 .att-th-date    { display: block; font-size: 10px; font-weight: 400; color: #aaa; margin-top: 1px; }
 
-.att-tr:nth-child(even) .att-td-name { background: #fffef0; }
-.att-tr:nth-child(even) .att-td-cell { background: #fffef0; }
+.att-tr:nth-child(even) .att-td-name { background: #ffffff; }
+.att-tr:nth-child(even) .att-td-cell { background: #ffffff; }
 
 .att-td-name {
   position: sticky; left: 0; z-index: 1;
@@ -1278,7 +1278,7 @@
 .dash-summary {
   display: flex;
   border-bottom: 1px solid #e8e5de;
-  background: #fffef0;
+  background: #ffffff;
   flex-shrink: 0;
 }
 
@@ -1332,7 +1332,7 @@
 .dash-th-name, .dash-th {
   position: sticky;
   top: 0;
-  background: #fffde4;
+  background: #f8f7f5;
   padding: 5px 6px;
   font-size: 10px;
   font-weight: 700;
@@ -1533,7 +1533,7 @@
 }
 
 .import-preview-table th {
-  background: #fffde4;
+  background: #f8f7f5;
   padding: 5px 10px;
   text-align: left;
   font-size: 10px;

@@ -3,7 +3,7 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .csea-stats {
@@ -45,7 +45,7 @@
 
 .csea-tabs {
   display: flex;
-  background: #fffde4;
+  background: #f8f7f5;
   border-bottom: 1px solid #e8e5de;
   flex-shrink: 0;
   padding: 8px 12px;
@@ -688,7 +688,7 @@
 }
 
 .member-option:hover {
-  background: #fffef0;
+  background: #ffffff;
 }
 
 .member-name {
