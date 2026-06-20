@@ -324,11 +324,19 @@
   min-height: 260px;
   padding: 20px 24px;
   font-family: 'Nunito', sans-serif;
-  font-size: 18px;
-  line-height: 1.9;
+  font-size: 16px;
+  line-height: 24px;
   font-style: normal;
   color: #2a2520;
-  background: #fff;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 23px,
+    rgba(184, 216, 224, 0.7) 23px, rgba(184, 216, 224, 0.7) 24px
+  );
+  background-size: 100% 24px;
+  background-position: 0 21px;
+  background-attachment: local;
   border: 1px solid #e8e5de;
   border-top: 4px solid var(--mantra-color, #4a7a6a);
   border-radius: 8px;
@@ -351,7 +359,8 @@
 .mantra-content {
   flex: 1;
   overflow-y: auto;
-  background: #fff;
+  background-color: #fff;
+  background-position: 0 29px;
   border: 1px solid #e8e5de;
   border-top: 4px solid var(--mantra-color, #4a7a6a);
   border-radius: 8px;
@@ -361,10 +370,10 @@
 .mantra-paragraph {
   font-family: 'Nunito', sans-serif;
   font-size: 16px;
-  line-height: 2;
+  line-height: 24px;
   font-style: normal;
   color: #2a2520;
-  margin: 0 0 1.6em;
+  margin: 0 0 24px;
 }
 
 .mantra-paragraph:last-child { margin-bottom: 0; }
