@@ -10,6 +10,7 @@ const SECTION_LINKS = [
   { key: 'meetings', label: 'Meetings', color: '#888',    icon: '📅', placeholder: 'Meeting notes and agenda…' },
   { key: 'mission',  label: 'Mission',  color: '#4a90d9', icon: '🧭', placeholder: 'Your personal mission statement…' },
   { key: 'notes',    label: 'Notes',    color: '#f0a040', icon: '📝', placeholder: 'General notes and ideas…' },
+  { key: 'hoa',      label: 'HOA',      color: '#7b5ea7', icon: '🏠', placeholder: 'HOA open items, notes, and action items…' },
   { key: 'journal',  label: 'Journal',  color: '#a0785a', icon: '📓', placeholder: 'Journal entry…' },
   { key: 'vision',   label: 'Vision',   color: '#5cb85c', icon: '🔭', placeholder: 'Your long-term vision…' },
   { key: 'values',   label: 'Values',   color: '#2e8b57', icon: '⭐', placeholder: 'Your core values…\n\n• Value 1\n• Value 2' },

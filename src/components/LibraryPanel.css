@@ -76,6 +76,16 @@
   border-bottom: 2px solid #4a7a6a;
 }
 
+.want-to-read-tab {
+  border-right: 1px solid #e8e5de;
+  margin-right: 4px;
+}
+
+.want-to-read-tab.active {
+  color: #4a90d9;
+  border-bottom: 2px solid #4a90d9;
+}
+
 .shelf-badge {
   background: #4a7a6a33;
   color: #4a7a6a;
@@ -192,6 +202,20 @@
   font-size: 10.5px;
   color: #999;
   line-height: 24px;
+}
+
+.book-shelf-label {
+  font-size: 10px;
+  color: #4a90d9;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.add-book-shelf-select {
+  max-width: 120px;
+  cursor: pointer;
 }
 
 .book-card-footer {

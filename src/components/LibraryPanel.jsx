@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { SHELVES } from '../hooks/useLibrary'
 import './LibraryPanel.css'
 
+const WANT_TO_READ_TAB = 'Want to Read'
+
 const STATUS_COLORS = {
   'want-to-read': '#888',
   'reading': '#4a90d9',
@@ -129,13 +131,17 @@ const DEFAULTS = [
 ]
 
 export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDeleteBook, onImportBooks }) {
-  const [activeShelf, setActiveShelf] = useState('Fiction')
+  const [activeShelf, setActiveShelf] = useState(WANT_TO_READ_TAB)
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
+  const [newShelf, setNewShelf] = useState('Fiction')
   const [hoveredId, setHoveredId] = useState(null)
   const [importing, setImporting] = useState(false)
 
-  const shelfBooks = books.filter(b => b.shelf === activeShelf)
+  const isWantToRead = activeShelf === WANT_TO_READ_TAB
+  const shelfBooks = isWantToRead
+    ? books.filter(b => b.status === 'want-to-read')
+    : books.filter(b => b.shelf === activeShelf)
 
   function cycleStatus(book) {
     const idx = STATUS_CYCLE.indexOf(book.status)
@@ -146,7 +152,7 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
   async function handleAdd(e) {
     e.preventDefault()
     if (!newTitle.trim()) return
-    await onAddBook(newTitle.trim(), newAuthor.trim(), activeShelf)
+    await onAddBook(newTitle.trim(), newAuthor.trim(), isWantToRead ? newShelf : activeShelf)
     setNewTitle('')
     setNewAuthor('')
   }
@@ -158,6 +164,7 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
   }
 
   const shelfCount = (shelf) => books.filter(b => b.shelf === shelf).length
+  const wantToReadCount = books.filter(b => b.status === 'want-to-read').length
 
   return (
     <div className="library-panel">
@@ -172,6 +179,15 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
       </div>
 
       <div className="library-shelf-tabs">
+        <button
+          className={`shelf-tab want-to-read-tab ${activeShelf === WANT_TO_READ_TAB ? 'active' : ''}`}
+          onClick={() => setActiveShelf(WANT_TO_READ_TAB)}
+        >
+          📚 Want to Read
+          {wantToReadCount > 0 && (
+            <span className="shelf-badge">{wantToReadCount}</span>
+          )}
+        </button>
         {SHELVES.map(shelf => (
           <button
             key={shelf}
@@ -207,6 +223,7 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
               <div className="book-card-body">
                 <span className="book-title">{book.title}</span>
                 {book.author && <span className="book-author">{book.author}</span>}
+                {isWantToRead && <span className="book-shelf-label">{book.shelf}</span>}
               </div>
               <div className="book-card-footer">
                 <button
@@ -246,6 +263,15 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
             value={newAuthor}
             onChange={e => setNewAuthor(e.target.value)}
           />
+          {isWantToRead && (
+            <select
+              className="add-book-input add-book-shelf-select"
+              value={newShelf}
+              onChange={e => setNewShelf(e.target.value)}
+            >
+              {SHELVES.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          )}
           <button type="submit" className="add-book-btn">+ Add book</button>
         </form>
       </div>
