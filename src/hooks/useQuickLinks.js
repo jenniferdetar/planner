@@ -11,7 +11,7 @@ export function useQuickLinks(userId, section) {
       .select('*')
       .eq('user_id', userId)
       .eq('section', section)
-      .order('created_at', { ascending: true })
+      .order('title', { ascending: true })
       .then(({ data }) => setLinks(data || []))
   }, [userId, section])
 
@@ -21,7 +21,7 @@ export function useQuickLinks(userId, section) {
       .insert({ title, url, section, user_id: userId })
       .select()
       .single()
-    if (data) setLinks((prev) => [...prev, data])
+    if (data) setLinks((prev) => [...prev, data].sort((a, b) => a.title.localeCompare(b.title)))
   }
 
   async function deleteLink(id) {
