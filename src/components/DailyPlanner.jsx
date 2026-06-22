@@ -606,6 +606,8 @@ function DailyTaskRow({ task, index, onToggle, onDelete, onUpdateNotes }) {
 }
 
 function SectionPanel({ def, value, onChange }) {
+  const [editing, setEditing] = useState(false)
+
   return (
     <div className="section-panel">
       <div className="section-panel-header" style={{ borderBottom: `3px solid ${def.color}` }}>
@@ -613,7 +615,18 @@ function SectionPanel({ def, value, onChange }) {
           <span className="section-panel-icon">{def.icon}</span>
           <h2 style={{ color: def.color }}>{def.label}</h2>
         </div>
-        {!def.iframeUrl && <span className="section-autosave-inline">Saves automatically</span>}
+        {!def.iframeUrl && (
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <button
+              className={`section-preview-btn${editing ? '' : ' active'}`}
+              style={{ '--ac': def.color }}
+              onClick={() => setEditing(e => !e)}
+            >
+              {editing ? 'Preview' : 'Edit'}
+            </button>
+            <span className="section-autosave-inline">Saves automatically</span>
+          </div>
+        )}
       </div>
       {def.iframeUrl ? (
         <iframe
@@ -623,7 +636,7 @@ function SectionPanel({ def, value, onChange }) {
           frameBorder="0"
           allowFullScreen
         />
-      ) : (
+      ) : editing ? (
         <SectionPanelTextArea
           sectionKey={def.key}
           value={value}
@@ -631,7 +644,73 @@ function SectionPanel({ def, value, onChange }) {
           accentColor={def.color}
           onChange={onChange}
         />
+      ) : (
+        <SectionPreview value={value} accentColor={def.color} placeholder={def.placeholder} />
       )}
+    </div>
+  )
+}
+
+function SectionPreview({ value, accentColor, placeholder }) {
+  if (!value?.trim()) {
+    return <div className="section-preview"><span className="section-preview-empty">{placeholder}</span></div>
+  }
+
+  function isSepRow(line) {
+    return /^[-|: ]+$/.test(line.trim()) && line.trim().length > 0
+  }
+  function isTableRow(line) {
+    return line.includes('|') && !isSepRow(line)
+  }
+  function parseCells(line) {
+    const cells = line.split('|').map(c => c.trim())
+    if (cells[0] === '') cells.shift()
+    if (cells.length > 0 && cells[cells.length - 1] === '') cells.pop()
+    return cells
+  }
+
+  const lines = value.split('\n')
+  const blocks = []
+  let i = 0
+  while (i < lines.length) {
+    if (isTableRow(lines[i]) || isSepRow(lines[i])) {
+      const tableLines = []
+      while (i < lines.length && (isTableRow(lines[i]) || isSepRow(lines[i]))) {
+        tableLines.push(lines[i])
+        i++
+      }
+      const dataLines = tableLines.filter(l => !isSepRow(l))
+      if (dataLines.length) blocks.push({ type: 'table', lines: dataLines })
+    } else {
+      blocks.push({ type: 'text', text: lines[i] })
+      i++
+    }
+  }
+
+  return (
+    <div className="section-preview">
+      {blocks.map((block, idx) => {
+        if (block.type === 'text') {
+          return block.text.trim()
+            ? <p key={idx} className="section-preview-p">{block.text}</p>
+            : <div key={idx} className="section-preview-spacer" />
+        }
+        const [headerLine, ...bodyLines] = block.lines
+        const header = parseCells(headerLine)
+        const body = bodyLines.map(parseCells)
+        return (
+          <table key={idx} className="section-preview-table" style={{ '--ac': accentColor }}>
+            <thead>
+              <tr>{header.map((cell, ci) => <th key={ci}>{cell}</th>)}</tr>
+            </thead>
+            <tbody>
+              {body.map((row, ri) => (
+                <tr key={ri}>{row.map((cell, ci) => <td key={ci}>{cell}</td>)}</tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      })}
     </div>
   )
 }
