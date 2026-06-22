@@ -7,10 +7,11 @@ export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'Gener
 export const SECTION_LINKS = [
   { key: 'roles',    label: 'Roles',    color: '#73a882', icon: '👤', placeholder: 'List your key roles in life and work…\n\n• Role 1\n• Role 2' },
   { key: 'goals',    label: 'Goals',    color: '#8bc34a', icon: '🎯', placeholder: 'Your most important goals…\n\n• Goal 1\n• Goal 2' },
+  { key: 'wants',    label: 'Wants',    color: '#e07b39', icon: '🛍️', placeholder: '300 Wants from God…', iframeUrl: 'https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/htmlview' },
   { key: 'meetings', label: 'Meetings', color: '#888',    icon: '📅', placeholder: 'Meeting notes and agenda…' },
   { key: 'mission',  label: 'Mission',  color: '#4a90d9', icon: '🧭', placeholder: 'Your personal mission statement…' },
   { key: 'notes',    label: 'Notes',    color: '#f0a040', icon: '📝', placeholder: 'General notes and ideas…' },
-  { key: 'hoa',      label: 'HOA',      color: '#7b5ea7', icon: '🏠', placeholder: 'HOA open items, notes, and action items…', iframeUrl: 'https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/htmlview' },
+  { key: 'hoa',      label: 'HOA',      color: '#7b5ea7', icon: '🏠', placeholder: 'HOA open items, notes, and action items…' },
   { key: 'journal',  label: 'Journal',  color: '#a0785a', icon: '📓', placeholder: 'Journal entry…' },
   { key: 'vision',   label: 'Vision',   color: '#5cb85c', icon: '🔭', placeholder: 'Your long-term vision…' },
   { key: 'values',   label: 'Values',   color: '#2e8b57', icon: '⭐', placeholder: 'Your core values…\n\n• Value 1\n• Value 2' },
@@ -143,7 +144,7 @@ export default function Sidebar({
           {sectionLabelNavItem('goals')}
           {navItem('🎯', 'My Goals', 'personal', 'goals')}
           {navItem('✅', 'Monthly Checklist', 'personal', 'checklist')}
-          {navItem('🛍️', 'Wants', 'personal', 'budget')}
+          {sectionNavItem('wants')}
           {navItem('📚', 'Library', 'personal', 'library')}
           {navItem('📈', 'Financial Goals', 'financial-goals')}
         </div>
