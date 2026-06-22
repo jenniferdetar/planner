@@ -1235,3 +1235,80 @@
   border: none;
   min-height: 0;
 }
+
+.section-autosave-inline {
+  font-size: 11px;
+  color: #bbb;
+  font-family: 'Nunito', sans-serif;
+}
+
+/* ── Section Preview (pipe-table renderer) ── */
+.section-preview {
+  flex: 1;
+  padding: 24px 32px;
+  overflow-y: auto;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #1e3342;
+}
+
+.section-preview-p {
+  margin-bottom: 4px;
+}
+
+.section-preview-spacer {
+  height: 8px;
+}
+
+.section-preview-empty {
+  color: #ccc;
+  font-style: italic;
+}
+
+.section-preview-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0 20px;
+  table-layout: fixed;
+}
+
+.section-preview-table th {
+  background: var(--ac, #4a7a6a);
+  color: white;
+  padding: 8px 16px;
+  text-align: left;
+  font-family: 'Architects Daughter', cursive;
+  font-weight: 600;
+}
+
+.section-preview-table td {
+  padding: 7px 16px;
+  border-bottom: 1px solid #eee;
+  font-family: 'Architects Daughter', cursive;
+}
+
+.section-preview-table tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+.section-preview-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.06);
+  color: #555;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: 'Nunito', sans-serif;
+}
+
+.section-preview-btn:hover {
+  background: rgba(0,0,0,0.12);
+}
+
+.section-preview-btn.active {
+  background: var(--ac, #4a7a6a);
+  color: white;
+}
