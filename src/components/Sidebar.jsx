@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { signOut } from '../lib/supabase'
 import './Sidebar.css'
 
 export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'General']
 
-const SECTION_LINKS = [
+export const SECTION_LINKS = [
   { key: 'roles',    label: 'Roles',    color: '#73a882', icon: '👤', placeholder: 'List your key roles in life and work…\n\n• Role 1\n• Role 2' },
   { key: 'goals',    label: 'Goals',    color: '#8bc34a', icon: '🎯', placeholder: 'Your most important goals…\n\n• Goal 1\n• Goal 2' },
   { key: 'meetings', label: 'Meetings', color: '#888',    icon: '📅', placeholder: 'Meeting notes and agenda…' },
@@ -15,8 +15,6 @@ const SECTION_LINKS = [
   { key: 'vision',   label: 'Vision',   color: '#5cb85c', icon: '🔭', placeholder: 'Your long-term vision…' },
   { key: 'values',   label: 'Values',   color: '#2e8b57', icon: '⭐', placeholder: 'Your core values…\n\n• Value 1\n• Value 2' },
 ]
-
-const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 
 export default function Sidebar({
   asanaTasks, asanaProjects, asanaStatus, onAddAsanaTask, onCompleteAsanaTask,
@@ -29,7 +27,6 @@ export default function Sidebar({
   const [showAdd, setShowAdd] = useState(false)
   const [adding, setAdding] = useState(false)
   const [filterProject, setFilterProject] = useState('All')
-  const [openSection, setOpenSection] = useState(null)
   const [collapsed, setCollapsed] = useState(false)
 
   async function handleAdd(e) {
@@ -43,15 +40,8 @@ export default function Sidebar({
     setAdding(false)
   }
 
-  const projectNames = ['All', ...(asanaProjects || []).map(p => p.name).sort()]
-  const filteredTasks = filterProject === 'All'
-    ? (asanaTasks || [])
-    : (asanaTasks || []).filter(t => t.project === filterProject)
-
   const avatarUrl = user?.user_metadata?.avatar_url
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'You'
-
-  const activeSectionDef = SECTION_LINKS.find(s => s.key === openSection)
 
   function navItem(icon, label, targetView, subTab) {
     const isActive = subTab
@@ -75,179 +65,92 @@ export default function Sidebar({
   }
 
   return (
-    <>
-      <aside className={`sidebar${collapsed ? ' sidebar-collapsed' : ''}`}>
-        <div className="sidebar-header">
-          <button className="sidebar-collapse-btn" onClick={() => setCollapsed(c => !c)} title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
-            {collapsed ? '›' : '‹'}
-          </button>
-          <div className="logo" style={{ display: collapsed ? 'none' : 'flex' }}>
-            <span className="logo-icon">◆</span>
-            <span className="logo-text">My Meridian Planner</span>
-          </div>
-        </div>
-
-        {/* Scrollable nav area */}
-        <div className="sidebar-nav-scroll">
-          {/* Nav: PLANNER */}
-          <div className="sidebar-nav-section">
-            {!collapsed && <div className="sidebar-nav-label">Planner</div>}
-            {navItem('📅', 'Month', 'month')}
-            {navItem('📆', 'Week', 'week')}
-          </div>
-
-          {/* Nav: WORK */}
-          <div className="sidebar-nav-section">
-            {!collapsed && <div className="sidebar-nav-label">Work</div>}
-            {navItem('📋', 'CSEA', 'csea')}
-            {navItem('📊', 'iCAAP', 'icaap')}
-            {navItem('🎓', 'GCU', 'gcu')}
-            {navItem('💰', 'Finance', 'finance')}
-            {navItem('🗒️', 'While You Were Out', 'wywo')}
-          </div>
-
-          {/* Nav: PERSONAL */}
-          <div className="sidebar-nav-section">
-            {!collapsed && <div className="sidebar-nav-label">Personal</div>}
-            {navItem('📝', 'Daily Log', 'personal', 'log')}
-            {navItem('🎯', 'My Goals', 'personal', 'goals')}
-            {navItem('✅', 'Monthly Checklist', 'personal', 'checklist')}
-            {navItem('📚', 'Library', 'personal', 'library')}
-            {navItem('💭', 'My Mantra', 'personal', 'mantra')}
-            {navItem('🛍️', 'Wants', 'personal', 'budget')}
-            {navItem('🌳', 'Family Tree', 'family')}
-          </div>
-
-          {/* Nav: NOTES (overlays) */}
-          <div className="sidebar-nav-section">
-            {!collapsed && <div className="sidebar-nav-label">Notes</div>}
-            {SECTION_LINKS.map(sec => sec.key === 'journal' ? (
-              <a
-                key={sec.key}
-                href="https://penzu.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sidebar-nav-item"
-                title={collapsed ? sec.label : undefined}
-              >
-                <span className="nav-icon">{sec.icon}</span>
-                {!collapsed && sec.label}
-              </a>
-            ) : (
-              <button
-                key={sec.key}
-                className="sidebar-nav-item"
-                onClick={() => setOpenSection(sec.key)}
-                title={collapsed ? sec.label : undefined}
-              >
-                <span className="nav-icon">{sec.icon}</span>
-                {!collapsed && sec.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="sidebar-footer">
-          <div className="user-row">
-            {avatarUrl ? (
-              <img src={avatarUrl} className="user-avatar" alt={displayName} />
-            ) : (
-              <div className="user-avatar-placeholder">{displayName[0].toUpperCase()}</div>
-            )}
-            {!collapsed && (
-              <div className="user-info">
-                <span className="user-name">{displayName}</span>
-                <button className="sign-out-btn" onClick={signOut}>Sign out</button>
-              </div>
-            )}
-          </div>
-        </div>
-      </aside>
-
-      {/* Full-page section overlay */}
-      {openSection && activeSectionDef && (
-        <SectionPage
-          def={activeSectionDef}
-          value={sections[openSection] ?? ''}
-          onChange={onUpdateSection}
-          onClose={() => setOpenSection(null)}
-        />
-      )}
-    </>
-  )
-}
-
-function SectionPage({ def, value, onChange, onClose }) {
-  useEffect(() => {
-    function onKey(e) { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-
-  return (
-    <div className="section-page-overlay" onClick={onClose}>
-      <div className="section-page" onClick={e => e.stopPropagation()}>
-        <div className="section-page-header" style={{ borderBottom: `3px solid ${def.color}` }}>
-          <div className="section-page-title">
-            <span className="section-page-icon">{def.icon}</span>
-            <h2 style={{ color: def.color }}>{def.label}</h2>
-          </div>
-          <button className="section-page-close" onClick={onClose}>✕</button>
-        </div>
-        <SectionTextArea
-          sectionKey={def.key}
-          value={value}
-          placeholder={def.placeholder}
-          accentColor={def.color}
-          onChange={onChange}
-        />
-        <div className="section-page-footer">
-          <span className="section-autosave">Saves automatically</span>
+    <aside className={`sidebar${collapsed ? ' sidebar-collapsed' : ''}`}>
+      <div className="sidebar-header">
+        <button className="sidebar-collapse-btn" onClick={() => setCollapsed(c => !c)} title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+          {collapsed ? '›' : '‹'}
+        </button>
+        <div className="logo" style={{ display: collapsed ? 'none' : 'flex' }}>
+          <span className="logo-icon">◆</span>
+          <span className="logo-text">My Meridian Planner</span>
         </div>
       </div>
-    </div>
-  )
-}
 
-function AsanaTaskRow({ task, onComplete }) {
-  const [hovered, setHovered] = useState(false)
-  return (
-    <div
-      className="task-row"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <button className="asana-check-btn" onClick={() => onComplete(task.id)} title="Complete in Asana">✓</button>
-      <span style={{ flex: 1, fontSize: 13, color: '#e8e4d8', lineHeight: 1.4 }}>{task.title}</span>
-      {task.project && <span className="task-category">{task.project}</span>}
-    </div>
-  )
-}
+      {/* Scrollable nav area */}
+      <div className="sidebar-nav-scroll">
+        {/* Nav: PLANNER */}
+        <div className="sidebar-nav-section">
+          {!collapsed && <div className="sidebar-nav-label">Planner</div>}
+          {navItem('📅', 'Month', 'month')}
+          {navItem('📆', 'Week', 'week')}
+        </div>
 
-function SectionTextArea({ sectionKey, value, placeholder, accentColor, onChange }) {
-  const saveTimer = useRef(null)
-  const [text, setText] = useState(value)
+        {/* Nav: WORK */}
+        <div className="sidebar-nav-section">
+          {!collapsed && <div className="sidebar-nav-label">Work</div>}
+          {navItem('📋', 'CSEA', 'csea')}
+          {navItem('📊', 'iCAAP', 'icaap')}
+          {navItem('🎓', 'GCU', 'gcu')}
+          {navItem('💰', 'Finance', 'finance')}
+          {navItem('🗒️', 'While You Were Out', 'wywo')}
+        </div>
 
-  if (text !== value && !saveTimer.current) setText(value)
+        {/* Nav: PERSONAL */}
+        <div className="sidebar-nav-section">
+          {!collapsed && <div className="sidebar-nav-label">Personal</div>}
+          {navItem('📝', 'Daily Log', 'personal', 'log')}
+          {navItem('🎯', 'My Goals', 'personal', 'goals')}
+          {navItem('✅', 'Monthly Checklist', 'personal', 'checklist')}
+          {navItem('📚', 'Library', 'personal', 'library')}
+          {navItem('💭', 'My Mantra', 'personal', 'mantra')}
+          {navItem('🛍️', 'Wants', 'personal', 'budget')}
+          {navItem('🌳', 'Family Tree', 'family')}
+        </div>
 
-  function handleChange(e) {
-    const val = e.target.value
-    setText(val)
-    clearTimeout(saveTimer.current)
-    saveTimer.current = setTimeout(() => {
-      onChange?.(sectionKey, val)
-      saveTimer.current = null
-    }, 800)
-  }
+        {/* Nav: NOTES (full pages) */}
+        <div className="sidebar-nav-section">
+          {!collapsed && <div className="sidebar-nav-label">Notes</div>}
+          {SECTION_LINKS.map(sec => sec.key === 'journal' ? (
+            <a
+              key={sec.key}
+              href="https://penzu.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sidebar-nav-item"
+              title={collapsed ? sec.label : undefined}
+            >
+              <span className="nav-icon">{sec.icon}</span>
+              {!collapsed && sec.label}
+            </a>
+          ) : (
+            <button
+              key={sec.key}
+              className={`sidebar-nav-item${view === 'section-' + sec.key ? ' active' : ''}`}
+              onClick={() => onViewChange?.('section-' + sec.key)}
+              title={collapsed ? sec.label : undefined}
+            >
+              <span className="nav-icon">{sec.icon}</span>
+              {!collapsed && sec.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
-  return (
-    <textarea
-      className="section-textarea"
-      style={{ '--ac': accentColor }}
-      placeholder={placeholder}
-      value={text}
-      onChange={handleChange}
-      autoFocus
-    />
+      <div className="sidebar-footer">
+        <div className="user-row">
+          {avatarUrl ? (
+            <img src={avatarUrl} className="user-avatar" alt={displayName} />
+          ) : (
+            <div className="user-avatar-placeholder">{displayName[0].toUpperCase()}</div>
+          )}
+          {!collapsed && (
+            <div className="user-info">
+              <span className="user-name">{displayName}</span>
+              <button className="sign-out-btn" onClick={signOut}>Sign out</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </aside>
   )
 }

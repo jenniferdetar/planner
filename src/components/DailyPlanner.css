@@ -1165,3 +1165,66 @@
 .ical-add-btn:hover { background: #2d2d4e; }
 
 .view-tab { font-family: 'Nunito', sans-serif !important; }
+
+/* ── Full-page Section Panel ── */
+.section-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  overflow: hidden;
+}
+
+.section-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px 16px;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.section-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-panel-icon {
+  font-size: 24px;
+}
+
+.section-panel-title h2 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.section-autosave-inline {
+  font-size: 11px;
+  color: #bbb;
+  letter-spacing: 0.3px;
+}
+
+.section-panel-textarea {
+  flex: 1;
+  width: 100%;
+  background-color: #ffffff;
+  border: none;
+  outline: none;
+  resize: none;
+  color: #2a2520;
+  font-size: 15px;
+  line-height: 27px;
+  padding: 20px 28px;
+  font-family: inherit;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.section-panel-textarea::placeholder {
+  color: #ccc;
+  font-style: normal;
+}
