@@ -11,7 +11,7 @@ import GcuPanel from './GcuPanel'
 import PersonalPanel from './PersonalPanel'
 import FamilyTreePanel from './FamilyTreePanel'
 import WhileYouWereOut from './WhileYouWereOut'
-import { TASK_AREAS } from './Sidebar'
+import { TASK_AREAS, SECTION_LINKS } from './Sidebar'
 
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6) // 6am–10pm
@@ -75,6 +75,7 @@ export default function DailyPlanner({
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
   personalSubTab, onPersonalSubTabChange,
   familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
+  sections, onUpdateSection,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -254,6 +255,12 @@ export default function DailyPlanner({
         />
       )}
 
+      {view?.startsWith('section-') && (() => {
+        const key = view.slice('section-'.length)
+        const def = SECTION_LINKS.find(s => s.key === key)
+        if (!def) return null
+        return <SectionPanel def={def} value={sections?.[key] ?? ''} onChange={onUpdateSection} />
+      })()}
 
       <div className="planner-body" style={{ display: 'none' }} aria-hidden="true">
         {/* Time Schedule */}
@@ -589,5 +596,54 @@ function DailyTaskRow({ task, index, onToggle, onDelete, onUpdateNotes }) {
         />
       )}
     </div>
+  )
+}
+
+function SectionPanel({ def, value, onChange }) {
+  return (
+    <div className="section-panel">
+      <div className="section-panel-header" style={{ borderBottom: `3px solid ${def.color}` }}>
+        <div className="section-panel-title">
+          <span className="section-panel-icon">{def.icon}</span>
+          <h2 style={{ color: def.color }}>{def.label}</h2>
+        </div>
+        <span className="section-autosave-inline">Saves automatically</span>
+      </div>
+      <SectionPanelTextArea
+        sectionKey={def.key}
+        value={value}
+        placeholder={def.placeholder}
+        accentColor={def.color}
+        onChange={onChange}
+      />
+    </div>
+  )
+}
+
+function SectionPanelTextArea({ sectionKey, value, placeholder, accentColor, onChange }) {
+  const saveTimer = useRef(null)
+  const [text, setText] = useState(value)
+
+  if (text !== value && !saveTimer.current) setText(value)
+
+  function handleChange(e) {
+    const val = e.target.value
+    setText(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => {
+      onChange?.(sectionKey, val)
+      saveTimer.current = null
+    }, 800)
+  }
+
+  return (
+    <textarea
+      className="section-panel-textarea"
+      style={{ '--ac': accentColor }}
+      placeholder={placeholder}
+      value={text}
+      onChange={handleChange}
+      autoFocus
+    />
   )
 }

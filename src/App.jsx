@@ -335,6 +335,8 @@ export default function App() {
           onUpdateFamilyMember={updateFamilyMember}
           onDeleteFamilyMember={deleteFamilyMember}
           onImportFamilyDefaults={importFamilyDefaults}
+          sections={sections}
+          onUpdateSection={updateSection}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>
