@@ -142,7 +142,10 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
   const shelfBooks = (isWantToRead
     ? books.filter(b => b.status === 'want-to-read')
     : books.filter(b => b.shelf === activeShelf)
-  ).slice().sort((a, b) => a.title.localeCompare(b.title))
+  ).slice().sort((a, b) => {
+    const authorCmp = (a.author || '').localeCompare(b.author || '')
+    return authorCmp !== 0 ? authorCmp : a.title.localeCompare(b.title)
+  })
 
   function cycleStatus(book) {
     const idx = STATUS_CYCLE.indexOf(book.status)
