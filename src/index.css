@@ -24,7 +24,7 @@ button {
 }
 
 input, textarea {
-  font-family: inherit;
+  font-family: 'Architects Daughter', cursive;
 }
 
 ::-webkit-scrollbar {
