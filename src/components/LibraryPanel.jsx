@@ -139,9 +139,10 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
   const [importing, setImporting] = useState(false)
 
   const isWantToRead = activeShelf === WANT_TO_READ_TAB
-  const shelfBooks = isWantToRead
+  const shelfBooks = (isWantToRead
     ? books.filter(b => b.status === 'want-to-read')
     : books.filter(b => b.shelf === activeShelf)
+  ).slice().sort((a, b) => a.title.localeCompare(b.title))
 
   function cycleStatus(book) {
     const idx = STATUS_CYCLE.indexOf(book.status)
