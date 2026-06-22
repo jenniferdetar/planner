@@ -613,15 +613,25 @@ function SectionPanel({ def, value, onChange }) {
           <span className="section-panel-icon">{def.icon}</span>
           <h2 style={{ color: def.color }}>{def.label}</h2>
         </div>
-        <span className="section-autosave-inline">Saves automatically</span>
+        {!def.iframeUrl && <span className="section-autosave-inline">Saves automatically</span>}
       </div>
-      <SectionPanelTextArea
-        sectionKey={def.key}
-        value={value}
-        placeholder={def.placeholder}
-        accentColor={def.color}
-        onChange={onChange}
-      />
+      {def.iframeUrl ? (
+        <iframe
+          src={def.iframeUrl}
+          className="section-panel-iframe"
+          title={def.label}
+          frameBorder="0"
+          allowFullScreen
+        />
+      ) : (
+        <SectionPanelTextArea
+          sectionKey={def.key}
+          value={value}
+          placeholder={def.placeholder}
+          accentColor={def.color}
+          onChange={onChange}
+        />
+      )}
     </div>
   )
 }

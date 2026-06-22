@@ -1228,3 +1228,10 @@
   color: #ccc;
   font-style: normal;
 }
+
+.section-panel-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  min-height: 0;
+}
