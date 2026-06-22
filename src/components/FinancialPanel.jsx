@@ -207,7 +207,7 @@ function BillCard({ bill, index, onToggle, onDelete }) {
   )
 }
 
-function GoalsTab({ goals, onUpdate }) {
+export function GoalsTab({ goals, onUpdate }) {
   const [editing, setEditing] = useState(null)
   const [editVal, setEditVal] = useState('')
 

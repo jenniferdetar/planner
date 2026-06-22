@@ -48,6 +48,33 @@ export default function Sidebar({
     )
   }
 
+  function sectionLabelNavItem(key) {
+    const sec = SECTION_LINKS.find(s => s.key === key)
+    if (!sec) return null
+    const isActive = view === 'section-' + sec.key
+    if (collapsed) {
+      return (
+        <button
+          key={sec.key}
+          className={`sidebar-nav-item${isActive ? ' active' : ''}`}
+          onClick={() => onViewChange?.('section-' + sec.key)}
+          title={sec.label}
+        >
+          <span className="nav-icon">{sec.icon}</span>
+        </button>
+      )
+    }
+    return (
+      <button
+        key={sec.key}
+        className={`sidebar-nav-section-label${isActive ? ' active' : ''}`}
+        onClick={() => onViewChange?.('section-' + sec.key)}
+      >
+        {sec.label}
+      </button>
+    )
+  }
+
   function sectionNavItem(key) {
     const sec = SECTION_LINKS.find(s => s.key === key)
     if (!sec) return null
@@ -97,37 +124,44 @@ export default function Sidebar({
           {!collapsed && <div className="sidebar-nav-label">Planner</div>}
           {navItem('📅', 'Month', 'month')}
           {navItem('📆', 'Week', 'week')}
-          {sectionNavItem('meetings')}
         </div>
 
-        {/* Nav: WORK */}
+        {/* Nav: ROLES */}
         <div className="sidebar-nav-section">
-          {!collapsed && <div className="sidebar-nav-label">Work</div>}
+          {sectionLabelNavItem('roles')}
           {navItem('📋', 'CSEA', 'csea')}
           {navItem('📊', 'iCAAP', 'icaap')}
           {navItem('🎓', 'GCU', 'gcu')}
           {navItem('💰', 'Finance', 'finance')}
           {navItem('🗒️', 'While You Were Out', 'wywo')}
-          {sectionNavItem('mission')}
-          {sectionNavItem('notes')}
           {sectionNavItem('hoa')}
+          {sectionNavItem('meetings')}
         </div>
 
-        {/* Nav: PERSONAL */}
+        {/* Nav: GOALS */}
         <div className="sidebar-nav-section">
-          {!collapsed && <div className="sidebar-nav-label">Personal</div>}
-          {navItem('📝', 'Daily Log', 'personal', 'log')}
+          {sectionLabelNavItem('goals')}
           {navItem('🎯', 'My Goals', 'personal', 'goals')}
           {navItem('✅', 'Monthly Checklist', 'personal', 'checklist')}
-          {navItem('📚', 'Library', 'personal', 'library')}
-          {navItem('💭', 'My Mantra', 'personal', 'mantra')}
           {navItem('🛍️', 'Wants', 'personal', 'budget')}
-          {navItem('🌳', 'Family Tree', 'family')}
-          {sectionNavItem('roles')}
-          {sectionNavItem('goals')}
-          {sectionNavItem('vision')}
-          {sectionNavItem('values')}
+          {navItem('📚', 'Library', 'personal', 'library')}
+          {navItem('📈', 'Financial Goals', 'financial-goals')}
+        </div>
+
+        {/* Nav: VISION */}
+        <div className="sidebar-nav-section">
+          {sectionLabelNavItem('vision')}
+          {sectionNavItem('mission')}
+          {navItem('💭', 'My Mantra', 'personal', 'mantra')}
+          {sectionNavItem('notes')}
+        </div>
+
+        {/* Nav: VALUES */}
+        <div className="sidebar-nav-section">
+          {sectionLabelNavItem('values')}
           {sectionNavItem('journal')}
+          {navItem('📝', 'Daily Log', 'personal', 'log')}
+          {navItem('🌳', 'Family Tree', 'family')}
         </div>
       </div>
 
