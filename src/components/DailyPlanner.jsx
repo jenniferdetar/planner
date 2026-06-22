@@ -4,7 +4,7 @@ import MonthView from './MonthView'
 import WeekView from './WeekView'
 import GoalsPanel from './GoalsPanel'
 import CseaTracker from './CseaTracker'
-import FinancialPanel from './FinancialPanel'
+import FinancialPanel, { GoalsTab } from './FinancialPanel'
 import IcaapTracker from './IcaapTracker'
 import LibraryPanel from './LibraryPanel'
 import GcuPanel from './GcuPanel'
@@ -243,6 +243,12 @@ export default function DailyPlanner({
 
       {view === 'wywo' && (
         <WhileYouWereOut userId={userId} />
+      )}
+
+      {view === 'financial-goals' && (
+        <div className="fin-panel">
+          <GoalsTab goals={goals || []} onUpdate={onUpdateGoalAmount} />
+        </div>
       )}
 
       {view === 'family' && (

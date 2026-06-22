@@ -540,6 +540,28 @@
   text-transform: uppercase;
 }
 
+.sidebar-nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.45);
+  padding: 6px 16px 2px;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  display: block;
+  transition: color 0.15s;
+}
+.sidebar-nav-section-label:hover {
+  color: rgba(255,255,255,0.85);
+}
+.sidebar-nav-section-label.active {
+  color: #73a882;
+}
+
 .sidebar-nav-item {
   display: flex;
   align-items: center;
