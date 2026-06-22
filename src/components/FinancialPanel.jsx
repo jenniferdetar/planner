@@ -932,12 +932,24 @@ function LaundryTab({ userId }) {
               <span className="laundry-day-total">{totalQuarters} quarters · {fmt(totalCost)}</span>
             </div>
 
-            {washSessions.length > 0 && (
-              <div className="laundry-section">
-                <div className="laundry-section-title">Washing</div>
-                <table className="laundry-table">
-                  <thead><tr><th>Machine</th><th>Loads</th><th>Quarters</th><th>Minutes</th><th>Cost</th><th></th></tr></thead>
+            {(washSessions.length > 0 || drySessions.length > 0) && (
+              <table className="laundry-table">
+                <colgroup>
+                  <col style={{ width: '32%' }} />
+                  <col style={{ width: '12%' }} />
+                  <col style={{ width: '14%' }} />
+                  <col style={{ width: '14%' }} />
+                  <col style={{ width: '14%' }} />
+                  <col style={{ width: '14%' }} />
+                </colgroup>
+                <thead>
+                  <tr><th>Machine</th><th>Loads</th><th>Quarters</th><th>Minutes</th><th>Cost</th><th></th></tr>
+                </thead>
+                {washSessions.length > 0 && (
                   <tbody>
+                    <tr className="laundry-section-row">
+                      <td colSpan={6} className="laundry-section-title">Washing</td>
+                    </tr>
                     {washSessions.map(s => (
                       <tr key={s.id} className="laundry-row">
                         <td>{machineLabel(s.machine_type)}</td>
@@ -949,16 +961,12 @@ function LaundryTab({ userId }) {
                       </tr>
                     ))}
                   </tbody>
-                </table>
-              </div>
-            )}
-
-            {drySessions.length > 0 && (
-              <div className="laundry-section">
-                <div className="laundry-section-title">Drying</div>
-                <table className="laundry-table">
-                  <thead><tr><th>Machine</th><th>Loads</th><th>Quarters</th><th>Minutes</th><th>Cost</th><th></th></tr></thead>
+                )}
+                {drySessions.length > 0 && (
                   <tbody>
+                    <tr className="laundry-section-row">
+                      <td colSpan={6} className="laundry-section-title">Drying</td>
+                    </tr>
                     {drySessions.map(s => (
                       <tr key={s.id} className="laundry-row">
                         <td>{machineLabel(s.machine_type)}</td>
@@ -970,8 +978,8 @@ function LaundryTab({ userId }) {
                       </tr>
                     ))}
                   </tbody>
-                </table>
-              </div>
+                )}
+              </table>
             )}
           </div>
         )

@@ -22,23 +22,7 @@ export default function Sidebar({
   view, onViewChange,
   personalSubTab, onPersonalSubTabChange,
 }) {
-  const [newText, setNewText] = useState('')
-  const [newProject, setNewProject] = useState('')
-  const [showAdd, setShowAdd] = useState(false)
-  const [adding, setAdding] = useState(false)
-  const [filterProject, setFilterProject] = useState('All')
   const [collapsed, setCollapsed] = useState(false)
-
-  async function handleAdd(e) {
-    e.preventDefault()
-    if (!newText.trim()) return
-    setAdding(true)
-    await onAddAsanaTask(newText.trim(), '', newProject || null)
-    setNewText('')
-    setNewProject('')
-    setShowAdd(false)
-    setAdding(false)
-  }
 
   const avatarUrl = user?.user_metadata?.avatar_url
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'You'
@@ -64,6 +48,37 @@ export default function Sidebar({
     )
   }
 
+  function sectionNavItem(key) {
+    const sec = SECTION_LINKS.find(s => s.key === key)
+    if (!sec) return null
+    if (sec.key === 'journal') {
+      return (
+        <a
+          key={sec.key}
+          href="https://penzu.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="sidebar-nav-item"
+          title={collapsed ? sec.label : undefined}
+        >
+          <span className="nav-icon">{sec.icon}</span>
+          {!collapsed && sec.label}
+        </a>
+      )
+    }
+    return (
+      <button
+        key={sec.key}
+        className={`sidebar-nav-item${view === 'section-' + sec.key ? ' active' : ''}`}
+        onClick={() => onViewChange?.('section-' + sec.key)}
+        title={collapsed ? sec.label : undefined}
+      >
+        <span className="nav-icon">{sec.icon}</span>
+        {!collapsed && sec.label}
+      </button>
+    )
+  }
+
   return (
     <aside className={`sidebar${collapsed ? ' sidebar-collapsed' : ''}`}>
       <div className="sidebar-header">
@@ -76,13 +91,13 @@ export default function Sidebar({
         </div>
       </div>
 
-      {/* Scrollable nav area */}
       <div className="sidebar-nav-scroll">
         {/* Nav: PLANNER */}
         <div className="sidebar-nav-section">
           {!collapsed && <div className="sidebar-nav-label">Planner</div>}
           {navItem('📅', 'Month', 'month')}
           {navItem('📆', 'Week', 'week')}
+          {sectionNavItem('meetings')}
         </div>
 
         {/* Nav: WORK */}
@@ -93,6 +108,9 @@ export default function Sidebar({
           {navItem('🎓', 'GCU', 'gcu')}
           {navItem('💰', 'Finance', 'finance')}
           {navItem('🗒️', 'While You Were Out', 'wywo')}
+          {sectionNavItem('mission')}
+          {sectionNavItem('notes')}
+          {sectionNavItem('hoa')}
         </div>
 
         {/* Nav: PERSONAL */}
@@ -105,34 +123,11 @@ export default function Sidebar({
           {navItem('💭', 'My Mantra', 'personal', 'mantra')}
           {navItem('🛍️', 'Wants', 'personal', 'budget')}
           {navItem('🌳', 'Family Tree', 'family')}
-        </div>
-
-        {/* Nav: NOTES (full pages) */}
-        <div className="sidebar-nav-section">
-          {!collapsed && <div className="sidebar-nav-label">Notes</div>}
-          {SECTION_LINKS.map(sec => sec.key === 'journal' ? (
-            <a
-              key={sec.key}
-              href="https://penzu.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sidebar-nav-item"
-              title={collapsed ? sec.label : undefined}
-            >
-              <span className="nav-icon">{sec.icon}</span>
-              {!collapsed && sec.label}
-            </a>
-          ) : (
-            <button
-              key={sec.key}
-              className={`sidebar-nav-item${view === 'section-' + sec.key ? ' active' : ''}`}
-              onClick={() => onViewChange?.('section-' + sec.key)}
-              title={collapsed ? sec.label : undefined}
-            >
-              <span className="nav-icon">{sec.icon}</span>
-              {!collapsed && sec.label}
-            </button>
-          ))}
+          {sectionNavItem('roles')}
+          {sectionNavItem('goals')}
+          {sectionNavItem('vision')}
+          {sectionNavItem('values')}
+          {sectionNavItem('journal')}
         </div>
       </div>
 
