@@ -57,7 +57,7 @@ export default function App() {
   const today = new Date()
   const { session, user, providerToken, loading, clearProviderToken } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
-  const [view, setView] = useState('week')
+  const [view, setView] = useState('day')
   const [personalSubTab, setPersonalSubTab] = useState('log')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
@@ -266,6 +266,8 @@ export default function App() {
           onAddBlock={handleAddBlock}
           onBulkAddMeetings={bulkAddMeetings}
           onDeleteBlock={handleDeleteBlock}
+          noteContent={noteContent}
+          onNoteChange={onNoteChange}
           view={view}
           onViewChange={(v) => {
             if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }

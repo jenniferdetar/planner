@@ -123,6 +123,7 @@ export default function Sidebar({
         {/* Nav: PLANNER */}
         <div className="sidebar-nav-section">
           {!collapsed && <div className="sidebar-nav-label">Planner</div>}
+          {navItem('📒', 'Day', 'day')}
           {navItem('📅', 'Month', 'month')}
           {navItem('📆', 'Week', 'week')}
         </div>

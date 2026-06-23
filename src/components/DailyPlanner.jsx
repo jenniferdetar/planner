@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import './DailyPlanner.css'
+import LeatherDayView from './LeatherDayView'
 import MonthView from './MonthView'
 import WeekView from './WeekView'
 import GoalsPanel from './GoalsPanel'
@@ -54,6 +55,7 @@ export default function DailyPlanner({
   dailyTasks, timeBlocks,
   onAddTask, onToggleTask, onDeleteTask, onUpdateTaskNotes,
   onAddBlock, onBulkAddMeetings, onDeleteBlock,
+  noteContent, onNoteChange,
   view, onViewChange,
   taskCounts,
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
@@ -135,6 +137,25 @@ export default function DailyPlanner({
 
   return (
     <main className="daily-planner">
+      {view === 'day' && (
+        <LeatherDayView
+          selectedDate={selectedDate}
+          onDateChange={onDateChange}
+          dailyTasks={dailyTasks || []}
+          onAddTask={onAddTask}
+          onToggleTask={onToggleTask}
+          onDeleteTask={onDeleteTask}
+          timeBlocks={timeBlocks || []}
+          onAddBlock={onAddBlock}
+          onDeleteBlock={onDeleteBlock}
+          noteContent={noteContent}
+          onNoteChange={onNoteChange}
+          masterTasks={masterTasks || []}
+          onDeleteMasterTask={onDeleteMasterTask}
+          sections={{}}
+          onUpdateSection={() => {}}
+        />
+      )}
       {view === 'week' && (
         <WeekView
           userId={userId}
