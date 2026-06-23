@@ -75,6 +75,7 @@ export default function LeatherDayView({
   icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
   // gcu props
   onPushGcuToAsana, gcuPushing,
+  calAuthExpired, onReconnectGoogle,
   // finance props
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
@@ -139,6 +140,7 @@ export default function LeatherDayView({
     addingBlock, blockText, setBlockText,
     blockStart, setBlockStart, blockEnd, setBlockEnd,
     openAddBlock, handleAddBlock, setAddingBlock,
+    calAuthExpired, onReconnectGoogle,
   }
 
   const firstNavKey = ALL_TABS.find(t => t.nav)?.key
@@ -462,7 +464,7 @@ function DailyTasksPanel({ pending, done, onToggle, onDelete, showAdd, setShowAd
   )
 }
 
-function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock }) {
+function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock, calAuthExpired, onReconnectGoogle }) {
   const today = new Date()
   return (
     <div className="rp-panel">
@@ -470,6 +472,12 @@ function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, b
         <span className="rp-title">Schedule</span>
         <span className="rp-subtitle">{DAY_NAMES[selectedDate.getDay()]}, {MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getDate()}</span>
       </div>
+      {calAuthExpired && (
+        <div className="gcal-reconnect-banner">
+          <span>Google Calendar disconnected</span>
+          <button onClick={onReconnectGoogle}>Reconnect</button>
+        </div>
+      )}
       <div className="rp-schedule-body">
         {HOURS.map(hour => {
           const blocksHere = timeBlocks.filter(b => b.hour === hour)
