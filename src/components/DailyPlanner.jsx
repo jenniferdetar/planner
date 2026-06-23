@@ -78,6 +78,7 @@ export default function DailyPlanner({
   personalSubTab, onPersonalSubTabChange,
   familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
   sections, onUpdateSection,
+  asanaTaskTags, onCycleAsanaTaskTag,
 }) {
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
@@ -154,6 +155,8 @@ export default function DailyPlanner({
         onDeleteMasterTask={onDeleteMasterTask}
         sections={sections}
         onUpdateSection={onUpdateSection}
+        asanaTaskTags={asanaTaskTags}
+        onCycleAsanaTaskTag={onCycleAsanaTaskTag}
         // week
         userId={userId}
         weeklyTasks={weeklyTasks}

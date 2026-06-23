@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import './LeatherDayView.css'
+import { TAG_COLORS } from '../hooks/useAsanaTaskTags'
 import WeekView from './WeekView'
 import MonthView from './MonthView'
 import CseaTracker from './CseaTracker'
@@ -54,7 +55,7 @@ export default function LeatherDayView({
   timeBlocks, onAddBlock, onDeleteBlock,
   masterTasks, onDeleteMasterTask,
   sections, onUpdateSection,
-  asanaTasks,
+  asanaTasks, asanaTaskTags, onCycleAsanaTaskTag,
   // week props
   userId,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
@@ -176,10 +177,10 @@ export default function LeatherDayView({
                 </form>
               )}
               <div className="lp-task-list">
-                {pending.map((t, i) => <LpTaskRow key={t.id} task={t} index={i+1} onToggle={onToggleTask} onDelete={onDeleteTask} />)}
+                {pending.map((t, i) => <LpTaskRow key={t.id} task={t} index={i+1} onToggle={onToggleTask} onDelete={onDeleteTask} tag={t.source === 'asana' ? (asanaTaskTags?.[t.id] ?? null) : null} onCycleTag={t.source === 'asana' ? () => onCycleAsanaTaskTag?.(t.id) : null} />)}
                 {done.length > 0 && <>
                   <div className="lp-done-sep">Done</div>
-                  {done.map((t, i) => <LpTaskRow key={t.id} task={t} index={pending.length+i+1} onToggle={onToggleTask} onDelete={onDeleteTask} done />)}
+                  {done.map((t, i) => <LpTaskRow key={t.id} task={t} index={pending.length+i+1} onToggle={onToggleTask} onDelete={onDeleteTask} done tag={t.source === 'asana' ? (asanaTaskTags?.[t.id] ?? null) : null} onCycleTag={t.source === 'asana' ? () => onCycleAsanaTaskTag?.(t.id) : null} />)}
                 </>}
                 {pending.length === 0 && done.length === 0 && !showAddTask &&
                   <p className="lp-empty">No tasks today</p>}
@@ -390,7 +391,7 @@ function LeftSchedule({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, bl
   )
 }
 
-function LpTaskRow({ task, index, onToggle, onDelete, done }) {
+function LpTaskRow({ task, index, onToggle, onDelete, done, tag, onCycleTag }) {
   const [hovered, setHovered] = useState(false)
   return (
     <div className={`lp-task-row ${done ? 'done' : ''}`}
@@ -400,6 +401,12 @@ function LpTaskRow({ task, index, onToggle, onDelete, done }) {
         <span className={`lp-circle ${done ? 'checked' : ''}`} />
       </button>
       <span className="lp-task-title">{task.title}</span>
+      {onCycleTag && (
+        <button className="lp-tag-btn" onClick={onCycleTag}
+          style={tag ? { background: TAG_COLORS[tag], color: '#fff' } : {}}>
+          {tag || '＋'}
+        </button>
+      )}
       {hovered && <button className="lp-del-btn" onClick={() => onDelete(task.id)}>✕</button>}
     </div>
   )

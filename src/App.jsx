@@ -13,6 +13,7 @@ import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useIcaapNotes } from './hooks/useIcaapNotes'
 import { useTransactions, useBills, useFinancialGoals, usePaychecks } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
+import { useAsanaTaskTags } from './hooks/useAsanaTaskTags'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
@@ -95,6 +96,7 @@ export default function App() {
   const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
   const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
+  const { tags: asanaTaskTags, cycleTag: cycleAsanaTaskTag } = useAsanaTaskTags()
   const { tasksByDate: weeklyTasks, toggleTask: toggleWeeklyTask, addTask: addWeeklyTask } = useWeeklyTasks(userId, selectedDate)
   const { addEntry: addLogEntry } = useDailyLog(userId, dateStr)
 
@@ -345,6 +347,8 @@ export default function App() {
           onImportFamilyDefaults={importFamilyDefaults}
           sections={sections}
           onUpdateSection={updateSection}
+          asanaTaskTags={asanaTaskTags}
+          onCycleAsanaTaskTag={cycleAsanaTaskTag}
         />
       </div>
       <div className={mp === 'right' ? 'mobile-active' : undefined}>

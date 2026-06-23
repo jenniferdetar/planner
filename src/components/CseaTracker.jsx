@@ -134,22 +134,7 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions</button>
         <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {cseaNotes.length > 0 && <span className="csea-tab-badge">{cseaNotes.length}</span>}</button>
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="csea-tab-badge">{quickLinks.length}</span>}</button>
-        <button className={`csea-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="csea-tab-badge">{asanaTasks.length}</span>}</button>
       </div>
-
-      {tab === 'asana' && (
-        <div className="csea-panel">
-          <div className="csea-toolbar">
-            <span className="csea-toolbar-label">CSEA tasks from Asana</span>
-          </div>
-          <div className="csea-issue-list">
-            {asanaTasks.length === 0 && <p className="csea-empty">No CSEA tasks in Asana</p>}
-            {asanaTasks.map(task => (
-              <CseaAsanaTaskRow key={task.id} task={task} onComplete={onCompleteAsanaTask} onUpdateNotes={onUpdateAsanaTaskNotes} />
-            ))}
-          </div>
-        </div>
-      )}
 
       {tab === 'issues' && (
         <div className="csea-panel">
