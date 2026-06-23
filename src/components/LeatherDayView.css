@@ -652,6 +652,8 @@
   width: 36px;
   overflow-y: auto;
   scrollbar-width: none;
+  gap: 0;
+  background: #4a6a5a;
 }
 .right-tabs::-webkit-scrollbar { display: none; }
 
@@ -691,7 +693,6 @@
 /* Divider between content tabs and nav tabs */
 .right-tab.nav-tab-first {
   border-top: 3px solid rgba(255,255,255,0.3);
-  margin-top: 4px;
 }
 
 /* ─── Full view components inside binder right page ─────────────────────── */
