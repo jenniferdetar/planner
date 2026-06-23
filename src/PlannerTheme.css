@@ -20,8 +20,8 @@
   --pt-header-alt: #ede8de;   /* light tan for soft headers */
   --pt-line: repeating-linear-gradient(
     transparent, transparent 27px,
-    rgba(180,170,150,0.18) 27px,
-    rgba(180,170,150,0.18) 28px
+    rgba(160,145,120,0.38) 27px,
+    rgba(160,145,120,0.38) 28px
   );
 }
 

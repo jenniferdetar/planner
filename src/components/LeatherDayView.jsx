@@ -211,6 +211,7 @@ export default function LeatherDayView({
             {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
             {(rightTab === 'roles' || rightTab === 'goals' || rightTab === 'meetings') && (
               <SectionTextPanel
+                key={rightTab}
                 sectionKey={rightTab}
                 label={ALL_TABS.find(t => t.key === rightTab)?.label}
                 color={ALL_TABS.find(t => t.key === rightTab)?.color}
