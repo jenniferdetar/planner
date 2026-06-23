@@ -715,6 +715,7 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  background: #faf8f2;
 }
 
 .rp-header {
