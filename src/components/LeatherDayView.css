@@ -123,18 +123,12 @@
 /* ─── Left Page: Date Header ─────────────────────────────────────────────── */
 .lp-date-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  gap: 12px;
   padding: 16px 20px 12px;
   border-bottom: 2px solid rgba(160,145,120,0.25);
   background: rgba(255,255,255,0.35);
   flex-shrink: 0;
-}
-
-.lp-date-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
 }
 
 .lp-day-num {
@@ -144,16 +138,17 @@
   line-height: 1;
   color: #2a1f10;
   letter-spacing: -2px;
+  flex-shrink: 0;
 }
 
-.lp-day-meta {
+.lp-date-right {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .lp-day-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: #3a2a18;
   font-family: 'Georgia', serif;
@@ -338,19 +333,23 @@
   flex-direction: column;
   flex-shrink: 0;
   width: 34px;
-  background: rgba(200,188,170,0.2);
+  background: rgba(200,188,170,0.15);
   border-left: 1px solid rgba(160,145,120,0.2);
+  overflow-y: auto;
+  scrollbar-width: none;
 }
+.right-tabs::-webkit-scrollbar { display: none; }
 
 .right-tab {
-  flex: 1;
+  flex-shrink: 0;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: rgba(200,188,170,0.1);
+  background: rgba(200,188,170,0.08);
   border: none;
-  border-bottom: 1px solid rgba(160,145,120,0.15);
+  border-bottom: 1px solid rgba(160,145,120,0.12);
   transition: all 0.15s;
   padding: 0;
 }
@@ -359,9 +358,9 @@
   writing-mode: vertical-rl;
   text-orientation: mixed;
   transform: rotate(180deg);
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.7px;
   text-transform: uppercase;
   color: #9a8a78;
   transition: color 0.15s;
@@ -372,6 +371,20 @@
 .right-tab:hover span { color: #3a2a18; }
 .right-tab.active { background: var(--tab-color); }
 .right-tab.active span { color: #fff; }
+
+/* Nav tabs get a slightly different base style */
+.right-tab.nav-tab {
+  background: rgba(180,165,140,0.06);
+}
+.right-tab.nav-tab span { color: #7a6a58; letter-spacing: 0.5px; }
+.right-tab.nav-tab:hover { background: var(--tab-color); }
+.right-tab.nav-tab:hover span { color: #fff; }
+
+/* Divider between content tabs and nav tabs */
+.right-tab.nav-tab:first-of-type {
+  border-top: 2px solid rgba(160,145,120,0.3);
+  margin-top: 4px;
+}
 
 /* ─── Right Page Panels ──────────────────────────────────────────────────── */
 .rp-panel {

@@ -56,7 +56,7 @@ export default function DailyPlanner({
   onAddTask, onToggleTask, onDeleteTask, onUpdateTaskNotes,
   onAddBlock, onBulkAddMeetings, onDeleteBlock,
   noteContent, onNoteChange,
-  view, onViewChange,
+  view, onViewChange, onLeatherViewChange,
   taskCounts,
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
   cseaInteractions, onAddCseaInteraction, onUpdateCseaInteraction, showArchivedInteractions, onToggleArchivedInteractions,
@@ -154,6 +154,7 @@ export default function DailyPlanner({
           onDeleteMasterTask={onDeleteMasterTask}
           sections={{}}
           onUpdateSection={() => {}}
+          onViewChange={onLeatherViewChange || onViewChange}
         />
       )}
       {view === 'week' && (

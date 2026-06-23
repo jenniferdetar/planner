@@ -229,7 +229,8 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className={mp === 'sidebar' ? 'mobile-active' : undefined}>
+      <div className={view === 'day' ? undefined : (mp === 'sidebar' ? 'mobile-active' : undefined)}
+           style={view === 'day' ? { display: 'none' } : undefined}>
         <Sidebar
           asanaTasks={asanaTasks}
           asanaProjects={asanaProjects}
@@ -269,6 +270,10 @@ export default function App() {
           noteContent={noteContent}
           onNoteChange={onNoteChange}
           view={view}
+          onLeatherViewChange={(v) => {
+            if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
+            setView(v)
+          }}
           onViewChange={(v) => {
             if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
             setView(v)
