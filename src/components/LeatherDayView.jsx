@@ -353,10 +353,16 @@ export default function LeatherDayView({
 }
 
 // ── Left col compact schedule ────────────────────────────────────────────────
-function LeftSchedule({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock }) {
+function LeftSchedule({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock, calAuthExpired, onReconnectGoogle }) {
   const today = new Date()
   return (
     <div className="lp-sched-list">
+      {calAuthExpired && (
+        <div className="lp-gcal-banner">
+          <span>📅 Google Calendar disconnected</span>
+          <button onClick={onReconnectGoogle}>Reconnect</button>
+        </div>
+      )}
       {HOURS.map(hour => {
         const blocksHere = timeBlocks.filter(b => b.hour === hour)
         const isAddingHere = addingBlock === hour
