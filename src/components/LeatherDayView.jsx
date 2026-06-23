@@ -210,7 +210,7 @@ export default function LeatherDayView({
 
             {/* Day content tabs */}
             {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
-            {(rightTab === 'roles' || rightTab === 'goals' || rightTab === 'meetings') && (
+            {(rightTab === 'roles' || rightTab === 'goals') && (
               <SectionTextPanel
                 key={rightTab}
                 sectionKey={rightTab}
@@ -220,6 +220,7 @@ export default function LeatherDayView({
                 onChange={onUpdateSection}
               />
             )}
+            {rightTab === 'meetings' && <SchedulePanel {...scheduleProps} />}
 
             {/* Nav view tabs — render full view components inside binder */}
             {rightTab === 'week' && (
@@ -485,6 +486,7 @@ function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, b
                   <div key={b.id} className="rp-block" style={{ background: b.color || '#4a90d9' }}>
                     <span className="rp-block-title">{b.title || b.text}</span>
                     {b.startLabel && <span className="rp-block-time">{b.startLabel}–{b.endLabel}</span>}
+                    {b.calendarName && <span className="rp-block-cal">{b.calendarName}</span>}
                     {b.source !== 'google' && <button className="rp-block-del" onClick={() => onDeleteBlock?.(b.id)}>✕</button>}
                   </div>
                 ))}
