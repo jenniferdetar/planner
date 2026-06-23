@@ -61,7 +61,7 @@ export default function DailyPlanner({
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
   cseaInteractions, onAddCseaInteraction, onUpdateCseaInteraction, showArchivedInteractions, onToggleArchivedInteractions,
   cseaNotes, onAddCseaNote, onDeleteCseaNote,
-  asanaCseaTasks, asanaIcaapTasks, onCompleteAsanaTask, onUpdateAsanaTaskNotes,
+  asanaTasks, asanaCseaTasks, asanaIcaapTasks, onCompleteAsanaTask, onUpdateAsanaTaskNotes,
   onMonthChange,
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
@@ -173,6 +173,7 @@ export default function DailyPlanner({
         onUpdateCseaInteraction={onUpdateCseaInteraction}
         showArchivedInteractions={showArchivedInteractions}
         onToggleArchivedInteractions={onToggleArchivedInteractions}
+        asanaTasks={asanaTasks}
         asanaCseaTasks={asanaCseaTasks}
         onCompleteAsanaTask={onCompleteAsanaTask}
         onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
