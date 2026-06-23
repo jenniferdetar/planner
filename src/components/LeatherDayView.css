@@ -397,6 +397,32 @@
   min-height: 0;
 }
 
+.lp-gcal-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff3cd;
+  border: 1px solid #f0d080;
+  border-radius: 5px;
+  margin: 4px 4px 6px;
+  padding: 5px 10px;
+  font-size: 10px;
+  color: #7a5a00;
+  gap: 8px;
+}
+.lp-gcal-banner button {
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  background: #b87a38;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.lp-gcal-banner button:hover { background: #a06020; }
+
 .lp-sched-list {
   flex: 1;
   overflow-y: auto;
