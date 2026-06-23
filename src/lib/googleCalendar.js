@@ -35,7 +35,8 @@ export async function fetchCalendarEvents(providerToken, startDate, endDate) {
         `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?${params}`,
         { headers: { Authorization: `Bearer ${providerToken}` } }
       )
-      if (res.status === 401 || res.status === 403) throw new Error('GOOGLE_AUTH_EXPIRED')
+      if (res.status === 401) throw new Error('GOOGLE_AUTH_EXPIRED')
+      if (res.status === 403) return []  // calendar inaccessible, not an auth error — skip it
       if (!res.ok) return []
       const data = await res.json()
       return (data.items || []).map((evt) => ({
