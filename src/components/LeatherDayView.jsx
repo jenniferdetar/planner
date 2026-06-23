@@ -54,7 +54,7 @@ export default function LeatherDayView({
   timeBlocks, onAddBlock, onDeleteBlock,
   masterTasks, onDeleteMasterTask,
   sections, onUpdateSection,
-  asanaTasks, onCompleteAsanaTask,
+  asanaTasks,
   // week props
   userId,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
