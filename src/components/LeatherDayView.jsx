@@ -2,18 +2,32 @@ import { useState, useRef } from 'react'
 import './LeatherDayView.css'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
-const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
-const SHORT_DAY = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 6) // 6am–8pm
 
-const RIGHT_TABS = [
+// Tabs that render content inline in the right panel
+const CONTENT_TABS = [
   { key: 'daily-tasks',  label: 'Daily Tasks',  color: '#4a7a9b' },
   { key: 'schedule',     label: 'Schedule',     color: '#2d7a5a' },
   { key: 'master-tasks', label: 'Master Tasks', color: '#7b5ea7' },
   { key: 'roles',        label: 'Roles',        color: '#c07a3a' },
   { key: 'goals',        label: 'Goals',        color: '#5a8a5a' },
-  { key: 'meetings',     label: 'Meetings',     color: '#888' },
+  { key: 'meetings',     label: 'Meetings',     color: '#6a7a88' },
 ]
+
+// Tabs that navigate to other views (handled by onViewChange)
+const NAV_TABS = [
+  { key: 'week',    label: 'Week',    color: '#3d6a5a' },
+  { key: 'month',   label: 'Month',   color: '#4a7a6a' },
+  { key: 'csea',    label: 'CSEA',    color: '#2d5560' },
+  { key: 'icaap',   label: 'iCAAP',   color: '#3d5a6a' },
+  { key: 'gcu',     label: 'GCU',     color: '#4a6a7a' },
+  { key: 'finance', label: 'Finance', color: '#1e3342' },
+  { key: 'wywo',    label: 'WYWO',    color: '#5a5a6a' },
+]
+
+const ALL_TABS = [...CONTENT_TABS, ...NAV_TABS]
 
 function sameDay(a, b) {
   return a.getFullYear() === b.getFullYear() &&
@@ -32,6 +46,7 @@ export default function LeatherDayView({
   noteContent, onNoteChange,
   masterTasks, onDeleteMasterTask,
   sections, onUpdateSection,
+  onViewChange,
 }) {
   const today = new Date()
   const [rightTab, setRightTab] = useState('daily-tasks')
@@ -42,98 +57,74 @@ export default function LeatherDayView({
   const [blockStart, setBlockStart] = useState('')
   const [blockEnd, setBlockEnd] = useState('')
 
-  const noteTimer = useRef(null)
-  const [noteVal, setNoteVal] = useState(noteContent || '')
-
-  function handleNoteChange(e) {
-    const val = e.target.value
-    setNoteVal(val)
-    clearTimeout(noteTimer.current)
-    noteTimer.current = setTimeout(() => {
-      onNoteChange?.(val)
-      noteTimer.current = null
-    }, 600)
+  function handleTabClick(tab) {
+    if (NAV_TABS.find(t => t.key === tab.key)) {
+      onViewChange?.(tab.key)
+    } else {
+      setRightTab(tab.key)
+    }
   }
 
-  function prevDay() {
-    const d = new Date(selectedDate); d.setDate(d.getDate() - 1); onDateChange(d)
-  }
-  function nextDay() {
-    const d = new Date(selectedDate); d.setDate(d.getDate() + 1); onDateChange(d)
-  }
+  function prevDay() { const d = new Date(selectedDate); d.setDate(d.getDate() - 1); onDateChange(d) }
+  function nextDay() { const d = new Date(selectedDate); d.setDate(d.getDate() + 1); onDateChange(d) }
 
   function handleAddTask(e) {
     e.preventDefault()
     if (!newTaskText.trim()) return
     onAddTask(newTaskText.trim(), 'medium')
-    setNewTaskText('')
-    setShowAddTask(false)
+    setNewTaskText(''); setShowAddTask(false)
   }
 
   function openAddBlock(hour) {
     const pad = n => String(n).padStart(2, '0')
-    setBlockStart(`${pad(hour)}:00`)
-    setBlockEnd(`${pad(Math.min(hour + 1, 23))}:00`)
-    setAddingBlock(hour)
-    setBlockText('')
+    setBlockStart(`${pad(hour)}:00`); setBlockEnd(`${pad(Math.min(hour+1,23))}:00`)
+    setAddingBlock(hour); setBlockText('')
   }
 
   function handleAddBlock(hour) {
     if (!blockText.trim()) return
     const pad = n => String(n).padStart(2, '0')
-    const st = blockStart || `${pad(hour)}:00`
-    const et = blockEnd || `${pad(Math.min(hour + 1, 23))}:00`
-    onAddBlock?.(hour, blockText.trim(), '#4a90d9', st + ':00', et + ':00')
+    onAddBlock?.(hour, blockText.trim(), '#4a90d9',
+      (blockStart || `${pad(hour)}:00`) + ':00',
+      (blockEnd   || `${pad(Math.min(hour+1,23))}:00`) + ':00')
     setBlockText(''); setBlockStart(''); setBlockEnd(''); setAddingBlock(null)
   }
 
   const pending = (dailyTasks || []).filter(t => !t.completed)
   const done    = (dailyTasks || []).filter(t => t.completed)
 
-  // Shared add-task props passed to the Daily Tasks tab
   const taskProps = {
     pending, done,
-    onToggle: onToggleTask,
-    onDelete: onDeleteTask,
+    onToggle: onToggleTask, onDelete: onDeleteTask,
     showAdd: showAddTask, setShowAdd: setShowAddTask,
     newText: newTaskText, setNewText: setNewTaskText,
-    onSubmit: handleAddTask,
-    selectedDate,
+    onSubmit: handleAddTask, selectedDate,
   }
 
-  // Shared schedule props
   const scheduleProps = {
-    selectedDate,
-    timeBlocks: timeBlocks || [],
-    onDeleteBlock,
+    selectedDate, timeBlocks: timeBlocks || [], onDeleteBlock,
     addingBlock, blockText, setBlockText,
-    blockStart, setBlockStart,
-    blockEnd, setBlockEnd,
-    openAddBlock, handleAddBlock,
-    setAddingBlock,
+    blockStart, setBlockStart, blockEnd, setBlockEnd,
+    openAddBlock, handleAddBlock, setAddingBlock,
   }
 
   return (
     <div className="leather-outer">
       <div className="leather-binder">
 
-        {/* ── Left page: date + mini calendar only ── */}
+        {/* ── Left page: date + mini calendar ── */}
         <div className="binder-page left-page">
           <div className="left-page-inner">
             <div className="lp-date-header">
-              <div className="lp-date-left">
-                <div className="lp-day-num">{selectedDate.getDate()}</div>
-                <div className="lp-day-meta">
-                  <div className="lp-day-name">{DAY_NAMES[selectedDate.getDay()]}</div>
-                  <div className="lp-month-year">{MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getFullYear()}</div>
-                </div>
+              <div className="lp-day-num">{selectedDate.getDate()}</div>
+              <div className="lp-date-right">
+                <div className="lp-day-name">{DAY_NAMES[selectedDate.getDay()]}</div>
+                <div className="lp-month-year">{MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getFullYear()}</div>
                 <div className="lp-date-nav">
                   <button className="lp-nav-btn" onClick={prevDay}>‹</button>
-                  <button
-                    className="lp-today-btn"
+                  <button className="lp-today-btn"
                     onClick={() => onDateChange(new Date())}
-                    style={{ opacity: sameDay(selectedDate, today) ? 0.4 : 1 }}
-                  >Today</button>
+                    style={{ opacity: sameDay(selectedDate, today) ? 0.4 : 1 }}>Today</button>
                   <button className="lp-nav-btn" onClick={nextDay}>›</button>
                 </div>
               </div>
@@ -143,35 +134,27 @@ export default function LeatherDayView({
               <MiniCalendar selectedDate={selectedDate} onDateChange={onDateChange} />
             </div>
 
-            {/* Filler lined area */}
             <div className="lp-lined-filler" />
           </div>
         </div>
 
         {/* ── Rings ── */}
         <div className="binder-rings">
-          {[0,1,2,3].map(i => (
-            <div key={i} className="ring-pair"><div className="ring" /></div>
-          ))}
+          {[0,1,2,3].map(i => <div key={i} className="ring-pair"><div className="ring" /></div>)}
         </div>
 
         {/* ── Right page ── */}
         <div className="binder-page right-page">
           <div className="right-page-inner">
 
-            {rightTab === 'daily-tasks' && <DailyTasksPanel {...taskProps} />}
-
-            {rightTab === 'schedule' && <SchedulePanel {...scheduleProps} />}
-
-            {rightTab === 'master-tasks' && (
-              <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />
-            )}
-
+            {rightTab === 'daily-tasks'  && <DailyTasksPanel  {...taskProps} />}
+            {rightTab === 'schedule'     && <SchedulePanel    {...scheduleProps} />}
+            {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
             {(rightTab === 'roles' || rightTab === 'goals' || rightTab === 'meetings') && (
               <SectionTextPanel
                 sectionKey={rightTab}
-                label={RIGHT_TABS.find(t => t.key === rightTab)?.label}
-                color={RIGHT_TABS.find(t => t.key === rightTab)?.color}
+                label={CONTENT_TABS.find(t => t.key === rightTab)?.label}
+                color={CONTENT_TABS.find(t => t.key === rightTab)?.color}
                 value={sections?.[rightTab] ?? ''}
                 onChange={onUpdateSection}
               />
@@ -179,18 +162,23 @@ export default function LeatherDayView({
 
           </div>
 
-          {/* Right-edge tabs */}
+          {/* Right-edge tabs — all sidebar items */}
           <div className="right-tabs">
-            {RIGHT_TABS.map(tab => (
-              <button
-                key={tab.key}
-                className={`right-tab ${rightTab === tab.key ? 'active' : ''}`}
-                style={{ '--tab-color': tab.color }}
-                onClick={() => setRightTab(tab.key)}
-              >
-                <span>{tab.label}</span>
-              </button>
-            ))}
+            {ALL_TABS.map(tab => {
+              const isNav = NAV_TABS.find(t => t.key === tab.key)
+              const isActive = !isNav && rightTab === tab.key
+              return (
+                <button
+                  key={tab.key}
+                  className={`right-tab ${isActive ? 'active' : ''} ${isNav ? 'nav-tab' : ''}`}
+                  style={{ '--tab-color': tab.color }}
+                  onClick={() => handleTabClick(tab)}
+                  title={tab.label}
+                >
+                  <span>{tab.label}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -199,7 +187,7 @@ export default function LeatherDayView({
   )
 }
 
-// ── Daily Tasks panel ────────────────────────────────────────────────────────
+// ── Daily Tasks ──────────────────────────────────────────────────────────────
 function DailyTasksPanel({ pending, done, onToggle, onDelete, showAdd, setShowAdd, newText, setNewText, onSubmit, selectedDate }) {
   const dateLabel = `${DAY_NAMES[selectedDate.getDay()]}, ${MONTH_NAMES[selectedDate.getMonth()]} ${selectedDate.getDate()}`
   return (
@@ -218,33 +206,22 @@ function DailyTasksPanel({ pending, done, onToggle, onDelete, showAdd, setShowAd
             <button type="button" className="lp-cancel-btn" onClick={() => setShowAdd(false)}>✕</button>
           </form>
         )}
-        {pending.map((task, i) => (
-          <RpTaskRow key={task.id} task={task} index={i + 1} onToggle={onToggle} onDelete={onDelete} />
-        ))}
-        {done.length > 0 && (
-          <>
-            <div className="rp-done-sep">Completed</div>
-            {done.map((task, i) => (
-              <RpTaskRow key={task.id} task={task} index={pending.length + i + 1} onToggle={onToggle} onDelete={onDelete} done />
-            ))}
-          </>
-        )}
-        {pending.length === 0 && done.length === 0 && !showAdd && (
-          <p className="rp-empty">No tasks yet. Click "+ Add" to get started.</p>
-        )}
-        {/* Lined blank rows */}
-        {Array.from({ length: Math.max(0, 8 - pending.length - done.length) }).map((_, i) => (
-          <div key={`b-${i}`} className="rp-blank-line" />
-        ))}
+        {pending.map((t, i) => <RpTaskRow key={t.id} task={t} index={i+1} onToggle={onToggle} onDelete={onDelete} />)}
+        {done.length > 0 && <>
+          <div className="rp-done-sep">Completed</div>
+          {done.map((t, i) => <RpTaskRow key={t.id} task={t} index={pending.length+i+1} onToggle={onToggle} onDelete={onDelete} done />)}
+        </>}
+        {pending.length === 0 && done.length === 0 && !showAdd &&
+          <p className="rp-empty">No tasks yet. Click "+ Add" to get started.</p>}
+        {Array.from({ length: Math.max(0, 8 - pending.length - done.length) }).map((_, i) =>
+          <div key={`b-${i}`} className="rp-blank-line" />)}
       </div>
-      <div className="rp-art">
-        <BlossomsArt />
-      </div>
+      <div className="rp-art"><BlossomsArt /></div>
     </div>
   )
 }
 
-// ── Schedule panel ───────────────────────────────────────────────────────────
+// ── Schedule ─────────────────────────────────────────────────────────────────
 function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock }) {
   const today = new Date()
   return (
@@ -257,30 +234,26 @@ function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, b
         {HOURS.map(hour => {
           const blocksHere = timeBlocks.filter(b => b.hour === hour)
           const isAddingHere = addingBlock === hour
-          const isCurrentHour = sameDay(selectedDate, today) && new Date().getHours() === hour
-
+          const isCurrent = sameDay(selectedDate, today) && new Date().getHours() === hour
           return (
-            <div key={hour} className={`rp-time-row ${isCurrentHour ? 'current' : ''}`}>
+            <div key={hour} className={`rp-time-row ${isCurrent ? 'current' : ''}`}>
               <div className="rp-hour-label">
-                {formatHour(hour)}
-                <span className="rp-hour-ampm">{hour < 12 ? 'am' : 'pm'}</span>
+                {formatHour(hour)}<span className="rp-hour-ampm">{hour < 12 ? 'am' : 'pm'}</span>
               </div>
               <div className="rp-hour-body">
-                {isCurrentHour && <div className="rp-now-line" />}
+                {isCurrent && <div className="rp-now-line" />}
                 {blocksHere.map(b => (
                   <div key={b.id} className="rp-block" style={{ background: b.color || '#4a90d9' }}>
                     <span className="rp-block-title">{b.title || b.text}</span>
                     {b.startLabel && <span className="rp-block-time">{b.startLabel}–{b.endLabel}</span>}
-                    {b.source !== 'google' && (
-                      <button className="rp-block-del" onClick={() => onDeleteBlock?.(b.id)}>✕</button>
-                    )}
+                    {b.source !== 'google' && <button className="rp-block-del" onClick={() => onDeleteBlock?.(b.id)}>✕</button>}
                   </div>
                 ))}
                 {isAddingHere ? (
                   <div className="rp-add-block-form">
                     <input autoFocus type="text" placeholder="Event…" value={blockText}
                       onChange={e => setBlockText(e.target.value)}
-                      onKeyDown={e => { if (e.key === 'Enter') handleAddBlock(hour); if (e.key === 'Escape') setAddingBlock(null) }}
+                      onKeyDown={e => { if (e.key==='Enter') handleAddBlock(hour); if (e.key==='Escape') setAddingBlock(null) }}
                       className="lp-block-input" />
                     <input type="time" value={blockStart} onChange={e => setBlockStart(e.target.value)} className="lp-time-input" />
                     <span>–</span>
@@ -300,13 +273,13 @@ function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, b
   )
 }
 
-// ── Master Tasks panel ───────────────────────────────────────────────────────
+// ── Master Tasks ─────────────────────────────────────────────────────────────
 function MasterTasksPanel({ masterTasks, onDelete }) {
   const groups = [
-    ['High Priority', masterTasks.filter(t => t.priority === 'high'), '#e05c5c'],
-    ['Medium',        masterTasks.filter(t => t.priority === 'medium'), '#f0a040'],
-    ['Low',           masterTasks.filter(t => t.priority === 'low'), '#5c9ee0'],
-    ['Other',         masterTasks.filter(t => !['high','medium','low'].includes(t.priority)), '#aaa'],
+    ['High', masterTasks.filter(t => t.priority==='high'), '#e05c5c'],
+    ['Medium', masterTasks.filter(t => t.priority==='medium'), '#f0a040'],
+    ['Low', masterTasks.filter(t => t.priority==='low'), '#5c9ee0'],
+    ['Other', masterTasks.filter(t => !['high','medium','low'].includes(t.priority)), '#aaa'],
   ]
   return (
     <div className="rp-panel">
@@ -316,48 +289,38 @@ function MasterTasksPanel({ masterTasks, onDelete }) {
       </div>
       <div className="rp-task-list">
         {masterTasks.length === 0 && <p className="rp-empty">No backlog tasks.</p>}
-        {groups.map(([label, group, color]) =>
-          group.length > 0 && (
-            <div key={label} className="rp-priority-group">
-              <div className="rp-priority-label" style={{ color }}>{label}</div>
-              {group.map(task => <MasterRow key={task.id} task={task} onDelete={onDelete} color={color} />)}
-            </div>
-          )
-        )}
+        {groups.map(([label, group, color]) => group.length > 0 && (
+          <div key={label} className="rp-priority-group">
+            <div className="rp-priority-label" style={{ color }}>{label}</div>
+            {group.map(task => <MasterRow key={task.id} task={task} onDelete={onDelete} color={color} />)}
+          </div>
+        ))}
       </div>
     </div>
   )
 }
 
-// ── Section text panel (Roles / Goals / Meetings) ────────────────────────────
+// ── Section text (Roles / Goals / Meetings) ──────────────────────────────────
 function SectionTextPanel({ sectionKey, label, color, value, onChange }) {
   const saveTimer = useRef(null)
   const [text, setText] = useState(value)
-
   function handleChange(e) {
-    const val = e.target.value
-    setText(val)
+    const val = e.target.value; setText(val)
     clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => onChange?.(sectionKey, val), 800)
   }
-
   return (
     <div className="rp-panel">
       <div className="rp-header" style={{ borderBottomColor: color }}>
         <span className="rp-title" style={{ color }}>{label}</span>
         <span className="rp-subtitle">Saves automatically</span>
       </div>
-      <textarea
-        className="rp-notes-area"
-        placeholder={`Your ${label?.toLowerCase()}…`}
-        value={text}
-        onChange={handleChange}
-      />
+      <textarea className="rp-notes-area" placeholder={`Your ${label?.toLowerCase()}…`} value={text} onChange={handleChange} />
     </div>
   )
 }
 
-// ── Shared row components ────────────────────────────────────────────────────
+// ── Shared rows ──────────────────────────────────────────────────────────────
 function RpTaskRow({ task, index, onToggle, onDelete, done }) {
   const [hovered, setHovered] = useState(false)
   return (
@@ -395,20 +358,13 @@ function MiniCalendar({ selectedDate, onDateChange }) {
   const firstDay = new Date(viewYear, viewMonth, 1).getDay()
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
   const daysInPrev = new Date(viewYear, viewMonth, 0).getDate()
-
   const cells = []
-  for (let i = firstDay - 1; i >= 0; i--) cells.push({ day: daysInPrev - i, overflow: true })
+  for (let i = firstDay-1; i >= 0; i--) cells.push({ day: daysInPrev-i, overflow: true })
   for (let d = 1; d <= daysInMonth; d++) cells.push({ day: d, overflow: false })
-  while (cells.length < 35) cells.push({ day: cells.length - firstDay - daysInMonth + 1, overflow: true })
+  while (cells.length < 35) cells.push({ day: cells.length-firstDay-daysInMonth+1, overflow: true })
 
-  function prevMonth() {
-    if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11) }
-    else setViewMonth(m => m - 1)
-  }
-  function nextMonth() {
-    if (viewMonth === 11) { setViewYear(y => y + 1); setViewMonth(0) }
-    else setViewMonth(m => m + 1)
-  }
+  function prevMonth() { viewMonth===0 ? (setViewYear(y=>y-1),setViewMonth(11)) : setViewMonth(m=>m-1) }
+  function nextMonth() { viewMonth===11 ? (setViewYear(y=>y+1),setViewMonth(0)) : setViewMonth(m=>m+1) }
 
   return (
     <div className="lp-mini-cal">
@@ -418,15 +374,15 @@ function MiniCalendar({ selectedDate, onDateChange }) {
         <button className="lp-cal-nav-btn" onClick={nextMonth}>›</button>
       </div>
       <div className="lp-cal-grid">
-        {SHORT_DAY.map((d, i) => <span key={i} className="lp-cal-dow">{d.charAt(0)}</span>)}
+        {SHORT_DAY.map((d,i) => <span key={i} className="lp-cal-dow">{d.charAt(0)}</span>)}
         {cells.map((cell, i) => {
           if (cell.overflow) return <span key={i} className="lp-cal-cell overflow" />
           const cellDate = new Date(viewYear, viewMonth, cell.day)
           const isToday = sameDay(cellDate, today)
-          const isSelected = sameDay(cellDate, selectedDate)
+          const isSel   = sameDay(cellDate, selectedDate)
           return (
             <button key={i}
-              className={`lp-cal-cell ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}`}
+              className={`lp-cal-cell ${isToday?'today':''} ${isSel?'selected':''}`}
               onClick={() => onDateChange(cellDate)}
             >{cell.day}</button>
           )
