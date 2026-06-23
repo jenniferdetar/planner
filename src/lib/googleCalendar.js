@@ -36,7 +36,13 @@ export async function fetchCalendarEvents(providerToken, startDate, endDate) {
         { headers: { Authorization: `Bearer ${providerToken}` } }
       )
       if (res.status === 401) throw new Error('GOOGLE_AUTH_EXPIRED')
-      if (res.status === 403) return []  // calendar inaccessible, not an auth error — skip it
+      if (res.status === 403) {
+        // Track 403s separately — widespread 403s across all calendars indicate
+        // the token lacks calendar scope (auth/scope problem), not per-calendar permissions
+        const e = new Error('FORBIDDEN')
+        e.forbidden = true
+        throw e
+      }
       if (!res.ok) return []
       const data = await res.json()
       return (data.items || []).map((evt) => ({
@@ -52,9 +58,13 @@ export async function fetchCalendarEvents(providerToken, startDate, endDate) {
     })
   )
 
-  // If any calendar returned 401, propagate the auth error
+  // 401 from any calendar = auth expired
   const authFailed = results.some(r => r.status === 'rejected' && r.reason?.message === 'GOOGLE_AUTH_EXPIRED')
   if (authFailed) throw new Error('GOOGLE_AUTH_EXPIRED')
+
+  // If the majority of calendars returned 403, the token lacks calendar scope — treat as auth expired
+  const forbidden = results.filter(r => r.status === 'rejected' && r.reason?.forbidden).length
+  if (forbidden >= Math.ceil(CALENDARS.length / 2)) throw new Error('GOOGLE_AUTH_EXPIRED')
 
   return results
     .filter((r) => r.status === 'fulfilled')
