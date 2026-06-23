@@ -368,6 +368,58 @@ select:focus {
   background: var(--pt-accent) !important;
 }
 
+/* ─── Sidebar ────────────────────────────────────────────────────────────── */
+.sidebar {
+  background: var(--pt-header-bg) !important;
+  color: #e8e4d8 !important;
+}
+.sidebar-nav-section-label {
+  color: rgba(232,228,216,0.45) !important;
+}
+.sidebar-nav-item {
+  color: rgba(232,228,216,0.7) !important;
+}
+.sidebar-nav-item:hover {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+}
+.sidebar-nav-item.active {
+  background: rgba(74,122,106,0.22) !important;
+  border-left-color: var(--pt-accent) !important;
+  color: #fff !important;
+}
+.sidebar-logo-text,
+.sidebar-app-name {
+  color: #f0ece2 !important;
+}
+.sidebar-collapse-btn {
+  color: rgba(232,228,216,0.5) !important;
+}
+.sidebar-collapse-btn:hover {
+  color: #fff !important;
+  background: rgba(255,255,255,0.08) !important;
+}
+.sidebar-user-name { color: #f0ece2 !important; }
+.sidebar-user-email,
+.sidebar-signout { color: rgba(232,228,216,0.5) !important; }
+
+/* ─── Week / Month base white → cream ───────────────────────────────────── */
+.week-view,
+.month-view { background: var(--pt-bg) !important; }
+
+/* ─── GCU course rows ────────────────────────────────────────────────────── */
+.gcu-course-row:nth-child(odd)  { background: var(--pt-bg) !important; }
+.gcu-course-row:nth-child(even) { background: var(--pt-bg-alt) !important; }
+.gcu-course-row:hover           { background: #ede8da !important; }
+.gcu-panel { background: var(--pt-bg) !important; }
+.gcu-body  { background: var(--pt-bg) !important; }
+.gcu-course-section { background: var(--pt-bg) !important; border-color: var(--pt-border) !important; }
+.gcu-section-title { background: var(--pt-bg-alt) !important; color: var(--pt-text) !important; }
+
+/* ─── App root background ────────────────────────────────────────────────── */
+#root,
+.app-layout { background: var(--pt-bg) !important; }
+
 /* ─── Scrollbars (global warm style) ────────────────────────────────────── */
 *::-webkit-scrollbar { width: 5px; height: 5px; }
 *::-webkit-scrollbar-track { background: transparent; }
