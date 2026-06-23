@@ -1,0 +1,380 @@
+/*
+ * PlannerTheme.css
+ * Global warm-paper overlay for every panel view.
+ * Loaded after component CSS so these rules win via specificity/cascade.
+ */
+
+/* ─── Design tokens ─────────────────────────────────────────────────────── */
+:root {
+  --pt-bg:         #faf8f2;   /* cream page */
+  --pt-bg-alt:     #f5f1e8;   /* slightly deeper cream for alt rows / headers */
+  --pt-bg-card:    #f9f7f1;   /* card surface */
+  --pt-border:     #e0d8cc;   /* warm tan border */
+  --pt-border-lt:  rgba(180,165,140,0.22); /* subtle line */
+  --pt-text:       #2a1f10;   /* warm dark brown */
+  --pt-text-2:     #6a5a48;   /* secondary text */
+  --pt-text-muted: #9a8a78;   /* muted / labels */
+  --pt-accent:     #4a7a6a;   /* sage green — kept as-is */
+  --pt-accent2:    #3a6a5a;   /* darker sage */
+  --pt-header-bg:  #3a2210;   /* warm leather dark for bold headers */
+  --pt-header-alt: #ede8de;   /* light tan for soft headers */
+  --pt-line: repeating-linear-gradient(
+    transparent, transparent 27px,
+    rgba(180,170,150,0.18) 27px,
+    rgba(180,170,150,0.18) 28px
+  );
+}
+
+/* ─── Base: all main panels ─────────────────────────────────────────────── */
+.daily-planner,
+.week-view,
+.month-view,
+.csea-tracker,
+.icaap-tracker,
+.fin-panel,
+.personal-panel,
+.library-panel,
+.gcu-panel,
+.wywo-wrap,
+.goals-panel,
+.section-panel,
+.right-panel {
+  background: var(--pt-bg);
+  color: var(--pt-text);
+}
+
+/* ─── Headers / toolbar bars that were dark navy (#1e3342) ──────────────── */
+.week-header {
+  background: var(--pt-header-bg) !important;
+  border-bottom: 2px solid rgba(255,255,255,0.08) !important;
+}
+
+.week-title,
+.week-nav-btn {
+  color: #f0ece2 !important;
+}
+
+/* Month view nav */
+.month-nav {
+  background: var(--pt-bg-alt) !important;
+  border-bottom: 1px solid var(--pt-border) !important;
+}
+.month-nav-btn,
+.month-nav-year {
+  color: var(--pt-text) !important;
+}
+.month-title {
+  color: var(--pt-text) !important;
+  font-family: 'Georgia', serif !important;
+}
+
+/* Day-of-week header strip */
+.dow-header {
+  background: var(--pt-accent) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+/* Month cells */
+.month-cell {
+  background: var(--pt-bg) !important;
+  border-color: var(--pt-border-lt) !important;
+}
+.month-cell:hover  { background: #f0ece2 !important; }
+.month-cell.today  { background: #f5f1e4 !important; }
+.month-cell.selected {
+  background: #ede8d8 !important;
+  outline-color: var(--pt-accent) !important;
+}
+.month-cell-num    { color: var(--pt-text) !important; }
+.month-cell.other-month .month-cell-num { color: var(--pt-text-muted) !important; }
+
+/* ─── Stat bars (CSEA / iCAAP / Finance) ────────────────────────────────── */
+.csea-stats,
+.icaap-stats,
+.fin-summary {
+  background: var(--pt-bg-alt) !important;
+  border-bottom: 1px solid var(--pt-border) !important;
+}
+.csea-stat,
+.icaap-stat,
+.fin-stat {
+  border-color: var(--pt-border-lt) !important;
+}
+.csea-stat-num,
+.icaap-stat-num,
+.fin-stat-num {
+  color: var(--pt-text) !important;
+  font-family: 'Georgia', serif !important;
+}
+.csea-stat-lbl,
+.icaap-stat-lbl,
+.fin-stat-lbl {
+  color: var(--pt-text-muted) !important;
+}
+
+/* ─── Tab strips (CSEA / iCAAP / Finance / Library / Personal) ──────────── */
+.csea-tabs,
+.icaap-tabs,
+.fin-tabs,
+.library-shelf-tabs,
+.personal-sub-tabs {
+  background: var(--pt-bg-alt) !important;
+  border-bottom: 1px solid var(--pt-border) !important;
+}
+
+.csea-tab,
+.icaap-tab,
+.fin-tab,
+.shelf-tab,
+.personal-sub-tab {
+  color: var(--pt-text-muted) !important;
+  background: transparent !important;
+}
+
+.csea-tab.active,
+.icaap-tab.active,
+.fin-tab.active,
+.shelf-tab.active,
+.personal-sub-tab.active {
+  color: var(--pt-accent) !important;
+  border-color: var(--pt-accent) !important;
+  background: rgba(74,122,106,0.08) !important;
+}
+
+/* ─── Tables and list rows ───────────────────────────────────────────────── */
+.csea-issue-row,
+.icaap-item-row,
+.fin-row,
+.library-book-row {
+  border-bottom: 1px solid var(--pt-border-lt) !important;
+  background: var(--pt-bg) !important;
+}
+.csea-issue-row:nth-child(even),
+.icaap-item-row:nth-child(even),
+.fin-row:nth-child(even),
+.library-book-row:nth-child(even) {
+  background: var(--pt-bg-alt) !important;
+}
+.csea-issue-row:hover,
+.icaap-item-row:hover,
+.fin-row:hover,
+.library-book-row:hover {
+  background: #ede8da !important;
+}
+
+/* ─── Cards ──────────────────────────────────────────────────────────────── */
+.goal-card,
+.fin-card,
+.csea-card,
+.icaap-card,
+.library-card {
+  background: var(--pt-bg-card) !important;
+  border-color: var(--pt-border) !important;
+}
+
+/* ─── Inputs, textareas ──────────────────────────────────────────────────── */
+input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+textarea,
+select {
+  background: rgba(255,255,255,0.7) !important;
+  border-color: var(--pt-border) !important;
+  color: var(--pt-text) !important;
+  font-family: 'Georgia', serif !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--pt-text-muted) !important;
+  font-style: italic;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--pt-accent) !important;
+  background: rgba(255,255,255,0.92) !important;
+  outline: none;
+}
+
+/* ─── Notes / text areas ─────────────────────────────────────────────────── */
+.notes-area,
+.rp-notes-area,
+.section-panel-textarea {
+  background: var(--pt-line), var(--pt-bg) !important;
+  color: var(--pt-text) !important;
+  font-family: 'Georgia', serif !important;
+  line-height: 28px !important;
+  border-color: transparent !important;
+}
+
+/* ─── Section panel (Roles, Goals, Meetings etc.) ────────────────────────── */
+.section-panel {
+  background: var(--pt-bg) !important;
+}
+.section-panel-header {
+  background: var(--pt-bg-alt) !important;
+  border-bottom-color: var(--pt-border) !important;
+}
+.section-panel-title h2 {
+  font-family: 'Georgia', serif !important;
+}
+.section-preview {
+  background: var(--pt-line), var(--pt-bg) !important;
+  font-family: 'Georgia', serif !important;
+  color: var(--pt-text) !important;
+}
+
+/* ─── Week view day rows ─────────────────────────────────────────────────── */
+.week-day-row {
+  background: var(--pt-bg) !important;
+  border-color: var(--pt-border-lt) !important;
+}
+.week-day-row:nth-child(odd)  { background: var(--pt-bg) !important; }
+.week-day-row:nth-child(even) { background: var(--pt-bg-alt) !important; }
+.week-day-row.week-day-today  { background: #fffdf5 !important; }
+
+.week-day-header {
+  background: var(--pt-bg-alt) !important;
+  border-color: var(--pt-border) !important;
+}
+.week-day-name,
+.week-day-num {
+  color: var(--pt-text) !important;
+}
+.week-day-name.today-name,
+.week-day-num.today-num-inline {
+  color: var(--pt-accent) !important;
+}
+
+/* Week event/block dots */
+.week-block {
+  border-color: var(--pt-border-lt) !important;
+}
+
+/* ─── Habit section (Week view) ──────────────────────────────────────────── */
+.habit-section { background: var(--pt-border) !important; }
+.habit-box     { background: var(--pt-bg-alt) !important; }
+.habit-title   { color: var(--pt-text) !important; }
+
+/* ─── Library ────────────────────────────────────────────────────────────── */
+.library-panel  { background: var(--pt-bg) !important; }
+.library-header {
+  background: var(--pt-bg-alt) !important;
+  border-bottom-color: var(--pt-border) !important;
+}
+.library-title    { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
+.library-subtitle { color: var(--pt-text-muted) !important; }
+
+/* ─── GCU panel header ───────────────────────────────────────────────────── */
+.gcu-header {
+  background: #3b1e6e !important; /* keep purple but it's already warm */
+}
+
+/* ─── Personal panel ─────────────────────────────────────────────────────── */
+.personal-panel  { background: var(--pt-bg) !important; }
+.personal-header {
+  background: var(--pt-bg-alt) !important;
+  border-color: var(--pt-border) !important;
+}
+.personal-title  { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
+
+/* ─── Finance panel ──────────────────────────────────────────────────────── */
+.fin-panel      { background: var(--pt-bg) !important; }
+.fin-body       { background: var(--pt-bg) !important; }
+.fin-table th   {
+  background: var(--pt-accent) !important;
+  color: #fff !important;
+}
+.fin-table td   {
+  border-color: var(--pt-border-lt) !important;
+  color: var(--pt-text) !important;
+}
+.fin-table tr:nth-child(even) td { background: var(--pt-bg-alt) !important; }
+
+/* ─── CSEA panel ─────────────────────────────────────────────────────────── */
+.csea-tracker   { background: var(--pt-bg) !important; }
+.csea-body      { background: var(--pt-bg) !important; }
+.csea-section-header {
+  background: var(--pt-bg-alt) !important;
+  border-color: var(--pt-border) !important;
+  color: var(--pt-text) !important;
+}
+
+/* ─── iCAAP panel ────────────────────────────────────────────────────────── */
+.icaap-tracker  { background: var(--pt-bg) !important; }
+.icaap-body     { background: var(--pt-bg) !important; }
+.icaap-section-header {
+  background: var(--pt-bg-alt) !important;
+  border-color: var(--pt-border) !important;
+  color: var(--pt-text) !important;
+}
+
+/* ─── Goals panel ────────────────────────────────────────────────────────── */
+.goals-panel    { background: var(--pt-bg) !important; }
+.goals-title    { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
+.goal-card      { background: var(--pt-bg-card) !important; border-color: var(--pt-border) !important; }
+.goal-card-header { border-bottom-color: var(--pt-border) !important; }
+.goal-card-title { color: var(--pt-text) !important; }
+
+/* ─── WYWO panel ─────────────────────────────────────────────────────────── */
+.wywo-wrap      { background: var(--pt-bg) !important; color: var(--pt-text) !important; }
+
+/* ─── Right panel (notes / mini calendar on desktop) ─────────────────────── */
+.right-panel    { background: var(--pt-bg) !important; }
+.mini-cal       { border-color: var(--pt-border) !important; }
+.panel-section-label { color: var(--pt-text-muted) !important; }
+.summary-stat   { background: var(--pt-bg-alt) !important; }
+.summary-num    { color: var(--pt-text) !important; }
+.progress-fill  { background: var(--pt-accent) !important; }
+
+/* ─── DailyPlanner shared elements ───────────────────────────────────────── */
+.daily-planner  { background: var(--pt-bg) !important; border-color: var(--pt-border) !important; }
+.planner-header { background: var(--pt-bg-alt) !important; border-color: var(--pt-border) !important; }
+.planner-tabs-bar { background: var(--pt-bg-alt) !important; border-color: var(--pt-border) !important; }
+.date-main      { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
+.nav-btn        { background: var(--pt-bg) !important; color: var(--pt-text-2) !important; }
+.nav-btn:hover  { background: var(--pt-accent) !important; color: #fff !important; }
+
+/* Task rows */
+.asana-row      { border-color: var(--pt-border-lt) !important; }
+.asana-row:first-child { border-color: var(--pt-border-lt) !important; }
+.asana-title    { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
+.asana-row-num  { color: var(--pt-text-muted) !important; }
+
+/* Time grid */
+.hour-label     { color: var(--pt-text-muted) !important; }
+.hour-content   { border-color: var(--pt-border-lt) !important; }
+
+/* ─── Login screen ────────────────────────────────────────────────────────── */
+.login-wrap  { background: var(--pt-bg) !important; }
+.login-card  {
+  background: #fff !important;
+  border: 1px solid var(--pt-border) !important;
+  box-shadow: 0 4px 40px rgba(90,60,30,0.12) !important;
+}
+.login-name  { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
+.login-divider { background: var(--pt-border) !important; }
+
+/* ─── Buttons (generic action buttons) ───────────────────────────────────── */
+.add-daily-task-btn { color: var(--pt-text-muted) !important; }
+.add-daily-task-btn:hover { color: var(--pt-accent) !important; }
+.today-btn  {
+  color: var(--pt-accent) !important;
+  border-color: var(--pt-accent) !important;
+}
+.today-btn:hover {
+  background: var(--pt-accent) !important;
+  color: #fff !important;
+}
+.today-badge {
+  background: var(--pt-accent) !important;
+}
+
+/* ─── Scrollbars (global warm style) ────────────────────────────────────── */
+*::-webkit-scrollbar { width: 5px; height: 5px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(160,140,110,0.35);
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(160,140,110,0.6);
+}
