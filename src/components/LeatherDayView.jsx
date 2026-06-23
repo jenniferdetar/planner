@@ -186,20 +186,6 @@ export default function LeatherDayView({
               </div>
             </div>
 
-            {/* Asana Tasks section */}
-            {(asanaTasks || []).length > 0 && (
-              <div className="lp-asana-section">
-                <div className="lp-section-title">
-                  <span>Asana</span>
-                  <span className="lp-asana-count">{(asanaTasks || []).filter(t => !t.completed).length} open</span>
-                </div>
-                <div className="lp-asana-list">
-                  {(asanaTasks || []).filter(t => !t.completed).map(task => (
-                    <LpAsanaRow key={task.id} task={task} onComplete={onCompleteAsanaTask} />
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="lp-col lp-col-right">

@@ -122,7 +122,7 @@ export default function App() {
 
   // Merge Asana tasks into local lists (read-only, source='asana')
   const allMasterTasks = masterTasks
-  const allDailyTasks = [...dailyTasks, ...asanaTodayTasks]
+  const allDailyTasks = [...dailyTasks, ...asanaTasks]
 
   // Fetch Google Calendar events: full month grid when in month view, else current week
   const calFetchStart = (() => {
