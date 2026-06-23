@@ -230,8 +230,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className={view === 'day' ? undefined : (mp === 'sidebar' ? 'mobile-active' : undefined)}
-           style={view === 'day' ? { display: 'none' } : undefined}>
+      <div style={{ display: 'none' }}>
         <Sidebar
           asanaTasks={asanaTasks}
           asanaProjects={asanaProjects}

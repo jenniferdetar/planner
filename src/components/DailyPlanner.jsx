@@ -137,158 +137,82 @@ export default function DailyPlanner({
 
   return (
     <main className="daily-planner">
-      {view === 'day' && (
-        <LeatherDayView
-          selectedDate={selectedDate}
-          onDateChange={onDateChange}
-          dailyTasks={dailyTasks || []}
-          onAddTask={onAddTask}
-          onToggleTask={onToggleTask}
-          onDeleteTask={onDeleteTask}
-          timeBlocks={timeBlocks || []}
-          onAddBlock={onAddBlock}
-          onDeleteBlock={onDeleteBlock}
-          noteContent={noteContent}
-          onNoteChange={onNoteChange}
-          masterTasks={masterTasks || []}
-          onDeleteMasterTask={onDeleteMasterTask}
-          sections={{}}
-          onUpdateSection={() => {}}
-          onViewChange={onLeatherViewChange || onViewChange}
-        />
-      )}
-      {view === 'week' && (
-        <WeekView
-          userId={userId}
-          selectedDate={selectedDate}
-          onDateChange={onDateChange}
-          calendarBlocks={calendarBlocks}
-          tasksByDate={weeklyTasks}
-          onToggleTask={onToggleWeeklyTask}
-          onAddTask={onAddWeeklyTask}
-        />
-      )}
-
-      {view === 'icaap' && (
-        <IcaapTracker
-          userId={userId}
-          items={icaapItems || []}
-          onAddItem={onAddIcaapItem}
-          onUpdateItem={onUpdateIcaapItem}
-          onDeleteItem={onDeleteIcaapItem}
-          asanaTasks={asanaIcaapTasks || []}
-          onCompleteAsanaTask={onCompleteAsanaTask}
-          onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
-          attendanceRecords={attendanceRecords || []}
-          onUpsertAttendance={onUpsertAttendance}
-          onUpdateAttendanceNotes={onUpdateAttendanceNotes}
-          icaapNotes={icaapNotes || []}
-          onAddIcaapNote={onAddIcaapNote}
-          onDeleteIcaapNote={onDeleteIcaapNote}
-        />
-      )}
-
-      {view === 'csea' && (
-        <CseaTracker
-          userId={userId}
-          issues={cseaIssues || []}
-          onAddIssue={onAddCseaIssue}
-          onUpdateStatus={onUpdateCseaStatus}
-          onDeleteIssue={onDeleteCseaIssue}
-          interactions={cseaInteractions || []}
-          onAddInteraction={onAddCseaInteraction}
-          onUpdateInteraction={onUpdateCseaInteraction}
-          showArchived={showArchivedInteractions}
-          onToggleArchived={onToggleArchivedInteractions}
-          asanaTasks={asanaCseaTasks || []}
-          onCompleteAsanaTask={onCompleteAsanaTask}
-          onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
-          cseaNotes={cseaNotes || []}
-          onAddCseaNote={onAddCseaNote}
-          onDeleteCseaNote={onDeleteCseaNote}
-        />
-      )}
-
-      {view === 'month' && (
-        <MonthView
-          selectedDate={selectedDate}
-          onDateChange={(d) => { onDateChange(d); onViewChange('week') }}
-          taskCounts={taskCounts}
-          timeBlocks={calendarBlocks || timeBlocks}
-          onMonthChange={onMonthChange}
-        />
-      )}
-
-      {view === 'personal' && (
-        <PersonalPanel
-          userId={userId}
-          selectedDate={selectedDate}
-          onDateChange={onDateChange}
-          books={books}
-          onAddBook={onAddBook}
-          onUpdateBookStatus={onUpdateBookStatus}
-          onDeleteBook={onDeleteBook}
-          onImportBooks={onImportBooks}
-          subTab={personalSubTab}
-          onSubTabChange={onPersonalSubTabChange}
-        />
-      )}
-
-      {view === 'gcu' && (
-        <GcuPanel
-          onPushToAsana={onPushGcuToAsana}
-          pushing={gcuPushing}
-        />
-      )}
-
-      {view === 'finance' && (
-        <FinancialPanel
-          transactions={transactions || []}
-          onAddTransaction={onAddTransaction}
-          onDeleteTransaction={onDeleteTransaction}
-          bills={bills || []}
-          onAddBill={onAddBill}
-          onToggleBillPaid={onToggleBillPaid}
-          onDeleteBill={onDeleteBill}
-          goals={goals || []}
-          onAddGoal={onAddGoal}
-          onUpdateGoalAmount={onUpdateGoalAmount}
-          onDeleteGoal={onDeleteGoal}
-          paychecks={paychecks || []}
-          onAddPaycheck={onAddPaycheck}
-          onUpdatePaycheckAmount={onUpdatePaycheckAmount}
-          onTogglePaycheckBill={onTogglePaycheckBill}
-          onDeletePaycheck={onDeletePaycheck}
-          userId={userId}
-        />
-      )}
-
-      {view === 'wywo' && (
-        <WhileYouWereOut userId={userId} />
-      )}
-
-      {view === 'financial-goals' && (
-        <div className="fin-panel">
-          <GoalsTab goals={goals || []} onUpdate={onUpdateGoalAmount} />
-        </div>
-      )}
-
-      {view === 'family' && (
-        <FamilyTreePanel
-          members={familyMembers || []}
-          onAddMember={onAddFamilyMember}
-          onUpdateMember={onUpdateFamilyMember}
-          onDeleteMember={onDeleteFamilyMember}
-          onImportDefaults={onImportFamilyDefaults}
-        />
-      )}
-
-      {view?.startsWith('section-') && (() => {
-        const key = view.slice('section-'.length)
-        const def = SECTION_LINKS.find(s => s.key === key)
-        if (!def) return null
-        return <SectionPanel def={def} value={sections?.[key] ?? ''} onChange={onUpdateSection} />
-      })()}
+      <LeatherDayView
+        view={view}
+        onViewChange={onLeatherViewChange || onViewChange}
+        // day
+        selectedDate={selectedDate}
+        onDateChange={onDateChange}
+        dailyTasks={dailyTasks || []}
+        onAddTask={onAddTask}
+        onToggleTask={onToggleTask}
+        onDeleteTask={onDeleteTask}
+        timeBlocks={timeBlocks || []}
+        onAddBlock={onAddBlock}
+        onDeleteBlock={onDeleteBlock}
+        masterTasks={masterTasks || []}
+        onDeleteMasterTask={onDeleteMasterTask}
+        sections={sections}
+        onUpdateSection={onUpdateSection}
+        // week
+        userId={userId}
+        weeklyTasks={weeklyTasks}
+        onToggleWeeklyTask={onToggleWeeklyTask}
+        onAddWeeklyTask={onAddWeeklyTask}
+        calendarBlocks={calendarBlocks}
+        // month
+        taskCounts={taskCounts}
+        onMonthChange={onMonthChange}
+        // csea
+        cseaIssues={cseaIssues}
+        onAddCseaIssue={onAddCseaIssue}
+        onUpdateCseaStatus={onUpdateCseaStatus}
+        onDeleteCseaIssue={onDeleteCseaIssue}
+        cseaInteractions={cseaInteractions}
+        onAddCseaInteraction={onAddCseaInteraction}
+        onUpdateCseaInteraction={onUpdateCseaInteraction}
+        showArchivedInteractions={showArchivedInteractions}
+        onToggleArchivedInteractions={onToggleArchivedInteractions}
+        asanaCseaTasks={asanaCseaTasks}
+        onCompleteAsanaTask={onCompleteAsanaTask}
+        onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
+        cseaNotes={cseaNotes}
+        onAddCseaNote={onAddCseaNote}
+        onDeleteCseaNote={onDeleteCseaNote}
+        // icaap
+        icaapItems={icaapItems}
+        onAddIcaapItem={onAddIcaapItem}
+        onUpdateIcaapItem={onUpdateIcaapItem}
+        onDeleteIcaapItem={onDeleteIcaapItem}
+        asanaIcaapTasks={asanaIcaapTasks}
+        attendanceRecords={attendanceRecords}
+        onUpsertAttendance={onUpsertAttendance}
+        onUpdateAttendanceNotes={onUpdateAttendanceNotes}
+        icaapNotes={icaapNotes}
+        onAddIcaapNote={onAddIcaapNote}
+        onDeleteIcaapNote={onDeleteIcaapNote}
+        // gcu
+        onPushGcuToAsana={onPushGcuToAsana}
+        gcuPushing={gcuPushing}
+        // finance
+        transactions={transactions}
+        onAddTransaction={onAddTransaction}
+        onDeleteTransaction={onDeleteTransaction}
+        bills={bills}
+        onAddBill={onAddBill}
+        onToggleBillPaid={onToggleBillPaid}
+        onDeleteBill={onDeleteBill}
+        goals={goals}
+        onAddGoal={onAddGoal}
+        onUpdateGoalAmount={onUpdateGoalAmount}
+        onDeleteGoal={onDeleteGoal}
+        paychecks={paychecks}
+        onAddPaycheck={onAddPaycheck}
+        onUpdatePaycheckAmount={onUpdatePaycheckAmount}
+        onTogglePaycheckBill={onTogglePaycheckBill}
+        onDeletePaycheck={onDeletePaycheck}
+        // wywo: userId already passed above
+      />
 
       <div className="planner-body" style={{ display: 'none' }} aria-hidden="true">
         {/* Time Schedule */}
