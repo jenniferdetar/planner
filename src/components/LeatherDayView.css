@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   border-radius: 6px;
   overflow: hidden;
   box-shadow:
@@ -34,7 +34,7 @@
   position: relative;
 }
 
-/* ─── Pages ──────────────────────────────────────────────────────────────── */
+/* ─── Pages — equal width ────────────────────────────────────────────────── */
 .binder-page {
   flex: 1;
   min-width: 0;
@@ -55,7 +55,10 @@
     ),
     #faf8f2;
   border-right: 1px solid #e0d8cc;
-  flex: 0 0 300px; /* fixed narrower left page — just date + calendar */
+  /* equal to right page */
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
 }
 
 .right-page {
@@ -70,62 +73,32 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  flex: 1;
 }
 
-.left-page-inner {
+/* ─── Left page two-column layout ────────────────────────────────────────── */
+.lp-col {
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow: hidden;
 }
 
-.right-page-inner {
+.lp-col-left {
   flex: 1;
+  min-width: 0;
+  border-right: 1px solid rgba(160,145,120,0.2);
+}
+
+.lp-col-right {
+  flex: 0 0 48%;
   min-width: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* ─── Rings ──────────────────────────────────────────────────────────────── */
-.binder-rings {
-  width: 28px;
-  flex-shrink: 0;
-  background: linear-gradient(to right, #c8c0b0, #d8d0c0, #c8c0b0);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 40px 0;
-  z-index: 2;
-  box-shadow: inset -2px 0 4px rgba(0,0,0,0.15), inset 2px 0 4px rgba(0,0,0,0.15);
-}
-
-.ring-pair {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.ring {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 3px solid #a09080;
-  background: radial-gradient(circle at 35% 35%, #e8e0d4, #b8b0a4);
-  box-shadow:
-    0 2px 4px rgba(0,0,0,0.35),
-    inset 0 1px 2px rgba(255,255,255,0.4),
-    inset 0 -1px 2px rgba(0,0,0,0.2);
-}
-
-/* ─── Left Page: Date Header ─────────────────────────────────────────────── */
-.lp-date-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 20px 12px;
+/* ─── Left col: date block ───────────────────────────────────────────────── */
+.lp-date-block {
+  padding: 14px 16px 10px;
   border-bottom: 2px solid rgba(160,145,120,0.25);
   background: rgba(255,255,255,0.35);
   flex-shrink: 0;
@@ -138,33 +111,28 @@
   line-height: 1;
   color: #2a1f10;
   letter-spacing: -2px;
-  flex-shrink: 0;
-}
-
-.lp-date-right {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
 }
 
 .lp-day-name {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: #3a2a18;
   font-family: 'Georgia', serif;
+  margin-top: 2px;
 }
 
 .lp-month-year {
   font-size: 11px;
   color: #8a7a68;
   letter-spacing: 0.3px;
+  margin-top: 2px;
 }
 
 .lp-date-nav {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-top: 2px;
+  margin-top: 6px;
 }
 
 .lp-nav-btn {
@@ -196,23 +164,271 @@
 }
 .lp-today-btn:hover { background: rgba(160,140,110,0.2); }
 
-/* ─── Left Page: Calendar area ───────────────────────────────────────────── */
+/* ─── Left col: task section ─────────────────────────────────────────────── */
+.lp-tasks-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.lp-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #b0a090;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(160,145,120,0.12);
+}
+
+.lp-add-task-btn {
+  font-size: 9px;
+  font-weight: 700;
+  color: #5a8a5a;
+  background: transparent;
+  border: 1px solid rgba(90,138,90,0.4);
+  border-radius: 10px;
+  padding: 2px 7px;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.15s;
+}
+.lp-add-task-btn:hover { background: rgba(90,138,90,0.1); }
+
+.lp-task-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2px 14px 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-task-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 27px;
+  border-bottom: 1px solid rgba(180,165,140,0.18);
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+.lp-task-row.done .lp-task-title { text-decoration: line-through; color: #b0a090; }
+
+.lp-blank-line {
+  height: 27px;
+  border-bottom: 1px solid rgba(180,165,140,0.18);
+  flex-shrink: 0;
+}
+
+.lp-done-sep {
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #c0b0a0;
+  padding: 5px 0 2px;
+  font-weight: 700;
+}
+
+.lp-task-num {
+  font-size: 9px;
+  color: #c0b0a0;
+  width: 16px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.lp-check {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+}
+
+.lp-circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid #c0b0a0;
+  display: block;
+  position: relative;
+  transition: all 0.15s;
+}
+.lp-circle.checked { background: #5a8a5a; border-color: #5a8a5a; }
+.lp-circle.checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 7px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.lp-task-title {
+  flex: 1;
+  font-size: 12px;
+  color: #3a2a18;
+  font-family: 'Georgia', serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lp-del-btn {
+  font-size: 8px;
+  color: #c0b0a0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 1px 2px;
+}
+.lp-del-btn:hover { color: #e05c5c; }
+
+.lp-empty {
+  font-size: 11px;
+  color: #c0b0a0;
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.lp-add-form {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 6px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 4px;
+  border: 1px solid rgba(160,140,110,0.3);
+  margin: 3px 0 4px;
+  flex-shrink: 0;
+}
+.lp-task-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: #3a2a18;
+  font-family: inherit;
+}
+.lp-task-input::placeholder { color: #c0b0a0; }
+
+/* ─── Right col of left page: mini calendar ──────────────────────────────── */
 .lp-cal-area {
-  padding: 16px 20px 12px;
+  padding: 10px 10px 8px;
   border-bottom: 1px solid rgba(160,145,120,0.15);
   flex-shrink: 0;
 }
 
-/* ─── Left Page: Lined filler ────────────────────────────────────────────── */
-.lp-lined-filler {
+/* ─── Right col of left page: schedule ──────────────────────────────────── */
+.lp-sched-area {
   flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.lp-sched-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2px 8px 4px 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-sched-row {
+  display: flex;
+  align-items: flex-start;
+  min-height: 36px;
+  position: relative;
+}
+.lp-sched-row.current .lp-sched-hour { color: #5a8a5a; font-weight: 700; }
+
+.lp-sched-hour {
+  width: 22px;
+  flex-shrink: 0;
+  font-size: 10px;
+  color: #b0a090;
+  padding-top: 4px;
+  font-family: 'Georgia', serif;
+  line-height: 1;
+}
+
+.lp-sched-ampm {
+  font-size: 7px;
+  display: block;
+  color: #c0b0a0;
+}
+
+.lp-sched-body {
+  flex: 1;
+  padding: 3px 0 3px 5px;
+  border-top: 1px solid rgba(180,165,140,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+  min-width: 0;
+}
+
+.lp-now-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: #e05c5c;
+  border-radius: 1px;
+}
+
+.lp-sched-block {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lp-sched-del {
+  font-size: 7px; color: rgba(255,255,255,0.6); cursor: pointer;
+  background: transparent; border: none; opacity: 0; transition: opacity 0.15s; padding: 0 1px;
+  flex-shrink: 0;
+}
+.lp-sched-block:hover .lp-sched-del { opacity: 1; }
+
+.lp-sched-add-btn {
+  font-size: 12px; color: #d0c0b0; background: transparent; border: none;
+  cursor: pointer; opacity: 0; width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; transition: all 0.12s; padding: 0;
+}
+.lp-sched-body:hover .lp-sched-add-btn { opacity: 1; }
+.lp-sched-add-btn:hover { background: #5a8a5a; color: #fff; opacity: 1; }
+
+.lp-sched-add-form {
+  display: flex; align-items: center; gap: 3px;
+  background: rgba(255,255,255,0.7); border: 1px solid rgba(160,140,110,0.3);
+  border-radius: 4px; padding: 2px 4px; font-size: 10px; color: #555;
 }
 
 /* ─── Mini Calendar ──────────────────────────────────────────────────────── */
 .lp-mini-cal {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .lp-cal-nav {
@@ -222,11 +438,11 @@
 }
 
 .lp-cal-nav-btn {
-  font-size: 14px;
+  font-size: 13px;
   color: #9a8a78;
-  padding: 1px 5px;
+  padding: 1px 4px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 3px;
   transition: all 0.12s;
   background: transparent;
   border: none;
@@ -234,9 +450,9 @@
 .lp-cal-nav-btn:hover { background: rgba(160,140,110,0.2); color: #3a2a18; }
 
 .lp-cal-month-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
   color: #7a6a58;
 }
@@ -248,25 +464,25 @@
 }
 
 .lp-cal-dow {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   text-transform: uppercase;
   color: #bbb0a0;
   text-align: center;
-  padding-bottom: 3px;
+  padding-bottom: 2px;
 }
 
 .lp-cal-cell {
-  font-size: 11px;
+  font-size: 10px;
   text-align: center;
-  padding: 3px 1px;
+  padding: 2px 0;
   border-radius: 50%;
   cursor: pointer;
   color: #5a4a38;
   transition: background 0.1s;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -279,25 +495,25 @@
 .lp-cal-cell.today { background: rgba(180,150,100,0.25); color: #5a8a5a; font-weight: 700; }
 .lp-cal-cell.selected { background: #4a7a6a; color: #fff; font-weight: 700; }
 
-/* ─── Shared button styles used across panels ────────────────────────────── */
+/* ─── Shared button styles ────────────────────────────────────────────────── */
 .lp-save-btn {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   color: #fff;
   background: #5a8a5a;
-  padding: 3px 10px;
-  border-radius: 5px;
+  padding: 2px 8px;
+  border-radius: 4px;
   cursor: pointer;
   border: none;
   white-space: nowrap;
 }
 .lp-save-btn:hover { background: #3a6a3a; }
-.lp-save-btn.sm { padding: 2px 8px; font-size: 13px; }
+.lp-save-btn.sm { padding: 2px 6px; font-size: 12px; }
 
 .lp-cancel-btn {
-  font-size: 11px;
+  font-size: 10px;
   color: #bbb0a0;
-  padding: 2px 4px;
+  padding: 2px 3px;
   cursor: pointer;
   background: transparent;
   border: none;
@@ -309,10 +525,10 @@
   background: transparent;
   border: none;
   outline: none;
-  font-size: 12px;
+  font-size: 11px;
   color: #3a2a18;
   font-family: inherit;
-  min-width: 60px;
+  min-width: 50px;
 }
 .lp-block-input::placeholder { color: #c0b0a0; }
 
@@ -320,21 +536,60 @@
   background: transparent;
   border: none;
   outline: none;
-  font-size: 10px;
+  font-size: 9px;
   color: #7a6a58;
   font-family: inherit;
-  width: 68px;
+  width: 62px;
   flex-shrink: 0;
 }
 
-/* ─── Right-Edge Tabs ────────────────────────────────────────────────────── */
+/* ─── Rings ──────────────────────────────────────────────────────────────── */
+.binder-rings {
+  width: 28px;
+  flex-shrink: 0;
+  background: linear-gradient(to right, #c8c0b0, #d8d0c0, #c8c0b0);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 30px 0;
+  z-index: 2;
+  box-shadow: inset -2px 0 4px rgba(0,0,0,0.15), inset 2px 0 4px rgba(0,0,0,0.15);
+}
+
+.ring-pair {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ring {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid #a09080;
+  background: radial-gradient(circle at 35% 35%, #e8e0d4, #b8b0a4);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.35),
+    inset 0 1px 2px rgba(255,255,255,0.4),
+    inset 0 -1px 2px rgba(0,0,0,0.2);
+}
+
+/* ─── Right page ─────────────────────────────────────────────────────────── */
+.right-page-inner {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─── Right-Edge Tabs — alternating colors ───────────────────────────────── */
 .right-tabs {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 34px;
-  background: rgba(200,188,170,0.15);
-  border-left: 1px solid rgba(160,145,120,0.2);
+  width: 36px;
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -342,47 +597,40 @@
 
 .right-tab {
   flex-shrink: 0;
-  min-height: 64px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: rgba(200,188,170,0.08);
+  /* each tab gets its own color as background */
+  background: var(--tab-color);
   border: none;
-  border-bottom: 1px solid rgba(160,145,120,0.12);
-  transition: all 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  transition: filter 0.15s;
   padding: 0;
+  opacity: 0.72;
 }
 
 .right-tab span {
   writing-mode: vertical-rl;
   text-orientation: mixed;
   transform: rotate(180deg);
-  font-size: 8.5px;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.7px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #9a8a78;
-  transition: color 0.15s;
+  color: rgba(255,255,255,0.88);
   white-space: nowrap;
+  transition: color 0.15s;
 }
 
-.right-tab:hover { background: rgba(160,140,110,0.12); }
-.right-tab:hover span { color: #3a2a18; }
-.right-tab.active { background: var(--tab-color); }
+.right-tab:hover { opacity: 0.9; filter: brightness(1.12); }
+.right-tab.active { opacity: 1; filter: brightness(1.1); }
 .right-tab.active span { color: #fff; }
 
-/* Nav tabs get a slightly different base style */
-.right-tab.nav-tab {
-  background: rgba(180,165,140,0.06);
-}
-.right-tab.nav-tab span { color: #7a6a58; letter-spacing: 0.5px; }
-.right-tab.nav-tab:hover { background: var(--tab-color); }
-.right-tab.nav-tab:hover span { color: #fff; }
-
 /* Divider between content tabs and nav tabs */
-.right-tab.nav-tab:first-of-type {
-  border-top: 2px solid rgba(160,145,120,0.3);
+.right-tab.nav-tab-first {
+  border-top: 3px solid rgba(255,255,255,0.3);
   margin-top: 4px;
 }
 
@@ -687,36 +935,42 @@
 .rp-art-svg {
   width: 100%;
   height: auto;
-  max-height: 120px;
+  max-height: 100px;
 }
 
 /* ─── Scrollbars ─────────────────────────────────────────────────────────── */
 .rp-task-list::-webkit-scrollbar,
-.rp-schedule-body::-webkit-scrollbar { width: 4px; }
+.rp-schedule-body::-webkit-scrollbar,
+.lp-task-list::-webkit-scrollbar,
+.lp-sched-list::-webkit-scrollbar { width: 3px; }
 .rp-task-list::-webkit-scrollbar-thumb,
-.rp-schedule-body::-webkit-scrollbar-thumb {
+.rp-schedule-body::-webkit-scrollbar-thumb,
+.lp-task-list::-webkit-scrollbar-thumb,
+.lp-sched-list::-webkit-scrollbar-thumb {
   background: rgba(160,140,110,0.3); border-radius: 2px;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .leather-outer { padding: 10px 6px; }
-  .left-page { flex: 0 0 220px; }
   .lp-day-num { font-size: 52px; }
+  .lp-col-right { flex: 0 0 45%; }
 }
 
 @media (max-width: 680px) {
   .leather-binder { flex-direction: column; }
-  .left-page { flex: none; }
+  .left-page { flex-direction: column; }
+  .lp-col-right { flex: none; }
   .binder-rings {
     flex-direction: row; height: 22px; width: 100%;
     padding: 0 40px; justify-content: space-evenly;
   }
   .right-tabs {
-    flex-direction: row; width: 100%; height: 30px;
+    flex-direction: row; width: 100%; height: 32px;
     border-left: none; border-top: 1px solid rgba(160,145,120,0.2);
   }
+  .right-tab { min-height: unset; flex: 1; }
   .right-tab span {
-    writing-mode: horizontal-tb; transform: none; font-size: 8px;
+    writing-mode: horizontal-tb; transform: none; font-size: 7px;
   }
 }

@@ -6,25 +6,24 @@ const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'
 const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 6) // 6am–8pm
 
-// Tabs that render content inline in the right panel
+// Alternating colors matching the Opus One reference screenshot
 const CONTENT_TABS = [
-  { key: 'daily-tasks',  label: 'Daily Tasks',  color: '#4a7a9b' },
-  { key: 'schedule',     label: 'Schedule',     color: '#2d7a5a' },
-  { key: 'master-tasks', label: 'Master Tasks', color: '#7b5ea7' },
-  { key: 'roles',        label: 'Roles',        color: '#c07a3a' },
-  { key: 'goals',        label: 'Goals',        color: '#5a8a5a' },
-  { key: 'meetings',     label: 'Meetings',     color: '#6a7a88' },
+  { key: 'daily-tasks',  label: 'Daily Tasks',  color: '#4a8a78' },
+  { key: 'schedule',     label: 'Schedule',     color: '#2d6358' },
+  { key: 'master-tasks', label: 'Master Tasks', color: '#b87a38' },
+  { key: 'roles',        label: 'Roles',        color: '#8a4848' },
+  { key: 'goals',        label: 'Goals',        color: '#5a7848' },
+  { key: 'meetings',     label: 'Meetings',     color: '#3a5c4a' },
 ]
 
-// Tabs that navigate to other views (handled by onViewChange)
 const NAV_TABS = [
-  { key: 'week',    label: 'Week',    color: '#3d6a5a' },
-  { key: 'month',   label: 'Month',   color: '#4a7a6a' },
-  { key: 'csea',    label: 'CSEA',    color: '#2d5560' },
-  { key: 'icaap',   label: 'iCAAP',   color: '#3d5a6a' },
-  { key: 'gcu',     label: 'GCU',     color: '#4a6a7a' },
-  { key: 'finance', label: 'Finance', color: '#1e3342' },
-  { key: 'wywo',    label: 'WYWO',    color: '#5a5a6a' },
+  { key: 'week',    label: 'Week',    color: '#4a8a78' },
+  { key: 'month',   label: 'Month',   color: '#2d6358' },
+  { key: 'csea',    label: 'CSEA',    color: '#b87a38' },
+  { key: 'icaap',   label: 'iCAAP',   color: '#8a4848' },
+  { key: 'gcu',     label: 'GCU',     color: '#5a7848' },
+  { key: 'finance', label: 'Finance', color: '#3a5c4a' },
+  { key: 'wywo',    label: 'WYWO',    color: '#4a3a58' },
 ]
 
 const ALL_TABS = [...CONTENT_TABS, ...NAV_TABS]
@@ -93,14 +92,6 @@ export default function LeatherDayView({
   const pending = (dailyTasks || []).filter(t => !t.completed)
   const done    = (dailyTasks || []).filter(t => t.completed)
 
-  const taskProps = {
-    pending, done,
-    onToggle: onToggleTask, onDelete: onDeleteTask,
-    showAdd: showAddTask, setShowAdd: setShowAddTask,
-    newText: newTaskText, setNewText: setNewTaskText,
-    onSubmit: handleAddTask, selectedDate,
-  }
-
   const scheduleProps = {
     selectedDate, timeBlocks: timeBlocks || [], onDeleteBlock,
     addingBlock, blockText, setBlockText,
@@ -112,43 +103,75 @@ export default function LeatherDayView({
     <div className="leather-outer">
       <div className="leather-binder">
 
-        {/* ── Left page: date + mini calendar ── */}
+        {/* ── Left page: date + tasks (left col) + calendar + schedule (right col) ── */}
         <div className="binder-page left-page">
-          <div className="left-page-inner">
-            <div className="lp-date-header">
+          {/* Left inner column: big date + task list */}
+          <div className="lp-col lp-col-left">
+            <div className="lp-date-block">
               <div className="lp-day-num">{selectedDate.getDate()}</div>
-              <div className="lp-date-right">
-                <div className="lp-day-name">{DAY_NAMES[selectedDate.getDay()]}</div>
-                <div className="lp-month-year">{MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getFullYear()}</div>
-                <div className="lp-date-nav">
-                  <button className="lp-nav-btn" onClick={prevDay}>‹</button>
-                  <button className="lp-today-btn"
-                    onClick={() => onDateChange(new Date())}
-                    style={{ opacity: sameDay(selectedDate, today) ? 0.4 : 1 }}>Today</button>
-                  <button className="lp-nav-btn" onClick={nextDay}>›</button>
-                </div>
+              <div className="lp-day-name">{DAY_NAMES[selectedDate.getDay()]}</div>
+              <div className="lp-month-year">{MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getFullYear()}</div>
+              <div className="lp-date-nav">
+                <button className="lp-nav-btn" onClick={prevDay}>‹</button>
+                <button className="lp-today-btn"
+                  onClick={() => onDateChange(new Date())}
+                  style={{ opacity: sameDay(selectedDate, today) ? 0.4 : 1 }}>Today</button>
+                <button className="lp-nav-btn" onClick={nextDay}>›</button>
               </div>
             </div>
 
+            <div className="lp-tasks-section">
+              <div className="lp-section-title">
+                <span>Tasks</span>
+                <button className="lp-add-task-btn" onClick={() => setShowAddTask(s => !s)}>+ Add</button>
+              </div>
+              {showAddTask && (
+                <form className="lp-add-form" onSubmit={handleAddTask}>
+                  <input autoFocus type="text" placeholder="New task…" value={newTaskText}
+                    onChange={e => setNewTaskText(e.target.value)} className="lp-task-input" />
+                  <button type="submit" className="lp-save-btn">Add</button>
+                  <button type="button" className="lp-cancel-btn" onClick={() => setShowAddTask(false)}>✕</button>
+                </form>
+              )}
+              <div className="lp-task-list">
+                {pending.map((t, i) => <LpTaskRow key={t.id} task={t} index={i+1} onToggle={onToggleTask} onDelete={onDeleteTask} />)}
+                {done.length > 0 && <>
+                  <div className="lp-done-sep">Done</div>
+                  {done.map((t, i) => <LpTaskRow key={t.id} task={t} index={pending.length+i+1} onToggle={onToggleTask} onDelete={onDeleteTask} done />)}
+                </>}
+                {pending.length === 0 && done.length === 0 && !showAddTask &&
+                  <p className="lp-empty">No tasks today</p>}
+                {Array.from({ length: Math.max(0, 10 - pending.length - done.length) }).map((_, i) =>
+                  <div key={`b-${i}`} className="lp-blank-line" />)}
+              </div>
+            </div>
+          </div>
+
+          {/* Right inner column: mini calendar + schedule */}
+          <div className="lp-col lp-col-right">
             <div className="lp-cal-area">
               <MiniCalendar selectedDate={selectedDate} onDateChange={onDateChange} />
             </div>
-
-            <div className="lp-lined-filler" />
+            <div className="lp-sched-area">
+              <LeftSchedule {...scheduleProps} />
+            </div>
           </div>
         </div>
 
         {/* ── Rings ── */}
         <div className="binder-rings">
-          {[0,1,2,3].map(i => <div key={i} className="ring-pair"><div className="ring" /></div>)}
+          {[0,1,2,3,4,5].map(i => <div key={i} className="ring-pair"><div className="ring" /></div>)}
         </div>
 
         {/* ── Right page ── */}
         <div className="binder-page right-page">
           <div className="right-page-inner">
-
-            {rightTab === 'daily-tasks'  && <DailyTasksPanel  {...taskProps} />}
-            {rightTab === 'schedule'     && <SchedulePanel    {...scheduleProps} />}
+            {rightTab === 'daily-tasks'  && <DailyTasksPanel pending={pending} done={done}
+              onToggle={onToggleTask} onDelete={onDeleteTask}
+              showAdd={showAddTask} setShowAdd={setShowAddTask}
+              newText={newTaskText} setNewText={setNewTaskText}
+              onSubmit={handleAddTask} selectedDate={selectedDate} />}
+            {rightTab === 'schedule'     && <SchedulePanel {...scheduleProps} />}
             {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
             {(rightTab === 'roles' || rightTab === 'goals' || rightTab === 'meetings') && (
               <SectionTextPanel
@@ -159,19 +182,19 @@ export default function LeatherDayView({
                 onChange={onUpdateSection}
               />
             )}
-
           </div>
 
-          {/* Right-edge tabs — all sidebar items */}
+          {/* Right-edge tabs */}
           <div className="right-tabs">
-            {ALL_TABS.map(tab => {
+            {ALL_TABS.map((tab, idx) => {
               const isNav = NAV_TABS.find(t => t.key === tab.key)
               const isActive = !isNav && rightTab === tab.key
+              const isFirstNav = isNav && tab.key === NAV_TABS[0].key
               return (
                 <button
                   key={tab.key}
-                  className={`right-tab ${isActive ? 'active' : ''} ${isNav ? 'nav-tab' : ''}`}
-                  style={{ '--tab-color': tab.color }}
+                  className={`right-tab ${isActive ? 'active' : ''} ${isNav ? 'nav-tab' : ''} ${isFirstNav ? 'nav-tab-first' : ''}`}
+                  style={{ '--tab-color': tab.color, '--tab-idx': idx }}
                   onClick={() => handleTabClick(tab)}
                   title={tab.label}
                 >
@@ -187,7 +210,65 @@ export default function LeatherDayView({
   )
 }
 
-// ── Daily Tasks ──────────────────────────────────────────────────────────────
+// ── Left page compact schedule ────────────────────────────────────────────────
+function LeftSchedule({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock }) {
+  const today = new Date()
+  return (
+    <div className="lp-sched-list">
+      {HOURS.map(hour => {
+        const blocksHere = timeBlocks.filter(b => b.hour === hour)
+        const isAddingHere = addingBlock === hour
+        const isCurrent = sameDay(selectedDate, today) && new Date().getHours() === hour
+        return (
+          <div key={hour} className={`lp-sched-row ${isCurrent ? 'current' : ''}`}>
+            <div className="lp-sched-hour">
+              {formatHour(hour)}<span className="lp-sched-ampm">{hour < 12 ? 'a' : 'p'}</span>
+            </div>
+            <div className="lp-sched-body">
+              {isCurrent && <div className="lp-now-line" />}
+              {blocksHere.map(b => (
+                <div key={b.id} className="lp-sched-block" style={{ background: b.color || '#4a90d9' }}>
+                  <span>{b.title || b.text}</span>
+                  {b.source !== 'google' && <button className="lp-sched-del" onClick={() => onDeleteBlock?.(b.id)}>✕</button>}
+                </div>
+              ))}
+              {isAddingHere ? (
+                <div className="lp-sched-add-form">
+                  <input autoFocus type="text" placeholder="Event…" value={blockText}
+                    onChange={e => setBlockText(e.target.value)}
+                    onKeyDown={e => { if (e.key==='Enter') handleAddBlock(hour); if (e.key==='Escape') setAddingBlock(null) }}
+                    className="lp-block-input" />
+                  <button className="lp-save-btn sm" onClick={() => handleAddBlock(hour)}>+</button>
+                  <button className="lp-cancel-btn" onClick={() => setAddingBlock(null)}>✕</button>
+                </div>
+              ) : (
+                <button className="lp-sched-add-btn" onClick={() => openAddBlock(hour)}>+</button>
+              )}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Left page task row ────────────────────────────────────────────────────────
+function LpTaskRow({ task, index, onToggle, onDelete, done }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <div className={`lp-task-row ${done ? 'done' : ''}`}
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <span className="lp-task-num">{index}.</span>
+      <button className="lp-check" onClick={() => onToggle(task.id)}>
+        <span className={`lp-circle ${done ? 'checked' : ''}`} />
+      </button>
+      <span className="lp-task-title">{task.title}</span>
+      {hovered && <button className="lp-del-btn" onClick={() => onDelete(task.id)}>✕</button>}
+    </div>
+  )
+}
+
+// ── Right page Daily Tasks ────────────────────────────────────────────────────
 function DailyTasksPanel({ pending, done, onToggle, onDelete, showAdd, setShowAdd, newText, setNewText, onSubmit, selectedDate }) {
   const dateLabel = `${DAY_NAMES[selectedDate.getDay()]}, ${MONTH_NAMES[selectedDate.getMonth()]} ${selectedDate.getDate()}`
   return (
@@ -221,7 +302,7 @@ function DailyTasksPanel({ pending, done, onToggle, onDelete, showAdd, setShowAd
   )
 }
 
-// ── Schedule ─────────────────────────────────────────────────────────────────
+// ── Right page Schedule ───────────────────────────────────────────────────────
 function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock }) {
   const today = new Date()
   return (
@@ -300,7 +381,7 @@ function MasterTasksPanel({ masterTasks, onDelete }) {
   )
 }
 
-// ── Section text (Roles / Goals / Meetings) ──────────────────────────────────
+// ── Section text ──────────────────────────────────────────────────────────────
 function SectionTextPanel({ sectionKey, label, color, value, onChange }) {
   const saveTimer = useRef(null)
   const [text, setText] = useState(value)
