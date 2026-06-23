@@ -327,6 +327,8 @@ export default function App() {
           onDeleteIcaapNote={deleteIcaapNote}
           calAuthExpired={calAuthExpired}
           onReconnectGoogle={reconnectGoogle}
+          calEventCount={calEvents.length}
+          onSignOut={() => signOut()}
           books={books}
           onAddBook={addBook}
           onUpdateBookStatus={updateBookStatus}

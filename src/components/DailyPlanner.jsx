@@ -71,7 +71,7 @@ export default function DailyPlanner({
   attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
   icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
   calendarBlocks,
-  calAuthExpired, onReconnectGoogle, providerToken,
+  calAuthExpired, onReconnectGoogle, providerToken, calEventCount, onSignOut,
   books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
   onPushGcuToAsana, gcuPushing,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
@@ -200,6 +200,8 @@ export default function DailyPlanner({
         gcuPushing={gcuPushing}
         calAuthExpired={calAuthExpired}
         onReconnectGoogle={onReconnectGoogle}
+        calEventCount={calEventCount}
+        onSignOut={onSignOut}
         // finance
         transactions={transactions}
         onAddTransaction={onAddTransaction}

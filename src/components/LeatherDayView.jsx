@@ -73,7 +73,8 @@ export default function LeatherDayView({
   icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
   // gcu props
   onPushGcuToAsana, gcuPushing,
-  calAuthExpired, onReconnectGoogle,
+  calAuthExpired, onReconnectGoogle, calEventCount,
+  onSignOut,
   // finance props
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
@@ -197,6 +198,10 @@ export default function LeatherDayView({
                 onWeekView={() => { setRightTab('week'); onViewChange?.('week') }}
                 onMonthView={() => { setRightTab('month'); onViewChange?.('month') }}
                 activeView={rightTab}
+                calAuthExpired={calAuthExpired}
+                onReconnectGoogle={onReconnectGoogle}
+                calEventCount={calEventCount}
+                onSignOut={onSignOut}
               />
             </div>
             <div className="lp-sched-area">
@@ -620,7 +625,7 @@ function MasterRow({ task, onDelete, color }) {
   )
 }
 
-function MiniCalendar({ selectedDate, onDateChange, onWeekView, onMonthView, activeView }) {
+function MiniCalendar({ selectedDate, onDateChange, onWeekView, onMonthView, activeView, calAuthExpired, onReconnectGoogle, calEventCount, onSignOut }) {
   const today = new Date()
   const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
   const [viewMonth, setViewMonth] = useState(selectedDate.getMonth())
@@ -646,6 +651,14 @@ function MiniCalendar({ selectedDate, onDateChange, onWeekView, onMonthView, act
       <div className="lp-cal-view-btns">
         <button className={`lp-cal-view-btn ${activeView === 'week' ? 'active' : ''}`} onClick={onWeekView}>Week</button>
         <button className={`lp-cal-view-btn ${activeView === 'month' ? 'active' : ''}`} onClick={onMonthView}>Month</button>
+      </div>
+      <div className="lp-cal-gcal-row">
+        {calAuthExpired ? (
+          <button className="lp-gcal-reconnect-chip" onClick={onReconnectGoogle}>📅 Reconnect Google Cal</button>
+        ) : (
+          <span className="lp-gcal-ok-chip">📅 {calEventCount > 0 ? `${calEventCount} event${calEventCount !== 1 ? 's' : ''}` : 'Google Cal'}</span>
+        )}
+        <button className="lp-signout-link" onClick={onSignOut}>Log out</button>
       </div>
       <div className="lp-cal-grid">
         {SHORT_DAY.map((d,i) => <span key={i} className="lp-cal-dow">{d.charAt(0)}</span>)}
