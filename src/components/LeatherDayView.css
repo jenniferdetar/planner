@@ -46,14 +46,7 @@
 }
 
 .left-page {
-  background:
-    repeating-linear-gradient(
-      transparent,
-      transparent 27px,
-      rgba(160,145,120,0.38) 27px,
-      rgba(160,145,120,0.38) 28px
-    ),
-    #faf8f2;
+  background: #faf8f2;
   border-right: 1px solid #e0d8cc;
   /* equal to right page */
   display: flex;
