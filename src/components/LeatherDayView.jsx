@@ -20,8 +20,6 @@ const ALL_TABS = [
   { key: 'goals',        label: 'Goals',        color: '#5a7848' },
   { key: 'meetings',     label: 'Meetings',     color: '#3a5c4a' },
   // ── divider here (first nav tab) ──
-  { key: 'week',         label: 'Week',         color: '#4a8a78', nav: true },
-  { key: 'month',        label: 'Month',        color: '#2d6358', nav: true },
   { key: 'csea',         label: 'CSEA',         color: '#b87a38', nav: true },
   { key: 'icaap',        label: 'iCAAP',        color: '#8a4848', nav: true },
   { key: 'gcu',          label: 'GCU',          color: '#5a7848', nav: true },
@@ -193,7 +191,13 @@ export default function LeatherDayView({
 
           <div className="lp-col lp-col-right">
             <div className="lp-cal-area">
-              <MiniCalendar selectedDate={selectedDate} onDateChange={onDateChange} />
+              <MiniCalendar
+                selectedDate={selectedDate}
+                onDateChange={onDateChange}
+                onWeekView={() => { setRightTab('week'); onViewChange?.('week') }}
+                onMonthView={() => { setRightTab('month'); onViewChange?.('month') }}
+                activeView={rightTab}
+              />
             </div>
             <div className="lp-sched-area">
               <LeftSchedule {...scheduleProps} />
@@ -616,7 +620,7 @@ function MasterRow({ task, onDelete, color }) {
   )
 }
 
-function MiniCalendar({ selectedDate, onDateChange }) {
+function MiniCalendar({ selectedDate, onDateChange, onWeekView, onMonthView, activeView }) {
   const today = new Date()
   const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
   const [viewMonth, setViewMonth] = useState(selectedDate.getMonth())
@@ -636,8 +640,12 @@ function MiniCalendar({ selectedDate, onDateChange }) {
     <div className="lp-mini-cal">
       <div className="lp-cal-nav">
         <button className="lp-cal-nav-btn" onClick={prevMonth}>‹</button>
-        <span className="lp-cal-month-label">{MONTH_NAMES[viewMonth]} {viewYear}</span>
+        <button className="lp-cal-month-label lp-cal-month-btn" onClick={onMonthView}>{MONTH_NAMES[viewMonth]} {viewYear}</button>
         <button className="lp-cal-nav-btn" onClick={nextMonth}>›</button>
+      </div>
+      <div className="lp-cal-view-btns">
+        <button className={`lp-cal-view-btn ${activeView === 'week' ? 'active' : ''}`} onClick={onWeekView}>Week</button>
+        <button className={`lp-cal-view-btn ${activeView === 'month' ? 'active' : ''}`} onClick={onMonthView}>Month</button>
       </div>
       <div className="lp-cal-grid">
         {SHORT_DAY.map((d,i) => <span key={i} className="lp-cal-dow">{d.charAt(0)}</span>)}
