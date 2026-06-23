@@ -198,6 +198,8 @@ export default function DailyPlanner({
         // gcu
         onPushGcuToAsana={onPushGcuToAsana}
         gcuPushing={gcuPushing}
+        calAuthExpired={calAuthExpired}
+        onReconnectGoogle={onReconnectGoogle}
         // finance
         transactions={transactions}
         onAddTransaction={onAddTransaction}

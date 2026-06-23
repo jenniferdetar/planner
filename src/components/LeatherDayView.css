@@ -709,6 +709,29 @@
   overflow: auto;
 }
 
+.gcal-reconnect-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff3cd;
+  border-bottom: 1px solid #f0d080;
+  padding: 7px 16px;
+  font-size: 11px;
+  color: #7a5a00;
+  flex-shrink: 0;
+}
+.gcal-reconnect-banner button {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: #b87a38;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+.gcal-reconnect-banner button:hover { background: #a06020; }
+
 /* ─── Right Page Panels ──────────────────────────────────────────────────── */
 .rp-panel {
   display: flex;
