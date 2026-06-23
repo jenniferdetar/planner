@@ -634,6 +634,20 @@
   margin-top: 4px;
 }
 
+/* ─── Full view components inside binder right page ─────────────────────── */
+.binder-view-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.binder-view-wrap > * {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
 /* ─── Right Page Panels ──────────────────────────────────────────────────── */
 .rp-panel {
   display: flex;

@@ -1,32 +1,41 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './LeatherDayView.css'
+import WeekView from './WeekView'
+import MonthView from './MonthView'
+import CseaTracker from './CseaTracker'
+import IcaapTracker from './IcaapTracker'
+import GcuPanel from './GcuPanel'
+import FinancialPanel from './FinancialPanel'
+import WhileYouWereOut from './WhileYouWereOut'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-const HOURS = Array.from({ length: 15 }, (_, i) => i + 6) // 6am–8pm
+const HOURS = Array.from({ length: 15 }, (_, i) => i + 6)
 
-// Alternating colors matching the Opus One reference screenshot
-const CONTENT_TABS = [
+const ALL_TABS = [
   { key: 'daily-tasks',  label: 'Daily Tasks',  color: '#4a8a78' },
   { key: 'schedule',     label: 'Schedule',     color: '#2d6358' },
   { key: 'master-tasks', label: 'Master Tasks', color: '#b87a38' },
   { key: 'roles',        label: 'Roles',        color: '#8a4848' },
   { key: 'goals',        label: 'Goals',        color: '#5a7848' },
   { key: 'meetings',     label: 'Meetings',     color: '#3a5c4a' },
+  // ── divider here (first nav tab) ──
+  { key: 'week',         label: 'Week',         color: '#4a8a78', nav: true },
+  { key: 'month',        label: 'Month',        color: '#2d6358', nav: true },
+  { key: 'csea',         label: 'CSEA',         color: '#b87a38', nav: true },
+  { key: 'icaap',        label: 'iCAAP',        color: '#8a4848', nav: true },
+  { key: 'gcu',          label: 'GCU',          color: '#5a7848', nav: true },
+  { key: 'finance',      label: 'Finance',      color: '#3a5c4a', nav: true },
+  { key: 'wywo',         label: 'WYWO',         color: '#4a3a58', nav: true },
 ]
 
-const NAV_TABS = [
-  { key: 'week',    label: 'Week',    color: '#4a8a78' },
-  { key: 'month',   label: 'Month',   color: '#2d6358' },
-  { key: 'csea',    label: 'CSEA',    color: '#b87a38' },
-  { key: 'icaap',   label: 'iCAAP',   color: '#8a4848' },
-  { key: 'gcu',     label: 'GCU',     color: '#5a7848' },
-  { key: 'finance', label: 'Finance', color: '#3a5c4a' },
-  { key: 'wywo',    label: 'WYWO',    color: '#4a3a58' },
-]
+const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks','roles','goals','meetings'])
 
-const ALL_TABS = [...CONTENT_TABS, ...NAV_TABS]
+function viewToTab(view) {
+  if (!view || view === 'day') return 'daily-tasks'
+  return view
+}
 
 function sameDay(a, b) {
   return a.getFullYear() === b.getFullYear() &&
@@ -39,16 +48,41 @@ function formatHour(h) {
 }
 
 export default function LeatherDayView({
+  // current view from App
+  view, onViewChange,
+  // day props
   selectedDate, onDateChange,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
   timeBlocks, onAddBlock, onDeleteBlock,
-  noteContent, onNoteChange,
   masterTasks, onDeleteMasterTask,
   sections, onUpdateSection,
-  onViewChange,
+  // week props
+  userId,
+  weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
+  calendarBlocks,
+  // month props
+  taskCounts, onMonthChange,
+  // csea props
+  cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
+  cseaInteractions, onAddCseaInteraction, onUpdateCseaInteraction,
+  showArchivedInteractions, onToggleArchivedInteractions,
+  asanaCseaTasks, onCompleteAsanaTask, onUpdateAsanaTaskNotes,
+  cseaNotes, onAddCseaNote, onDeleteCseaNote,
+  // icaap props
+  icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
+  asanaIcaapTasks,
+  attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
+  icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
+  // gcu props
+  onPushGcuToAsana, gcuPushing,
+  // finance props
+  transactions, onAddTransaction, onDeleteTransaction,
+  bills, onAddBill, onToggleBillPaid, onDeleteBill,
+  goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
+  paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
 }) {
   const today = new Date()
-  const [rightTab, setRightTab] = useState('daily-tasks')
+  const [rightTab, setRightTab] = useState(() => viewToTab(view))
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
   const [addingBlock, setAddingBlock] = useState(null)
@@ -56,12 +90,17 @@ export default function LeatherDayView({
   const [blockStart, setBlockStart] = useState('')
   const [blockEnd, setBlockEnd] = useState('')
 
+  // Sync external view changes into tab state
+  useEffect(() => {
+    const tab = viewToTab(view)
+    setRightTab(tab)
+  }, [view])
+
   function handleTabClick(tab) {
-    if (NAV_TABS.find(t => t.key === tab.key)) {
-      onViewChange?.(tab.key)
-    } else {
-      setRightTab(tab.key)
-    }
+    setRightTab(tab.key)
+    // sync back to App so sidebar stays in sync
+    if (tab.nav) onViewChange?.(tab.key)
+    else onViewChange?.('day')
   }
 
   function prevDay() { const d = new Date(selectedDate); d.setDate(d.getDate() - 1); onDateChange(d) }
@@ -99,13 +138,14 @@ export default function LeatherDayView({
     openAddBlock, handleAddBlock, setAddingBlock,
   }
 
+  const firstNavKey = ALL_TABS.find(t => t.nav)?.key
+
   return (
     <div className="leather-outer">
       <div className="leather-binder">
 
-        {/* ── Left page: date + tasks (left col) + calendar + schedule (right col) ── */}
+        {/* ── Left page ── */}
         <div className="binder-page left-page">
-          {/* Left inner column: big date + task list */}
           <div className="lp-col lp-col-left">
             <div className="lp-date-block">
               <div className="lp-day-num">{selectedDate.getDate()}</div>
@@ -147,7 +187,6 @@ export default function LeatherDayView({
             </div>
           </div>
 
-          {/* Right inner column: mini calendar + schedule */}
           <div className="lp-col lp-col-right">
             <div className="lp-cal-area">
               <MiniCalendar selectedDate={selectedDate} onDateChange={onDateChange} />
@@ -166,35 +205,140 @@ export default function LeatherDayView({
         {/* ── Right page ── */}
         <div className="binder-page right-page">
           <div className="right-page-inner">
-            {rightTab === 'daily-tasks'  && <DailyTasksPanel pending={pending} done={done}
-              onToggle={onToggleTask} onDelete={onDeleteTask}
-              showAdd={showAddTask} setShowAdd={setShowAddTask}
-              newText={newTaskText} setNewText={setNewTaskText}
-              onSubmit={handleAddTask} selectedDate={selectedDate} />}
-            {rightTab === 'schedule'     && <SchedulePanel {...scheduleProps} />}
+
+            {/* Day content tabs */}
+            {rightTab === 'daily-tasks' && (
+              <DailyTasksPanel pending={pending} done={done}
+                onToggle={onToggleTask} onDelete={onDeleteTask}
+                showAdd={showAddTask} setShowAdd={setShowAddTask}
+                newText={newTaskText} setNewText={setNewTaskText}
+                onSubmit={handleAddTask} selectedDate={selectedDate} />
+            )}
+            {rightTab === 'schedule' && <SchedulePanel {...scheduleProps} />}
             {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
             {(rightTab === 'roles' || rightTab === 'goals' || rightTab === 'meetings') && (
               <SectionTextPanel
                 sectionKey={rightTab}
-                label={CONTENT_TABS.find(t => t.key === rightTab)?.label}
-                color={CONTENT_TABS.find(t => t.key === rightTab)?.color}
+                label={ALL_TABS.find(t => t.key === rightTab)?.label}
+                color={ALL_TABS.find(t => t.key === rightTab)?.color}
                 value={sections?.[rightTab] ?? ''}
                 onChange={onUpdateSection}
               />
             )}
+
+            {/* Nav view tabs — render full view components inside binder */}
+            {rightTab === 'week' && (
+              <div className="binder-view-wrap">
+                <WeekView
+                  userId={userId}
+                  selectedDate={selectedDate}
+                  onDateChange={onDateChange}
+                  calendarBlocks={calendarBlocks}
+                  tasksByDate={weeklyTasks}
+                  onToggleTask={onToggleWeeklyTask}
+                  onAddTask={onAddWeeklyTask}
+                />
+              </div>
+            )}
+            {rightTab === 'month' && (
+              <div className="binder-view-wrap">
+                <MonthView
+                  selectedDate={selectedDate}
+                  onDateChange={(d) => { onDateChange(d); setRightTab('daily-tasks'); onViewChange?.('day') }}
+                  taskCounts={taskCounts}
+                  timeBlocks={calendarBlocks || timeBlocks}
+                  onMonthChange={onMonthChange}
+                />
+              </div>
+            )}
+            {rightTab === 'csea' && (
+              <div className="binder-view-wrap">
+                <CseaTracker
+                  userId={userId}
+                  issues={cseaIssues || []}
+                  onAddIssue={onAddCseaIssue}
+                  onUpdateStatus={onUpdateCseaStatus}
+                  onDeleteIssue={onDeleteCseaIssue}
+                  interactions={cseaInteractions || []}
+                  onAddInteraction={onAddCseaInteraction}
+                  onUpdateInteraction={onUpdateCseaInteraction}
+                  showArchived={showArchivedInteractions}
+                  onToggleArchived={onToggleArchivedInteractions}
+                  asanaTasks={asanaCseaTasks || []}
+                  onCompleteAsanaTask={onCompleteAsanaTask}
+                  onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
+                  cseaNotes={cseaNotes || []}
+                  onAddCseaNote={onAddCseaNote}
+                  onDeleteCseaNote={onDeleteCseaNote}
+                />
+              </div>
+            )}
+            {rightTab === 'icaap' && (
+              <div className="binder-view-wrap">
+                <IcaapTracker
+                  userId={userId}
+                  items={icaapItems || []}
+                  onAddItem={onAddIcaapItem}
+                  onUpdateItem={onUpdateIcaapItem}
+                  onDeleteItem={onDeleteIcaapItem}
+                  asanaTasks={asanaIcaapTasks || []}
+                  onCompleteAsanaTask={onCompleteAsanaTask}
+                  onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
+                  attendanceRecords={attendanceRecords || []}
+                  onUpsertAttendance={onUpsertAttendance}
+                  onUpdateAttendanceNotes={onUpdateAttendanceNotes}
+                  icaapNotes={icaapNotes || []}
+                  onAddIcaapNote={onAddIcaapNote}
+                  onDeleteIcaapNote={onDeleteIcaapNote}
+                />
+              </div>
+            )}
+            {rightTab === 'gcu' && (
+              <div className="binder-view-wrap">
+                <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
+              </div>
+            )}
+            {rightTab === 'finance' && (
+              <div className="binder-view-wrap">
+                <FinancialPanel
+                  transactions={transactions || []}
+                  onAddTransaction={onAddTransaction}
+                  onDeleteTransaction={onDeleteTransaction}
+                  bills={bills || []}
+                  onAddBill={onAddBill}
+                  onToggleBillPaid={onToggleBillPaid}
+                  onDeleteBill={onDeleteBill}
+                  goals={goals || []}
+                  onAddGoal={onAddGoal}
+                  onUpdateGoalAmount={onUpdateGoalAmount}
+                  onDeleteGoal={onDeleteGoal}
+                  paychecks={paychecks || []}
+                  onAddPaycheck={onAddPaycheck}
+                  onUpdatePaycheckAmount={onUpdatePaycheckAmount}
+                  onTogglePaycheckBill={onTogglePaycheckBill}
+                  onDeletePaycheck={onDeletePaycheck}
+                  userId={userId}
+                />
+              </div>
+            )}
+            {rightTab === 'wywo' && (
+              <div className="binder-view-wrap">
+                <WhileYouWereOut userId={userId} />
+              </div>
+            )}
+
           </div>
 
           {/* Right-edge tabs */}
           <div className="right-tabs">
-            {ALL_TABS.map((tab, idx) => {
-              const isNav = NAV_TABS.find(t => t.key === tab.key)
-              const isActive = !isNav && rightTab === tab.key
-              const isFirstNav = isNav && tab.key === NAV_TABS[0].key
+            {ALL_TABS.map((tab) => {
+              const isActive = rightTab === tab.key
+              const isFirstNav = tab.key === firstNavKey
               return (
                 <button
                   key={tab.key}
-                  className={`right-tab ${isActive ? 'active' : ''} ${isNav ? 'nav-tab' : ''} ${isFirstNav ? 'nav-tab-first' : ''}`}
-                  style={{ '--tab-color': tab.color, '--tab-idx': idx }}
+                  className={`right-tab ${isActive ? 'active' : ''} ${isFirstNav ? 'nav-tab-first' : ''}`}
+                  style={{ '--tab-color': tab.color }}
                   onClick={() => handleTabClick(tab)}
                   title={tab.label}
                 >
@@ -210,7 +354,7 @@ export default function LeatherDayView({
   )
 }
 
-// ── Left page compact schedule ────────────────────────────────────────────────
+// ── Left col compact schedule ────────────────────────────────────────────────
 function LeftSchedule({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock }) {
   const today = new Date()
   return (
@@ -252,7 +396,6 @@ function LeftSchedule({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, bl
   )
 }
 
-// ── Left page task row ────────────────────────────────────────────────────────
 function LpTaskRow({ task, index, onToggle, onDelete, done }) {
   const [hovered, setHovered] = useState(false)
   return (
@@ -268,7 +411,6 @@ function LpTaskRow({ task, index, onToggle, onDelete, done }) {
   )
 }
 
-// ── Right page Daily Tasks ────────────────────────────────────────────────────
 function DailyTasksPanel({ pending, done, onToggle, onDelete, showAdd, setShowAdd, newText, setNewText, onSubmit, selectedDate }) {
   const dateLabel = `${DAY_NAMES[selectedDate.getDay()]}, ${MONTH_NAMES[selectedDate.getMonth()]} ${selectedDate.getDate()}`
   return (
@@ -302,7 +444,6 @@ function DailyTasksPanel({ pending, done, onToggle, onDelete, showAdd, setShowAd
   )
 }
 
-// ── Right page Schedule ───────────────────────────────────────────────────────
 function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock }) {
   const today = new Date()
   return (
@@ -354,7 +495,6 @@ function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, b
   )
 }
 
-// ── Master Tasks ─────────────────────────────────────────────────────────────
 function MasterTasksPanel({ masterTasks, onDelete }) {
   const groups = [
     ['High', masterTasks.filter(t => t.priority==='high'), '#e05c5c'],
@@ -381,7 +521,6 @@ function MasterTasksPanel({ masterTasks, onDelete }) {
   )
 }
 
-// ── Section text ──────────────────────────────────────────────────────────────
 function SectionTextPanel({ sectionKey, label, color, value, onChange }) {
   const saveTimer = useRef(null)
   const [text, setText] = useState(value)
@@ -401,7 +540,6 @@ function SectionTextPanel({ sectionKey, label, color, value, onChange }) {
   )
 }
 
-// ── Shared rows ──────────────────────────────────────────────────────────────
 function RpTaskRow({ task, index, onToggle, onDelete, done }) {
   const [hovered, setHovered] = useState(false)
   return (
@@ -430,7 +568,6 @@ function MasterRow({ task, onDelete, color }) {
   )
 }
 
-// ── Mini Calendar ────────────────────────────────────────────────────────────
 function MiniCalendar({ selectedDate, onDateChange }) {
   const today = new Date()
   const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
@@ -473,7 +610,6 @@ function MiniCalendar({ selectedDate, onDateChange }) {
   )
 }
 
-// ── Decorative SVG ───────────────────────────────────────────────────────────
 function BlossomsArt() {
   return (
     <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg" className="rp-art-svg">
