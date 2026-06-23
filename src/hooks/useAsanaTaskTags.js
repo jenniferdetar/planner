@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 
 const STORAGE_KEY = 'asana_task_tags'
-const TAG_OPTIONS = [null, 'CSEA', 'iCAAP', 'Roles']
+const TAG_OPTIONS = [null, 'CSEA', 'iCAAP', 'Roles', 'GCU']
 
 function load() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') } catch { return {} }
@@ -30,4 +30,5 @@ export const TAG_COLORS = {
   CSEA:  '#b87a38',
   iCAAP: '#3a5c4a',
   Roles: '#8a4848',
+  GCU:   '#5a7848',
 }
