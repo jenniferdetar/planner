@@ -79,6 +79,9 @@
   flex: 1;
   min-width: 0;
   border-right: 1px solid rgba(160,145,120,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .lp-col-right {
@@ -159,8 +162,8 @@
 
 /* ─── Left col: task section ─────────────────────────────────────────────── */
 .lp-tasks-section {
-  flex: 1;
-  min-height: 80px;
+  flex: 0 0 auto;
+  max-height: 40%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -230,12 +233,12 @@
 
 /* ─── Left col: Asana section ────────────────────────────────────────────── */
 .lp-asana-section {
-  flex-shrink: 0;
+  flex: 1;
+  min-height: 0;
   border-top: 1px solid rgba(160,145,120,0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  max-height: 45%;
 }
 
 .lp-asana-count {
