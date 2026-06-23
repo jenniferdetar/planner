@@ -291,6 +291,7 @@ export default function App() {
           cseaNotes={cseaNotes}
           onAddCseaNote={addCseaNote}
           onDeleteCseaNote={deleteCseaNote}
+          asanaTasks={asanaTasks}
           asanaCseaTasks={asanaCseaTasks}
           asanaIcaapTasks={asanaIcaapTasks}
           onCompleteAsanaTask={completeAsanaTask}

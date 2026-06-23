@@ -54,6 +54,7 @@ export default function LeatherDayView({
   timeBlocks, onAddBlock, onDeleteBlock,
   masterTasks, onDeleteMasterTask,
   sections, onUpdateSection,
+  asanaTasks, onCompleteAsanaTask,
   // week props
   userId,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
@@ -182,10 +183,23 @@ export default function LeatherDayView({
                 </>}
                 {pending.length === 0 && done.length === 0 && !showAddTask &&
                   <p className="lp-empty">No tasks today</p>}
-                {Array.from({ length: Math.max(0, 10 - pending.length - done.length) }).map((_, i) =>
-                  <div key={`b-${i}`} className="lp-blank-line" />)}
               </div>
             </div>
+
+            {/* Asana Tasks section */}
+            {(asanaTasks || []).length > 0 && (
+              <div className="lp-asana-section">
+                <div className="lp-section-title">
+                  <span>Asana</span>
+                  <span className="lp-asana-count">{(asanaTasks || []).filter(t => !t.completed).length} open</span>
+                </div>
+                <div className="lp-asana-list">
+                  {(asanaTasks || []).filter(t => !t.completed).map(task => (
+                    <LpAsanaRow key={task.id} task={task} onComplete={onCompleteAsanaTask} />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="lp-col lp-col-right">
@@ -401,6 +415,22 @@ function LpTaskRow({ task, index, onToggle, onDelete, done }) {
       </button>
       <span className="lp-task-title">{task.title}</span>
       {hovered && <button className="lp-del-btn" onClick={() => onDelete(task.id)}>✕</button>}
+    </div>
+  )
+}
+
+function LpAsanaRow({ task, onComplete }) {
+  const [hovered, setHovered] = useState(false)
+  const due = task.due_on || task.due_date
+  const dueLabel = due ? new Date(due + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : null
+  return (
+    <div className="lp-asana-row"
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <button className="lp-check" onClick={() => onComplete?.(task.id)}>
+        <span className="lp-circle" />
+      </button>
+      <span className="lp-asana-title">{task.title || task.name}</span>
+      {dueLabel && <span className="lp-asana-due">{dueLabel}</span>}
     </div>
   )
 }
