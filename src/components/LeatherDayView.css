@@ -674,7 +674,7 @@
 .right-tab span {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  transform: rotate(180deg);
+  transform: rotate(0deg);
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.8px;
