@@ -1,7 +1,7 @@
 import './PlannerTheme.css'
 import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
-import { supabase, signOut } from './lib/supabase'
+import { supabase, signOut, signInWithGoogle } from './lib/supabase'
 import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
 import { useDailyLog } from './hooks/useDailyLog'
 import { useWeeklyTasks } from './hooks/useWeeklyTasks'
