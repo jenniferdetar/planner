@@ -653,10 +653,10 @@ function MiniCalendar({ selectedDate, onDateChange, onWeekView, onMonthView, act
         <button className={`lp-cal-view-btn ${activeView === 'month' ? 'active' : ''}`} onClick={onMonthView}>Month</button>
       </div>
       <div className="lp-cal-gcal-row">
-        {calAuthExpired ? (
-          <button className="lp-gcal-reconnect-chip" onClick={onReconnectGoogle}>📅 Reconnect Google Cal</button>
+        {(calAuthExpired || calEventCount === 0) ? (
+          <button className="lp-gcal-reconnect-chip" onClick={onReconnectGoogle}>📅 Connect Google Cal</button>
         ) : (
-          <span className="lp-gcal-ok-chip">📅 {calEventCount > 0 ? `${calEventCount} event${calEventCount !== 1 ? 's' : ''}` : 'Google Cal'}</span>
+          <span className="lp-gcal-ok-chip">📅 {calEventCount} event{calEventCount !== 1 ? 's' : ''}</span>
         )}
         <button className="lp-signout-link" onClick={onSignOut}>Log out</button>
       </div>
