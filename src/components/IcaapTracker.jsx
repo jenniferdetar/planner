@@ -150,7 +150,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       {/* Sub-tabs */}
       <div className="icaap-tabs">
         <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
-        <button data-t="asana" className={`icaap-tab ${tab === 'asana' ? 'active' : ''}`} onClick={() => setTab('asana')}>Asana {asanaTasks.length > 0 && <span className="icaap-tab-badge">{asanaTasks.length}</span>}</button>
         <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
         <button data-t="transcripts" className={`icaap-tab ${tab === 'transcripts' ? 'active' : ''}`} onClick={() => setTab('transcripts')}>Transcripts</button>
@@ -160,16 +159,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
 
       {/* Dashboard tab */}
       {tab === 'dashboard' && <IcaapDashboard />}
-
-      {/* Asana tab */}
-      {tab === 'asana' && (
-        <div className="icaap-list">
-          {asanaTasks.length === 0 && <p className="icaap-empty">No iCAAP tasks in Asana</p>}
-          {asanaTasks.map(task => (
-            <AsanaTaskRow key={task.id} task={task} onComplete={onCompleteAsanaTask} onUpdateNotes={onUpdateAsanaTaskNotes} />
-          ))}
-        </div>
-      )}
 
       {/* Extra Hours tab */}
       {tab === 'extrahours' && (

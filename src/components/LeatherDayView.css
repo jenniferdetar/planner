@@ -162,7 +162,8 @@
 
 /* ─── Left col: task section ─────────────────────────────────────────────── */
 .lp-tasks-section {
-  flex: 0 0 38%;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
