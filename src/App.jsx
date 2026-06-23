@@ -155,14 +155,7 @@ export default function App() {
 
   async function reconnectGoogle() {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          scopes: 'https://www.googleapis.com/auth/calendar.readonly',
-          redirectTo: window.location.origin,
-          queryParams: { prompt: 'consent' },
-        },
-      })
+      const { error } = await signInWithGoogle()
       if (error) alert('Google Calendar error: ' + error.message)
     } catch (e) {
       alert('Google Calendar error: ' + e.message)
