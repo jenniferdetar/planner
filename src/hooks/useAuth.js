@@ -41,30 +41,16 @@ export function useAuth() {
 
     init()
 
-    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      // On SIGNED_IN (e.g. after Google OAuth redirect) re-fetch the session so
-      // provider_token is reliably captured — Supabase only includes it in the
-      // immediate post-OAuth session object, not in every onAuthStateChange payload.
-      if (event === 'SIGNED_IN') {
-        const { data: fresh } = await supabase.auth.getSession()
-        const fullSession = fresh?.session ?? session
-        setSession(fullSession)
-        if (fullSession?.provider_token) {
-          localStorage.setItem(TOKEN_KEY, fullSession.provider_token)
-          setCachedToken(fullSession.provider_token)
-        } else if (session?.provider_token) {
-          localStorage.setItem(TOKEN_KEY, session.provider_token)
-          setCachedToken(session.provider_token)
-        }
-      } else {
-        setSession(session)
-        if (session?.provider_token) {
-          localStorage.setItem(TOKEN_KEY, session.provider_token)
-          setCachedToken(session.provider_token)
-        } else if (event === 'TOKEN_REFRESHED') {
-          const stored = localStorage.getItem(TOKEN_KEY)
-          if (stored) setCachedToken(stored)
-        }
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      // provider_token is ONLY available in the immediate post-OAuth session object —
+      // Supabase does not persist it, so we must capture it here and store ourselves.
+      setSession(session)
+      if (session?.provider_token) {
+        localStorage.setItem(TOKEN_KEY, session.provider_token)
+        setCachedToken(session.provider_token)
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        const stored = localStorage.getItem(TOKEN_KEY)
+        if (stored) setCachedToken(stored)
       }
     })
 
