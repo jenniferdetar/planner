@@ -512,13 +512,25 @@ function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, b
   )
 }
 
+const CATEGORY_COLORS = {
+  'CSEA': '#b87a38',
+  'LAUSD / iCAAP': '#3a5c4a',
+  'GCU': '#5a7848',
+  'Business': '#4a6a8a',
+  'Household Finances': '#8a5a3a',
+  'Jeff': '#7a4a6a',
+  'Home': '#4a7a6a',
+  'Personal Development': '#6a5a8a',
+}
+
 function MasterTasksPanel({ masterTasks, onDelete }) {
-  const groups = [
-    ['High', masterTasks.filter(t => t.priority==='high'), '#e05c5c'],
-    ['Medium', masterTasks.filter(t => t.priority==='medium'), '#f0a040'],
-    ['Low', masterTasks.filter(t => t.priority==='low'), '#5c9ee0'],
-    ['Other', masterTasks.filter(t => !['high','medium','low'].includes(t.priority)), '#aaa'],
-  ]
+  const categoryMap = {}
+  masterTasks.forEach(t => {
+    const cat = t.category || 'Other'
+    if (!categoryMap[cat]) categoryMap[cat] = []
+    categoryMap[cat].push(t)
+  })
+  const categories = Object.keys(categoryMap)
   return (
     <div className="rp-panel">
       <div className="rp-header">
@@ -527,12 +539,15 @@ function MasterTasksPanel({ masterTasks, onDelete }) {
       </div>
       <div className="rp-task-list">
         {masterTasks.length === 0 && <p className="rp-empty">No backlog tasks.</p>}
-        {groups.map(([label, group, color]) => group.length > 0 && (
-          <div key={label} className="rp-priority-group">
-            <div className="rp-priority-label" style={{ color }}>{label}</div>
-            {group.map(task => <MasterRow key={task.id} task={task} onDelete={onDelete} color={color} />)}
-          </div>
-        ))}
+        {categories.map(cat => {
+          const color = CATEGORY_COLORS[cat] || '#aaa'
+          return (
+            <div key={cat} className="rp-priority-group">
+              <div className="rp-priority-label" style={{ color }}>{cat}</div>
+              {categoryMap[cat].map(task => <MasterRow key={task.id} task={task} onDelete={onDelete} color={color} />)}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
