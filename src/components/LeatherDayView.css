@@ -50,8 +50,8 @@
     repeating-linear-gradient(
       transparent,
       transparent 27px,
-      rgba(180,170,150,0.18) 27px,
-      rgba(180,170,150,0.18) 28px
+      rgba(160,145,120,0.38) 27px,
+      rgba(160,145,120,0.38) 28px
     ),
     #faf8f2;
   border-right: 1px solid #e0d8cc;
@@ -66,8 +66,8 @@
     repeating-linear-gradient(
       transparent,
       transparent 27px,
-      rgba(180,170,150,0.18) 27px,
-      rgba(180,170,150,0.18) 28px
+      rgba(160,145,120,0.38) 27px,
+      rgba(160,145,120,0.38) 28px
     ),
     #faf8f2;
   display: flex;
@@ -214,7 +214,7 @@
   align-items: center;
   gap: 6px;
   height: 27px;
-  border-bottom: 1px solid rgba(180,165,140,0.18);
+  border-bottom: 1px solid rgba(160,145,120,0.38);
   padding: 0 2px;
   flex-shrink: 0;
 }
@@ -222,7 +222,7 @@
 
 .lp-blank-line {
   height: 27px;
-  border-bottom: 1px solid rgba(180,165,140,0.18);
+  border-bottom: 1px solid rgba(160,145,120,0.38);
   flex-shrink: 0;
 }
 
@@ -726,14 +726,14 @@
   align-items: center;
   gap: 8px;
   height: 30px;
-  border-bottom: 1px solid rgba(180,165,140,0.2);
+  border-bottom: 1px solid rgba(160,145,120,0.38);
   padding: 0 2px;
 }
 .rp-task-row.done .rp-task-title { text-decoration: line-through; color: #b0a090; }
 
 .rp-blank-line {
   height: 30px;
-  border-bottom: 1px solid rgba(180,165,140,0.2);
+  border-bottom: 1px solid rgba(160,145,120,0.38);
   flex-shrink: 0;
 }
 
