@@ -14,8 +14,6 @@ const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 6)
 
 const ALL_TABS = [
-  { key: 'daily-tasks',  label: 'Daily Tasks',  color: '#4a8a78' },
-  { key: 'schedule',     label: 'Schedule',     color: '#2d6358' },
   { key: 'master-tasks', label: 'Master Tasks', color: '#b87a38' },
   { key: 'roles',        label: 'Roles',        color: '#8a4848' },
   { key: 'goals',        label: 'Goals',        color: '#5a7848' },
@@ -82,7 +80,10 @@ export default function LeatherDayView({
   paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
 }) {
   const today = new Date()
-  const [rightTab, setRightTab] = useState(() => viewToTab(view))
+  const [rightTab, setRightTab] = useState(() => {
+    const t = viewToTab(view)
+    return (t === 'daily-tasks' || t === 'schedule') ? 'master-tasks' : t
+  })
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
   const [addingBlock, setAddingBlock] = useState(null)
@@ -93,7 +94,7 @@ export default function LeatherDayView({
   // Sync external view changes into tab state
   useEffect(() => {
     const tab = viewToTab(view)
-    setRightTab(tab)
+    setRightTab((tab === 'daily-tasks' || tab === 'schedule') ? 'master-tasks' : tab)
   }, [view])
 
   function handleTabClick(tab) {
@@ -207,14 +208,6 @@ export default function LeatherDayView({
           <div className="right-page-inner">
 
             {/* Day content tabs */}
-            {rightTab === 'daily-tasks' && (
-              <DailyTasksPanel pending={pending} done={done}
-                onToggle={onToggleTask} onDelete={onDeleteTask}
-                showAdd={showAddTask} setShowAdd={setShowAddTask}
-                newText={newTaskText} setNewText={setNewTaskText}
-                onSubmit={handleAddTask} selectedDate={selectedDate} />
-            )}
-            {rightTab === 'schedule' && <SchedulePanel {...scheduleProps} />}
             {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
             {(rightTab === 'roles' || rightTab === 'goals' || rightTab === 'meetings') && (
               <SectionTextPanel
