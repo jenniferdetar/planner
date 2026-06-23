@@ -154,12 +154,8 @@ export default function App() {
   const rangedMeetings = useMeetingsInRange(userId, calFetchStart, calFetchEnd)
 
   async function reconnectGoogle() {
-    try {
-      const { error } = await signInWithGoogle()
-      if (error) alert('Google Calendar error: ' + error.message)
-    } catch (e) {
-      alert('Google Calendar error: ' + e.message)
-    }
+    // Sign out first so Supabase triggers a full fresh OAuth flow with calendar scope
+    await signOut()
   }
 
   // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
