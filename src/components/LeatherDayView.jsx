@@ -15,7 +15,6 @@ const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 6)
 
 const ALL_TABS = [
-  { key: 'meetings',     label: '',             color: '#3a5c4a' },
   { key: 'master-tasks', label: 'Master Tasks', color: '#b87a38' },
   { key: 'roles',        label: 'Roles',        color: '#8a4848' },
   { key: 'goals',        label: 'Goals',        color: '#5a7848' },
@@ -27,7 +26,7 @@ const ALL_TABS = [
   { key: 'wywo',         label: 'WYWO',         color: '#4a3a58', nav: true },
 ]
 
-const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks','roles','goals','meetings'])
+const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks','roles','goals'])
 
 function viewToTab(view) {
   if (!view || view === 'day') return 'daily-tasks'
@@ -231,7 +230,6 @@ export default function LeatherDayView({
                 onChange={onUpdateSection}
               />
             )}
-            {rightTab === 'meetings' && <SchedulePanel {...scheduleProps} />}
 
             {/* Nav view tabs — render full view components inside binder */}
             {rightTab === 'week' && (
@@ -479,62 +477,6 @@ function DailyTasksPanel({ pending, done, onToggle, onDelete, showAdd, setShowAd
   )
 }
 
-function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, blockText, setBlockText, blockStart, setBlockStart, blockEnd, setBlockEnd, openAddBlock, handleAddBlock, setAddingBlock, calAuthExpired, onReconnectGoogle }) {
-  const today = new Date()
-  return (
-    <div className="rp-panel">
-      <div className="rp-header">
-        <span className="rp-subtitle">{DAY_NAMES[selectedDate.getDay()]}, {MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getDate()}</span>
-      </div>
-      {calAuthExpired && (
-        <div className="gcal-reconnect-banner">
-          <span>Google Calendar disconnected</span>
-          <button onClick={onReconnectGoogle}>Reconnect</button>
-        </div>
-      )}
-      <div className="rp-schedule-body">
-        {HOURS.map(hour => {
-          const blocksHere = timeBlocks.filter(b => b.hour === hour)
-          const isAddingHere = addingBlock === hour
-          const isCurrent = sameDay(selectedDate, today) && new Date().getHours() === hour
-          return (
-            <div key={hour} className={`rp-time-row ${isCurrent ? 'current' : ''}`}>
-              <div className="rp-hour-label">
-                {formatHour(hour)}<span className="rp-hour-ampm">{hour < 12 ? 'am' : 'pm'}</span>
-              </div>
-              <div className="rp-hour-body">
-                {isCurrent && <div className="rp-now-line" />}
-                {blocksHere.map(b => (
-                  <div key={b.id} className="rp-block" style={{ background: b.color || '#4a90d9' }}>
-                    <span className="rp-block-title">{b.title || b.text}</span>
-                    {b.startLabel && <span className="rp-block-time">{b.startLabel}–{b.endLabel}</span>}
-                    {b.calendarName && <span className="rp-block-cal">{b.calendarName}</span>}
-                    {b.source !== 'google' && <button className="rp-block-del" onClick={() => onDeleteBlock?.(b.id)}>✕</button>}
-                  </div>
-                ))}
-                {isAddingHere ? (
-                  <div className="rp-add-block-form">
-                    <input autoFocus type="text" placeholder="Event…" value={blockText}
-                      onChange={e => setBlockText(e.target.value)}
-                      onKeyDown={e => { if (e.key==='Enter') handleAddBlock(hour); if (e.key==='Escape') setAddingBlock(null) }}
-                      className="lp-block-input" />
-                    <input type="time" value={blockStart} onChange={e => setBlockStart(e.target.value)} className="lp-time-input" />
-                    <span>–</span>
-                    <input type="time" value={blockEnd} onChange={e => setBlockEnd(e.target.value)} className="lp-time-input" />
-                    <button className="lp-save-btn sm" onClick={() => handleAddBlock(hour)}>+</button>
-                    <button className="lp-cancel-btn" onClick={() => setAddingBlock(null)}>✕</button>
-                  </div>
-                ) : (
-                  <button className="rp-add-hour-btn" onClick={() => openAddBlock(hour)}>+</button>
-                )}
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
 
 const CATEGORY_COLORS = {
   'CSEA': '#b87a38',
