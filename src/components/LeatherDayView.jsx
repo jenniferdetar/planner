@@ -8,6 +8,7 @@ import IcaapTracker from './IcaapTracker'
 import GcuPanel from './GcuPanel'
 import FinancialPanel from './FinancialPanel'
 import WhileYouWereOut from './WhileYouWereOut'
+import ContractReference from './ContractReference'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
@@ -24,6 +25,7 @@ const ALL_TABS = [
   { key: 'gcu',          label: 'GCU',          color: '#5a7848', nav: true },
   { key: 'finance',      label: 'Finance',      color: '#3a5c4a', nav: true },
   { key: 'wywo',         label: 'WYWO',         color: '#4a3a58', nav: true },
+  { key: 'contract',     label: 'Contract',     color: '#2a5878', nav: true },
 ]
 
 const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks','roles','goals'])
@@ -329,6 +331,11 @@ export default function LeatherDayView({
             {rightTab === 'wywo' && (
               <div className="binder-view-wrap">
                 <WhileYouWereOut userId={userId} />
+              </div>
+            )}
+            {rightTab === 'contract' && (
+              <div className="binder-view-wrap">
+                <ContractReference userId={userId} />
               </div>
             )}
 
