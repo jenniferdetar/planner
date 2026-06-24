@@ -122,9 +122,16 @@ export default function App() {
     }
   }
 
-  // Merge Asana tasks into local lists (read-only, source='asana')
+  // Merge Asana tasks into local lists — only tasks due within the current week
   const allMasterTasks = masterTasks
-  const allDailyTasks = [...dailyTasks, ...asanaTasks.filter(t => t.due_on)]
+  const _ws = new Date(selectedDate); _ws.setDate(_ws.getDate() - _ws.getDay())
+  const _we = new Date(_ws); _we.setDate(_we.getDate() + 6)
+  const _weekStart = _ws.toISOString().split('T')[0]
+  const _weekEnd   = _we.toISOString().split('T')[0]
+  const allDailyTasks = [
+    ...dailyTasks,
+    ...asanaTasks.filter(t => t.due_on && t.due_on >= _weekStart && t.due_on <= _weekEnd),
+  ]
 
   // Fetch Google Calendar events: full month grid when in month view, else current week
   const calFetchStart = (() => {
