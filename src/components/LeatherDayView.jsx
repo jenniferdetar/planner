@@ -347,7 +347,9 @@ export default function LeatherDayView({
                   onClick={() => handleTabClick(tab)}
                   title={tab.label}
                 >
-                  <span>{tab.label}</span>
+                  {tab.label.split(' ').map((word, i) => (
+                    <span key={i}>{word}</span>
+                  ))}
                 </button>
               )
             })}
