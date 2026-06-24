@@ -1177,9 +1177,11 @@ a.lp-task-title:hover {
     flex-direction: row; height: 22px; width: 100%;
     padding: 0 40px; justify-content: space-evenly;
   }
+  .right-page { flex-direction: column; }
   .right-tabs {
     flex-direction: row; width: 100%; height: 32px;
     border-left: none; border-top: 1px solid rgba(160,145,120,0.2);
+    flex-shrink: 0;
   }
   .right-tab { min-height: unset; flex: 1; }
   .right-tab span {
