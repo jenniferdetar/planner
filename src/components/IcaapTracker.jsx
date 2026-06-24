@@ -1268,7 +1268,12 @@ function TranscriptsPanel({ userId }) {
   return (
     <div className="tr-panel">
       <div className="tr-toolbar">
-        <span className="tr-title">2025–2026 Transcripts</span>
+        <a
+          className="tr-title tr-title-link"
+          href="https://lausd-my.sharepoint.com/:x:/r/personal/jennifer_detar_lausd_net/Documents/2025-2026%20Transcripts.xlsx?d=wf58c588a79ec4907a35067c636778268&csf=1&web=1&e=1f8pLN"
+          target="_blank"
+          rel="noopener noreferrer"
+        >2025–2026 Transcripts ↗</a>
         <div className="tr-toolbar-right">
           {saved && <span className="icaap-note-saved">Saved ✓</span>}
           {!pasteMode && (
