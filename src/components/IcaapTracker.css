@@ -615,6 +615,13 @@
   font-weight: 600;
   color: #3d5a8a;
 }
+a.tr-title-link {
+  text-decoration: none;
+}
+a.tr-title-link:hover {
+  text-decoration: underline;
+  color: #2a4a7a;
+}
 
 .tr-toolbar-right {
   display: flex;
