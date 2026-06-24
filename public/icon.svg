@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#5c3d20"/>
+  <!-- Inner leather panel -->
+  <rect x="55" y="55" width="402" height="402" rx="55" fill="#6b4a28"/>
+  <!-- Spine -->
+  <rect x="55" y="55" width="75" height="402" rx="0" fill="#4a2e14"/>
+  <rect x="55" y="55" width="75" height="402" rx="55" fill="#4a2e14"/>
+  <rect x="94" y="55" width="36" height="402" fill="#4a2e14"/>
+  <!-- Binder rings -->
+  <circle cx="130" cy="176" r="18" fill="none" stroke="#c8a87a" stroke-width="10"/>
+  <circle cx="130" cy="256" r="18" fill="none" stroke="#c8a87a" stroke-width="10"/>
+  <circle cx="130" cy="336" r="18" fill="none" stroke="#c8a87a" stroke-width="10"/>
+  <!-- M letter -->
+  <text x="316" y="336" font-family="Georgia, 'Times New Roman', serif" font-size="230" font-weight="bold" fill="#e8d5b0" text-anchor="middle" letter-spacing="-10">M</text>
+</svg>
