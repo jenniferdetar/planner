@@ -152,7 +152,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
         <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
-        <button data-t="transcripts" className={`icaap-tab ${tab === 'transcripts' ? 'active' : ''}`} onClick={() => setTab('transcripts')}>Transcripts</button>
         <button data-t="notes" className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
         <button data-t="links" className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
       </div>
@@ -181,11 +180,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
           {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#a0c878" />}
         </div>
-      )}
-
-      {/* Transcripts tab */}
-      {tab === 'transcripts' && (
-        <TranscriptsPanel userId={userId} />
       )}
 
       {/* Notes tab */}
@@ -283,7 +277,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       )}
 
       {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'transcripts' || tab === 'notes' || tab === 'links') ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links') ? 'none' : undefined }}>
         {false ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (
@@ -297,7 +291,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       </div>
 
       {/* Add form — hidden on Asana/Attendance tabs */}
-      {showForm && tab !== 'asana' && tab !== 'attendance' && tab !== 'transcripts' && tab !== 'notes' && (
+      {showForm && tab !== 'asana' && tab !== 'attendance' && tab !== 'notes' && (
         <form className="icaap-form" onSubmit={handleAdd}>
           <input className="icaap-input" placeholder="Title *" value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))} autoFocus />
