@@ -15,7 +15,7 @@ const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 6)
 
 const ALL_TABS = [
-  { key: 'meetings',     label: 'Schedule',     color: '#3a5c4a' },
+  { key: 'meetings',     label: '',             color: '#3a5c4a' },
   { key: 'master-tasks', label: 'Master Tasks', color: '#b87a38' },
   { key: 'roles',        label: 'Roles',        color: '#8a4848' },
   { key: 'goals',        label: 'Goals',        color: '#5a7848' },
