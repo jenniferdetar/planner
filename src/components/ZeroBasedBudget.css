@@ -121,7 +121,7 @@
   display: flex;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow: auto;
   gap: 3px;
   padding: 3px;
   background: #c8c4be;
