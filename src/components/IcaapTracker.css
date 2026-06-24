@@ -873,6 +873,7 @@
 
 .icaap-table-wrap {
   flex: 1;
+  min-height: 0;
   overflow: auto;
   padding: 20px;
   display: flex;
@@ -1619,6 +1620,20 @@
   text-transform: uppercase;
   letter-spacing: 0.6px;
   color: #888;
+}
+
+.icaap-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.icaap-item-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .icaap-notes-section {
