@@ -776,7 +776,7 @@
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  word-spacing: 4px;
+  word-spacing: -2px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.88);
   white-space: normal;
