@@ -618,6 +618,7 @@
   min-width: 200px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   background: #ffffff;
   overflow-y: auto;
   overflow-x: auto;
@@ -634,6 +635,7 @@
   top: 0;
   z-index: 3;
   flex-shrink: 0;
+  min-width: 100%;
 }
 
 .zbb-alloc-col-headers > span {
@@ -661,6 +663,7 @@
   position: sticky;
   top: 30px; /* height of col-headers */
   z-index: 2;
+  min-width: 100%;
 }
 
 .zbb-alloc-section-header > span {
@@ -678,6 +681,7 @@
   padding: 0 8px;
   background: #ffffff;
   border-bottom: 1px solid #f0ece0;
+  min-width: 100%;
 }
 
 .zbb-alloc-env-row > span {
@@ -741,6 +745,7 @@
   border-top: 2px solid #b2dfdb;
   border-bottom: 2px solid #b2dfdb;
   padding: 0 8px;
+  min-width: 100%;
 }
 
 .zbb-alloc-subtotal-row > span {
