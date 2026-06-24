@@ -484,7 +484,6 @@ function SchedulePanel({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, b
   return (
     <div className="rp-panel">
       <div className="rp-header">
-        <span className="rp-title">Schedule</span>
         <span className="rp-subtitle">{DAY_NAMES[selectedDate.getDay()]}, {MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getDate()}</span>
       </div>
       {calAuthExpired && (
