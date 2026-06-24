@@ -1,0 +1,304 @@
+.hoa-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #fff;
+  font-size: 13px;
+}
+
+/* Header */
+.hoa-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+  background: #faf8f4;
+}
+.hoa-header-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #3a2a6a;
+  letter-spacing: 0.3px;
+}
+.hoa-add-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 5px;
+  border: 1px solid #7b5ea7;
+  color: #7b5ea7;
+  background: transparent;
+  cursor: pointer;
+}
+.hoa-add-btn:hover { background: #f0ebf9; }
+
+/* Stats */
+.hoa-stats {
+  display: flex;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+}
+.hoa-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  border-right: 1px solid #f0ede6;
+}
+.hoa-stat:last-child { border-right: none; }
+.hoa-stat-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cat);
+  line-height: 1;
+}
+.hoa-stat-lbl {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #aaa;
+  margin-top: 2px;
+}
+
+/* Category tabs */
+.hoa-tabs {
+  display: flex;
+  gap: 0;
+  padding: 8px 12px 0;
+  border-bottom: 1px solid #e8e5de;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.hoa-tab {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border: none;
+  background: transparent;
+  color: #999;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.hoa-tab:hover { color: var(--tab-col); }
+.hoa-tab.active { color: var(--tab-col); border-bottom-color: var(--tab-col); }
+
+/* Form */
+.hoa-form {
+  padding: 12px 16px;
+  border-bottom: 2px solid #e8e5de;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  background: #faf8f4;
+}
+.hoa-form-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.hoa-input {
+  flex: 1;
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid #d8d4cc;
+  border-radius: 5px;
+  outline: none;
+  background: #fff;
+  color: #2a2520;
+  font-family: inherit;
+}
+.hoa-input-sm { flex: 0 0 auto; width: 90px; }
+.hoa-input:focus { border-color: #7b5ea7; }
+.hoa-select {
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid #d8d4cc;
+  border-radius: 5px;
+  background: #fff;
+  color: #2a2520;
+  cursor: pointer;
+  font-family: inherit;
+}
+.hoa-textarea {
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid #d8d4cc;
+  border-radius: 5px;
+  resize: vertical;
+  outline: none;
+  background: #fff;
+  color: #2a2520;
+  font-family: inherit;
+  line-height: 1.5;
+}
+.hoa-textarea:focus { border-color: #7b5ea7; }
+
+.hoa-btn-group {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.hoa-btn-option {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 4px;
+  border: 1px solid var(--bc);
+  color: var(--bc);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.hoa-btn-option.active { background: var(--bc); color: #fff; }
+
+.hoa-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.hoa-cancel-btn {
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #666;
+  cursor: pointer;
+}
+.hoa-save-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 16px;
+  border-radius: 4px;
+  border: none;
+  background: #7b5ea7;
+  color: #fff;
+  cursor: pointer;
+}
+.hoa-save-btn:hover { background: #6a4d96; }
+
+/* Items list */
+.hoa-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.hoa-empty {
+  color: #aaa;
+  font-size: 12px;
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.hoa-item {
+  border-bottom: 1px solid #f0ede6;
+}
+.hoa-item-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.hoa-item-main:hover { background: #faf8f4; }
+.hoa-item.expanded .hoa-item-main { background: #f5f2fc; }
+
+.hoa-item-cat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.hoa-item-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.hoa-item-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2a2520;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hoa-item-unit {
+  color: #7b5ea7;
+  font-weight: 700;
+}
+.hoa-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hoa-item-date {
+  font-size: 10px;
+  color: #aaa;
+}
+.hoa-item-priority {
+  font-size: 10px;
+  font-weight: 700;
+}
+.hoa-item-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.hoa-item-chevron {
+  font-size: 9px;
+  color: #bbb;
+  flex-shrink: 0;
+}
+
+.hoa-item-detail {
+  padding: 8px 16px 12px 32px;
+  background: #faf8fc;
+  border-top: 1px solid #ece8f5;
+}
+.hoa-item-notes {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 10px;
+}
+.hoa-item-actions {
+  display: flex;
+  gap: 8px;
+}
+.hoa-edit-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid #7b5ea7;
+  color: #7b5ea7;
+  background: transparent;
+  cursor: pointer;
+}
+.hoa-edit-btn:hover { background: #f0ebf9; }
+.hoa-del-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid #e05c5c;
+  color: #e05c5c;
+  background: transparent;
+  cursor: pointer;
+}
+.hoa-del-btn:hover { background: #fdf0f0; }
