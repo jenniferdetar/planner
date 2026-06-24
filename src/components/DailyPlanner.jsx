@@ -538,7 +538,16 @@ function DailyTaskRow({ task, index, onToggle, onDelete, onUpdateNotes }) {
         <button className="asana-check" onClick={() => onToggle(task.id)}>
           <span className={`asana-circle ${task.completed ? 'checked' : ''}`} />
         </button>
-        <span className="asana-title">{task.title}</span>
+        {task.source === 'asana' ? (
+          <a
+            className="asana-title"
+            href={`https://app.asana.com/0/0/${task.id.replace('asana_', '')}/f`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >{task.title}</a>
+        ) : (
+          <span className="asana-title">{task.title}</span>
+        )}
         <div className="asana-row-meta">
           {dueLabel && <span className="asana-due">{dueLabel}</span>}
           <button className="asana-notes-btn" onClick={() => setExpanded(e => !e)} title="Notes">≡</button>
