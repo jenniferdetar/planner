@@ -386,6 +386,15 @@
   border-top: 1px solid #f0ede6;
 }
 
+a.asana-title {
+  text-decoration: none;
+  color: inherit;
+}
+a.asana-title:hover {
+  text-decoration: underline;
+  color: #3d5a8a;
+}
+
 .asana-row.done .asana-title {
   text-decoration: line-through;
   color: #bbb;

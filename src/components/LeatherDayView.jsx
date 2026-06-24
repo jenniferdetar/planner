@@ -425,7 +425,16 @@ function LpTaskRow({ task, index, onToggle, onDelete, done, tag, onCycleTag }) {
       <button className="lp-check" onClick={() => onToggle(task.id)}>
         <span className={`lp-circle ${done ? 'checked' : ''}`} />
       </button>
-      <span className="lp-task-title">{task.title}</span>
+      {task.source === 'asana' ? (
+        <a
+          className="lp-task-title"
+          href={`https://app.asana.com/0/0/${task.id.replace('asana_', '')}/f`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >{task.title}</a>
+      ) : (
+        <span className="lp-task-title">{task.title}</span>
+      )}
       {onCycleTag && (
         <button className="lp-tag-btn" onClick={onCycleTag}
           style={tag ? { background: TAG_COLORS[tag], color: '#fff' } : {}}>
@@ -447,7 +456,12 @@ function LpAsanaRow({ task, onComplete }) {
       <button className="lp-check" onClick={() => onComplete?.(task.id)}>
         <span className="lp-circle" />
       </button>
-      <span className="lp-asana-title">{task.title || task.name}</span>
+      <a
+        className="lp-asana-title"
+        href={`https://app.asana.com/0/0/${(task.id || '').replace('asana_', '')}/f`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >{task.title || task.name}</a>
       {dueLabel && <span className="lp-asana-due">{dueLabel}</span>}
     </div>
   )

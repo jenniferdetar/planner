@@ -271,6 +271,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+a.lp-asana-title {
+  text-decoration: none;
+}
+a.lp-asana-title:hover {
+  text-decoration: underline;
+  color: #5c3a1a;
+}
 
 .lp-asana-due {
   font-size: 9px;
@@ -324,6 +331,13 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+a.lp-task-title {
+  text-decoration: none;
+}
+a.lp-task-title:hover {
+  text-decoration: underline;
+  color: #5c3a1a;
 }
 
 .lp-tag-btn {
