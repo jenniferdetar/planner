@@ -773,13 +773,14 @@
 .right-tab span {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  transform: rotate(180deg);
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.88);
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
   transition: color 0.15s;
 }
 
