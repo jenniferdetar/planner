@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { fetchWorkspaces, fetchMyTasks, asanaTaskToMaster, completeAsanaTask, updateAsanaTaskNotes, createTask, findOrCreateProject, fetchProjects } from '../lib/asana'
 
-const POLL_INTERVAL = 5 * 60 * 1000 // 5 minutes
+const POLL_INTERVAL = 60 * 1000 // 1 minute
 
 function matchesProject(task, name) {
   return task.memberships?.some(
@@ -19,10 +19,13 @@ export function useAsanaTasks() {
   const [status, setStatus] = useState('idle')
   const timerRef = useRef(null)
   const wsGidRef = useRef(null)
+  const syncingRef = useRef(false)
 
   async function sync(wsGid) {
     const gid = wsGid ?? wsGidRef.current
     if (!gid) return
+    if (syncingRef.current) return // prevent overlapping fetches
+    syncingRef.current = true
     setStatus('loading')
     try {
       const [raw, projectList] = await Promise.all([
@@ -39,6 +42,8 @@ export function useAsanaTasks() {
     } catch (err) {
       console.error('Asana sync failed:', err)
       setStatus('error')
+    } finally {
+      syncingRef.current = false
     }
   }
 
@@ -62,7 +67,21 @@ export function useAsanaTasks() {
 
     init()
     timerRef.current = setInterval(() => sync(), POLL_INTERVAL)
-    return () => clearInterval(timerRef.current)
+
+    // Sync immediately when the tab becomes visible or the window regains focus
+    // so completing a task in the Asana app and switching back here picks it up instantly
+    function onVisible() {
+      if (document.visibilityState === 'visible') sync()
+    }
+    function onFocus() { sync() }
+    document.addEventListener('visibilitychange', onVisible)
+    window.addEventListener('focus', onFocus)
+
+    return () => {
+      clearInterval(timerRef.current)
+      document.removeEventListener('visibilitychange', onVisible)
+      window.removeEventListener('focus', onFocus)
+    }
   }, [token])
 
   async function completeTask(id) {
