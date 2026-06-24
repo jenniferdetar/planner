@@ -749,16 +749,14 @@
   flex-direction: column;
   flex-shrink: 0;
   width: 36px;
-  overflow-y: auto;
-  scrollbar-width: none;
+  overflow: hidden;
   gap: 0;
   background: #4a6a5a;
 }
-.right-tabs::-webkit-scrollbar { display: none; }
 
 .right-tab {
-  flex-shrink: 0;
-  min-height: 56px;
+  flex: 1;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
