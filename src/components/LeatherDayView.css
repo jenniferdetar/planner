@@ -771,17 +771,15 @@
 }
 
 .right-tab span {
-  writing-mode: horizontal-tb;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.88);
-  white-space: normal;
-  word-break: break-word;
-  text-align: center;
-  line-height: 1.2;
-  padding: 0 2px;
+  white-space: nowrap;
   transition: color 0.15s;
 }
 
