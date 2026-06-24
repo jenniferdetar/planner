@@ -136,6 +136,7 @@ export default function Sidebar({
           {navItem('🎓', 'GCU', 'gcu')}
           {navItem('💰', 'Finance', 'finance')}
           {navItem('🗒️', 'While You Were Out', 'wywo')}
+          {navItem('📄', 'Contract Reference', 'contract')}
           {sectionNavItem('hoa')}
           {sectionNavItem('meetings')}
         </div>
