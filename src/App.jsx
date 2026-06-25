@@ -173,9 +173,12 @@ export default function App() {
   }
 
   // Merge Supabase meetings + Google Calendar events into time blocks for the selected day
+  // Google Cal events take precedence — drop any Supabase block whose title matches a gcal event
   const supabaseBlocks = meetings.map((m) => meetingToBlock(m, BLOCK_COLORS[0]))
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
-  const allTimeBlocks = [...supabaseBlocks, ...gcalBlocksForDay]
+  const gcalTitles = new Set(gcalBlocksForDay.map(e => e.text?.trim().toLowerCase()).filter(Boolean))
+  const dedupedSupabaseBlocks = supabaseBlocks.filter(b => !gcalTitles.has(b.text?.trim().toLowerCase()))
+  const allTimeBlocks = [...dedupedSupabaseBlocks, ...gcalBlocksForDay]
 
   // All timed events for the month calendar grid (Supabase + Google Cal)
   const supabaseBlocksForMonth = rangedMeetings.map((m) => ({
