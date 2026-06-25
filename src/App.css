@@ -91,3 +91,29 @@
     display: none;
   }
 }
+
+/* ── View mode toggle (binder → dashboard) ── */
+.view-mode-toggle {
+  position: fixed;
+  bottom: 14px;
+  right: 14px;
+  z-index: 9000;
+  background: rgba(26,35,50,0.82);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  font-size: 17px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  transition: background 0.15s, transform 0.1s;
+  backdrop-filter: blur(4px);
+}
+.view-mode-toggle:hover {
+  background: rgba(26,35,50,0.96);
+  transform: scale(1.08);
+}

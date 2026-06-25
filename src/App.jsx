@@ -19,6 +19,7 @@ import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
 import { useFamilyTree } from './hooks/useFamilyTree'
 import DailyPlanner from './components/DailyPlanner'
+import DashboardView from './components/DashboardView'
 import LoginScreen from './components/LoginScreen'
 import './App.css'
 
@@ -59,6 +60,7 @@ export default function App() {
   const { session, user, providerToken, loading, clearProviderToken } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
   const [view, setView] = useState('day')
+  const [viewMode, setViewMode] = useState('binder') // 'binder' | 'dashboard'
   const [personalSubTab, setPersonalSubTab] = useState('log')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
@@ -236,6 +238,82 @@ export default function App() {
 
   const mp = isMobile ? mobilePanel : null
 
+  if (viewMode === 'dashboard') {
+    return (
+      <DashboardView
+        userId={userId}
+        selectedDate={selectedDate}
+        onDateChange={setSelectedDate}
+        onSwitchToBinder={() => setViewMode('binder')}
+        dailyTasks={allDailyTasks}
+        onAddTask={addDailyTask}
+        onToggleTask={handleToggleDailyTask}
+        onDeleteTask={handleDeleteDailyTask}
+        timeBlocks={allTimeBlocks}
+        onAddBlock={handleAddBlock}
+        onDeleteBlock={handleDeleteBlock}
+        masterTasks={masterTasks}
+        onAddMasterTask={addMasterTask}
+        onDeleteMasterTask={deleteMasterTask}
+        onUpdateMasterTask={updateMasterTask}
+        cseaIssues={cseaIssues}
+        onAddCseaIssue={addCseaIssue}
+        onUpdateCseaStatus={updateCseaStatus}
+        onDeleteCseaIssue={deleteCseaIssue}
+        cseaInteractions={cseaInteractions}
+        onAddCseaInteraction={addCseaInteraction}
+        onUpdateCseaInteraction={updateCseaInteraction}
+        showArchivedInteractions={showArchivedInteractions}
+        onToggleArchivedInteractions={() => setShowArchivedInteractions(v => !v)}
+        asanaCseaTasks={asanaCseaTasks}
+        onCompleteAsanaTask={completeAsanaTask}
+        onUpdateAsanaTaskNotes={updateAsanaNotes}
+        cseaNotes={cseaNotes}
+        onAddCseaNote={addCseaNote}
+        onDeleteCseaNote={deleteCseaNote}
+        cseaIssueNotes={cseaIssueNotes}
+        onAddCseaIssueNote={addCseaIssueNote}
+        onDeleteCseaIssueNote={deleteCseaIssueNote}
+        icaapItems={icaapItems}
+        onAddIcaapItem={addIcaapItem}
+        onUpdateIcaapItem={updateIcaapItem}
+        onDeleteIcaapItem={deleteIcaapItem}
+        asanaIcaapTasks={asanaIcaapTasks}
+        attendanceRecords={attendanceRecords}
+        onUpsertAttendance={upsertAttendance}
+        onUpdateAttendanceNotes={updateAttendanceNotes}
+        icaapNotes={icaapNotes}
+        onAddIcaapNote={addIcaapNote}
+        onDeleteIcaapNote={deleteIcaapNote}
+        transactions={transactions}
+        onAddTransaction={addTransaction}
+        onDeleteTransaction={deleteTransaction}
+        bills={bills}
+        onAddBill={addBill}
+        onToggleBillPaid={toggleBillPaid}
+        onDeleteBill={deleteBill}
+        goals={goals}
+        onAddGoal={addGoal}
+        onUpdateGoalAmount={updateGoalAmount}
+        onDeleteGoal={deleteGoal}
+        paychecks={paychecks}
+        onAddPaycheck={addPaycheck}
+        onUpdatePaycheckAmount={updatePaycheckAmount}
+        onTogglePaycheckBill={togglePaycheckBill}
+        onDeletePaycheck={deletePaycheck}
+        onPushGcuToAsana={handlePushGcuToAsana}
+        gcuPushing={gcuPushing}
+        books={books}
+        onAddBook={addBook}
+        onUpdateBookStatus={updateBookStatus}
+        onUpdateBookChapter={updateBookChapter}
+        onDeleteBook={deleteBook}
+        onImportBooks={importBooks}
+        onSignOut={() => signOut()}
+      />
+    )
+  }
+
   return (
     <div className="app">
       <div className={mp === null || mp === 'main' ? 'mobile-active' : undefined}>
@@ -355,6 +433,13 @@ export default function App() {
           </button>
         </nav>
       )}
+      <button
+        className="view-mode-toggle"
+        onClick={() => setViewMode('dashboard')}
+        title="Switch to dashboard view"
+      >
+        ⊞
+      </button>
     </div>
   )
 }
