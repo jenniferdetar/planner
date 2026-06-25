@@ -778,16 +778,13 @@ a.lp-task-title:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
   cursor: pointer;
-  background: #00326b;
+  background: var(--tab-color);
   border: none;
-  border-bottom: 2px solid #8e2a2a;
-  outline: 2px solid #8e2a2a;
-  outline-offset: -2px;
-  transition: background 0.15s, filter 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  transition: filter 0.15s, opacity 0.15s;
   padding: 0;
-  opacity: 0.85;
+  opacity: 0.88;
 }
 
 .right-tab span {
@@ -797,14 +794,13 @@ a.lp-task-title:hover {
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #ffca38;
+  color: rgba(255,255,255,0.9);
   white-space: nowrap;
-  transition: color 0.15s;
 }
 
-.right-tab:hover { opacity: 1; filter: brightness(1.1); }
-.right-tab.active { opacity: 1; background: #ffca38; filter: none; }
-.right-tab.active span { color: #00326b; }
+.right-tab:hover { opacity: 1; filter: brightness(1.15); }
+.right-tab.active { opacity: 1; filter: brightness(1.0); background: #ffca38; }
+.right-tab.active span { color: #00326b; font-weight: 800; }
 
 /* Divider between content tabs and nav tabs */
 .right-tab.nav-tab-first {

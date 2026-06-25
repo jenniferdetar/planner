@@ -21,13 +21,13 @@ const HOURS = Array.from({ length: 15 }, (_, i) => i + 6)
 
 const ALL_TABS = [
   { key: 'csea',        label: 'CSEA',         color: '#00326b', nav: true },
-  { key: 'finance',     label: 'Finance',      color: '#b87a38', nav: true },
+  { key: 'finance',     label: 'Finance',      color: '#1e5799', nav: true },
   { key: 'gcu',         label: 'GCU',          color: '#00326b', nav: true },
-  { key: 'hoa',         label: 'HOA',          color: '#b87a38', nav: true },
+  { key: 'hoa',         label: 'HOA',          color: '#1e5799', nav: true },
   { key: 'icaap',       label: 'iCAAP',        color: '#00326b', nav: true },
-  { key: 'master-tasks',label: 'Master Tasks', color: '#b87a38' },
+  { key: 'master-tasks',label: 'Master Tasks', color: '#1e5799' },
   { key: 'matrix',      label: 'Matrix',       color: '#00326b', nav: true },
-  { key: 'personal',    label: 'Personal',     color: '#b87a38', nav: true },
+  { key: 'personal',    label: 'Personal',     color: '#1e5799', nav: true },
   { key: 'wywo',        label: 'WYWO',         color: '#00326b', nav: true },
 ]
 

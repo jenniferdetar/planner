@@ -615,13 +615,11 @@
    ══════════════════════════════════════════════ */
 .zbb-alloc-panel {
   flex: 1;
-  min-width: 200px;
+  min-width: max-content;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   background: #ffffff;
-  overflow-y: clip;
-  overflow-x: auto;
 }
 
 /* Column header row (gray) */
