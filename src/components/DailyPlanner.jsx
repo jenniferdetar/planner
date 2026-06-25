@@ -73,7 +73,7 @@ export default function DailyPlanner({
   icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
   calendarBlocks,
   calAuthExpired, onReconnectGoogle, providerToken, calEventCount, onSignOut,
-  books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
+  books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks,
   onPushGcuToAsana, gcuPushing,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
   personalSubTab, onPersonalSubTabChange,
@@ -228,6 +228,7 @@ export default function DailyPlanner({
         books={books}
         onAddBook={onAddBook}
         onUpdateBookStatus={onUpdateBookStatus}
+        onUpdateBookChapter={onUpdateBookChapter}
         onDeleteBook={onDeleteBook}
         onImportBooks={onImportBooks}
         // wywo: userId already passed above

@@ -32,6 +32,15 @@ export function useLibrary(userId) {
     if (data) setBooks(prev => prev.map(b => b.id === id ? data : b))
   }, [])
 
+  const updateChapter = useCallback(async (id, current_chapter) => {
+    const ch = Math.max(0, current_chapter)
+    const { data } = await supabase
+      .from('library_books')
+      .update({ current_chapter: ch })
+      .eq('id', id).select().single()
+    if (data) setBooks(prev => prev.map(b => b.id === id ? data : b))
+  }, [])
+
   const deleteBook = useCallback(async (id) => {
     await supabase.from('library_books').delete().eq('id', id)
     setBooks(prev => prev.filter(b => b.id !== id))
@@ -47,5 +56,5 @@ export function useLibrary(userId) {
     if (data) setBooks(prev => [...prev, ...data])
   }, [userId])
 
-  return { books, addBook, updateStatus, deleteBook, importDefaults }
+  return { books, addBook, updateStatus, updateChapter, deleteBook, importDefaults }
 }

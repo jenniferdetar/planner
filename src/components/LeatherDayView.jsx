@@ -89,7 +89,7 @@ export default function LeatherDayView({
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   // personal props
-  books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
+  books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks,
 }) {
   const today = new Date()
   const [rightTab, setRightTab] = useState(() => {
@@ -369,6 +369,7 @@ export default function LeatherDayView({
                   books={books || []}
                   onAddBook={onAddBook}
                   onUpdateBookStatus={onUpdateBookStatus}
+                  onUpdateBookChapter={onUpdateBookChapter}
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
                   allowedSubTabs={['library', 'mantra']}

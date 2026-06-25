@@ -306,3 +306,42 @@
 .add-book-btn:hover {
   background: #f8f7f5;
 }
+
+/* ── Chapter tracker ──────────────────────────────────────────────────────── */
+.chapter-tracker {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.chapter-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: 1px solid #d0cfc9;
+  background: #f5f4f0;
+  color: #4a7a6a;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.chapter-btn:hover { background: #4a7a6a; color: #fff; border-color: #4a7a6a; }
+.chapter-btn-next { background: #4a7a6a22; border-color: #4a7a6a55; }
+.chapter-btn-next:hover { background: #4a7a6a; color: #fff; }
+
+.chapter-display {
+  font-size: 10px;
+  font-weight: 700;
+  color: #4a7a6a;
+  letter-spacing: 0.3px;
+  padding: 0 3px;
+  white-space: nowrap;
+}

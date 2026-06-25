@@ -18,7 +18,7 @@ const SUB_TABS = [
   { key: 'budget',    label: 'Wants',              color: '#4a7a6a' },
 ]
 
-export default function PersonalPanel({ userId, selectedDate, onDateChange, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
+export default function PersonalPanel({ userId, selectedDate, onDateChange, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
   const visibleTabs = allowedSubTabs ? SUB_TABS.filter(t => allowedSubTabs.includes(t.key)) : SUB_TABS
   const defaultTab = visibleTabs[0]?.key || 'log'
   const dateStr = selectedDate instanceof Date
@@ -153,6 +153,7 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
           books={books || []}
           onAddBook={onAddBook}
           onUpdateStatus={onUpdateBookStatus}
+          onUpdateBookChapter={onUpdateBookChapter}
           onDeleteBook={onDeleteBook}
           onImportBooks={onImportBooks}
         />
