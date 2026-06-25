@@ -767,7 +767,7 @@ a.lp-task-title:hover {
   overflow-y: auto;
   overflow-x: hidden;
   gap: 0;
-  background: #5c3518;
+  background: #00326b;
   scrollbar-width: none;
 }
 .right-tabs::-webkit-scrollbar { display: none; }
@@ -780,12 +780,14 @@ a.lp-task-title:hover {
   justify-content: center;
   gap: 0;
   cursor: pointer;
-  background: var(--tab-color);
+  background: #00326b;
   border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.12);
-  transition: filter 0.15s;
+  border-bottom: 2px solid #8e2a2a;
+  outline: 2px solid #8e2a2a;
+  outline-offset: -2px;
+  transition: background 0.15s, filter 0.15s;
   padding: 0;
-  opacity: 0.72;
+  opacity: 0.85;
 }
 
 .right-tab span {
@@ -795,14 +797,14 @@ a.lp-task-title:hover {
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.88);
+  color: #ffca38;
   white-space: nowrap;
   transition: color 0.15s;
 }
 
-.right-tab:hover { opacity: 0.9; filter: brightness(1.12); }
-.right-tab.active { opacity: 1; filter: brightness(1.1); }
-.right-tab.active span { color: #fff; }
+.right-tab:hover { opacity: 1; filter: brightness(1.1); }
+.right-tab.active { opacity: 1; background: #ffca38; filter: none; }
+.right-tab.active span { color: #00326b; }
 
 /* Divider between content tabs and nav tabs */
 .right-tab.nav-tab-first {
