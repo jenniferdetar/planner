@@ -19,16 +19,15 @@ const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 6)
 
 const ALL_TABS = [
-  { key: 'contract',    label: 'Contract',     color: '#3164a0', nav: true },
   { key: 'csea',        label: 'CSEA',         color: '#00326b', nav: true },
-  { key: 'finance',     label: 'Finance',      color: '#3164a0', nav: true },
-  { key: 'gcu',         label: 'GCU',          color: '#53575a', nav: true },
-  { key: 'hoa',         label: 'HOA',          color: '#3164a0', nav: true },
-  { key: 'icaap',       label: 'iCAAP',        color: '#3164a0', nav: true },
-  { key: 'master-tasks',label: 'Master Tasks', color: '#00326b' },
-  { key: 'matrix',      label: 'Matrix',       color: '#53575a', nav: true },
-  { key: 'personal',    label: 'Personal',     color: '#eeb125', nav: true },
-  { key: 'wywo',        label: 'WYWO',         color: '#f7941d', nav: true },
+  { key: 'finance',     label: 'Finance',      color: '#b87a38', nav: true },
+  { key: 'gcu',         label: 'GCU',          color: '#00326b', nav: true },
+  { key: 'hoa',         label: 'HOA',          color: '#b87a38', nav: true },
+  { key: 'icaap',       label: 'iCAAP',        color: '#00326b', nav: true },
+  { key: 'master-tasks',label: 'Master Tasks', color: '#b87a38' },
+  { key: 'matrix',      label: 'Matrix',       color: '#00326b', nav: true },
+  { key: 'personal',    label: 'Personal',     color: '#b87a38', nav: true },
+  { key: 'wywo',        label: 'WYWO',         color: '#00326b', nav: true },
 ]
 
 const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks'])
@@ -330,11 +329,6 @@ export default function LeatherDayView({
             {rightTab === 'wywo' && (
               <div className="binder-view-wrap">
                 <WhileYouWereOut userId={userId} />
-              </div>
-            )}
-            {rightTab === 'contract' && (
-              <div className="binder-view-wrap">
-                <ContractReference userId={userId} />
               </div>
             )}
             {rightTab === 'hoa' && (
