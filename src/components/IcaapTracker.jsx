@@ -154,6 +154,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
         <button data-t="notes" className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
         <button data-t="links" className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
+        <button data-t="payroll" className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
       </div>
 
       {/* Dashboard tab */}
@@ -275,8 +276,11 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         />
       )}
 
+      {/* Payroll tab */}
+      {tab === 'payroll' && <PayrollSchedule />}
+
       {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links') ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links' || tab === 'payroll') ? 'none' : undefined }}>
         {false ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all'].map(f => (
@@ -1489,6 +1493,155 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
           </table>
         </div>
       )}
+    </div>
+  )
+}
+
+// ─── PayrollSchedule ──────────────────────────────────────────────────────────
+
+const PAYROLL_ROWS = [
+  // July 2026
+  { period: 'Scheduled Off-cycles',    cutoff: 'Thu, Jul 2, 2026',   pay: 'Thu, Jul 9, 2026',   area: 'Cert & Class Off-cycles' },
+  { period: '07/01/2026 – 07/15/2026', cutoff: 'Thu, Jul 16, 2026',  pay: 'Thu, Jul 23, 2026',  area: 'Semi-Monthly' },
+  { period: '07/01/2026 – 07/31/2026', cutoff: 'Thu, Jul 23, 2026',  pay: 'Fri, Jul 31, 2026',  area: 'Classified' },
+  { period: '07/01/2026 – 07/31/2026', cutoff: 'Tue, Jul 28, 2026',  pay: 'Wed, Aug 5, 2026',   area: 'Certificated' },
+  { period: '07/16/2026 – 07/31/2026', cutoff: 'Fri, Jul 31, 2026',  pay: 'Fri, Aug 7, 2026',   area: 'Semi-Monthly' },
+  // August 2026
+  { period: 'Scheduled Off-cycles',    cutoff: 'Wed, Aug 5, 2026',   pay: 'Wed, Aug 12, 2026',  area: 'Cert & Class Off-cycles' },
+  { period: '08/01/2026 – 08/15/2026', cutoff: 'Fri, Aug 14, 2026',  pay: 'Fri, Aug 21, 2026',  area: 'Semi-Monthly' },
+  { period: '08/01/2026 – 08/31/2026', cutoff: 'Thu, Aug 20, 2026',  pay: 'Mon, Aug 31, 2026',  area: 'Classified' },
+  { period: '08/01/2026 – 08/31/2026', cutoff: 'Mon, Aug 24, 2026',  pay: 'Fri, Sep 4, 2026',   area: 'Certificated' },
+  { period: '08/16/2026 – 08/31/2026', cutoff: 'Fri, Aug 28, 2026',  pay: 'Tue, Sep 8, 2026',   area: 'Semi-Monthly' },
+  // September 2026
+  { period: 'Scheduled Off-cycles',    cutoff: 'Wed, Sep 2, 2026',   pay: 'Fri, Sep 11, 2026',  area: 'Cert & Class Off-cycles' },
+  { period: '09/01/2026 – 09/15/2026', cutoff: 'Wed, Sep 16, 2026',  pay: 'Wed, Sep 23, 2026',  area: 'Semi-Monthly' },
+  { period: '09/01/2026 – 09/30/2026', cutoff: 'Tue, Sep 22, 2026',  pay: 'Wed, Sep 30, 2026',  area: 'Classified' },
+  { period: '09/01/2026 – 09/30/2026', cutoff: 'Fri, Sep 25, 2026',  pay: 'Mon, Oct 5, 2026',   area: 'Certificated' },
+  { period: '09/16/2026 – 09/30/2026', cutoff: 'Thu, Oct 1, 2026',   pay: 'Thu, Oct 8, 2026',   area: 'Semi-Monthly' },
+  // October 2026
+  { period: 'Scheduled Off-cycles',    cutoff: 'Mon, Oct 5, 2026',   pay: 'Tue, Oct 13, 2026',  area: 'Cert & Class Off-cycles' },
+  { period: '10/01/2026 – 10/15/2026', cutoff: 'Fri, Oct 16, 2026',  pay: 'Fri, Oct 23, 2026',  area: 'Semi-Monthly' },
+  { period: '10/01/2026 – 10/31/2026', cutoff: 'Thu, Oct 22, 2026',  pay: 'Fri, Oct 30, 2026',  area: 'Classified' },
+  { period: '10/01/2026 – 10/31/2026', cutoff: 'Wed, Oct 28, 2026',  pay: 'Thu, Nov 5, 2026',   area: 'Certificated' },
+  { period: '10/16/2026 – 10/31/2026', cutoff: 'Fri, Oct 30, 2026',  pay: 'Fri, Nov 6, 2026',   area: 'Semi-Monthly' },
+  // November 2026
+  { period: 'Scheduled Off-cycles',    cutoff: 'Thu, Nov 5, 2026',   pay: 'Thu, Nov 12, 2026',  area: 'Cert & Class Off-cycles' },
+  { period: '11/01/2026 – 11/15/2026', cutoff: 'Mon, Nov 16, 2026',  pay: 'Mon, Nov 23, 2026',  area: 'Semi-Monthly' },
+  { period: '11/01/2026 – 11/30/2026', cutoff: 'Thu, Nov 19, 2026',  pay: 'Mon, Nov 30, 2026',  area: 'Classified' },
+  { period: '11/01/2026 – 11/30/2026', cutoff: 'Fri, Nov 20, 2026',  pay: 'Fri, Dec 4, 2026',   area: 'Certificated' },
+  { period: '11/16/2026 – 11/30/2026', cutoff: 'Tue, Dec 1, 2026',   pay: 'Tue, Dec 8, 2026',   area: 'Semi-Monthly' },
+  // December 2026
+  { period: 'Scheduled Off-cycles',    cutoff: 'Thu, Dec 3, 2026',   pay: 'Fri, Dec 11, 2026',  area: 'Cert & Class Off-cycles' },
+  { period: '12/01/2026 – 12/15/2026', cutoff: 'Fri, Dec 11, 2026',  pay: 'Wed, Dec 23, 2026',  area: 'Semi-Monthly' },
+  { period: '12/01/2026 – 12/31/2026', cutoff: 'Fri, Dec 11, 2026',  pay: 'Thu, Dec 31, 2026',  area: 'Classified' },
+  { period: '12/01/2026 – 12/31/2026', cutoff: 'Fri, Dec 11, 2026',  pay: 'Tue, Jan 5, 2027',   area: 'Certificated' },
+  { period: '12/16/2026 – 12/31/2026', cutoff: 'Fri, Dec 11, 2026',  pay: 'Fri, Jan 8, 2027',   area: 'Semi-Monthly' },
+  // January 2027
+  { period: 'Scheduled Off-cycles',    cutoff: 'Tue, Jan 5, 2027',   pay: 'Tue, Jan 12, 2027',  area: 'Cert & Class Off-cycles' },
+  { period: '01/01/2027 – 01/15/2027', cutoff: 'Thu, Jan 14, 2027',  pay: 'Fri, Jan 22, 2027',  area: 'Semi-Monthly' },
+  { period: '01/01/2027 – 01/31/2027', cutoff: 'Thu, Jan 21, 2027',  pay: 'Fri, Jan 29, 2027',  area: 'Classified' },
+  { period: '01/01/2027 – 01/31/2027', cutoff: 'Thu, Jan 28, 2027',  pay: 'Fri, Feb 5, 2027',   area: 'Certificated' },
+  { period: '01/16/2027 – 01/31/2027', cutoff: 'Mon, Feb 1, 2027',   pay: 'Mon, Feb 8, 2027',   area: 'Semi-Monthly' },
+  // February 2027
+  { period: 'Scheduled Off-cycles',    cutoff: 'Fri, Feb 5, 2027',   pay: 'Fri, Feb 12, 2027',  area: 'Cert & Class Off-cycles' },
+  { period: '02/01/2027 – 02/15/2027', cutoff: 'Tue, Feb 16, 2027',  pay: 'Tue, Feb 23, 2027',  area: 'Semi-Monthly' },
+  { period: '02/01/2027 – 02/28/2027', cutoff: 'Thu, Feb 18, 2027',  pay: 'Fri, Feb 26, 2027',  area: 'Classified' },
+  { period: '02/01/2027 – 02/28/2027', cutoff: 'Thu, Feb 25, 2027',  pay: 'Fri, Mar 5, 2027',   area: 'Certificated' },
+  { period: '02/16/2027 – 02/28/2027', cutoff: 'Mon, Mar 1, 2027',   pay: 'Mon, Mar 8, 2027',   area: 'Semi-Monthly' },
+  // March 2027
+  { period: 'Scheduled Off-cycles',    cutoff: 'Fri, Mar 5, 2027',   pay: 'Fri, Mar 12, 2027',  area: 'Cert & Class Off-cycles' },
+  { period: '03/01/2027 – 03/15/2027', cutoff: 'Tue, Mar 16, 2027',  pay: 'Tue, Mar 23, 2027',  area: 'Semi-Monthly' },
+  { period: '03/01/2027 – 03/31/2027', cutoff: 'Fri, Mar 19, 2027',  pay: 'Wed, Mar 31, 2027',  area: 'Classified' },
+  { period: '03/01/2027 – 03/31/2027', cutoff: 'Fri, Mar 19, 2027',  pay: 'Mon, Apr 5, 2027',   area: 'Certificated' },
+  { period: '03/16/2027 – 03/31/2027', cutoff: 'Thu, Apr 1, 2027',   pay: 'Thu, Apr 8, 2027',   area: 'Semi-Monthly' },
+  // April 2027
+  { period: 'Scheduled Off-cycles',    cutoff: 'Mon, Apr 5, 2027',   pay: 'Mon, Apr 12, 2027',  area: 'Cert & Class Off-cycles' },
+  { period: '04/01/2027 – 04/15/2027', cutoff: 'Fri, Apr 16, 2027',  pay: 'Fri, Apr 23, 2027',  area: 'Semi-Monthly' },
+  { period: '04/01/2027 – 04/30/2027', cutoff: 'Thu, Apr 22, 2027',  pay: 'Fri, Apr 30, 2027',  area: 'Classified' },
+  { period: '04/01/2027 – 04/30/2027', cutoff: 'Tue, Apr 27, 2027',  pay: 'Wed, May 5, 2027',   area: 'Certificated' },
+  { period: '04/16/2027 – 04/30/2027', cutoff: 'Fri, Apr 30, 2027',  pay: 'Fri, May 7, 2027',   area: 'Semi-Monthly' },
+  // May 2027
+  { period: 'Scheduled Off-cycles',    cutoff: 'Wed, May 5, 2027',   pay: 'Wed, May 12, 2027',  area: 'Cert & Class Off-cycles' },
+  { period: '05/01/2027 – 05/15/2027', cutoff: 'Fri, May 14, 2027',  pay: 'Fri, May 21, 2027',  area: 'Semi-Monthly' },
+  { period: '05/01/2027 – 05/31/2027', cutoff: 'Thu, May 20, 2027',  pay: 'Fri, May 28, 2027',  area: 'Classified' },
+  { period: '05/01/2027 – 05/31/2027', cutoff: 'Wed, May 26, 2027',  pay: 'Fri, Jun 4, 2027',   area: 'Certificated' },
+  { period: '05/16/2027 – 05/31/2027', cutoff: 'Tue, Jun 1, 2027',   pay: 'Tue, Jun 8, 2027',   area: 'Semi-Monthly' },
+  // June 2027
+  { period: 'Scheduled Off-cycles',    cutoff: 'Fri, Jun 4, 2027',   pay: 'Fri, Jun 11, 2027',  area: 'Cert & Class Off-cycles' },
+  { period: '06/01/2027 – 06/15/2027', cutoff: 'Tue, Jun 15, 2027',  pay: 'Wed, Jun 23, 2027',  area: 'Semi-Monthly' },
+  { period: '06/01/2027 – 06/30/2027', cutoff: 'Mon, Jun 21, 2027',  pay: 'Wed, Jun 30, 2027',  area: 'Classified' },
+  { period: '06/01/2027 – 06/30/2027', cutoff: 'Wed, Jun 23, 2027',  pay: 'Fri, Jul 2, 2027',   area: 'Certificated' },
+  { period: '06/16/2027 – 06/30/2027', cutoff: 'Tue, Jun 29, 2027',  pay: 'Thu, Jul 8, 2027',   area: 'Semi-Monthly' },
+  // July 2027
+  { period: 'Scheduled Off-cycles',    cutoff: 'Thu, Jul 1, 2027',   pay: 'Mon, Jul 12, 2027',  area: 'Cert & Class Off-cycles' },
+]
+
+const AREA_COLORS = {
+  'Cert & Class Off-cycles': '#7b5ea7',
+  'Semi-Monthly':            '#3a6a9a',
+  'Classified':              '#3a5c4a',
+  'Certificated':            '#7a4a28',
+}
+
+function PayrollSchedule() {
+  const today = new Date()
+  const todayStr = today.toISOString().split('T')[0]
+
+  function parseDate(str) {
+    return new Date(str.replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s*/, ''))
+  }
+
+  function isPast(dateStr) {
+    return parseDate(dateStr) < today
+  }
+
+  function isUpcoming(dateStr) {
+    const d = parseDate(dateStr)
+    const diff = (d - today) / (1000 * 60 * 60 * 24)
+    return diff >= 0 && diff <= 7
+  }
+
+  return (
+    <div className="payroll-panel">
+      <div className="payroll-header">
+        <span className="payroll-title">2026–2027 CATS Cut-Off &amp; Pay Dates</span>
+        <span className="payroll-sub">REV. 06/16/2026</span>
+      </div>
+      <div className="payroll-legend">
+        {Object.entries(AREA_COLORS).map(([area, color]) => (
+          <span key={area} className="payroll-legend-item">
+            <span className="payroll-legend-dot" style={{ background: color }} />{area}
+          </span>
+        ))}
+      </div>
+      <div className="payroll-table-wrap">
+        <table className="payroll-table">
+          <thead>
+            <tr>
+              <th>Pay Period</th>
+              <th>Cut-Off Date</th>
+              <th>Pay Date</th>
+              <th>Area</th>
+            </tr>
+          </thead>
+          <tbody>
+            {PAYROLL_ROWS.map((row, i) => {
+              const cutoffPast    = isPast(row.cutoff)
+              const payPast       = isPast(row.pay)
+              const cutoffSoon    = !cutoffPast && isUpcoming(row.cutoff)
+              const paySoon       = !payPast && isUpcoming(row.pay)
+              return (
+                <tr key={i} className={cutoffPast && payPast ? 'payroll-row-past' : ''}>
+                  <td className="payroll-period">{row.period}</td>
+                  <td className={`payroll-cutoff ${cutoffSoon ? 'soon' : cutoffPast ? 'past' : ''}`}>{row.cutoff}</td>
+                  <td className={`payroll-pay    ${paySoon   ? 'soon' : payPast   ? 'past' : ''}`}>{row.pay}</td>
+                  <td><span className="payroll-area-badge" style={{ background: AREA_COLORS[row.area] + '22', color: AREA_COLORS[row.area], border: `1px solid ${AREA_COLORS[row.area]}55` }}>{row.area}</span></td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

@@ -1746,3 +1746,132 @@ a.tr-title-link:hover {
   background: #fce8e8;
 }
 
+
+/* ══════════════════════════════════════════════
+   PAYROLL SCHEDULE TAB
+   ══════════════════════════════════════════════ */
+.payroll-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+.payroll-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 16px 6px;
+  background: #00326b;
+  flex-shrink: 0;
+}
+
+.payroll-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.payroll-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+}
+
+.payroll-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding: 7px 16px;
+  background: #f4f4f4;
+  border-bottom: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.payroll-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #555;
+  font-weight: 600;
+}
+
+.payroll-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.payroll-table-wrap {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.payroll-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 560px;
+}
+
+.payroll-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #1e3342;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 7px 10px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.payroll-table tbody tr {
+  border-bottom: 1px solid #f0ece0;
+  transition: background 0.1s;
+}
+
+.payroll-table tbody tr:hover { background: #f8f7f4; }
+
+.payroll-table tbody tr.payroll-row-past { opacity: 0.45; }
+
+.payroll-table td {
+  padding: 5px 10px;
+  vertical-align: middle;
+  color: #2a2520;
+}
+
+.payroll-period {
+  font-size: 11px;
+  color: #888;
+  white-space: nowrap;
+}
+
+.payroll-cutoff,
+.payroll-pay {
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.payroll-cutoff.soon { color: #c0392b; font-weight: 700; }
+.payroll-pay.soon    { color: #2e7d32; font-weight: 700; }
+.payroll-cutoff.past,
+.payroll-pay.past    { color: #aaa; }
+
+.payroll-area-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
