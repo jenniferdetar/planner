@@ -18,7 +18,9 @@ const SUB_TABS = [
   { key: 'budget',    label: 'Wants',              color: '#4a7a6a' },
 ]
 
-export default function PersonalPanel({ userId, selectedDate, onDateChange, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks, subTab = 'log', onSubTabChange }) {
+export default function PersonalPanel({ userId, selectedDate, onDateChange, books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
+  const visibleTabs = allowedSubTabs ? SUB_TABS.filter(t => allowedSubTabs.includes(t.key)) : SUB_TABS
+  const defaultTab = visibleTabs[0]?.key || 'log'
   const dateStr = selectedDate instanceof Date
     ? selectedDate.toISOString().split('T')[0]
     : new Date().toISOString().split('T')[0]
@@ -29,6 +31,12 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
   const [mantraEditing, setMantraEditing] = useState(false)
   const [editingEntryId, setEditingEntryId] = useState(null)
   const [editingEntryText, setEditingEntryText] = useState('')
+  const [localSubTab, setLocalSubTab] = useState(defaultTab)
+  const subTab = subTabProp ?? localSubTab
+  function handleSubTabChange(key) {
+    setLocalSubTab(key)
+    onSubTabChange?.(key)
+  }
   const saveTimer = useRef(null)
   const editTimers = useRef({})
 
@@ -76,10 +84,22 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
     onDateChange?.(d)
   }
 
-  const activeColor = SUB_TABS.find(t => t.key === subTab)?.color || '#73a882'
+  const activeColor = visibleTabs.find(t => t.key === subTab)?.color || '#73a882'
 
   return (
     <div className="personal-panel">
+      {allowedSubTabs && (
+        <div className="personal-inline-tabs">
+          {visibleTabs.map(t => (
+            <button
+              key={t.key}
+              className={`personal-inline-tab ${subTab === t.key ? 'active' : ''}`}
+              style={{ '--itab-color': t.color }}
+              onClick={() => handleSubTabChange(t.key)}
+            >{t.label}</button>
+          ))}
+        </div>
+      )}
       {subTab === 'log' && (
         <div className="personal-body">
           <div className="daily-log-section">

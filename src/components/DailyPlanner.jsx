@@ -220,6 +220,12 @@ export default function DailyPlanner({
         onUpdatePaycheckAmount={onUpdatePaycheckAmount}
         onTogglePaycheckBill={onTogglePaycheckBill}
         onDeletePaycheck={onDeletePaycheck}
+        // personal
+        books={books}
+        onAddBook={onAddBook}
+        onUpdateBookStatus={onUpdateBookStatus}
+        onDeleteBook={onDeleteBook}
+        onImportBooks={onImportBooks}
         // wywo: userId already passed above
       />
 

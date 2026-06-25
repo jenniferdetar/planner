@@ -763,15 +763,18 @@ a.lp-task-title:hover {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 36px;
-  overflow: hidden;
+  width: 48px;
+  overflow-y: auto;
+  overflow-x: hidden;
   gap: 0;
   background: #4a6a5a;
+  scrollbar-width: none;
 }
+.right-tabs::-webkit-scrollbar { display: none; }
 
 .right-tab {
-  flex: 1;
-  min-height: 0;
+  flex-shrink: 0;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -788,9 +791,9 @@ a.lp-task-title:hover {
 .right-tab span {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.88);
   white-space: nowrap;
