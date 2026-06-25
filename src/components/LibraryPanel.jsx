@@ -22,7 +22,9 @@ const STATUS_CYCLE = ['want-to-read', 'reading', 'read']
 
 const DEFAULTS = [
   // Fiction
-  { title: 'Mark of the Lion', author: 'Francine Rivers', shelf: 'Fiction', status: 'want-to-read' },
+  { title: 'A Voice in the Wind', author: 'Francine Rivers', shelf: 'Fiction', status: 'want-to-read', notes: 'Mark of the Lion #1' },
+  { title: 'An Echo in the Darkness', author: 'Francine Rivers', shelf: 'Fiction', status: 'want-to-read', notes: 'Mark of the Lion #2' },
+  { title: 'As Sure as the Dawn', author: 'Francine Rivers', shelf: 'Fiction', status: 'want-to-read', notes: 'Mark of the Lion #3' },
   { title: 'Piercing the Darkness', author: 'Frank Peretti', shelf: 'Fiction', status: 'want-to-read' },
   { title: "Hinds' Feet on High Places", author: 'Hannah Hurnard', shelf: 'Fiction', status: 'want-to-read' },
   { title: 'Scales of the Dragon', author: 'Katee Robert', shelf: 'Fiction', status: 'want-to-read' },
@@ -130,7 +132,7 @@ const DEFAULTS = [
   { title: 'Popular Mechanics', author: '', shelf: 'Magazine', status: 'want-to-read' },
 ]
 
-export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDeleteBook, onImportBooks }) {
+export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onUpdateBookChapter, onDeleteBook, onImportBooks }) {
   const [activeShelf, setActiveShelf] = useState(WANT_TO_READ_TAB)
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
@@ -238,6 +240,15 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onDelet
                 >
                   {STATUS_LABELS[book.status]}
                 </button>
+                {book.status === 'reading' && (
+                  <div className="chapter-tracker">
+                    <button className="chapter-btn" onClick={() => onUpdateBookChapter?.(book.id, (book.current_chapter || 0) - 1)} title="Previous chapter">−</button>
+                    <span className="chapter-display">
+                      Ch.{book.current_chapter || 0}{book.total_chapters ? `/${book.total_chapters}` : ''}
+                    </span>
+                    <button className="chapter-btn chapter-btn-next" onClick={() => onUpdateBookChapter?.(book.id, (book.current_chapter || 0) + 1)} title="Next chapter">+</button>
+                  </div>
+                )}
                 {hoveredId === book.id && (
                   <button
                     className="delete-book-btn"

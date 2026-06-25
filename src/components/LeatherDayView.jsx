@@ -73,6 +73,7 @@ export default function LeatherDayView({
   showArchivedInteractions, onToggleArchivedInteractions,
   asanaCseaTasks, onCompleteAsanaTask, onUpdateAsanaTaskNotes,
   cseaNotes, onAddCseaNote, onDeleteCseaNote,
+  cseaIssueNotes, onAddCseaIssueNote, onDeleteCseaIssueNote,
   // icaap props
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   asanaIcaapTasks,
@@ -88,7 +89,7 @@ export default function LeatherDayView({
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   // personal props
-  books, onAddBook, onUpdateBookStatus, onDeleteBook, onImportBooks,
+  books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks,
 }) {
   const today = new Date()
   const [rightTab, setRightTab] = useState(() => {
@@ -285,6 +286,9 @@ export default function LeatherDayView({
                   cseaNotes={cseaNotes || []}
                   onAddCseaNote={onAddCseaNote}
                   onDeleteCseaNote={onDeleteCseaNote}
+                  issueNotes={cseaIssueNotes || {}}
+                  onAddIssueNote={onAddCseaIssueNote}
+                  onDeleteIssueNote={onDeleteCseaIssueNote}
                 />
               </div>
             )}
@@ -365,6 +369,10 @@ export default function LeatherDayView({
                   books={books || []}
                   onAddBook={onAddBook}
                   onUpdateBookStatus={onUpdateBookStatus}
+<<<<<<< HEAD
+                  onUpdateBookChapter={onUpdateBookChapter}
+=======
+>>>>>>> origin/main
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
                   allowedSubTabs={['library', 'mantra']}

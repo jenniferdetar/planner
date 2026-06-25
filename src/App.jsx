@@ -7,7 +7,7 @@ import { useDailyLog } from './hooks/useDailyLog'
 import { useWeeklyTasks } from './hooks/useWeeklyTasks'
 import { usePlannerSections } from './hooks/usePlannerSections'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
-import { useCseaIssues, useMemberInteractions, useCseaNotes } from './hooks/useCseaData'
+import { useCseaIssues, useMemberInteractions, useCseaNotes, useCseaIssueNotes } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useIcaapNotes } from './hooks/useIcaapNotes'
@@ -85,6 +85,7 @@ export default function App() {
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction, showArchived: showArchivedInteractions, setShowArchived: setShowArchivedInteractions } = useMemberInteractions(userId)
   const { notes: cseaNotes, addNote: addCseaNote, deleteNote: deleteCseaNote } = useCseaNotes(userId)
+  const { notesByIssue: cseaIssueNotes, addNote: addCseaIssueNote, deleteNote: deleteCseaIssueNote } = useCseaIssueNotes(userId)
   const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
@@ -93,7 +94,7 @@ export default function App() {
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { notes: icaapNotes, addNote: addIcaapNote, deleteNote: deleteIcaapNote } = useIcaapNotes(userId)
-  const { books, addBook, updateStatus: updateBookStatus, deleteBook, importDefaults: importBooks } = useLibrary(userId)
+  const { books, addBook, updateStatus: updateBookStatus, updateChapter: updateBookChapter, deleteBook, importDefaults: importBooks } = useLibrary(userId)
   const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
   const { tags: asanaTaskTags, cycleTag: cycleAsanaTaskTag } = useAsanaTaskTags()
@@ -300,6 +301,9 @@ export default function App() {
           cseaNotes={cseaNotes}
           onAddCseaNote={addCseaNote}
           onDeleteCseaNote={deleteCseaNote}
+          cseaIssueNotes={cseaIssueNotes}
+          onAddCseaIssueNote={addCseaIssueNote}
+          onDeleteCseaIssueNote={deleteCseaIssueNote}
           asanaTasks={asanaTasks}
           asanaCseaTasks={asanaCseaTasks}
           asanaIcaapTasks={asanaIcaapTasks}
@@ -339,6 +343,7 @@ export default function App() {
           books={books}
           onAddBook={addBook}
           onUpdateBookStatus={updateBookStatus}
+          onUpdateBookChapter={updateBookChapter}
           onDeleteBook={deleteBook}
           onImportBooks={importBooks}
           onPushGcuToAsana={handlePushGcuToAsana}

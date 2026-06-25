@@ -1,13 +1,23 @@
 /* ── CSEA Brand Tokens ──────────────────────────────────────────────────── */
 :root {
-  --csea-blue:       #00326b;
-  --csea-yellow:     #ffca38;
-  --csea-accent:     #f7941d;
-  --csea-link:       #3164a0;
-  --csea-light-blue: #d9edfa;
-  --csea-body:       #222222;
-  --csea-border:     #bfbfbf;
-  --csea-light-gray: #e6e6e6;
+  /* Primary */
+  --csea-blue:        #00326b;
+  --csea-yellow:      #ffca38;
+  /* Secondary */
+  --csea-link:        #3164a0;
+  --csea-light-blue:  #d9edfa;
+  --csea-gold:        #eeb125;
+  --csea-accent:      #f7941d;
+  --csea-dark-orange: #e0592a;
+  --csea-burgundy:    #8e2a2a;
+  /* Neutrals */
+  --csea-body:        #222222;
+  --csea-dark-gray:   #53575a;
+  --csea-border:      #bfbfbf;
+  --csea-light-gray:  #e6e6e6;
+  /* Semantic */
+  --csea-success:     #41a700;
+  --csea-error:       #cc0000;
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
@@ -147,7 +157,11 @@
   padding: 3px 10px;
   border-radius: 3px;
   border: 1px solid var(--csea-border);
+<<<<<<< HEAD
+  color: var(--csea-dark-gray);
+=======
   color: #666;
+>>>>>>> origin/main
   background: #fff;
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
@@ -191,7 +205,11 @@
   transition: background 0.15s;
 }
 
+<<<<<<< HEAD
+.csea-add-btn:hover { background: #001f4a; }
+=======
 .csea-add-btn:hover { background: #00255a; }
+>>>>>>> origin/main
 
 /* ── Form ──────────────────────────────────────────────────────────────── */
 .csea-form {
@@ -279,7 +297,11 @@
 
 .csea-cancel {
   font-size: 12px;
+<<<<<<< HEAD
+  color: var(--csea-dark-gray);
+=======
   color: #666;
+>>>>>>> origin/main
   padding: 5px 12px;
   border: 1px solid var(--csea-border);
   border-radius: 3px;
@@ -299,7 +321,11 @@
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
 }
+<<<<<<< HEAD
+.csea-save:hover { background: #001f4a; }
+=======
 .csea-save:hover { background: #00255a; }
+>>>>>>> origin/main
 
 /* ── Issue list ────────────────────────────────────────────────────────── */
 .csea-issue-list {
@@ -311,7 +337,11 @@
 
 .csea-empty {
   font-size: 13px;
+<<<<<<< HEAD
+  color: var(--csea-border);
+=======
   color: #aaa;
+>>>>>>> origin/main
   text-align: center;
   padding: 32px 0;
 }
@@ -385,7 +415,11 @@
 }
 
 .issue-desc { font-size: 13px; color: var(--csea-body); line-height: 1.5; margin-top: 4px; }
+<<<<<<< HEAD
+.issue-detail { font-size: 12px; color: var(--csea-dark-gray); }
+=======
 .issue-detail { font-size: 12px; color: #666; }
+>>>>>>> origin/main
 
 .issue-actions {
   display: flex;
@@ -411,7 +445,11 @@
 
 .issue-delete-btn {
   font-size: 10px;
+<<<<<<< HEAD
+  color: var(--csea-border);
+=======
   color: #aaa;
+>>>>>>> origin/main
   padding: 3px 8px;
   border: 1px solid var(--csea-light-gray);
   border-radius: 2px;
@@ -419,8 +457,109 @@
   font-family: 'Open Sans', sans-serif;
   transition: color 0.15s;
 }
+<<<<<<< HEAD
+.issue-delete-btn:hover { color: var(--csea-error); border-color: var(--csea-error); }
+
+/* ── Issue notes count badge ───────────────────────────────────────────── */
+.issue-notes-count {
+  background: var(--csea-blue);
+  color: var(--csea-yellow);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 8px;
+  margin-left: auto;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* ── Issue timeline ─────────────────────────────────────────────────────── */
+.issue-timeline {
+  margin: 10px 0 6px;
+  border-left: 3px solid var(--csea-blue);
+  padding-left: 10px;
+}
+
+.issue-timeline-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--csea-blue);
+  margin-bottom: 6px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.issue-timeline-entry {
+  position: relative;
+  padding: 6px 24px 6px 0;
+  border-bottom: 1px solid var(--csea-light-gray);
+}
+
+.issue-timeline-entry:last-child { border-bottom: none; }
+
+.issue-timeline-date {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--csea-blue);
+  font-family: 'Open Sans', sans-serif;
+  margin-bottom: 2px;
+}
+
+.issue-timeline-text {
+  font-size: 12px;
+  color: var(--csea-body);
+  line-height: 1.5;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.issue-timeline-delete {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #ccc;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+.issue-timeline-delete:hover { color: var(--csea-error); }
+
+/* ── Issue add note button ──────────────────────────────────────────────── */
+.issue-add-note-btn {
+  background: none;
+  border: 1px dashed var(--csea-border);
+  color: var(--csea-link);
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 6px 0;
+  font-family: 'Open Sans', sans-serif;
+  transition: border-color 0.15s, background 0.15s;
+}
+.issue-add-note-btn:hover {
+  border-color: var(--csea-blue);
+  background: var(--csea-light-blue);
+}
+
+/* ── Issue note form ────────────────────────────────────────────────────── */
+.issue-note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 8px;
+  background: var(--csea-light-blue);
+  border-radius: 6px;
+  border: 1px solid #b0d4ef;
+}
+
+=======
 .issue-delete-btn:hover { color: #cc0000; border-color: #cc0000; }
 
+>>>>>>> origin/main
 /* ── Interaction groups ─────────────────────────────────────────────────── */
 .interaction-group {
   border: 1px solid var(--csea-light-gray);
@@ -494,6 +633,15 @@
   flex-shrink: 0;
 }
 .interaction-cat-select:hover,
+<<<<<<< HEAD
+.interaction-cat-select:focus { border-color: var(--csea-blue); background: var(--csea-light-blue); }
+
+.interaction-date-input { font-size: 11px; color: var(--csea-dark-gray); padding: 2px 4px; width: auto; flex-shrink: 0; }
+.interaction-loc-select { font-size: 12px; color: var(--csea-dark-gray); padding: 2px 5px; cursor: pointer; }
+.interaction-loc-inline { flex: 1; min-width: 0; }
+.interaction-disc-textarea { font-size: 13px; color: var(--csea-body); line-height: 1.5; resize: vertical; padding: 3px 5px; }
+.interaction-who-input { font-size: 12px; color: var(--csea-dark-gray); font-style: normal; padding: 2px 5px; }
+=======
 .interaction-cat-select:focus { border-color: var(--csea-blue); background: #c0dff5; }
 
 .interaction-date-input { font-size: 11px; color: #888; padding: 2px 4px; width: auto; flex-shrink: 0; }
@@ -501,6 +649,7 @@
 .interaction-loc-inline { flex: 1; min-width: 0; }
 .interaction-disc-textarea { font-size: 13px; color: var(--csea-body); line-height: 1.5; resize: vertical; padding: 3px 5px; }
 .interaction-who-input { font-size: 12px; color: #666; font-style: normal; padding: 2px 5px; }
+>>>>>>> origin/main
 
 /* ── Asana tasks ─────────────────────────────────────────────────────────── */
 .asana-task-row {
@@ -531,10 +680,17 @@
   padding: 0;
   transition: border-color 0.15s, background 0.15s;
 }
+<<<<<<< HEAD
+.asana-row-check-btn:hover { border-color: var(--csea-success); background: #f0fce8; }
+
+.asana-task-title { flex: 1; font-size: 13px; font-weight: 400; color: var(--csea-blue); line-height: 1.4; cursor: pointer; }
+.asana-task-due { font-size: 11px; color: var(--csea-dark-gray); }
+=======
 .asana-row-check-btn:hover { border-color: #41a700; background: #f0fce8; }
 
 .asana-task-title { flex: 1; font-size: 13px; font-weight: 400; color: var(--csea-blue); line-height: 1.4; cursor: pointer; }
 .asana-task-due { font-size: 11px; color: #888; }
+>>>>>>> origin/main
 
 .asana-task-body {
   padding: 0 12px 10px;
@@ -547,7 +703,11 @@
 .asana-task-actions { display: flex; gap: 8px; }
 
 .asana-complete-btn {
+<<<<<<< HEAD
+  background: var(--csea-success);
+=======
   background: #41a700;
+>>>>>>> origin/main
   color: #fff;
   border: none;
   border-radius: 3px;
@@ -557,7 +717,11 @@
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
 }
+<<<<<<< HEAD
+.asana-complete-btn:hover { background: #338500; }
+=======
 .asana-complete-btn:hover { background: #339900; }
+>>>>>>> origin/main
 
 /* ── Member search ───────────────────────────────────────────────────────── */
 .member-search { position: relative; width: 100%; }
@@ -592,7 +756,11 @@
 .member-option:hover { background: var(--csea-light-blue); }
 
 .member-name { font-size: 13px; color: var(--csea-body); }
+<<<<<<< HEAD
+.member-emp { font-size: 11px; color: var(--csea-border); flex-shrink: 0; }
+=======
 .member-emp { font-size: 11px; color: #aaa; flex-shrink: 0; }
+>>>>>>> origin/main
 
 /* ── Notes tab ───────────────────────────────────────────────────────────── */
 .csea-notes-form {
@@ -629,7 +797,11 @@
 
 .csea-note-date {
   font-size: 10px;
+<<<<<<< HEAD
+  color: var(--csea-dark-gray);
+=======
   color: #888;
+>>>>>>> origin/main
   font-weight: 600;
   letter-spacing: 0.4px;
 }
@@ -674,7 +846,11 @@
   border-radius: 3px;
   transition: color 0.12s, background 0.12s;
 }
+<<<<<<< HEAD
+.csea-note-delete:hover { color: var(--csea-error); background: #fce8e8; }
+=======
 .csea-note-delete:hover { color: #cc0000; background: #fce8e8; }
+>>>>>>> origin/main
 
 /* ── Quick links ─────────────────────────────────────────────────────────── */
 .quick-link-anchor {
