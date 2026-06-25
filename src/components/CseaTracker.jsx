@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useCseaMembers, useWorkLocations } from '../hooks/useCseaData'
 import { useQuickLinks } from '../hooks/useQuickLinks'
+import ContractReference from './ContractReference'
 import './CseaTracker.css'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
@@ -134,6 +135,7 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions</button>
         <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {cseaNotes.length > 0 && <span className="csea-tab-badge">{cseaNotes.length}</span>}</button>
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="csea-tab-badge">{quickLinks.length}</span>}</button>
+        <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract</button>
       </div>
 
       {tab === 'issues' && (
@@ -287,6 +289,12 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {tab === 'contract' && (
+        <div className="csea-panel" style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          <ContractReference userId={userId} />
         </div>
       )}
 
