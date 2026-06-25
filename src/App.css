@@ -49,7 +49,7 @@
     left: 0;
     right: 0;
     height: 56px;
-    background: #1e3342;
+    background: #00326b;
     display: flex;
     align-items: stretch;
     border-top: 1px solid rgba(255,255,255,0.1);
@@ -76,7 +76,7 @@
   }
 
   .mobile-nav-btn.active {
-    color: #4a7a6a;
+    color: #3164a0;
   }
 
   .mobile-nav-icon {

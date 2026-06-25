@@ -24,8 +24,8 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: #1a2535;
-  border: 1px solid #2e3d50;
+  background: #00326b;
+  border: 1px solid #00326b;
   border-radius: 8px;
   list-style: none;
   margin: 0;
@@ -43,7 +43,7 @@
   transition: background 0.1s;
 }
 
-.wywo-suggestion:hover { background: #2e3d50; }
+.wywo-suggestion:hover { background: #00326b; }
 
 .wywo-sug-name {
   font-size: 13px;
@@ -65,8 +65,8 @@
 }
 
 .wywo-tab {
-  background: #243040;
-  border: 1px solid #2e3d50;
+  background: #00326b;
+  border: 1px solid #00326b;
   color: #a0988e;
   padding: 7px 16px;
   border-radius: 8px;
@@ -308,7 +308,7 @@
 .wywo-submit {
   flex: 1;
   display: block;
-  background: #8b2020;
+  background: #cc0000;
   border: none;
   color: #fff;
   padding: 10px;
@@ -320,11 +320,11 @@
   transition: background 0.15s;
 }
 
-.wywo-submit:hover { background: #a52828; }
+.wywo-submit:hover { background: #cc0000; }
 
 .wywo-print-btn {
-  background: #243040;
-  border: 1px solid #2e3d50;
+  background: #00326b;
+  border: 1px solid #00326b;
   color: #e8e4d8;
   padding: 10px 16px;
   border-radius: 6px;
@@ -335,7 +335,7 @@
   transition: background 0.15s;
 }
 
-.wywo-print-btn:hover { background: #2e3d50; }
+.wywo-print-btn:hover { background: #00326b; }
 
 /* LOG */
 .wywo-log { max-width: 700px; }
@@ -357,7 +357,7 @@
 .wywo-link {
   background: none;
   border: none;
-  color: #4a90d9;
+  color: #3164a0;
   cursor: pointer;
   font-size: 14px;
   text-decoration: underline;
@@ -375,8 +375,8 @@
 }
 
 .wywo-log-card.wywo-log-urgent {
-  border-color: #8b2020;
-  box-shadow: 0 0 0 1px #8b2020;
+  border-color: #cc0000;
+  box-shadow: 0 0 0 1px #cc0000;
 }
 
 .wywo-log-header {
@@ -390,7 +390,7 @@
 .wywo-log-to { font-size: 14px; }
 
 .wywo-log-urgent-badge {
-  background: #8b2020;
+  background: #cc0000;
   color: #fff;
   font-size: 11px;
   font-weight: 700;
@@ -415,7 +415,7 @@
   border-radius: 4px;
 }
 
-.wywo-log-del:hover { background: rgba(0,0,0,0.1); color: #8b2020; }
+.wywo-log-del:hover { background: rgba(0,0,0,0.1); color: #cc0000; }
 
 .wywo-log-from { font-size: 13px; margin-bottom: 4px; }
 .wywo-log-phone { font-size: 13px; color: #333; margin-bottom: 6px; }

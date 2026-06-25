@@ -21,7 +21,7 @@
 .hoa-header-title {
   font-size: 13px;
   font-weight: 700;
-  color: #3a2a6a;
+  color: #3164a0;
   letter-spacing: 0.3px;
 }
 .hoa-add-btn {
@@ -29,12 +29,12 @@
   font-weight: 600;
   padding: 4px 12px;
   border-radius: 5px;
-  border: 1px solid #7b5ea7;
-  color: #7b5ea7;
+  border: 1px solid #3164a0;
+  color: #3164a0;
   background: transparent;
   cursor: pointer;
 }
-.hoa-add-btn:hover { background: #f0ebf9; }
+.hoa-add-btn:hover { background: #d9edfa; }
 
 /* Stats */
 .hoa-stats {
@@ -114,18 +114,18 @@
   border-radius: 5px;
   outline: none;
   background: #fff;
-  color: #2a2520;
+  color: #222222;
   font-family: inherit;
 }
 .hoa-input-sm { flex: 0 0 auto; width: 90px; }
-.hoa-input:focus { border-color: #7b5ea7; }
+.hoa-input:focus { border-color: #3164a0; }
 .hoa-select {
   font-size: 12px;
   padding: 6px 10px;
   border: 1px solid #d8d4cc;
   border-radius: 5px;
   background: #fff;
-  color: #2a2520;
+  color: #222222;
   cursor: pointer;
   font-family: inherit;
 }
@@ -137,11 +137,11 @@
   resize: vertical;
   outline: none;
   background: #fff;
-  color: #2a2520;
+  color: #222222;
   font-family: inherit;
   line-height: 1.5;
 }
-.hoa-textarea:focus { border-color: #7b5ea7; }
+.hoa-textarea:focus { border-color: #3164a0; }
 
 .hoa-btn-group {
   display: flex;
@@ -181,11 +181,11 @@
   padding: 5px 16px;
   border-radius: 4px;
   border: none;
-  background: #7b5ea7;
+  background: #3164a0;
   color: #fff;
   cursor: pointer;
 }
-.hoa-save-btn:hover { background: #6a4d96; }
+.hoa-save-btn:hover { background: #3164a0; }
 
 /* Items list */
 .hoa-list {
@@ -230,13 +230,13 @@
 .hoa-item-title {
   font-size: 12px;
   font-weight: 600;
-  color: #2a2520;
+  color: #222222;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .hoa-item-unit {
-  color: #7b5ea7;
+  color: #3164a0;
   font-weight: 700;
 }
 .hoa-item-meta {
@@ -285,19 +285,19 @@
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 4px;
-  border: 1px solid #7b5ea7;
-  color: #7b5ea7;
+  border: 1px solid #3164a0;
+  color: #3164a0;
   background: transparent;
   cursor: pointer;
 }
-.hoa-edit-btn:hover { background: #f0ebf9; }
+.hoa-edit-btn:hover { background: #d9edfa; }
 .hoa-del-btn {
   font-size: 11px;
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 4px;
-  border: 1px solid #e05c5c;
-  color: #e05c5c;
+  border: 1px solid #cc0000;
+  color: #cc0000;
   background: transparent;
   cursor: pointer;
 }

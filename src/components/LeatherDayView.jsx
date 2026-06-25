@@ -19,22 +19,19 @@ const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 6)
 
 const ALL_TABS = [
-  { key: 'master-tasks', label: 'Master Tasks', color: '#b87a38' },
-  { key: 'roles',        label: 'Roles',        color: '#8a4848' },
-  { key: 'goals',        label: 'Goals',        color: '#5a7848' },
-  // ── divider here (first nav tab) ──
-  { key: 'csea',         label: 'CSEA',         color: '#b87a38', nav: true },
-  { key: 'icaap',        label: 'iCAAP',        color: '#8a4848', nav: true },
-  { key: 'gcu',          label: 'GCU',          color: '#5a7848', nav: true },
-  { key: 'finance',      label: 'Finance',      color: '#3a5c4a', nav: true },
-  { key: 'wywo',         label: 'WYWO',         color: '#4a3a58', nav: true },
-  { key: 'contract',     label: 'Contract',     color: '#2a5878', nav: true },
-  { key: 'hoa',         label: 'HOA',          color: '#7b5ea7', nav: true },
-  { key: 'matrix',      label: 'Matrix',       color: '#4a5878', nav: true },
-  { key: 'personal',    label: 'Personal',     color: '#6a5a8a', nav: true },
+  { key: 'contract',    label: 'Contract',     color: '#3164a0', nav: true },
+  { key: 'csea',        label: 'CSEA',         color: '#00326b', nav: true },
+  { key: 'finance',     label: 'Finance',      color: '#3164a0', nav: true },
+  { key: 'gcu',         label: 'GCU',          color: '#53575a', nav: true },
+  { key: 'hoa',         label: 'HOA',          color: '#3164a0', nav: true },
+  { key: 'icaap',       label: 'iCAAP',        color: '#3164a0', nav: true },
+  { key: 'master-tasks',label: 'Master Tasks', color: '#00326b' },
+  { key: 'matrix',      label: 'Matrix',       color: '#53575a', nav: true },
+  { key: 'personal',    label: 'Personal',     color: '#eeb125', nav: true },
+  { key: 'wywo',        label: 'WYWO',         color: '#f7941d', nav: true },
 ]
 
-const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks','roles','goals'])
+const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks'])
 
 function viewToTab(view) {
   if (!view || view === 'day') return 'daily-tasks'
@@ -231,16 +228,6 @@ export default function LeatherDayView({
 
             {/* Day content tabs */}
             {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
-            {(rightTab === 'roles' || rightTab === 'goals') && (
-              <SectionTextPanel
-                key={rightTab}
-                sectionKey={rightTab}
-                label={ALL_TABS.find(t => t.key === rightTab)?.label}
-                color={ALL_TABS.find(t => t.key === rightTab)?.color}
-                value={sections?.[rightTab] ?? ''}
-                onChange={onUpdateSection}
-              />
-            )}
 
             {/* Nav view tabs — render full view components inside binder */}
             {rightTab === 'week' && (
@@ -369,13 +356,10 @@ export default function LeatherDayView({
                   books={books || []}
                   onAddBook={onAddBook}
                   onUpdateBookStatus={onUpdateBookStatus}
-<<<<<<< HEAD
                   onUpdateBookChapter={onUpdateBookChapter}
-=======
->>>>>>> origin/main
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
-                  allowedSubTabs={['library', 'mantra']}
+                  allowedSubTabs={['goals', 'library', 'mantra', 'roles']}
                 />
               </div>
             )}

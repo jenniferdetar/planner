@@ -6,22 +6,22 @@
 
 /* ─── Design tokens ─────────────────────────────────────────────────────── */
 :root {
-  --pt-bg:         #faf8f2;   /* cream page */
-  --pt-bg-alt:     #f5f1e8;   /* slightly deeper cream for alt rows / headers */
-  --pt-bg-card:    #f9f7f1;   /* card surface */
-  --pt-border:     #e0d8cc;   /* warm tan border */
-  --pt-border-lt:  rgba(180,165,140,0.22); /* subtle line */
-  --pt-text:       #2a1f10;   /* warm dark brown */
-  --pt-text-2:     #6a5a48;   /* secondary text */
-  --pt-text-muted: #9a8a78;   /* muted / labels */
-  --pt-accent:     #4a7a6a;   /* sage green — kept as-is */
-  --pt-accent2:    #3a6a5a;   /* darker sage */
-  --pt-header-bg:  #3a2210;   /* warm leather dark for bold headers */
-  --pt-header-alt: #ede8de;   /* light tan for soft headers */
+  --pt-bg:         #f5f7fa;   /* CSEA light bg */
+  --pt-bg-alt:     #eef2f7;   /* slightly deeper for alt rows / headers */
+  --pt-bg-card:    #ffffff;   /* card surface */
+  --pt-border:     #bfbfbf;   /* CSEA border gray */
+  --pt-border-lt:  rgba(49,100,160,0.15); /* subtle line */
+  --pt-text:       #222222;   /* CSEA body text */
+  --pt-text-2:     #53575a;   /* CSEA dark gray */
+  --pt-text-muted: #8a8a8a;   /* muted / labels */
+  --pt-accent:     #3164a0;   /* CSEA link blue */
+  --pt-accent2:    #00326b;   /* CSEA navy */
+  --pt-header-bg:  #00326b;   /* CSEA primary navy */
+  --pt-header-alt: #d9edfa;   /* CSEA light blue bg */
   --pt-line: repeating-linear-gradient(
     transparent, transparent 27px,
-    rgba(160,145,120,0.38) 27px,
-    rgba(160,145,120,0.38) 28px
+    rgba(191,191,191,0.38) 27px,
+    rgba(191,191,191,0.38) 28px
   );
 }
 
@@ -51,7 +51,7 @@
 
 .week-title,
 .week-nav-btn {
-  color: #f0ece2 !important;
+  color: #f5f7fa !important;
 }
 
 /* Month view nav */
@@ -79,10 +79,10 @@
   background: var(--pt-bg) !important;
   border-color: var(--pt-border-lt) !important;
 }
-.month-cell:hover  { background: #f0ece2 !important; }
-.month-cell.today  { background: #f5f1e4 !important; }
+.month-cell:hover  { background: #f5f7fa !important; }
+.month-cell.today  { background: #f5f7fa !important; }
 .month-cell.selected {
-  background: #ede8d8 !important;
+  background: #f5f7fa !important;
   outline-color: var(--pt-accent) !important;
 }
 .month-cell-num    { color: var(--pt-text) !important; }
@@ -138,7 +138,7 @@
 .personal-sub-tab.active {
   color: var(--pt-accent) !important;
   border-color: var(--pt-accent) !important;
-  background: rgba(74,122,106,0.08) !important;
+  background: rgba(49,100,160,0.08) !important;
 }
 
 /* ─── Tables and list rows ───────────────────────────────────────────────── */
@@ -159,7 +159,7 @@
 .icaap-item-row:hover,
 .fin-row:hover,
 .library-book-row:hover {
-  background: #ede8da !important;
+  background: #f5f7fa !important;
 }
 
 /* ─── Cards ──────────────────────────────────────────────────────────────── */
@@ -229,7 +229,7 @@ select:focus {
 }
 .week-day-row:nth-child(odd)  { background: var(--pt-bg) !important; }
 .week-day-row:nth-child(even) { background: var(--pt-bg-alt) !important; }
-.week-day-row.week-day-today  { background: #fffdf5 !important; }
+.week-day-row.week-day-today  { background: #f5f7fa !important; }
 
 .week-day-header {
   background: var(--pt-bg-alt) !important;
@@ -348,7 +348,7 @@ select:focus {
 .login-card  {
   background: #fff !important;
   border: 1px solid var(--pt-border) !important;
-  box-shadow: 0 4px 40px rgba(90,60,30,0.12) !important;
+  box-shadow: 0 4px 40px rgba(0,50,107,0.12) !important;
 }
 .login-name  { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
 .login-divider { background: var(--pt-border) !important; }
@@ -371,7 +371,7 @@ select:focus {
 /* ─── Sidebar ────────────────────────────────────────────────────────────── */
 .sidebar {
   background: var(--pt-header-bg) !important;
-  color: #e8e4d8 !important;
+  color: #f5f7fa !important;
 }
 .sidebar-nav-section-label {
   color: rgba(232,228,216,0.45) !important;
@@ -384,13 +384,13 @@ select:focus {
   color: #fff !important;
 }
 .sidebar-nav-item.active {
-  background: rgba(74,122,106,0.22) !important;
+  background: rgba(49,100,160,0.22) !important;
   border-left-color: var(--pt-accent) !important;
   color: #fff !important;
 }
 .sidebar-logo-text,
 .sidebar-app-name {
-  color: #f0ece2 !important;
+  color: #f5f7fa !important;
 }
 .sidebar-collapse-btn {
   color: rgba(232,228,216,0.5) !important;
@@ -399,7 +399,7 @@ select:focus {
   color: #fff !important;
   background: rgba(255,255,255,0.08) !important;
 }
-.sidebar-user-name { color: #f0ece2 !important; }
+.sidebar-user-name { color: #f5f7fa !important; }
 .sidebar-user-email,
 .sidebar-signout { color: rgba(232,228,216,0.5) !important; }
 
@@ -410,7 +410,7 @@ select:focus {
 /* ─── GCU course rows ────────────────────────────────────────────────────── */
 .gcu-course-row:nth-child(odd)  { background: var(--pt-bg) !important; }
 .gcu-course-row:nth-child(even) { background: var(--pt-bg-alt) !important; }
-.gcu-course-row:hover           { background: #ede8da !important; }
+.gcu-course-row:hover           { background: #f5f7fa !important; }
 .gcu-panel { background: var(--pt-bg) !important; }
 .gcu-body  { background: var(--pt-bg) !important; }
 .gcu-course-section { background: var(--pt-bg) !important; border-color: var(--pt-border) !important; }
@@ -424,9 +424,9 @@ select:focus {
 *::-webkit-scrollbar { width: 5px; height: 5px; }
 *::-webkit-scrollbar-track { background: transparent; }
 *::-webkit-scrollbar-thumb {
-  background: rgba(160,140,110,0.35);
+  background: rgba(191,191,191,0.35);
   border-radius: 3px;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(160,140,110,0.6);
+  background: rgba(191,191,191,0.6);
 }

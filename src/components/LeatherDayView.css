@@ -13,7 +13,7 @@
       rgba(0,0,0,0.03) 2px,
       rgba(0,0,0,0.03) 4px
     ),
-    linear-gradient(160deg, #7a4a28 0%, #5c3518 40%, #4a2a10 70%, #6a3e20 100%);
+    linear-gradient(160deg, #00326b 0%, #00326b 40%, #00326b 70%, #00326b 100%);
   padding: 22px 16px;
   overflow: hidden;
   min-height: 0;
@@ -60,8 +60,8 @@
     repeating-linear-gradient(
       transparent,
       transparent 27px,
-      rgba(160,145,120,0.38) 27px,
-      rgba(160,145,120,0.38) 28px
+      rgba(191,191,191,0.38) 27px,
+      rgba(191,191,191,0.38) 28px
     ),
     #faf8f2;
   display: flex;
@@ -79,7 +79,7 @@
 .lp-col-left {
   flex: 1;
   min-width: 0;
-  border-right: 1px solid rgba(160,145,120,0.2);
+  border-right: 1px solid rgba(191,191,191,0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -96,7 +96,7 @@
 /* ─── Left col: date block ───────────────────────────────────────────────── */
 .lp-date-block {
   padding: 14px 16px 10px;
-  border-bottom: 2px solid rgba(160,145,120,0.25);
+  border-bottom: 2px solid rgba(191,191,191,0.25);
   background: rgba(255,255,255,0.35);
   flex-shrink: 0;
 }
@@ -106,21 +106,21 @@
   font-size: 72px;
   font-weight: 400;
   line-height: 1;
-  color: #2a1f10;
+  color: #001f4a;
   letter-spacing: -2px;
 }
 
 .lp-day-name {
   font-size: 15px;
   font-weight: 600;
-  color: #3a2a18;
+  color: #001f4a;
   font-family: 'Georgia', serif;
   margin-top: 2px;
 }
 
 .lp-month-year {
   font-size: 11px;
-  color: #8a7a68;
+  color: #53575a;
   letter-spacing: 0.3px;
   margin-top: 2px;
 }
@@ -136,7 +136,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(160,140,110,0.15);
+  background: rgba(191,191,191,0.15);
   font-size: 16px;
   color: #7a6a58;
   display: flex;
@@ -147,19 +147,19 @@
   line-height: 1;
   border: none;
 }
-.lp-nav-btn:hover { background: rgba(160,140,110,0.35); color: #2a1f10; }
+.lp-nav-btn:hover { background: rgba(191,191,191,0.35); color: #001f4a; }
 
 .lp-today-btn {
   font-size: 10px;
   color: #7a6a58;
   padding: 3px 8px;
-  border: 1px solid rgba(160,140,110,0.4);
+  border: 1px solid rgba(191,191,191,0.4);
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.15s;
   background: transparent;
 }
-.lp-today-btn:hover { background: rgba(160,140,110,0.2); }
+.lp-today-btn:hover { background: rgba(191,191,191,0.2); }
 
 /* ─── Left col: task section ─────────────────────────────────────────────── */
 .lp-tasks-section {
@@ -179,15 +179,15 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #b0a090;
+  color: #53575a;
   flex-shrink: 0;
-  border-bottom: 1px solid rgba(160,145,120,0.12);
+  border-bottom: 1px solid rgba(191,191,191,0.12);
 }
 
 .lp-add-task-btn {
   font-size: 9px;
   font-weight: 700;
-  color: #5a8a5a;
+  color: #41a700;
   background: transparent;
   border: 1px solid rgba(90,138,90,0.4);
   border-radius: 10px;
@@ -211,15 +211,15 @@
   align-items: center;
   gap: 6px;
   height: 27px;
-  border-bottom: 1px solid rgba(160,145,120,0.38);
+  border-bottom: 1px solid rgba(191,191,191,0.38);
   padding: 0 2px;
   flex-shrink: 0;
 }
-.lp-task-row.done .lp-task-title { text-decoration: line-through; color: #b0a090; }
+.lp-task-row.done .lp-task-title { text-decoration: line-through; color: #53575a; }
 
 .lp-blank-line {
   height: 27px;
-  border-bottom: 1px solid rgba(160,145,120,0.38);
+  border-bottom: 1px solid rgba(191,191,191,0.38);
   flex-shrink: 0;
 }
 
@@ -236,7 +236,7 @@
 .lp-asana-section {
   flex: 1;
   min-height: 0;
-  border-top: 1px solid rgba(160,145,120,0.2);
+  border-top: 1px solid rgba(191,191,191,0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -244,7 +244,7 @@
 
 .lp-asana-count {
   font-size: 9px;
-  color: #b0a090;
+  color: #53575a;
   font-weight: 400;
 }
 
@@ -259,14 +259,14 @@
   align-items: center;
   gap: 6px;
   height: 27px;
-  border-bottom: 1px solid rgba(160,145,120,0.38);
+  border-bottom: 1px solid rgba(191,191,191,0.38);
   flex-shrink: 0;
 }
 
 .lp-asana-title {
   flex: 1;
   font-size: 11px;
-  color: #3a2a18;
+  color: #001f4a;
   font-family: 'Georgia', serif;
   white-space: nowrap;
   overflow: hidden;
@@ -313,7 +313,7 @@ a.lp-asana-title:hover {
   position: relative;
   transition: all 0.15s;
 }
-.lp-circle.checked { background: #5a8a5a; border-color: #5a8a5a; }
+.lp-circle.checked { background: #41a700; border-color: #41a700; }
 .lp-circle.checked::after {
   content: '✓';
   position: absolute;
@@ -327,7 +327,7 @@ a.lp-asana-title:hover {
 .lp-task-title {
   flex: 1;
   font-size: 12px;
-  color: #3a2a18;
+  color: #001f4a;
   font-family: 'Georgia', serif;
   white-space: nowrap;
   overflow: hidden;
@@ -347,7 +347,7 @@ a.lp-task-title:hover {
   letter-spacing: 0.4px;
   padding: 1px 5px;
   border-radius: 8px;
-  border: 1px solid rgba(160,140,110,0.4);
+  border: 1px solid rgba(191,191,191,0.4);
   background: transparent;
   color: #9a8a7a;
   cursor: pointer;
@@ -355,7 +355,7 @@ a.lp-task-title:hover {
   white-space: nowrap;
   transition: all 0.15s;
 }
-.lp-tag-btn:hover { border-color: #b87a38; color: #b87a38; }
+.lp-tag-btn:hover { border-color: #eeb125; color: #eeb125; }
 
 .lp-del-btn {
   font-size: 8px;
@@ -365,7 +365,7 @@ a.lp-task-title:hover {
   cursor: pointer;
   padding: 1px 2px;
 }
-.lp-del-btn:hover { color: #e05c5c; }
+.lp-del-btn:hover { color: #cc0000; }
 
 .lp-empty {
   font-size: 11px;
@@ -381,7 +381,7 @@ a.lp-task-title:hover {
   padding: 4px 8px;
   background: rgba(255,255,255,0.6);
   border-radius: 8px;
-  border: 1px solid rgba(160,140,110,0.3);
+  border: 1px solid rgba(191,191,191,0.3);
   margin: 3px 0 4px;
   flex-shrink: 0;
 }
@@ -391,7 +391,7 @@ a.lp-task-title:hover {
   border: none;
   outline: none;
   font-size: 12px;
-  color: #3a2a18;
+  color: #001f4a;
   font-family: inherit;
 }
 .lp-task-input::placeholder { color: #c0b0a0; }
@@ -399,7 +399,7 @@ a.lp-task-title:hover {
 /* ─── Right col of left page: mini calendar ──────────────────────────────── */
 .lp-cal-area {
   padding: 10px 10px 8px;
-  border-bottom: 1px solid rgba(160,145,120,0.15);
+  border-bottom: 1px solid rgba(191,191,191,0.15);
   flex-shrink: 0;
 }
 
@@ -429,14 +429,14 @@ a.lp-task-title:hover {
   font-size: 10px;
   font-weight: 700;
   color: #fff;
-  background: #b87a38;
+  background: #eeb125;
   border: none;
   border-radius: 4px;
   padding: 2px 8px;
   cursor: pointer;
   white-space: nowrap;
 }
-.lp-gcal-banner button:hover { background: #a06020; }
+.lp-gcal-banner button:hover { background: #eeb125; }
 
 .lp-sched-list {
   flex: 1;
@@ -452,13 +452,13 @@ a.lp-task-title:hover {
   min-height: 36px;
   position: relative;
 }
-.lp-sched-row.current .lp-sched-hour { color: #5a8a5a; font-weight: 700; }
+.lp-sched-row.current .lp-sched-hour { color: #41a700; font-weight: 700; }
 
 .lp-sched-hour {
   width: 22px;
   flex-shrink: 0;
   font-size: 10px;
-  color: #b0a090;
+  color: #53575a;
   padding-top: 4px;
   font-family: 'Georgia', serif;
   line-height: 1;
@@ -485,7 +485,7 @@ a.lp-task-title:hover {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: #e05c5c;
+  background: #cc0000;
   border-radius: 1px;
 }
 
@@ -517,11 +517,11 @@ a.lp-task-title:hover {
   border-radius: 50%; transition: all 0.12s; padding: 0;
 }
 .lp-sched-body:hover .lp-sched-add-btn { opacity: 1; }
-.lp-sched-add-btn:hover { background: #5a8a5a; color: #fff; opacity: 1; }
+.lp-sched-add-btn:hover { background: #41a700; color: #fff; opacity: 1; }
 
 .lp-sched-add-form {
   display: flex; align-items: center; gap: 3px;
-  background: rgba(255,255,255,0.7); border: 1px solid rgba(160,140,110,0.3);
+  background: rgba(255,255,255,0.7); border: 1px solid rgba(191,191,191,0.3);
   border-radius: 8px; padding: 2px 6px; font-size: 10px; color: #555;
 }
 
@@ -548,7 +548,7 @@ a.lp-task-title:hover {
   background: transparent;
   border: none;
 }
-.lp-cal-nav-btn:hover { background: rgba(160,140,110,0.2); color: #3a2a18; }
+.lp-cal-nav-btn:hover { background: rgba(191,191,191,0.2); color: #001f4a; }
 
 .lp-cal-month-label {
   font-size: 10px;
@@ -564,7 +564,7 @@ a.lp-task-title:hover {
   cursor: pointer;
   padding: 0;
 }
-.lp-cal-month-btn:hover { color: #4a8a78; text-decoration: underline; }
+.lp-cal-month-btn:hover { color: #3164a0; text-decoration: underline; }
 
 .lp-cal-view-btns {
   display: flex;
@@ -575,7 +575,7 @@ a.lp-task-title:hover {
 
 .lp-cal-view-btn {
   background: rgba(255,255,255,0.1);
-  border: 1px solid #c8b89a;
+  border: 1px solid #d9edfa;
   border-radius: 4px;
   font-size: 9px;
   font-weight: 700;
@@ -586,8 +586,8 @@ a.lp-task-title:hover {
   cursor: pointer;
   transition: all 0.15s;
 }
-.lp-cal-view-btn:hover { background: rgba(74,138,120,0.15); color: #4a8a78; border-color: #4a8a78; }
-.lp-cal-view-btn.active { background: #4a8a78; color: #fff; border-color: #4a8a78; }
+.lp-cal-view-btn:hover { background: rgba(74,138,120,0.15); color: #3164a0; border-color: #3164a0; }
+.lp-cal-view-btn.active { background: #3164a0; color: #fff; border-color: #3164a0; }
 
 .lp-cal-gcal-row {
   display: flex;
@@ -605,7 +605,7 @@ a.lp-task-title:hover {
 }
 
 .lp-gcal-reconnect-chip {
-  background: #b87a38;
+  background: #eeb125;
   border: none;
   border-radius: 4px;
   color: #fff;
@@ -621,7 +621,7 @@ a.lp-task-title:hover {
 .lp-signout-link {
   background: none;
   border: none;
-  color: #b0a090;
+  color: #53575a;
   font-size: 9px;
   cursor: pointer;
   padding: 0;
@@ -664,9 +664,9 @@ a.lp-task-title:hover {
   background: transparent;
   border: none;
 }
-.lp-cal-cell:hover { background: rgba(160,140,110,0.2); }
+.lp-cal-cell:hover { background: rgba(191,191,191,0.2); }
 .lp-cal-cell.overflow { pointer-events: none; color: transparent; }
-.lp-cal-cell.today { background: rgba(180,150,100,0.25); color: #5a8a5a; font-weight: 700; }
+.lp-cal-cell.today { background: rgba(180,150,100,0.25); color: #41a700; font-weight: 700; }
 .lp-cal-cell.selected { background: #4a7a6a; color: #fff; font-weight: 700; }
 
 /* ─── Shared button styles ────────────────────────────────────────────────── */
@@ -674,7 +674,7 @@ a.lp-task-title:hover {
   font-size: 10px;
   font-weight: 600;
   color: #fff;
-  background: #5a8a5a;
+  background: #41a700;
   padding: 2px 8px;
   border-radius: 4px;
   cursor: pointer;
@@ -692,7 +692,7 @@ a.lp-task-title:hover {
   background: transparent;
   border: none;
 }
-.lp-cancel-btn:hover { color: #e05c5c; }
+.lp-cancel-btn:hover { color: #cc0000; }
 
 .lp-block-input {
   flex: 1;
@@ -700,7 +700,7 @@ a.lp-task-title:hover {
   border: none;
   outline: none;
   font-size: 11px;
-  color: #3a2a18;
+  color: #001f4a;
   font-family: inherit;
   min-width: 50px;
 }
@@ -767,7 +767,7 @@ a.lp-task-title:hover {
   overflow-y: auto;
   overflow-x: hidden;
   gap: 0;
-  background: #4a6a5a;
+  background: #3164a0;
   scrollbar-width: none;
 }
 .right-tabs::-webkit-scrollbar { display: none; }
@@ -838,13 +838,13 @@ a.lp-task-title:hover {
   font-size: 11px;
   font-weight: 700;
   color: #fff;
-  background: #b87a38;
+  background: #eeb125;
   border: none;
   border-radius: 5px;
   padding: 3px 10px;
   cursor: pointer;
 }
-.gcal-reconnect-banner button:hover { background: #a06020; }
+.gcal-reconnect-banner button:hover { background: #eeb125; }
 
 /* ─── Right Page Panels ──────────────────────────────────────────────────── */
 .rp-panel {
@@ -857,7 +857,7 @@ a.lp-task-title:hover {
 
 .rp-header {
   padding: 14px 18px 10px;
-  border-bottom: 2px solid rgba(160,145,120,0.2);
+  border-bottom: 2px solid rgba(191,191,191,0.2);
   flex-shrink: 0;
   display: flex;
   align-items: baseline;
@@ -869,7 +869,7 @@ a.lp-task-title:hover {
   font-family: 'Georgia', serif;
   font-size: 17px;
   font-weight: 400;
-  color: #2a1f10;
+  color: #001f4a;
   letter-spacing: 0.3px;
 }
 
@@ -883,7 +883,7 @@ a.lp-task-title:hover {
 .rp-add-inline-btn {
   font-size: 10px;
   font-weight: 700;
-  color: #5a8a5a;
+  color: #41a700;
   background: transparent;
   border: 1px solid rgba(90,138,90,0.4);
   border-radius: 12px;
@@ -925,14 +925,14 @@ a.lp-task-title:hover {
   align-items: center;
   gap: 8px;
   height: 30px;
-  border-bottom: 1px solid rgba(160,145,120,0.38);
+  border-bottom: 1px solid rgba(191,191,191,0.38);
   padding: 0 2px;
 }
-.rp-task-row.done .rp-task-title { text-decoration: line-through; color: #b0a090; }
+.rp-task-row.done .rp-task-title { text-decoration: line-through; color: #53575a; }
 
 .rp-blank-line {
   height: 30px;
-  border-bottom: 1px solid rgba(160,145,120,0.38);
+  border-bottom: 1px solid rgba(191,191,191,0.38);
   flex-shrink: 0;
 }
 
@@ -962,7 +962,7 @@ a.lp-task-title:hover {
   position: relative;
   transition: all 0.15s;
 }
-.rp-circle.checked { background: #5a8a5a; border-color: #5a8a5a; }
+.rp-circle.checked { background: #41a700; border-color: #41a700; }
 .rp-circle.checked::after {
   content: '✓';
   position: absolute;
@@ -976,7 +976,7 @@ a.lp-task-title:hover {
 .rp-task-title {
   flex: 1;
   font-size: 13px;
-  color: #3a2a18;
+  color: #001f4a;
   font-family: 'Georgia', serif;
   white-space: nowrap;
   overflow: hidden;
@@ -991,7 +991,7 @@ a.lp-task-title:hover {
   cursor: pointer;
   padding: 1px 3px;
 }
-.rp-del-btn:hover { color: #e05c5c; }
+.rp-del-btn:hover { color: #cc0000; }
 
 .rp-priority-group { margin-bottom: 10px; }
 .rp-priority-label {
@@ -1010,7 +1010,7 @@ a.lp-task-title:hover {
 .rp-tag {
   font-size: 8px;
   background: rgba(90,138,90,0.12);
-  color: #5a8a5a;
+  color: #41a700;
   padding: 1px 5px;
   border-radius: 8px;
   white-space: nowrap;
@@ -1024,7 +1024,7 @@ a.lp-task-title:hover {
   padding: 6px 4px;
   background: rgba(255,255,255,0.6);
   border-radius: 5px;
-  border: 1px solid rgba(160,140,110,0.3);
+  border: 1px solid rgba(191,191,191,0.3);
   margin: 4px 0 6px;
   flex-shrink: 0;
 }
@@ -1034,7 +1034,7 @@ a.lp-task-title:hover {
   border: none;
   outline: none;
   font-size: 13px;
-  color: #3a2a18;
+  color: #001f4a;
   font-family: inherit;
 }
 .rp-task-input::placeholder { color: #c0b0a0; }
@@ -1054,13 +1054,13 @@ a.lp-task-title:hover {
   min-height: 44px;
   position: relative;
 }
-.rp-time-row.current .rp-hour-label { color: #5a8a5a; font-weight: 700; }
+.rp-time-row.current .rp-hour-label { color: #41a700; font-weight: 700; }
 
 .rp-hour-label {
   width: 36px;
   flex-shrink: 0;
   font-size: 12px;
-  color: #b0a090;
+  color: #53575a;
   padding-top: 5px;
   font-family: 'Georgia', serif;
   line-height: 1;
@@ -1086,7 +1086,7 @@ a.lp-task-title:hover {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: #e05c5c;
+  background: #cc0000;
   border-radius: 1px;
 }
 
@@ -1116,11 +1116,11 @@ a.lp-task-title:hover {
   border-radius: 50%; transition: all 0.12s; padding: 0;
 }
 .rp-hour-body:hover .rp-add-hour-btn { opacity: 1; }
-.rp-add-hour-btn:hover { background: #5a8a5a; color: #fff; opacity: 1; }
+.rp-add-hour-btn:hover { background: #41a700; color: #fff; opacity: 1; }
 
 .rp-add-block-form {
   display: flex; align-items: center; gap: 5px;
-  background: rgba(255,255,255,0.7); border: 1px solid rgba(160,140,110,0.3);
+  background: rgba(255,255,255,0.7); border: 1px solid rgba(191,191,191,0.3);
   border-radius: 5px; padding: 3px 6px; font-size: 11px; color: #555;
 }
 
@@ -1133,7 +1133,7 @@ a.lp-task-title:hover {
   resize: none;
   font-size: 13px;
   line-height: 28px;
-  color: #3a2a18;
+  color: #001f4a;
   font-family: 'Georgia', serif;
   padding: 10px 18px;
   padding-top: 7px;
@@ -1162,7 +1162,7 @@ a.lp-task-title:hover {
 .rp-schedule-body::-webkit-scrollbar-thumb,
 .lp-task-list::-webkit-scrollbar-thumb,
 .lp-sched-list::-webkit-scrollbar-thumb {
-  background: rgba(160,140,110,0.3); border-radius: 2px;
+  background: rgba(191,191,191,0.3); border-radius: 2px;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
@@ -1183,7 +1183,7 @@ a.lp-task-title:hover {
   .right-page { flex-direction: column; }
   .right-tabs {
     flex-direction: row; width: 100%; height: 32px;
-    border-left: none; border-top: 1px solid rgba(160,145,120,0.2);
+    border-left: none; border-top: 1px solid rgba(191,191,191,0.2);
     flex-shrink: 0;
   }
   .right-tab { min-height: unset; flex: 1; }
