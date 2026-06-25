@@ -15,7 +15,7 @@
 }
 .icaap-ref-link {
   font-size: 12px;
-  color: #4a7a6a;
+  color: #3164a0;
   text-decoration: none;
   opacity: 0.85;
 }
@@ -48,7 +48,7 @@
 .icaap-stat-num {
   font-size: 24px;
   font-weight: 700;
-  color: #1e3342;
+  color: #00326b;
   line-height: 1;
 }
 
@@ -82,9 +82,9 @@
 }
 
 .icaap-tab.active {
-  color: #1e3342;
+  color: #00326b;
   background: #fff;
-  border-bottom-color: #9b59b6;
+  border-bottom-color: #3164a0;
 }
 
 /* Toolbar */
@@ -114,24 +114,24 @@
 }
 
 .filter-pill.active {
-  background: #1e3342;
+  background: #00326b;
   color: #fff;
-  border-color: #1e3342;
+  border-color: #00326b;
 }
 
 .icaap-add-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #9b59b6;
+  color: #3164a0;
   padding: 6px 12px;
-  border: 1px solid #9b59b6;
+  border: 1px solid #3164a0;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .icaap-add-btn:hover {
-  background: #9b59b6;
+  background: #3164a0;
   color: #fff;
 }
 
@@ -228,7 +228,7 @@
 }
 
 .icaap-input:focus {
-  border-color: #9b59b6;
+  border-color: #3164a0;
 }
 
 .icaap-date-input {
@@ -251,7 +251,7 @@
 }
 
 .icaap-textarea:focus {
-  border-color: #9b59b6;
+  border-color: #3164a0;
 }
 
 .icaap-form-actions {
@@ -273,7 +273,7 @@
 .icaap-save {
   font-size: 12px;
   font-weight: 600;
-  background: #9b59b6;
+  background: #3164a0;
   color: #fff;
   padding: 6px 16px;
   border-radius: 6px;
@@ -497,14 +497,14 @@
 }
 
 .asana-push-btn.err {
-  color: #e05c5c;
-  border-color: #e05c5c;
+  color: #cc0000;
+  border-color: #cc0000;
 }
 
 .asana-synced-badge {
   font-size: 10px;
   font-weight: 600;
-  color: #5cb85c;
+  color: #41a700;
   padding: 3px 9px;
   background: rgba(92,184,92,0.1);
   border-radius: 6px;
@@ -521,8 +521,8 @@
 }
 
 .icaap-delete-btn:hover {
-  color: #e05c5c;
-  border-color: #e05c5c;
+  color: #cc0000;
+  border-color: #cc0000;
 }
 
 /* Mobile */
@@ -585,8 +585,8 @@
 .icaap-extrahours-tab:hover { color: #555; }
 
 .icaap-extrahours-tab.active {
-  color: #1e3342;
-  border-bottom-color: #4a7ab5;
+  color: #00326b;
+  border-bottom-color: #3164a0;
 }
 
 /* Note panel */
@@ -613,14 +613,14 @@
 .tr-title {
   font-size: 13px;
   font-weight: 600;
-  color: #3d5a8a;
+  color: #3164a0;
 }
 a.tr-title-link {
   text-decoration: none;
 }
 a.tr-title-link:hover {
   text-decoration: underline;
-  color: #2a4a7a;
+  color: #3164a0;
 }
 
 .tr-toolbar-right {
@@ -634,8 +634,8 @@ a.tr-title-link:hover {
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 4px;
-  border: 1px solid #5c8ac8;
-  color: #5c8ac8;
+  border: 1px solid #3164a0;
+  color: #3164a0;
   background: transparent;
   cursor: pointer;
 }
@@ -700,10 +700,10 @@ a.tr-title-link:hover {
   outline: none;
   color: #333;
 }
-.tr-fi:focus { border-color: #5c8ac8; }
+.tr-fi:focus { border-color: #3164a0; }
 .tr-fi-adviser {
   background: #f0f4fa;
-  color: #3d5a8a;
+  color: #3164a0;
   font-weight: 600;
 }
 .tr-fi-ta {
@@ -734,11 +734,11 @@ a.tr-title-link:hover {
   padding: 5px 16px;
   border-radius: 4px;
   border: none;
-  background: #3d5a8a;
+  background: #3164a0;
   color: #fff;
   cursor: pointer;
 }
-.tr-submit-btn:hover { background: #2d4a7a; }
+.tr-submit-btn:hover { background: #3164a0; }
 
 .tr-table-wrap {
   flex: 1;
@@ -805,7 +805,7 @@ a.tr-title-link:hover {
   width: 100%;
   box-sizing: border-box;
   font-size: 12px;
-  border: 2px solid #5c8ac8;
+  border: 2px solid #3164a0;
   border-radius: 0;
   padding: 4px 7px;
   background: #fff;
@@ -861,7 +861,7 @@ a.tr-title-link:hover {
 
 .icaap-note-saved {
   font-size: 11px;
-  color: #3d6a5a;
+  color: #3164a0;
   font-weight: 600;
 }
 
@@ -949,7 +949,7 @@ a.tr-title-link:hover {
 }
 
 .icaap-row-delete-btn:hover {
-  color: #e05c5c;
+  color: #cc0000;
   background: #fce8e8;
 }
 
@@ -998,7 +998,7 @@ a.tr-title-link:hover {
 }
 
 .asana-row-check-btn:hover {
-  border-color: #5cb85c;
+  border-color: #41a700;
   background: #edf7ed;
 }
 
@@ -1006,7 +1006,7 @@ a.tr-title-link:hover {
   flex: 1;
   font-size: 13.5px;
   font-weight: 400;
-  color: #1e3342;
+  color: #00326b;
   line-height: 1.4;
   cursor: pointer;
 }
@@ -1030,7 +1030,7 @@ a.tr-title-link:hover {
 }
 
 .asana-complete-btn {
-  background: #5cb85c;
+  background: #41a700;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -1079,7 +1079,7 @@ a.tr-title-link:hover {
 .att-week-label {
   font-size: 13px;
   font-weight: 600;
-  color: #1e3342;
+  color: #00326b;
 }
 
 .att-table-wrap {
@@ -1095,7 +1095,7 @@ a.tr-title-link:hover {
 
 .att-th-name {
   position: sticky; left: 0; z-index: 2;
-  background: #1e3342; color: #fff;
+  background: #00326b; color: #fff;
   text-align: left; padding: 8px 14px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
   min-width: 160px;
@@ -1103,7 +1103,7 @@ a.tr-title-link:hover {
 }
 
 .att-th-day {
-  background: #1e3342; color: #73a882;
+  background: #00326b; color: #3164a0;
   text-align: center; padding: 6px 10px;
   min-width: 110px;
   border-right: 1px solid #333;
@@ -1118,7 +1118,7 @@ a.tr-title-link:hover {
   position: sticky; left: 0; z-index: 1;
   background: #fff;
   padding: 8px 14px;
-  font-size: 13px; font-weight: 600; color: #1e3342;
+  font-size: 13px; font-weight: 600; color: #00326b;
   border-right: 2px solid #e8e5de;
   border-bottom: 1px solid #f0ede6;
   white-space: nowrap;
@@ -1160,7 +1160,7 @@ a.tr-title-link:hover {
   cursor: pointer;
   padding: 0;
 }
-.att-time-btn:hover { color: #9b59b6; }
+.att-time-btn:hover { color: #3164a0; }
 
 .att-time-input {
   display: block;
@@ -1168,7 +1168,7 @@ a.tr-title-link:hover {
   margin: 4px auto 0;
   font-size: 11px;
   padding: 2px 4px;
-  border: 1px solid #9b59b6;
+  border: 1px solid #3164a0;
   border-radius: 4px;
   text-align: center;
   font-family: inherit;
@@ -1190,7 +1190,7 @@ a.tr-title-link:hover {
   text-overflow: ellipsis;
   max-width: 120px;
 }
-.att-notes-btn:hover { color: #73a882; }
+.att-notes-btn:hover { color: #3164a0; }
 
 .att-notes-input {
   display: block;
@@ -1198,7 +1198,7 @@ a.tr-title-link:hover {
   margin-top: 4px;
   font-size: 11px;
   padding: 3px 5px;
-  border: 1px solid #73a882;
+  border: 1px solid #3164a0;
   border-radius: 4px;
   font-family: inherit;
   resize: vertical;
@@ -1267,9 +1267,9 @@ a.tr-title-link:hover {
 }
 
 .dash-month-pill.active {
-  background: #1e3342;
+  background: #00326b;
   color: #fff;
-  border-color: #1e3342;
+  border-color: #00326b;
 }
 
 .dash-search {
@@ -1283,7 +1283,7 @@ a.tr-title-link:hover {
   align-self: flex-end;
 }
 
-.dash-search:focus { border-color: #73a882; }
+.dash-search:focus { border-color: #3164a0; }
 
 .dash-summary {
   display: flex;
@@ -1392,7 +1392,7 @@ a.tr-title-link:hover {
   width: 100%;
   box-sizing: border-box;
   font-size: 11px;
-  border: 1px solid #4a7a6a;
+  border: 1px solid #3164a0;
   border-radius: 3px;
   padding: 2px 4px;
   background: #fff;
@@ -1402,11 +1402,11 @@ a.tr-title-link:hover {
 
 .dash-tr:nth-child(even) .dash-td-name,
 .dash-tr:nth-child(even) .dash-cell {
-  background: #ddd8cc;
+  background: #bfbfbf;
 }
 
 .dash-done {
-  color: #5cb85c;
+  color: #41a700;
   font-weight: 600;
 }
 
@@ -1424,9 +1424,9 @@ a.tr-title-link:hover {
 .dash-import-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #73a882;
+  color: #3164a0;
   padding: 5px 12px;
-  border: 1px solid #73a882;
+  border: 1px solid #3164a0;
   border-radius: 6px;
   cursor: pointer;
   background: none;
@@ -1435,7 +1435,7 @@ a.tr-title-link:hover {
 }
 
 .dash-import-btn:hover {
-  background: #73a882;
+  background: #3164a0;
   color: #fff;
 }
 
@@ -1473,7 +1473,7 @@ a.tr-title-link:hover {
 .import-modal-title {
   font-size: 15px;
   font-weight: 700;
-  color: #1e3342;
+  color: #00326b;
 }
 
 .import-modal-close {
@@ -1507,12 +1507,12 @@ a.tr-title-link:hover {
   box-sizing: border-box;
 }
 
-.import-textarea:focus { border-color: #73a882; }
+.import-textarea:focus { border-color: #3164a0; }
 
 .import-parse-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #1e3342;
+  background: #00326b;
   color: #fff;
   padding: 8px 16px;
   border-radius: 6px;
@@ -1582,7 +1582,7 @@ a.tr-title-link:hover {
 .import-confirm-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #73a882;
+  background: #3164a0;
   color: #fff;
   padding: 7px 18px;
   border-radius: 6px;
@@ -1597,13 +1597,13 @@ a.tr-title-link:hover {
 .import-result-ok {
   font-size: 14px;
   font-weight: 600;
-  color: #5cb85c;
+  color: #41a700;
   margin: 0;
 }
 
 .import-result-errors {
   font-size: 12px;
-  color: #e05c5c;
+  color: #cc0000;
 }
 
 .import-result-errors ul { margin: 4px 0 0 16px; padding: 0; }
@@ -1611,7 +1611,7 @@ a.tr-title-link:hover {
 .import-done-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #1e3342;
+  background: #00326b;
   color: #fff;
   padding: 7px 18px;
   border-radius: 6px;
@@ -1684,8 +1684,8 @@ a.tr-title-link:hover {
   overflow: hidden;
 }
 
-.icaap-note-row:nth-child(odd)  { background: rgba(155,89,182,0.05); border-left: 3px solid #9b59b6; }
-.icaap-note-row:nth-child(even) { background: rgba(74,90,162,0.05);  border-left: 3px solid #7b69c6; }
+.icaap-note-row:nth-child(odd)  { background: rgba(49,100,160,0.05); border-left: 3px solid #3164a0; }
+.icaap-note-row:nth-child(even) { background: rgba(49,100,160,0.05);  border-left: 3px solid #3164a0; }
 
 .icaap-note-meta {
   display: flex;
@@ -1702,8 +1702,8 @@ a.tr-title-link:hover {
 
 .icaap-note-source {
   font-size: 10px;
-  color: #9b59b6;
-  background: rgba(155,89,182,0.12);
+  color: #3164a0;
+  background: rgba(49,100,160,0.12);
   padding: 1px 7px;
   border-radius: 20px;
   font-weight: 600;
@@ -1742,7 +1742,7 @@ a.tr-title-link:hover {
 }
 
 .icaap-note-delete:hover {
-  color: #e05c5c;
+  color: #cc0000;
   background: #fce8e8;
 }
 
