@@ -369,7 +369,10 @@ export default function LeatherDayView({
                   books={books || []}
                   onAddBook={onAddBook}
                   onUpdateBookStatus={onUpdateBookStatus}
+<<<<<<< HEAD
                   onUpdateBookChapter={onUpdateBookChapter}
+=======
+>>>>>>> origin/main
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
                   allowedSubTabs={['library', 'mantra']}
