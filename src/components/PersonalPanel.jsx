@@ -12,6 +12,7 @@ function formatTime(ts) {
 const SUB_TABS = [
   { key: 'log',       label: 'Daily Log',         color: '#e8a0a0' },
   { key: 'goals',     label: 'My Goals',           color: '#e8c97a' },
+  { key: 'roles',     label: 'Roles',              color: '#3164a0' },
   { key: 'checklist', label: 'Monthly Checklist',  color: '#7ec8c8' },
   { key: 'library',   label: 'Library',            color: '#7ba7e0' },
   { key: 'mantra',    label: 'My Mantra',          color: '#e8a0a0' },
@@ -147,6 +148,7 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
       )}
 
       {subTab === 'goals' && <GoalsPanel userId={userId} section="goals" />}
+      {subTab === 'roles' && <GoalsPanel userId={userId} section="roles" />}
       {subTab === 'checklist' && <GoalsPanel userId={userId} section="checklist" />}
       {subTab === 'library' && (
         <LibraryPanel

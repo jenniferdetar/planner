@@ -23,17 +23,15 @@ const ALL_TABS = [
   { key: 'csea',        label: 'CSEA',         color: '#00326b', nav: true },
   { key: 'finance',     label: 'Finance',      color: '#3164a0', nav: true },
   { key: 'gcu',         label: 'GCU',          color: '#53575a', nav: true },
-  { key: 'goals',       label: 'Goals',        color: '#3164a0' },
   { key: 'hoa',         label: 'HOA',          color: '#3164a0', nav: true },
   { key: 'icaap',       label: 'iCAAP',        color: '#3164a0', nav: true },
   { key: 'master-tasks',label: 'Master Tasks', color: '#00326b' },
   { key: 'matrix',      label: 'Matrix',       color: '#53575a', nav: true },
   { key: 'personal',    label: 'Personal',     color: '#eeb125', nav: true },
-  { key: 'roles',       label: 'Roles',        color: '#3164a0' },
   { key: 'wywo',        label: 'WYWO',         color: '#f7941d', nav: true },
 ]
 
-const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks','roles','goals'])
+const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks'])
 
 function viewToTab(view) {
   if (!view || view === 'day') return 'daily-tasks'
@@ -230,16 +228,6 @@ export default function LeatherDayView({
 
             {/* Day content tabs */}
             {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
-            {(rightTab === 'roles' || rightTab === 'goals') && (
-              <SectionTextPanel
-                key={rightTab}
-                sectionKey={rightTab}
-                label={ALL_TABS.find(t => t.key === rightTab)?.label}
-                color={ALL_TABS.find(t => t.key === rightTab)?.color}
-                value={sections?.[rightTab] ?? ''}
-                onChange={onUpdateSection}
-              />
-            )}
 
             {/* Nav view tabs — render full view components inside binder */}
             {rightTab === 'week' && (
@@ -368,13 +356,10 @@ export default function LeatherDayView({
                   books={books || []}
                   onAddBook={onAddBook}
                   onUpdateBookStatus={onUpdateBookStatus}
-<<<<<<< HEAD
                   onUpdateBookChapter={onUpdateBookChapter}
-=======
->>>>>>> origin/main
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
-                  allowedSubTabs={['library', 'mantra']}
+                  allowedSubTabs={['goals', 'library', 'mantra', 'roles']}
                 />
               </div>
             )}
