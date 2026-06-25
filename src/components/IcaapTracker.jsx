@@ -256,7 +256,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
               <div key={l.id} className="csea-note-row">
                 <div className="csea-note-body">
                   <a href={l.url} target="_blank" rel="noopener noreferrer" className="quick-link-anchor">{l.title}</a>
-                  <span className="csea-note-source">{l.url}</span>
                 </div>
                 <button className="csea-note-delete" onClick={() => deleteLink(l.id)}>✕</button>
               </div>
