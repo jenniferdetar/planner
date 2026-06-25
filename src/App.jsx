@@ -360,10 +360,6 @@ export default function App() {
       </div>
       {isMobile && (
         <nav className="mobile-nav">
-          <button className={`mobile-nav-btn${mobilePanel === 'sidebar' ? ' active' : ''}`} onClick={() => setMobilePanel('sidebar')}>
-            <span className="mobile-nav-icon">☰</span>
-            Tasks
-          </button>
           <button className={`mobile-nav-btn${mobilePanel === 'main' ? ' active' : ''}`} onClick={() => setMobilePanel('main')}>
             <span className="mobile-nav-icon">📅</span>
             Planner
