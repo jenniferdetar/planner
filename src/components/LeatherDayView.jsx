@@ -99,6 +99,7 @@ export default function LeatherDayView({
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
   const [promotedToast, setPromotedToast] = useState(null)
+  const [personalSubTab, setPersonalSubTab] = useState('goals')
 
   function handlePromoteTask(task) {
     const cat = TAB_CATEGORY[rightTab] || ''
@@ -406,14 +407,18 @@ export default function LeatherDayView({
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
                   allowedSubTabs={['goals', 'library', 'mantra', 'roles']}
+                  subTab={personalSubTab}
+                  onSubTabChange={setPersonalSubTab}
                 />
-                <MiniMasterPanel
-                  tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.personal)}
-                  category={TAB_CATEGORY.personal}
-                  color={CATEGORY_COLORS[TAB_CATEGORY.personal]}
-                  onAdd={onAddMasterTask}
-                  onDelete={onDeleteMasterTask}
-                />
+                {personalSubTab === 'goals' && (
+                  <MiniMasterPanel
+                    tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.personal)}
+                    category={TAB_CATEGORY.personal}
+                    color={CATEGORY_COLORS[TAB_CATEGORY.personal]}
+                    onAdd={onAddMasterTask}
+                    onDelete={onDeleteMasterTask}
+                  />
+                )}
               </div>
             )}
 
