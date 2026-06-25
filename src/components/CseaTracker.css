@@ -421,6 +421,102 @@
 }
 .issue-delete-btn:hover { color: #cc0000; border-color: #cc0000; }
 
+/* ── Issue notes count badge ───────────────────────────────────────────── */
+.issue-notes-count {
+  background: var(--csea-blue);
+  color: var(--csea-yellow);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 8px;
+  margin-left: auto;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* ── Issue timeline ─────────────────────────────────────────────────────── */
+.issue-timeline {
+  margin: 10px 0 6px;
+  border-left: 3px solid var(--csea-blue);
+  padding-left: 10px;
+}
+
+.issue-timeline-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--csea-blue);
+  margin-bottom: 6px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.issue-timeline-entry {
+  position: relative;
+  padding: 6px 24px 6px 0;
+  border-bottom: 1px solid var(--csea-light-gray);
+}
+
+.issue-timeline-entry:last-child { border-bottom: none; }
+
+.issue-timeline-date {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--csea-blue);
+  font-family: 'Open Sans', sans-serif;
+  margin-bottom: 2px;
+}
+
+.issue-timeline-text {
+  font-size: 12px;
+  color: var(--csea-body);
+  line-height: 1.5;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.issue-timeline-delete {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #ccc;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+.issue-timeline-delete:hover { color: #cc0000; }
+
+/* ── Issue add note button ──────────────────────────────────────────────── */
+.issue-add-note-btn {
+  background: none;
+  border: 1px dashed var(--csea-border);
+  color: var(--csea-link);
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 6px 0;
+  font-family: 'Open Sans', sans-serif;
+  transition: border-color 0.15s, background 0.15s;
+}
+.issue-add-note-btn:hover {
+  border-color: var(--csea-blue);
+  background: var(--csea-light-blue);
+}
+
+/* ── Issue note form ────────────────────────────────────────────────────── */
+.issue-note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 8px;
+  background: var(--csea-light-blue);
+  border-radius: 6px;
+  border: 1px solid #c0d8ee;
+}
+
 /* ── Interaction groups ─────────────────────────────────────────────────── */
 .interaction-group {
   border: 1px solid var(--csea-light-gray);

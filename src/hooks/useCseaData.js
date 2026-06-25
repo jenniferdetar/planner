@@ -120,6 +120,51 @@ export function useMemberInteractions(userId) {
   return { interactions, addInteraction, updateInteraction, showArchived, setShowArchived }
 }
 
+export function useCseaIssueNotes(userId) {
+  const [notesByIssue, setNotesByIssue] = useState({})
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('csea_issue_notes')
+      .select('*')
+      .eq('user_id', userId)
+      .order('note_date', { ascending: true })
+      .then(({ data }) => {
+        const grouped = {}
+        for (const n of (data || [])) {
+          if (!grouped[n.issue_id]) grouped[n.issue_id] = []
+          grouped[n.issue_id].push(n)
+        }
+        setNotesByIssue(grouped)
+      })
+  }, [userId])
+
+  async function addNote(issueId, noteText, noteDate) {
+    const { data } = await supabase
+      .from('csea_issue_notes')
+      .insert({ issue_id: issueId, note_text: noteText, note_date: noteDate || null, user_id: userId })
+      .select()
+      .single()
+    if (data) {
+      setNotesByIssue(prev => ({
+        ...prev,
+        [issueId]: [...(prev[issueId] || []), data],
+      }))
+    }
+  }
+
+  async function deleteNote(issueId, noteId) {
+    await supabase.from('csea_issue_notes').delete().eq('id', noteId)
+    setNotesByIssue(prev => ({
+      ...prev,
+      [issueId]: (prev[issueId] || []).filter(n => n.id !== noteId),
+    }))
+  }
+
+  return { notesByIssue, addNote, deleteNote }
+}
+
 export function useCseaNotes(userId) {
   const [notes, setNotes] = useState([])
 

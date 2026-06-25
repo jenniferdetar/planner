@@ -73,6 +73,7 @@ export default function LeatherDayView({
   showArchivedInteractions, onToggleArchivedInteractions,
   asanaCseaTasks, onCompleteAsanaTask, onUpdateAsanaTaskNotes,
   cseaNotes, onAddCseaNote, onDeleteCseaNote,
+  cseaIssueNotes, onAddCseaIssueNote, onDeleteCseaIssueNote,
   // icaap props
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   asanaIcaapTasks,
@@ -285,6 +286,9 @@ export default function LeatherDayView({
                   cseaNotes={cseaNotes || []}
                   onAddCseaNote={onAddCseaNote}
                   onDeleteCseaNote={onDeleteCseaNote}
+                  issueNotes={cseaIssueNotes || {}}
+                  onAddIssueNote={onAddCseaIssueNote}
+                  onDeleteIssueNote={onDeleteCseaIssueNote}
                 />
               </div>
             )}

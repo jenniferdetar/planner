@@ -57,7 +57,7 @@ const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote }) {
+export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote }) {
   const workLocations = useWorkLocations()
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
   const [tab, setTab] = useState('issues')
@@ -195,7 +195,15 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
               <p className="csea-empty">No {filter === 'active' ? 'active' : filter === 'resolved' ? 'resolved' : ''} issues</p>
             )}
             {displayIssues.map(issue => (
-              <IssueCard key={issue.id} issue={issue} onUpdateStatus={onUpdateStatus} onDelete={onDeleteIssue} />
+              <IssueCard
+                key={issue.id}
+                issue={issue}
+                onUpdateStatus={onUpdateStatus}
+                onDelete={onDeleteIssue}
+                notes={issueNotes[issue.id] || []}
+                onAddNote={(text, date) => onAddIssueNote?.(issue.id, text, date)}
+                onDeleteNote={(noteId) => onDeleteIssueNote?.(issue.id, noteId)}
+              />
             ))}
           </div>
         </div>
@@ -495,8 +503,20 @@ function CseaAsanaTaskRow({ task, onComplete, onUpdateNotes }) {
   )
 }
 
-function IssueCard({ issue, onUpdateStatus, onDelete }) {
+function IssueCard({ issue, onUpdateStatus, onDelete, notes = [], onAddNote, onDeleteNote }) {
   const [expanded, setExpanded] = useState(false)
+  const [showNoteForm, setShowNoteForm] = useState(false)
+  const [noteText, setNoteText] = useState('')
+  const [noteDate, setNoteDate] = useState(new Date().toISOString().split('T')[0])
+
+  async function handleAddNote(e) {
+    e.preventDefault()
+    if (!noteText.trim()) return
+    await onAddNote?.(noteText.trim(), noteDate)
+    setNoteText('')
+    setNoteDate(new Date().toISOString().split('T')[0])
+    setShowNoteForm(false)
+  }
 
   return (
     <div className={`issue-card ${issue.status === 'Resolved' || issue.status === 'Closed' ? 'resolved' : ''}`}>
@@ -513,6 +533,7 @@ function IssueCard({ issue, onUpdateStatus, onDelete }) {
         <span className="issue-status-badge" style={{ background: STATUS_COLORS[issue.status] + '22', color: STATUS_COLORS[issue.status] }}>
           {issue.status}
         </span>
+        {notes.length > 0 && <span className="issue-notes-count">{notes.length}</span>}
         <span className="issue-chevron">{expanded ? '▾' : '▸'}</span>
       </div>
 
@@ -522,6 +543,44 @@ function IssueCard({ issue, onUpdateStatus, onDelete }) {
           {issue.description && <div className="issue-desc">{issue.description}</div>}
           {issue.involved_parties && <div className="issue-detail">👥 {issue.involved_parties}</div>}
           {issue.issue_date && <div className="issue-detail">📅 {issue.issue_date}</div>}
+
+          {notes.length > 0 && (
+            <div className="issue-timeline">
+              <div className="issue-timeline-label">Timeline</div>
+              {notes.map(n => (
+                <div key={n.id} className="issue-timeline-entry">
+                  <div className="issue-timeline-date">{n.note_date ? new Date(n.note_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</div>
+                  <div className="issue-timeline-text">{n.note_text}</div>
+                  <button className="issue-timeline-delete" onClick={() => onDeleteNote?.(n.id)} title="Remove">×</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {showNoteForm ? (
+            <form className="issue-note-form" onSubmit={handleAddNote}>
+              <input
+                className="csea-input"
+                type="date"
+                value={noteDate}
+                onChange={e => setNoteDate(e.target.value)}
+              />
+              <textarea
+                className="csea-textarea"
+                placeholder="Note *"
+                rows={2}
+                value={noteText}
+                onChange={e => setNoteText(e.target.value)}
+              />
+              <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
+                <button type="button" className="csea-cancel" onClick={() => setShowNoteForm(false)}>Cancel</button>
+                <button type="submit" className="csea-save">Add</button>
+              </div>
+            </form>
+          ) : (
+            <button className="issue-add-note-btn" onClick={() => setShowNoteForm(true)}>+ Add Timeline Note</button>
+          )}
+
           <div className="issue-actions">
             <div className="issue-status-btns">
               {STATUSES.filter(s => s !== issue.status).map(s => (
