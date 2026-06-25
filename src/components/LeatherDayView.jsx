@@ -519,7 +519,6 @@ const CATEGORY_COLORS = {
   'CSEA': '#b87a38',
   'LAUSD / iCAAP': '#3a5c4a',
   'GCU': '#5a7848',
-  'Business': '#4a6a8a',
   'Household Finances': '#8a5a3a',
   'Jeff': '#7a4a6a',
   'Home': '#4a7a6a',
