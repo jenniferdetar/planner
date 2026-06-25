@@ -395,3 +395,129 @@
   flex: 1;
   min-height: 0;
 }
+
+/* ─── Sidebar mini-calendar ────────────────────────────────────────────────── */
+
+.dash-mini-cal {
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.dmc-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.dmc-nav-btn {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color 0.12s;
+}
+.dmc-nav-btn:hover { color: #e5e7eb; }
+
+.dmc-month-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #d1d5db;
+  letter-spacing: 0.3px;
+}
+
+.dmc-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.dmc-dow {
+  font-size: 9px;
+  font-weight: 600;
+  color: #4b5563;
+  text-align: center;
+  padding: 3px 0 4px;
+  text-transform: uppercase;
+}
+
+.dmc-cell {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 11px;
+  text-align: center;
+  padding: 4px 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: background 0.1s, color 0.1s;
+}
+.dmc-cell:hover { background: rgba(255,255,255,0.08); color: #e5e7eb; }
+.dmc-cell.overflow { visibility: hidden; cursor: default; }
+.dmc-cell.today { color: #fbbf24; font-weight: 700; }
+.dmc-cell.selected {
+  background: #fff;
+  color: #1a2332;
+  font-weight: 700;
+}
+.dmc-cell.today.selected { background: #fbbf24; color: #1a2332; }
+
+/* ─── Nav group labels ─────────────────────────────────────────────────────── */
+
+.dash-nav-group-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #374151;
+  padding: 6px 16px 2px;
+}
+
+/* ─── Google cal / footer extras ───────────────────────────────────────────── */
+
+.dash-gcal-btn {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  color: #6b7280;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin-bottom: 6px;
+  transition: background 0.12s, color 0.12s;
+  text-align: center;
+}
+.dash-gcal-btn:hover { background: rgba(255,255,255,0.06); color: #d1d5db; }
+
+.dash-gcal-ok {
+  display: block;
+  font-size: 11px;
+  color: #4b5563;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+/* ─── Calendar views ───────────────────────────────────────────────────────── */
+
+.dash-cal-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.dash-cal-wrap > * {
+  flex: 1;
+  min-height: 0;
+}

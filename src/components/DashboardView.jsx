@@ -8,9 +8,14 @@ import WhileYouWereOut from './WhileYouWereOut'
 import HoaPanel from './HoaPanel'
 import EisenhowerMatrix from './EisenhowerMatrix'
 import PersonalPanel from './PersonalPanel'
+import WeekView from './WeekView'
+import MonthView from './MonthView'
+import { sameDay } from '../utils/dateUtils'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
+const SHORT_MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+const SHORT_DAY   = ['S','M','T','W','T','F','S']
 
 const CATEGORY_COLORS = {
   'CSEA':                 '#b87a38',
@@ -23,16 +28,18 @@ const CATEGORY_COLORS = {
 }
 
 const NAV_ITEMS = [
-  { key: 'today',    label: 'Today',        color: '#374151' },
-  { key: 'master',   label: 'Master Tasks', color: '#1e5799' },
-  { key: 'csea',     label: 'CSEA',         color: '#b87a38' },
-  { key: 'finance',  label: 'Finance',      color: '#8a5a3a' },
-  { key: 'gcu',      label: 'GCU',          color: '#5a7848' },
-  { key: 'hoa',      label: 'HOA',          color: '#4a7a6a' },
-  { key: 'icaap',    label: 'iCAAP',        color: '#3a5c4a' },
-  { key: 'personal', label: 'Personal',     color: '#6a5a8a' },
-  { key: 'matrix',   label: 'Matrix',       color: '#374151' },
-  { key: 'wywo',     label: 'WYWO',         color: '#374151' },
+  { key: 'today',    label: 'Today',        color: '#9ca3af', group: 'day' },
+  { key: 'week',     label: 'Week',         color: '#9ca3af', group: 'day' },
+  { key: 'month',    label: 'Month',        color: '#9ca3af', group: 'day' },
+  { key: 'master',   label: 'Master Tasks', color: '#1e5799', group: 'module' },
+  { key: 'csea',     label: 'CSEA',         color: '#b87a38', group: 'module' },
+  { key: 'finance',  label: 'Finance',      color: '#8a5a3a', group: 'module' },
+  { key: 'gcu',      label: 'GCU',          color: '#5a7848', group: 'module' },
+  { key: 'hoa',      label: 'HOA',          color: '#4a7a6a', group: 'module' },
+  { key: 'icaap',    label: 'iCAAP',        color: '#3a5c4a', group: 'module' },
+  { key: 'personal', label: 'Personal',     color: '#6a5a8a', group: 'module' },
+  { key: 'matrix',   label: 'Matrix',       color: '#9ca3af', group: 'module' },
+  { key: 'wywo',     label: 'WYWO',         color: '#9ca3af', group: 'module' },
 ]
 
 function fmtTime(ts) {
@@ -42,11 +49,57 @@ function fmtTime(ts) {
   return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${period}`
 }
 
+function DashMiniCal({ selectedDate, onDateChange }) {
+  const today = new Date()
+  const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
+  const [viewMonth, setViewMonth] = useState(selectedDate.getMonth())
+
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay()
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+  const daysInPrev = new Date(viewYear, viewMonth, 0).getDate()
+  const cells = []
+  for (let i = firstDay - 1; i >= 0; i--) cells.push({ day: daysInPrev - i, overflow: true })
+  for (let d = 1; d <= daysInMonth; d++) cells.push({ day: d, overflow: false })
+  while (cells.length < 35) cells.push({ day: cells.length - firstDay - daysInMonth + 1, overflow: true })
+
+  function prevMonth() { viewMonth === 0 ? (setViewYear(y => y - 1), setViewMonth(11)) : setViewMonth(m => m - 1) }
+  function nextMonth() { viewMonth === 11 ? (setViewYear(y => y + 1), setViewMonth(0)) : setViewMonth(m => m + 1) }
+
+  return (
+    <div className="dash-mini-cal">
+      <div className="dmc-nav">
+        <button className="dmc-nav-btn" onClick={prevMonth}>‹</button>
+        <span className="dmc-month-label">{SHORT_MONTH[viewMonth]} {viewYear}</span>
+        <button className="dmc-nav-btn" onClick={nextMonth}>›</button>
+      </div>
+      <div className="dmc-grid">
+        {SHORT_DAY.map((d, i) => <span key={i} className="dmc-dow">{d}</span>)}
+        {cells.map((cell, i) => {
+          if (cell.overflow) return <span key={i} className="dmc-cell overflow" />
+          const cellDate = new Date(viewYear, viewMonth, cell.day)
+          const isToday = sameDay(cellDate, today)
+          const isSel   = sameDay(cellDate, selectedDate)
+          return (
+            <button key={i}
+              className={`dmc-cell${isToday ? ' today' : ''}${isSel ? ' selected' : ''}`}
+              onClick={() => onDateChange(cellDate)}
+            >{cell.day}</button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export default function DashboardView({
   userId, selectedDate, onDateChange, onSwitchToBinder,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
   timeBlocks, onAddBlock, onDeleteBlock,
+  calendarBlocks,
   masterTasks, onAddMasterTask, onDeleteMasterTask, onUpdateMasterTask,
+  weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
+  taskCounts, onMonthChange,
+  calAuthExpired, onReconnectGoogle, calEventCount,
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
   cseaInteractions, onAddCseaInteraction, onUpdateCseaInteraction,
   showArchivedInteractions, onToggleArchivedInteractions,
@@ -86,7 +139,10 @@ export default function DashboardView({
     setNewTask('')
   }
 
-  const activeColor = NAV_ITEMS.find(n => n.key === section)?.color || '#374151'
+  function handleDateChange(date) {
+    onDateChange(date)
+    setSection('today')
+  }
 
   return (
     <div className="dash-outer">
@@ -95,23 +151,36 @@ export default function DashboardView({
       <aside className="dash-sidebar">
         <div className="dash-brand">
           <span className="dash-brand-name">Planner</span>
-          <button className="dash-binder-btn" onClick={onSwitchToBinder} title="Switch to binder view">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-              <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-              <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-              <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
-          </button>
+          {onSwitchToBinder && (
+            <button className="dash-binder-btn" onClick={onSwitchToBinder} title="Switch to binder view">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+              </svg>
+            </button>
+          )}
         </div>
 
-        <div className="dash-date-block">
-          <div className="dash-date-day">{DAY_NAMES[d.getDay()]}</div>
-          <div className="dash-date-mdy">{MONTH_NAMES[d.getMonth()]} {d.getDate()}, {d.getFullYear()}</div>
-        </div>
+        {/* Mini calendar */}
+        <DashMiniCal selectedDate={selectedDate} onDateChange={handleDateChange} />
 
         <nav className="dash-nav">
-          {NAV_ITEMS.map(item => (
+          <div className="dash-nav-group-label">Views</div>
+          {NAV_ITEMS.filter(n => n.group === 'day').map(item => (
+            <button
+              key={item.key}
+              className={`dash-nav-item${section === item.key ? ' active' : ''}`}
+              style={section === item.key ? { borderLeftColor: '#6b7280' } : {}}
+              onClick={() => setSection(item.key)}
+            >
+              <span className="dash-nav-dot" style={{ background: item.color }} />
+              {item.label}
+            </button>
+          ))}
+          <div className="dash-nav-group-label" style={{ marginTop: 10 }}>Modules</div>
+          {NAV_ITEMS.filter(n => n.group === 'module').map(item => (
             <button
               key={item.key}
               className={`dash-nav-item${section === item.key ? ' active' : ''}`}
@@ -125,6 +194,10 @@ export default function DashboardView({
         </nav>
 
         <div className="dash-sidebar-foot">
+          {(calAuthExpired || calEventCount === 0)
+            ? <button className="dash-gcal-btn" onClick={onReconnectGoogle}>Connect Google Cal</button>
+            : <span className="dash-gcal-ok">📅 {calEventCount} calendar event{calEventCount !== 1 ? 's' : ''}</span>
+          }
           <button className="dash-signout-btn" onClick={onSignOut}>Sign out</button>
         </div>
       </aside>
@@ -204,6 +277,34 @@ export default function DashboardView({
               </div>
             </div>
           </>
+        )}
+
+        {/* WEEK VIEW */}
+        {section === 'week' && (
+          <div className="dash-cal-wrap">
+            <WeekView
+              userId={userId}
+              selectedDate={selectedDate}
+              onDateChange={d => { handleDateChange(d) }}
+              calendarBlocks={calendarBlocks}
+              tasksByDate={weeklyTasks}
+              onToggleTask={onToggleWeeklyTask}
+              onAddTask={onAddWeeklyTask}
+            />
+          </div>
+        )}
+
+        {/* MONTH VIEW */}
+        {section === 'month' && (
+          <div className="dash-cal-wrap">
+            <MonthView
+              selectedDate={selectedDate}
+              onDateChange={d => { handleDateChange(d) }}
+              taskCounts={taskCounts}
+              timeBlocks={calendarBlocks || timeBlocks}
+              onMonthChange={onMonthChange}
+            />
+          </div>
         )}
 
         {/* MASTER TASKS */}

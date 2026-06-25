@@ -60,7 +60,7 @@ export default function App() {
   const { session, user, providerToken, loading, clearProviderToken } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
   const [view, setView] = useState('day')
-  const [viewMode, setViewMode] = useState('binder') // 'binder' | 'dashboard'
+  const [viewMode, setViewMode] = useState('dashboard') // 'binder' | 'dashboard'
   const [personalSubTab, setPersonalSubTab] = useState('log')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
@@ -309,6 +309,15 @@ export default function App() {
         onUpdateBookChapter={updateBookChapter}
         onDeleteBook={deleteBook}
         onImportBooks={importBooks}
+        calendarBlocks={allCalendarBlocks}
+        weeklyTasks={weeklyTasks}
+        onToggleWeeklyTask={handleToggleWeeklyTask}
+        onAddWeeklyTask={addWeeklyTask}
+        taskCounts={taskCounts}
+        onMonthChange={(y, m) => { setCalViewYear(y); setCalViewMonth(m) }}
+        calAuthExpired={calAuthExpired}
+        onReconnectGoogle={reconnectGoogle}
+        calEventCount={calEvents.length}
         onSignOut={() => signOut()}
       />
     )
@@ -433,13 +442,6 @@ export default function App() {
           </button>
         </nav>
       )}
-      <button
-        className="view-mode-toggle"
-        onClick={() => setViewMode('dashboard')}
-        title="Switch to dashboard view"
-      >
-        ⊞
-      </button>
     </div>
   )
 }
