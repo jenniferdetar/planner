@@ -15,6 +15,7 @@ export function useHoaItems(userId) {
     const { data } = await supabase
       .from('hoa_items')
       .select('*')
+      .eq('user_id', userId)
       .order('category')
       .order('created_at', { ascending: false })
     setItems(data || [])

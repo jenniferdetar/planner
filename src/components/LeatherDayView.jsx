@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './LeatherDayView.css'
 import { TAG_COLORS } from '../hooks/useAsanaTaskTags'
+import { sameDay } from '../utils/dateUtils'
 import WeekView from './WeekView'
 import MonthView from './MonthView'
 import CseaTracker from './CseaTracker'
@@ -35,12 +36,6 @@ const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks'])
 function viewToTab(view) {
   if (!view || view === 'day') return 'daily-tasks'
   return view
-}
-
-function sameDay(a, b) {
-  return a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
 }
 
 function formatHour(h) {
