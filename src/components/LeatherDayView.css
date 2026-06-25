@@ -898,8 +898,8 @@ a.lp-task-title:hover {
   flex: 1;
   overflow-y: auto;
   padding: 6px 18px;
-  display: flex;
-  flex-direction: column;
+  column-count: 3;
+  column-gap: 14px;
 }
 
 .rp-empty {
@@ -991,7 +991,7 @@ a.lp-task-title:hover {
 }
 .rp-del-btn:hover { color: #cc0000; }
 
-.rp-priority-group { margin-bottom: 10px; }
+.rp-priority-group { margin-bottom: 10px; break-inside: avoid; }
 .rp-priority-label {
   font-size: 9px;
   font-weight: 700;
