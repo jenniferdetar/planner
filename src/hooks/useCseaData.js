@@ -35,12 +35,24 @@ export function useCseaMembers() {
 export function useWorkLocations() {
   const [locations, setLocations] = useState([])
   useEffect(() => {
-    supabase
-      .from('school directory')
-      .select('"School Name"')
-      .order('"School Name"')
-      .limit(2000)
-      .then(({ data }) => setLocations((data || []).map(r => r['School Name'])))
+    async function fetchAll() {
+      const PAGE = 1000
+      let all = []
+      let from = 0
+      while (true) {
+        const { data } = await supabase
+          .from('school directory')
+          .select('"School Name"')
+          .order('"School Name"')
+          .range(from, from + PAGE - 1)
+        if (!data || data.length === 0) break
+        all = all.concat(data.map(r => r['School Name']))
+        if (data.length < PAGE) break
+        from += PAGE
+      }
+      setLocations(all)
+    }
+    fetchAll()
   }, [])
   return locations
 }
