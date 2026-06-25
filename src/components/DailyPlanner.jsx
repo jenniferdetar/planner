@@ -51,7 +51,7 @@ const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
 export default function DailyPlanner({
   userId,
   selectedDate, onDateChange,
-  masterTasks, onDeleteMasterTask,
+  masterTasks, onDeleteMasterTask, onUpdateMasterTask,
   dailyTasks, timeBlocks,
   onAddTask, onToggleTask, onDeleteTask, onUpdateTaskNotes,
   onAddBlock, onBulkAddMeetings, onDeleteBlock,
@@ -153,6 +153,7 @@ export default function DailyPlanner({
         onDeleteBlock={onDeleteBlock}
         masterTasks={masterTasks || []}
         onDeleteMasterTask={onDeleteMasterTask}
+        onUpdateMasterTask={onUpdateMasterTask}
         sections={sections}
         onUpdateSection={onUpdateSection}
         asanaTaskTags={asanaTaskTags}

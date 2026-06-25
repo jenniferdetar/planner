@@ -77,7 +77,7 @@ export default function App() {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-  const { tasks: masterTasks, addTask: addMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
+  const { tasks: masterTasks, addTask: addMasterTask, updateTask: updateMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
   const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask, updateTaskDescription } = useDailyTasks(userId, selectedDate)
   const { meetings, addMeeting, bulkAddMeetings, deleteMeeting } = useMeetings(userId, selectedDate)
   const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
@@ -262,6 +262,7 @@ export default function App() {
           onDateChange={setSelectedDate}
           masterTasks={masterTasks}
           onDeleteMasterTask={deleteMasterTask}
+          onUpdateMasterTask={updateMasterTask}
           dailyTasks={allDailyTasks}
           timeBlocks={allTimeBlocks}
           calendarBlocks={allCalendarBlocks}
