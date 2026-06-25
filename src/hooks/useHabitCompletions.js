@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-
-function toDateStr(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
-}
+import { toDateStr } from '../utils/dateUtils'
 
 export function useHabitCompletions(userId, weekStart, weekEnd) {
   const [completions, setCompletions] = useState(new Set())

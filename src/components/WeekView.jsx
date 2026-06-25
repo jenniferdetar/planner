@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './WeekView.css'
+import { toDateStr } from '../utils/dateUtils'
 import { useHabitCompletions } from '../hooks/useHabitCompletions'
 import { usePersonalChecklist } from '../hooks/usePersonalChecklist'
 import { useMeetingsInRange } from '../hooks/usePlannerData'
@@ -41,10 +42,6 @@ function dedupeEvents(events) {
     seen.add(key)
     return true
   })
-}
-
-function toDateStr(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 }
 
 function getWeekStart(date) {

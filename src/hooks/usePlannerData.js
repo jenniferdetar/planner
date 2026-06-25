@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
-
-function toDateStr(d) {
-  return d.toISOString().split('T')[0]
-}
+import { toDateStr } from '../utils/dateUtils'
 
 // ─── Master Tasks ────────────────────────────────────────────────────────────
 

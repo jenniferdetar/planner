@@ -18,7 +18,6 @@ import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
 import { useFamilyTree } from './hooks/useFamilyTree'
-import Sidebar from './components/Sidebar'
 import DailyPlanner from './components/DailyPlanner'
 import LoginScreen from './components/LoginScreen'
 import './App.css'
@@ -239,26 +238,6 @@ export default function App() {
 
   return (
     <div className="app">
-      <div style={{ display: 'none' }}>
-        <Sidebar
-          asanaTasks={asanaTasks}
-          asanaProjects={asanaProjects}
-          asanaStatus={asanaStatus}
-          onAddAsanaTask={addAsanaTask}
-          onCompleteAsanaTask={completeAsanaTask}
-          onRefreshAsana={refreshAsana}
-          user={user}
-          sections={sections}
-          onUpdateSection={updateSection}
-          view={view}
-          onViewChange={(v) => {
-            if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
-            setView(v)
-          }}
-          personalSubTab={personalSubTab}
-          onPersonalSubTabChange={setPersonalSubTab}
-        />
-      </div>
       <div className={mp === null || mp === 'main' ? 'mobile-active' : undefined}>
         <DailyPlanner
           userId={userId}

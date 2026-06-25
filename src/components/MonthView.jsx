@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './MonthView.css'
+import { sameDay, toDateStr } from '../utils/dateUtils'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
@@ -22,15 +23,6 @@ function contrastColor(hex) {
   return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1e3342' : '#ffffff'
 }
 
-function sameDay(a, b) {
-  return a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-}
-
-function toDateStr(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
-}
 
 export default function MonthView({ selectedDate, onDateChange, taskCounts, timeBlocks, onMonthChange }) {
   const today = new Date()
