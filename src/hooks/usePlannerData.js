@@ -28,12 +28,22 @@ export function useMasterTasks(userId) {
     if (data) setTasks((prev) => [...prev, data])
   }
 
+  async function updateTask(id, updates) {
+    const { data } = await supabase
+      .from('opus_master_tasks')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single()
+    if (data) setTasks((prev) => prev.map((t) => (t.id === id ? data : t)))
+  }
+
   async function deleteTask(id) {
     await supabase.from('opus_master_tasks').delete().eq('id', id)
     setTasks((prev) => prev.filter((t) => t.id !== id))
   }
 
-  return { tasks, addTask, deleteTask }
+  return { tasks, addTask, updateTask, deleteTask }
 }
 
 // ─── Daily Tasks ─────────────────────────────────────────────────────────────

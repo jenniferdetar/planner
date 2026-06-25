@@ -10,6 +10,7 @@ import FinancialPanel from './FinancialPanel'
 import WhileYouWereOut from './WhileYouWereOut'
 import ContractReference from './ContractReference'
 import HoaPanel from './HoaPanel'
+import EisenhowerMatrix from './EisenhowerMatrix'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
@@ -28,6 +29,7 @@ const ALL_TABS = [
   { key: 'wywo',         label: 'WYWO',         color: '#4a3a58', nav: true },
   { key: 'contract',     label: 'Contract',     color: '#2a5878', nav: true },
   { key: 'hoa',         label: 'HOA',          color: '#7b5ea7', nav: true },
+  { key: 'matrix',      label: 'Matrix',       color: '#4a5878', nav: true },
 ]
 
 const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks','roles','goals'])
@@ -54,7 +56,7 @@ export default function LeatherDayView({
   selectedDate, onDateChange,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
   timeBlocks, onAddBlock, onDeleteBlock,
-  masterTasks, onDeleteMasterTask,
+  masterTasks, onDeleteMasterTask, onUpdateMasterTask,
   sections, onUpdateSection,
   asanaTasks, asanaTaskTags, onCycleAsanaTaskTag,
   // week props
@@ -343,6 +345,11 @@ export default function LeatherDayView({
             {rightTab === 'hoa' && (
               <div className="binder-view-wrap">
                 <HoaPanel userId={userId} />
+              </div>
+            )}
+            {rightTab === 'matrix' && (
+              <div className="binder-view-wrap">
+                <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
               </div>
             )}
 
