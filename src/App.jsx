@@ -244,6 +244,7 @@ export default function App() {
           selectedDate={selectedDate}
           onDateChange={setSelectedDate}
           masterTasks={masterTasks}
+          onAddMasterTask={addMasterTask}
           onDeleteMasterTask={deleteMasterTask}
           onUpdateMasterTask={updateMasterTask}
           dailyTasks={allDailyTasks}

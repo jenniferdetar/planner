@@ -19,6 +19,15 @@ const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'
 const SHORT_DAY   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 6)
 
+const TAB_CATEGORY = {
+  csea:     'CSEA',
+  finance:  'Household Finances',
+  gcu:      'GCU',
+  hoa:      'Home',
+  icaap:    'LAUSD / iCAAP',
+  personal: 'Personal Development',
+}
+
 const ALL_TABS = [
   { key: 'csea',        label: 'CSEA',         color: '#00326b', nav: true },
   { key: 'finance',     label: 'Finance',      color: '#1e5799', nav: true },
@@ -49,7 +58,7 @@ export default function LeatherDayView({
   selectedDate, onDateChange,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
   timeBlocks, onAddBlock, onDeleteBlock,
-  masterTasks, onDeleteMasterTask, onUpdateMasterTask,
+  masterTasks, onAddMasterTask, onDeleteMasterTask, onUpdateMasterTask,
   sections, onUpdateSection,
   asanaTasks, asanaTaskTags, onCycleAsanaTaskTag,
   // week props
@@ -89,6 +98,14 @@ export default function LeatherDayView({
   })
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
+  const [promotedToast, setPromotedToast] = useState(null)
+
+  function handlePromoteTask(task) {
+    const cat = TAB_CATEGORY[rightTab] || ''
+    onAddMasterTask?.(task.title, task.priority || 'medium', cat)
+    setPromotedToast(task.title)
+    setTimeout(() => setPromotedToast(null), 2500)
+  }
   const [addingBlock, setAddingBlock] = useState(null)
   const [blockText, setBlockText] = useState('')
   const [blockStart, setBlockStart] = useState('')
@@ -149,6 +166,11 @@ export default function LeatherDayView({
     <div className="leather-outer">
       <div className="leather-binder">
 
+        {/* ── Promote toast ── */}
+        {promotedToast && (
+          <div className="promote-toast">Sent to Master Tasks: {promotedToast}</div>
+        )}
+
         {/* ── Left page ── */}
         <div className="binder-page left-page">
           <div className="lp-col lp-col-left">
@@ -179,10 +201,10 @@ export default function LeatherDayView({
                 </form>
               )}
               <div className="lp-task-list">
-                {pending.map((t, i) => <LpTaskRow key={t.id} task={t} index={i+1} onToggle={onToggleTask} onDelete={onDeleteTask} tag={t.source === 'asana' ? (asanaTaskTags?.[t.id] ?? null) : null} onCycleTag={t.source === 'asana' ? () => onCycleAsanaTaskTag?.(t.id) : null} />)}
+                {pending.map((t, i) => <LpTaskRow key={t.id} task={t} index={i+1} onToggle={onToggleTask} onDelete={onDeleteTask} onPromote={t.source !== 'asana' ? handlePromoteTask : null} tag={t.source === 'asana' ? (asanaTaskTags?.[t.id] ?? null) : null} onCycleTag={t.source === 'asana' ? () => onCycleAsanaTaskTag?.(t.id) : null} />)}
                 {done.length > 0 && <>
                   <div className="lp-done-sep">Done</div>
-                  {done.map((t, i) => <LpTaskRow key={t.id} task={t} index={pending.length+i+1} onToggle={onToggleTask} onDelete={onDeleteTask} done tag={t.source === 'asana' ? (asanaTaskTags?.[t.id] ?? null) : null} onCycleTag={t.source === 'asana' ? () => onCycleAsanaTaskTag?.(t.id) : null} />)}
+                  {done.map((t, i) => <LpTaskRow key={t.id} task={t} index={pending.length+i+1} onToggle={onToggleTask} onDelete={onDeleteTask} onPromote={t.source !== 'asana' ? handlePromoteTask : null} done tag={t.source === 'asana' ? (asanaTaskTags?.[t.id] ?? null) : null} onCycleTag={t.source === 'asana' ? () => onCycleAsanaTaskTag?.(t.id) : null} />)}
                 </>}
                 {pending.length === 0 && done.length === 0 && !showAddTask &&
                   <p className="lp-empty">No tasks today</p>}
@@ -271,6 +293,13 @@ export default function LeatherDayView({
                   onAddIssueNote={onAddCseaIssueNote}
                   onDeleteIssueNote={onDeleteCseaIssueNote}
                 />
+                <MiniMasterPanel
+                  tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.csea)}
+                  category={TAB_CATEGORY.csea}
+                  color={CATEGORY_COLORS[TAB_CATEGORY.csea]}
+                  onAdd={onAddMasterTask}
+                  onDelete={onDeleteMasterTask}
+                />
               </div>
             )}
             {rightTab === 'icaap' && (
@@ -291,11 +320,25 @@ export default function LeatherDayView({
                   onAddIcaapNote={onAddIcaapNote}
                   onDeleteIcaapNote={onDeleteIcaapNote}
                 />
+                <MiniMasterPanel
+                  tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.icaap)}
+                  category={TAB_CATEGORY.icaap}
+                  color={CATEGORY_COLORS[TAB_CATEGORY.icaap]}
+                  onAdd={onAddMasterTask}
+                  onDelete={onDeleteMasterTask}
+                />
               </div>
             )}
             {rightTab === 'gcu' && (
               <div className="binder-view-wrap">
                 <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
+                <MiniMasterPanel
+                  tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.gcu)}
+                  category={TAB_CATEGORY.gcu}
+                  color={CATEGORY_COLORS[TAB_CATEGORY.gcu]}
+                  onAdd={onAddMasterTask}
+                  onDelete={onDeleteMasterTask}
+                />
               </div>
             )}
             {rightTab === 'finance' && (
@@ -319,6 +362,13 @@ export default function LeatherDayView({
                   onDeletePaycheck={onDeletePaycheck}
                   userId={userId}
                 />
+                <MiniMasterPanel
+                  tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.finance)}
+                  category={TAB_CATEGORY.finance}
+                  color={CATEGORY_COLORS[TAB_CATEGORY.finance]}
+                  onAdd={onAddMasterTask}
+                  onDelete={onDeleteMasterTask}
+                />
               </div>
             )}
             {rightTab === 'wywo' && (
@@ -329,6 +379,13 @@ export default function LeatherDayView({
             {rightTab === 'hoa' && (
               <div className="binder-view-wrap">
                 <HoaPanel userId={userId} />
+                <MiniMasterPanel
+                  tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.hoa)}
+                  category={TAB_CATEGORY.hoa}
+                  color={CATEGORY_COLORS[TAB_CATEGORY.hoa]}
+                  onAdd={onAddMasterTask}
+                  onDelete={onDeleteMasterTask}
+                />
               </div>
             )}
             {rightTab === 'matrix' && (
@@ -349,6 +406,13 @@ export default function LeatherDayView({
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
                   allowedSubTabs={['goals', 'library', 'mantra', 'roles']}
+                />
+                <MiniMasterPanel
+                  tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.personal)}
+                  category={TAB_CATEGORY.personal}
+                  color={CATEGORY_COLORS[TAB_CATEGORY.personal]}
+                  onAdd={onAddMasterTask}
+                  onDelete={onDeleteMasterTask}
                 />
               </div>
             )}
@@ -430,7 +494,7 @@ function LeftSchedule({ selectedDate, timeBlocks, onDeleteBlock, addingBlock, bl
   )
 }
 
-function LpTaskRow({ task, index, onToggle, onDelete, done, tag, onCycleTag }) {
+function LpTaskRow({ task, index, onToggle, onDelete, done, tag, onCycleTag, onPromote }) {
   const [hovered, setHovered] = useState(false)
   return (
     <div className={`lp-task-row ${done ? 'done' : ''}`}
@@ -455,7 +519,52 @@ function LpTaskRow({ task, index, onToggle, onDelete, done, tag, onCycleTag }) {
           {tag || '＋'}
         </button>
       )}
+      {hovered && onPromote && <button className="lp-promote-btn" title="Send to Master Tasks" onClick={() => onPromote(task)}>↑</button>}
       {hovered && <button className="lp-del-btn" onClick={() => onDelete(task.id)}>✕</button>}
+    </div>
+  )
+}
+
+function MiniMasterPanel({ tasks, category, color, onAdd, onDelete }) {
+  const [collapsed, setCollapsed] = useState(false)
+  const [showAdd, setShowAdd] = useState(false)
+  const [text, setText] = useState('')
+
+  function handleAdd(e) {
+    e.preventDefault()
+    if (!text.trim()) return
+    onAdd?.(text.trim(), 'medium', category)
+    setText('')
+    setShowAdd(false)
+  }
+
+  return (
+    <div className="mini-master-panel">
+      <div className="mmp-header" onClick={() => setCollapsed(c => !c)}>
+        <span className="mmp-title" style={{ color }}>Master Tasks</span>
+        <span className="mmp-count">{tasks.length}</span>
+        <button className="mmp-add-btn" title="Add master task" onClick={e => { e.stopPropagation(); setShowAdd(s => !s); setCollapsed(false) }}>+</button>
+        <span className="mmp-caret">{collapsed ? '▾' : '▴'}</span>
+      </div>
+      {!collapsed && (
+        <div className="mmp-body">
+          {showAdd && (
+            <form className="mmp-add-form" onSubmit={handleAdd}>
+              <input autoFocus value={text} onChange={e => setText(e.target.value)} placeholder="Add backlog task…" className="mmp-input" />
+              <button type="submit" className="mmp-save">Add</button>
+              <button type="button" className="mmp-cancel" onClick={() => setShowAdd(false)}>✕</button>
+            </form>
+          )}
+          {tasks.length === 0 && !showAdd && <p className="mmp-empty">No {category} tasks in backlog.</p>}
+          {tasks.map(t => (
+            <div key={t.id} className="mmp-row">
+              <span className="mmp-dot" style={{ background: color }} />
+              <span className="mmp-text">{t.title}</span>
+              <button className="mmp-del" onClick={() => onDelete?.(t.id)}>✕</button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
