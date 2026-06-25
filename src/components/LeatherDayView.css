@@ -898,7 +898,7 @@ a.lp-task-title:hover {
   flex: 1;
   overflow-y: auto;
   padding: 6px 18px;
-  column-count: 3;
+  column-count: 2;
   column-gap: 14px;
 }
 
@@ -1258,6 +1258,8 @@ a.lp-task-title:hover {
   padding: 4px 0;
   flex: 1;
   min-height: 0;
+  column-count: 3;
+  column-gap: 10px;
 }
 .mmp-body::-webkit-scrollbar { width: 3px; }
 .mmp-body::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
@@ -1305,6 +1307,7 @@ a.lp-task-title:hover {
   align-items: center;
   gap: 6px;
   padding: 3px 12px;
+  break-inside: avoid;
 }
 .mmp-row:hover { background: rgba(0,50,107,0.03); }
 .mmp-dot {
