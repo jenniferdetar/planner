@@ -1,13 +1,23 @@
 /* ── CSEA Brand Tokens ──────────────────────────────────────────────────── */
 :root {
-  --csea-blue:       #00326b;
-  --csea-yellow:     #ffca38;
-  --csea-accent:     #f7941d;
-  --csea-link:       #3164a0;
-  --csea-light-blue: #d9edfa;
-  --csea-body:       #222222;
-  --csea-border:     #bfbfbf;
-  --csea-light-gray: #e6e6e6;
+  /* Primary */
+  --csea-blue:        #00326b;
+  --csea-yellow:      #ffca38;
+  /* Secondary */
+  --csea-link:        #3164a0;
+  --csea-light-blue:  #d9edfa;
+  --csea-gold:        #eeb125;
+  --csea-accent:      #f7941d;
+  --csea-dark-orange: #e0592a;
+  --csea-burgundy:    #8e2a2a;
+  /* Neutrals */
+  --csea-body:        #222222;
+  --csea-dark-gray:   #53575a;
+  --csea-border:      #bfbfbf;
+  --csea-light-gray:  #e6e6e6;
+  /* Semantic */
+  --csea-success:     #41a700;
+  --csea-error:       #cc0000;
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
@@ -147,7 +157,7 @@
   padding: 3px 10px;
   border-radius: 3px;
   border: 1px solid var(--csea-border);
-  color: #666;
+  color: var(--csea-dark-gray);
   background: #fff;
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
@@ -191,7 +201,7 @@
   transition: background 0.15s;
 }
 
-.csea-add-btn:hover { background: #00255a; }
+.csea-add-btn:hover { background: #001f4a; }
 
 /* ── Form ──────────────────────────────────────────────────────────────── */
 .csea-form {
@@ -279,7 +289,7 @@
 
 .csea-cancel {
   font-size: 12px;
-  color: #666;
+  color: var(--csea-dark-gray);
   padding: 5px 12px;
   border: 1px solid var(--csea-border);
   border-radius: 3px;
@@ -299,7 +309,7 @@
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
 }
-.csea-save:hover { background: #00255a; }
+.csea-save:hover { background: #001f4a; }
 
 /* ── Issue list ────────────────────────────────────────────────────────── */
 .csea-issue-list {
@@ -311,7 +321,7 @@
 
 .csea-empty {
   font-size: 13px;
-  color: #aaa;
+  color: var(--csea-border);
   text-align: center;
   padding: 32px 0;
 }
@@ -385,7 +395,7 @@
 }
 
 .issue-desc { font-size: 13px; color: var(--csea-body); line-height: 1.5; margin-top: 4px; }
-.issue-detail { font-size: 12px; color: #666; }
+.issue-detail { font-size: 12px; color: var(--csea-dark-gray); }
 
 .issue-actions {
   display: flex;
@@ -411,7 +421,7 @@
 
 .issue-delete-btn {
   font-size: 10px;
-  color: #aaa;
+  color: var(--csea-border);
   padding: 3px 8px;
   border: 1px solid var(--csea-light-gray);
   border-radius: 2px;
@@ -419,7 +429,7 @@
   font-family: 'Open Sans', sans-serif;
   transition: color 0.15s;
 }
-.issue-delete-btn:hover { color: #cc0000; border-color: #cc0000; }
+.issue-delete-btn:hover { color: var(--csea-error); border-color: var(--csea-error); }
 
 /* ── Issue notes count badge ───────────────────────────────────────────── */
 .issue-notes-count {
@@ -485,7 +495,7 @@
   padding: 0 2px;
   line-height: 1;
 }
-.issue-timeline-delete:hover { color: #cc0000; }
+.issue-timeline-delete:hover { color: var(--csea-error); }
 
 /* ── Issue add note button ──────────────────────────────────────────────── */
 .issue-add-note-btn {
@@ -514,7 +524,7 @@
   padding: 8px;
   background: var(--csea-light-blue);
   border-radius: 6px;
-  border: 1px solid #c0d8ee;
+  border: 1px solid #b0d4ef;
 }
 
 /* ── Interaction groups ─────────────────────────────────────────────────── */
@@ -590,13 +600,13 @@
   flex-shrink: 0;
 }
 .interaction-cat-select:hover,
-.interaction-cat-select:focus { border-color: var(--csea-blue); background: #c0dff5; }
+.interaction-cat-select:focus { border-color: var(--csea-blue); background: var(--csea-light-blue); }
 
-.interaction-date-input { font-size: 11px; color: #888; padding: 2px 4px; width: auto; flex-shrink: 0; }
-.interaction-loc-select { font-size: 12px; color: #666; padding: 2px 5px; cursor: pointer; }
+.interaction-date-input { font-size: 11px; color: var(--csea-dark-gray); padding: 2px 4px; width: auto; flex-shrink: 0; }
+.interaction-loc-select { font-size: 12px; color: var(--csea-dark-gray); padding: 2px 5px; cursor: pointer; }
 .interaction-loc-inline { flex: 1; min-width: 0; }
 .interaction-disc-textarea { font-size: 13px; color: var(--csea-body); line-height: 1.5; resize: vertical; padding: 3px 5px; }
-.interaction-who-input { font-size: 12px; color: #666; font-style: normal; padding: 2px 5px; }
+.interaction-who-input { font-size: 12px; color: var(--csea-dark-gray); font-style: normal; padding: 2px 5px; }
 
 /* ── Asana tasks ─────────────────────────────────────────────────────────── */
 .asana-task-row {
@@ -627,10 +637,10 @@
   padding: 0;
   transition: border-color 0.15s, background 0.15s;
 }
-.asana-row-check-btn:hover { border-color: #41a700; background: #f0fce8; }
+.asana-row-check-btn:hover { border-color: var(--csea-success); background: #f0fce8; }
 
 .asana-task-title { flex: 1; font-size: 13px; font-weight: 400; color: var(--csea-blue); line-height: 1.4; cursor: pointer; }
-.asana-task-due { font-size: 11px; color: #888; }
+.asana-task-due { font-size: 11px; color: var(--csea-dark-gray); }
 
 .asana-task-body {
   padding: 0 12px 10px;
@@ -643,7 +653,7 @@
 .asana-task-actions { display: flex; gap: 8px; }
 
 .asana-complete-btn {
-  background: #41a700;
+  background: var(--csea-success);
   color: #fff;
   border: none;
   border-radius: 3px;
@@ -653,7 +663,7 @@
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
 }
-.asana-complete-btn:hover { background: #339900; }
+.asana-complete-btn:hover { background: #338500; }
 
 /* ── Member search ───────────────────────────────────────────────────────── */
 .member-search { position: relative; width: 100%; }
@@ -688,7 +698,7 @@
 .member-option:hover { background: var(--csea-light-blue); }
 
 .member-name { font-size: 13px; color: var(--csea-body); }
-.member-emp { font-size: 11px; color: #aaa; flex-shrink: 0; }
+.member-emp { font-size: 11px; color: var(--csea-border); flex-shrink: 0; }
 
 /* ── Notes tab ───────────────────────────────────────────────────────────── */
 .csea-notes-form {
@@ -725,7 +735,7 @@
 
 .csea-note-date {
   font-size: 10px;
-  color: #888;
+  color: var(--csea-dark-gray);
   font-weight: 600;
   letter-spacing: 0.4px;
 }
@@ -770,7 +780,7 @@
   border-radius: 3px;
   transition: color 0.12s, background 0.12s;
 }
-.csea-note-delete:hover { color: #cc0000; background: #fce8e8; }
+.csea-note-delete:hover { color: var(--csea-error); background: #fce8e8; }
 
 /* ── Quick links ─────────────────────────────────────────────────────────── */
 .quick-link-anchor {

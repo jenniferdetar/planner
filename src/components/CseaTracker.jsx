@@ -51,9 +51,9 @@ const ISSUE_TYPES = ['Grievance', 'Gripe', 'Complaint']
 const PRIORITIES = ['Low', 'Medium', 'High']
 const STATUSES = ['Open', 'In Progress', 'Resolved', 'Closed']
 
-const TYPE_COLORS = { Grievance: '#e05c5c', Gripe: '#f0a040', Complaint: '#5c9ee0' }
-const STATUS_COLORS = { Open: '#e05c5c', 'In Progress': '#f0a040', Resolved: '#5cb85c', Closed: '#aaa' }
-const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
+const TYPE_COLORS = { Grievance: '#8e2a2a', Gripe: '#f7941d', Complaint: '#3164a0' }
+const STATUS_COLORS = { Open: '#cc0000', 'In Progress': '#f7941d', Resolved: '#41a700', Closed: '#53575a' }
+const PRIORITY_COLORS = { High: '#cc0000', Medium: '#f7941d', Low: '#3164a0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
@@ -307,7 +307,7 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
                   {INTERACTION_CATEGORIES.map(c => (
                     <button key={c} type="button"
                       className={`type-btn ${interactionForm.category === c ? 'active' : ''}`}
-                      style={{ '--tc': '#4a90d9' }}
+                      style={{ '--tc': '#3164a0' }}
                       onClick={() => setInteractionForm(f => ({ ...f, category: c }))}
                     >{c}</button>
                   ))}
