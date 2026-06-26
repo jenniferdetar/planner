@@ -306,6 +306,26 @@
 
 /* ─── Schedule ──────────────────────────────────────────────────────────────── */
 
+.dash-block-add-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px 4px;
+  flex-wrap: wrap;
+}
+
+.dash-block-time-input {
+  font-size: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: #374151;
+  background: #fff;
+  outline: none;
+  width: 110px;
+}
+.dash-block-time-input:focus { border-color: #6b7280; }
+
 .dash-sched-list {
   flex: 1;
   overflow-y: auto;

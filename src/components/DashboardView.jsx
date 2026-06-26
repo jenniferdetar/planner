@@ -120,6 +120,9 @@ export default function DashboardView({
   const [section, setSection] = useState('today')
   const [newTask, setNewTask] = useState('')
   const [personalSubTab, setPersonalSubTab] = useState('goals')
+  const [newBlockTitle, setNewBlockTitle] = useState('')
+  const [newBlockStart, setNewBlockStart] = useState('')
+  const [newBlockEnd, setNewBlockEnd] = useState('')
 
   const d = selectedDate
   const pending = (dailyTasks || []).filter(t => !t.completed)
@@ -137,6 +140,16 @@ export default function DashboardView({
     if (!newTask.trim()) return
     onAddTask(newTask.trim(), 'medium')
     setNewTask('')
+  }
+
+  function handleAddBlock(e) {
+    e.preventDefault()
+    if (!newBlockTitle.trim()) return
+    const hour = newBlockStart ? parseInt(newBlockStart.split(':')[0], 10) : 9
+    onAddBlock(hour, newBlockTitle.trim(), '#1e5799', newBlockStart || null, newBlockEnd || null)
+    setNewBlockTitle('')
+    setNewBlockStart('')
+    setNewBlockEnd('')
   }
 
   function handleDateChange(date) {
@@ -250,17 +263,38 @@ export default function DashboardView({
                   <span className="dash-card-title">Schedule</span>
                   <span className="dash-badge">{(timeBlocks || []).length} blocks</span>
                 </div>
+                <form className="dash-block-add-form" onSubmit={handleAddBlock}>
+                  <input
+                    className="dash-add-input"
+                    placeholder="Add a block…"
+                    value={newBlockTitle}
+                    onChange={e => setNewBlockTitle(e.target.value)}
+                  />
+                  <input
+                    className="dash-block-time-input"
+                    type="time"
+                    value={newBlockStart}
+                    onChange={e => setNewBlockStart(e.target.value)}
+                  />
+                  <input
+                    className="dash-block-time-input"
+                    type="time"
+                    value={newBlockEnd}
+                    onChange={e => setNewBlockEnd(e.target.value)}
+                  />
+                  <button className="dash-add-btn" type="submit">Add</button>
+                </form>
                 <div className="dash-sched-list">
                   {(timeBlocks || []).length === 0 &&
                     <p className="dash-empty">No blocks scheduled</p>}
                   {(timeBlocks || [])
                     .slice()
-                    .sort((a, b) => (a.start_time || '').localeCompare(b.start_time || ''))
+                    .sort((a, b) => (a.hour ?? 0) - (b.hour ?? 0))
                     .map(b => (
                       <div key={b.id} className="dash-block-row" style={{ borderLeftColor: b.color || '#1e5799' }}>
-                        <span className="dash-block-time">{fmtTime(b.start_time)}–{fmtTime(b.end_time)}</span>
-                        <span className="dash-block-title">{b.title}</span>
-                        <button className="dash-row-del" onClick={() => onDeleteBlock(b.id)}>✕</button>
+                        <span className="dash-block-time">{b.startLabel || (b.hour != null ? `${b.hour % 12 || 12}:00 ${b.hour >= 12 ? 'PM' : 'AM'}` : '')}–{b.endLabel || ''}</span>
+                        <span className="dash-block-title">{b.text}</span>
+                        {b.source !== 'gcal' && <button className="dash-row-del" onClick={() => onDeleteBlock(b.id)}>✕</button>}
                       </div>
                     ))}
                 </div>
