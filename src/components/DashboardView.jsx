@@ -197,9 +197,8 @@ export default function DashboardView({
         </nav>
 
         <div className="dash-sidebar-foot">
-          {(calAuthExpired || calEventCount === 0)
-            ? <button className="dash-gcal-btn" onClick={onReconnectGoogle}>Connect Google Cal</button>
-            : <span className="dash-gcal-ok">📅 {calEventCount} calendar event{calEventCount !== 1 ? 's' : ''}</span>
+          {(calAuthExpired || calEventCount === 0) &&
+            <button className="dash-gcal-btn" onClick={onReconnectGoogle}>Connect Google Cal</button>
           }
           <button className="dash-signout-btn" onClick={onSignOut}>Sign out</button>
         </div>
