@@ -39,9 +39,6 @@ const NAV_ITEMS = [
   { key: 'hoa',      label: 'HOA',          color: '#4a7a6a', group: 'module' },
   { key: 'icaap',    label: 'iCAAP',        color: '#3a5c4a', group: 'module' },
   { key: 'personal', label: 'Personal',     color: '#6a5a8a', group: 'module' },
-  { key: 'library',  label: 'Library',      color: '#7ba7e0', group: 'module' },
-  { key: 'mantra',   label: 'Mantra',       color: '#e8a0a0', group: 'module' },
-  { key: 'mission',  label: 'Mission',      color: '#a0b4e8', group: 'module' },
   { key: 'matrix',   label: 'Matrix',       color: '#9ca3af', group: 'module' },
   { key: 'wywo',     label: 'WYWO',         color: '#9ca3af', group: 'module' },
 ]
@@ -494,60 +491,6 @@ export default function DashboardView({
               onImportBooks={onImportBooks}
               subTab={personalSubTab}
               onSubTabChange={setPersonalSubTab}
-            />
-          </div>
-        )}
-        {section === 'library' && (
-          <div className="dash-panel-wrap">
-            <PersonalPanel
-              userId={userId}
-              selectedDate={selectedDate}
-              onDateChange={onDateChange}
-              books={books || []}
-              onAddBook={onAddBook}
-              onUpdateBookStatus={onUpdateBookStatus}
-              onUpdateBookChapter={onUpdateBookChapter}
-              onDeleteBook={onDeleteBook}
-              onImportBooks={onImportBooks}
-              subTab="library"
-              onSubTabChange={() => {}}
-              allowedSubTabs={['library']}
-            />
-          </div>
-        )}
-        {section === 'mantra' && (
-          <div className="dash-panel-wrap">
-            <PersonalPanel
-              userId={userId}
-              selectedDate={selectedDate}
-              onDateChange={onDateChange}
-              books={books || []}
-              onAddBook={onAddBook}
-              onUpdateBookStatus={onUpdateBookStatus}
-              onUpdateBookChapter={onUpdateBookChapter}
-              onDeleteBook={onDeleteBook}
-              onImportBooks={onImportBooks}
-              subTab="mantra"
-              onSubTabChange={() => {}}
-              allowedSubTabs={['mantra']}
-            />
-          </div>
-        )}
-        {section === 'mission' && (
-          <div className="dash-panel-wrap">
-            <PersonalPanel
-              userId={userId}
-              selectedDate={selectedDate}
-              onDateChange={onDateChange}
-              books={books || []}
-              onAddBook={onAddBook}
-              onUpdateBookStatus={onUpdateBookStatus}
-              onUpdateBookChapter={onUpdateBookChapter}
-              onDeleteBook={onDeleteBook}
-              onImportBooks={onImportBooks}
-              subTab="mission"
-              onSubTabChange={() => {}}
-              allowedSubTabs={['mission']}
             />
           </div>
         )}
