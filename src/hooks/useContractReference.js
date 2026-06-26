@@ -176,6 +176,12 @@ export function useContractReference(userId) {
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(false)
 
+  const sort = (arr) =>
+    [...arr].sort((a, b) =>
+      a.issue_category.localeCompare(b.issue_category) ||
+      a.issue_description.localeCompare(b.issue_description)
+    )
+
   const load = useCallback(async () => {
     if (!userId) return
     setLoading(true)
@@ -188,7 +194,35 @@ export function useContractReference(userId) {
     setLoading(false)
   }, [userId])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    load()
+
+    if (!userId) return
+
+    const channel = supabase
+      .channel('contract_quick_reference')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'contract_quick_reference' },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setEntries((prev) => {
+              if (prev.some((e) => e.id === payload.new.id)) return prev
+              return sort([...prev, payload.new])
+            })
+          } else if (payload.eventType === 'DELETE') {
+            setEntries((prev) => prev.filter((e) => e.id !== payload.old.id))
+          } else if (payload.eventType === 'UPDATE') {
+            setEntries((prev) => sort(prev.map((e) => (e.id === payload.new.id ? payload.new : e))))
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [load, userId])
 
   async function addEntry(fields) {
     const { data, error } = await supabase
@@ -196,8 +230,7 @@ export function useContractReference(userId) {
       .insert({ ...fields, user_id: userId })
       .select()
       .single()
-    if (!error && data) setEntries(prev => [...prev, data].sort((a, b) =>
-      a.issue_category.localeCompare(b.issue_category) || a.issue_description.localeCompare(b.issue_description)))
+    if (!error && data) setEntries(prev => sort([...prev, data]))
   }
 
   async function updateEntry(id, fields) {
@@ -207,7 +240,7 @@ export function useContractReference(userId) {
       .eq('id', id)
       .select()
       .single()
-    if (!error && data) setEntries(prev => prev.map(e => e.id === id ? data : e))
+    if (!error && data) setEntries(prev => sort(prev.map(e => e.id === id ? data : e)))
   }
 
   async function deleteEntry(id) {
@@ -221,8 +254,7 @@ export function useContractReference(userId) {
       .from('contract_quick_reference')
       .insert(rows)
       .select()
-    if (data) setEntries(prev => [...prev, ...data].sort((a, b) =>
-      a.issue_category.localeCompare(b.issue_category) || a.issue_description.localeCompare(b.issue_description)))
+    if (data) setEntries(prev => sort([...prev, ...data]))
   }
 
   return { entries, loading, addEntry, updateEntry, deleteEntry, seedDefaults }

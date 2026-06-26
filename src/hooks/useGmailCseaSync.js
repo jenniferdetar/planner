@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { fetchCseaWebformEmails, fetchEmailBody, parseEmailToInteraction } from '../lib/gmailCsea'
 
-export function useGmailCseaSync(providerToken, onImported) {
+export function useGmailCseaSync(providerToken) {
   const [syncing, setSyncing] = useState(false)
   const [lastSynced, setLastSynced] = useState(null)
   const [newCount, setNewCount] = useState(null)
@@ -31,12 +31,8 @@ export function useGmailCseaSync(providerToken, onImported) {
         const full = await fetchEmailBody(providerToken, msg.id)
         const record = parseEmailToInteraction(full)
         if (!record) continue
-        const { data } = await supabase
-          .from('member_interactions')
-          .insert(record)
-          .select()
-          .single()
-        if (data) { imported++; onImported?.(data) }
+        const { error } = await supabase.from('member_interactions').insert(record)
+        if (!error) imported++
       }
 
       setNewCount(imported)
@@ -46,7 +42,7 @@ export function useGmailCseaSync(providerToken, onImported) {
     } finally {
       setSyncing(false)
     }
-  }, [providerToken, syncing, onImported])
+  }, [providerToken, syncing])
 
   return { sync, syncing, lastSynced, newCount }
 }
