@@ -10,13 +10,13 @@
 
 .library-header {
   padding: 10px 16px 8px;
-  border-bottom: 1px solid #d9e8f0;
+  border-bottom: 2px solid #001a5e;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-shrink: 0;
-  background: #fff;
+  background: #003087;
 }
 
 .library-title {
@@ -36,8 +36,9 @@
 .library-shelf-tabs {
   display: flex;
   gap: 2px;
-  padding: 10px 16px 0;
-  border-bottom: 1px solid #d9e8f0;
+  padding: 6px 16px 0;
+  background: #1a4a8a;
+  border-bottom: 2px solid #001040;
   overflow-x: auto;
   scrollbar-width: none;
   flex-shrink: 0;
@@ -56,7 +57,7 @@
   border: none;
   border-radius: 6px 6px 0 0;
   background: transparent;
-  color: #999;
+  color: rgba(255,255,255,0.6);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -65,30 +66,30 @@
 }
 
 .shelf-tab:hover {
-  background: #f5f7fa;
-  color: #003087;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
 }
 
 .shelf-tab.active {
   background: #ffffff;
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 600;
-  border-bottom: 2px solid #1a4a8a;
+  border-bottom: 2px solid #ffb81c;
 }
 
 .want-to-read-tab {
-  border-right: 1px solid #d9e8f0;
+  border-right: 1px solid rgba(255,255,255,0.2);
   margin-right: 4px;
 }
 
 .want-to-read-tab.active {
-  color: #1a4a8a;
-  border-bottom: 2px solid #1a4a8a;
+  color: #003087;
+  border-bottom: 2px solid #ffb81c;
 }
 
 .shelf-badge {
-  background: #1a4a8a33;
-  color: #1a4a8a;
+  background: rgba(255,184,28,0.25);
+  color: #ffb81c;
   border-radius: 10px;
   font-size: 10px;
   font-weight: 600;
@@ -124,19 +125,19 @@
 }
 
 .import-btn {
-  background: #1a4a8a;
-  color: #fff;
+  background: #ffb81c;
+  color: #003087;
   border: none;
   border-radius: 8px;
-  padding: 10px 22px;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
 }
 
 .import-btn:hover {
-  background: #ffb81c;
+  background: #ffc93d;
 }
 
 .import-btn:active {
