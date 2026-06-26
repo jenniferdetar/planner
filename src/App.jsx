@@ -228,6 +228,7 @@ export default function App() {
   return (
       <DashboardView
         userId={userId}
+        providerToken={providerToken}
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
         dailyTasks={allDailyTasks}

@@ -203,6 +203,21 @@
 
 .csea-add-btn:hover { background: #001f4a; }
 
+.csea-gmail-sync-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: #3164a0;
+  background: transparent;
+  border: 1px solid #3164a0;
+  border-radius: 3px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  transition: background 0.15s, color 0.15s;
+}
+.csea-gmail-sync-btn:hover:not(:disabled) { background: #3164a0; color: #fff; }
+.csea-gmail-sync-btn:disabled { opacity: 0.5; cursor: default; }
+
 /* ── Form ──────────────────────────────────────────────────────────────── */
 .csea-form {
   margin: 10px 16px;
@@ -575,38 +590,32 @@
 
 .interaction-header { display: flex; align-items: center; gap: 8px; }
 
-.interaction-field {
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  font-family: 'Open Sans', sans-serif;
-  transition: border-color 0.15s, background 0.15s;
-  outline: none;
-  width: 100%;
-  box-sizing: border-box;
-}
-.interaction-field:hover { border-color: var(--csea-border); background: #fafafa; }
-.interaction-field:focus { border-color: var(--csea-blue); background: #fff; }
-
-.interaction-cat-select {
+.interaction-cat-badge {
   font-size: 10px;
   font-weight: 700;
   color: var(--csea-blue);
   background: var(--csea-light-blue);
   border-radius: 2px;
   padding: 2px 7px;
-  cursor: pointer;
-  width: auto;
   flex-shrink: 0;
 }
-.interaction-cat-select:hover,
-.interaction-cat-select:focus { border-color: var(--csea-blue); background: var(--csea-light-blue); }
-
-.interaction-date-input { font-size: 11px; color: var(--csea-dark-gray); padding: 2px 4px; width: auto; flex-shrink: 0; }
-.interaction-loc-select { font-size: 12px; color: var(--csea-dark-gray); padding: 2px 5px; cursor: pointer; }
-.interaction-loc-inline { flex: 1; min-width: 0; }
-.interaction-disc-textarea { font-size: 13px; color: var(--csea-body); line-height: 1.5; resize: vertical; padding: 3px 5px; }
-.interaction-who-input { font-size: 12px; color: var(--csea-dark-gray); font-style: normal; padding: 2px 5px; }
+.interaction-loc-badge { font-size: 11px; color: var(--csea-dark-gray); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.interaction-date-badge { font-size: 11px; color: var(--csea-dark-gray); flex-shrink: 0; }
+.interaction-delete-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.interaction-delete-btn:hover { color: #cc0000; }
+.interaction-disc-text { font-size: 13px; color: var(--csea-body); line-height: 1.5; margin: 0; white-space: pre-wrap; }
+.interaction-who-text { font-size: 11px; color: var(--csea-dark-gray); margin: 0; }
+.interaction-poc-text { font-size: 11px; color: var(--csea-dark-gray); margin: 0; }
 
 /* ── Asana tasks ─────────────────────────────────────────────────────────── */
 .asana-task-row {

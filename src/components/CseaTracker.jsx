@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useCseaMembers, useWorkLocations } from '../hooks/useCseaData'
 import { useQuickLinks } from '../hooks/useQuickLinks'
+import { useGmailCseaSync } from '../hooks/useGmailCseaSync'
 import ContractReference from './ContractReference'
 import './CseaTracker.css'
 
@@ -58,7 +59,7 @@ const PRIORITY_COLORS = { High: '#cc0000', Medium: '#f7941d', Low: '#3164a0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote }) {
+export default function CseaTracker({ userId, providerToken, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote }) {
   const workLocations = useWorkLocations()
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
   const [tab, setTab] = useState('issues')
@@ -80,6 +81,16 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
     category: 'General', member_name: '', work_location: '',
     discussion: '', who_involved: '', date_spoke: new Date().toISOString().split('T')[0],
   })
+
+  const { sync: syncGmail, syncing: gmailSyncing, lastSynced: gmailLastSynced, newCount: gmailNewCount } = useGmailCseaSync(
+    providerToken,
+    (record) => onAddInteraction && onAddInteraction(record, true)
+  )
+
+  // Auto-sync when interactions tab is opened
+  useEffect(() => {
+    if (tab === 'interactions' && providerToken) syncGmail()
+  }, [tab, providerToken])
 
   const activeIssues = issues.filter(i => i.status === 'Open' || i.status === 'In Progress')
   const resolvedIssues = issues.filter(i => i.status === 'Resolved' || i.status === 'Closed')
@@ -298,6 +309,11 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
             <button className="csea-archive-toggle" onClick={onToggleArchived}>
               {showArchived ? 'Hide Archived' : 'Show Archived'}
             </button>
+            {providerToken && (
+              <button className="csea-gmail-sync-btn" onClick={syncGmail} disabled={gmailSyncing}>
+                {gmailSyncing ? 'Syncing…' : gmailNewCount != null ? `↻ Sync Gmail${gmailNewCount > 0 ? ` (+${gmailNewCount})` : ''}` : '↻ Sync Gmail'}
+              </button>
+            )}
             <button className="csea-add-btn" onClick={() => setShowAddInteraction(true)}>+ Log Contact</button>
           </div>
 
@@ -395,72 +411,18 @@ function CseaNoteRowItem({ note: n, onDelete }) {
   )
 }
 
-function InteractionCard({ interaction: i, onUpdate, workLocations }) {
-  const [form, setForm] = useState({
-    category: i.category, member_name: i.member_name, work_location: i.work_location || '',
-    date_spoke: i.date_spoke, discussion: i.discussion || '', who_involved: i.who_involved || '',
-  })
-  const saveTimer = useRef(null)
-
-  function scheduleUpdate(updated) {
-    clearTimeout(saveTimer.current)
-    saveTimer.current = setTimeout(() => onUpdate?.(i.id, updated), 800)
-  }
-
-  function handleChange(field, value) {
-    const updated = { ...form, [field]: value }
-    setForm(updated)
-    scheduleUpdate(updated)
-  }
-
-  function handleBlur() {
-    clearTimeout(saveTimer.current)
-    onUpdate?.(i.id, form)
-  }
-
+function InteractionCard({ interaction: i, onUpdate }) {
   return (
-    <div className="interaction-card interaction-card-editable">
+    <div className="interaction-card">
       <div className="interaction-header">
-        <select
-          className="interaction-field interaction-cat-select"
-          value={form.category}
-          onChange={e => handleChange('category', e.target.value)}
-          onBlur={handleBlur}
-        >
-          {INTERACTION_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-        <select
-          className="interaction-field interaction-loc-select interaction-loc-inline"
-          value={form.work_location}
-          onChange={e => handleChange('work_location', e.target.value)}
-          onBlur={handleBlur}
-        >
-          <option value="">📍 Location</option>
-          {workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
-        </select>
-        <input
-          className="interaction-field interaction-date-input"
-          type="date"
-          value={form.date_spoke}
-          onChange={e => handleChange('date_spoke', e.target.value)}
-          onBlur={handleBlur}
-        />
+        {i.category && <span className="interaction-cat-badge">{i.category}</span>}
+        {i.work_location && <span className="interaction-loc-badge">📍 {i.work_location}</span>}
+        {i.date_spoke && <span className="interaction-date-badge">{new Date(i.date_spoke + 'T12:00:00').toLocaleDateString()}</span>}
+        <button className="interaction-delete-btn" title="Delete" onClick={() => onUpdate?.(i.id, { archived: true })}>✕</button>
       </div>
-      <textarea
-        className="interaction-field interaction-disc-textarea"
-        value={form.discussion}
-        onChange={e => handleChange('discussion', e.target.value)}
-        onBlur={handleBlur}
-        placeholder="What was discussed?"
-        rows={2}
-      />
-      <input
-        className="interaction-field interaction-who-input"
-        value={form.who_involved}
-        onChange={e => handleChange('who_involved', e.target.value)}
-        onBlur={handleBlur}
-        placeholder="Others involved"
-      />
+      {i.discussion && <p className="interaction-disc-text">{i.discussion}</p>}
+      {i.who_involved && <p className="interaction-who-text">With: {i.who_involved}</p>}
+      {i.point_of_contact && <p className="interaction-poc-text">Contact: {i.point_of_contact}</p>}
     </div>
   )
 }
