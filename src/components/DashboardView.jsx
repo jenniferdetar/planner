@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useDailyInspiration } from '../hooks/useDailyInspiration'
+import { useDailyLog } from '../hooks/useDailyLog'
 import './DashboardView.css'
 import CseaTracker from './CseaTracker'
 import IcaapTracker from './IcaapTracker'
@@ -127,6 +128,35 @@ export default function DashboardView({
   const [newBlockEnd, setNewBlockEnd] = useState('')
 
   const d = selectedDate
+  const dateStr = selectedDate.toISOString().split('T')[0]
+  const { entries: logEntries, addEntry: addLogEntry, deleteEntry: deleteLogEntry, updateEntry: updateLogEntry } = useDailyLog(userId, dateStr)
+  const [logText, setLogText] = useState('')
+  const [editingLogId, setEditingLogId] = useState(null)
+  const [editingLogText, setEditingLogText] = useState('')
+  const logEditTimers = useRef({})
+
+  function handleLogAdd(e) {
+    e.preventDefault()
+    if (!logText.trim()) return
+    addLogEntry(logText.trim())
+    setLogText('')
+  }
+
+  function handleLogEdit(entry) {
+    setEditingLogId(entry.id)
+    setEditingLogText(entry.entry)
+  }
+
+  function handleLogChange(id, val) {
+    setEditingLogText(val)
+    clearTimeout(logEditTimers.current[id])
+    logEditTimers.current[id] = setTimeout(() => updateLogEntry(id, val), 800)
+  }
+
+  function commitLogEdit() {
+    setEditingLogId(null)
+  }
+
   const pending = (dailyTasks || []).filter(t => !t.completed)
   const done    = (dailyTasks || []).filter(t =>  t.completed)
 
@@ -299,6 +329,44 @@ export default function DashboardView({
                       </div>
                     ))}
                 </div>
+              </div>
+            </div>
+
+            {/* Daily Log */}
+            <div className="dash-card dash-card-full">
+              <div className="dash-card-header">
+                <span className="dash-card-title">Daily Log</span>
+                <span className="dash-badge">{logEntries.length} {logEntries.length === 1 ? 'entry' : 'entries'}</span>
+              </div>
+              <form className="dash-add-row" onSubmit={handleLogAdd}>
+                <input
+                  className="dash-add-input"
+                  placeholder="What did you do today?"
+                  value={logText}
+                  onChange={e => setLogText(e.target.value)}
+                />
+                <button className="dash-add-btn" type="submit">Add</button>
+              </form>
+              <div className="dash-log-list">
+                {logEntries.map(entry => (
+                  <div key={entry.id} className="dash-task-row">
+                    <span className="dash-log-time">{new Date(entry.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
+                    {editingLogId === entry.id ? (
+                      <input
+                        autoFocus
+                        className="dash-add-input"
+                        value={editingLogText}
+                        onChange={e => handleLogChange(entry.id, e.target.value)}
+                        onBlur={commitLogEdit}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') commitLogEdit() }}
+                      />
+                    ) : (
+                      <span className="dash-task-text" style={{ cursor: 'pointer' }} onClick={() => handleLogEdit(entry)}>{entry.entry}</span>
+                    )}
+                    <button className="dash-row-del" onClick={() => deleteLogEntry(entry.id)}>✕</button>
+                  </div>
+                ))}
+                {logEntries.length === 0 && <p className="dash-empty">Nothing logged yet</p>}
               </div>
             </div>
 
