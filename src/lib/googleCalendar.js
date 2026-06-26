@@ -69,10 +69,12 @@ export async function fetchCalendarEvents(providerToken, startDate, endDate) {
   return results
     .filter((r) => r.status === 'fulfilled')
     .flatMap((r) => r.value)
-    .filter((e) => !e.allDay)
 }
 
 export function eventToTimeBlock(event) {
+  if (event.allDay) {
+    return { ...event, hour: 0, durationMins: 1440, startLabel: null, endLabel: null }
+  }
   const start = new Date(event.startIso)
   const end = new Date(event.endIso)
   return {
