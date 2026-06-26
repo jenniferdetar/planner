@@ -27,8 +27,8 @@
 /* Stats */
 .icaap-stats {
   display: flex;
-  border-bottom: 1px solid #d9e8f0;
-  background: #fff;
+  border-bottom: 2px solid #001a5e;
+  background: #003087;
   flex-shrink: 0;
 }
 
@@ -38,7 +38,7 @@
   flex-direction: column;
   align-items: center;
   padding: 10px 8px;
-  border-right: 1px solid #eef2f7;
+  border-right: 1px solid rgba(255,255,255,0.15);
 }
 
 .icaap-stat:last-child {
@@ -48,7 +48,7 @@
 .icaap-stat-num {
   font-size: 24px;
   font-weight: 700;
-  color: #003087;
+  color: #fff;
   line-height: 1;
 }
 
@@ -57,7 +57,7 @@
   font-weight: 600;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #bbb;
+  color: rgba(255,255,255,0.6);
   margin-top: 3px;
 }
 
