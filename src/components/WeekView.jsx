@@ -30,6 +30,16 @@ function contrastColor(hex) {
   return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1e3342' : '#ffffff'
 }
 
+// Ensure any time label has AM/PM — handles "09:00", "17:30", "9:00 AM", "05:30 PM"
+function formatAmPm(label) {
+  if (!label) return label
+  if (/AM|PM/i.test(label)) return label // already has it
+  const [h, min] = label.split(':').map(Number)
+  const suffix = h >= 12 ? 'PM' : 'AM'
+  const h12 = h % 12 || 12
+  return `${h12}:${String(min).padStart(2, '0')} ${suffix}`
+}
+
 function normalizeTitle(t) {
   return (t || '')
     .replace(/^\d{1,2}(:\d{2})?\s*(AM|PM)?\s*/i, '')
@@ -198,14 +208,21 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
           const tasks = tasksByDate[dateStr] || []
           const meetingEvents = weekMeetings
             .filter(m => m.date === dateStr)
-            .map(m => ({
-              id: m.id,
-              title: m.title,
-              color: m.color || '#00326b',
-              startLabel: m.start_time ? m.start_time.slice(0, 5) : null,
-            }))
-          const calEvents = (calendarBlocks || []).filter(b => b.startIso?.startsWith(dateStr))
+            .map(m => {
+              let startLabel = null
+              if (m.start_time) {
+                const [h, min] = m.start_time.split(':').map(Number)
+                const suffix = h >= 12 ? 'PM' : 'AM'
+                const h12 = h % 12 || 12
+                startLabel = `${h12}:${String(min).padStart(2, '0')} ${suffix}`
+              }
+              return { id: m.id, title: m.title, color: m.color || '#00326b', startLabel, _sortKey: m.start_time || '' }
+            })
+          const calEvents = (calendarBlocks || [])
+            .filter(b => b.startIso?.startsWith(dateStr))
+            .map(b => ({ ...b, _sortKey: b.startIso || '' }))
           const events = dedupeEvents([...meetingEvents, ...calEvents])
+            .sort((a, b) => (a._sortKey || '').localeCompare(b._sortKey || ''))
           const isToday = day.getTime() === today.getTime()
 
           return (
@@ -333,12 +350,12 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                 )}
                 {events.map(evt => {
                   const rawTitle = evt.title || evt.text || ''
-                  const isCseaEvent = /\bArea\s+I\b|\bMB\b|LA\s+500\s+Steward\s+Committee|Regional\s+President'?s?\s+Meeting/i.test(rawTitle)
+                  const isCseaEvent = /^CSEA\b|^CSEA:|CSEA\s+\w|CSEA:/i.test(rawTitle) || /\bArea\s+I\b|\bMB\b|LA\s+500\s+Steward\s+Committee|Regional\s+President'?s?\s+Meeting/i.test(rawTitle)
                   const displayTitle = isCseaEvent && !/^CSEA\b/i.test(rawTitle)
                     ? 'CSEA ' + rawTitle
                     : rawTitle
                   const pillStyle = isCseaEvent
-                    ? { background: '#f7e84b', color: '#00326b', border: '1.5px solid #cc0000' }
+                    ? { background: '#f7e84b', color: '#00326b', border: '1.5px solid #cc0000', fontWeight: 700 }
                     : { background: evt.color ?? '#4a90d9', color: contrastColor(evt.color) }
                   return (
                     <div
@@ -346,7 +363,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                       className="week-event-pill"
                       style={pillStyle}
                     >
-                      {evt.startLabel && <span className="week-event-time">{evt.startLabel}</span>}
+                      {evt.startLabel && <span className="week-event-time">{formatAmPm(evt.startLabel)}</span>}
                       <span className="week-event-title">{displayTitle}</span>
                     </div>
                   )
