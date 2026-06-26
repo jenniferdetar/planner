@@ -7,6 +7,7 @@ const COLOR_OPTIONS = [
   { label: 'Blue',   value: 'blue',   hex: '#2980b9' },
   { label: 'Green',  value: 'green',  hex: '#27ae60' },
   { label: 'Purple', value: 'purple', hex: '#8e44ad' },
+  { label: 'Orange', value: 'orange', hex: '#e67e22' },
   { label: 'Gold',   value: 'gold',   hex: '#d4a017' },
   { label: 'Teal',   value: 'teal',   hex: '#16a085' },
 ]
@@ -113,7 +114,7 @@ export default function ValuesPanel({ userId }) {
   return (
     <div className="values-list-wrap">
       <div className="values-list-header">
-        <h3 className="values-list-title">My Values</h3>
+        <h3 className="values-list-title">Values</h3>
         {!adding && (
           <button className="values-add-btn" onClick={() => setAdding(true)}>+ Add Value</button>
         )}
