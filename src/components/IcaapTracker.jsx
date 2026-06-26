@@ -251,6 +251,11 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
               <div key={l.id} className="csea-note-row">
                 <div className="csea-note-body">
                   <a href={l.url} target="_blank" rel="noopener noreferrer" className="quick-link-anchor">{l.title}</a>
+                  {l.created_at && (
+                    <span className="quick-link-date">
+                      {new Date(l.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                    </span>
+                  )}
                 </div>
                 <button className="csea-note-delete" onClick={() => deleteLink(l.id)}>✕</button>
               </div>

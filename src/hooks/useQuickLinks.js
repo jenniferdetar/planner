@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
+const alpha = (arr) => [...arr].sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }))
+
 export function useQuickLinks(userId, section) {
   const [links, setLinks] = useState([])
 
@@ -12,7 +14,7 @@ export function useQuickLinks(userId, section) {
       .select('*')
       .eq('user_id', userId)
       .eq('section', section)
-      .order('created_at', { ascending: true })
+      .order('title', { ascending: true })
       .then(({ data }) => setLinks(data || []))
 
     const channel = supabase
@@ -29,12 +31,12 @@ export function useQuickLinks(userId, section) {
           if (payload.eventType === 'INSERT' && payload.new.section === section) {
             setLinks((prev) => {
               if (prev.some((l) => l.id === payload.new.id)) return prev
-              return [...prev, payload.new]
+              return alpha([...prev, payload.new])
             })
           } else if (payload.eventType === 'DELETE') {
             setLinks((prev) => prev.filter((l) => l.id !== payload.old.id))
           } else if (payload.eventType === 'UPDATE' && payload.new.section === section) {
-            setLinks((prev) => prev.map((l) => (l.id === payload.new.id ? payload.new : l)))
+            setLinks((prev) => alpha(prev.map((l) => (l.id === payload.new.id ? payload.new : l))))
           }
         }
       )
@@ -51,7 +53,7 @@ export function useQuickLinks(userId, section) {
       .insert({ title, url, section, user_id: userId })
       .select()
       .single()
-    if (data) setLinks((prev) => [...prev, data])
+    if (data) setLinks((prev) => alpha([...prev, data]))
   }
 
   async function deleteLink(id) {
