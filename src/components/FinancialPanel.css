@@ -71,11 +71,11 @@
 .fin-tab:hover { opacity: 0.8; }
 .fin-tab.active { opacity: 1; }
 
-.fin-tab:nth-child(1) { background: #3164a0; }
-.fin-tab:nth-child(2) { background: #3164a0; }
-.fin-tab:nth-child(3) { background: #3164a0; }
-.fin-tab:nth-child(4) { background: #00326b; }
-.fin-tab:nth-child(5) { background: #3164a0; }
+.fin-tab:nth-child(1) { background: #3164a0; }  /* Bills     — blue      */
+.fin-tab:nth-child(2) { background: #4a7a6a; }  /* Goals     — teal      */
+.fin-tab:nth-child(3) { background: #c77b3a; }  /* Cash      — amber     */
+.fin-tab:nth-child(4) { background: #7d3c98; }  /* Budget    — purple    */
+.fin-tab:nth-child(5) { background: #2e7d32; }  /* Laundry   — green     */
 
 
 .fin-content {
@@ -330,7 +330,7 @@
 .fin-bill-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.09); transform: translateY(-2px); }
 
 .fin-bill-card-top {
-  height: 5px;
+  height: 7px;
   flex-shrink: 0;
 }
 
@@ -708,18 +708,22 @@
 .pc-table tbody tr:nth-child(odd)  .pc-td-account { background: rgba(49,100,160,0.12); }
 .pc-table tbody tr:nth-child(even) .pc-td-account { background: rgba(0,50,107,0.12); }
 
-.coins-table th { background: #00326b; color: #d9edfa; }
-.coins-row:nth-child(odd)  td { background: rgba(0,50,107,0.09); }
-.coins-row:nth-child(even) td { background: rgba(0,50,107,0.09); }
+.coins-table th { background: #3164a0; color: #d9edfa; }
+.coins-half:first-child .coins-table th { background: #3164a0; }
+.coins-half:first-child .coins-half-title { color: #3164a0; }
+.coins-half:last-child  .coins-table th { background: #4a7a6a; }
+.coins-half:last-child  .coins-half-title { color: #4a7a6a; }
+.coins-row:nth-child(odd)  td { background: rgba(49,100,160,0.06); }
+.coins-row:nth-child(even) td { background: #fff; }
 
 .goals-table tbody tr:nth-child(odd)  td { background: rgba(49,100,160,0.07); }
 .goals-table tbody tr:nth-child(even) td { background: rgba(0,50,107,0.07); }
 .goals-th-name, .goals-th-col { background: #00326b !important; color: #d9edfa !important; }
 
-/* ── Goals palette ── */
+/* ── Summary stat palette ── */
 .fin-stat:nth-child(1) .fin-stat-num:not(.income):not(.expense) { color: #3164a0 !important; }
 .fin-stat:nth-child(2) .fin-stat-num:not(.income):not(.expense) { color: #3164a0 !important; }
-.fin-stat:nth-child(3) .fin-stat-num:not(.income):not(.expense) { color: #3164a0 !important; }
+.fin-stat:nth-child(3) .fin-stat-num:not(.income):not(.expense) { color: #c77b3a !important; }
 .fin-stat:nth-child(4) .fin-stat-num:not(.income):not(.expense) { color: #00326b !important; }
 
 .fin-txn:nth-child(odd)  { background: rgba(49,100,160,0.05); border-left: 3px solid #3164a0; }
@@ -751,7 +755,7 @@
 
 .goal-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.09); transform: translateY(-2px); }
 
-.goal-card-top { height: 5px; flex-shrink: 0; }
+.goal-card-top { height: 7px; flex-shrink: 0; }
 
 .goal-card-name {
   font-size: 12px;
@@ -800,7 +804,7 @@
 
 .goal-card-fill {
   height: 100%;
-  background: #3164a0;
+  background: var(--card-color, #3164a0);
   border-radius: 4px;
   transition: width 0.3s;
 }
@@ -1166,6 +1170,9 @@
   color: #3164a0;
   padding: 10px 0 4px;
 }
+
+.laundry-table tbody:first-of-type .laundry-section-title { color: #3164a0; }
+.laundry-table tbody:last-of-type  .laundry-section-title { color: #c77b3a; }
 
 .laundry-table {
   width: 100%;
