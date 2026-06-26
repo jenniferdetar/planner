@@ -39,7 +39,8 @@
 /* Stats */
 .hoa-stats {
   display: flex;
-  border-bottom: 1px solid #d9e8f0;
+  border-bottom: 2px solid #001040;
+  background: #003087;
   flex-shrink: 0;
 }
 .hoa-stat {
@@ -48,13 +49,13 @@
   flex-direction: column;
   align-items: center;
   padding: 8px 4px;
-  border-right: 1px solid #eef2f7;
+  border-right: 1px solid rgba(255,255,255,0.15);
 }
 .hoa-stat:last-child { border-right: none; }
 .hoa-stat-num {
   font-size: 20px;
   font-weight: 700;
-  color: var(--cat);
+  color: #ffb81c;
   line-height: 1;
 }
 .hoa-stat-lbl {
@@ -62,7 +63,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #aaa;
+  color: rgba(255,255,255,0.6);
   margin-top: 2px;
 }
 
@@ -70,8 +71,9 @@
 .hoa-tabs {
   display: flex;
   gap: 0;
-  padding: 8px 12px 0;
-  border-bottom: 1px solid #d9e8f0;
+  padding: 6px 10px 0;
+  background: #1a4a8a;
+  border-bottom: 2px solid #001040;
   flex-shrink: 0;
   overflow-x: auto;
 }
@@ -81,14 +83,14 @@
   padding: 5px 10px;
   border: none;
   background: transparent;
-  color: #999;
+  color: rgba(255,255,255,0.55);
   cursor: pointer;
   border-bottom: 2px solid transparent;
   white-space: nowrap;
   transition: color 0.15s, border-color 0.15s;
 }
-.hoa-tab:hover { color: var(--tab-col); }
-.hoa-tab.active { color: var(--tab-col); border-bottom-color: var(--tab-col); }
+.hoa-tab:hover { color: #fff; }
+.hoa-tab.active { color: #fff; border-bottom-color: #ffb81c; }
 
 /* Form */
 .hoa-form {

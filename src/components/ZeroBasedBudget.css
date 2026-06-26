@@ -135,14 +135,14 @@
 
 /* Column-level panel header (gray band) */
 .zbb-panel-col-header {
-  background: #d0d0d0;
+  background: #1e3342;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #444;
+  color: rgba(255,255,255,0.75);
   padding: 7px 12px;
-  border-bottom: 1px solid #b8b8b8;
+  border-bottom: 2px solid #0e1e2a;
   flex-shrink: 0;
   text-align: center;
 }
