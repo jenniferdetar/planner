@@ -37,22 +37,6 @@
   color: #fff;
 }
 
-.dash-binder-btn {
-  background: rgba(255,255,255,0.08);
-  border: none;
-  border-radius: 6px;
-  color: #9ca3af;
-  cursor: pointer;
-  padding: 5px 6px;
-  display: flex;
-  align-items: center;
-  transition: background 0.15s, color 0.15s;
-}
-.dash-binder-btn:hover {
-  background: rgba(255,255,255,0.16);
-  color: #fff;
-}
-
 .dash-date-block {
   padding: 14px 16px 12px;
   border-bottom: 1px solid rgba(255,255,255,0.06);

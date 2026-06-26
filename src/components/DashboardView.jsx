@@ -92,7 +92,7 @@ function DashMiniCal({ selectedDate, onDateChange }) {
 }
 
 export default function DashboardView({
-  userId, selectedDate, onDateChange, onSwitchToBinder,
+  userId, selectedDate, onDateChange,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
   timeBlocks, onAddBlock, onDeleteBlock,
   calendarBlocks,
@@ -151,16 +151,6 @@ export default function DashboardView({
       <aside className="dash-sidebar">
         <div className="dash-brand">
           <span className="dash-brand-name">Planner</span>
-          {onSwitchToBinder && (
-            <button className="dash-binder-btn" onClick={onSwitchToBinder} title="Switch to binder view">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-                <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-                <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-                <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-              </svg>
-            </button>
-          )}
         </div>
 
         {/* Mini calendar */}

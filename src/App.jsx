@@ -18,7 +18,6 @@ import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
 import { useFamilyTree } from './hooks/useFamilyTree'
-import DailyPlanner from './components/DailyPlanner'
 import DashboardView from './components/DashboardView'
 import LoginScreen from './components/LoginScreen'
 import './App.css'
@@ -60,7 +59,6 @@ export default function App() {
   const { session, user, providerToken, loading, clearProviderToken } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
   const [view, setView] = useState('day')
-  const [viewMode, setViewMode] = useState('dashboard') // 'binder' | 'dashboard'
   const [personalSubTab, setPersonalSubTab] = useState('log')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
@@ -68,15 +66,6 @@ export default function App() {
   const userId = user?.id ?? null
   const quote = QUOTES[today.getDate() % QUOTES.length]
   const dateStr = selectedDate.toISOString().split('T')[0]
-
-  const [mobilePanel, setMobilePanel] = useState('main') // 'sidebar' | 'main' | 'right'
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768)
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)')
-    const handler = (e) => setIsMobile(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
 
   const { tasks: masterTasks, addTask: addMasterTask, updateTask: updateMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
   const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask, updateTaskDescription } = useDailyTasks(userId, selectedDate)
@@ -236,15 +225,11 @@ export default function App() {
 
   if (!session) return <LoginScreen />
 
-  const mp = isMobile ? mobilePanel : null
-
-  if (viewMode === 'dashboard') {
-    return (
+  return (
       <DashboardView
         userId={userId}
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
-        onSwitchToBinder={() => setViewMode('binder')}
         dailyTasks={allDailyTasks}
         onAddTask={addDailyTask}
         onToggleTask={handleToggleDailyTask}
@@ -320,128 +305,5 @@ export default function App() {
         calEventCount={calEvents.length}
         onSignOut={() => signOut()}
       />
-    )
-  }
-
-  return (
-    <div className="app">
-      <div className={mp === null || mp === 'main' ? 'mobile-active' : undefined}>
-        <DailyPlanner
-          userId={userId}
-          selectedDate={selectedDate}
-          onDateChange={setSelectedDate}
-          masterTasks={masterTasks}
-          onAddMasterTask={addMasterTask}
-          onDeleteMasterTask={deleteMasterTask}
-          onUpdateMasterTask={updateMasterTask}
-          dailyTasks={allDailyTasks}
-          timeBlocks={allTimeBlocks}
-          calendarBlocks={allCalendarBlocks}
-          onAddTask={addDailyTask}
-          onToggleTask={handleToggleDailyTask}
-          onDeleteTask={handleDeleteDailyTask}
-          onUpdateTaskNotes={handleUpdateTaskNotes}
-          onAddBlock={handleAddBlock}
-          onBulkAddMeetings={bulkAddMeetings}
-          onDeleteBlock={handleDeleteBlock}
-          noteContent={noteContent}
-          onNoteChange={onNoteChange}
-          view={view}
-          onLeatherViewChange={(v) => {
-            if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
-            setView(v)
-          }}
-          onViewChange={(v) => {
-            if (v === 'month') { setCalViewYear(selectedDate.getFullYear()); setCalViewMonth(selectedDate.getMonth()) }
-            setView(v)
-          }}
-          taskCounts={taskCounts}
-          cseaIssues={cseaIssues}
-          onAddCseaIssue={addCseaIssue}
-          onUpdateCseaStatus={updateCseaStatus}
-          onDeleteCseaIssue={deleteCseaIssue}
-          cseaInteractions={cseaInteractions}
-          onAddCseaInteraction={addCseaInteraction}
-          onUpdateCseaInteraction={updateCseaInteraction}
-          showArchivedInteractions={showArchivedInteractions}
-          onToggleArchivedInteractions={() => setShowArchivedInteractions(v => !v)}
-          cseaNotes={cseaNotes}
-          onAddCseaNote={addCseaNote}
-          onDeleteCseaNote={deleteCseaNote}
-          cseaIssueNotes={cseaIssueNotes}
-          onAddCseaIssueNote={addCseaIssueNote}
-          onDeleteCseaIssueNote={deleteCseaIssueNote}
-          asanaTasks={asanaTasks}
-          asanaCseaTasks={asanaCseaTasks}
-          asanaIcaapTasks={asanaIcaapTasks}
-          onCompleteAsanaTask={completeAsanaTask}
-          onUpdateAsanaTaskNotes={updateAsanaNotes}
-          onMonthChange={(y, m) => { setCalViewYear(y); setCalViewMonth(m) }}
-          transactions={transactions}
-          onAddTransaction={addTransaction}
-          onDeleteTransaction={deleteTransaction}
-          bills={bills}
-          onAddBill={addBill}
-          onToggleBillPaid={toggleBillPaid}
-          onDeleteBill={deleteBill}
-          goals={goals}
-          onAddGoal={addGoal}
-          onUpdateGoalAmount={updateGoalAmount}
-          onDeleteGoal={deleteGoal}
-          paychecks={paychecks}
-          onAddPaycheck={addPaycheck}
-          onUpdatePaycheckAmount={updatePaycheckAmount}
-          onTogglePaycheckBill={togglePaycheckBill}
-          onDeletePaycheck={deletePaycheck}
-          icaapItems={icaapItems}
-          onAddIcaapItem={addIcaapItem}
-          onUpdateIcaapItem={updateIcaapItem}
-          onDeleteIcaapItem={deleteIcaapItem}
-          attendanceRecords={attendanceRecords}
-          onUpsertAttendance={upsertAttendance}
-          onUpdateAttendanceNotes={updateAttendanceNotes}
-          icaapNotes={icaapNotes}
-          onAddIcaapNote={addIcaapNote}
-          onDeleteIcaapNote={deleteIcaapNote}
-          calAuthExpired={calAuthExpired}
-          onReconnectGoogle={reconnectGoogle}
-          calEventCount={calEvents.length}
-          onSignOut={() => signOut()}
-          books={books}
-          onAddBook={addBook}
-          onUpdateBookStatus={updateBookStatus}
-          onUpdateBookChapter={updateBookChapter}
-          onDeleteBook={deleteBook}
-          onImportBooks={importBooks}
-          onPushGcuToAsana={handlePushGcuToAsana}
-          gcuPushing={gcuPushing}
-          providerToken={providerToken}
-          weeklyTasks={weeklyTasks}
-          onToggleWeeklyTask={handleToggleWeeklyTask}
-          onAddWeeklyTask={addWeeklyTask}
-          personalSubTab={personalSubTab}
-          onPersonalSubTabChange={setPersonalSubTab}
-          familyMembers={familyMembers}
-          onAddFamilyMember={addFamilyMember}
-          onUpdateFamilyMember={updateFamilyMember}
-          onDeleteFamilyMember={deleteFamilyMember}
-          onImportFamilyDefaults={importFamilyDefaults}
-          sections={sections}
-          onUpdateSection={updateSection}
-          asanaTaskTags={asanaTaskTags}
-          onCycleAsanaTaskTag={cycleAsanaTaskTag}
-        />
-      </div>
-      <div className={mp === 'right' ? 'mobile-active' : undefined}>
-      </div>
-      {isMobile && (
-        <nav className="mobile-nav">
-          <button className={`mobile-nav-btn${mobilePanel === 'main' ? ' active' : ''}`} onClick={() => setMobilePanel('main')}>
-            <span className="mobile-nav-icon">📅</span>
-            Planner
-          </button>
-        </nav>
-      )}
-    </div>
   )
 }
