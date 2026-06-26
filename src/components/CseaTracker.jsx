@@ -82,10 +82,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
     discussion: '', who_involved: '', date_spoke: new Date().toISOString().split('T')[0],
   })
 
-  const { sync: syncGmail, syncing: gmailSyncing, lastSynced: gmailLastSynced, newCount: gmailNewCount } = useGmailCseaSync(
-    providerToken,
-    (record) => onAddInteraction && onAddInteraction(record, true)
-  )
+  const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount } = useGmailCseaSync(providerToken)
 
   // Auto-sync when interactions tab is opened
   useEffect(() => {

@@ -100,15 +100,63 @@ export function useMemberInteractions(userId) {
   const [interactions, setInteractions] = useState([])
   const [showArchived, setShowArchived] = useState(false)
 
-  useEffect(() => {
+  // Load (or reload) all interactions when userId or showArchived changes
+  const load = useCallback(async () => {
     if (!userId) return
     let q = supabase
       .from('member_interactions')
       .select('*')
       .order('date_spoke', { ascending: false })
     if (!showArchived) q = q.eq('archived', false)
-    q.then(({ data }) => setInteractions(data || []))
+    const { data } = await q
+    setInteractions(data || [])
   }, [userId, showArchived])
+
+  useEffect(() => {
+    load()
+
+    if (!userId) return
+
+    // Realtime: INSERT/UPDATE/DELETE from any source (including Gmail sync) updates state immediately
+    const channel = supabase
+      .channel('member_interactions')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'member_interactions' },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            const row = payload.new
+            if (!showArchived && row.archived) return
+            setInteractions((prev) => {
+              if (prev.some((i) => i.id === row.id)) return prev
+              return [row, ...prev].sort((a, b) =>
+                (b.date_spoke || '').localeCompare(a.date_spoke || '')
+              )
+            })
+          } else if (payload.eventType === 'UPDATE') {
+            const row = payload.new
+            setInteractions((prev) => {
+              const filtered = prev.filter((i) => {
+                if (i.id !== row.id) return true
+                // Drop from list if now archived and we're hiding archived
+                return showArchived || !row.archived
+              })
+              if (filtered.some((i) => i.id === row.id)) {
+                return filtered.map((i) => (i.id === row.id ? row : i))
+              }
+              return filtered
+            })
+          } else if (payload.eventType === 'DELETE') {
+            setInteractions((prev) => prev.filter((i) => i.id !== payload.old.id))
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [load, userId, showArchived])
 
   async function addInteraction(fields) {
     const { data } = await supabase
