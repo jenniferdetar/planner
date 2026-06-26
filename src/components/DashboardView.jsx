@@ -501,6 +501,20 @@ export default function DashboardView({
         )}
 
       </main>
+
+      {/* ── Mobile bottom nav ── */}
+      <nav className="dash-mobile-nav">
+        {NAV_ITEMS.map(item => (
+          <button
+            key={item.key}
+            className={`dash-mobile-nav-btn${section === item.key ? ' active' : ''}`}
+            onClick={() => setSection(item.key)}
+          >
+            <span className="dash-mobile-nav-dot" style={{ background: section === item.key ? '#f7e84b' : item.color }} />
+            {item.label}
+          </button>
+        ))}
+      </nav>
     </div>
   )
 }
