@@ -4,6 +4,7 @@ import { useMantra } from '../hooks/useMantra'
 import { useMission } from '../hooks/useMission'
 import GoalsPanel from './GoalsPanel'
 import LibraryPanel from './LibraryPanel'
+import ValuesPanel from './ValuesPanel'
 import './PersonalPanel.css'
 
 function formatTime(ts) {
@@ -18,6 +19,7 @@ const SUB_TABS = [
   { key: 'library',   label: 'Library',            color: '#7ba7e0' },
   { key: 'mantra',    label: 'My Mantra',          color: '#e8a0a0' },
   { key: 'mission',   label: 'Mission',             color: '#a0b4e8' },
+  { key: 'values',    label: 'Values',              color: '#8e44ad' },
   { key: 'budget',    label: 'Wants',              color: '#4a7a6a' },
 ]
 
@@ -239,6 +241,8 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
           )}
         </div>
       )}
+
+      {subTab === 'values' && <ValuesPanel userId={userId} />}
     </div>
   )
 }

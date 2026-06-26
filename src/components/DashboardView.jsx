@@ -42,6 +42,7 @@ const NAV_ITEMS = [
   { key: 'library',  label: 'Library',      color: '#7ba7e0', group: 'module' },
   { key: 'mantra',   label: 'Mantra',       color: '#e8a0a0', group: 'module' },
   { key: 'mission',  label: 'Mission',      color: '#a0b4e8', group: 'module' },
+  { key: 'values',   label: 'Values',       color: '#8e44ad', group: 'module' },
   { key: 'matrix',   label: 'Matrix',       color: '#9ca3af', group: 'module' },
   { key: 'wywo',     label: 'WYWO',         color: '#9ca3af', group: 'module' },
 ]
@@ -548,6 +549,24 @@ export default function DashboardView({
               subTab="mission"
               onSubTabChange={() => {}}
               allowedSubTabs={['mission']}
+            />
+          </div>
+        )}
+        {section === 'values' && (
+          <div className="dash-panel-wrap">
+            <PersonalPanel
+              userId={userId}
+              selectedDate={selectedDate}
+              onDateChange={onDateChange}
+              books={books || []}
+              onAddBook={onAddBook}
+              onUpdateBookStatus={onUpdateBookStatus}
+              onUpdateBookChapter={onUpdateBookChapter}
+              onDeleteBook={onDeleteBook}
+              onImportBooks={onImportBooks}
+              subTab="values"
+              onSubTabChange={() => {}}
+              allowedSubTabs={['values']}
             />
           </div>
         )}
