@@ -508,6 +508,50 @@
   text-align: center;
 }
 
+/* ─── Daily inspiration row ─────────────────────────────────────────────────── */
+
+.dash-inspiration-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.dash-inspiration-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.dash-inspiration-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-color: #d1d5db;
+}
+
+.dash-inspiration-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.dash-inspiration-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.dash-inspiration-sub {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
 /* ─── Calendar views ───────────────────────────────────────────────────────── */
 
 .dash-cal-wrap {
