@@ -571,10 +571,10 @@ function CoinsTab({ userId }) {
 }
 
 const BUDGET_SECTIONS = [
-  { key: 'Income',    label: 'INCOME',             color: '#2a7a2a' },
-  { key: 'Fixed',     label: 'FIXED EXPENSES',     color: '#4a7a6a' },
-  { key: 'Variable',  label: 'VARIABLE EXPENSES',  color: '#3d6a5a' },
-  { key: 'Savings',   label: 'SAVINGS & DEBT',     color: '#2d5560' },
+  { key: 'Income',    label: 'INCOME',             color: '#1a6b2a' },
+  { key: 'Fixed',     label: 'FIXED EXPENSES',     color: '#1a4a8a' },
+  { key: 'Variable',  label: 'VARIABLE EXPENSES',  color: '#7d3c98' },
+  { key: 'Savings',   label: 'SAVINGS & DEBT',     color: '#b34d00' },
 ]
 
 const DEFAULT_ROWS = [
@@ -677,17 +677,17 @@ function BudgetTab({ bills, userId }) {
       </div>
 
       <div className="budget-summary-bar">
-        <div className="budget-summary-item">
-          <span className="budget-summary-lbl">Income</span>
-          <span className="budget-summary-val income">{fmt(totalActualIncome)}</span>
+        <div className="budget-summary-item" style={{ background: '#1a6b2a22' }}>
+          <span className="budget-summary-lbl" style={{ color: '#1a6b2a' }}>Income</span>
+          <span className="budget-summary-val" style={{ color: '#1a6b2a' }}>{fmt(totalActualIncome)}</span>
         </div>
-        <div className="budget-summary-item">
-          <span className="budget-summary-lbl">Expenses</span>
-          <span className="budget-summary-val expense">{fmt(totalActualExpenses)}</span>
+        <div className="budget-summary-item" style={{ background: '#b34d0022' }}>
+          <span className="budget-summary-lbl" style={{ color: '#b34d00' }}>Expenses</span>
+          <span className="budget-summary-val" style={{ color: '#b34d00' }}>{fmt(totalActualExpenses)}</span>
         </div>
-        <div className="budget-summary-item">
+        <div className="budget-summary-item" style={{ background: netActual >= 0 ? '#1a6b2a22' : '#e05c5c22' }}>
           <span className="budget-summary-lbl">Net</span>
-          <span className="budget-summary-val" style={{ color: netActual >= 0 ? '#2a7a2a' : '#e05c5c' }}>{fmt(netActual)}</span>
+          <span className="budget-summary-val" style={{ color: netActual >= 0 ? '#1a6b2a' : '#e05c5c' }}>{fmt(netActual)}</span>
         </div>
       </div>
 
@@ -759,10 +759,10 @@ function BudgetTab({ bills, userId }) {
                     </tr>
                   )
                 }),
-                <tr key={`ft-${sec.key}`} className="budget-section-total">
-                  <td className="budget-td cat">Total {sec.label.split(' ')[0] === 'INCOME' ? 'Income' : sec.label.replace('EXPENSES','').replace('&','&').trim().split(' ').map(w=>w[0]+w.slice(1).toLowerCase()).join(' ')}</td>
-                  <td className="budget-td num total-val">{fmt(secBudget)}</td>
-                  <td className="budget-td num total-val">{fmt(secActual)}</td>
+                <tr key={`ft-${sec.key}`} className="budget-section-total" style={{ background: sec.color + '22' }}>
+                  <td className="budget-td cat" style={{ color: sec.color, fontWeight: 700 }}>Subtotal</td>
+                  <td className="budget-td num total-val" style={{ color: sec.color }}>{fmt(secBudget)}</td>
+                  <td className="budget-td num total-val" style={{ color: sec.color }}>{fmt(secActual)}</td>
                   <td className="budget-td num total-val" style={{ color: secDiff >= 0 ? '#2a7a2a' : '#e05c5c' }}>{fmt(Math.abs(secDiff))}</td>
                   <td></td>
                 </tr>,
