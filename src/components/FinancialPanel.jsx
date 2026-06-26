@@ -10,7 +10,7 @@ function fmt(n) {
 }
 
 const FULL_AMOUNT_BILLS = ['Mortgage', 'HOA', 'HELOC (California Credit Union)']
-const PALETTE = ['#4a7a6a', '#3d6a5a', '#2d5560', '#1e3342']
+const PALETTE = ['#3164a0', '#c77b3a', '#4a7a6a', '#9b59b6', '#c0392b', '#1abc9c', '#e07a5f', '#2e7d32']
 
 export default function FinancialPanel({
   transactions, onAddTransaction, onDeleteTransaction,
@@ -260,7 +260,7 @@ export function GoalsTab({ goals, onUpdate }) {
           </span>
         )}
         <div className="goal-card-bar">
-          <div className="goal-card-fill" style={{ width: `${pct}%`, background: pct >= 100 ? '#5cb85c' : undefined }} />
+          <div className="goal-card-fill" style={{ width: `${pct}%`, background: pct >= 100 ? '#5cb85c' : 'var(--card-color, #3164a0)' }} />
         </div>
         <span className="goal-card-pct">{pct}%</span>
       </div>
@@ -273,7 +273,7 @@ export function GoalsTab({ goals, onUpdate }) {
         {sortedRows.map((row, idx) => {
           const color = PALETTE[idx % PALETTE.length]
           return (
-            <div key={row.name} className="goal-card">
+            <div key={row.name} className="goal-card" style={{ '--card-color': color }}>
               <div className="goal-card-top" style={{ background: color }} />
               <div className="goal-card-name">{row.name}</div>
               <div className="goal-card-body">
