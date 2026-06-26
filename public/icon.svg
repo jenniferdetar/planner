@@ -1,16 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <!-- Background -->
-  <rect width="512" height="512" rx="80" fill="#5c3d20"/>
-  <!-- Inner leather panel -->
-  <rect x="55" y="55" width="402" height="402" rx="55" fill="#6b4a28"/>
-  <!-- Spine -->
-  <rect x="55" y="55" width="75" height="402" rx="0" fill="#4a2e14"/>
-  <rect x="55" y="55" width="75" height="402" rx="55" fill="#4a2e14"/>
-  <rect x="94" y="55" width="36" height="402" fill="#4a2e14"/>
-  <!-- Binder rings -->
-  <circle cx="130" cy="176" r="18" fill="none" stroke="#c8a87a" stroke-width="10"/>
-  <circle cx="130" cy="256" r="18" fill="none" stroke="#c8a87a" stroke-width="10"/>
-  <circle cx="130" cy="336" r="18" fill="none" stroke="#c8a87a" stroke-width="10"/>
-  <!-- M letter -->
-  <text x="316" y="336" font-family="Georgia, 'Times New Roman', serif" font-size="230" font-weight="bold" fill="#e8d5b0" text-anchor="middle" letter-spacing="-10">M</text>
+  <rect width="512" height="512" rx="96" fill="#1a2035"/>
+
+  <!-- Calendar card -->
+  <rect x="96" y="120" width="320" height="280" rx="24" fill="#ffffff" opacity="0.08"/>
+  <rect x="96" y="120" width="320" height="280" rx="24" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.18"/>
+
+  <!-- Calendar header bar -->
+  <rect x="96" y="120" width="320" height="72" rx="24" fill="#4a7fd4"/>
+  <rect x="96" y="168" width="320" height="24" fill="#4a7fd4"/>
+
+  <!-- Header binding rings -->
+  <circle cx="176" cy="120" r="16" fill="#1a2035"/>
+  <circle cx="256" cy="120" r="16" fill="#1a2035"/>
+  <circle cx="336" cy="120" r="16" fill="#1a2035"/>
+
+  <!-- Grid dots — calendar days -->
+  <rect x="128" y="228" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="178" y="228" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="228" y="228" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="278" y="228" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="328" y="228" width="28" height="28" rx="6" fill="#4a7fd4" opacity="0.9"/>
+
+  <rect x="128" y="276" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="178" y="276" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="228" y="276" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="278" y="276" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="328" y="276" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+
+  <rect x="128" y="324" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="178" y="324" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+  <rect x="228" y="324" width="28" height="28" rx="6" fill="#ffffff" opacity="0.15"/>
+
+  <!-- Checkmark on highlighted day -->
+  <polyline points="332,238 342,250 358,232" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Month label in header -->
+  <text x="175" y="166" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="36" font-weight="700" fill="#ffffff" letter-spacing="1">PLANNER</text>
 </svg>
