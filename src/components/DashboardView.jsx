@@ -292,12 +292,30 @@ export default function DashboardView({
                     .map(b => (
                       <div key={b.id} className="dash-block-row" style={{ borderLeftColor: b.color || '#1e5799' }}>
                         <span className="dash-block-time">{b.startLabel || (b.hour != null ? `${b.hour % 12 || 12}:00 ${b.hour >= 12 ? 'PM' : 'AM'}` : '')}–{b.endLabel || ''}</span>
-                        <span className="dash-block-title">{b.text}</span>
+                        <span className="dash-block-title">{b.text || b.title}</span>
                         {b.source !== 'gcal' && <button className="dash-row-del" onClick={() => onDeleteBlock(b.id)}>✕</button>}
                       </div>
                     ))}
                 </div>
               </div>
+            </div>
+
+            {/* Daily inspiration */}
+            <div className="dash-inspiration-row">
+              <a className="dash-inspiration-card" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener noreferrer">
+                <span className="dash-inspiration-icon">✝</span>
+                <div>
+                  <div className="dash-inspiration-label">Verse of the Day</div>
+                  <div className="dash-inspiration-sub">bible.com</div>
+                </div>
+              </a>
+              <a className="dash-inspiration-card" href="https://www.brainyquote.com/quote_of_the_day" target="_blank" rel="noopener noreferrer">
+                <span className="dash-inspiration-icon">❝</span>
+                <div>
+                  <div className="dash-inspiration-label">Quote of the Day</div>
+                  <div className="dash-inspiration-sub">brainyquote.com</div>
+                </div>
+              </a>
             </div>
           </>
         )}
