@@ -5,12 +5,12 @@
   min-height: 0;
   overflow: hidden;
   background: #ffffff;
-  color: #00326b;
+  color: #003087;
 }
 
 .library-header {
   padding: 10px 16px 8px;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,7 +22,7 @@
 .library-title {
   font-size: 14px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   margin: 0 0 2px;
 }
 
@@ -37,7 +37,7 @@
   display: flex;
   gap: 2px;
   padding: 10px 16px 0;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   overflow-x: auto;
   scrollbar-width: none;
   flex-shrink: 0;
@@ -65,30 +65,30 @@
 }
 
 .shelf-tab:hover {
-  background: #f8f7f5;
-  color: #00326b;
+  background: #f5f7fa;
+  color: #003087;
 }
 
 .shelf-tab.active {
   background: #ffffff;
-  color: #3164a0;
+  color: #1a4a8a;
   font-weight: 600;
-  border-bottom: 2px solid #3164a0;
+  border-bottom: 2px solid #1a4a8a;
 }
 
 .want-to-read-tab {
-  border-right: 1px solid #e8e5de;
+  border-right: 1px solid #d9e8f0;
   margin-right: 4px;
 }
 
 .want-to-read-tab.active {
-  color: #3164a0;
-  border-bottom: 2px solid #3164a0;
+  color: #1a4a8a;
+  border-bottom: 2px solid #1a4a8a;
 }
 
 .shelf-badge {
-  background: #3164a033;
-  color: #3164a0;
+  background: #1a4a8a33;
+  color: #1a4a8a;
   border-radius: 10px;
   font-size: 10px;
   font-weight: 600;
@@ -124,7 +124,7 @@
 }
 
 .import-btn {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -136,7 +136,7 @@
 }
 
 .import-btn:hover {
-  background: #eeb125;
+  background: #ffb81c;
 }
 
 .import-btn:active {
@@ -166,7 +166,7 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 8px;
   overflow: hidden;
   transition: box-shadow 0.15s, transform 0.12s;
@@ -194,7 +194,7 @@
 .book-title {
   font-size: 12px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   line-height: 24px;
 }
 
@@ -206,7 +206,7 @@
 
 .book-shelf-label {
   font-size: 10px;
-  color: #3164a0;
+  color: #1a4a8a;
   font-weight: 500;
   line-height: 20px;
   text-transform: uppercase;
@@ -265,7 +265,7 @@
   gap: 8px;
   margin-top: 8px;
   padding-top: 12px;
-  border-top: 1px solid #e8e5de;
+  border-top: 1px solid #d9e8f0;
   flex-wrap: wrap;
 }
 
@@ -273,9 +273,9 @@
   flex: 1;
   min-width: 120px;
   background: #fff;
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 7px;
-  color: #00326b;
+  color: #003087;
   font-size: 13px;
   padding: 8px 12px;
   outline: none;
@@ -287,14 +287,14 @@
 }
 
 .add-book-input:focus {
-  border-color: #3164a0;
+  border-color: #1a4a8a;
 }
 
 .add-book-btn {
   background: #fff;
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 7px;
-  color: #3164a0;
+  color: #1a4a8a;
   font-size: 13px;
   font-weight: 500;
   padding: 8px 16px;
@@ -304,7 +304,7 @@
 }
 
 .add-book-btn:hover {
-  background: #f8f7f5;
+  background: #f5f7fa;
 }
 
 /* ── Chapter tracker ──────────────────────────────────────────────────────── */

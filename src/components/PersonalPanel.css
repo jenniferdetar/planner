@@ -11,7 +11,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
-  border-bottom: 2px solid #e8e5de;
+  border-bottom: 2px solid #d9e8f0;
   background: #faf8f2;
 }
 
@@ -42,7 +42,7 @@
 .personal-sub-tabs {
   display: flex;
   gap: 0;
-  border-bottom: 2px solid #e8e5de;
+  border-bottom: 2px solid #d9e8f0;
   background: #fff;
   flex-shrink: 0;
   overflow-x: auto;
@@ -72,7 +72,7 @@
 }
 
 .personal-sub-tab.active {
-  color: #00326b;
+  color: #003087;
   border-bottom-width: 2px;
   border-bottom-style: solid;
   font-weight: 700;
@@ -81,7 +81,7 @@
 .personal-header {
   padding: 20px 32px 0;
   background: #fff;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   flex-shrink: 0;
 }
 
@@ -93,7 +93,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   margin: 0;
 }
 
@@ -101,8 +101,8 @@
   display: flex;
   gap: 8px;
   padding: 8px 12px;
-  background: #f8f7f5;
-  border-bottom: 1px solid #e8e5de;
+  background: #f5f7fa;
+  border-bottom: 1px solid #d9e8f0;
 }
 
 .personal-sub-tab {
@@ -121,13 +121,13 @@
 .personal-sub-tab:hover { opacity: 0.8; }
 .personal-sub-tab.active { opacity: 1; }
 
-.personal-sub-tab:nth-child(1) { background: #3164a0; }
-.personal-sub-tab:nth-child(2) { background: #3164a0; }
-.personal-sub-tab:nth-child(3) { background: #3164a0; }
-.personal-sub-tab:nth-child(4) { background: #00326b; }
+.personal-sub-tab:nth-child(1) { background: #1a4a8a; }
+.personal-sub-tab:nth-child(2) { background: #1a4a8a; }
+.personal-sub-tab:nth-child(3) { background: #1a4a8a; }
+.personal-sub-tab:nth-child(4) { background: #003087; }
 
-.personal-sub-tab:nth-child(5) { background: #3164a0; }
-.personal-sub-tab:nth-child(6) { background: #3164a0; }
+.personal-sub-tab:nth-child(5) { background: #1a4a8a; }
+.personal-sub-tab:nth-child(6) { background: #1a4a8a; }
 
 .personal-body {
   flex: 1;
@@ -141,7 +141,7 @@
   flex-shrink: 0;
   padding: 14px 24px 12px;
   background: #fff;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
 }
 
 .daily-log-header {
@@ -157,7 +157,7 @@
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #3164a0;
+  color: #1a4a8a;
   text-align: center;
 }
 
@@ -167,8 +167,8 @@
   height: 28px;
   border-radius: 50%;
   border: none;
-  background: #f0ede6;
-  color: #3164a0;
+  background: #eef2f7;
+  color: #1a4a8a;
   font-size: 18px;
   line-height: 1;
   display: flex;
@@ -180,7 +180,7 @@
 }
 
 .day-nav-btn:hover {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
 }
 
@@ -193,7 +193,7 @@
 .daily-log-input {
   flex: 1;
   padding: 7px 10px;
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 6px;
   font-size: 13px;
   font-family: inherit;
@@ -203,7 +203,7 @@
 }
 
 .daily-log-input:focus {
-  border-color: #3164a0;
+  border-color: #1a4a8a;
 }
 
 .daily-log-add-btn {
@@ -211,7 +211,7 @@
   font-size: 12px;
   font-weight: 600;
   color: #fff;
-  background: #3164a0;
+  background: #1a4a8a;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -239,11 +239,11 @@
   padding: 5px 8px;
   border-radius: 6px;
   background: #ffffff;
-  border-left: 3px solid #3164a0;
+  border-left: 3px solid #1a4a8a;
 }
 
-.daily-log-item:nth-child(even) { border-left-color: #3164a0; background: rgba(0,50,107,0.05); }
-.daily-log-item:nth-child(odd)  { border-left-color: #3164a0; background: rgba(49,100,160,0.05); }
+.daily-log-item:nth-child(even) { border-left-color: #1a4a8a; background: rgba(0,48,135,0.05); }
+.daily-log-item:nth-child(odd)  { border-left-color: #1a4a8a; background: rgba(26,74,138,0.05); }
 
 .daily-log-time {
   font-size: 10px;
@@ -259,7 +259,7 @@
   cursor: text;
 }
 
-.daily-log-text:hover { color: #00326b; }
+.daily-log-text:hover { color: #003087; }
 
 .daily-log-edit-input {
   flex: 1;
@@ -267,7 +267,7 @@
   color: #333;
   font-family: inherit;
   border: none;
-  border-bottom: 1.5px solid #3164a0;
+  border-bottom: 1.5px solid #1a4a8a;
   outline: none;
   background: transparent;
   padding: 0;
@@ -346,7 +346,7 @@
 
 .mantra-saved {
   font-size: 11px;
-  color: #3164a0;
+  color: #1a4a8a;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
@@ -361,8 +361,8 @@
   font-style: normal;
   color: #222222;
   background-color: #fff;
-  border: 1px solid #e8e5de;
-  border-top: 4px solid var(--mantra-color, #3164a0);
+  border: 1px solid #d9e8f0;
+  border-top: 4px solid var(--mantra-color, #1a4a8a);
   border-radius: 8px;
   outline: none;
   resize: none;
@@ -376,16 +376,16 @@
 
 .mantra-textarea:focus {
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-  border-color: #e8e5de;
-  border-top-color: var(--mantra-color, #3164a0);
+  border-color: #d9e8f0;
+  border-top-color: var(--mantra-color, #1a4a8a);
 }
 
 .mantra-content {
   flex: 1;
   overflow-y: auto;
   background-color: #fff;
-  border: 1px solid #e8e5de;
-  border-top: 4px solid var(--mantra-color, #3164a0);
+  border: 1px solid #d9e8f0;
+  border-top: 4px solid var(--mantra-color, #1a4a8a);
   border-radius: 8px;
   padding: 28px 32px;
 }
@@ -424,7 +424,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 17px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0;
@@ -437,7 +437,7 @@
 }
 
 .goal-card {
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
@@ -453,7 +453,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #00326b;
+  color: #003087;
 }
 
 .goal-card-body {
@@ -469,7 +469,7 @@
   align-items: center;
   gap: 4px;
   padding: 2px 0;
-  border-bottom: 1px solid #f0ede6;
+  border-bottom: 1px solid #eef2f7;
 }
 
 .goal-item:last-of-type {
@@ -512,7 +512,7 @@
 }
 
 .goal-add-btn:hover {
-  color: #3164a0;
+  color: #1a4a8a;
 }
 
 .goal-add-form {
@@ -557,7 +557,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0 0 10px;
@@ -574,7 +574,7 @@
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  background: #00326b !important;
+  background: #003087 !important;
   color: #AAAA9E !important;
   padding: 6px 3px;
   text-align: center;
@@ -645,7 +645,7 @@
 }
 
 .checklist-add-task-btn:hover {
-  color: #3164a0;
+  color: #1a4a8a;
 }
 
 /* Sheet embed */
@@ -679,7 +679,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   margin: 0;
 }
 

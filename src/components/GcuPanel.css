@@ -116,7 +116,7 @@
 /* ── Course group ── */
 .gcu-group {
   margin-bottom: 28px;
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
@@ -134,7 +134,7 @@
 
 /* ── Course rows ── */
 .gcu-course-row {
-  border-bottom: 1px solid #f0ede6;
+  border-bottom: 1px solid #eef2f7;
   transition: background 0.12s;
 }
 
@@ -247,7 +247,7 @@
   color: #bbb;
   white-space: nowrap;
   flex-shrink: 0;
-  background: #f8f7f5;
+  background: #f5f7fa;
   padding: 1px 7px;
   border-radius: 10px;
 }

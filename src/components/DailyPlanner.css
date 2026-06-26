@@ -5,8 +5,8 @@
   overflow: hidden;
   flex: 1;
   min-width: 0;
-  border-left: 1px solid #e8e5de;
-  border-right: 1px solid #e8e5de;
+  border-left: 1px solid #d9e8f0;
+  border-right: 1px solid #d9e8f0;
   background: #ffffff;
   min-width: 0;
 }
@@ -17,7 +17,7 @@
   align-items: center;
   justify-content: center;
   padding: 12px 20px 10px;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   background: #fff;
   flex-shrink: 0;
   gap: 12px;
@@ -30,7 +30,7 @@
   justify-content: space-between;
   padding: 20px 28px 16px;
   background: #fff;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   flex-shrink: 0;
   gap: 16px;
 }
@@ -52,7 +52,7 @@
   font-size: 72px;
   font-weight: 700;
   line-height: 1;
-  color: #00326b;
+  color: #003087;
   letter-spacing: -2px;
 }
 
@@ -65,7 +65,7 @@
 .day-hero-dayname {
   font-size: 18px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   line-height: 1.1;
 }
 
@@ -100,7 +100,7 @@
 }
 
 .mini-nav-btn:hover {
-  background: #f0ede6;
+  background: #eef2f7;
   color: #333;
 }
 
@@ -146,17 +146,17 @@
 }
 
 .mini-cell:hover {
-  background: #f0ede6;
+  background: #eef2f7;
 }
 
 .mini-cell.today {
   background: rgba(201, 169, 110, 0.18);
-  color: #3164a0;
+  color: #1a4a8a;
   font-weight: 700;
 }
 
 .mini-cell.selected {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   font-weight: 700;
 }
@@ -168,7 +168,7 @@
 /* ── Legacy header (kept for non-day views that still use it) ── */
 .planner-header {
   padding: 24px 32px 16px;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -187,7 +187,7 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #f0ede6;
+  background: #eef2f7;
   font-size: 18px;
   color: #666;
   display: flex;
@@ -198,7 +198,7 @@
 }
 
 .nav-btn:hover {
-  background: #00326b;
+  background: #003087;
   color: #fff;
 }
 
@@ -212,11 +212,11 @@
   font-family: 'Nunito', sans-serif;
   font-size: 22px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
 }
 
 .today-badge {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -227,17 +227,17 @@
 
 .today-btn {
   font-size: 12px;
-  color: #3164a0;
+  color: #1a4a8a;
   font-weight: 600;
   padding: 6px 12px;
-  border: 1px solid #3164a0;
+  border: 1px solid #1a4a8a;
   border-radius: 6px;
   transition: all 0.15s;
   cursor: pointer;
 }
 
 .today-btn:hover {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
 }
 
@@ -252,7 +252,7 @@
 }
 
 .planner-signout-btn:hover {
-  background: #f8f7f5;
+  background: #f5f7fa;
   color: #cc0000;
 }
 
@@ -282,13 +282,13 @@
 .view-tab:hover { opacity: 0.8; }
 .view-tab.active { opacity: 1; }
 
-.view-tab[data-v="month"]   { background: #3164a0; }
-.view-tab[data-v="week"]    { background: #3164a0; }
-.view-tab[data-v="csea"]    { background: #3164a0; }
-.view-tab[data-v="finance"] { background: #00326b; color: #fff; }
-.view-tab[data-v="gcu"]     { background: #3164a0; }
-.view-tab[data-v="icaap"]   { background: #3164a0; }
-.view-tab[data-v="personal"]{ background: #3164a0; }
+.view-tab[data-v="month"]   { background: #1a4a8a; }
+.view-tab[data-v="week"]    { background: #1a4a8a; }
+.view-tab[data-v="csea"]    { background: #1a4a8a; }
+.view-tab[data-v="finance"] { background: #003087; color: #fff; }
+.view-tab[data-v="gcu"]     { background: #1a4a8a; }
+.view-tab[data-v="icaap"]   { background: #1a4a8a; }
+.view-tab[data-v="personal"]{ background: #1a4a8a; }
 
 .planner-body {
   flex: 1;
@@ -298,7 +298,7 @@
 /* Daily Tasks */
 .daily-tasks-section {
   padding: 20px 32px 16px;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   background: #fff;
 }
 
@@ -324,24 +324,24 @@
 
 .gcal-reconnect-inline {
   font-size: 11px;
-  color: #3164a0;
+  color: #1a4a8a;
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid rgba(49,100,160,0.35);
+  border: 1px solid rgba(26,74,138,0.35);
   padding: 3px 10px;
   border-radius: 20px;
-  background: rgba(49,100,160,0.08);
+  background: rgba(26,74,138,0.08);
   transition: all 0.15s;
 }
 
 .gcal-reconnect-inline:hover {
-  background: rgba(49,100,160,0.18);
-  border-color: rgba(49,100,160,0.6);
+  background: rgba(26,74,138,0.18);
+  border-color: rgba(26,74,138,0.6);
 }
 
 .gcal-empty-state {
   padding: 20px 24px;
-  background: #d9edfa;
+  background: #d9e8f5;
   border-radius: 8px;
   margin: 0 0 12px;
   display: flex;
@@ -360,7 +360,7 @@
   font-size: 12px;
   font-weight: 700;
   color: #fff;
-  background: #3164a0;
+  background: #1a4a8a;
   border: none;
   padding: 7px 14px;
   border-radius: 20px;
@@ -369,7 +369,7 @@
 }
 
 .gcal-empty-state button:hover {
-  background: #3164a0;
+  background: #1a4a8a;
 }
 
 .daily-task-list {
@@ -379,11 +379,11 @@
 
 /* Asana-style task rows */
 .asana-row {
-  border-bottom: 1px solid #f0ede6;
+  border-bottom: 1px solid #eef2f7;
 }
 
 .asana-row:first-child {
-  border-top: 1px solid #f0ede6;
+  border-top: 1px solid #eef2f7;
 }
 
 a.asana-title {
@@ -442,8 +442,8 @@ a.asana-title:hover {
 }
 
 .asana-circle.checked {
-  background: #3164a0;
-  border-color: #3164a0;
+  background: #1a4a8a;
+  border-color: #1a4a8a;
 }
 
 .asana-circle.checked::after {
@@ -506,7 +506,7 @@ a.asana-title:hover {
 }
 
 .asana-delete-btn:hover { color: #cc0000; }
-.asana-notes-btn:hover  { color: #3164a0; }
+.asana-notes-btn:hover  { color: #1a4a8a; }
 
 .check-box {
   width: 16px;
@@ -525,8 +525,8 @@ a.asana-title:hover {
 
 .task-project {
   font-size: 10px;
-  background: rgba(49,100,160, 0.12);
-  color: #3164a0;
+  background: rgba(26,74,138, 0.12);
+  color: #1a4a8a;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
@@ -539,7 +539,7 @@ a.asana-title:hover {
   padding: 8px 10px;
   box-sizing: border-box;
   width: calc(100% - 16px);
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 6px;
   font-size: 12px;
   color: #444;
@@ -552,7 +552,7 @@ a.asana-title:hover {
 }
 
 .task-notes-input:focus {
-  border-color: #3164a0;
+  border-color: #1a4a8a;
   background-color: #fffde6;
 }
 
@@ -588,7 +588,7 @@ a.asana-title:hover {
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-  background: #f8f7f5;
+  background: #f5f7fa;
   border-radius: 8px;
 }
 
@@ -647,7 +647,7 @@ a.asana-title:hover {
 }
 
 .add-daily-task-btn:hover {
-  color: #3164a0;
+  color: #1a4a8a;
 }
 
 /* Schedule */
@@ -668,7 +668,7 @@ a.asana-title:hover {
 }
 
 .time-row.current-hour .hour-label {
-  color: #3164a0;
+  color: #1a4a8a;
   font-weight: 600;
 }
 
@@ -790,7 +790,7 @@ a.asana-title:hover {
   align-items: center;
   gap: 6px;
   padding: 5px 8px;
-  background: #f8f7f5;
+  background: #f5f7fa;
   border-radius: 6px;
 }
 
@@ -849,7 +849,7 @@ a.asana-title:hover {
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  background: #3164a0;
+  background: #1a4a8a;
   padding: 3px 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -882,7 +882,7 @@ a.asana-title:hover {
 }
 
 .add-block-btn:hover {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
 }
 
@@ -898,7 +898,7 @@ a.asana-title:hover {
   display: flex;
   gap: 6px;
   padding: 12px 32px 10px;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   background: #fff;
   flex-shrink: 0;
   flex-wrap: wrap;
@@ -910,21 +910,21 @@ a.asana-title:hover {
   padding: 5px 14px;
   border-radius: 20px;
   color: #888;
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   cursor: pointer;
   transition: all 0.15s;
   background: #fff;
 }
 
 .task-hub-filter-btn:hover {
-  border-color: #3164a0;
-  color: #3164a0;
+  border-color: #1a4a8a;
+  color: #1a4a8a;
 }
 
 .task-hub-filter-btn.active {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
-  border-color: #3164a0;
+  border-color: #1a4a8a;
   font-weight: 700;
 }
 
@@ -939,7 +939,7 @@ a.asana-title:hover {
 
 .task-hub-section {
   padding: 20px 24px;
-  border-right: 1px solid #e8e5de;
+  border-right: 1px solid #d9e8f0;
 }
 
 .task-hub-section:last-child {
@@ -982,13 +982,13 @@ a.asana-title:hover {
 }
 
 .task-hub-master-row:hover {
-  background: #f8f7f5;
+  background: #f5f7fa;
 }
 
 .task-hub-area-tag {
   font-size: 9px;
-  background: rgba(49,100,160,0.12);
-  color: #3164a0;
+  background: rgba(26,74,138,0.12);
+  color: #1a4a8a;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
@@ -1003,7 +1003,7 @@ a.asana-title:hover {
   .task-hub-section {
     padding: 14px 16px;
     border-right: none;
-    border-bottom: 1px solid #e8e5de;
+    border-bottom: 1px solid #d9e8f0;
   }
 
   .task-hub-filters {
@@ -1126,16 +1126,16 @@ a.asana-title:hover {
   font-size: 11px;
   padding: 3px 8px;
   border-radius: 5px;
-  background: #f0ede6;
+  background: #eef2f7;
   color: #666;
   cursor: pointer;
   border: 1px solid #e0ddd6;
 }
-.ical-mgr-btn:hover { background: #00326b; color: #AAAA9E; border-color: #00326b; }
+.ical-mgr-btn:hover { background: #003087; color: #AAAA9E; border-color: #003087; }
 
 .ical-manager {
   background: #fff;
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 12px;
@@ -1149,7 +1149,7 @@ a.asana-title:hover {
   align-items: center;
   font-weight: 600;
   font-size: 13px;
-  color: #00326b;
+  color: #003087;
 }
 .ical-manager-header button { background: none; font-size: 14px; color: #999; cursor: pointer; }
 .ical-sub-row {
@@ -1159,7 +1159,7 @@ a.asana-title:hover {
   font-size: 12px;
   color: #444;
   padding: 4px 0;
-  border-bottom: 1px solid #f0ede6;
+  border-bottom: 1px solid #eef2f7;
 }
 .ical-sub-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .ical-sub-name { font-weight: 600; flex-shrink: 0; }
@@ -1170,7 +1170,7 @@ a.asana-title:hover {
 .ical-add-form { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 4px; }
 .ical-input { flex: 1; min-width: 120px; padding: 5px 8px; border: 1px solid #e0ddd6; border-radius: 5px; font-size: 12px; }
 .ical-color-input { width: 32px; height: 30px; padding: 1px; border: 1px solid #e0ddd6; border-radius: 5px; cursor: pointer; }
-.ical-add-btn { padding: 5px 12px; background: #00326b; color: #AAAA9E; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.ical-add-btn { padding: 5px 12px; background: #003087; color: #AAAA9E; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .ical-add-btn:hover { background: #2d2d4e; }
 
 .view-tab { font-family: 'Nunito', sans-serif !important; }
@@ -1259,7 +1259,7 @@ a.asana-title:hover {
   font-family: 'Architects Daughter', cursive;
   font-size: 15px;
   line-height: 1.8;
-  color: #00326b;
+  color: #003087;
 }
 
 .section-preview-p {
@@ -1283,7 +1283,7 @@ a.asana-title:hover {
 }
 
 .section-preview-table th {
-  background: var(--ac, #3164a0);
+  background: var(--ac, #1a4a8a);
   color: white;
   padding: 8px 16px;
   text-align: left;
@@ -1318,6 +1318,6 @@ a.asana-title:hover {
 }
 
 .section-preview-btn.active {
-  background: var(--ac, #3164a0);
+  background: var(--ac, #1a4a8a);
   color: white;
 }

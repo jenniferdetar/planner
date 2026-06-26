@@ -28,7 +28,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin: 0;
@@ -41,7 +41,7 @@
 }
 
 .goal-card {
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
@@ -57,7 +57,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #00326b;
+  color: #003087;
 }
 
 .goal-card-body {
@@ -74,7 +74,7 @@
   gap: 4px;
   padding: 0;
   height: 24px;
-  border-bottom: 1px solid #f0ede6;
+  border-bottom: 1px solid #eef2f7;
 }
 
 .goal-item:last-of-type {
@@ -124,7 +124,7 @@
 }
 
 .goal-add-btn:hover {
-  color: #3164a0;
+  color: #1a4a8a;
 }
 
 .goal-add-form {
@@ -172,7 +172,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0 0 10px;
@@ -192,7 +192,7 @@
   color: #999;
   padding: 2px 3px;
   text-align: center;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
 }
 
 .checklist-table th.task-col {
@@ -257,11 +257,11 @@
 }
 
 .checklist-add-task-btn:hover {
-  color: #3164a0;
+  color: #1a4a8a;
 }
 
 /* ── Palette alternating rows ── */
-.checklist-table tbody tr:nth-child(odd)  td { background: rgba(49,100,160,0.07); }
-.checklist-table tbody tr:nth-child(even) td { background: rgba(0,50,107,0.07); }
-.checklist-table thead th { background: #00326b; color: #3164a0; }
-.checklist-table thead th.task-col { background: #00326b; color: #3164a0; }
+.checklist-table tbody tr:nth-child(odd)  td { background: rgba(0,48,135,0.06); }
+.checklist-table tbody tr:nth-child(even) td { background: rgba(0,48,135,0.03); }
+.checklist-table thead th { background: #003087; color: #ffffff; }
+.checklist-table thead th.task-col { background: #003087; color: #ffffff; }

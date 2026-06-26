@@ -28,7 +28,7 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #3164a0;
+  color: #1a4a8a;
   border: 1px solid #c8d8ee;
   border-radius: 5px;
   padding: 4px 12px;
@@ -38,7 +38,7 @@
 }
 
 .values-add-btn:hover {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .values-add-input:focus {
-  border-color: #3164a0;
+  border-color: #1a4a8a;
 }
 
 .values-add-save {
@@ -70,7 +70,7 @@
   font-size: 12px;
   font-weight: 600;
   color: #fff;
-  background: #3164a0;
+  background: #1a4a8a;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -103,8 +103,8 @@
   align-items: flex-start;
   gap: 4px;
   padding: 14px 16px;
-  border: 1px solid #e8e5de;
-  border-left: 4px solid var(--val-color, #3164a0);
+  border: 1px solid #d9e8f0;
+  border-left: 4px solid var(--val-color, #1a4a8a);
   border-radius: 8px;
   background: #faf9f7;
   cursor: pointer;
@@ -131,7 +131,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: var(--val-color, #3164a0);
+  color: var(--val-color, #1a4a8a);
 }
 
 .values-card-preview {
@@ -154,7 +154,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 24px;
-  border-bottom: 1px solid #e8e5de;
+  border-bottom: 1px solid #d9e8f0;
   background: #faf8f2;
   flex-shrink: 0;
 }
@@ -162,7 +162,7 @@
 .values-back-btn {
   font-size: 13px;
   font-weight: 600;
-  color: #3164a0;
+  color: #1a4a8a;
   background: none;
   border: none;
   cursor: pointer;
@@ -234,7 +234,7 @@
 }
 
 .values-name-input:focus {
-  border-bottom-color: #3164a0;
+  border-bottom-color: #1a4a8a;
 }
 
 .values-color-picker {
@@ -276,8 +276,8 @@
   line-height: 26px;
   color: #222;
   background: #fff;
-  border: 1px solid #e8e5de;
-  border-top: 4px solid var(--values-color, #3164a0);
+  border: 1px solid #d9e8f0;
+  border-top: 4px solid var(--values-color, #1a4a8a);
   border-radius: 8px;
   outline: none;
   resize: none;

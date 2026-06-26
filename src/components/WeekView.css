@@ -16,7 +16,7 @@
   justify-content: center;
   gap: 20px;
   padding: 14px 32px 10px;
-  background: #00326b;
+  background: #003087;
   flex-shrink: 0;
 }
 
@@ -54,7 +54,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1px;
-  background: #e8e5de;
+  background: #d9e8f0;
   flex-shrink: 0;
 }
 
@@ -136,7 +136,7 @@
 
 /* Motivational banner */
 .week-banner {
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   text-align: center;
   font-size: 11px;
@@ -171,7 +171,7 @@
 .week-day-tasks {
   padding: 8px 14px 8px 16px;
   border-left: 4px solid;
-  border-right: 1px solid #e8e5de;
+  border-right: 1px solid #d9e8f0;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -238,7 +238,7 @@
 }
 
 .week-add-btn:hover {
-  color: #3164a0;
+  color: #1a4a8a;
 }
 
 .week-add-form {
@@ -372,7 +372,7 @@
 
   .week-day-events {
     border-top: none;
-    border-left: 1px solid #e8e5de;
+    border-left: 1px solid #d9e8f0;
     padding: 8px 8px 8px 10px;
   }
 
@@ -392,8 +392,8 @@
 }
 
 /* ── Palette alternating day rows ── */
-.week-day-row:nth-child(odd)  { background: rgba(49,100,160,0.05); }
-.week-day-row:nth-child(even) { background: rgba(0,50,107,0.05); }
+.week-day-row:nth-child(odd)  { background: rgba(26,74,138,0.05); }
+.week-day-row:nth-child(even) { background: rgba(0,48,135,0.05); }
 .week-day-row.week-day-today  { background: #eef2f7 !important; }
 
 /* ── Left panel bold ── */
