@@ -11,13 +11,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  padding: 10px 16px;
+  background: #003087;
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
 
 .values-list-title {
   font-family: 'Nunito', sans-serif;
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 600;
+  color: #fff;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: #444;
@@ -155,14 +159,14 @@
   gap: 12px;
   padding: 12px 24px;
   border-bottom: 1px solid #d9e8f0;
-  background: #faf8f2;
+  background: #003087;
   flex-shrink: 0;
 }
 
 .values-back-btn {
   font-size: 13px;
   font-weight: 600;
-  color: #1a4a8a;
+  color: #fff;
   background: none;
   border: none;
   cursor: pointer;
@@ -178,7 +182,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #aaa;
+  color: rgba(255,255,255,0.75);
   text-transform: uppercase;
 }
 

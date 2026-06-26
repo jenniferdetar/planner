@@ -64,8 +64,8 @@
 /* Sub-tabs */
 .icaap-tabs {
   display: flex;
-  background: #f5f7fa;
-  border-bottom: 1px solid #d9e8f0;
+  background: #003087;
+  border-bottom: 2px solid #001a5e;
   flex-shrink: 0;
 }
 
@@ -75,16 +75,16 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #999;
+  color: rgba(255,255,255,0.6);
   transition: all 0.15s;
   cursor: pointer;
   border-bottom: 2px solid transparent;
 }
 
 .icaap-tab.active {
-  color: #003087;
-  background: #fff;
-  border-bottom-color: #1a4a8a;
+  color: #ffb81c;
+  background: rgba(255,255,255,0.08);
+  border-bottom-color: #ffb81c;
 }
 
 /* Toolbar */

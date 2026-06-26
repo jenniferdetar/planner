@@ -17,7 +17,10 @@
   align-items: center;
   gap: 8px;
   justify-content: center;
+  padding: 8px 16px;
   margin-bottom: 8px;
+  background: #003087;
+  flex-shrink: 0;
 }
 
 .goals-trophy {
@@ -28,7 +31,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: #003087;
+  color: #fff;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin: 0;
