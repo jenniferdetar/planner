@@ -241,44 +241,44 @@
   padding: 5px 10px 5px 7px;
   border-radius: 20px;
   border: 1.5px solid #cc0000;
-  background: #f7e84b;
+  background: #00326b;
   cursor: pointer;
   font-family: 'Nunito', sans-serif;
   transition: all 0.15s;
   text-align: left;
 }
 .cref-pill:hover {
-  background: #f5e020;
+  background: #00255a;
   border-color: #aa0000;
 }
 .cref-pill.active {
-  background: #f5e020;
+  background: #00255a;
   border-color: #aa0000;
-  box-shadow: 0 0 0 2px rgba(204,0,0,0.25);
+  box-shadow: 0 0 0 2px rgba(204,0,0,0.35);
 }
-.cref-pill.active .cref-pill-dot { background: #00326b; }
-.cref-pill.active .cref-pill-label { color: #00326b; }
-.cref-pill.active .cref-pill-art { color: #00326b; }
+.cref-pill.active .cref-pill-dot { background: #f7e84b; }
+.cref-pill.active .cref-pill-label { color: #f7e84b; }
+.cref-pill.active .cref-pill-art { color: #f7e84b; }
 
 .cref-pill-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #00326b;
+  background: #f7e84b;
   flex-shrink: 0;
 }
 
 .cref-pill-label {
   font-size: 11px;
   font-weight: 700;
-  color: #00326b;
+  color: #f7e84b;
   white-space: nowrap;
 }
 
 .cref-pill-art {
   font-size: 9px;
   font-weight: 600;
-  color: #1a4a8a;
+  color: #f0d840;
   white-space: nowrap;
 }
 
