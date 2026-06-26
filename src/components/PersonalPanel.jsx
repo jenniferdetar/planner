@@ -101,18 +101,16 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
 
   return (
     <div className="personal-panel">
-      {allowedSubTabs && (
-        <div className="personal-inline-tabs">
-          {visibleTabs.map(t => (
-            <button
-              key={t.key}
-              className={`personal-inline-tab ${subTab === t.key ? 'active' : ''}`}
-              style={{ '--itab-color': t.color }}
-              onClick={() => handleSubTabChange(t.key)}
-            >{t.label}</button>
-          ))}
-        </div>
-      )}
+      <div className="personal-inline-tabs">
+        {visibleTabs.map(t => (
+          <button
+            key={t.key}
+            className={`personal-inline-tab ${subTab === t.key ? 'active' : ''}`}
+            style={{ '--itab-color': t.color }}
+            onClick={() => handleSubTabChange(t.key)}
+          >{t.label}</button>
+        ))}
+      </div>
       {subTab === 'log' && (
         <div className="personal-body">
           <div className="daily-log-section">
