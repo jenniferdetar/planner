@@ -76,7 +76,7 @@ export default function App() {
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction, showArchived: showArchivedInteractions, setShowArchived: setShowArchivedInteractions } = useMemberInteractions(userId)
   const { notes: cseaNotes, addNote: addCseaNote, deleteNote: deleteCseaNote } = useCseaNotes(userId)
   const { notesByIssue: cseaIssueNotes, addNote: addCseaIssueNote, deleteNote: deleteCseaIssueNote } = useCseaIssueNotes(userId)
-  const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
+  const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, workspaceGid: asanaWorkspaceGid, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
@@ -299,6 +299,9 @@ export default function App() {
         weeklyTasks={weeklyTasks}
         onToggleWeeklyTask={handleToggleWeeklyTask}
         onAddWeeklyTask={addWeeklyTask}
+        asanaToken={import.meta.env.VITE_ASANA_TOKEN}
+        asanaWorkspaceGid={asanaWorkspaceGid}
+        allAsanaTasks={asanaTasks}
         taskCounts={taskCounts}
         onMonthChange={(y, m) => { setCalViewYear(y); setCalViewMonth(m) }}
         calAuthExpired={calAuthExpired}
