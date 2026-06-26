@@ -186,9 +186,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       {/* Notes tab */}
       {tab === 'notes' && (
         <div className="icaap-notes-section">
-          <div className="icaap-toolbar">
-            <span className="icaap-toolbar-label">One-off notes &amp; reminders</span>
-          </div>
           <form className="icaap-notes-form" onSubmit={async (e) => {
             e.preventDefault()
             if (!noteText.trim()) return
@@ -224,9 +221,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
 
       {tab === 'links' && (
         <div className="icaap-panel">
-          <div className="icaap-toolbar" style={{ display: 'flex' }}>
-            <span className="icaap-toolbar-label">Quick Links</span>
-          </div>
           <form className="icaap-notes-form" onSubmit={async (e) => {
             e.preventDefault()
             if (!linkTitle.trim() || !linkUrl.trim()) return

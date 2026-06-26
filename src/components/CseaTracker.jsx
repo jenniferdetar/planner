@@ -213,9 +213,6 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
 
       {tab === 'notes' && (
         <div className="csea-panel">
-          <div className="csea-toolbar">
-            <span className="csea-toolbar-label">One-off notes &amp; reminders</span>
-          </div>
           <form className="csea-notes-form" onSubmit={async (e) => {
             e.preventDefault()
             if (!noteText.trim()) return
@@ -251,9 +248,6 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
 
       {tab === 'links' && (
         <div className="csea-panel">
-          <div className="csea-toolbar">
-            <span className="csea-toolbar-label">Quick Links</span>
-          </div>
           <form className="csea-notes-form" onSubmit={async (e) => {
             e.preventDefault()
             if (!linkTitle.trim() || !linkUrl.trim()) return
@@ -301,7 +295,6 @@ export default function CseaTracker({ userId, issues, onAddIssue, onUpdateStatus
       {tab === 'interactions' && (
         <div className="csea-panel">
           <div className="csea-toolbar">
-            <span className="csea-toolbar-label">Member contacts</span>
             <button className="csea-archive-toggle" onClick={onToggleArchived}>
               {showArchived ? 'Hide Archived' : 'Show Archived'}
             </button>

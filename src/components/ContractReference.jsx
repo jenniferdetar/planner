@@ -163,7 +163,6 @@ export default function ContractReference({ userId }) {
     <div className="cref-panel">
       <div className="cref-header">
         <div className="cref-header-top">
-          <h2 className="cref-title">Contract Quick Reference</h2>
           <button className="cref-add-btn" onClick={() => { setShowForm(v => !v); setEditEntry(null); setSelectedId(null) }}>+ Add</button>
         </div>
         <div className="cref-controls">
