@@ -230,18 +230,18 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                         key={task.id}
                         className={`week-task-row ${task.completed ? 'done' : ''}`}
                         onClick={() => toggleTask(task.id, dateStr)}
-                        style={isCseaTask ? { background: '#f7e84b', borderRadius: '4px', padding: '1px 4px' } : {}}
+                        style={isCseaTask ? { background: '#00326b', borderRadius: '4px', padding: '1px 4px', border: '1.5px solid #cc0000' } : {}}
                       >
                         <span
                           className="week-task-check"
                           style={{
-                            background: task.completed ? (isCseaTask ? '#00326b' : dayColor) : 'transparent',
+                            background: task.completed ? (isCseaTask ? '#f7e84b' : dayColor) : 'transparent',
                             borderColor: isCseaTask ? '#cc0000' : dayColor,
                           }}
                         />
                         <span
                           className="week-task-text"
-                          style={isCseaTask ? { color: '#00326b', fontWeight: 700 } : {}}
+                          style={isCseaTask ? { color: '#f7e84b', fontWeight: 700 } : {}}
                         >{displayTaskTitle}</span>
                       </div>
                     )
@@ -290,7 +290,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                     ? 'CSEA ' + rawTitle
                     : rawTitle
                   const pillStyle = isCseaEvent
-                    ? { background: '#f7e84b', color: '#00326b', border: '1.5px solid #cc0000', fontWeight: 700 }
+                    ? { background: '#00326b', color: '#f7e84b', border: '1.5px solid #cc0000', fontWeight: 700 }
                     : { background: evt.color ?? '#4a90d9', color: contrastColor(evt.color) }
                   return (
                     <div
