@@ -775,6 +775,32 @@
   font-weight: 700;
 }
 
+.csea-note-topic {
+  font-size: 10px;
+  color: #7a4a00;
+  background: #fff3cd;
+  padding: 1px 7px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.csea-notes-toggle {
+  display: block;
+  width: 100%;
+  margin: 8px 0 2px;
+  padding: 7px 12px;
+  background: var(--csea-light-blue);
+  color: var(--csea-blue);
+  border: 1px solid var(--csea-border-lt, rgba(49,100,160,0.2));
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+.csea-notes-toggle:hover { background: #d4e8f8; }
+
 .csea-note-text {
   font-size: 13px;
   color: var(--csea-body);
