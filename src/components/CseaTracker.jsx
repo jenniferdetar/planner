@@ -353,9 +353,16 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
             {interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
             {Object.entries(
               interactions.reduce((groups, i) => {
-                const key = i.member_name || 'Unknown'
-                if (!groups[key]) groups[key] = []
-                groups[key].push(i)
+                const raw = i.member_name || 'Unknown'
+                // Expand "Group Chat (Name1, Name2, ...)" into individual names
+                const gcMatch = raw.match(/^Group Chat\s*\((.+)\)$/i)
+                const keys = gcMatch
+                  ? gcMatch[1].split(',').map(n => n.trim()).filter(Boolean)
+                  : [raw]
+                keys.forEach(key => {
+                  if (!groups[key]) groups[key] = []
+                  groups[key].push(i)
+                })
                 return groups
               }, {})
             ).sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
