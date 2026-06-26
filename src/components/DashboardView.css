@@ -195,6 +195,22 @@
   min-height: 0;
 }
 
+.dash-card-full {
+  grid-column: 1 / -1;
+}
+
+.dash-log-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dash-log-time {
+  font-size: 11px;
+  color: #9ca3af;
+  min-width: 64px;
+  flex-shrink: 0;
+}
+
 /* ─── Task list ─────────────────────────────────────────────────────────────── */
 
 .dash-add-row {

@@ -9,6 +9,7 @@
 
 .personal-inline-tabs {
   display: flex;
+  flex-wrap: wrap;
   flex-shrink: 0;
   border-bottom: 2px solid #e8e5de;
   background: #faf8f2;
