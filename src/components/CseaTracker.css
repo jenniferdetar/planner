@@ -149,7 +149,24 @@
 
 .csea-filter-pills {
   display: flex;
+  align-items: center;
   gap: 4px;
+  flex-wrap: wrap;
+}
+
+.csea-inline-stat {
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+.csea-inline-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.85;
 }
 
 .filter-pill {

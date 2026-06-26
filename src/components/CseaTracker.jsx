@@ -117,25 +117,6 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
 
   return (
     <div className="csea-tracker">
-      {/* Stats bar */}
-      <div className="csea-stats">
-        <div className="csea-stat">
-          <span className="csea-stat-num" style={{ color: '#e05c5c' }}>{counts.Grievance}</span>
-          <span className="csea-stat-lbl">Grievances</span>
-        </div>
-        <div className="csea-stat">
-          <span className="csea-stat-num" style={{ color: '#f0a040' }}>{counts.Gripe}</span>
-          <span className="csea-stat-lbl">Gripes</span>
-        </div>
-        <div className="csea-stat">
-          <span className="csea-stat-num" style={{ color: '#5c9ee0' }}>{counts.Complaint}</span>
-          <span className="csea-stat-lbl">Complaints</span>
-        </div>
-        <div className="csea-stat">
-          <span className="csea-stat-num">{activeIssues.length}</span>
-          <span className="csea-stat-lbl">Active</span>
-        </div>
-      </div>
 
       {/* Sub-tabs */}
       <div className="csea-tabs">
@@ -155,6 +136,9 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
                   {f.charAt(0).toUpperCase() + f.slice(1)}
                 </button>
               ))}
+              <span className="csea-inline-stat" style={{ color: '#e05c5c' }}>{counts.Grievance} <span className="csea-inline-lbl">Grievances</span></span>
+              <span className="csea-inline-stat" style={{ color: '#f0a040' }}>{counts.Gripe} <span className="csea-inline-lbl">Gripes</span></span>
+              <span className="csea-inline-stat" style={{ color: '#5c9ee0' }}>{counts.Complaint} <span className="csea-inline-lbl">Complaints</span></span>
             </div>
             <button className="csea-add-btn" onClick={() => setShowAddIssue(true)}>+ Log Issue</button>
           </div>
