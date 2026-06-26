@@ -238,10 +238,10 @@ export function useCseaNotes(userId) {
       .then(({ data }) => setNotes(data || []))
   }, [userId])
 
-  async function addNote(note, source) {
+  async function addNote(note, source, topic) {
     const { data } = await supabase
       .from('csea_notes')
-      .insert({ note, source: source || null, user_id: userId })
+      .insert({ note, source: source || null, topic: topic || null, user_id: userId })
       .select()
       .single()
     if (data) setNotes((prev) => [data, ...prev])

@@ -70,6 +70,8 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
   const [filter, setFilter] = useState('active')
   const [noteText, setNoteText] = useState('')
   const [noteSource, setNoteSource] = useState('')
+  const [noteTopic, setNoteTopic] = useState('')
+  const [showNotesList, setShowNotesList] = useState(false)
 
   const [issueForm, setIssueForm] = useState({
     issue_type: 'Grievance', member_name: '', work_location: '',
@@ -208,9 +210,10 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
           <form className="csea-notes-form" onSubmit={async (e) => {
             e.preventDefault()
             if (!noteText.trim()) return
-            await onAddCseaNote?.(noteText.trim(), noteSource.trim())
+            await onAddCseaNote?.(noteText.trim(), noteSource.trim(), noteTopic.trim())
             setNoteText('')
             setNoteSource('')
+            setNoteTopic('')
           }}>
             <textarea
               className="csea-textarea"
@@ -218,6 +221,12 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
               rows={2}
               value={noteText}
               onChange={e => setNoteText(e.target.value)}
+            />
+            <input
+              className="csea-input"
+              placeholder="Topic (optional)"
+              value={noteTopic}
+              onChange={e => setNoteTopic(e.target.value)}
             />
             <div className="csea-notes-form-row">
               <input
@@ -229,12 +238,17 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
               <button type="submit" className="csea-save">Add</button>
             </div>
           </form>
-          <div className="csea-issue-list">
-            {cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
-            {cseaNotes.map(n => (
-              <CseaNoteRowItem key={n.id} note={n} onDelete={onDeleteCseaNote} />
-            ))}
-          </div>
+          <button className="csea-notes-toggle" onClick={() => setShowNotesList(v => !v)}>
+            {showNotesList ? `Hide Notes (${cseaNotes.length})` : `Show Notes (${cseaNotes.length})`}
+          </button>
+          {showNotesList && (
+            <div className="csea-issue-list">
+              {cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
+              {cseaNotes.map(n => (
+                <CseaNoteRowItem key={n.id} note={n} onDelete={onDeleteCseaNote} />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -392,6 +406,7 @@ function CseaNoteRowItem({ note: n, onDelete }) {
     >
       <div className="csea-note-meta">
         <span className="csea-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
+        {n.topic && <span className="csea-note-topic">{n.topic}</span>}
         {n.source && <span className="csea-note-source">{n.source}</span>}
       </div>
       <div className="csea-note-text">{n.note}</div>
