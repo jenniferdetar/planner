@@ -65,6 +65,7 @@ export default function LeatherDayView({
   userId,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
   calendarBlocks,
+  asanaToken, asanaWorkspaceGid, allAsanaTasks,
   // month props
   taskCounts, onMonthChange,
   // csea props
@@ -257,6 +258,9 @@ export default function LeatherDayView({
                   tasksByDate={weeklyTasks}
                   onToggleTask={onToggleWeeklyTask}
                   onAddTask={onAddWeeklyTask}
+                  asanaTasks={allAsanaTasks}
+                  asanaToken={asanaToken}
+                  asanaWorkspaceGid={asanaWorkspaceGid}
                 />
               </div>
             )}

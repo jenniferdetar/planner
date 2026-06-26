@@ -31,7 +31,11 @@ function contrastColor(hex) {
 }
 
 function normalizeTitle(t) {
-  return (t || '').replace(/^\d{1,2}(:\d{2})?\s*(AM|PM)?\s*/i, '').toLowerCase().trim()
+  return (t || '')
+    .replace(/^\d{1,2}(:\d{2})?\s*(AM|PM)?\s*/i, '')
+    .replace(/\s+via\s+zoom(\s+meeting)?$/i, '')
+    .toLowerCase()
+    .trim()
 }
 
 function dedupeEvents(events) {
@@ -65,18 +69,24 @@ const HABIT_COLORS = {
   'Weekends': '#1e3342',
 }
 
-export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks }) {
+export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks, asanaTasks, asanaToken, asanaWorkspaceGid }) {
   const [weekStart, setWeekStart] = useState(() => getWeekStart(selectedDate))
   const [addingDay, setAddingDay] = useState(null)
   const [newTaskText, setNewTaskText] = useState('')
   const [newTaskPriority, setNewTaskPriority] = useState('medium')
+  const [newTaskAsanaGid, setNewTaskAsanaGid] = useState('')
+  const [linkingTask, setLinkingTask] = useState(null) // { id, dateStr }
+  const [linkPickerGid, setLinkPickerGid] = useState('')
 
   const weekEnd = new Date(weekStart)
   weekEnd.setDate(weekStart.getDate() + 6)
 
   const { isCompleted, toggle: toggleHabit } = useHabitCompletions(userId, weekStart, weekEnd)
   const weekMeetings = useMeetingsInRange(userId, weekStart, weekEnd)
-  const { tasksByDate, toggleTask, addTask: addWeekTask } = useWeeklyTasks(userId, weekStart)
+  const { tasksByDate, toggleTask, addTask: addWeekTask, linkTask } = useWeeklyTasks(
+    userId, weekStart,
+    { token: asanaToken, workspaceGid: asanaWorkspaceGid }
+  )
   const { tasks: monthlyTasks, isChecked: isMonthChecked, toggle: toggleMonthTask } = usePersonalChecklist(userId)
   const weekMonth = weekStart.getMonth() + 1
 
@@ -112,10 +122,18 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
 
   async function handleAddTask(dateStr) {
     if (!newTaskText.trim()) return
-    await addWeekTask(dateStr, newTaskText.trim(), newTaskPriority)
+    await addWeekTask(dateStr, newTaskText.trim(), newTaskPriority, newTaskAsanaGid || null)
     setNewTaskText('')
     setNewTaskPriority('medium')
+    setNewTaskAsanaGid('')
     setAddingDay(null)
+  }
+
+  async function handleLinkTask() {
+    if (!linkingTask || !linkPickerGid) return
+    await linkTask(linkingTask.id, linkingTask.dateStr, linkPickerGid)
+    setLinkingTask(null)
+    setLinkPickerGid('')
   }
 
   const today = new Date()
@@ -199,22 +217,64 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                 </div>
                 <div className="week-day-date">{MONTH_SHORT[day.getMonth()]} {day.getDate()}</div>
                 <div className="week-task-list">
-                  {tasks.map(task => (
-                    <div
-                      key={task.id}
-                      className={`week-task-row ${task.completed ? 'done' : ''}`}
-                      onClick={() => toggleTask(task.id, dateStr)}
-                    >
-                      <span
-                        className="week-task-check"
-                        style={{
-                          background: task.completed ? dayColor : 'transparent',
-                          borderColor: dayColor,
-                        }}
-                      />
-                      <span className="week-task-text">{task.title}</span>
-                    </div>
-                  ))}
+                  {tasks.map(task => {
+                    const isCseaTask = /\bArea\s+I\b|\bMB\b|LA\s+500\s+Steward\s+Committee|Regional\s+President'?s?\s+Meeting/i.test(task.title || '')
+                    const displayTaskTitle = isCseaTask && !/^CSEA\b/i.test(task.title || '')
+                      ? 'CSEA ' + task.title
+                      : task.title
+                    const asanaUrl = task.asana_gid ? `https://app.asana.com/0/0/${task.asana_gid}/f` : null
+                    const isLinking = linkingTask?.id === task.id
+                    return (
+                      <div key={task.id}>
+                        <div
+                          className={`week-task-row ${task.completed ? 'done' : ''}`}
+                          style={isCseaTask ? { background: '#f7e84b', borderRadius: '4px', padding: '1px 4px' } : {}}
+                        >
+                          <span
+                            className="week-task-check"
+                            style={{
+                              background: task.completed ? (isCseaTask ? '#00326b' : dayColor) : 'transparent',
+                              borderColor: isCseaTask ? '#cc0000' : dayColor,
+                            }}
+                            onClick={() => toggleTask(task.id, dateStr)}
+                          />
+                          <span
+                            className="week-task-text"
+                            style={isCseaTask ? { color: '#00326b', fontWeight: 700 } : {}}
+                            onClick={() => toggleTask(task.id, dateStr)}
+                          >{displayTaskTitle}</span>
+                          {asanaUrl ? (
+                            <a
+                              href={asanaUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="week-asana-badge"
+                              title="View in Asana"
+                              onClick={e => e.stopPropagation()}
+                            >A</a>
+                          ) : asanaTasks?.length > 0 && (
+                            <button
+                              className="week-asana-link-btn"
+                              title="Link to Asana task"
+                              onClick={e => { e.stopPropagation(); setLinkingTask({ id: task.id, dateStr }); setLinkPickerGid('') }}
+                            >⊕</button>
+                          )}
+                        </div>
+                        {isLinking && (
+                          <div className="week-link-picker">
+                            <select value={linkPickerGid} onChange={e => setLinkPickerGid(e.target.value)} className="week-link-select">
+                              <option value="">— pick Asana task —</option>
+                              {(asanaTasks || []).map(at => (
+                                <option key={at.id} value={String(at.id).replace('asana_', '')}>{at.title || at.name}</option>
+                              ))}
+                            </select>
+                            <button className="week-link-save" onClick={handleLinkTask} disabled={!linkPickerGid}>Link</button>
+                            <button className="week-link-cancel" onClick={() => setLinkingTask(null)}>✕</button>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
                 {addingDay === dateStr ? (
                   <div className="week-add-form">
@@ -225,7 +285,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                       onChange={e => setNewTaskText(e.target.value)}
                       onKeyDown={e => {
                         if (e.key === 'Enter') handleAddTask(dateStr)
-                        if (e.key === 'Escape') setAddingDay(null)
+                        if (e.key === 'Escape') { setAddingDay(null); setNewTaskAsanaGid('') }
                       }}
                       className="week-add-input"
                     />
@@ -239,8 +299,27 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                         />
                       ))}
                     </div>
+                    {asanaTasks?.length > 0 && (
+                      <select
+                        className="week-add-asana-pick"
+                        value={newTaskAsanaGid}
+                        onChange={e => {
+                          setNewTaskAsanaGid(e.target.value)
+                          if (e.target.value) {
+                            const at = asanaTasks.find(t => String(t.id).replace('asana_', '') === e.target.value)
+                            if (at && !newTaskText) setNewTaskText(at.title || at.name || '')
+                          }
+                        }}
+                        title="Link to existing Asana task (optional)"
+                      >
+                        <option value="">+ Asana (auto-create)</option>
+                        {asanaTasks.map(at => (
+                          <option key={at.id} value={String(at.id).replace('asana_', '')}>{at.title || at.name}</option>
+                        ))}
+                      </select>
+                    )}
                     <button className="week-add-save" onClick={() => handleAddTask(dateStr)}>✓</button>
-                    <button className="week-add-cancel" onClick={() => setAddingDay(null)}>✕</button>
+                    <button className="week-add-cancel" onClick={() => { setAddingDay(null); setNewTaskAsanaGid('') }}>✕</button>
                   </div>
                 ) : (
                   <button className="week-add-btn" onClick={() => { setAddingDay(dateStr); setNewTaskText('') }}>+ task</button>
@@ -252,16 +331,26 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                 {events.length === 0 && (
                   <span className="week-no-events">—</span>
                 )}
-                {events.map(evt => (
-                  <div
-                    key={evt.id}
-                    className="week-event-pill"
-                    style={{ background: evt.color ?? '#4a90d9', color: contrastColor(evt.color) }}
-                  >
-                    {evt.startLabel && <span className="week-event-time">{evt.startLabel}</span>}
-                    <span className="week-event-title">{evt.title || evt.text}</span>
-                  </div>
-                ))}
+                {events.map(evt => {
+                  const rawTitle = evt.title || evt.text || ''
+                  const isCseaEvent = /\bArea\s+I\b|\bMB\b|LA\s+500\s+Steward\s+Committee|Regional\s+President'?s?\s+Meeting/i.test(rawTitle)
+                  const displayTitle = isCseaEvent && !/^CSEA\b/i.test(rawTitle)
+                    ? 'CSEA ' + rawTitle
+                    : rawTitle
+                  const pillStyle = isCseaEvent
+                    ? { background: '#f7e84b', color: '#00326b', border: '1.5px solid #cc0000' }
+                    : { background: evt.color ?? '#4a90d9', color: contrastColor(evt.color) }
+                  return (
+                    <div
+                      key={evt.id}
+                      className="week-event-pill"
+                      style={pillStyle}
+                    >
+                      {evt.startLabel && <span className="week-event-time">{evt.startLabel}</span>}
+                      <span className="week-event-title">{displayTitle}</span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )

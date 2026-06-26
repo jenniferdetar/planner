@@ -398,3 +398,88 @@
 .week-day-tasks .week-add-btn {
   font-weight: 700 !important;
 }
+
+/* ── Asana link badge & picker ── */
+.week-task-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.week-asana-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: #f06a35;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  text-decoration: none;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.week-asana-badge:hover { background: #d4521e; }
+
+.week-asana-link-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 13px;
+  padding: 0;
+  line-height: 1;
+  margin-left: auto;
+  flex-shrink: 0;
+  display: none;
+}
+
+.week-task-row:hover .week-asana-link-btn { display: inline-flex; }
+
+.week-link-picker {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 0 3px 18px;
+}
+
+.week-link-select {
+  font-size: 11px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.week-link-save {
+  font-size: 11px;
+  padding: 2px 7px;
+  background: #f06a35;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.week-link-save:disabled { background: #ccc; cursor: default; }
+
+.week-link-cancel {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  font-size: 12px;
+}
+
+.week-add-asana-pick {
+  font-size: 11px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 4px;
+  max-width: 160px;
+}

@@ -99,6 +99,7 @@ export default function DashboardView({
   calendarBlocks,
   masterTasks, onAddMasterTask, onDeleteMasterTask, onUpdateMasterTask,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
+  asanaToken, asanaWorkspaceGid, allAsanaTasks,
   taskCounts, onMonthChange,
   calAuthExpired, onReconnectGoogle, calEventCount,
   cseaIssues, onAddCseaIssue, onUpdateCseaStatus, onDeleteCseaIssue,
@@ -345,6 +346,9 @@ export default function DashboardView({
               tasksByDate={weeklyTasks}
               onToggleTask={onToggleWeeklyTask}
               onAddTask={onAddWeeklyTask}
+              asanaTasks={allAsanaTasks}
+              asanaToken={asanaToken}
+              asanaWorkspaceGid={asanaWorkspaceGid}
             />
           </div>
         )}
