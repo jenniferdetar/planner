@@ -167,8 +167,8 @@ export default function App() {
   // Google Cal events take precedence — drop any Supabase block whose title matches a gcal event
   const supabaseBlocks = meetings.map((m) => meetingToBlock(m, BLOCK_COLORS[0]))
   const gcalBlocksForDay = calEvents.filter((e) => e.startIso?.startsWith(dateStr))
-  const gcalTitles = new Set(gcalBlocksForDay.map(e => e.text?.trim().toLowerCase()).filter(Boolean))
-  const dedupedSupabaseBlocks = supabaseBlocks.filter(b => !gcalTitles.has(b.text?.trim().toLowerCase()))
+  const gcalTitles = new Set(gcalBlocksForDay.map(e => (e.title || e.text)?.trim().toLowerCase()).filter(Boolean))
+  const dedupedSupabaseBlocks = supabaseBlocks.filter(b => !gcalTitles.has((b.title || b.text)?.trim().toLowerCase()))
   const allTimeBlocks = [...dedupedSupabaseBlocks, ...gcalBlocksForDay]
 
   // All timed events for the month calendar grid (Supabase + Google Cal)

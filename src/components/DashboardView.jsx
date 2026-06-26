@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useDailyInspiration } from '../hooks/useDailyInspiration'
 import './DashboardView.css'
 import CseaTracker from './CseaTracker'
 import IcaapTracker from './IcaapTracker'
@@ -118,6 +119,7 @@ export default function DashboardView({
   onSignOut,
 }) {
   const [section, setSection] = useState('today')
+  const { verse, quote } = useDailyInspiration()
   const [newTask, setNewTask] = useState('')
   const [personalSubTab, setPersonalSubTab] = useState('goals')
   const [newBlockTitle, setNewBlockTitle] = useState('')
@@ -303,18 +305,30 @@ export default function DashboardView({
             {/* Daily inspiration */}
             <div className="dash-inspiration-row">
               <a className="dash-inspiration-card" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener noreferrer">
-                <span className="dash-inspiration-icon">✝</span>
-                <div>
-                  <div className="dash-inspiration-label">Verse of the Day</div>
-                  <div className="dash-inspiration-sub">bible.com</div>
+                <div className="dash-inspiration-header">
+                  <span className="dash-inspiration-icon">✝</span>
+                  <span className="dash-inspiration-label">Verse of the Day</span>
                 </div>
+                {verse
+                  ? <>
+                      <p className="dash-inspiration-text">{verse.text}</p>
+                      <span className="dash-inspiration-sub">{verse.reference}</span>
+                    </>
+                  : <p className="dash-inspiration-loading">Loading…</p>
+                }
               </a>
               <a className="dash-inspiration-card" href="https://www.brainyquote.com/quote_of_the_day" target="_blank" rel="noopener noreferrer">
-                <span className="dash-inspiration-icon">❝</span>
-                <div>
-                  <div className="dash-inspiration-label">Quote of the Day</div>
-                  <div className="dash-inspiration-sub">brainyquote.com</div>
+                <div className="dash-inspiration-header">
+                  <span className="dash-inspiration-icon">❝</span>
+                  <span className="dash-inspiration-label">Quote of the Day</span>
                 </div>
+                {quote
+                  ? <>
+                      <p className="dash-inspiration-text">{quote.text}</p>
+                      <span className="dash-inspiration-sub">— {quote.author}</span>
+                    </>
+                  : <p className="dash-inspiration-loading">Loading…</p>
+                }
               </a>
             </div>
           </>
