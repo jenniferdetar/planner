@@ -16,12 +16,12 @@
   padding: 10px 16px;
   border-bottom: 1px solid #d9e8f0;
   flex-shrink: 0;
-  background: #faf8f4;
+  background: #003087;
 }
 .hoa-header-title {
   font-size: 13px;
   font-weight: 700;
-  color: #1a4a8a;
+  color: #fff;
   letter-spacing: 0.3px;
 }
 .hoa-add-btn {
@@ -29,12 +29,12 @@
   font-weight: 600;
   padding: 4px 12px;
   border-radius: 5px;
-  border: 1px solid #1a4a8a;
-  color: #1a4a8a;
-  background: transparent;
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  background: rgba(255,255,255,0.1);
   cursor: pointer;
 }
-.hoa-add-btn:hover { background: #d9e8f5; }
+.hoa-add-btn:hover { background: rgba(255,255,255,0.2); }
 
 /* Stats */
 .hoa-stats {

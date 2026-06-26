@@ -11,7 +11,7 @@
 .cref-header {
   padding: 14px 14px 10px;
   border-bottom: 1px solid #d9e8f0;
-  background: #f5f7fa;
+  background: #003087;
   flex-shrink: 0;
 }
 
@@ -26,8 +26,8 @@
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.6px;
+  color: #fff;
   text-transform: uppercase;
-  color: #003087;
   margin: 0;
 }
 
@@ -35,15 +35,16 @@
   padding: 4px 11px;
   font-size: 11px;
   font-weight: 700;
-  background: #1a4a8a;
+  background: rgba(255,255,255,0.12);
   color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
   border: none;
   border-radius: 20px;
   cursor: pointer;
   font-family: 'Nunito', sans-serif;
   transition: background 0.15s;
 }
-.cref-add-btn:hover { background: #003087; }
+.cref-add-btn:hover { background: rgba(255,255,255,0.22); }
 
 .cref-controls {
   display: flex;
@@ -54,9 +55,10 @@
   flex: 1;
   padding: 6px 10px;
   font-size: 11px;
-  border: 1px solid #d8d5ce;
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 6px;
-  background: #fff;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
   color: #003087;
   font-family: 'Nunito', sans-serif;
   outline: none;
@@ -67,9 +69,10 @@
 .cref-cat-filter {
   padding: 6px 7px;
   font-size: 11px;
-  border: 1px solid #d8d5ce;
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 6px;
-  background: #fff;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
   color: #003087;
   font-family: 'Nunito', sans-serif;
   cursor: pointer;
