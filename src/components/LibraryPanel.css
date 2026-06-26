@@ -9,7 +9,7 @@
 }
 
 .library-header {
-  padding: 20px 24px 12px;
+  padding: 10px 16px 8px;
   border-bottom: 1px solid #e8e5de;
   display: flex;
   align-items: center;
@@ -20,7 +20,7 @@
 }
 
 .library-title {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: #00326b;
   margin: 0 0 2px;
@@ -101,10 +101,10 @@
 .library-body {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 24px;
+  padding: 10px 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 /* Empty states */
@@ -113,8 +113,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 24px;
-  gap: 16px;
+  padding: 24px 16px;
+  gap: 10px;
 }
 
 .empty-state-text {
@@ -149,7 +149,7 @@
 }
 
 .shelf-empty {
-  padding: 32px 0;
+  padding: 16px 0;
   text-align: center;
   color: #999;
   font-size: 13px;

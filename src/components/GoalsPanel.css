@@ -9,35 +9,35 @@
 
 /* Goals section */
 .goals-section {
-  padding: 20px 24px 24px;
+  padding: 12px 16px 16px;
 }
 
 .goals-section-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .goals-trophy {
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .goals-title {
   font-family: 'Nunito', sans-serif;
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 600;
   color: #00326b;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   margin: 0;
 }
 
 .goals-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 8px;
 }
 
 .goal-card {
@@ -165,7 +165,7 @@
 
 /* Checklist */
 .checklist-section {
-  padding: 0 24px 16px;
+  padding: 0 16px 10px;
 }
 
 .checklist-title {

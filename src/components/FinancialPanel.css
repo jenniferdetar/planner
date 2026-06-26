@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 18px 6px;
+  padding: 10px 6px;
   border-right: 1px solid rgba(255,255,255,0.12);
 }
 
@@ -48,14 +48,14 @@
   background: #0d2748;
   border-bottom: 2px solid #071830;
   flex-shrink: 0;
-  padding: 8px 12px;
-  gap: 8px;
+  padding: 5px 10px;
+  gap: 6px;
 }
 
 .fin-tab {
   flex: 1;
-  padding: 6px 10px;
-  font-size: 11px;
+  padding: 4px 8px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: #fff;
@@ -89,7 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
+  padding: 6px 12px;
   background: #163356;
   border-bottom: 1px solid #0a1f3a;
   flex-shrink: 0;
@@ -118,11 +118,11 @@
 
 /* Form */
 .fin-form {
-  margin: 10px 14px;
+  margin: 6px 10px;
   background: #fff;
   border: 1px solid #e8e5de;
-  border-radius: 10px;
-  padding: 14px;
+  border-radius: 8px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -218,10 +218,10 @@
 
 /* Transactions */
 .fin-txn-list {
-  padding: 10px 14px;
+  padding: 6px 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .fin-empty {
@@ -297,10 +297,10 @@
 
 /* Bills */
 .fin-bill-grid {
-  padding: 12px 14px;
+  padding: 8px 10px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
   align-content: start;
 }
 
@@ -317,14 +317,14 @@
 .fin-bill-card {
   background: #fff;
   border: 1px solid #e8e5de;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
   transition: box-shadow 0.15s, transform 0.15s;
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 110px;
+  min-height: 90px;
 }
 
 .fin-bill-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.09); transform: translateY(-2px); }
@@ -355,10 +355,10 @@
 .fin-bill-card-delete:hover { color: #cc0000; border-color: #cc0000; }
 
 .fin-bill-card-amount {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #00326b;
-  padding: 10px 10px 2px;
+  padding: 6px 8px 2px;
   line-height: 1;
 }
 
@@ -402,17 +402,17 @@
 
 /* Goals */
 .fin-goals-list {
-  padding: 10px 14px;
+  padding: 6px 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .fin-goal {
   background: #fff;
   border: 1px solid #e8e5de;
-  border-radius: 10px;
-  padding: 12px 14px;
+  border-radius: 8px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -734,7 +734,7 @@
 
 /* ── Goal Cards ── */
 .fin-goals-grid {
-  padding: 12px 14px;
+  padding: 8px 10px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
@@ -834,7 +834,7 @@
 .fin-budget-th {
   background: #00326b !important;
   color: #d9edfa !important;
-  padding: 8px 12px;
+  padding: 5px 10px;
   text-align: right;
   font-size: 10px;
   font-weight: 700;
@@ -851,7 +851,7 @@
 .fin-budget-row:hover td { background: rgba(49,100,160,0.08); }
 
 .fin-budget-td {
-  padding: 8px 12px;
+  padding: 5px 10px;
   border-bottom: 1px solid #f0ede6;
   vertical-align: middle;
   text-align: right;
@@ -904,7 +904,7 @@
   font-weight: 700;
   border-top: 2px solid #e8e5de;
   background: #ffffff;
-  padding: 10px 12px;
+  padding: 6px 10px;
   text-align: right;
   font-size: 13px;
 }
@@ -944,7 +944,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px 10px;
+  padding: 8px 14px 6px;
   background: #00326b;
   flex-shrink: 0;
 }

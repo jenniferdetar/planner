@@ -17,8 +17,8 @@
 
 .personal-inline-tab {
   flex: 1;
-  padding: 8px 4px;
-  font-size: 11px;
+  padding: 5px 4px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.4px;
   text-transform: uppercase;
@@ -302,7 +302,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 28px 32px;
+  padding: 14px 20px;
   background: #ffffff;
   overflow-y: auto;
 }
@@ -311,8 +311,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .mantra-header-right {
@@ -337,9 +337,9 @@
 
 .mantra-title {
   font-family: 'Nunito', sans-serif;
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   margin: 0;
 }
@@ -353,11 +353,11 @@
 
 .mantra-textarea {
   flex: 1;
-  min-height: 260px;
-  padding: 20px 24px;
+  min-height: 200px;
+  padding: 12px 16px;
   font-family: 'Architects Daughter', cursive;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 15px;
+  line-height: 22px;
   font-style: normal;
   color: #222222;
   background-color: #fff;
