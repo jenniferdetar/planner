@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useDailyLog } from '../hooks/useDailyLog'
 import { useMantra } from '../hooks/useMantra'
+import { useMission } from '../hooks/useMission'
 import GoalsPanel from './GoalsPanel'
 import LibraryPanel from './LibraryPanel'
 import './PersonalPanel.css'
@@ -16,6 +17,7 @@ const SUB_TABS = [
   { key: 'checklist', label: 'Monthly Checklist',  color: '#7ec8c8' },
   { key: 'library',   label: 'Library',            color: '#7ba7e0' },
   { key: 'mantra',    label: 'My Mantra',          color: '#e8a0a0' },
+  { key: 'mission',   label: 'Mission',             color: '#a0b4e8' },
   { key: 'budget',    label: 'Wants',              color: '#4a7a6a' },
 ]
 
@@ -28,8 +30,10 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
 
   const { entries, addEntry, deleteEntry, updateEntry } = useDailyLog(userId, dateStr)
   const { mantra, setMantra, save, saved } = useMantra(userId)
+  const { mission, setMission, save: saveMission, saved: missionSaved } = useMission(userId)
   const [text, setText] = useState('')
   const [mantraEditing, setMantraEditing] = useState(false)
+  const [missionEditing, setMissionEditing] = useState(false)
   const [editingEntryId, setEditingEntryId] = useState(null)
   const [editingEntryText, setEditingEntryText] = useState('')
   const [localSubTab, setLocalSubTab] = useState(defaultTab)
@@ -67,6 +71,12 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
     setMantra(val)
     clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => save(val), 900)
+  }
+
+  function handleMissionChange(val) {
+    setMission(val)
+    clearTimeout(saveTimer.current)
+    saveTimer.current = setTimeout(() => saveMission(val), 900)
   }
 
   const displayDate = selectedDate instanceof Date
@@ -193,6 +203,36 @@ export default function PersonalPanel({ userId, selectedDate, onDateChange, book
           ) : (
             <div className="mantra-content" style={{ '--mantra-color': activeColor }}>
               {mantra.split('\n\n').filter(p => p.trim()).map((para, i) => (
+                <p key={i} className="mantra-paragraph">{para.trim()}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {subTab === 'mission' && (
+        <div className="mantra-section">
+          <div className="mantra-header">
+            <h3 className="mantra-title" style={{ color: activeColor }}>Mission</h3>
+            <div className="mantra-header-right">
+              {missionSaved && <span className="mantra-saved">Saved ✓</span>}
+              <button className="mantra-edit-btn" onClick={() => setMissionEditing(e => !e)}>
+                {missionEditing ? 'View' : 'Edit'}
+              </button>
+            </div>
+          </div>
+          {missionEditing || !mission.trim() ? (
+            <textarea
+              className="mantra-textarea"
+              style={{ '--mantra-color': activeColor }}
+              value={mission}
+              onChange={e => handleMissionChange(e.target.value)}
+              placeholder="Write your personal mission statement here… who are you, what are your strengths, and how are you growing?"
+              autoFocus={missionEditing}
+            />
+          ) : (
+            <div className="mantra-content" style={{ '--mantra-color': activeColor }}>
+              {mission.split('\n\n').filter(p => p.trim()).map((para, i) => (
                 <p key={i} className="mantra-paragraph">{para.trim()}</p>
               ))}
             </div>
