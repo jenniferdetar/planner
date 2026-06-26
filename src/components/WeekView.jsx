@@ -31,7 +31,11 @@ function contrastColor(hex) {
 }
 
 function normalizeTitle(t) {
-  return (t || '').replace(/^\d{1,2}(:\d{2})?\s*(AM|PM)?\s*/i, '').toLowerCase().trim()
+  return (t || '')
+    .replace(/^\d{1,2}(:\d{2})?\s*(AM|PM)?\s*/i, '')
+    .replace(/\s+via\s+zoom(\s+meeting)?$/i, '')
+    .toLowerCase()
+    .trim()
 }
 
 function dedupeEvents(events) {
