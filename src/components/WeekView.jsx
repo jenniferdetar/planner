@@ -199,22 +199,32 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                 </div>
                 <div className="week-day-date">{MONTH_SHORT[day.getMonth()]} {day.getDate()}</div>
                 <div className="week-task-list">
-                  {tasks.map(task => (
-                    <div
-                      key={task.id}
-                      className={`week-task-row ${task.completed ? 'done' : ''}`}
-                      onClick={() => toggleTask(task.id, dateStr)}
-                    >
-                      <span
-                        className="week-task-check"
-                        style={{
-                          background: task.completed ? dayColor : 'transparent',
-                          borderColor: dayColor,
-                        }}
-                      />
-                      <span className="week-task-text">{task.title}</span>
-                    </div>
-                  ))}
+                  {tasks.map(task => {
+                    const isCseaTask = /\bArea\s+I\b|\bMB\b|LA\s+500\s+Steward\s+Committee|Regional\s+President'?s?\s+Meeting/i.test(task.title || '')
+                    const displayTaskTitle = isCseaTask && !/^CSEA\b/i.test(task.title || '')
+                      ? 'CSEA ' + task.title
+                      : task.title
+                    return (
+                      <div
+                        key={task.id}
+                        className={`week-task-row ${task.completed ? 'done' : ''}`}
+                        onClick={() => toggleTask(task.id, dateStr)}
+                        style={isCseaTask ? { background: '#f7e84b', borderRadius: '4px', padding: '1px 4px' } : {}}
+                      >
+                        <span
+                          className="week-task-check"
+                          style={{
+                            background: task.completed ? (isCseaTask ? '#00326b' : dayColor) : 'transparent',
+                            borderColor: isCseaTask ? '#cc0000' : dayColor,
+                          }}
+                        />
+                        <span
+                          className="week-task-text"
+                          style={isCseaTask ? { color: '#00326b', fontWeight: 700 } : {}}
+                        >{displayTaskTitle}</span>
+                      </div>
+                    )
+                  })}
                 </div>
                 {addingDay === dateStr ? (
                   <div className="week-add-form">
@@ -252,16 +262,26 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                 {events.length === 0 && (
                   <span className="week-no-events">—</span>
                 )}
-                {events.map(evt => (
-                  <div
-                    key={evt.id}
-                    className="week-event-pill"
-                    style={{ background: evt.color ?? '#4a90d9', color: contrastColor(evt.color) }}
-                  >
-                    {evt.startLabel && <span className="week-event-time">{evt.startLabel}</span>}
-                    <span className="week-event-title">{evt.title || evt.text}</span>
-                  </div>
-                ))}
+                {events.map(evt => {
+                  const rawTitle = evt.title || evt.text || ''
+                  const isCseaEvent = /\bArea\s+I\b|\bMB\b|LA\s+500\s+Steward\s+Committee|Regional\s+President'?s?\s+Meeting/i.test(rawTitle)
+                  const displayTitle = isCseaEvent && !/^CSEA\b/i.test(rawTitle)
+                    ? 'CSEA ' + rawTitle
+                    : rawTitle
+                  const pillStyle = isCseaEvent
+                    ? { background: '#f7e84b', color: '#00326b', border: '1.5px solid #cc0000' }
+                    : { background: evt.color ?? '#4a90d9', color: contrastColor(evt.color) }
+                  return (
+                    <div
+                      key={evt.id}
+                      className="week-event-pill"
+                      style={pillStyle}
+                    >
+                      {evt.startLabel && <span className="week-event-time">{evt.startLabel}</span>}
+                      <span className="week-event-title">{displayTitle}</span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )
