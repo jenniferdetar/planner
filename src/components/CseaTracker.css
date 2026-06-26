@@ -1,12 +1,12 @@
 /* ── CSEA Brand Tokens ──────────────────────────────────────────────────── */
 :root {
   /* Primary */
-  --csea-blue:        #00326b;
+  --csea-blue:        #003087;
   --csea-yellow:      #ffca38;
   /* Secondary */
-  --csea-link:        #3164a0;
-  --csea-light-blue:  #d9edfa;
-  --csea-gold:        #eeb125;
+  --csea-link:        #1a4a8a;
+  --csea-light-blue:  #d9e8f5;
+  --csea-gold:        #ffb81c;
   --csea-accent:      #f7941d;
   --csea-dark-orange: #e0592a;
   --csea-burgundy:    #8e2a2a;
@@ -223,16 +223,16 @@
 .csea-gmail-sync-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #3164a0;
+  color: #1a4a8a;
   background: transparent;
-  border: 1px solid #3164a0;
+  border: 1px solid #1a4a8a;
   border-radius: 3px;
   padding: 4px 10px;
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
   transition: background 0.15s, color 0.15s;
 }
-.csea-gmail-sync-btn:hover:not(:disabled) { background: #3164a0; color: #fff; }
+.csea-gmail-sync-btn:hover:not(:disabled) { background: #1a4a8a; color: #fff; }
 .csea-gmail-sync-btn:disabled { opacity: 0.5; cursor: default; }
 
 /* ── Form ──────────────────────────────────────────────────────────────── */
@@ -368,7 +368,7 @@
 }
 
 .issue-card:nth-child(even) { border-left-color: var(--csea-accent); }
-.issue-card:hover { box-shadow: 0 2px 8px rgba(0,50,107,0.12); }
+.issue-card:hover { box-shadow: 0 2px 8px rgba(0,48,135,0.12); }
 .issue-card.resolved { opacity: 0.55; }
 
 .issue-header {
@@ -706,7 +706,7 @@
   max-height: 220px;
   overflow-y: auto;
   z-index: 100;
-  box-shadow: 0 4px 12px rgba(0,50,107,0.12);
+  box-shadow: 0 4px 12px rgba(0,48,135,0.12);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -791,7 +791,7 @@
   padding: 7px 12px;
   background: var(--csea-light-blue);
   color: var(--csea-blue);
-  border: 1px solid var(--csea-border-lt, rgba(49,100,160,0.2));
+  border: 1px solid var(--csea-border-lt, rgba(26,74,138,0.2));
   border-radius: 4px;
   font-size: 12px;
   font-weight: 700;

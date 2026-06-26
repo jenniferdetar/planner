@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #f8f7f5;
+  background: #f5f7fa;
 }
 
 .login-card {
@@ -24,7 +24,7 @@
 }
 
 .login-icon {
-  color: #3164a0;
+  color: #1a4a8a;
   font-size: 20px;
 }
 
@@ -32,7 +32,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 26px;
   font-weight: 600;
-  color: #00326b;
+  color: #003087;
 }
 
 .login-tagline {
@@ -44,7 +44,7 @@
 
 .login-divider {
   height: 1px;
-  background: #f0ede6;
+  background: #eef2f7;
   margin-bottom: 24px;
 }
 
@@ -74,7 +74,7 @@
 }
 
 .google-btn:hover {
-  background: #f8f7f5;
+  background: #f5f7fa;
   border-color: #ccc;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }

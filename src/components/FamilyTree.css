@@ -250,7 +250,7 @@
   transition: background 0.12s, color 0.12s;
 }
 
-.ft-card-btn:hover { background: #f0ede6; color: #555; }
+.ft-card-btn:hover { background: #eef2f7; color: #555; }
 .ft-card-btn.delete:hover { background: #fce8e8; color: #e05c5c; }
 
 /* ── Empty state ── */
@@ -353,7 +353,7 @@
 }
 
 .ft-modal-cancel {
-  background: #f0ede6;
+  background: #eef2f7;
   color: #666;
 }
 

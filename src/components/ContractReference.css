@@ -10,8 +10,8 @@
 /* ── Header ── */
 .cref-header {
   padding: 14px 14px 10px;
-  border-bottom: 1px solid #e8e5de;
-  background: #f8f7f5;
+  border-bottom: 1px solid #d9e8f0;
+  background: #f5f7fa;
   flex-shrink: 0;
 }
 
@@ -27,7 +27,7 @@
   font-weight: 800;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: #00326b;
+  color: #003087;
   margin: 0;
 }
 
@@ -35,7 +35,7 @@
   padding: 4px 11px;
   font-size: 11px;
   font-weight: 700;
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -43,7 +43,7 @@
   font-family: 'Nunito', sans-serif;
   transition: background 0.15s;
 }
-.cref-add-btn:hover { background: #00326b; }
+.cref-add-btn:hover { background: #003087; }
 
 .cref-controls {
   display: flex;
@@ -57,12 +57,12 @@
   border: 1px solid #d8d5ce;
   border-radius: 6px;
   background: #fff;
-  color: #00326b;
+  color: #003087;
   font-family: 'Nunito', sans-serif;
   outline: none;
   transition: border-color 0.15s;
 }
-.cref-search:focus { border-color: #3164a0; }
+.cref-search:focus { border-color: #1a4a8a; }
 
 .cref-cat-filter {
   padding: 6px 7px;
@@ -70,18 +70,18 @@
   border: 1px solid #d8d5ce;
   border-radius: 6px;
   background: #fff;
-  color: #00326b;
+  color: #003087;
   font-family: 'Nunito', sans-serif;
   cursor: pointer;
   outline: none;
   min-width: 100px;
 }
-.cref-cat-filter:focus { border-color: #3164a0; }
+.cref-cat-filter:focus { border-color: #1a4a8a; }
 
 /* ── Form wrap ── */
 .cref-form-wrap {
-  border-bottom: 1px solid #e8e5de;
-  background: #d9edfa;
+  border-bottom: 1px solid #d9e8f0;
+  background: #d9e8f5;
   flex-shrink: 0;
   padding: 10px 14px;
   overflow-y: auto;
@@ -116,7 +116,7 @@
   border: 1px solid #d8d5ce;
   border-radius: 5px;
   background: #fff;
-  color: #00326b;
+  color: #003087;
   font-family: 'Nunito', sans-serif;
   outline: none;
   resize: vertical;
@@ -124,7 +124,7 @@
 }
 .cref-form-row input:focus,
 .cref-form-row select:focus,
-.cref-form-row textarea:focus { border-color: #3164a0; }
+.cref-form-row textarea:focus { border-color: #1a4a8a; }
 
 .cref-form-2col {
   display: grid;
@@ -141,7 +141,7 @@
   padding: 5px 14px;
   font-size: 11px;
   font-weight: 700;
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -149,7 +149,7 @@
   font-family: 'Nunito', sans-serif;
   transition: background 0.15s;
 }
-.cref-save-btn:hover { background: #00326b; }
+.cref-save-btn:hover { background: #003087; }
 
 .cref-cancel-btn {
   padding: 5px 12px;
@@ -222,7 +222,7 @@
   padding: 7px 18px;
   font-size: 11px;
   font-weight: 700;
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -230,7 +230,7 @@
   font-family: 'Nunito', sans-serif;
   transition: background 0.15s;
 }
-.cref-seed-btn:hover:not(:disabled) { background: #00326b; }
+.cref-seed-btn:hover:not(:disabled) { background: #003087; }
 .cref-seed-btn:disabled { opacity: 0.6; cursor: default; }
 
 /* ── Pill ── */
@@ -241,7 +241,7 @@
   padding: 5px 10px 5px 7px;
   border-radius: 20px;
   border: 1.5px solid #cc0000;
-  background: #00326b;
+  background: #003087;
   cursor: pointer;
   font-family: 'Nunito', sans-serif;
   transition: all 0.15s;
@@ -285,7 +285,7 @@
 /* ── Detail pane ── */
 .cref-detail {
   flex-shrink: 0;
-  border-top: 1px solid #e8e5de;
+  border-top: 1px solid #d9e8f0;
   background: #fafaf8;
   padding: 12px 14px;
   overflow-y: auto;
@@ -310,7 +310,7 @@
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   padding: 2px 7px;
   border-radius: 12px;
@@ -320,8 +320,8 @@
 .cref-art-badge {
   font-size: 9px;
   font-weight: 700;
-  background: #d9edfa;
-  color: #3164a0;
+  background: #d9e8f5;
+  color: #1a4a8a;
   padding: 2px 7px;
   border-radius: 12px;
   white-space: nowrap;
@@ -342,7 +342,7 @@
 .cref-detail-title {
   font-size: 13px;
   font-weight: 800;
-  color: #00326b;
+  color: #003087;
   margin: 0 0 8px;
   line-height: 1.3;
 }
@@ -376,7 +376,7 @@
   padding: 4px 11px;
   font-size: 10px;
   font-weight: 700;
-  background: #3164a0;
+  background: #1a4a8a;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -384,7 +384,7 @@
   font-family: 'Nunito', sans-serif;
   transition: background 0.15s;
 }
-.cref-copy-btn:hover { background: #00326b; }
+.cref-copy-btn:hover { background: #003087; }
 
 .cref-edit-btn {
   padding: 4px 11px;
@@ -398,7 +398,7 @@
   font-family: 'Nunito', sans-serif;
   transition: all 0.15s;
 }
-.cref-edit-btn:hover { border-color: #3164a0; color: #3164a0; }
+.cref-edit-btn:hover { border-color: #1a4a8a; color: #1a4a8a; }
 
 .cref-del-btn {
   padding: 4px 9px;
@@ -406,7 +406,7 @@
   font-weight: 600;
   background: transparent;
   color: #ccc;
-  border: 1px solid #e8e5de;
+  border: 1px solid #d9e8f0;
   border-radius: 20px;
   cursor: pointer;
   font-family: 'Nunito', sans-serif;
@@ -420,7 +420,7 @@
   padding: 6px 14px;
   font-size: 10px;
   color: #aaa;
-  border-top: 1px solid #e8e5de;
+  border-top: 1px solid #d9e8f0;
   text-align: right;
   flex-shrink: 0;
   letter-spacing: 0.3px;
