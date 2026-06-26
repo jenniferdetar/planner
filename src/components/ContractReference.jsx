@@ -5,6 +5,7 @@ import './ContractReference.css'
 const CATEGORIES = [
   'Discipline', 'Leave', 'Schedule', 'Evaluation',
   'Grievance', 'Overtime', 'Transfer', 'Health & Safety', 'Probation', 'Layoff',
+  'Constitution',
 ]
 
 const CAT_COLORS = {
@@ -18,6 +19,7 @@ const CAT_COLORS = {
   'Health & Safety':'#e74c3c',
   'Probation':      '#7f8c8d',
   'Layoff':         '#c0392b',
+  'Constitution':   '#00326b',
 }
 
 const BLANK_FORM = {
