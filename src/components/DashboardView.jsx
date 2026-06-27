@@ -549,6 +549,7 @@ export default function DashboardView({
           <div className="dash-panel-wrap">
             <PersonalPanel
               userId={userId}
+              providerToken={providerToken}
               selectedDate={selectedDate}
               onDateChange={onDateChange}
               books={books || []}

@@ -5,6 +5,7 @@ import GoalsPanel from './GoalsPanel'
 import LibraryPanel from './LibraryPanel'
 import ValuesPanel from './ValuesPanel'
 import RolesPanel from './RolesPanel'
+import WantsPanel from './WantsPanel'
 import './PersonalPanel.css'
 
 const SUB_TABS = [
@@ -18,7 +19,7 @@ const SUB_TABS = [
   { key: 'budget',    label: 'Wants',             color: '#4a7a6a' },
 ]
 
-export default function PersonalPanel({ userId, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
+export default function PersonalPanel({ userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
   const visibleTabs = allowedSubTabs ? SUB_TABS.filter(t => allowedSubTabs.includes(t.key)) : SUB_TABS
   const defaultTab = visibleTabs[0]?.key || 'goals'
 
@@ -75,15 +76,7 @@ export default function PersonalPanel({ userId, books, onAddBook, onUpdateBookSt
           onImportBooks={onImportBooks}
         />
       )}
-      {subTab === 'budget' && (
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <iframe
-            src="https://docs.google.com/spreadsheets/d/1jFsKvlXd0SvvGGkNLjjiAK-trWxUNgagRwxodSLQggQ/pub?embedded=true"
-            className="sheet-embed"
-            title="Wants"
-          />
-        </div>
-      )}
+      {subTab === 'budget' && <WantsPanel providerToken={providerToken} />}
 
       {subTab === 'mantra' && (
         <div className="mantra-section">
