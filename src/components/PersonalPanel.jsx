@@ -4,6 +4,7 @@ import { useMission } from '../hooks/useMission'
 import GoalsPanel from './GoalsPanel'
 import LibraryPanel from './LibraryPanel'
 import ValuesPanel from './ValuesPanel'
+import RolesPanel from './RolesPanel'
 import './PersonalPanel.css'
 
 const SUB_TABS = [
@@ -62,7 +63,7 @@ export default function PersonalPanel({ userId, books, onAddBook, onUpdateBookSt
       </div>
 
       {subTab === 'goals' && <GoalsPanel userId={userId} section="goals" />}
-      {subTab === 'roles' && <GoalsPanel userId={userId} section="roles" />}
+      {subTab === 'roles' && <RolesPanel userId={userId} />}
       {subTab === 'checklist' && <GoalsPanel userId={userId} section="checklist" />}
       {subTab === 'library' && (
         <LibraryPanel
