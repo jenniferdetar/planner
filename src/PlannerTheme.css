@@ -263,10 +263,6 @@ select:focus {
 .library-title    { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
 .library-subtitle { color: var(--pt-text-muted) !important; }
 
-/* ─── GCU panel header ───────────────────────────────────────────────────── */
-.gcu-header {
-  background: #3b1e6e !important; /* keep purple but it's already warm */
-}
 
 /* ─── Personal panel ─────────────────────────────────────────────────────── */
 .personal-panel  { background: var(--pt-bg) !important; }
