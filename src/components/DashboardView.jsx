@@ -33,7 +33,7 @@ const NAV_ITEMS = [
   { key: 'today',    label: 'Today',        color: '#9ca3af', group: 'day' },
   { key: 'week',     label: 'Week',         color: '#9ca3af', group: 'day' },
   { key: 'month',    label: 'Month',        color: '#9ca3af', group: 'day' },
-  { key: 'master',   label: 'Master Tasks', color: '#1e5799', group: 'module' },
+  { key: 'master',   label: 'Master Tasks', mobileLabel: 'Tasks', color: '#1e5799', group: 'module' },
   { key: 'csea',     label: 'CSEA',         color: '#b87a38', group: 'module' },
   { key: 'finance',  label: 'Finance',      color: '#8a5a3a', group: 'module' },
   { key: 'gcu',      label: 'GCU',          color: '#5a7848', group: 'module' },
@@ -443,7 +443,7 @@ export default function DashboardView({
                 return (
                   <div key={cat} className="dash-card">
                     <div className="dash-card-header" style={{ borderBottomColor: color }}>
-                      <span className="dash-card-title" style={{ color }}>{cat}</span>
+                      <span className="dash-card-title">{cat}</span>
                       <span className="dash-badge">{tasks.length}</span>
                     </div>
                     {tasks.map(t => (
@@ -579,7 +579,7 @@ export default function DashboardView({
             onClick={() => setSection(item.key)}
           >
             <span className="dash-mobile-nav-dot" style={{ background: section === item.key ? '#f7e84b' : item.color }} />
-            {item.label}
+            {item.mobileLabel || item.label}
           </button>
         ))}
       </nav>

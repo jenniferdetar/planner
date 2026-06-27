@@ -8,7 +8,7 @@
 
 .fin-summary {
   display: flex;
-  background: #003087;
+  background: #001a5e;
   border-bottom: 1px solid #001040;
   flex-shrink: 0;
 }
@@ -18,29 +18,43 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 6px;
   border-right: 1px solid rgba(255,255,255,0.12);
 }
 
 .fin-stat:last-child { border-right: none; }
+
+.fin-stat-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 6px;
+  background: #003087;
+  border-bottom: 2px solid transparent;
+}
+
+.fin-stat-header--income  { border-bottom-color: #81d46e; }
+.fin-stat-header--expense { border-bottom-color: #f08080; }
+.fin-stat-header--bills   { border-bottom-color: #f5c96a; }
 
 .fin-stat-num {
   font-size: 14px;
   font-weight: 700;
   color: #fff;
   line-height: 1;
+  padding: 8px 6px 6px;
 }
 
-.fin-stat-num.income { color: #81d46e; }
-.fin-stat-num.expense { color: #f08080; }
+.fin-stat-num.income    { color: #81d46e; }
+.fin-stat-num.expense   { color: #f08080; }
+.fin-stat-num.bills-due { color: #f5c96a; }
 
 .fin-stat-lbl {
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-  margin-top: 3px;
+  color: #fff;
 }
 
 .fin-tabs {
@@ -720,9 +734,6 @@
 .goals-table tbody tr:nth-child(even) td { background: rgba(0,48,135,0.03); }
 .goals-th-name, .goals-th-col { background: #003087 !important; color: #d9e8f5 !important; }
 
-/* ── Summary stat — Bills Due in amber on dark background ── */
-.fin-stat:nth-child(3) .fin-stat-num:not(.income):not(.expense) { color: #f5c96a !important; }
-.fin-stat:nth-child(4) .fin-stat-num:not(.income):not(.expense) { color: #003087 !important; }
 
 .fin-txn:nth-child(odd)  { background: rgba(26,74,138,0.05); border-left: 3px solid #1a4a8a; }
 .fin-txn:nth-child(even) { background: rgba(0,48,135,0.05); border-left: 3px solid #1a4a8a; }

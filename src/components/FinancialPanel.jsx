@@ -31,16 +31,22 @@ export default function FinancialPanel({
     <div className="fin-panel">
       <div className="fin-summary">
         <div className="fin-stat">
+          <div className="fin-stat-header fin-stat-header--income">
+            <span className="fin-stat-lbl">Income</span>
+          </div>
           <span className="fin-stat-num income">{fmt(totalIncome)}</span>
-          <span className="fin-stat-lbl">Income</span>
         </div>
         <div className="fin-stat">
+          <div className="fin-stat-header fin-stat-header--expense">
+            <span className="fin-stat-lbl">Spent</span>
+          </div>
           <span className="fin-stat-num expense">{fmt(totalExpenses)}</span>
-          <span className="fin-stat-lbl">Spent</span>
         </div>
         <div className="fin-stat">
-          <span className="fin-stat-num">{fmt(unpaidBills)}</span>
-          <span className="fin-stat-lbl">Bills Due</span>
+          <div className="fin-stat-header fin-stat-header--bills">
+            <span className="fin-stat-lbl">Bills Due</span>
+          </div>
+          <span className="fin-stat-num bills-due">{fmt(unpaidBills)}</span>
         </div>
       </div>
 
