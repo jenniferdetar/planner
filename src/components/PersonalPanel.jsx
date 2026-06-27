@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useMantra } from '../hooks/useMantra'
 import { useMission } from '../hooks/useMission'
+import { useRoles } from '../hooks/useRoles'
 import GoalsPanel from './GoalsPanel'
 import LibraryPanel from './LibraryPanel'
 import ValuesPanel from './ValuesPanel'
@@ -19,12 +20,23 @@ const SUB_TABS = [
   { key: 'budget',    label: 'Wants',             color: '#4a7a6a' },
 ]
 
+// Clickable framework flow shown above content
+const FRAMEWORK = [
+  { key: 'values',    label: 'Values' },
+  { key: 'mission',   label: 'Mission' },
+  { key: 'mantra',    label: 'Mantra' },
+  { key: 'roles',     label: 'Roles' },
+  { key: 'goals',     label: 'Goals' },
+  { key: 'checklist', label: 'Checklist' },
+]
+
 export default function PersonalPanel({ userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
   const visibleTabs = allowedSubTabs ? SUB_TABS.filter(t => allowedSubTabs.includes(t.key)) : SUB_TABS
   const defaultTab = visibleTabs[0]?.key || 'goals'
 
   const { mantra, setMantra, save, saved } = useMantra(userId)
   const { mission, setMission, save: saveMission, saved: missionSaved } = useMission(userId)
+  const { roles } = useRoles(userId)
   const [mantraEditing, setMantraEditing] = useState(false)
   const [missionEditing, setMissionEditing] = useState(false)
   const [localSubTab, setLocalSubTab] = useState(defaultTab)
@@ -49,6 +61,7 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
   }
 
   const activeColor = visibleTabs.find(t => t.key === subTab)?.color || '#73a882'
+  const visibleFramework = FRAMEWORK.filter(f => visibleTabs.find(t => t.key === f.key))
 
   return (
     <div className="personal-panel">
@@ -63,9 +76,23 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
         ))}
       </div>
 
-      {subTab === 'goals' && <GoalsPanel userId={userId} section="goals" />}
-      {subTab === 'roles' && <RolesPanel userId={userId} />}
-      {subTab === 'checklist' && <GoalsPanel userId={userId} section="checklist" />}
+      {visibleFramework.length > 1 && (
+        <div className="personal-framework-strip">
+          {visibleFramework.map((f, i) => (
+            <span key={f.key} className="personal-framework-flow">
+              <button
+                className={`pfw-btn ${subTab === f.key ? 'active' : ''}`}
+                onClick={() => handleSubTabChange(f.key)}
+              >{f.label}</button>
+              {i < visibleFramework.length - 1 && <span className="pfw-arrow">→</span>}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {subTab === 'goals' && <GoalsPanel userId={userId} section="goals" roles={roles} />}
+      {subTab === 'roles' && <RolesPanel userId={userId} roles={roles} />}
+      {subTab === 'checklist' && <GoalsPanel userId={userId} section="checklist" roles={roles} />}
       {subTab === 'library' && (
         <LibraryPanel
           books={books || []}
@@ -89,6 +116,7 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
               </button>
             </div>
           </div>
+          <p className="mantra-context-note">Your mantra distills your values and mission into words you live by.</p>
           {mantraEditing || !mantra.trim() ? (
             <textarea
               className="mantra-textarea"
@@ -119,6 +147,7 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
               </button>
             </div>
           </div>
+          <p className="mantra-context-note">Your mission flows from your values and shapes your roles and goals.</p>
           {missionEditing || !mission.trim() ? (
             <textarea
               className="mantra-textarea"

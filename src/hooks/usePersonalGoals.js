@@ -15,13 +15,18 @@ export function usePersonalGoals(userId) {
       .then(({ data }) => setGoals(data || []))
   }, [userId])
 
-  async function addGoal(category, goal_text) {
+  async function addGoal(category, goal_text, role_id = null) {
     const maxOrder = goals.filter(g => g.category === category).length + 1
     const { data } = await supabase
       .from('personal_goals')
-      .insert({ user_id: userId, category, goal_text, sort_order: maxOrder })
+      .insert({ user_id: userId, category, goal_text, sort_order: maxOrder, role_id })
       .select().single()
     if (data) setGoals(prev => [...prev, data])
+  }
+
+  async function updateGoal(id, fields) {
+    await supabase.from('personal_goals').update(fields).eq('id', id)
+    setGoals(prev => prev.map(g => g.id === id ? { ...g, ...fields } : g))
   }
 
   async function deleteGoal(id) {
@@ -35,5 +40,5 @@ export function usePersonalGoals(userId) {
     return acc
   }, {})
 
-  return { goals, byCategory, addGoal, deleteGoal }
+  return { goals, byCategory, addGoal, updateGoal, deleteGoal }
 }

@@ -235,6 +235,62 @@
 .roles-purpose-textarea:focus { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
 .roles-purpose-textarea::placeholder { color: #ccc; }
 
+.roles-linked-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.roles-linked-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roles-linked-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #aaa;
+}
+
+.roles-linked-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.roles-linked-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 10px;
+  background: #f4f6fb;
+  border-left: 3px solid #1e3070;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.roles-linked-cat {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffb81c;
+  background: #1e3070;
+  border-radius: 3px;
+  padding: 1px 6px;
+  flex-shrink: 0;
+}
+
+.roles-linked-text {
+  color: #333;
+  flex: 1;
+}
+
 .roles-delete-btn {
   align-self: flex-start;
   font-size: 11px;
