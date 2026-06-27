@@ -20,28 +20,28 @@ const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'
 const SHORT_DAY   = ['S','M','T','W','T','F','S']
 
 const CATEGORY_COLORS = {
-  'CSEA':                 '#b87a38',
-  'LAUSD / iCAAP':        '#3a5c4a',
-  'GCU':                  '#5a7848',
-  'Household Finances':   '#8a5a3a',
-  'Jeff':                 '#7a4a6a',
-  'Home':                 '#4a7a6a',
-  'Personal Development': '#6a5a8a',
+  'CSEA':                 '#003087',
+  'LAUSD / iCAAP':        '#003087',
+  'GCU':                  '#003087',
+  'Household Finances':   '#003087',
+  'Jeff':                 '#003087',
+  'Home':                 '#003087',
+  'Personal Development': '#003087',
 }
 
 const NAV_ITEMS = [
   { key: 'today',    label: 'Today',        color: '#9ca3af', group: 'day' },
   { key: 'week',     label: 'Week',         color: '#9ca3af', group: 'day' },
   { key: 'month',    label: 'Month',        color: '#9ca3af', group: 'day' },
-  { key: 'master',   label: 'Master Tasks', mobileLabel: 'Tasks', color: '#1e5799', group: 'module' },
-  { key: 'csea',     label: 'CSEA',         color: '#b87a38', group: 'module' },
-  { key: 'finance',  label: 'Finance',      color: '#8a5a3a', group: 'module' },
-  { key: 'gcu',      label: 'GCU',          color: '#5a7848', group: 'module' },
-  { key: 'hoa',      label: 'HOA',          color: '#4a7a6a', group: 'module' },
-  { key: 'icaap',    label: 'iCAAP',        color: '#3a5c4a', group: 'module' },
-  { key: 'personal', label: 'Personal',     color: '#6a5a8a', group: 'module' },
-  { key: 'matrix',   label: 'Matrix',       color: '#9ca3af', group: 'module' },
-  { key: 'wywo',     label: 'WYWO',         color: '#9ca3af', group: 'module' },
+  { key: 'master',   label: 'Master Tasks', mobileLabel: 'Tasks', color: '#003087', group: 'module' },
+  { key: 'csea',     label: 'CSEA',         color: '#003087', group: 'module' },
+  { key: 'finance',  label: 'Finance',      color: '#003087', group: 'module' },
+  { key: 'gcu',      label: 'GCU',          color: '#003087', group: 'module' },
+  { key: 'hoa',      label: 'HOA',          color: '#003087', group: 'module' },
+  { key: 'icaap',    label: 'iCAAP',        color: '#003087', group: 'module' },
+  { key: 'personal', label: 'Personal',     color: '#003087', group: 'module' },
+  { key: 'matrix',   label: 'Matrix',       color: '#003087', group: 'module' },
+  { key: 'wywo',     label: 'WYWO',         color: '#003087', group: 'module' },
 ]
 
 function fmtTime(ts) {
@@ -462,7 +462,12 @@ export default function DashboardView({
 
         {/* MODULE PANELS */}
         {section === 'csea' && (
-          <div className="dash-panel-wrap">
+          <>
+            <div className="dash-page-header">
+              <h1 className="dash-page-title">CSEA</h1>
+              <span className="dash-badge">{(cseaIssues || []).length} issues</span>
+            </div>
+            <div className="dash-panel-wrap">
             <CseaTracker
               userId={userId}
               providerToken={providerToken}
@@ -485,10 +490,16 @@ export default function DashboardView({
               onAddIssueNote={onAddCseaIssueNote}
               onDeleteIssueNote={onDeleteCseaIssueNote}
             />
-          </div>
+            </div>
+          </>
         )}
         {section === 'icaap' && (
-          <div className="dash-panel-wrap">
+          <>
+            <div className="dash-page-header">
+              <h1 className="dash-page-title">iCAAP</h1>
+              <span className="dash-badge">{(icaapItems || []).length} items</span>
+            </div>
+            <div className="dash-panel-wrap">
             <IcaapTracker
               userId={userId}
               items={icaapItems || []}
@@ -505,67 +516,100 @@ export default function DashboardView({
               onAddIcaapNote={onAddIcaapNote}
               onDeleteIcaapNote={onDeleteIcaapNote}
             />
-          </div>
+            </div>
+          </>
         )}
         {section === 'gcu' && (
-          <div className="dash-panel-wrap">
-            <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
-          </div>
+          <>
+            <div className="dash-page-header">
+              <h1 className="dash-page-title">GCU</h1>
+            </div>
+            <div className="dash-panel-wrap">
+              <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
+            </div>
+          </>
         )}
         {section === 'finance' && (
-          <div className="dash-panel-wrap">
-            <FinancialPanel
-              transactions={transactions || []}
-              onAddTransaction={onAddTransaction}
-              onDeleteTransaction={onDeleteTransaction}
-              bills={bills || []}
-              onAddBill={onAddBill}
-              onToggleBillPaid={onToggleBillPaid}
-              onDeleteBill={onDeleteBill}
-              goals={goals || []}
-              onAddGoal={onAddGoal}
-              onUpdateGoalAmount={onUpdateGoalAmount}
-              onDeleteGoal={onDeleteGoal}
-              paychecks={paychecks || []}
-              onAddPaycheck={onAddPaycheck}
-              onUpdatePaycheckAmount={onUpdatePaycheckAmount}
-              onTogglePaycheckBill={onTogglePaycheckBill}
-              onDeletePaycheck={onDeletePaycheck}
-              userId={userId}
-            />
-          </div>
+          <>
+            <div className="dash-page-header">
+              <h1 className="dash-page-title">Finance</h1>
+              <span className="dash-badge">{(bills || []).length} bills</span>
+            </div>
+            <div className="dash-panel-wrap">
+              <FinancialPanel
+                transactions={transactions || []}
+                onAddTransaction={onAddTransaction}
+                onDeleteTransaction={onDeleteTransaction}
+                bills={bills || []}
+                onAddBill={onAddBill}
+                onToggleBillPaid={onToggleBillPaid}
+                onDeleteBill={onDeleteBill}
+                goals={goals || []}
+                onAddGoal={onAddGoal}
+                onUpdateGoalAmount={onUpdateGoalAmount}
+                onDeleteGoal={onDeleteGoal}
+                paychecks={paychecks || []}
+                onAddPaycheck={onAddPaycheck}
+                onUpdatePaycheckAmount={onUpdatePaycheckAmount}
+                onTogglePaycheckBill={onTogglePaycheckBill}
+                onDeletePaycheck={onDeletePaycheck}
+                userId={userId}
+              />
+            </div>
+          </>
         )}
         {section === 'hoa' && (
-          <div className="dash-panel-wrap">
-            <HoaPanel userId={userId} />
-          </div>
+          <>
+            <div className="dash-page-header">
+              <h1 className="dash-page-title">HOA</h1>
+            </div>
+            <div className="dash-panel-wrap">
+              <HoaPanel userId={userId} />
+            </div>
+          </>
         )}
         {section === 'matrix' && (
-          <div className="dash-panel-wrap">
-            <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
-          </div>
+          <>
+            <div className="dash-page-header">
+              <h1 className="dash-page-title">Priority Matrix</h1>
+              <span className="dash-badge">{(masterTasks || []).length} tasks</span>
+            </div>
+            <div className="dash-panel-wrap">
+              <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
+            </div>
+          </>
         )}
         {section === 'personal' && (
-          <div className="dash-panel-wrap">
-            <PersonalPanel
-              userId={userId}
-              selectedDate={selectedDate}
-              onDateChange={onDateChange}
-              books={books || []}
-              onAddBook={onAddBook}
-              onUpdateBookStatus={onUpdateBookStatus}
-              onUpdateBookChapter={onUpdateBookChapter}
-              onDeleteBook={onDeleteBook}
-              onImportBooks={onImportBooks}
-              subTab={personalSubTab}
-              onSubTabChange={setPersonalSubTab}
-            />
-          </div>
+          <>
+            <div className="dash-page-header">
+              <h1 className="dash-page-title">Personal</h1>
+            </div>
+            <div className="dash-panel-wrap">
+              <PersonalPanel
+                userId={userId}
+                selectedDate={selectedDate}
+                onDateChange={onDateChange}
+                books={books || []}
+                onAddBook={onAddBook}
+                onUpdateBookStatus={onUpdateBookStatus}
+                onUpdateBookChapter={onUpdateBookChapter}
+                onDeleteBook={onDeleteBook}
+                onImportBooks={onImportBooks}
+                subTab={personalSubTab}
+                onSubTabChange={setPersonalSubTab}
+              />
+            </div>
+          </>
         )}
         {section === 'wywo' && (
-          <div className="dash-panel-wrap">
-            <WhileYouWereOut userId={userId} />
-          </div>
+          <>
+            <div className="dash-page-header">
+              <h1 className="dash-page-title">While You Were Out</h1>
+            </div>
+            <div className="dash-panel-wrap">
+              <WhileYouWereOut userId={userId} />
+            </div>
+          </>
         )}
 
       </main>
@@ -578,7 +622,7 @@ export default function DashboardView({
             className={`dash-mobile-nav-btn${section === item.key ? ' active' : ''}`}
             onClick={() => setSection(item.key)}
           >
-            <span className="dash-mobile-nav-dot" style={{ background: section === item.key ? '#f7e84b' : item.color }} />
+            <span className="dash-mobile-nav-dot" style={{ background: section === item.key ? '#ffb81c' : item.color }} />
             {item.mobileLabel || item.label}
           </button>
         ))}
