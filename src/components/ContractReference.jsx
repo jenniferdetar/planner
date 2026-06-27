@@ -19,7 +19,7 @@ const CAT_COLORS = {
   'Health & Safety':'#e74c3c',
   'Probation':      '#7f8c8d',
   'Layoff':         '#c0392b',
-  'Constitution':   '#003087',
+  'Constitution':   '#1e3070',
 }
 
 const BLANK_FORM = {

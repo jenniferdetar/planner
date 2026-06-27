@@ -1,5 +1,5 @@
 .sidebar {
-  background: #003087;
+  background: #1e3070;
   color: #e8e6df;
   display: flex;
   flex-direction: column;
@@ -288,7 +288,7 @@
 }
 
 .add-task-area-select option {
-  background: #003087;
+  background: #1e3070;
   color: #fff;
 }
 
@@ -334,7 +334,7 @@
 .btn-save {
   font-size: 12px;
   background: #ffb81c;
-  color: #003087;
+  color: #1e3070;
   font-weight: 700;
   padding: 4px 12px;
   border-radius: 6px;
@@ -393,8 +393,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #003087;
-  color: #003087;
+  background: #1e3070;
+  color: #1e3070;
   font-size: 13px;
   font-weight: 700;
   display: flex;
@@ -446,7 +446,7 @@
 .stat-num {
   font-size: 20px;
   font-weight: 600;
-  color: #003087;
+  color: #1e3070;
   line-height: 1;
 }
 
@@ -471,7 +471,7 @@
 }
 
 .asana-badge.syncing {
-  color: #003087;
+  color: #1e3070;
   background: rgba(201, 169, 110, 0.15);
 }
 
@@ -559,7 +559,7 @@
   color: rgba(255,255,255,0.85);
 }
 .sidebar-nav-section-label.active {
-  color: #003087;
+  color: #1e3070;
 }
 
 .sidebar-nav-item {
@@ -737,7 +737,7 @@
 }
 
 .section-textarea:focus {
-  box-shadow: inset 2px 0 0 var(--ac, #003087);
+  box-shadow: inset 2px 0 0 var(--ac, #1e3070);
 }
 
 .journal-panel {
@@ -756,7 +756,7 @@
   background: rgba(160, 120, 90, 0.15);
   border: 1px solid rgba(160, 120, 90, 0.35);
   border-radius: 10px;
-  color: #003087;
+  color: #1e3070;
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;

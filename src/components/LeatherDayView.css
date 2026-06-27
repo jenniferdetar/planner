@@ -564,7 +564,7 @@ a.lp-task-title:hover {
   cursor: pointer;
   padding: 0;
 }
-.lp-cal-month-btn:hover { color: #003087; text-decoration: underline; }
+.lp-cal-month-btn:hover { color: #1e3070; text-decoration: underline; }
 
 .lp-cal-view-btns {
   display: flex;
@@ -575,7 +575,7 @@ a.lp-task-title:hover {
 
 .lp-cal-view-btn {
   background: rgba(255,255,255,0.1);
-  border: 1px solid #d9e8f5;
+  border: 1px solid #dce6f5;
   border-radius: 4px;
   font-size: 9px;
   font-weight: 700;
@@ -586,8 +586,8 @@ a.lp-task-title:hover {
   cursor: pointer;
   transition: all 0.15s;
 }
-.lp-cal-view-btn:hover { background: rgba(74,138,120,0.15); color: #003087; border-color: #003087; }
-.lp-cal-view-btn.active { background: #003087; color: #fff; border-color: #003087; }
+.lp-cal-view-btn:hover { background: rgba(74,138,120,0.15); color: #1e3070; border-color: #1e3070; }
+.lp-cal-view-btn.active { background: #1e3070; color: #fff; border-color: #1e3070; }
 
 .lp-cal-gcal-row {
   display: flex;
@@ -767,7 +767,7 @@ a.lp-task-title:hover {
   overflow-y: auto;
   overflow-x: hidden;
   gap: 0;
-  background: #003087;
+  background: #1e3070;
   scrollbar-width: none;
 }
 .right-tabs::-webkit-scrollbar { display: none; }
@@ -800,7 +800,7 @@ a.lp-task-title:hover {
 
 .right-tab:hover { opacity: 1; filter: brightness(1.15); }
 .right-tab.active { opacity: 1; filter: brightness(1.0); background: #ffca38; }
-.right-tab.active span { color: #003087; font-weight: 800; }
+.right-tab.active span { color: #1e3070; font-weight: 800; }
 
 /* Divider between content tabs and nav tabs */
 .right-tab.nav-tab-first {
@@ -1205,7 +1205,7 @@ a.lp-task-title:hover {
 .mini-master-panel {
   flex-shrink: 0;
   background: rgba(255,255,255,0.97);
-  border-top: 2px solid rgba(0,48,135,0.15);
+  border-top: 2px solid rgba(30,48,112,0.15);
   box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
   max-height: 200px;
   display: flex;
@@ -1218,8 +1218,8 @@ a.lp-task-title:hover {
   padding: 6px 12px;
   cursor: pointer;
   user-select: none;
-  background: rgba(0,48,135,0.04);
-  border-bottom: 1px solid rgba(0,48,135,0.08);
+  background: rgba(30,48,112,0.04);
+  border-bottom: 1px solid rgba(30,48,112,0.08);
   flex-shrink: 0;
 }
 .mmp-title {
@@ -1242,13 +1242,13 @@ a.lp-task-title:hover {
   font-size: 13px;
   line-height: 1;
   cursor: pointer;
-  color: #003087;
+  color: #1e3070;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
 }
-.mmp-add-btn:hover { background: rgba(0,48,135,0.08); }
+.mmp-add-btn:hover { background: rgba(30,48,112,0.08); }
 .mmp-caret {
   font-size: 10px;
   color: #aaa;
@@ -1277,9 +1277,9 @@ a.lp-task-title:hover {
   font-size: 11px;
   outline: none;
 }
-.mmp-input:focus { border-color: #003087; }
+.mmp-input:focus { border-color: #1e3070; }
 .mmp-save {
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -1309,7 +1309,7 @@ a.lp-task-title:hover {
   padding: 3px 12px;
   break-inside: avoid;
 }
-.mmp-row:hover { background: rgba(0,48,135,0.03); }
+.mmp-row:hover { background: rgba(30,48,112,0.03); }
 .mmp-dot {
   width: 6px;
   height: 6px;
@@ -1339,7 +1339,7 @@ a.lp-task-title:hover {
   background: none;
   border: none;
   cursor: pointer;
-  color: #003087;
+  color: #1e3070;
   font-size: 13px;
   font-weight: 700;
   padding: 0 3px;
@@ -1354,7 +1354,7 @@ a.lp-task-title:hover {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   font-size: 12px;
   padding: 8px 16px;

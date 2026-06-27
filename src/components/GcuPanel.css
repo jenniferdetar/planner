@@ -1,7 +1,7 @@
 :root {
-  --gcu: #003087;
-  --gcu-light: rgba(0,48,135,0.06);
-  --gcu-mid:   rgba(0,48,135,0.12);
+  --gcu: #1e3070;
+  --gcu-light: rgba(30,48,112,0.06);
+  --gcu-mid:   rgba(30,48,112,0.12);
   --gcu-dark:  #001a5e;
   --gcu-gold:  #ffb81c;
 }
@@ -233,7 +233,7 @@
 
 .gcu-grade-input:focus {
   border-color: var(--gcu);
-  box-shadow: 0 0 0 2px rgba(0,48,135,0.12);
+  box-shadow: 0 0 0 2px rgba(30,48,112,0.12);
 }
 
 .gcu-grade-input::placeholder {
@@ -273,8 +273,8 @@
   color: #555;
   line-height: 1.7;
   padding: 6px 16px 14px 35px;
-  border-top: 1px solid rgba(0,48,135,0.1);
-  background: rgba(0,48,135,0.04);
+  border-top: 1px solid rgba(30,48,112,0.1);
+  background: rgba(30,48,112,0.04);
 }
 
 /* gcu-controls is a flex row; no override needed on desktop */

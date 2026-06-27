@@ -10,7 +10,7 @@ const STATUS_COLORS = {
 }
 const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
 const CAT_COLORS = {
-  Maintenance: '#7b5ea7',
+  Maintenance: '#1e3070',
   Financials:  '#3a5c4a',
   Insurance:   '#4a7ab5',
   Legal:       '#a05050',
@@ -91,7 +91,7 @@ export default function HoaPanel({ userId }) {
           <button
             key={t}
             className={`hoa-tab ${tab === t ? 'active' : ''}`}
-            style={{ '--tab-col': t === 'All' ? '#7b5ea7' : CAT_COLORS[t] }}
+            style={{ '--tab-col': t === 'All' ? '#1e3070' : CAT_COLORS[t] }}
             onClick={() => setTab(t)}
           >{t}</button>
         ))}

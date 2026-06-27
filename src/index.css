@@ -12,7 +12,7 @@ html, body, #root {
 body {
   font-family: 'Nunito', sans-serif;
   background-color: #ffffff;
-  color: #003087;
+  color: #1e3070;
   overflow: hidden;
 }
 
@@ -44,11 +44,11 @@ input, textarea {
 * { font-size: 14px; font-weight: 400; line-height: 24px; }
 
 /* ── Global heading colors (component-level overrides take precedence) ── */
-h1 { color: #003087; }
-h2 { color: #003087; }
-h3 { color: #003087; }
-h4 { color: #003087; }
-h5, h6 { color: #003087; }
+h1 { color: #1e3070; }
+h2 { color: #1e3070; }
+h3 { color: #1e3070; }
+h4 { color: #1e3070; }
+h5, h6 { color: #1e3070; }
 
 
 /* ── Indie Flower for all pills ── */

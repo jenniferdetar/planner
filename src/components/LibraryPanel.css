@@ -5,18 +5,18 @@
   min-height: 0;
   overflow: hidden;
   background: #ffffff;
-  color: #003087;
+  color: #1e3070;
 }
 
 .library-header {
   padding: 10px 16px 8px;
-  border-bottom: 2px solid #001040;
+  border-bottom: 2px solid #0d1a40;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-shrink: 0;
-  background: #003087;
+  background: #1e3070;
 }
 
 .library-title {
@@ -37,8 +37,8 @@
   display: flex;
   gap: 0;
   padding: 6px 16px 0;
-  background: #003087;
-  border-bottom: 2px solid #001040;
+  background: #1e3070;
+  border-bottom: 2px solid #0d1a40;
   overflow-x: auto;
   scrollbar-width: none;
   flex-shrink: 0;
@@ -118,7 +118,7 @@
 
 .import-btn {
   background: #ffb81c;
-  color: #003087;
+  color: #1e3070;
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -187,7 +187,7 @@
 .book-title {
   font-size: 12px;
   font-weight: 600;
-  color: #003087;
+  color: #1e3070;
   line-height: 24px;
 }
 
@@ -199,7 +199,7 @@
 
 .book-shelf-label {
   font-size: 10px;
-  color: #003087;
+  color: #1e3070;
   font-weight: 500;
   line-height: 20px;
   text-transform: uppercase;
@@ -268,7 +268,7 @@
   background: #fff;
   border: 1px solid #d9e8f0;
   border-radius: 7px;
-  color: #003087;
+  color: #1e3070;
   font-size: 13px;
   padding: 8px 12px;
   outline: none;
@@ -280,14 +280,14 @@
 }
 
 .add-book-input:focus {
-  border-color: #003087;
+  border-color: #1e3070;
 }
 
 .add-book-btn {
   background: #fff;
   border: 1px solid #d9e8f0;
   border-radius: 7px;
-  color: #003087;
+  color: #1e3070;
   font-size: 13px;
   font-weight: 500;
   padding: 8px 16px;

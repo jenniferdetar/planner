@@ -29,8 +29,8 @@
   justify-content: center;
   border-radius: 4px 4px 0 0;
 }
-.em-col-header.urgent     { color: #003087; background: rgba(0,48,135,0.08); }
-.em-col-header.not-urgent { color: #003087; background: rgba(0,48,135,0.07); }
+.em-col-header.urgent     { color: #1e3070; background: rgba(30,48,112,0.08); }
+.em-col-header.not-urgent { color: #1e3070; background: rgba(30,48,112,0.07); }
 
 .em-row-header {
   font-size: 8px;
@@ -45,7 +45,7 @@
   transform: rotate(180deg);
   border-radius: 0 4px 4px 0;
 }
-.em-row-header.important     { color: #003087; background: rgba(0,48,135,0.07); }
+.em-row-header.important     { color: #1e3070; background: rgba(30,48,112,0.07); }
 .em-row-header.not-important { color: #53575a; background: rgba(83,87,90,0.07); }
 
 /* ── Quadrant cell ─────────────────────────────────────────────────────── */
@@ -120,7 +120,7 @@
 .em-task-title {
   flex: 1;
   font-size: 11px;
-  color: #003087;
+  color: #1e3070;
   font-family: 'Georgia', serif;
   white-space: nowrap;
   overflow: hidden;

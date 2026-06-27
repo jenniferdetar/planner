@@ -52,7 +52,7 @@
   font-size: 72px;
   font-weight: 700;
   line-height: 1;
-  color: #003087;
+  color: #1e3070;
   letter-spacing: -2px;
 }
 
@@ -65,7 +65,7 @@
 .day-hero-dayname {
   font-size: 18px;
   font-weight: 600;
-  color: #003087;
+  color: #1e3070;
   line-height: 1.1;
 }
 
@@ -151,12 +151,12 @@
 
 .mini-cell.today {
   background: rgba(201, 169, 110, 0.18);
-  color: #003087;
+  color: #1e3070;
   font-weight: 700;
 }
 
 .mini-cell.selected {
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   font-weight: 700;
 }
@@ -198,7 +198,7 @@
 }
 
 .nav-btn:hover {
-  background: #003087;
+  background: #1e3070;
   color: #fff;
 }
 
@@ -212,11 +212,11 @@
   font-family: 'Nunito', sans-serif;
   font-size: 22px;
   font-weight: 600;
-  color: #003087;
+  color: #1e3070;
 }
 
 .today-badge {
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -227,17 +227,17 @@
 
 .today-btn {
   font-size: 12px;
-  color: #003087;
+  color: #1e3070;
   font-weight: 600;
   padding: 6px 12px;
-  border: 1px solid #003087;
+  border: 1px solid #1e3070;
   border-radius: 6px;
   transition: all 0.15s;
   cursor: pointer;
 }
 
 .today-btn:hover {
-  background: #003087;
+  background: #1e3070;
   color: #fff;
 }
 
@@ -282,13 +282,13 @@
 .view-tab:hover { opacity: 0.8; }
 .view-tab.active { opacity: 1; }
 
-.view-tab[data-v="month"]   { background: #003087; }
-.view-tab[data-v="week"]    { background: #003087; }
-.view-tab[data-v="csea"]    { background: #003087; }
-.view-tab[data-v="finance"] { background: #003087; color: #fff; }
-.view-tab[data-v="gcu"]     { background: #003087; }
-.view-tab[data-v="icaap"]   { background: #003087; }
-.view-tab[data-v="personal"]{ background: #003087; }
+.view-tab[data-v="month"]   { background: #1e3070; }
+.view-tab[data-v="week"]    { background: #1e3070; }
+.view-tab[data-v="csea"]    { background: #1e3070; }
+.view-tab[data-v="finance"] { background: #1e3070; color: #fff; }
+.view-tab[data-v="gcu"]     { background: #1e3070; }
+.view-tab[data-v="icaap"]   { background: #1e3070; }
+.view-tab[data-v="personal"]{ background: #1e3070; }
 
 .planner-body {
   flex: 1;
@@ -324,24 +324,24 @@
 
 .gcal-reconnect-inline {
   font-size: 11px;
-  color: #003087;
+  color: #1e3070;
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid rgba(0,48,135,0.35);
+  border: 1px solid rgba(30,48,112,0.35);
   padding: 3px 10px;
   border-radius: 20px;
-  background: rgba(0,48,135,0.08);
+  background: rgba(30,48,112,0.08);
   transition: all 0.15s;
 }
 
 .gcal-reconnect-inline:hover {
-  background: rgba(0,48,135,0.18);
-  border-color: rgba(0,48,135,0.6);
+  background: rgba(30,48,112,0.18);
+  border-color: rgba(30,48,112,0.6);
 }
 
 .gcal-empty-state {
   padding: 20px 24px;
-  background: #d9e8f5;
+  background: #dce6f5;
   border-radius: 8px;
   margin: 0 0 12px;
   display: flex;
@@ -360,7 +360,7 @@
   font-size: 12px;
   font-weight: 700;
   color: #fff;
-  background: #003087;
+  background: #1e3070;
   border: none;
   padding: 7px 14px;
   border-radius: 20px;
@@ -369,7 +369,7 @@
 }
 
 .gcal-empty-state button:hover {
-  background: #003087;
+  background: #1e3070;
 }
 
 .daily-task-list {
@@ -442,8 +442,8 @@ a.asana-title:hover {
 }
 
 .asana-circle.checked {
-  background: #003087;
-  border-color: #003087;
+  background: #1e3070;
+  border-color: #1e3070;
 }
 
 .asana-circle.checked::after {
@@ -506,7 +506,7 @@ a.asana-title:hover {
 }
 
 .asana-delete-btn:hover { color: #cc0000; }
-.asana-notes-btn:hover  { color: #003087; }
+.asana-notes-btn:hover  { color: #1e3070; }
 
 .check-box {
   width: 16px;
@@ -525,8 +525,8 @@ a.asana-title:hover {
 
 .task-project {
   font-size: 10px;
-  background: rgba(0,48,135, 0.12);
-  color: #003087;
+  background: rgba(30,48,112, 0.12);
+  color: #1e3070;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
@@ -552,7 +552,7 @@ a.asana-title:hover {
 }
 
 .task-notes-input:focus {
-  border-color: #003087;
+  border-color: #1e3070;
   background-color: #fffde6;
 }
 
@@ -647,7 +647,7 @@ a.asana-title:hover {
 }
 
 .add-daily-task-btn:hover {
-  color: #003087;
+  color: #1e3070;
 }
 
 /* Schedule */
@@ -668,7 +668,7 @@ a.asana-title:hover {
 }
 
 .time-row.current-hour .hour-label {
-  color: #003087;
+  color: #1e3070;
   font-weight: 600;
 }
 
@@ -849,7 +849,7 @@ a.asana-title:hover {
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  background: #003087;
+  background: #1e3070;
   padding: 3px 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -882,7 +882,7 @@ a.asana-title:hover {
 }
 
 .add-block-btn:hover {
-  background: #003087;
+  background: #1e3070;
   color: #fff;
 }
 
@@ -917,14 +917,14 @@ a.asana-title:hover {
 }
 
 .task-hub-filter-btn:hover {
-  border-color: #003087;
-  color: #003087;
+  border-color: #1e3070;
+  color: #1e3070;
 }
 
 .task-hub-filter-btn.active {
-  background: #003087;
+  background: #1e3070;
   color: #fff;
-  border-color: #003087;
+  border-color: #1e3070;
   font-weight: 700;
 }
 
@@ -987,8 +987,8 @@ a.asana-title:hover {
 
 .task-hub-area-tag {
   font-size: 9px;
-  background: rgba(0,48,135,0.12);
-  color: #003087;
+  background: rgba(30,48,112,0.12);
+  color: #1e3070;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
@@ -1131,7 +1131,7 @@ a.asana-title:hover {
   cursor: pointer;
   border: 1px solid #e0ddd6;
 }
-.ical-mgr-btn:hover { background: #003087; color: #AAAA9E; border-color: #003087; }
+.ical-mgr-btn:hover { background: #1e3070; color: #AAAA9E; border-color: #1e3070; }
 
 .ical-manager {
   background: #fff;
@@ -1149,7 +1149,7 @@ a.asana-title:hover {
   align-items: center;
   font-weight: 600;
   font-size: 13px;
-  color: #003087;
+  color: #1e3070;
 }
 .ical-manager-header button { background: none; font-size: 14px; color: #999; cursor: pointer; }
 .ical-sub-row {
@@ -1170,7 +1170,7 @@ a.asana-title:hover {
 .ical-add-form { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 4px; }
 .ical-input { flex: 1; min-width: 120px; padding: 5px 8px; border: 1px solid #e0ddd6; border-radius: 5px; font-size: 12px; }
 .ical-color-input { width: 32px; height: 30px; padding: 1px; border: 1px solid #e0ddd6; border-radius: 5px; cursor: pointer; }
-.ical-add-btn { padding: 5px 12px; background: #003087; color: #AAAA9E; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.ical-add-btn { padding: 5px 12px; background: #1e3070; color: #AAAA9E; border-radius: 5px; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .ical-add-btn:hover { background: #2d2d4e; }
 
 .view-tab { font-family: 'Nunito', sans-serif !important; }
@@ -1259,7 +1259,7 @@ a.asana-title:hover {
   font-family: 'Architects Daughter', cursive;
   font-size: 15px;
   line-height: 1.8;
-  color: #003087;
+  color: #1e3070;
 }
 
 .section-preview-p {
@@ -1283,7 +1283,7 @@ a.asana-title:hover {
 }
 
 .section-preview-table th {
-  background: var(--ac, #003087);
+  background: var(--ac, #1e3070);
   color: white;
   padding: 8px 16px;
   text-align: left;
@@ -1318,6 +1318,6 @@ a.asana-title:hover {
 }
 
 .section-preview-btn.active {
-  background: var(--ac, #003087);
+  background: var(--ac, #1e3070);
   color: white;
 }
