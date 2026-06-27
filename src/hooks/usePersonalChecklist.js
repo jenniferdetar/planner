@@ -49,12 +49,17 @@ export function usePersonalChecklist(userId) {
     }
   }
 
-  async function addTask(task_name) {
+  async function addTask(task_name, role_id = null) {
     const { data } = await supabase
       .from('personal_checklist_tasks')
-      .insert({ user_id: userId, task_name, sort_order: tasks.length + 1 })
+      .insert({ user_id: userId, task_name, sort_order: tasks.length + 1, role_id })
       .select().single()
     if (data) setTasks(prev => [...prev, data])
+  }
+
+  async function updateTask(id, fields) {
+    await supabase.from('personal_checklist_tasks').update(fields).eq('id', id)
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...fields } : t))
   }
 
   async function deleteTask(id) {
@@ -62,5 +67,5 @@ export function usePersonalChecklist(userId) {
     setTasks(prev => prev.filter(t => t.id !== id))
   }
 
-  return { tasks, isChecked, toggle, addTask, deleteTask }
+  return { tasks, isChecked, toggle, addTask, updateTask, deleteTask }
 }

@@ -74,10 +74,66 @@
 .goal-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 4px;
   padding: 0;
-  height: 24px;
+  min-height: 24px;
   border-bottom: 1px solid #eef2f7;
+}
+
+.goal-item-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 1px;
+}
+
+.goal-role-badge {
+  font-size: 9px;
+  font-weight: 700;
+  color: #1e3070;
+  background: rgba(30,48,112,0.08);
+  border-radius: 3px;
+  padding: 1px 5px;
+  align-self: flex-start;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.goal-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.12s;
+  flex-shrink: 0;
+}
+.goal-item:hover .goal-item-actions { opacity: 1; }
+
+.goal-role-select {
+  font-size: 9px;
+  padding: 1px 3px;
+  border: 1px solid #e0ddd7;
+  border-radius: 3px;
+  background: #fff;
+  color: #555;
+  max-width: 90px;
+  cursor: pointer;
+}
+
+.goal-add-role-select {
+  font-size: 10px;
+  padding: 3px 4px;
+  border: 1px solid #e0ddd7;
+  border-radius: 4px;
+  background: #fff;
+  color: #555;
+  max-width: 110px;
+  cursor: pointer;
 }
 
 .goal-item:last-of-type {
@@ -202,6 +258,32 @@
   text-align: left;
   padding-left: 6px;
   min-width: 160px;
+}
+
+.checklist-table th.task-role-col {
+  text-align: left;
+  padding-left: 4px;
+  min-width: 100px;
+  max-width: 120px;
+  font-size: 9px;
+}
+
+.task-role-cell {
+  text-align: left;
+  padding: 1px 4px;
+  max-width: 120px;
+}
+
+.checklist-role-select {
+  font-size: 9px;
+  padding: 1px 3px;
+  border: 1px solid #e0ddd7;
+  border-radius: 3px;
+  background: #fff;
+  color: #555;
+  width: 100%;
+  max-width: 110px;
+  cursor: pointer;
 }
 
 .checklist-table td {

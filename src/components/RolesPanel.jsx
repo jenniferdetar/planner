@@ -1,17 +1,33 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRoles } from '../hooks/useRoles'
+import { supabase } from '../lib/supabase'
 import './RolesPanel.css'
 
 const ROLE_ICONS = ['👩‍👧‍👦', '💼', '🏠', '📚', '🤝', '💪', '🌱', '❤️', '✨', '🎯']
 
-export default function RolesPanel({ userId }) {
-  const { roles, addRole, updateRole, deleteRole } = useRoles(userId)
+function useRoleLinked(roleId) {
+  const [goals, setGoals] = useState([])
+  const [tasks, setTasks] = useState([])
+
+  useEffect(() => {
+    if (!roleId) return
+    supabase.from('personal_goals').select('id, goal_text, category').eq('role_id', roleId).order('category').then(({ data }) => setGoals(data || []))
+    supabase.from('personal_checklist_tasks').select('id, task_name').eq('role_id', roleId).order('sort_order').then(({ data }) => setTasks(data || []))
+  }, [roleId])
+
+  return { goals, tasks }
+}
+
+export default function RolesPanel({ userId, roles: rolesProp }) {
+  const { roles: rolesOwn, addRole, updateRole, deleteRole } = useRoles(userId)
+  const roles = rolesProp ?? rolesOwn
   const [detail, setDetail] = useState(null)
   const [adding, setAdding] = useState(false)
   const [newName, setNewName] = useState('')
   const saveTimer = useRef({})
 
   const current = roles.find(r => r.id === detail)
+  const { goals: linkedGoals, tasks: linkedTasks } = useRoleLinked(detail)
 
   function handlePurposeChange(id, text) {
     updateRole(id, { purpose: text })
@@ -60,6 +76,37 @@ export default function RolesPanel({ userId }) {
             onChange={e => handlePurposeChange(current.id, e.target.value)}
             placeholder="What does this role mean to you? What do you want to give to it?"
           />
+
+          {(linkedGoals.length > 0 || linkedTasks.length > 0) && (
+            <div className="roles-linked-section">
+              {linkedGoals.length > 0 && (
+                <div className="roles-linked-block">
+                  <span className="roles-linked-label">Goals tied to this role</span>
+                  <ul className="roles-linked-list">
+                    {linkedGoals.map(g => (
+                      <li key={g.id} className="roles-linked-item">
+                        <span className="roles-linked-cat">{g.category}</span>
+                        <span className="roles-linked-text">{g.goal_text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {linkedTasks.length > 0 && (
+                <div className="roles-linked-block">
+                  <span className="roles-linked-label">Monthly checklist tasks tied to this role</span>
+                  <ul className="roles-linked-list">
+                    {linkedTasks.map(t => (
+                      <li key={t.id} className="roles-linked-item">
+                        <span className="roles-linked-text">{t.task_name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
           <button className="roles-delete-btn" onClick={() => handleDelete(current.id)}>
             Delete Role
           </button>

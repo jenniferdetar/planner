@@ -3,21 +3,6 @@ import { usePersonalGoals } from '../hooks/usePersonalGoals'
 import { usePersonalChecklist } from '../hooks/usePersonalChecklist'
 import './GoalsPanel.css'
 
-const CATEGORY_COLORS = {
-  'Physical':       '#1e3070',
-  'Mental':         '#1e3070',
-  'Relational':     '#1e3070',
-  'Self-Care':      '#1e3070',
-  'Hobbies':        '#1e3070',
-  'Home':           '#1e3070',
-  'Career':         '#1e3070',
-  'Financial':      '#1e3070',
-  'Organizational': '#1e3070',
-  'Screen Time':    '#1e3070',
-  'Learn':          '#1e3070',
-  'CSEA':           '#1e3070',
-}
-
 const CATEGORY_ORDER = ['Physical','Mental','Relational','Self-Care','Hobbies','Home','Career','Financial','Organizational','Screen Time','Learn','CSEA']
 
 function contrastColor(hex) {
@@ -28,19 +13,22 @@ function contrastColor(hex) {
   return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1e3342' : '#ffffff'
 }
 
-export default function GoalsPanel({ userId, section = 'all' }) {
-  const { byCategory, addGoal, deleteGoal } = usePersonalGoals(userId)
-  const { tasks: checklistTasks, isChecked, toggle: toggleCheck, addTask: addChecklistTask, deleteTask: deleteChecklistTask } = usePersonalChecklist(userId)
+export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
+  const { byCategory, addGoal, updateGoal, deleteGoal } = usePersonalGoals(userId)
+  const { tasks: checklistTasks, isChecked, toggle: toggleCheck, addTask, updateTask, deleteTask: deleteChecklistTask } = usePersonalChecklist(userId)
 
   const [addingCategory, setAddingCategory] = useState(null)
   const [newGoalText, setNewGoalText] = useState('')
+  const [newGoalRole, setNewGoalRole] = useState('')
   const [addingChecklist, setAddingChecklist] = useState(false)
   const [newChecklistTask, setNewChecklistTask] = useState('')
+  const [newChecklistRole, setNewChecklistRole] = useState('')
 
   async function handleAddGoal(category) {
     if (!newGoalText.trim()) return
-    await addGoal(category, newGoalText.trim())
+    await addGoal(category, newGoalText.trim(), newGoalRole || null)
     setNewGoalText('')
+    setNewGoalRole('')
     setAddingCategory(null)
   }
 
@@ -49,136 +37,186 @@ export default function GoalsPanel({ userId, section = 'all' }) {
     ...Object.keys(byCategory).filter(c => !CATEGORY_ORDER.includes(c)),
   ]
 
+  function roleNameById(id) {
+    return roles.find(r => r.id === id)?.name || ''
+  }
+
   return (
     <div className="goals-panel">
-      {/* My Personal Goals */}
-      {(section === 'all' || section === 'goals') && <div className="goals-section">
-        <div className="goals-section-header">
-          <span className="goals-trophy">🏆</span>
-          <h3 className="goals-title">My Personal Goals</h3>
-        </div>
-        <div className="goals-grid">
-          {orderedCategories.map((category, idx) => {
-            const color = idx % 2 === 0 ? '#1e3070' : '#ffb81c'
-            const goals = byCategory[category] || []
-            return (
-              <div key={category} className="goal-card">
-                <div className="goal-card-header" style={{ background: color }}>
-                  <span className="goal-card-title" style={{ color: contrastColor(color) }}>{category}</span>
-                </div>
-                <div className="goal-card-body">
-                  {goals.map(g => (
-                    <div key={g.id} className="goal-item">
-                      <span className="goal-text">{g.goal_text}</span>
-                      <button className="goal-del" onClick={() => deleteGoal(g.id)}>×</button>
-                    </div>
-                  ))}
-                  {addingCategory === category ? (
-                    <div className="goal-add-form">
-                      <input
-                        autoFocus
-                        placeholder="New goal…"
-                        value={newGoalText}
-                        onChange={e => setNewGoalText(e.target.value)}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter') handleAddGoal(category)
-                          if (e.key === 'Escape') setAddingCategory(null)
-                        }}
-                        className="goal-add-input"
-                      />
-                      <button className="goal-add-save" onClick={() => handleAddGoal(category)}>✓</button>
-                      <button className="goal-add-cancel" onClick={() => setAddingCategory(null)}>✕</button>
-                    </div>
-                  ) : (
-                    <button
-                      className="goal-add-btn"
-                      onClick={() => { setAddingCategory(category); setNewGoalText('') }}
-                    >+ add</button>
-                  )}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>}
-
-      {/* Monthly Checklist */}
-      {(section === 'all' || section === 'checklist') && <div className="checklist-section">
-        <h3 className="checklist-title">Monthly Checklist</h3>
-        <table className="checklist-table">
-          <thead>
-            <tr>
-              <th className="task-col">TASK</th>
-              {['J','F','M','A','M','J','J','A','S','O','N','D'].map((m, i) => (
-                <th key={i}>{m}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {checklistTasks.map((task, rowIdx) => {
-              const colors = ['#1e3070','#1e3070','#1e3070','#1e3070']
-              const color = colors[rowIdx % colors.length]
+      {(section === 'all' || section === 'goals') && (
+        <div className="goals-section">
+          <div className="goals-section-header">
+            <span className="goals-trophy">🏆</span>
+            <h3 className="goals-title">My Personal Goals</h3>
+          </div>
+          <div className="goals-grid">
+            {orderedCategories.map((category, idx) => {
+              const color = idx % 2 === 0 ? '#1e3070' : '#ffb81c'
+              const goals = byCategory[category] || []
               return (
-                <tr key={task.id}>
-                  <td className="task-name-cell">
-                    <span>{task.task_name}</span>
-                    <button className="goal-del" onClick={() => deleteChecklistTask(task.id)} style={{ marginLeft: 4 }}>×</button>
-                  </td>
-                  {Array.from({ length: 12 }, (_, i) => {
-                    const month = i + 1
-                    const checked = isChecked(task.id, month)
-                    return (
-                      <td key={month}>
-                        <span
-                          className="checklist-box"
-                          style={{
-                            borderColor: color,
-                            background: checked ? color : 'transparent',
+                <div key={category} className="goal-card">
+                  <div className="goal-card-header" style={{ background: color }}>
+                    <span className="goal-card-title" style={{ color: contrastColor(color) }}>{category}</span>
+                  </div>
+                  <div className="goal-card-body">
+                    {goals.map(g => (
+                      <div key={g.id} className="goal-item">
+                        <div className="goal-item-main">
+                          <span className="goal-text">{g.goal_text}</span>
+                          {g.role_id && (
+                            <span className="goal-role-badge">{roleNameById(g.role_id)}</span>
+                          )}
+                        </div>
+                        <div className="goal-item-actions">
+                          {roles.length > 0 && (
+                            <select
+                              className="goal-role-select"
+                              value={g.role_id || ''}
+                              onChange={e => updateGoal(g.id, { role_id: e.target.value || null })}
+                              title="Assign to a role"
+                            >
+                              <option value="">— role —</option>
+                              {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                            </select>
+                          )}
+                          <button className="goal-del" onClick={() => deleteGoal(g.id)}>×</button>
+                        </div>
+                      </div>
+                    ))}
+                    {addingCategory === category ? (
+                      <div className="goal-add-form">
+                        <input
+                          autoFocus
+                          placeholder="New goal…"
+                          value={newGoalText}
+                          onChange={e => setNewGoalText(e.target.value)}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') handleAddGoal(category)
+                            if (e.key === 'Escape') setAddingCategory(null)
                           }}
-                          onClick={() => toggleCheck(task.id, month)}
+                          className="goal-add-input"
                         />
-                      </td>
-                    )
-                  })}
-                </tr>
+                        {roles.length > 0 && (
+                          <select className="goal-add-role-select" value={newGoalRole} onChange={e => setNewGoalRole(e.target.value)}>
+                            <option value="">No role</option>
+                            {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                          </select>
+                        )}
+                        <button className="goal-add-save" onClick={() => handleAddGoal(category)}>✓</button>
+                        <button className="goal-add-cancel" onClick={() => setAddingCategory(null)}>✕</button>
+                      </div>
+                    ) : (
+                      <button
+                        className="goal-add-btn"
+                        onClick={() => { setAddingCategory(category); setNewGoalText(''); setNewGoalRole('') }}
+                      >+ add</button>
+                    )}
+                  </div>
+                </div>
               )
             })}
-            <tr>
-              <td colSpan={13}>
-                {addingChecklist ? (
-                  <div style={{ display: 'flex', gap: 6, alignItems: 'center', padding: '6px 0' }}>
-                    <input
-                      autoFocus
-                      placeholder="New task…"
-                      value={newChecklistTask}
-                      onChange={e => setNewChecklistTask(e.target.value)}
-                      onKeyDown={async e => {
-                        if (e.key === 'Enter' && newChecklistTask.trim()) {
-                          await addChecklistTask(newChecklistTask.trim())
+          </div>
+        </div>
+      )}
+
+      {(section === 'all' || section === 'checklist') && (
+        <div className="checklist-section">
+          <h3 className="checklist-title">Monthly Checklist</h3>
+          <table className="checklist-table">
+            <thead>
+              <tr>
+                <th className="task-col">TASK</th>
+                <th className="task-role-col">ROLE</th>
+                {['J','F','M','A','M','J','J','A','S','O','N','D'].map((m, i) => (
+                  <th key={i}>{m}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {checklistTasks.map((task, rowIdx) => {
+                const color = '#1e3070'
+                return (
+                  <tr key={task.id}>
+                    <td className="task-name-cell">
+                      <span>{task.task_name}</span>
+                      <button className="goal-del" onClick={() => deleteChecklistTask(task.id)} style={{ marginLeft: 4 }}>×</button>
+                    </td>
+                    <td className="task-role-cell">
+                      {roles.length > 0 && (
+                        <select
+                          className="checklist-role-select"
+                          value={task.role_id || ''}
+                          onChange={e => updateTask(task.id, { role_id: e.target.value || null })}
+                        >
+                          <option value="">—</option>
+                          {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                        </select>
+                      )}
+                    </td>
+                    {Array.from({ length: 12 }, (_, i) => {
+                      const month = i + 1
+                      const checked = isChecked(task.id, month)
+                      return (
+                        <td key={month}>
+                          <span
+                            className="checklist-box"
+                            style={{
+                              borderColor: color,
+                              background: checked ? color : 'transparent',
+                            }}
+                            onClick={() => toggleCheck(task.id, month)}
+                          />
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              })}
+              <tr>
+                <td colSpan={14}>
+                  {addingChecklist ? (
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center', padding: '6px 0' }}>
+                      <input
+                        autoFocus
+                        placeholder="New task…"
+                        value={newChecklistTask}
+                        onChange={e => setNewChecklistTask(e.target.value)}
+                        onKeyDown={async e => {
+                          if (e.key === 'Enter' && newChecklistTask.trim()) {
+                            await addTask(newChecklistTask.trim(), newChecklistRole || null)
+                            setNewChecklistTask('')
+                            setNewChecklistRole('')
+                            setAddingChecklist(false)
+                          }
+                          if (e.key === 'Escape') setAddingChecklist(false)
+                        }}
+                        className="checklist-new-input"
+                      />
+                      {roles.length > 0 && (
+                        <select className="checklist-role-select" value={newChecklistRole} onChange={e => setNewChecklistRole(e.target.value)}>
+                          <option value="">No role</option>
+                          {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                        </select>
+                      )}
+                      <button className="goal-add-save" onClick={async () => {
+                        if (newChecklistTask.trim()) {
+                          await addTask(newChecklistTask.trim(), newChecklistRole || null)
                           setNewChecklistTask('')
+                          setNewChecklistRole('')
                           setAddingChecklist(false)
                         }
-                        if (e.key === 'Escape') setAddingChecklist(false)
-                      }}
-                      className="checklist-new-input"
-                    />
-                    <button className="goal-add-save" onClick={async () => {
-                      if (newChecklistTask.trim()) {
-                        await addChecklistTask(newChecklistTask.trim())
-                        setNewChecklistTask('')
-                        setAddingChecklist(false)
-                      }
-                    }}>✓</button>
-                    <button className="goal-add-cancel" onClick={() => setAddingChecklist(false)}>✕</button>
-                  </div>
-                ) : (
-                  <button className="checklist-add-task-btn" onClick={() => setAddingChecklist(true)}>+ add task</button>
-                )}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>}
+                      }}>✓</button>
+                      <button className="goal-add-cancel" onClick={() => setAddingChecklist(false)}>✕</button>
+                    </div>
+                  ) : (
+                    <button className="checklist-add-task-btn" onClick={() => setAddingChecklist(true)}>+ add task</button>
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }

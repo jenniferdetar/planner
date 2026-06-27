@@ -38,6 +38,47 @@
 .personal-inline-tab.active { color: #fff; border-bottom-color: #ffb81c; }
 .personal-inline-tab:hover:not(.active) { color: #fff; }
 
+/* Framework strip */
+.personal-framework-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 5px 16px;
+  background: #f4f6fb;
+  border-bottom: 1px solid rgba(30,48,112,0.10);
+  flex-shrink: 0;
+}
+
+.personal-framework-flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.pfw-btn {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #9aaac8;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.pfw-btn:hover { color: #1e3070; background: rgba(30,48,112,0.06); }
+.pfw-btn.active { color: #1e3070; font-weight: 700; }
+
+.pfw-arrow {
+  font-size: 10px;
+  color: #c8d0e0;
+  padding: 0 2px;
+  user-select: none;
+}
+
 /* Sheet embed */
 .sheet-embed {
   width: 100%;
@@ -96,6 +137,13 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
   margin: 0;
+}
+
+.mantra-context-note {
+  font-size: 11px;
+  color: #9aaac8;
+  font-style: italic;
+  margin: -6px 0 10px;
 }
 
 .mantra-saved {
