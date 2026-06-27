@@ -4,18 +4,18 @@ import { usePersonalChecklist } from '../hooks/usePersonalChecklist'
 import './GoalsPanel.css'
 
 const CATEGORY_COLORS = {
-  'Physical':       '#4a7a6a',
-  'Mental':         '#3d6a5a',
-  'Relational':     '#2d5560',
-  'Self-Care':      '#4a7a6a',
-  'Hobbies':        '#1e3342',
-  'Home':           '#3d6a5a',
-  'Career':         '#2d5560',
-  'Financial':      '#1e3342',
-  'Organizational': '#4a7a6a',
-  'Screen Time':    '#3d6a5a',
-  'Learn':          '#2d5560',
-  'CSEA':           '#00326b',
+  'Physical':       '#003087',
+  'Mental':         '#003087',
+  'Relational':     '#003087',
+  'Self-Care':      '#003087',
+  'Hobbies':        '#003087',
+  'Home':           '#003087',
+  'Career':         '#003087',
+  'Financial':      '#003087',
+  'Organizational': '#003087',
+  'Screen Time':    '#003087',
+  'Learn':          '#003087',
+  'CSEA':           '#003087',
 }
 
 const CATEGORY_ORDER = ['Physical','Mental','Relational','Self-Care','Hobbies','Home','Career','Financial','Organizational','Screen Time','Learn','CSEA']
@@ -116,7 +116,7 @@ export default function GoalsPanel({ userId, section = 'all' }) {
           </thead>
           <tbody>
             {checklistTasks.map((task, rowIdx) => {
-              const colors = ['#4a7a6a','#2d5560','#3d6a5a','#1e3342']
+              const colors = ['#003087','#1a4a8a','#003087','#1a4a8a']
               const color = colors[rowIdx % colors.length]
               return (
                 <tr key={task.id}>
