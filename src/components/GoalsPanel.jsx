@@ -4,18 +4,18 @@ import { usePersonalChecklist } from '../hooks/usePersonalChecklist'
 import './GoalsPanel.css'
 
 const CATEGORY_COLORS = {
-  'Physical':       '#003087',
-  'Mental':         '#003087',
-  'Relational':     '#003087',
-  'Self-Care':      '#003087',
-  'Hobbies':        '#003087',
-  'Home':           '#003087',
-  'Career':         '#003087',
-  'Financial':      '#003087',
-  'Organizational': '#003087',
-  'Screen Time':    '#003087',
-  'Learn':          '#003087',
-  'CSEA':           '#003087',
+  'Physical':       '#1e3070',
+  'Mental':         '#1e3070',
+  'Relational':     '#1e3070',
+  'Self-Care':      '#1e3070',
+  'Hobbies':        '#1e3070',
+  'Home':           '#1e3070',
+  'Career':         '#1e3070',
+  'Financial':      '#1e3070',
+  'Organizational': '#1e3070',
+  'Screen Time':    '#1e3070',
+  'Learn':          '#1e3070',
+  'CSEA':           '#1e3070',
 }
 
 const CATEGORY_ORDER = ['Physical','Mental','Relational','Self-Care','Hobbies','Home','Career','Financial','Organizational','Screen Time','Learn','CSEA']
@@ -59,7 +59,7 @@ export default function GoalsPanel({ userId, section = 'all' }) {
         </div>
         <div className="goals-grid">
           {orderedCategories.map((category, idx) => {
-            const color = idx % 2 === 0 ? '#003087' : '#ffb81c'
+            const color = idx % 2 === 0 ? '#1e3070' : '#ffb81c'
             const goals = byCategory[category] || []
             return (
               <div key={category} className="goal-card">
@@ -116,7 +116,7 @@ export default function GoalsPanel({ userId, section = 'all' }) {
           </thead>
           <tbody>
             {checklistTasks.map((task, rowIdx) => {
-              const colors = ['#003087','#003087','#003087','#003087']
+              const colors = ['#1e3070','#1e3070','#1e3070','#1e3070']
               const color = colors[rowIdx % colors.length]
               return (
                 <tr key={task.id}>

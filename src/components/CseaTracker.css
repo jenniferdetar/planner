@@ -1,11 +1,11 @@
 /* ── CSEA Brand Tokens ──────────────────────────────────────────────────── */
 :root {
   /* Primary */
-  --csea-blue:        #003087;
+  --csea-blue:        #1e3070;
   --csea-yellow:      #ffca38;
   /* Secondary */
-  --csea-link:        #003087;
-  --csea-light-blue:  #d9e8f5;
+  --csea-link:        #1e3070;
+  --csea-light-blue:  #dce6f5;
   --csea-gold:        #ffb81c;
   --csea-accent:      #f7941d;
   --csea-dark-orange: #e0592a;
@@ -70,8 +70,8 @@
 /* ── Tabs ──────────────────────────────────────────────────────────────── */
 .csea-tabs {
   display: flex;
-  background: #003087;
-  border-bottom: 2px solid #001040;
+  background: #1e3070;
+  border-bottom: 2px solid #0d1a40;
   flex-shrink: 0;
   padding: 6px 10px 0;
   gap: 0;
@@ -227,16 +227,16 @@
 .csea-gmail-sync-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #003087;
+  color: #1e3070;
   background: transparent;
-  border: 1px solid #003087;
+  border: 1px solid #1e3070;
   border-radius: 3px;
   padding: 4px 10px;
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
   transition: background 0.15s, color 0.15s;
 }
-.csea-gmail-sync-btn:hover:not(:disabled) { background: #003087; color: #fff; }
+.csea-gmail-sync-btn:hover:not(:disabled) { background: #1e3070; color: #fff; }
 .csea-gmail-sync-btn:disabled { opacity: 0.5; cursor: default; }
 
 /* ── Form ──────────────────────────────────────────────────────────────── */
@@ -372,7 +372,7 @@
 }
 
 .issue-card:nth-child(even) { border-left-color: var(--csea-accent); }
-.issue-card:hover { box-shadow: 0 2px 8px rgba(0,48,135,0.12); }
+.issue-card:hover { box-shadow: 0 2px 8px rgba(30,48,112,0.12); }
 .issue-card.resolved { opacity: 0.55; }
 
 .issue-header {
@@ -710,7 +710,7 @@
   max-height: 220px;
   overflow-y: auto;
   z-index: 100;
-  box-shadow: 0 4px 12px rgba(0,48,135,0.12);
+  box-shadow: 0 4px 12px rgba(30,48,112,0.12);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -795,7 +795,7 @@
   padding: 7px 12px;
   background: var(--csea-light-blue);
   color: var(--csea-blue);
-  border: 1px solid var(--csea-border-lt, rgba(0,48,135,0.2));
+  border: 1px solid var(--csea-border-lt, rgba(30,48,112,0.2));
   border-radius: 4px;
   font-size: 12px;
   font-weight: 700;

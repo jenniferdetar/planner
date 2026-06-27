@@ -202,7 +202,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                 const h12 = h % 12 || 12
                 startLabel = `${h12}:${String(min).padStart(2, '0')} ${suffix}`
               }
-              return { id: m.id, title: m.title, color: m.color || '#003087', startLabel, _sortKey: m.start_time || '' }
+              return { id: m.id, title: m.title, color: m.color || '#1e3070', startLabel, _sortKey: m.start_time || '' }
             })
           const calEvents = (calendarBlocks || [])
             .filter(b => b.startIso?.startsWith(dateStr))
@@ -230,7 +230,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                         key={task.id}
                         className={`week-task-row ${task.completed ? 'done' : ''}`}
                         onClick={() => toggleTask(task.id, dateStr)}
-                        style={isCseaTask ? { background: '#003087', borderRadius: '4px', padding: '1px 4px', border: '1.5px solid #cc0000' } : {}}
+                        style={isCseaTask ? { background: '#1e3070', borderRadius: '4px', padding: '1px 4px', border: '1.5px solid #cc0000' } : {}}
                       >
                         <span
                           className="week-task-check"
@@ -290,7 +290,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                     ? 'CSEA ' + rawTitle
                     : rawTitle
                   const pillStyle = isCseaEvent
-                    ? { background: '#003087', color: '#f7e84b', border: '1.5px solid #cc0000', fontWeight: 700 }
+                    ? { background: '#1e3070', color: '#f7e84b', border: '1.5px solid #cc0000', fontWeight: 700 }
                     : { background: evt.color ?? '#4a90d9', color: contrastColor(evt.color) }
                   return (
                     <div

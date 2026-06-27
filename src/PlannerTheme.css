@@ -10,14 +10,14 @@
   --pt-bg-alt:     #eef2f7;   /* slightly deeper for alt rows / headers */
   --pt-bg-card:    #ffffff;   /* card surface */
   --pt-border:     #bfbfbf;   /* CSEA border gray */
-  --pt-border-lt:  rgba(0,48,135,0.15); /* subtle line */
+  --pt-border-lt:  rgba(30,48,112,0.15); /* subtle line */
   --pt-text:       #222222;   /* CSEA body text */
   --pt-text-2:     #53575a;   /* CSEA dark gray */
   --pt-text-muted: #8a8a8a;   /* muted / labels */
-  --pt-accent:     #003087;   /* CSEA link blue */
-  --pt-accent2:    #003087;   /* CSEA navy */
-  --pt-header-bg:  #003087;   /* CSEA primary navy */
-  --pt-header-alt: #d9e8f5;   /* CSEA light blue bg */
+  --pt-accent:     #1e3070;   /* CSEA link blue */
+  --pt-accent2:    #1e3070;   /* CSEA navy */
+  --pt-header-bg:  #1e3070;   /* CSEA primary navy */
+  --pt-header-alt: #dce6f5;   /* CSEA light blue bg */
   --pt-line: repeating-linear-gradient(
     transparent, transparent 27px,
     rgba(191,191,191,0.38) 27px,
@@ -271,7 +271,7 @@ select:focus {
 .login-card  {
   background: #fff !important;
   border: 1px solid var(--pt-border) !important;
-  box-shadow: 0 4px 40px rgba(0,48,135,0.12) !important;
+  box-shadow: 0 4px 40px rgba(30,48,112,0.12) !important;
 }
 .login-name  { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
 .login-divider { background: var(--pt-border) !important; }
@@ -307,7 +307,7 @@ select:focus {
   color: #fff !important;
 }
 .sidebar-nav-item.active {
-  background: rgba(0,48,135,0.22) !important;
+  background: rgba(30,48,112,0.22) !important;
   border-left-color: var(--pt-accent) !important;
   color: #fff !important;
 }

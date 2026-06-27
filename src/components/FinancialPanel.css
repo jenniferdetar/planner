@@ -8,8 +8,8 @@
 
 .fin-summary {
   display: flex;
-  background: #003087;
-  border-bottom: 1px solid #001040;
+  background: #1e3070;
+  border-bottom: 1px solid #0d1a40;
   flex-shrink: 0;
 }
 
@@ -29,7 +29,7 @@
   align-items: center;
   justify-content: center;
   padding: 5px 6px;
-  background: #003087;
+  background: #1e3070;
   border-bottom: 2px solid transparent;
 }
 
@@ -59,8 +59,8 @@
 
 .fin-tabs {
   display: flex;
-  background: #003087;
-  border-bottom: 2px solid #001040;
+  background: #1e3070;
+  border-bottom: 2px solid #0d1a40;
   flex-shrink: 0;
   padding: 6px 16px 0;
   gap: 0;
@@ -104,7 +104,7 @@
   justify-content: space-between;
   padding: 6px 12px;
   background: #002266;
-  border-bottom: 1px solid #001040;
+  border-bottom: 1px solid #0d1a40;
   flex-shrink: 0;
 }
 
@@ -121,13 +121,13 @@
   font-weight: 600;
   color: #7db8f5;
   padding: 5px 10px;
-  border: 1px solid #003087;
+  border: 1px solid #1e3070;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
-.fin-add-btn:hover { background: #003087; color: #fff; }
+.fin-add-btn:hover { background: #1e3070; color: #fff; }
 
 /* Form */
 .fin-form {
@@ -161,7 +161,7 @@
   background: #fff;
 }
 
-.fin-input:focus { border-color: #003087; }
+.fin-input:focus { border-color: #1e3070; }
 .fin-input.amount { font-weight: 600; }
 
 .fin-type-toggle {
@@ -198,7 +198,7 @@
   transition: border-color 0.15s;
 }
 
-.fin-color-swatch.active { border-color: #003087; }
+.fin-color-swatch.active { border-color: #1e3070; }
 
 .fin-form-actions {
   display: flex;
@@ -220,7 +220,7 @@
 .fin-save {
   font-size: 11px;
   font-weight: 600;
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   padding: 5px 14px;
   border-radius: 6px;
@@ -370,7 +370,7 @@
 .fin-bill-card-amount {
   font-size: 14px;
   font-weight: 700;
-  color: #003087;
+  color: #1e3070;
   padding: 6px 8px 2px;
   line-height: 1;
 }
@@ -410,7 +410,7 @@
 }
 
 .fin-bill-method { font-size: 9px; font-weight: 600; padding: 1px 5px; border-radius: 3px; }
-.fin-bill-method.billpay { background: #d9e8f5; color: #003087; }
+.fin-bill-method.billpay { background: #dce6f5; color: #1e3070; }
 .fin-bill-method.cash { background: #eaf7ea; color: #41a700; }
 
 /* Goals */
@@ -451,7 +451,7 @@
   transition: all 0.15s;
 }
 
-.fin-edit-btn:hover { color: #003087; border-color: #003087; }
+.fin-edit-btn:hover { color: #1e3070; border-color: #1e3070; }
 
 .fin-goal-amounts {
   display: flex;
@@ -504,7 +504,7 @@
 
 .pc-th-account {
   position: sticky; left: 0; z-index: 2;
-  background: #003087; color: #d9e8f5;
+  background: #1e3070; color: #dce6f5;
   text-align: left; padding: 8px 12px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
   min-width: 180px;
@@ -512,7 +512,7 @@
 }
 
 .pc-th-date {
-  background: #003087; color: #d9e8f5;
+  background: #1e3070; color: #dce6f5;
   padding: 6px 10px; text-align: center;
   font-size: 11px; font-weight: 600;
   min-width: 100px;
@@ -534,24 +534,24 @@
   border-bottom: 1px solid #eef2f7;
   min-width: 180px;
 }
-.pc-td-bill-name { display: block; font-size: 12.5px; color: #003087; line-height: 1.2; }
+.pc-td-bill-name { display: block; font-size: 12.5px; color: #1e3070; line-height: 1.2; }
 .pc-td-method { font-size: 10px; font-weight: 600; padding: 0px 5px; border-radius: 3px; }
-.pc-td-method.billpay { background: #d9e8f5; color: #003087; }
+.pc-td-method.billpay { background: #dce6f5; color: #1e3070; }
 .pc-td-method.cash { background: #eaf7ea; color: #41a700; }
 
 /* Jennifer's Check row */
 .pc-row-check .pc-td-account { background: #f5f7fa; }
-.pc-td-check-label { font-size: 13px; font-weight: 700; color: #003087; }
+.pc-td-check-label { font-size: 13px; font-weight: 700; color: #1e3070; }
 .pc-td-check-amount {
   text-align: center; padding: 6px 8px;
-  font-size: 13px; font-weight: 700; color: #003087;
+  font-size: 13px; font-weight: 700; color: #1e3070;
   cursor: pointer; border-bottom: 2px solid #d9e8f0;
   border-right: 1px solid #d9e8f0;
   background: #f5f7fa;
 }
 .pc-td-check-amount:hover { background: #eae9e4; }
 .pc-cell-input {
-  width: 80px; border: 1px solid #003087; border-radius: 3px;
+  width: 80px; border: 1px solid #1e3070; border-radius: 3px;
   padding: 2px 4px; font-size: 12px; text-align: right;
 }
 
@@ -572,17 +572,17 @@
 
 /* Totals */
 .pc-row-total .pc-td-account { background: #eef2f7; font-weight: 700; }
-.pc-td-total-label { font-size: 12px; font-weight: 700; color: #003087; }
+.pc-td-total-label { font-size: 12px; font-weight: 700; color: #1e3070; }
 .pc-td-total {
   text-align: right; padding: 5px 10px;
-  font-size: 12px; font-weight: 700; color: #003087;
+  font-size: 12px; font-weight: 700; color: #1e3070;
   background: #eef2f7; border-right: 1px solid #e0ddd7;
   border-bottom: 1px solid #e0ddd7;
 }
 
 /* Left over */
 .pc-row-leftover .pc-td-account { background: #f5f7fa; }
-.pc-td-leftover-label { font-size: 12px; font-weight: 700; color: #003087; }
+.pc-td-leftover-label { font-size: 12px; font-weight: 700; color: #1e3070; }
 .pc-td-leftover {
   text-align: right; padding: 5px 10px;
   font-size: 12px; font-weight: 700;
@@ -605,16 +605,16 @@
 .coins-row td { border-bottom: 1px solid #eef2f7; padding: 4px 8px; }
 .coins-row .coins-td-count { padding-right: 2px; }
 .coins-row .coins-td-sub { padding-left: 2px; }
-.coins-td-name { font-weight: 600; color: #003087; white-space: nowrap; }
+.coins-td-name { font-weight: 600; color: #1e3070; white-space: nowrap; }
 .coins-td-val { color: #888; font-size: 12px; }
 .coins-td-count { display: flex; align-items: center; gap: 8px; }
 .coins-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; background: #f5f7fa; font-size: 16px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #555; }
 .coins-btn:hover { background: #d9e8f0; }
 .coins-input { width: 52px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 3px 4px; font-size: 13px; }
-.coins-td-sub { text-align: right; font-weight: 600; color: #003087; white-space: nowrap; }
+.coins-td-sub { text-align: right; font-weight: 600; color: #1e3070; white-space: nowrap; }
 .coins-section-divider td { padding: 6px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #aaa; background: #f5f7fa; border-top: 2px solid #d9e8f0; border-bottom: 1px solid #d9e8f0; }
 .coins-total-row td { padding: 5px 8px; font-weight: 700; font-size: 14px; border-top: 2px solid #d9e8f0; }
-.coins-td-total-label { color: #003087; }
+.coins-td-total-label { color: #1e3070; }
 .coins-td-total { text-align: right; color: #41a700; font-size: 16px; }
 
 /* ── Goals Table ── */
@@ -642,7 +642,7 @@
 
 .goals-th-name { text-align: left; width: 45%; }
 .goals-th-col { text-align: center; width: 27.5%; }
-.goals-th-col.mo3 { color: #003087; }
+.goals-th-col.mo3 { color: #1e3070; }
 .goals-th-col.mo6 { color: #41a700; }
 
 .goals-name {
@@ -669,7 +669,7 @@
   display: block;
   font-size: 12px;
   font-weight: 700;
-  color: #003087;
+  color: #1e3070;
   line-height: 1.2;
 }
 
@@ -690,14 +690,14 @@
 
 .goals-fill {
   height: 100%;
-  background: #003087;
+  background: #1e3070;
   border-radius: 2px;
   transition: width 0.3s;
 }
 
 .goals-total-row .goals-name {
   font-weight: 700;
-  color: #003087;
+  color: #1e3070;
   border-top: 2px solid #d9e8f0;
 }
 
@@ -706,7 +706,7 @@
 .goals-cell-input {
   width: 100%;
   padding: 4px 6px;
-  border: 1px solid #003087;
+  border: 1px solid #1e3070;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
@@ -716,29 +716,29 @@
 }
 
 /* ── Palette alternating rows ── */
-.pc-table tbody tr:nth-child(odd)  td { background: rgba(0,48,135,0.06); }
-.pc-table tbody tr:nth-child(even) td { background: rgba(0,48,135,0.03); }
-.pc-table tbody tr:nth-child(odd)  .pc-td-account { background: rgba(0,48,135,0.12); }
-.pc-table tbody tr:nth-child(even) .pc-td-account { background: rgba(0,48,135,0.12); }
+.pc-table tbody tr:nth-child(odd)  td { background: rgba(30,48,112,0.06); }
+.pc-table tbody tr:nth-child(even) td { background: rgba(30,48,112,0.03); }
+.pc-table tbody tr:nth-child(odd)  .pc-td-account { background: rgba(30,48,112,0.12); }
+.pc-table tbody tr:nth-child(even) .pc-td-account { background: rgba(30,48,112,0.12); }
 
-.coins-table th { background: #003087; color: #d9e8f5; }
-.coins-half:first-child .coins-table th { background: #003087; }
-.coins-half:first-child .coins-half-title { color: #003087; }
+.coins-table th { background: #1e3070; color: #dce6f5; }
+.coins-half:first-child .coins-table th { background: #1e3070; }
+.coins-half:first-child .coins-half-title { color: #1e3070; }
 .coins-half:last-child  .coins-table th { background: #4a7a6a; }
 .coins-half:last-child  .coins-half-title { color: #4a7a6a; }
-.coins-row:nth-child(odd)  td { background: rgba(0,48,135,0.06); }
+.coins-row:nth-child(odd)  td { background: rgba(30,48,112,0.06); }
 .coins-row:nth-child(even) td { background: #fff; }
 
-.goals-table tbody tr:nth-child(odd)  td { background: rgba(0,48,135,0.06); }
-.goals-table tbody tr:nth-child(even) td { background: rgba(0,48,135,0.03); }
-.goals-th-name, .goals-th-col { background: #003087 !important; color: #d9e8f5 !important; }
+.goals-table tbody tr:nth-child(odd)  td { background: rgba(30,48,112,0.06); }
+.goals-table tbody tr:nth-child(even) td { background: rgba(30,48,112,0.03); }
+.goals-th-name, .goals-th-col { background: #1e3070 !important; color: #dce6f5 !important; }
 
 
-.fin-txn:nth-child(odd)  { background: rgba(0,48,135,0.05); border-left: 3px solid #003087; }
-.fin-txn:nth-child(even) { background: rgba(0,48,135,0.05); border-left: 3px solid #003087; }
+.fin-txn:nth-child(odd)  { background: rgba(30,48,112,0.05); border-left: 3px solid #1e3070; }
+.fin-txn:nth-child(even) { background: rgba(30,48,112,0.05); border-left: 3px solid #1e3070; }
 
-.fin-goal:nth-child(odd)  { border-left: 3px solid #003087; }
-.fin-goal:nth-child(even) { border-left: 3px solid #003087; }
+.fin-goal:nth-child(odd)  { border-left: 3px solid #1e3070; }
+.fin-goal:nth-child(even) { border-left: 3px solid #1e3070; }
 
 /* ── Goal Cards ── */
 .fin-goals-grid {
@@ -798,7 +798,7 @@
   cursor: pointer;
 }
 
-.goal-card-saved { font-size: 14px; font-weight: 700; color: #003087; }
+.goal-card-saved { font-size: 14px; font-weight: 700; color: #1e3070; }
 .goal-card-target { font-size: 10px; color: #aaa; }
 
 .goal-card-bar {
@@ -810,7 +810,7 @@
 
 .goal-card-fill {
   height: 100%;
-  background: var(--card-color, #003087);
+  background: var(--card-color, #1e3070);
   border-radius: 4px;
   transition: width 0.3s;
 }
@@ -824,7 +824,7 @@
 .goal-card-input {
   width: 100%;
   border: none;
-  border-bottom: 1.5px solid #003087;
+  border-bottom: 1.5px solid #1e3070;
   outline: none;
   font-size: 13px;
   font-family: inherit;
@@ -840,8 +840,8 @@
 }
 
 .fin-budget-th {
-  background: #003087 !important;
-  color: #d9e8f5 !important;
+  background: #1e3070 !important;
+  color: #dce6f5 !important;
   padding: 5px 10px;
   text-align: right;
   font-size: 10px;
@@ -854,9 +854,9 @@
 
 .fin-budget-th.cat-col { text-align: left; }
 
-.fin-budget-row:nth-child(odd)  { background: rgba(0,48,135,0.04); }
+.fin-budget-row:nth-child(odd)  { background: rgba(30,48,112,0.04); }
 .fin-budget-row:nth-child(even) { background: #fff; }
-.fin-budget-row:hover td { background: rgba(0,48,135,0.08); }
+.fin-budget-row:hover td { background: rgba(30,48,112,0.08); }
 
 .fin-budget-td {
   padding: 5px 10px;
@@ -870,16 +870,16 @@
 .fin-budget-td.cat-col {
   text-align: left;
   font-weight: 600;
-  color: #003087;
+  color: #1e3070;
 }
 
 .fin-budget-amount { cursor: pointer; }
-.fin-budget-amount:hover { color: #003087; }
+.fin-budget-amount:hover { color: #1e3070; }
 
 .fin-budget-input {
   width: 90px;
   padding: 3px 6px;
-  border: 1px solid #003087;
+  border: 1px solid #1e3070;
   border-radius: 4px;
   font-size: 13px;
   text-align: right;
@@ -916,7 +916,7 @@
   text-align: right;
   font-size: 13px;
 }
-.fin-budget-total-row .cat-col { text-align: left; color: #003087; }
+.fin-budget-total-row .cat-col { text-align: left; color: #1e3070; }
 
 .fin-budget-add-row {
   padding: 12px 12px;
@@ -928,7 +928,7 @@
   cursor: pointer;
   transition: color 0.12s;
 }
-.fin-budget-add-cat:hover { color: #003087; }
+.fin-budget-add-cat:hover { color: #1e3070; }
 
 .fin-budget-new-input {
   padding: 5px 8px;
@@ -937,7 +937,7 @@
   font-size: 13px;
   outline: none;
 }
-.fin-budget-new-input:focus { border-color: #003087; }
+.fin-budget-new-input:focus { border-color: #1e3070; }
 
 /* ── Budget Tab (Personal Finance Tracker) ── */
 .budget-wrap {
@@ -953,12 +953,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 14px 6px;
-  background: #003087;
+  background: #1e3070;
   flex-shrink: 0;
 }
 
 .budget-title {
-  color: #d9e8f5;
+  color: #dce6f5;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 1.5px;
@@ -967,8 +967,8 @@
 }
 
 .budget-month-sel {
-  background: #003087;
-  color: #d9e8f5;
+  background: #1e3070;
+  color: #dce6f5;
   border: 1px solid #444;
   border-radius: 5px;
   padding: 4px 8px;
@@ -1007,10 +1007,10 @@
 .budget-summary-val {
   font-size: 14px;
   font-weight: 700;
-  color: #003087;
+  color: #1e3070;
 }
 .budget-summary-val.income { color: #41a700; }
-.budget-summary-val.expense { color: #003087; }
+.budget-summary-val.expense { color: #1e3070; }
 
 .budget-table-wrap {
   flex: 1;
@@ -1023,8 +1023,8 @@
 }
 
 .budget-th {
-  background: #003087 !important;
-  color: #d9e8f5 !important;
+  background: #1e3070 !important;
+  color: #dce6f5 !important;
   padding: 5px 10px;
   font-size: 10px;
   font-weight: 700;
@@ -1055,8 +1055,8 @@
 }
 
 .budget-row:nth-child(odd) { background: #fff; }
-.budget-row:nth-child(even) { background: rgba(0,48,135,0.03); }
-.budget-row:hover td { background: rgba(0,48,135,0.06); }
+.budget-row:nth-child(even) { background: rgba(30,48,112,0.03); }
+.budget-row:hover td { background: rgba(30,48,112,0.06); }
 
 .budget-td {
   padding: 4px 10px;
@@ -1065,35 +1065,35 @@
   color: #333;
   vertical-align: middle;
 }
-.budget-td.cat { text-align: left; color: #003087; }
+.budget-td.cat { text-align: left; color: #1e3070; }
 .budget-td.num { text-align: right; }
 .budget-td.del-col { text-align: center; width: 28px; }
 
 .budget-cell-val { cursor: pointer; }
-.budget-cell-val:hover { color: #003087; }
+.budget-cell-val:hover { color: #1e3070; }
 .budget-empty { color: #ccc; }
 
 .budget-input {
   width: 80px;
   padding: 2px 5px;
-  border: 1px solid #003087;
+  border: 1px solid #1e3070;
   border-radius: 3px;
   font-size: 12px;
   text-align: right;
   outline: none;
 }
 
-.total-val { color: #003087; font-size: 12px; }
+.total-val { color: #1e3070; font-size: 12px; }
 
 .budget-net-row td {
-  background: #003087;
-  color: #d9e8f5;
+  background: #1e3070;
+  color: #dce6f5;
   font-weight: 700;
   font-size: 12px;
   padding: 6px 10px;
   border-top: 2px solid #000;
 }
-.budget-net-row .budget-td.cat { color: #d9e8f5; text-align: left; }
+.budget-net-row .budget-td.cat { color: #dce6f5; text-align: left; }
 .budget-net-row .net-val { text-align: right; }
 
 .budget-add-row-tr td { padding: 4px 12px; }
@@ -1103,7 +1103,7 @@
   cursor: pointer;
   transition: color 0.12s;
 }
-.budget-add-cat:hover { color: #003087; }
+.budget-add-cat:hover { color: #1e3070; }
 .budget-new-input {
   padding: 4px 7px;
   border: 1px solid #ddd;
@@ -1111,7 +1111,7 @@
   font-size: 12px;
   outline: none;
 }
-.budget-new-input:focus { border-color: #003087; }
+.budget-new-input:focus { border-color: #1e3070; }
 .budget-del {
   color: #ccc;
   font-size: 15px;
@@ -1156,7 +1156,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   padding: 8px 14px;
   font-size: 13px;
@@ -1173,11 +1173,11 @@
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #003087;
+  color: #1e3070;
   padding: 10px 0 4px;
 }
 
-.laundry-table tbody:first-of-type .laundry-section-title { color: #003087; }
+.laundry-table tbody:first-of-type .laundry-section-title { color: #1e3070; }
 .laundry-table tbody:last-of-type  .laundry-section-title { color: #c77b3a; }
 
 .laundry-table {

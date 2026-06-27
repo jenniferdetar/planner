@@ -29,15 +29,15 @@ const TAB_CATEGORY = {
 }
 
 const ALL_TABS = [
-  { key: 'csea',        label: 'CSEA',         color: '#003087', nav: true },
+  { key: 'csea',        label: 'CSEA',         color: '#1e3070', nav: true },
   { key: 'finance',     label: 'Finance',      color: '#1e5799', nav: true },
-  { key: 'gcu',         label: 'GCU',          color: '#003087', nav: true },
+  { key: 'gcu',         label: 'GCU',          color: '#1e3070', nav: true },
   { key: 'hoa',         label: 'HOA',          color: '#1e5799', nav: true },
-  { key: 'icaap',       label: 'iCAAP',        color: '#003087', nav: true },
+  { key: 'icaap',       label: 'iCAAP',        color: '#1e3070', nav: true },
   { key: 'master-tasks',label: 'Master Tasks', color: '#1e5799' },
-  { key: 'matrix',      label: 'Matrix',       color: '#003087', nav: true },
+  { key: 'matrix',      label: 'Matrix',       color: '#1e3070', nav: true },
   { key: 'personal',    label: 'Personal',     color: '#1e5799', nav: true },
-  { key: 'wywo',        label: 'WYWO',         color: '#003087', nav: true },
+  { key: 'wywo',        label: 'WYWO',         color: '#1e3070', nav: true },
 ]
 
 const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks'])

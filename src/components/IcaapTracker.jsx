@@ -1576,7 +1576,7 @@ const PAYROLL_ROWS = [
 ]
 
 const AREA_COLORS = {
-  'Cert & Class Off-cycles': '#7b5ea7',
+  'Cert & Class Off-cycles': '#1e3070',
   'Semi-Monthly':            '#3a6a9a',
   'Classified':              '#3a5c4a',
   'Certificated':            '#7a4a28',

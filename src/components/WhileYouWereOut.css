@@ -24,8 +24,8 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: #003087;
-  border: 1px solid #003087;
+  background: #1e3070;
+  border: 1px solid #1e3070;
   border-radius: 8px;
   list-style: none;
   margin: 0;
@@ -43,7 +43,7 @@
   transition: background 0.1s;
 }
 
-.wywo-suggestion:hover { background: #003087; }
+.wywo-suggestion:hover { background: #1e3070; }
 
 .wywo-sug-name {
   font-size: 13px;
@@ -65,8 +65,8 @@
 }
 
 .wywo-tab {
-  background: #003087;
-  border: 1px solid #003087;
+  background: #1e3070;
+  border: 1px solid #1e3070;
   color: #a0988e;
   padding: 7px 16px;
   border-radius: 8px;
@@ -323,8 +323,8 @@
 .wywo-submit:hover { background: #cc0000; }
 
 .wywo-print-btn {
-  background: #003087;
-  border: 1px solid #003087;
+  background: #1e3070;
+  border: 1px solid #1e3070;
   color: #e8e4d8;
   padding: 10px 16px;
   border-radius: 6px;
@@ -335,7 +335,7 @@
   transition: background 0.15s;
 }
 
-.wywo-print-btn:hover { background: #003087; }
+.wywo-print-btn:hover { background: #1e3070; }
 
 /* LOG */
 .wywo-log { max-width: 700px; }
@@ -357,7 +357,7 @@
 .wywo-link {
   background: none;
   border: none;
-  color: #003087;
+  color: #1e3070;
   cursor: pointer;
   font-size: 14px;
   text-decoration: underline;

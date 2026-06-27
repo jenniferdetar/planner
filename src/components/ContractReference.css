@@ -11,7 +11,7 @@
 .cref-header {
   padding: 14px 14px 10px;
   border-bottom: 1px solid #d9e8f0;
-  background: #003087;
+  background: #1e3070;
   flex-shrink: 0;
 }
 
@@ -59,12 +59,12 @@
   border-radius: 6px;
   background: rgba(255,255,255,0.12);
   color: #fff;
-  color: #003087;
+  color: #1e3070;
   font-family: 'Nunito', sans-serif;
   outline: none;
   transition: border-color 0.15s;
 }
-.cref-search:focus { border-color: #003087; }
+.cref-search:focus { border-color: #1e3070; }
 
 .cref-cat-filter {
   padding: 6px 7px;
@@ -73,18 +73,18 @@
   border-radius: 6px;
   background: rgba(255,255,255,0.12);
   color: #fff;
-  color: #003087;
+  color: #1e3070;
   font-family: 'Nunito', sans-serif;
   cursor: pointer;
   outline: none;
   min-width: 100px;
 }
-.cref-cat-filter:focus { border-color: #003087; }
+.cref-cat-filter:focus { border-color: #1e3070; }
 
 /* ── Form wrap ── */
 .cref-form-wrap {
   border-bottom: 1px solid #d9e8f0;
-  background: #d9e8f5;
+  background: #dce6f5;
   flex-shrink: 0;
   padding: 10px 14px;
   overflow-y: auto;
@@ -119,7 +119,7 @@
   border: 1px solid #d8d5ce;
   border-radius: 5px;
   background: #fff;
-  color: #003087;
+  color: #1e3070;
   font-family: 'Nunito', sans-serif;
   outline: none;
   resize: vertical;
@@ -127,7 +127,7 @@
 }
 .cref-form-row input:focus,
 .cref-form-row select:focus,
-.cref-form-row textarea:focus { border-color: #003087; }
+.cref-form-row textarea:focus { border-color: #1e3070; }
 
 .cref-form-2col {
   display: grid;
@@ -144,7 +144,7 @@
   padding: 5px 14px;
   font-size: 11px;
   font-weight: 700;
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -152,7 +152,7 @@
   font-family: 'Nunito', sans-serif;
   transition: background 0.15s;
 }
-.cref-save-btn:hover { background: #003087; }
+.cref-save-btn:hover { background: #1e3070; }
 
 .cref-cancel-btn {
   padding: 5px 12px;
@@ -225,7 +225,7 @@
   padding: 7px 18px;
   font-size: 11px;
   font-weight: 700;
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -233,7 +233,7 @@
   font-family: 'Nunito', sans-serif;
   transition: background 0.15s;
 }
-.cref-seed-btn:hover:not(:disabled) { background: #003087; }
+.cref-seed-btn:hover:not(:disabled) { background: #1e3070; }
 .cref-seed-btn:disabled { opacity: 0.6; cursor: default; }
 
 /* ── Pill ── */
@@ -244,7 +244,7 @@
   padding: 5px 10px 5px 7px;
   border-radius: 20px;
   border: 1.5px solid #cc0000;
-  background: #003087;
+  background: #1e3070;
   cursor: pointer;
   font-family: 'Nunito', sans-serif;
   transition: all 0.15s;
@@ -313,7 +313,7 @@
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   padding: 2px 7px;
   border-radius: 12px;
@@ -323,8 +323,8 @@
 .cref-art-badge {
   font-size: 9px;
   font-weight: 700;
-  background: #d9e8f5;
-  color: #003087;
+  background: #dce6f5;
+  color: #1e3070;
   padding: 2px 7px;
   border-radius: 12px;
   white-space: nowrap;
@@ -345,7 +345,7 @@
 .cref-detail-title {
   font-size: 13px;
   font-weight: 800;
-  color: #003087;
+  color: #1e3070;
   margin: 0 0 8px;
   line-height: 1.3;
 }
@@ -379,7 +379,7 @@
   padding: 4px 11px;
   font-size: 10px;
   font-weight: 700;
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -387,7 +387,7 @@
   font-family: 'Nunito', sans-serif;
   transition: background 0.15s;
 }
-.cref-copy-btn:hover { background: #003087; }
+.cref-copy-btn:hover { background: #1e3070; }
 
 .cref-edit-btn {
   padding: 4px 11px;
@@ -401,7 +401,7 @@
   font-family: 'Nunito', sans-serif;
   transition: all 0.15s;
 }
-.cref-edit-btn:hover { border-color: #003087; color: #003087; }
+.cref-edit-btn:hover { border-color: #1e3070; color: #1e3070; }
 
 .cref-del-btn {
   padding: 4px 9px;

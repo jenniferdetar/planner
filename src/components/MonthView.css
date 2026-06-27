@@ -13,8 +13,8 @@
   justify-content: center;
   gap: 20px;
   padding: 18px 32px 12px;
-  background: #003087;
-  border-bottom: 2px solid #001040;
+  background: #1e3070;
+  border-bottom: 2px solid #0d1a40;
   flex-shrink: 0;
 }
 
@@ -109,8 +109,8 @@
 }
 
 .month-cell.selected {
-  background: #d9e8f5;
-  outline: 2px solid #003087;
+  background: #dce6f5;
+  outline: 2px solid #1e3070;
   outline-offset: -2px;
 }
 
@@ -129,7 +129,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #003087;
+  background: #1e3070;
   color: #fff;
   font-weight: 700;
   font-size: 12px;
@@ -152,7 +152,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  background: #003087;
+  background: #1e3070;
   border-radius: 3px;
   transition: width 0.3s;
 }
