@@ -194,17 +194,24 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: 0;
 }
 .hoa-empty {
   color: #aaa;
   font-size: 12px;
   text-align: center;
   padding: 32px 16px;
+  grid-column: 1 / -1;
 }
 
 .hoa-item {
   border-bottom: 1px solid #eef2f7;
+  border-right: 1px solid #eef2f7;
 }
+.hoa-item:nth-child(even) { border-right: none; }
 .hoa-item-main {
   display: flex;
   align-items: center;
