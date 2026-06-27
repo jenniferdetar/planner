@@ -29,8 +29,8 @@
   justify-content: center;
   border-radius: 4px 4px 0 0;
 }
-.em-col-header.urgent     { color: #1e3070; background: rgba(30,48,112,0.08); }
-.em-col-header.not-urgent { color: #1e3070; background: rgba(30,48,112,0.07); }
+.em-col-header.urgent     { color: #fff; background: #1e3070; }
+.em-col-header.not-urgent { color: #fff; background: #1e3070; }
 
 .em-row-header {
   font-size: 8px;
@@ -45,13 +45,13 @@
   transform: rotate(180deg);
   border-radius: 0 4px 4px 0;
 }
-.em-row-header.important     { color: #1e3070; background: rgba(30,48,112,0.07); }
-.em-row-header.not-important { color: #1e3070; background: rgba(30,48,112,0.07); }
+.em-row-header.important     { color: #fff; background: #1e3070; }
+.em-row-header.not-important { color: #fff; background: #1e3070; }
 
 /* ── Quadrant cell ─────────────────────────────────────────────────────── */
 .em-quadrant {
-  background: var(--qbg);
-  border: 1.5px solid color-mix(in srgb, var(--qc) 20%, transparent);
+  background: #fff;
+  border: 1.5px solid rgba(30,48,112,0.15);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -64,9 +64,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 8px 4px;
-  border-bottom: 1px solid color-mix(in srgb, var(--qc) 15%, transparent);
-  background: color-mix(in srgb, var(--qc) 8%, white);
+  padding: 6px 10px 5px;
+  
+  background: #1e3070;
   flex-shrink: 0;
 }
 
@@ -75,14 +75,14 @@
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: var(--qc);
+  color: #fff;
 }
 
 .em-q-count {
   font-size: 10px;
   font-weight: 700;
-  color: var(--qc);
-  background: color-mix(in srgb, var(--qc) 12%, transparent);
+  color: #fff;
+  background: #ffb81c;
   border-radius: 10px;
   padding: 0 6px;
   min-width: 18px;
@@ -115,7 +115,7 @@
   border-radius: 4px;
   position: relative;
 }
-.em-task-row:hover { background: color-mix(in srgb, var(--qc, #888) 8%, transparent); }
+.em-task-row:hover { background: rgba(30,48,112,0.05); }
 
 .em-task-title {
   flex: 1;
@@ -216,8 +216,8 @@
   font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.3px;
-  color: var(--qc);
-  background: color-mix(in srgb, var(--qc) 8%, white);
+  color: #fff;
+  background: #1e3070;
   border: 1px solid color-mix(in srgb, var(--qc) 25%, transparent);
   border-radius: 4px;
   padding: 2px 5px;
