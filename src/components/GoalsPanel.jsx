@@ -58,8 +58,8 @@ export default function GoalsPanel({ userId, section = 'all' }) {
           <h3 className="goals-title">My Personal Goals</h3>
         </div>
         <div className="goals-grid">
-          {orderedCategories.map(category => {
-            const color = CATEGORY_COLORS[category] || '#4a7a6a'
+          {orderedCategories.map((category, idx) => {
+            const color = idx % 2 === 0 ? '#003087' : '#ffb81c'
             const goals = byCategory[category] || []
             return (
               <div key={category} className="goal-card">
