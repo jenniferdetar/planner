@@ -236,7 +236,6 @@ select:focus {
 .goals-title    { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
 .goal-card      { background: var(--pt-bg-card) !important; border-color: var(--pt-border) !important; }
 .goal-card-header { border-bottom-color: var(--pt-border) !important; }
-.goal-card-title { color: var(--pt-text) !important; }
 
 /* ─── WYWO panel ─────────────────────────────────────────────────────────── */
 .wywo-wrap      { background: var(--pt-bg) !important; color: var(--pt-text) !important; }
