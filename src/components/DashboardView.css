@@ -715,6 +715,17 @@
     background: currentColor;
     margin-bottom: 1px;
   }
+
+  .dash-mobile-logout-btn {
+    flex: 0 0 auto;
+    min-width: 52px;
+    border-left: 1px solid rgba(255,255,255,0.08);
+    color: rgba(224,92,92,0.6);
+  }
+
+  .dash-mobile-logout-btn:hover {
+    color: #e05c5c;
+  }
 }
 
 @media (min-width: 769px) {
