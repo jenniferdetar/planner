@@ -128,7 +128,7 @@ select {
   background: rgba(255,255,255,0.7) !important;
   border-color: var(--pt-border) !important;
   color: var(--pt-text) !important;
-  font-family: 'Georgia', serif !important;
+  font-family: 'Architects Daughter', cursive !important;
 }
 input::placeholder,
 textarea::placeholder {
@@ -149,7 +149,7 @@ select:focus {
 .section-panel-textarea {
   background: var(--pt-line), var(--pt-bg) !important;
   color: var(--pt-text) !important;
-  font-family: 'Georgia', serif !important;
+  font-family: 'Architects Daughter', cursive !important;
   line-height: 28px !important;
   border-color: transparent !important;
 }
@@ -167,7 +167,7 @@ select:focus {
 }
 .section-preview {
   background: var(--pt-line), var(--pt-bg) !important;
-  font-family: 'Georgia', serif !important;
+  font-family: 'Architects Daughter', cursive !important;
   color: var(--pt-text) !important;
 }
 
