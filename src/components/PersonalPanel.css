@@ -11,9 +11,13 @@
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
-  border-bottom: 2px solid #d9e8f0;
-  background: #faf8f2;
+  background: #1a4a8a;
+  border-bottom: 2px solid #001040;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+
+.personal-inline-tabs::-webkit-scrollbar { display: none; }
 
 .personal-inline-tab {
   flex: 1;
@@ -24,19 +28,20 @@
   text-transform: uppercase;
   background: none;
   border: none;
-  border-bottom: 3px solid transparent;
-  color: #888;
+  border-bottom: 2px solid transparent;
+  color: rgba(255,255,255,0.55);
   cursor: pointer;
+  white-space: nowrap;
   transition: color 0.15s, border-color 0.15s;
 }
 
 .personal-inline-tab.active {
-  color: var(--itab-color);
-  border-bottom-color: var(--itab-color);
+  color: #fff;
+  border-bottom-color: #ffb81c;
 }
 
 .personal-inline-tab:hover:not(.active) {
-  color: #555;
+  color: #fff;
 }
 
 .personal-sub-tabs {
@@ -99,35 +104,32 @@
 
 .personal-sub-tabs {
   display: flex;
-  gap: 8px;
-  padding: 8px 12px;
-  background: #f5f7fa;
-  border-bottom: 1px solid #d9e8f0;
+  gap: 0;
+  padding: 0;
+  background: #1a4a8a;
+  border-bottom: 2px solid #001040;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
+.personal-sub-tabs::-webkit-scrollbar { display: none; }
+
 .personal-sub-tab {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   padding: 6px 14px;
-  color: #fff;
-  border-radius: 20px;
+  color: rgba(255,255,255,0.55);
+  background: none;
   border: none;
-  transition: all 0.15s;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
   cursor: pointer;
-  opacity: 0.55;
+  white-space: nowrap;
   font-family: 'Nunito', sans-serif !important;
 }
 
-.personal-sub-tab:hover { opacity: 0.8; }
-.personal-sub-tab.active { opacity: 1; }
-
-.personal-sub-tab:nth-child(1) { background: #1a4a8a; }
-.personal-sub-tab:nth-child(2) { background: #1a4a8a; }
-.personal-sub-tab:nth-child(3) { background: #1a4a8a; }
-.personal-sub-tab:nth-child(4) { background: #003087; }
-
-.personal-sub-tab:nth-child(5) { background: #1a4a8a; }
-.personal-sub-tab:nth-child(6) { background: #1a4a8a; }
+.personal-sub-tab:hover { color: #fff; }
+.personal-sub-tab.active { color: #fff; border-bottom-color: #ffb81c; }
 
 .personal-body {
   flex: 1;

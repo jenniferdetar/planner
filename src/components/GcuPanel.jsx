@@ -72,7 +72,7 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
         <div className="gcu-title-row">
           <div>
             <h2 className="gcu-title">MPA – Government &amp; Policy</h2>
-            <p className="gcu-subtitle">Grand Canyon University · College of Humanities and Social Sciences · <a href="https://newportal.gcu.edu/#!/dashboard" target="_blank" rel="noreferrer" style={{ color: '#f0c070' }}>Student Portal</a></p>
+            <p className="gcu-subtitle">Grand Canyon University · College of Humanities and Social Sciences · <a href="https://newportal.gcu.edu/#!/dashboard" target="_blank" rel="noreferrer" style={{ color: '#ffb81c' }}>Student Portal</a></p>
           </div>
           <button
             className={`gcu-asana-btn ${pushing ? 'pushing' : ''}`}
