@@ -121,7 +121,6 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
 
       {(section === 'all' || section === 'checklist') && (
         <div className="checklist-section">
-          <h3 className="checklist-title">Monthly Checklist</h3>
           <table className="checklist-table">
             <thead>
               <tr>
