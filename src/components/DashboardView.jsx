@@ -443,7 +443,7 @@ export default function DashboardView({
                 return (
                   <div key={cat} className="dash-card">
                     <div className="dash-card-header" style={{ borderBottomColor: color }}>
-                      <span className="dash-card-title" style={{ color }}>{cat}</span>
+                      <span className="dash-card-title">{cat}</span>
                       <span className="dash-badge">{tasks.length}</span>
                     </div>
                     {tasks.map(t => (
