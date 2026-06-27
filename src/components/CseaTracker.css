@@ -70,36 +70,40 @@
 /* ── Tabs ──────────────────────────────────────────────────────────────── */
 .csea-tabs {
   display: flex;
-  background: var(--csea-blue);
-  border-bottom: none;
+  background: #1a4a8a;
+  border-bottom: 2px solid #001040;
   flex-shrink: 0;
-  padding: 6px 10px;
-  gap: 6px;
+  padding: 6px 10px 0;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+
+.csea-tabs::-webkit-scrollbar { display: none; }
 
 .csea-tab {
   flex: 1;
-  padding: 6px 4px;
+  padding: 5px 8px;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.6px;
-  color: rgba(255,255,255,0.65);
-  transition: all 0.15s;
+  color: rgba(255,255,255,0.55);
+  transition: color 0.15s, border-color 0.15s;
   cursor: pointer;
-  border-radius: 4px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.08);
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
   text-align: center;
   text-transform: uppercase;
+  white-space: nowrap;
   font-family: 'Open Sans', sans-serif;
 }
 
-.csea-tab:hover { color: #fff; background: rgba(255,255,255,0.15); }
+.csea-tab:hover { color: #fff; }
 
 .csea-tab.active {
-  background: var(--csea-yellow);
-  color: var(--csea-blue);
-  border-color: var(--csea-yellow);
+  color: #fff;
+  border-bottom-color: var(--csea-yellow);
   font-weight: 800;
 }
 
