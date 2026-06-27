@@ -148,18 +148,20 @@ function CourseGroup({ label, courses, statuses, grades, expanded, onToggle, onC
                 <span className="gcu-course-name">{course.name}</span>
                 {course.end && <span className="gcu-course-due"><span className="gcu-due-label">Due</span> {course.end}</span>}
               </div>
-              <input
-                className="gcu-grade-input"
-                type="text"
-                value={grades[course.code]}
-                onChange={e => onGrade(course.code, e.target.value)}
-                onClick={e => e.stopPropagation()}
-                placeholder="Grade"
-                maxLength={6}
-              />
-              <span className="gcu-credits">{course.credits} cr</span>
-              <span className="gcu-status-label" style={{ color: STATUS_COLORS[status] }}>{status}</span>
-              <span className="gcu-chevron">{isOpen ? '▲' : '▾'}</span>
+              <div className="gcu-controls">
+                <input
+                  className="gcu-grade-input"
+                  type="text"
+                  value={grades[course.code]}
+                  onChange={e => onGrade(course.code, e.target.value)}
+                  onClick={e => e.stopPropagation()}
+                  placeholder="Grade"
+                  maxLength={6}
+                />
+                <span className="gcu-credits">{course.credits} cr</span>
+                <span className="gcu-status-label" style={{ color: STATUS_COLORS[status] }}>{status}</span>
+                <span className="gcu-chevron">{isOpen ? '▲' : '▾'}</span>
+              </div>
             </div>
             {isOpen && (
               <div className="gcu-course-desc">{course.description}</div>
