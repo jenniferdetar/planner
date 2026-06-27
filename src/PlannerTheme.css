@@ -233,7 +233,7 @@ select:focus {
 
 /* ─── Goals panel ────────────────────────────────────────────────────────── */
 .goals-panel    { background: var(--pt-bg) !important; }
-.goals-title    { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
+.goals-title    { font-family: 'Georgia', serif !important; }
 .goal-card      { background: var(--pt-bg-card) !important; border-color: var(--pt-border) !important; }
 .goal-card-header { border-bottom-color: var(--pt-border) !important; }
 
