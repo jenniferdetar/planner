@@ -635,6 +635,39 @@
     font-size: 18px;
   }
 
+  /* Single-column today grid */
+  .dash-today-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Schedule form: title on its own row, times + Add on second row */
+  .dash-block-add-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .dash-block-add-form .dash-add-input {
+    grid-column: 1 / -1;
+  }
+
+  .dash-block-time-input {
+    width: auto;
+  }
+
+  /* Tighter schedule event rows */
+  .dash-block-time {
+    min-width: 72px;
+    font-size: 10px;
+  }
+
+  .dash-block-title {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
   /* Bottom nav */
   .dash-mobile-nav {
     position: fixed;
@@ -652,7 +685,7 @@
 
   .dash-mobile-nav-btn {
     flex: 1;
-    min-width: 52px;
+    min-width: 44px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -663,10 +696,11 @@
     font-weight: 600;
     letter-spacing: 0.4px;
     text-transform: uppercase;
+    white-space: nowrap;
     cursor: pointer;
     border: none;
     background: none;
-    padding: 6px 2px;
+    padding: 6px 4px;
     transition: color 0.15s;
   }
 
