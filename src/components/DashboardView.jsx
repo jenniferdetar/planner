@@ -582,6 +582,10 @@ export default function DashboardView({
             {item.mobileLabel || item.label}
           </button>
         ))}
+        <button className="dash-mobile-nav-btn dash-mobile-logout-btn" onClick={onSignOut}>
+          <span className="dash-mobile-nav-dot" style={{ background: '#e05c5c' }} />
+          Logout
+        </button>
       </nav>
     </div>
   )
