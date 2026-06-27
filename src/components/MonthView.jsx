@@ -3,7 +3,7 @@ import './MonthView.css'
 import { sameDay, toDateStr } from '../utils/dateUtils'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
-const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 
 const DAY_COLORS = [
   '#e8a0a0', // Sunday   – rose
