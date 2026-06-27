@@ -88,58 +88,7 @@
 .month-cell-num    { color: var(--pt-text) !important; }
 .month-cell.other-month .month-cell-num { color: var(--pt-text-muted) !important; }
 
-/* ─── Stat bars (CSEA / iCAAP / Finance) ────────────────────────────────── */
-.csea-stats,
-.icaap-stats,
-.fin-summary {
-  background: var(--pt-bg-alt) !important;
-  border-bottom: 1px solid var(--pt-border) !important;
-}
-.csea-stat,
-.icaap-stat,
-.fin-stat {
-  border-color: var(--pt-border-lt) !important;
-}
-.csea-stat-num,
-.icaap-stat-num,
-.fin-stat-num {
-  color: var(--pt-text) !important;
-  font-family: 'Georgia', serif !important;
-}
-.csea-stat-lbl,
-.icaap-stat-lbl,
-.fin-stat-lbl {
-  color: var(--pt-text-muted) !important;
-}
 
-/* ─── Tab strips (CSEA / iCAAP / Finance / Library / Personal) ──────────── */
-.csea-tabs,
-.icaap-tabs,
-.fin-tabs,
-.library-shelf-tabs,
-.personal-sub-tabs {
-  background: var(--pt-bg-alt) !important;
-  border-bottom: 1px solid var(--pt-border) !important;
-}
-
-.csea-tab,
-.icaap-tab,
-.fin-tab,
-.shelf-tab,
-.personal-sub-tab {
-  color: var(--pt-text-muted) !important;
-  background: transparent !important;
-}
-
-.csea-tab.active,
-.icaap-tab.active,
-.fin-tab.active,
-.shelf-tab.active,
-.personal-sub-tab.active {
-  color: var(--pt-accent) !important;
-  border-color: var(--pt-accent) !important;
-  background: rgba(26,74,138,0.08) !important;
-}
 
 /* ─── Tables and list rows ───────────────────────────────────────────────── */
 .csea-issue-row,
@@ -256,21 +205,10 @@ select:focus {
 
 /* ─── Library ────────────────────────────────────────────────────────────── */
 .library-panel  { background: var(--pt-bg) !important; }
-.library-header {
-  background: var(--pt-bg-alt) !important;
-  border-bottom-color: var(--pt-border) !important;
-}
-.library-title    { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
-.library-subtitle { color: var(--pt-text-muted) !important; }
 
 
 /* ─── Personal panel ─────────────────────────────────────────────────────── */
 .personal-panel  { background: var(--pt-bg) !important; }
-.personal-header {
-  background: var(--pt-bg-alt) !important;
-  border-color: var(--pt-border) !important;
-}
-.personal-title  { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
 
 /* ─── Finance panel ──────────────────────────────────────────────────────── */
 .fin-panel      { background: var(--pt-bg) !important; }
@@ -288,20 +226,10 @@ select:focus {
 /* ─── CSEA panel ─────────────────────────────────────────────────────────── */
 .csea-tracker   { background: var(--pt-bg) !important; }
 .csea-body      { background: var(--pt-bg) !important; }
-.csea-section-header {
-  background: var(--pt-bg-alt) !important;
-  border-color: var(--pt-border) !important;
-  color: var(--pt-text) !important;
-}
 
 /* ─── iCAAP panel ────────────────────────────────────────────────────────── */
 .icaap-tracker  { background: var(--pt-bg) !important; }
 .icaap-body     { background: var(--pt-bg) !important; }
-.icaap-section-header {
-  background: var(--pt-bg-alt) !important;
-  border-color: var(--pt-border) !important;
-  color: var(--pt-text) !important;
-}
 
 /* ─── Goals panel ────────────────────────────────────────────────────────── */
 .goals-panel    { background: var(--pt-bg) !important; }
