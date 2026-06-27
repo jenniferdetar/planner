@@ -740,8 +740,6 @@
 .fin-goal:nth-child(odd)  { border-left: 3px solid #1a4a8a; }
 .fin-goal:nth-child(even) { border-left: 3px solid #003087; }
 
-.fin-tab { font-family: 'Nunito', sans-serif !important; }
-
 /* ── Goal Cards ── */
 .fin-goals-grid {
   padding: 8px 10px;

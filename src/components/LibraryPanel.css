@@ -78,10 +78,6 @@
   margin-right: 4px;
 }
 
-.want-to-read-tab.active {
-  color: #003087;
-  border-bottom: 2px solid #ffb81c;
-}
 
 .shelf-badge {
   background: rgba(255,184,28,0.25);
