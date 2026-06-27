@@ -76,21 +76,8 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
         ))}
       </div>
 
-      {visibleFramework.length > 1 && (
-        <div className="personal-framework-strip">
-          {visibleFramework.map((f, i) => (
-            <span key={f.key} className="personal-framework-flow">
-              <button
-                className={`pfw-btn ${subTab === f.key ? 'active' : ''}`}
-                onClick={() => handleSubTabChange(f.key)}
-              >{f.label}</button>
-              {i < visibleFramework.length - 1 && <span className="pfw-arrow">→</span>}
-            </span>
-          ))}
-        </div>
-      )}
 
-      {subTab === 'goals' && <GoalsPanel userId={userId} section="goals" roles={roles} />}
+{subTab === 'goals' && <GoalsPanel userId={userId} section="goals" roles={roles} />}
       {subTab === 'roles' && <RolesPanel userId={userId} roles={roles} />}
       {subTab === 'checklist' && <GoalsPanel userId={userId} section="checklist" roles={roles} />}
       {subTab === 'library' && (
