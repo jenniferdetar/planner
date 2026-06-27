@@ -151,12 +151,12 @@
 
 .mini-cell.today {
   background: rgba(201, 169, 110, 0.18);
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 700;
 }
 
 .mini-cell.selected {
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   font-weight: 700;
 }
@@ -216,7 +216,7 @@
 }
 
 .today-badge {
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -227,17 +227,17 @@
 
 .today-btn {
   font-size: 12px;
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 600;
   padding: 6px 12px;
-  border: 1px solid #1a4a8a;
+  border: 1px solid #003087;
   border-radius: 6px;
   transition: all 0.15s;
   cursor: pointer;
 }
 
 .today-btn:hover {
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
 }
 
@@ -282,13 +282,13 @@
 .view-tab:hover { opacity: 0.8; }
 .view-tab.active { opacity: 1; }
 
-.view-tab[data-v="month"]   { background: #1a4a8a; }
-.view-tab[data-v="week"]    { background: #1a4a8a; }
-.view-tab[data-v="csea"]    { background: #1a4a8a; }
+.view-tab[data-v="month"]   { background: #003087; }
+.view-tab[data-v="week"]    { background: #003087; }
+.view-tab[data-v="csea"]    { background: #003087; }
 .view-tab[data-v="finance"] { background: #003087; color: #fff; }
-.view-tab[data-v="gcu"]     { background: #1a4a8a; }
-.view-tab[data-v="icaap"]   { background: #1a4a8a; }
-.view-tab[data-v="personal"]{ background: #1a4a8a; }
+.view-tab[data-v="gcu"]     { background: #003087; }
+.view-tab[data-v="icaap"]   { background: #003087; }
+.view-tab[data-v="personal"]{ background: #003087; }
 
 .planner-body {
   flex: 1;
@@ -324,19 +324,19 @@
 
 .gcal-reconnect-inline {
   font-size: 11px;
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid rgba(26,74,138,0.35);
+  border: 1px solid rgba(0,48,135,0.35);
   padding: 3px 10px;
   border-radius: 20px;
-  background: rgba(26,74,138,0.08);
+  background: rgba(0,48,135,0.08);
   transition: all 0.15s;
 }
 
 .gcal-reconnect-inline:hover {
-  background: rgba(26,74,138,0.18);
-  border-color: rgba(26,74,138,0.6);
+  background: rgba(0,48,135,0.18);
+  border-color: rgba(0,48,135,0.6);
 }
 
 .gcal-empty-state {
@@ -360,7 +360,7 @@
   font-size: 12px;
   font-weight: 700;
   color: #fff;
-  background: #1a4a8a;
+  background: #003087;
   border: none;
   padding: 7px 14px;
   border-radius: 20px;
@@ -369,7 +369,7 @@
 }
 
 .gcal-empty-state button:hover {
-  background: #1a4a8a;
+  background: #003087;
 }
 
 .daily-task-list {
@@ -442,8 +442,8 @@ a.asana-title:hover {
 }
 
 .asana-circle.checked {
-  background: #1a4a8a;
-  border-color: #1a4a8a;
+  background: #003087;
+  border-color: #003087;
 }
 
 .asana-circle.checked::after {
@@ -506,7 +506,7 @@ a.asana-title:hover {
 }
 
 .asana-delete-btn:hover { color: #cc0000; }
-.asana-notes-btn:hover  { color: #1a4a8a; }
+.asana-notes-btn:hover  { color: #003087; }
 
 .check-box {
   width: 16px;
@@ -525,8 +525,8 @@ a.asana-title:hover {
 
 .task-project {
   font-size: 10px;
-  background: rgba(26,74,138, 0.12);
-  color: #1a4a8a;
+  background: rgba(0,48,135, 0.12);
+  color: #003087;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
@@ -552,7 +552,7 @@ a.asana-title:hover {
 }
 
 .task-notes-input:focus {
-  border-color: #1a4a8a;
+  border-color: #003087;
   background-color: #fffde6;
 }
 
@@ -647,7 +647,7 @@ a.asana-title:hover {
 }
 
 .add-daily-task-btn:hover {
-  color: #1a4a8a;
+  color: #003087;
 }
 
 /* Schedule */
@@ -668,7 +668,7 @@ a.asana-title:hover {
 }
 
 .time-row.current-hour .hour-label {
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 600;
 }
 
@@ -849,7 +849,7 @@ a.asana-title:hover {
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  background: #1a4a8a;
+  background: #003087;
   padding: 3px 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -882,7 +882,7 @@ a.asana-title:hover {
 }
 
 .add-block-btn:hover {
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
 }
 
@@ -917,14 +917,14 @@ a.asana-title:hover {
 }
 
 .task-hub-filter-btn:hover {
-  border-color: #1a4a8a;
-  color: #1a4a8a;
+  border-color: #003087;
+  color: #003087;
 }
 
 .task-hub-filter-btn.active {
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
-  border-color: #1a4a8a;
+  border-color: #003087;
   font-weight: 700;
 }
 
@@ -987,8 +987,8 @@ a.asana-title:hover {
 
 .task-hub-area-tag {
   font-size: 9px;
-  background: rgba(26,74,138,0.12);
-  color: #1a4a8a;
+  background: rgba(0,48,135,0.12);
+  color: #003087;
   padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
@@ -1283,7 +1283,7 @@ a.asana-title:hover {
 }
 
 .section-preview-table th {
-  background: var(--ac, #1a4a8a);
+  background: var(--ac, #003087);
   color: white;
   padding: 8px 16px;
   text-align: left;
@@ -1318,6 +1318,6 @@ a.asana-title:hover {
 }
 
 .section-preview-btn.active {
-  background: var(--ac, #1a4a8a);
+  background: var(--ac, #003087);
   color: white;
 }

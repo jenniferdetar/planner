@@ -64,7 +64,7 @@
   outline: none;
   transition: border-color 0.15s;
 }
-.cref-search:focus { border-color: #1a4a8a; }
+.cref-search:focus { border-color: #003087; }
 
 .cref-cat-filter {
   padding: 6px 7px;
@@ -79,7 +79,7 @@
   outline: none;
   min-width: 100px;
 }
-.cref-cat-filter:focus { border-color: #1a4a8a; }
+.cref-cat-filter:focus { border-color: #003087; }
 
 /* ── Form wrap ── */
 .cref-form-wrap {
@@ -127,7 +127,7 @@
 }
 .cref-form-row input:focus,
 .cref-form-row select:focus,
-.cref-form-row textarea:focus { border-color: #1a4a8a; }
+.cref-form-row textarea:focus { border-color: #003087; }
 
 .cref-form-2col {
   display: grid;
@@ -144,7 +144,7 @@
   padding: 5px 14px;
   font-size: 11px;
   font-weight: 700;
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -225,7 +225,7 @@
   padding: 7px 18px;
   font-size: 11px;
   font-weight: 700;
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -313,7 +313,7 @@
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   padding: 2px 7px;
   border-radius: 12px;
@@ -324,7 +324,7 @@
   font-size: 9px;
   font-weight: 700;
   background: #d9e8f5;
-  color: #1a4a8a;
+  color: #003087;
   padding: 2px 7px;
   border-radius: 12px;
   white-space: nowrap;
@@ -379,7 +379,7 @@
   padding: 4px 11px;
   font-size: 10px;
   font-weight: 700;
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -401,7 +401,7 @@
   font-family: 'Nunito', sans-serif;
   transition: all 0.15s;
 }
-.cref-edit-btn:hover { border-color: #1a4a8a; color: #1a4a8a; }
+.cref-edit-btn:hover { border-color: #003087; color: #003087; }
 
 .cref-del-btn {
   padding: 4px 9px;

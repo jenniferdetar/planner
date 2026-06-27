@@ -66,7 +66,7 @@
 }
 
 .values-add-input:focus {
-  border-color: #1a4a8a;
+  border-color: #003087;
 }
 
 .values-add-save {
@@ -74,7 +74,7 @@
   font-size: 12px;
   font-weight: 600;
   color: #fff;
-  background: #1a4a8a;
+  background: #003087;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -108,7 +108,7 @@
   gap: 4px;
   padding: 14px 16px;
   border: 1px solid #d9e8f0;
-  border-left: 4px solid var(--val-color, #1a4a8a);
+  border-left: 4px solid var(--val-color, #003087);
   border-radius: 8px;
   background: #faf9f7;
   cursor: pointer;
@@ -135,7 +135,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: var(--val-color, #1a4a8a);
+  color: var(--val-color, #003087);
 }
 
 .values-card-preview {
@@ -238,7 +238,7 @@
 }
 
 .values-name-input:focus {
-  border-bottom-color: #1a4a8a;
+  border-bottom-color: #003087;
 }
 
 .values-color-picker {
@@ -281,7 +281,7 @@
   color: #222;
   background: #fff;
   border: 1px solid #d9e8f0;
-  border-top: 4px solid var(--values-color, #1a4a8a);
+  border-top: 4px solid var(--values-color, #003087);
   border-radius: 8px;
   outline: none;
   resize: none;

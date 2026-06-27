@@ -393,7 +393,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #1a4a8a;
+  background: #003087;
   color: #003087;
   font-size: 13px;
   font-weight: 700;
@@ -446,7 +446,7 @@
 .stat-num {
   font-size: 20px;
   font-weight: 600;
-  color: #1a4a8a;
+  color: #003087;
   line-height: 1;
 }
 
@@ -471,7 +471,7 @@
 }
 
 .asana-badge.syncing {
-  color: #1a4a8a;
+  color: #003087;
   background: rgba(201, 169, 110, 0.15);
 }
 
@@ -559,7 +559,7 @@
   color: rgba(255,255,255,0.85);
 }
 .sidebar-nav-section-label.active {
-  color: #1a4a8a;
+  color: #003087;
 }
 
 .sidebar-nav-item {
@@ -737,7 +737,7 @@
 }
 
 .section-textarea:focus {
-  box-shadow: inset 2px 0 0 var(--ac, #1a4a8a);
+  box-shadow: inset 2px 0 0 var(--ac, #003087);
 }
 
 .journal-panel {
@@ -756,7 +756,7 @@
   background: rgba(160, 120, 90, 0.15);
   border: 1px solid rgba(160, 120, 90, 0.35);
   border-radius: 10px;
-  color: #1a4a8a;
+  color: #003087;
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;

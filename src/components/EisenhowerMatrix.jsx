@@ -3,7 +3,7 @@ import './EisenhowerMatrix.css'
 
 const QUADRANTS = [
   { key: 'q1', label: 'Do First',  color: '#003087', bg: 'rgba(0,48,135,0.05)',   desc: 'Urgent + Important' },
-  { key: 'q2', label: 'Schedule',  color: '#1a4a8a', bg: 'rgba(26,74,138,0.04)',  desc: 'Not Urgent + Important' },
+  { key: 'q2', label: 'Schedule',  color: '#003087', bg: 'rgba(0,48,135,0.04)',  desc: 'Not Urgent + Important' },
   { key: 'q3', label: 'Delegate',  color: '#b8860b', bg: 'rgba(184,134,11,0.06)', desc: 'Urgent + Not Important' },
   { key: 'q4', label: 'Eliminate', color: '#53575a', bg: 'rgba(83,87,90,0.05)',   desc: 'Not Urgent + Not Important' },
 ]

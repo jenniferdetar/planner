@@ -578,7 +578,7 @@ function CoinsTab({ userId }) {
 
 const BUDGET_SECTIONS = [
   { key: 'Income',    label: 'INCOME',             color: '#1a6b2a' },
-  { key: 'Fixed',     label: 'FIXED EXPENSES',     color: '#1a4a8a' },
+  { key: 'Fixed',     label: 'FIXED EXPENSES',     color: '#003087' },
   { key: 'Variable',  label: 'VARIABLE EXPENSES',  color: '#7d3c98' },
   { key: 'Savings',   label: 'SAVINGS & DEBT',     color: '#b34d00' },
 ]

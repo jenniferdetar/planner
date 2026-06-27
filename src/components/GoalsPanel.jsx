@@ -116,7 +116,7 @@ export default function GoalsPanel({ userId, section = 'all' }) {
           </thead>
           <tbody>
             {checklistTasks.map((task, rowIdx) => {
-              const colors = ['#003087','#1a4a8a','#003087','#1a4a8a']
+              const colors = ['#003087','#003087','#003087','#003087']
               const color = colors[rowIdx % colors.length]
               return (
                 <tr key={task.id}>

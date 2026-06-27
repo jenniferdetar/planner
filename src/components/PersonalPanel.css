@@ -11,7 +11,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
-  background: #1a4a8a;
+  background: #003087;
   border-bottom: 2px solid #001040;
   overflow-x: auto;
   scrollbar-width: none;
@@ -100,7 +100,7 @@
 
 .mantra-saved {
   font-size: 11px;
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
@@ -116,7 +116,7 @@
   color: #222222;
   background-color: #fff;
   border: 1px solid #d9e8f0;
-  border-top: 4px solid var(--mantra-color, #1a4a8a);
+  border-top: 4px solid var(--mantra-color, #003087);
   border-radius: 8px;
   outline: none;
   resize: none;
@@ -131,7 +131,7 @@
 .mantra-textarea:focus {
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
   border-color: #d9e8f0;
-  border-top-color: var(--mantra-color, #1a4a8a);
+  border-top-color: var(--mantra-color, #003087);
 }
 
 .mantra-content {
@@ -139,7 +139,7 @@
   overflow-y: auto;
   background-color: #fff;
   border: 1px solid #d9e8f0;
-  border-top: 4px solid var(--mantra-color, #1a4a8a);
+  border-top: 4px solid var(--mantra-color, #003087);
   border-radius: 8px;
   padding: 28px 32px;
 }

@@ -564,7 +564,7 @@ a.lp-task-title:hover {
   cursor: pointer;
   padding: 0;
 }
-.lp-cal-month-btn:hover { color: #1a4a8a; text-decoration: underline; }
+.lp-cal-month-btn:hover { color: #003087; text-decoration: underline; }
 
 .lp-cal-view-btns {
   display: flex;
@@ -586,8 +586,8 @@ a.lp-task-title:hover {
   cursor: pointer;
   transition: all 0.15s;
 }
-.lp-cal-view-btn:hover { background: rgba(74,138,120,0.15); color: #1a4a8a; border-color: #1a4a8a; }
-.lp-cal-view-btn.active { background: #1a4a8a; color: #fff; border-color: #1a4a8a; }
+.lp-cal-view-btn:hover { background: rgba(74,138,120,0.15); color: #003087; border-color: #003087; }
+.lp-cal-view-btn.active { background: #003087; color: #fff; border-color: #003087; }
 
 .lp-cal-gcal-row {
   display: flex;
