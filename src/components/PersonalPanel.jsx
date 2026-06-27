@@ -82,6 +82,7 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
       {subTab === 'checklist' && <GoalsPanel userId={userId} section="checklist" roles={roles} />}
       {subTab === 'library' && (
         <LibraryPanel
+          userId={userId}
           books={books || []}
           onAddBook={onAddBook}
           onUpdateStatus={onUpdateBookStatus}

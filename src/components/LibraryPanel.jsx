@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { SHELVES } from '../hooks/useLibrary'
+import { supabase } from '../lib/supabase'
 import './LibraryPanel.css'
 
 const WANT_TO_READ_TAB = 'Want to Read'
@@ -132,15 +133,33 @@ const DEFAULTS = [
   { title: 'Popular Mechanics', author: '', shelf: 'Magazine', status: 'want-to-read' },
 ]
 
-export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onUpdateBookChapter, onDeleteBook, onImportBooks }) {
+export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus, onUpdateBookChapter, onDeleteBook, onImportBooks }) {
   const [activeShelf, setActiveShelf] = useState(WANT_TO_READ_TAB)
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newShelf, setNewShelf] = useState('Fiction')
   const [hoveredId, setHoveredId] = useState(null)
   const [importing, setImporting] = useState(false)
+  const [taskAdded, setTaskAdded] = useState(false)
 
   const isWantToRead = activeShelf === WANT_TO_READ_TAB
+
+  // Most recent book currently being read
+  const currentBook = books
+    .filter(b => b.status === 'reading')
+    .sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0))[0] || null
+
+  async function handleAddReadingTask() {
+    if (!currentBook || !userId) return
+    const today = new Date()
+    const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`
+    const chap = currentBook.current_chapter || 0
+    const total = currentBook.total_chapters ? `/${currentBook.total_chapters}` : ''
+    const title = `📖 Read: ${currentBook.title} — Ch.${chap}${total}`
+    await supabase.from('opus_tasks').insert({ title, priority: 'medium', due_date: dateStr, completed: false, user_id: userId })
+    setTaskAdded(true)
+    setTimeout(() => setTaskAdded(false), 3000)
+  }
   const shelfBooks = (isWantToRead
     ? books.filter(b => b.status === 'want-to-read')
     : books.filter(b => b.shelf === activeShelf)
@@ -179,9 +198,16 @@ export default function LibraryPanel({ books, onAddBook, onUpdateStatus, onUpdat
           <h2 className="library-title">My Library</h2>
           <p className="library-subtitle">Nook Book Collection</p>
         </div>
-        <button className="import-btn" onClick={handleImport} disabled={importing}>
-          {importing ? 'Importing…' : '↓ Sync Nook library'}
-        </button>
+        <div className="library-header-actions">
+          {currentBook && (
+            <button className="reading-task-btn" onClick={handleAddReadingTask} title={`Add today's reading task for "${currentBook.title}"`}>
+              {taskAdded ? '✓ Added!' : '📖 Add reading task'}
+            </button>
+          )}
+          <button className="import-btn" onClick={handleImport} disabled={importing}>
+            {importing ? 'Importing…' : '↓ Sync Nook library'}
+          </button>
+        </div>
       </div>
 
       <div className="library-shelf-tabs">
