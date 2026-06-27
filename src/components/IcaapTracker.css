@@ -15,7 +15,7 @@
 }
 .icaap-ref-link {
   font-size: 12px;
-  color: #1a4a8a;
+  color: #003087;
   text-decoration: none;
   opacity: 0.85;
 }
@@ -64,7 +64,7 @@
 /* Sub-tabs */
 .icaap-tabs {
   display: flex;
-  background: #1a4a8a;
+  background: #003087;
   border-bottom: 2px solid #001040;
   flex-shrink: 0;
 }
@@ -123,16 +123,16 @@
 .icaap-add-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #1a4a8a;
+  color: #003087;
   padding: 6px 12px;
-  border: 1px solid #1a4a8a;
+  border: 1px solid #003087;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .icaap-add-btn:hover {
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
 }
 
@@ -229,7 +229,7 @@
 }
 
 .icaap-input:focus {
-  border-color: #1a4a8a;
+  border-color: #003087;
 }
 
 .icaap-date-input {
@@ -252,7 +252,7 @@
 }
 
 .icaap-textarea:focus {
-  border-color: #1a4a8a;
+  border-color: #003087;
 }
 
 .icaap-form-actions {
@@ -274,7 +274,7 @@
 .icaap-save {
   font-size: 12px;
   font-weight: 600;
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   padding: 6px 16px;
   border-radius: 6px;
@@ -587,7 +587,7 @@
 
 .icaap-extrahours-tab.active {
   color: #003087;
-  border-bottom-color: #1a4a8a;
+  border-bottom-color: #003087;
 }
 
 /* Note panel */
@@ -614,14 +614,14 @@
 .tr-title {
   font-size: 13px;
   font-weight: 600;
-  color: #1a4a8a;
+  color: #003087;
 }
 a.tr-title-link {
   text-decoration: none;
 }
 a.tr-title-link:hover {
   text-decoration: underline;
-  color: #1a4a8a;
+  color: #003087;
 }
 
 .tr-toolbar-right {
@@ -635,8 +635,8 @@ a.tr-title-link:hover {
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 4px;
-  border: 1px solid #1a4a8a;
-  color: #1a4a8a;
+  border: 1px solid #003087;
+  color: #003087;
   background: transparent;
   cursor: pointer;
 }
@@ -701,10 +701,10 @@ a.tr-title-link:hover {
   outline: none;
   color: #333;
 }
-.tr-fi:focus { border-color: #1a4a8a; }
+.tr-fi:focus { border-color: #003087; }
 .tr-fi-adviser {
   background: #f0f4fa;
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 600;
 }
 .tr-fi-ta {
@@ -735,11 +735,11 @@ a.tr-title-link:hover {
   padding: 5px 16px;
   border-radius: 4px;
   border: none;
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   cursor: pointer;
 }
-.tr-submit-btn:hover { background: #1a4a8a; }
+.tr-submit-btn:hover { background: #003087; }
 
 .tr-table-wrap {
   flex: 1;
@@ -806,7 +806,7 @@ a.tr-title-link:hover {
   width: 100%;
   box-sizing: border-box;
   font-size: 12px;
-  border: 2px solid #1a4a8a;
+  border: 2px solid #003087;
   border-radius: 0;
   padding: 4px 7px;
   background: #fff;
@@ -862,7 +862,7 @@ a.tr-title-link:hover {
 
 .icaap-note-saved {
   font-size: 11px;
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 600;
 }
 
@@ -1104,7 +1104,7 @@ a.tr-title-link:hover {
 }
 
 .att-th-day {
-  background: #003087; color: #1a4a8a;
+  background: #003087; color: #003087;
   text-align: center; padding: 6px 10px;
   min-width: 110px;
   border-right: 1px solid #333;
@@ -1161,7 +1161,7 @@ a.tr-title-link:hover {
   cursor: pointer;
   padding: 0;
 }
-.att-time-btn:hover { color: #1a4a8a; }
+.att-time-btn:hover { color: #003087; }
 
 .att-time-input {
   display: block;
@@ -1169,7 +1169,7 @@ a.tr-title-link:hover {
   margin: 4px auto 0;
   font-size: 11px;
   padding: 2px 4px;
-  border: 1px solid #1a4a8a;
+  border: 1px solid #003087;
   border-radius: 4px;
   text-align: center;
   font-family: inherit;
@@ -1191,7 +1191,7 @@ a.tr-title-link:hover {
   text-overflow: ellipsis;
   max-width: 120px;
 }
-.att-notes-btn:hover { color: #1a4a8a; }
+.att-notes-btn:hover { color: #003087; }
 
 .att-notes-input {
   display: block;
@@ -1199,7 +1199,7 @@ a.tr-title-link:hover {
   margin-top: 4px;
   font-size: 11px;
   padding: 3px 5px;
-  border: 1px solid #1a4a8a;
+  border: 1px solid #003087;
   border-radius: 4px;
   font-family: inherit;
   resize: vertical;
@@ -1284,7 +1284,7 @@ a.tr-title-link:hover {
   align-self: flex-end;
 }
 
-.dash-search:focus { border-color: #1a4a8a; }
+.dash-search:focus { border-color: #003087; }
 
 .dash-summary {
   display: flex;
@@ -1393,7 +1393,7 @@ a.tr-title-link:hover {
   width: 100%;
   box-sizing: border-box;
   font-size: 11px;
-  border: 1px solid #1a4a8a;
+  border: 1px solid #003087;
   border-radius: 3px;
   padding: 2px 4px;
   background: #fff;
@@ -1425,9 +1425,9 @@ a.tr-title-link:hover {
 .dash-import-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #1a4a8a;
+  color: #003087;
   padding: 5px 12px;
-  border: 1px solid #1a4a8a;
+  border: 1px solid #003087;
   border-radius: 6px;
   cursor: pointer;
   background: none;
@@ -1436,7 +1436,7 @@ a.tr-title-link:hover {
 }
 
 .dash-import-btn:hover {
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
 }
 
@@ -1508,7 +1508,7 @@ a.tr-title-link:hover {
   box-sizing: border-box;
 }
 
-.import-textarea:focus { border-color: #1a4a8a; }
+.import-textarea:focus { border-color: #003087; }
 
 .import-parse-btn {
   font-size: 12px;
@@ -1583,7 +1583,7 @@ a.tr-title-link:hover {
 .import-confirm-btn {
   font-size: 12px;
   font-weight: 600;
-  background: #1a4a8a;
+  background: #003087;
   color: #fff;
   padding: 7px 18px;
   border-radius: 6px;
@@ -1685,8 +1685,8 @@ a.tr-title-link:hover {
   overflow: hidden;
 }
 
-.icaap-note-row:nth-child(odd)  { background: rgba(26,74,138,0.05); border-left: 3px solid #1a4a8a; }
-.icaap-note-row:nth-child(even) { background: rgba(26,74,138,0.05);  border-left: 3px solid #1a4a8a; }
+.icaap-note-row:nth-child(odd)  { background: rgba(0,48,135,0.05); border-left: 3px solid #003087; }
+.icaap-note-row:nth-child(even) { background: rgba(0,48,135,0.05);  border-left: 3px solid #003087; }
 
 .icaap-note-meta {
   display: flex;
@@ -1703,8 +1703,8 @@ a.tr-title-link:hover {
 
 .icaap-note-source {
   font-size: 10px;
-  color: #1a4a8a;
-  background: rgba(26,74,138,0.12);
+  color: #003087;
+  background: rgba(0,48,135,0.12);
   padding: 1px 7px;
   border-radius: 20px;
   font-weight: 600;

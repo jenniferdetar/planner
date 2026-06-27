@@ -4,7 +4,7 @@
   --csea-blue:        #003087;
   --csea-yellow:      #ffca38;
   /* Secondary */
-  --csea-link:        #1a4a8a;
+  --csea-link:        #003087;
   --csea-light-blue:  #d9e8f5;
   --csea-gold:        #ffb81c;
   --csea-accent:      #f7941d;
@@ -70,7 +70,7 @@
 /* ── Tabs ──────────────────────────────────────────────────────────────── */
 .csea-tabs {
   display: flex;
-  background: #1a4a8a;
+  background: #003087;
   border-bottom: 2px solid #001040;
   flex-shrink: 0;
   padding: 6px 10px 0;
@@ -227,16 +227,16 @@
 .csea-gmail-sync-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #1a4a8a;
+  color: #003087;
   background: transparent;
-  border: 1px solid #1a4a8a;
+  border: 1px solid #003087;
   border-radius: 3px;
   padding: 4px 10px;
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
   transition: background 0.15s, color 0.15s;
 }
-.csea-gmail-sync-btn:hover:not(:disabled) { background: #1a4a8a; color: #fff; }
+.csea-gmail-sync-btn:hover:not(:disabled) { background: #003087; color: #fff; }
 .csea-gmail-sync-btn:disabled { opacity: 0.5; cursor: default; }
 
 /* ── Form ──────────────────────────────────────────────────────────────── */
@@ -795,7 +795,7 @@
   padding: 7px 12px;
   background: var(--csea-light-blue);
   color: var(--csea-blue);
-  border: 1px solid var(--csea-border-lt, rgba(26,74,138,0.2));
+  border: 1px solid var(--csea-border-lt, rgba(0,48,135,0.2));
   border-radius: 4px;
   font-size: 12px;
   font-weight: 700;

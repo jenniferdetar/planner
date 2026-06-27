@@ -37,7 +37,7 @@
   display: flex;
   gap: 0;
   padding: 6px 16px 0;
-  background: #1a4a8a;
+  background: #003087;
   border-bottom: 2px solid #001040;
   overflow-x: auto;
   scrollbar-width: none;
@@ -199,7 +199,7 @@
 
 .book-shelf-label {
   font-size: 10px;
-  color: #1a4a8a;
+  color: #003087;
   font-weight: 500;
   line-height: 20px;
   text-transform: uppercase;
@@ -280,14 +280,14 @@
 }
 
 .add-book-input:focus {
-  border-color: #1a4a8a;
+  border-color: #003087;
 }
 
 .add-book-btn {
   background: #fff;
   border: 1px solid #d9e8f0;
   border-radius: 7px;
-  color: #1a4a8a;
+  color: #003087;
   font-size: 13px;
   font-weight: 500;
   padding: 8px 16px;

@@ -10,11 +10,11 @@
   --pt-bg-alt:     #eef2f7;   /* slightly deeper for alt rows / headers */
   --pt-bg-card:    #ffffff;   /* card surface */
   --pt-border:     #bfbfbf;   /* CSEA border gray */
-  --pt-border-lt:  rgba(26,74,138,0.15); /* subtle line */
+  --pt-border-lt:  rgba(0,48,135,0.15); /* subtle line */
   --pt-text:       #222222;   /* CSEA body text */
   --pt-text-2:     #53575a;   /* CSEA dark gray */
   --pt-text-muted: #8a8a8a;   /* muted / labels */
-  --pt-accent:     #1a4a8a;   /* CSEA link blue */
+  --pt-accent:     #003087;   /* CSEA link blue */
   --pt-accent2:    #003087;   /* CSEA navy */
   --pt-header-bg:  #003087;   /* CSEA primary navy */
   --pt-header-alt: #d9e8f5;   /* CSEA light blue bg */
@@ -307,7 +307,7 @@ select:focus {
   color: #fff !important;
 }
 .sidebar-nav-item.active {
-  background: rgba(26,74,138,0.22) !important;
+  background: rgba(0,48,135,0.22) !important;
   border-left-color: var(--pt-accent) !important;
   color: #fff !important;
 }
