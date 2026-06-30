@@ -3,6 +3,7 @@ import { useCseaMembers, useWorkLocations } from '../hooks/useCseaData'
 import { useQuickLinks } from '../hooks/useQuickLinks'
 import { useGmailCseaSync } from '../hooks/useGmailCseaSync'
 import ContractReference from './ContractReference'
+import { fetchPageTitle } from '../utils/fetchPageTitle'
 import './CseaTracker.css'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
@@ -65,6 +66,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
   const [tab, setTab] = useState('issues')
   const [linkTitle, setLinkTitle] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
+  const [linkTitleLoading, setLinkTitleLoading] = useState(false)
   const [showAddIssue, setShowAddIssue] = useState(false)
   const [showAddInteraction, setShowAddInteraction] = useState(false)
   const [filter, setFilter] = useState('active')
@@ -264,7 +266,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
           }}>
             <input
               className="csea-input"
-              placeholder="Label *"
+              placeholder={linkTitleLoading ? 'Label * (looking up...)' : 'Label *'}
               value={linkTitle}
               onChange={e => setLinkTitle(e.target.value)}
             />
@@ -274,6 +276,14 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
                 placeholder="URL *"
                 value={linkUrl}
                 onChange={e => setLinkUrl(e.target.value)}
+                onBlur={async () => {
+                  if (linkTitle.trim() || !linkUrl.trim()) return
+                  const url = linkUrl.trim().startsWith('http') ? linkUrl.trim() : 'https://' + linkUrl.trim()
+                  setLinkTitleLoading(true)
+                  const title = await fetchPageTitle(url)
+                  setLinkTitleLoading(false)
+                  if (title) setLinkTitle(title)
+                }}
               />
               <button type="submit" className="csea-save">Add</button>
             </div>
