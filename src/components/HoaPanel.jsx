@@ -52,7 +52,7 @@ const HOA_DOCUMENTS = [
 
 // Monthly financial summary pulled from the Board Member Packets above
 // (Balance Sheet / Cash Flow / Annual Budget sections of each PDF)
-const HOA_FINANCIALS = [
+const HOA_FINANCIALS_RAW = [
   { month: 'Jun 2025', operating_cash: 117647.19, reserve_assets: 508434.67, total_assets: 626081.86, total_reserves: 719774.18, net_income_mtd: 31292.18, net_income_ytd: -12879.57, total_income_mtd: 55407.11, total_expense_mtd: 24114.93 },
   { month: 'Jul 2025', operating_cash: 126271.37, reserve_assets: 513478.92, total_assets: 639750.29, total_reserves: 724818.43, net_income_mtd: 8624.18, net_income_ytd: -4255.39, total_income_mtd: 62203.88, total_expense_mtd: 53579.70 },
   { month: 'Aug 2025', operating_cash: 157376.66, reserve_assets: 368702.34, total_assets: 526079.00, total_reserves: 729827.85, net_income_mtd: -118680.71, net_income_ytd: -122936.10, total_income_mtd: 58087.19, total_expense_mtd: 176767.90 },
@@ -67,6 +67,11 @@ const HOA_FINANCIALS = [
   { month: 'May 2026', operating_cash: 155541.61, reserve_assets: 302851.92, total_assets: 458393.53, total_reserves: 649522.45, net_income_mtd: -3925.72, net_income_ytd: 12436.24, total_income_mtd: 66618.28, total_expense_mtd: 70544.00 },
 ]
 
+const HOA_FINANCIALS = HOA_FINANCIALS_RAW.map(m => {
+  const doc = HOA_DOCUMENTS.find(d => d.title.endsWith(m.month))
+  return { ...m, docUrl: doc?.url }
+})
+
 function fmtUSD(n) {
   if (n === null || n === undefined) return '—'
   return Number(n).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })
@@ -80,7 +85,7 @@ export default function HoaPanel({ userId }) {
   const [editId, setEditId] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
 
-  const tabs = ['All', ...CATEGORIES, 'Financials', 'Documents']
+  const tabs = ['All', ...CATEGORIES, 'Financials']
   const filtered = tab === 'All' ? items : items.filter(i => i.category === tab)
 
   const counts = {}
@@ -125,7 +130,7 @@ export default function HoaPanel({ userId }) {
       {/* Header */}
       <div className="hoa-header">
         <span className="hoa-header-title">Park Reseda HOA</span>
-        {tab !== 'Documents' && tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
+        {tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
       </div>
 
       {/* Stats row */}
@@ -144,7 +149,7 @@ export default function HoaPanel({ userId }) {
           <button
             key={t}
             className={`hoa-tab ${tab === t ? 'active' : ''}`}
-            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Documents' ? '#5c7d9e' : t === 'Financials' ? '#3a5c4a' : CAT_COLORS[t] }}
+            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Financials' ? '#3a5c4a' : CAT_COLORS[t] }}
             onClick={() => setTab(t)}
           >{t}</button>
         ))}
@@ -211,7 +216,7 @@ export default function HoaPanel({ userId }) {
                   <tbody>
                     {[...HOA_FINANCIALS].reverse().map(m => (
                       <tr key={m.month}>
-                        <td>{m.month}</td>
+                        <td>{m.docUrl ? <a href={m.docUrl} target="_blank" rel="noreferrer noopener">{m.month}</a> : m.month}</td>
                         <td>{fmtUSD(m.total_assets)}</td>
                         <td>{fmtUSD(m.total_reserves)}</td>
                         <td>{fmtUSD(m.operating_cash)}</td>
@@ -229,27 +234,8 @@ export default function HoaPanel({ userId }) {
         )
       })()}
 
-      {/* Documents tab */}
-      {tab === 'Documents' && (
-        <div className="hoa-docs">
-          <p className="hoa-docs-intro">
-            Board Member Packets synced from the{' '}
-            <a href="https://drive.google.com/drive/u/0/folders/1DPzR6n9aPRHdGtBagWXVygwqLh8Hm5oV" target="_blank" rel="noreferrer noopener">
-              HOA Google Drive folder
-            </a>.
-          </p>
-          <ul className="hoa-docs-list">
-            {HOA_DOCUMENTS.map(doc => (
-              <li key={doc.id} className="hoa-doc-item">
-                <a href={doc.url} target="_blank" rel="noreferrer noopener">{doc.title}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       {/* Add / Edit form */}
-      {tab !== 'Documents' && tab !== 'Financials' && showForm && (
+      {tab !== 'Financials' && showForm && (
         <form className="hoa-form" onSubmit={handleSubmit}>
           <div className="hoa-form-row">
             <select className="hoa-select" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
@@ -286,7 +272,7 @@ export default function HoaPanel({ userId }) {
       )}
 
       {/* Items list */}
-      {tab !== 'Documents' && tab !== 'Financials' && <div className="hoa-list">
+      {tab !== 'Financials' && <div className="hoa-list">
         {loading && <p className="hoa-empty">Loading…</p>}
         {!loading && filtered.length === 0 && <p className="hoa-empty">No items in this category.</p>}
         {filtered.map(item => {
