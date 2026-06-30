@@ -1085,12 +1085,19 @@ function IcaapDashboard() {
   )
 }
 
+function summarizeNote(text) {
+  if (!text) return 'Note'
+  const firstLine = text.trim().split('\n')[0]
+  const words = firstLine.split(/\s+/).slice(0, 6).join(' ')
+  return words.length < firstLine.length ? `${words}…` : words
+}
+
 function IcaapNoteGroup({ note: n, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
     <div className="interaction-group">
       <div className="interaction-group-header">
-        <span className="interaction-group-name">{n.source || 'Note'}</span>
+        <span className="interaction-group-name">{n.source || summarizeNote(n.note)}</span>
         {n.created_at && (
           <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
         )}
