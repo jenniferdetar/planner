@@ -357,7 +357,7 @@
 
 .csea-interactions-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   align-content: start;
   gap: 8px 12px;
 }
