@@ -89,11 +89,14 @@ export default function HoaPanel({ userId }) {
   const onImported = useCallback(() => reload?.(), [reload])
   const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount, error: yahooError } = useYahooHoaSync(userId, onImported)
 
+  const [showArchived, setShowArchived] = useState(false)
+
   const tabs = ['All', ...CATEGORIES]
-  const filtered = tab === 'All' ? items : items.filter(i => i.category === tab)
+  const visibleItems = showArchived ? items : items.filter(i => !i.archived)
+  const filtered = tab === 'All' ? visibleItems : visibleItems.filter(i => i.category === tab)
 
   const counts = {}
-  CATEGORIES.forEach(c => { counts[c] = items.filter(i => i.category === c && i.status !== 'Completed' && i.status !== 'Resolved').length })
+  CATEGORIES.forEach(c => { counts[c] = items.filter(i => i.category === c && !i.archived && i.status !== 'Completed' && i.status !== 'Resolved').length })
 
   function openAdd() {
     setForm(BLANK)
@@ -147,6 +150,9 @@ export default function HoaPanel({ userId }) {
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
             </svg>
             {yahooNewCount > 0 && <span className="hoa-sync-badge">{yahooNewCount}</span>}
+          </button>
+          <button className="hoa-add-btn" style={{ opacity: 0.75, fontSize: '10px' }} onClick={() => setShowArchived(a => !a)}>
+            {showArchived ? 'Hide Archived' : 'Show Archived'}
           </button>
           {tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
         </div>
