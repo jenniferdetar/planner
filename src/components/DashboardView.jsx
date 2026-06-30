@@ -399,6 +399,22 @@ export default function DashboardView({
                 }
               </a>
             </div>
+
+            {/* Mobile pill nav — only shown on Today page */}
+            <nav className="dash-pill-nav">
+              {NAV_ITEMS.filter(i => i.key !== 'today').map(item => (
+                <button
+                  key={item.key}
+                  className="dash-pill-btn"
+                  onClick={() => setSection(item.key)}
+                >
+                  {item.mobileLabel || item.label}
+                </button>
+              ))}
+              <button className="dash-pill-btn dash-pill-logout" onClick={onSignOut}>
+                Logout
+              </button>
+            </nav>
           </>
         )}
 
@@ -571,21 +587,12 @@ export default function DashboardView({
 
       </main>
 
-      {/* ── Mobile bottom nav ── */}
-      <nav className="dash-mobile-nav">
-        {NAV_ITEMS.map(item => (
-          <button
-            key={item.key}
-            className={`dash-mobile-nav-btn${section === item.key ? ' active' : ''}`}
-            onClick={() => setSection(item.key)}
-          >
-            {item.mobileLabel || item.label}
-          </button>
-        ))}
-        <button className="dash-mobile-nav-btn dash-mobile-logout-btn" onClick={onSignOut}>
-          Logout
+      {/* Mobile back-to-today button — shown on all non-Today sections */}
+      {section !== 'today' && (
+        <button className="dash-mobile-back-btn" onClick={() => setSection('today')}>
+          ← Today
         </button>
-      </nav>
+      )}
     </div>
   )
 }
