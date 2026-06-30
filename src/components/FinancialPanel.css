@@ -1151,11 +1151,11 @@
 .laundry-note {
   font-size: 11px;
   color: #999;
-  padding: 6px 16px 4px;
+  padding: 4px 16px 3px;
   border-bottom: 1px solid #eef2f7;
 }
 
-.laundry-form { margin: 0 16px 12px; }
+.laundry-form { margin: 0 16px 8px; }
 
 .laundry-lbl {
   display: flex;
@@ -1170,7 +1170,7 @@
 }
 
 .laundry-day {
-  margin: 4px 10px;
+  margin: 3px 10px;
   border: 1px solid #d9e8f0;
   border-radius: 8px;
   overflow: hidden;
@@ -1182,23 +1182,23 @@
   align-items: center;
   background: #1e3070;
   color: #fff;
-  padding: 5px 14px;
-  font-size: 13px;
+  padding: 3px 14px;
+  font-size: 12px;
   font-weight: 600;
 }
 
 .laundry-day-total {
-  font-size: 12px;
+  font-size: 11px;
   opacity: 0.85;
 }
 
 .laundry-section-row td.laundry-section-title {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: #1e3070;
-  padding: 5px 0 2px;
+  padding: 3px 0 1px;
 }
 
 .laundry-table tbody:first-of-type .laundry-section-title { color: #1e3070; }
@@ -1208,22 +1208,22 @@
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .laundry-table th {
   text-align: left;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: #aaa;
-  padding: 2px 8px 3px 0;
+  padding: 1px 8px 2px 0;
   border-bottom: 1px solid #eef2f7;
 }
 
 .laundry-row td {
-  padding: 3px 8px 3px 0;
+  padding: 2px 8px 2px 0;
   color: #333;
   border-bottom: 1px solid #f5f7fa;
 }
