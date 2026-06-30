@@ -8,6 +8,7 @@ import FavoriteVideosPanel from './FavoriteVideosPanel'
 import ValuesPanel from './ValuesPanel'
 import RolesPanel from './RolesPanel'
 import WantsPanel from './WantsPanel'
+import QuickLinksPanel from './QuickLinksPanel'
 import './PersonalPanel.css'
 
 const SUB_TABS = [
@@ -16,6 +17,7 @@ const SUB_TABS = [
   { key: 'checklist', label: 'Monthly Checklist', color: '#7ec8c8' },
   { key: 'library',   label: 'Library',           color: '#7ba7e0' },
   { key: 'videos',    label: 'Favorite Videos',   color: '#cc4444' },
+  { key: 'links',     label: 'Links',             color: '#3a8a72' },
   { key: 'mantra',    label: 'My Mantra',         color: '#e8a0a0' },
   { key: 'mission',   label: 'Mission',           color: '#a0b4e8' },
   { key: 'values',    label: 'Values',            color: '#8e44ad' },
@@ -94,6 +96,7 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
         />
       )}
       {subTab === 'videos' && <FavoriteVideosPanel userId={userId} />}
+      {subTab === 'links' && <QuickLinksPanel userId={userId} section="personal" color={activeColor} />}
       {subTab === 'budget' && <WantsPanel providerToken={providerToken} />}
 
       {subTab === 'mantra' && (
