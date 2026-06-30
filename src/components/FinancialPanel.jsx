@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { useIcaapNote } from '../hooks/useIcaapNote'
 import './FinancialPanel.css'
 import ZeroBasedBudget from './ZeroBasedBudget'
 
@@ -51,7 +52,7 @@ export default function FinancialPanel({
       </div>
 
       <div className="fin-tabs">
-        {['bills', 'goals', 'coins', 'budget', 'laundry'].map(t => (
+        {['bills', 'goals', 'coins', 'budget', 'laundry', 'notes'].map(t => (
           <button key={t} className={`fin-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
             {t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
@@ -63,6 +64,7 @@ export default function FinancialPanel({
       {tab === 'coins' && <CoinsTab userId={userId} />}
       {tab === 'budget' && <ZeroBasedBudget userId={userId} bills={bills} />}
       {tab === 'laundry' && <LaundryTab userId={userId} />}
+      {tab === 'notes' && <NotesTab userId={userId} />}
     </div>
   )
 }
@@ -990,6 +992,27 @@ function LaundryTab({ userId }) {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+// ─── Notes ──────────────────────────────────────────────────────────────────
+
+function NotesTab({ userId }) {
+  const { content, handleChange, saved } = useIcaapNote(userId, 'financial')
+
+  return (
+    <div className="fin-content">
+      <div className="fin-toolbar">
+        <span className="fin-toolbar-label">Financial Notes</span>
+        <span className="fin-notes-saved">{saved ? 'Saved' : 'Saves automatically'}</span>
+      </div>
+      <textarea
+        className="fin-notes-area"
+        placeholder="Jot down financial notes, reminders, account details…"
+        value={content}
+        onChange={e => handleChange(e.target.value)}
+      />
     </div>
   )
 }
