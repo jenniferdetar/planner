@@ -94,7 +94,7 @@ function DashMiniCal({ selectedDate, onDateChange }) {
 }
 
 export default function DashboardView({
-  userId, providerToken, selectedDate, onDateChange,
+  userId, providerToken, userEmail, selectedDate, onDateChange,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
   timeBlocks, onAddBlock, onDeleteBlock,
   calendarBlocks,
@@ -466,6 +466,7 @@ export default function DashboardView({
             <CseaTracker
               userId={userId}
               providerToken={providerToken}
+              userEmail={userEmail}
               issues={cseaIssues || []}
               onAddIssue={onAddCseaIssue}
               onUpdateStatus={onUpdateCseaStatus}

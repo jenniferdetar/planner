@@ -59,7 +59,7 @@ const PRIORITY_COLORS = { High: '#cc0000', Medium: '#f7941d', Low: '#3164a0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-export default function CseaTracker({ userId, providerToken, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote }) {
+export default function CseaTracker({ userId, providerToken, userEmail, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote }) {
   const workLocations = useWorkLocations()
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
   const [tab, setTab] = useState('issues')
@@ -84,7 +84,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
     discussion: '', who_involved: '', date_spoke: new Date().toISOString().split('T')[0],
   })
 
-  const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount } = useGmailCseaSync(providerToken)
+  const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount } = useGmailCseaSync(providerToken, userEmail)
 
   // Auto-sync when interactions tab is opened
   useEffect(() => {

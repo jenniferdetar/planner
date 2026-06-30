@@ -229,6 +229,7 @@ export default function App() {
       <DashboardView
         userId={userId}
         providerToken={providerToken}
+        userEmail={user?.email}
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
         dailyTasks={allDailyTasks}
