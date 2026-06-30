@@ -1146,7 +1146,7 @@
 }
 
 .laundry-day {
-  margin: 6px 10px;
+  margin: 4px 10px;
   border: 1px solid #d9e8f0;
   border-radius: 8px;
   overflow: hidden;
@@ -1158,7 +1158,7 @@
   align-items: center;
   background: #1e3070;
   color: #fff;
-  padding: 8px 14px;
+  padding: 5px 14px;
   font-size: 13px;
   font-weight: 600;
 }
@@ -1174,7 +1174,7 @@
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: #1e3070;
-  padding: 10px 0 4px;
+  padding: 5px 0 2px;
 }
 
 .laundry-table tbody:first-of-type .laundry-section-title { color: #1e3070; }
@@ -1194,12 +1194,12 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: #aaa;
-  padding: 3px 8px 5px 0;
+  padding: 2px 8px 3px 0;
   border-bottom: 1px solid #eef2f7;
 }
 
 .laundry-row td {
-  padding: 5px 8px 5px 0;
+  padding: 3px 8px 3px 0;
   color: #333;
   border-bottom: 1px solid #f5f7fa;
 }
