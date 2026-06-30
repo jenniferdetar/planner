@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useHoaItems, CATEGORIES, PRIORITIES, STATUSES } from '../hooks/useHoaItems'
+import { useYahooHoaSync } from '../hooks/useYahooHoaSync'
 import './HoaPanel.css'
 
 const STATUS_COLORS = {
@@ -78,12 +79,15 @@ function fmtUSD(n) {
 }
 
 export default function HoaPanel({ userId }) {
-  const { items, loading, addItem, updateItem, deleteItem } = useHoaItems(userId)
+  const { items, loading, addItem, updateItem, deleteItem, reload } = useHoaItems(userId)
   const [tab, setTab] = useState('All')
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(BLANK)
   const [editId, setEditId] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
+
+  const onImported = useCallback(() => reload?.(), [reload])
+  const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount, error: yahooError } = useYahooHoaSync(userId, onImported)
 
   const tabs = ['All', ...CATEGORIES]
   const filtered = tab === 'All' ? items : items.filter(i => i.category === tab)
@@ -130,7 +134,12 @@ export default function HoaPanel({ userId }) {
       {/* Header */}
       <div className="hoa-header">
         <span className="hoa-header-title">Park Reseda HOA</span>
-        {tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button className="csea-gmail-sync-btn" onClick={syncYahoo} disabled={yahooSyncing} title={yahooError || undefined}>
+            {yahooSyncing ? 'Syncing…' : yahooNewCount != null ? `↻ Yahoo Mail${yahooNewCount > 0 ? ` (+${yahooNewCount})` : ''}` : '↻ Yahoo Mail'}
+          </button>
+          {tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
+        </div>
       </div>
 
       {/* Stats row */}
