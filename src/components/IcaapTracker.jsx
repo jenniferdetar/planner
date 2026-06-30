@@ -5,6 +5,7 @@ import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
 import { useIcaapNote } from '../hooks/useIcaapNote'
 import { employeeMap } from '../data/employeeLookup'
+import { fetchPageTitle } from '../utils/fetchPageTitle'
 
 const CATEGORIES = ['Task', 'Meeting', 'Research', 'Review', 'Report', 'Follow-up', 'Other']
 const PRIORITIES = ['Low', 'Medium', 'High']
@@ -62,6 +63,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
   const [noteSource, setNoteSource] = useState('')
   const [linkTitle, setLinkTitle] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
+  const [linkTitleLoading, setLinkTitleLoading] = useState(false)
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
@@ -231,7 +233,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           }}>
             <input
               className="icaap-input"
-              placeholder="Label *"
+              placeholder={linkTitleLoading ? 'Label * (looking up...)' : 'Label *'}
               value={linkTitle}
               onChange={e => setLinkTitle(e.target.value)}
             />
@@ -241,6 +243,14 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
                 placeholder="URL *"
                 value={linkUrl}
                 onChange={e => setLinkUrl(e.target.value)}
+                onBlur={async () => {
+                  if (linkTitle.trim() || !linkUrl.trim()) return
+                  const url = linkUrl.trim().startsWith('http') ? linkUrl.trim() : 'https://' + linkUrl.trim()
+                  setLinkTitleLoading(true)
+                  const title = await fetchPageTitle(url)
+                  setLinkTitleLoading(false)
+                  if (title) setLinkTitle(title)
+                }}
               />
               <button type="submit" className="icaap-save">Add</button>
             </div>
