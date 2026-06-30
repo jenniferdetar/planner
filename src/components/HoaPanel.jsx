@@ -52,7 +52,20 @@ const HOA_DOCUMENTS = [
 
 // Monthly financial summary pulled from the Board Member Packets above
 // (Balance Sheet / Cash Flow / Annual Budget sections of each PDF)
-const HOA_FINANCIALS = []
+const HOA_FINANCIALS = [
+  { month: 'Jun 2025', operating_cash: 117647.19, reserve_assets: 508434.67, total_assets: 626081.86, total_reserves: 719774.18, net_income_mtd: 31292.18, net_income_ytd: -12879.57, total_income_mtd: 55407.11, total_expense_mtd: 24114.93 },
+  { month: 'Jul 2025', operating_cash: 126271.37, reserve_assets: 513478.92, total_assets: 639750.29, total_reserves: 724818.43, net_income_mtd: 8624.18, net_income_ytd: -4255.39, total_income_mtd: 62203.88, total_expense_mtd: 53579.70 },
+  { month: 'Aug 2025', operating_cash: 157376.66, reserve_assets: 368702.34, total_assets: 526079.00, total_reserves: 729827.85, net_income_mtd: -118680.71, net_income_ytd: -122936.10, total_income_mtd: 58087.19, total_expense_mtd: 176767.90 },
+  { month: 'Sep 2025', operating_cash: 142149.25, reserve_assets: 373664.75, total_assets: 515814.00, total_reserves: 734790.26, net_income_mtd: -15327.41, net_income_ytd: -138263.51, total_income_mtd: 61584.97, total_expense_mtd: 76912.38 },
+  { month: 'Oct 2025', operating_cash: 71289.05, reserve_assets: 393095.14, total_assets: 464384.19, total_reserves: 739765.67, net_income_mtd: -56405.22, net_income_ytd: -194668.73, total_income_mtd: 64408.70, total_expense_mtd: 120813.92 },
+  { month: 'Nov 2025', operating_cash: 50117.37, reserve_assets: 398074.13, total_assets: 448191.50, total_reserves: 744744.66, net_income_mtd: -21271.68, net_income_ytd: -215940.41, total_income_mtd: 50386.74, total_expense_mtd: 71658.42 },
+  { month: 'Dec 2025', operating_cash: 142905.37, reserve_assets: 338235.21, total_assets: 481140.58, total_reserves: 684905.74, net_income_mtd: 92788.00, net_income_ytd: -123152.41, total_income_mtd: 70647.77, total_expense_mtd: -22140.23 },
+  { month: 'Jan 2026', operating_cash: 116713.12, reserve_assets: 279332.30, total_assets: 396045.42, total_reserves: 626002.83, net_income_mtd: -26192.25, net_income_ytd: -26192.25, total_income_mtd: 71279.82, total_expense_mtd: 97472.07 },
+  { month: 'Feb 2026', operating_cash: 144554.52, reserve_assets: 285204.30, total_assets: 429758.82, total_reserves: 631874.83, net_income_mtd: 27741.40, net_income_ytd: 1549.15, total_income_mtd: 69102.66, total_expense_mtd: 41361.26 },
+  { month: 'Mar 2026', operating_cash: 124824.77, reserve_assets: 291083.27, total_assets: 415908.04, total_reserves: 637753.80, net_income_mtd: -19829.75, net_income_ytd: -18280.60, total_income_mtd: 84555.52, total_expense_mtd: 104385.27 },
+  { month: 'Apr 2026', operating_cash: 159467.33, reserve_assets: 296965.58, total_assets: 456432.91, total_reserves: 643636.11, net_income_mtd: 34642.56, net_income_ytd: 16361.96, total_income_mtd: 61207.50, total_expense_mtd: 26564.94 },
+  { month: 'May 2026', operating_cash: 155541.61, reserve_assets: 302851.92, total_assets: 458393.53, total_reserves: 649522.45, net_income_mtd: -3925.72, net_income_ytd: 12436.24, total_income_mtd: 66618.28, total_expense_mtd: 70544.00 },
+]
 
 function fmtUSD(n) {
   if (n === null || n === undefined) return '—'
