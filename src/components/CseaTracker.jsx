@@ -409,7 +409,7 @@ function CseaNoteGroup({ note: n, onDelete }) {
   return (
     <div className="interaction-group">
       <div className="interaction-group-header">
-        <span className="interaction-group-name">{n.topic || 'Note'}</span>
+        <span className="interaction-group-name">{n.topic || 'Topic'}</span>
         {n.created_at && (
           <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
         )}
