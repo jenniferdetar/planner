@@ -11,15 +11,6 @@ export async function fetchWorkspaces(token) {
   return data // [{ gid, name }]
 }
 
-export async function fetchMyTasks(token, workspaceGid) {
-  const fields = 'gid,name,completed,due_on,notes,memberships.project.name'
-  const url = `${BASE}/tasks?assignee=me&workspace=${workspaceGid}&completed_since=now&opt_fields=${fields}&limit=100`
-  const res = await fetch(url, { headers: headers(token) })
-  if (!res.ok) throw new Error(`Asana /tasks ${res.status}`)
-  const { data } = await res.json()
-  return data
-}
-
 export async function completeAsanaTask(token, gid) {
   const res = await fetch(`${BASE}/tasks/${gid}`, {
     method: 'PUT',

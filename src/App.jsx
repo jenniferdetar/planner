@@ -1,8 +1,8 @@
 import './PlannerTheme.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { supabase, signOut, signInWithGoogle } from './lib/supabase'
-import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
+import { useMasterTasks, useDailyTasks, useMeetings, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
 import { useDailyLog } from './hooks/useDailyLog'
 import { useWeeklyTasks } from './hooks/useWeeklyTasks'
 import { usePlannerSections } from './hooks/usePlannerSections'
@@ -17,7 +17,6 @@ import { useAsanaTaskTags } from './hooks/useAsanaTaskTags'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
-import { useFamilyTree } from './hooks/useFamilyTree'
 import DashboardView from './components/DashboardView'
 import LoginScreen from './components/LoginScreen'
 import './App.css'
@@ -70,7 +69,6 @@ export default function App() {
   const { tasks: masterTasks, addTask: addMasterTask, updateTask: updateMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
   const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask, updateTaskDescription } = useDailyTasks(userId, selectedDate)
   const { meetings, addMeeting, bulkAddMeetings, deleteMeeting } = useMeetings(userId, selectedDate)
-  const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction, showArchived: showArchivedInteractions, setShowArchived: setShowArchivedInteractions } = useMemberInteractions(userId)
@@ -85,7 +83,6 @@ export default function App() {
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { notes: icaapNotes, addNote: addIcaapNote, deleteNote: deleteIcaapNote } = useIcaapNotes(userId)
   const { books, addBook, updateStatus: updateBookStatus, updateChapter: updateBookChapter, deleteBook, importDefaults: importBooks } = useLibrary(userId)
-  const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
   const { tags: asanaTaskTags, cycleTag: cycleAsanaTaskTag } = useAsanaTaskTags()
   const { tasksByDate: weeklyTasks, toggleTask: toggleWeeklyTask, addTask: addWeeklyTask } = useWeeklyTasks(userId, selectedDate)
