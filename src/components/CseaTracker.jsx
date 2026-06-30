@@ -407,9 +407,15 @@ function CseaNoteRowItem({ note: n, onDelete }) {
       <div className="csea-note-meta">
         <span className="csea-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
         {n.topic && <span className="csea-note-topic">{n.topic}</span>}
-        {n.source && <span className="csea-note-source">{n.source}</span>}
+        {!expanded && !n.topic && n.source && <span className="csea-note-source">{n.source}</span>}
+        <span className="csea-note-chevron">{expanded ? '▾' : '▸'}</span>
       </div>
-      <div className="csea-note-text">{n.note}</div>
+      {expanded && (
+        <>
+          {n.source && <div className="csea-note-source-full">{n.source}</div>}
+          <div className="csea-note-text">{n.note}</div>
+        </>
+      )}
       <button
         className="csea-note-delete"
         onClick={e => { e.stopPropagation(); onDelete?.(n.id) }}
