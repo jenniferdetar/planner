@@ -135,8 +135,18 @@ export default function HoaPanel({ userId }) {
       <div className="hoa-header">
         <span className="hoa-header-title">Park Reseda HOA</span>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <button className="csea-gmail-sync-btn" onClick={syncYahoo} disabled={yahooSyncing} title={yahooError || undefined}>
-            {yahooSyncing ? 'Syncing…' : yahooNewCount != null ? `↻ Yahoo Mail${yahooNewCount > 0 ? ` (+${yahooNewCount})` : ''}` : '↻ Yahoo Mail'}
+          <button
+            className={`hoa-sync-btn${yahooSyncing ? ' spinning' : ''}`}
+            onClick={syncYahoo}
+            disabled={yahooSyncing}
+            title={yahooError || (yahooNewCount != null ? `Last sync: ${yahooNewCount} new` : 'Sync Yahoo HOA emails')}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 4v6h-6"/>
+              <path d="M1 20v-6h6"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            {yahooNewCount > 0 && <span className="hoa-sync-badge">{yahooNewCount}</span>}
           </button>
           {tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
         </div>
