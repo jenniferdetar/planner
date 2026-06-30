@@ -50,6 +50,15 @@ const HOA_DOCUMENTS = [
   { id: '1Vh5US5NUKaPNaI-nbNFbtE6KgG56Bm0H', title: 'Board Member Packet — May 2026' },
 ].map(d => ({ ...d, url: `https://drive.google.com/file/d/${d.id}/view` })).reverse()
 
+// Monthly financial summary pulled from the Board Member Packets above
+// (Balance Sheet / Cash Flow / Annual Budget sections of each PDF)
+const HOA_FINANCIALS = []
+
+function fmtUSD(n) {
+  if (n === null || n === undefined) return '—'
+  return Number(n).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })
+}
+
 export default function HoaPanel({ userId }) {
   const { items, loading, addItem, updateItem, deleteItem } = useHoaItems(userId)
   const [tab, setTab] = useState('All')
@@ -58,7 +67,7 @@ export default function HoaPanel({ userId }) {
   const [editId, setEditId] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
 
-  const tabs = ['All', ...CATEGORIES, 'Documents']
+  const tabs = ['All', ...CATEGORIES, 'Financials', 'Documents']
   const filtered = tab === 'All' ? items : items.filter(i => i.category === tab)
 
   const counts = {}
@@ -103,7 +112,7 @@ export default function HoaPanel({ userId }) {
       {/* Header */}
       <div className="hoa-header">
         <span className="hoa-header-title">Park Reseda HOA</span>
-        {tab !== 'Documents' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
+        {tab !== 'Documents' && tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
       </div>
 
       {/* Stats row */}
@@ -122,11 +131,90 @@ export default function HoaPanel({ userId }) {
           <button
             key={t}
             className={`hoa-tab ${tab === t ? 'active' : ''}`}
-            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Documents' ? '#5c7d9e' : CAT_COLORS[t] }}
+            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Documents' ? '#5c7d9e' : t === 'Financials' ? '#3a5c4a' : CAT_COLORS[t] }}
             onClick={() => setTab(t)}
           >{t}</button>
         ))}
       </div>
+
+      {/* Financials tab */}
+      {tab === 'Financials' && (() => {
+        const latest = HOA_FINANCIALS[HOA_FINANCIALS.length - 1]
+        const maxAssets = Math.max(...HOA_FINANCIALS.map(m => m.total_assets || 0), 1)
+        return (
+          <div className="hoa-fin">
+            {latest && (
+              <div className="hoa-fin-stats">
+                <div className="hoa-fin-stat">
+                  <span className="hoa-fin-stat-lbl">Total Assets</span>
+                  <span className="hoa-fin-stat-num">{fmtUSD(latest.total_assets)}</span>
+                </div>
+                <div className="hoa-fin-stat">
+                  <span className="hoa-fin-stat-lbl">Reserve Funds</span>
+                  <span className="hoa-fin-stat-num">{fmtUSD(latest.total_reserves)}</span>
+                </div>
+                <div className="hoa-fin-stat">
+                  <span className="hoa-fin-stat-lbl">Operating Cash</span>
+                  <span className="hoa-fin-stat-num">{fmtUSD(latest.operating_cash)}</span>
+                </div>
+                <div className="hoa-fin-stat">
+                  <span className="hoa-fin-stat-lbl">Net Income (MTD)</span>
+                  <span className={`hoa-fin-stat-num ${Number(latest.net_income_mtd) < 0 ? 'neg' : 'pos'}`}>{fmtUSD(latest.net_income_mtd)}</span>
+                </div>
+              </div>
+            )}
+
+            <p className="hoa-fin-asof">{latest ? `As of ${latest.month}` : 'No financial data available yet.'} — pulled from the Board Member Packets in the HOA Google Drive folder.</p>
+
+            {HOA_FINANCIALS.length > 0 && (
+              <div className="hoa-fin-chart">
+                <span className="hoa-fin-chart-title">Total Assets by Month</span>
+                <div className="hoa-fin-bars">
+                  {HOA_FINANCIALS.map(m => (
+                    <div key={m.month} className="hoa-fin-bar-col" title={`${m.month}: ${fmtUSD(m.total_assets)}`}>
+                      <div className="hoa-fin-bar" style={{ height: `${Math.max(4, (m.total_assets / maxAssets) * 100)}%` }} />
+                      <span className="hoa-fin-bar-lbl">{m.month.split(' ')[0]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {HOA_FINANCIALS.length > 0 && (
+              <div className="hoa-fin-table-wrap">
+                <table className="hoa-fin-table">
+                  <thead>
+                    <tr>
+                      <th>Month</th>
+                      <th>Total Assets</th>
+                      <th>Reserves</th>
+                      <th>Operating Cash</th>
+                      <th>Income (MTD)</th>
+                      <th>Expense (MTD)</th>
+                      <th>Net Income (MTD)</th>
+                      <th>Net Income (YTD)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...HOA_FINANCIALS].reverse().map(m => (
+                      <tr key={m.month}>
+                        <td>{m.month}</td>
+                        <td>{fmtUSD(m.total_assets)}</td>
+                        <td>{fmtUSD(m.total_reserves)}</td>
+                        <td>{fmtUSD(m.operating_cash)}</td>
+                        <td>{fmtUSD(m.total_income_mtd)}</td>
+                        <td>{fmtUSD(m.total_expense_mtd)}</td>
+                        <td className={Number(m.net_income_mtd) < 0 ? 'neg' : 'pos'}>{fmtUSD(m.net_income_mtd)}</td>
+                        <td className={Number(m.net_income_ytd) < 0 ? 'neg' : 'pos'}>{fmtUSD(m.net_income_ytd)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )
+      })()}
 
       {/* Documents tab */}
       {tab === 'Documents' && (
@@ -148,7 +236,7 @@ export default function HoaPanel({ userId }) {
       )}
 
       {/* Add / Edit form */}
-      {tab !== 'Documents' && showForm && (
+      {tab !== 'Documents' && tab !== 'Financials' && showForm && (
         <form className="hoa-form" onSubmit={handleSubmit}>
           <div className="hoa-form-row">
             <select className="hoa-select" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
@@ -185,7 +273,7 @@ export default function HoaPanel({ userId }) {
       )}
 
       {/* Items list */}
-      {tab !== 'Documents' && <div className="hoa-list">
+      {tab !== 'Documents' && tab !== 'Financials' && <div className="hoa-list">
         {loading && <p className="hoa-empty">Loading…</p>}
         {!loading && filtered.length === 0 && <p className="hoa-empty">No items in this category.</p>}
         {filtered.map(item => {
