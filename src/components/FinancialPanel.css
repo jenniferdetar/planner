@@ -1178,14 +1178,16 @@
 }
 
 .laundry-day-header {
-  display: flex;
-  justify-content: space-between;
+  display: inline-flex;
   align-items: center;
+  gap: 14px;
   background: #1e3070;
   color: #fff;
   padding: 3px 14px;
   font-size: 12px;
   font-weight: 600;
+  border-radius: 0 0 8px 0;
+  white-space: nowrap;
 }
 
 .laundry-day-total {
