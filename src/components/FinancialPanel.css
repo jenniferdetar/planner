@@ -1193,40 +1193,66 @@
   opacity: 0.85;
 }
 
-.laundry-section-row td.laundry-section-title {
+.laundry-section { padding: 6px 14px 8px; }
+
+.laundry-section-title {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #1e3070;
-  padding: 3px 0 1px;
+  margin-bottom: 5px;
 }
 
-.laundry-table tbody:first-of-type .laundry-section-title { color: #1e3070; }
-.laundry-table tbody:last-of-type  .laundry-section-title { color: #c77b3a; }
+.laundry-section-title--wash { color: #1e3070; }
+.laundry-section-title--dry  { color: #c77b3a; }
 
-.laundry-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  font-size: 11px;
+.laundry-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 6px;
 }
 
-.laundry-table th {
-  text-align: left;
+.laundry-session-card {
+  position: relative;
+  background: #f7fafc;
+  border: 1px solid #e3edf3;
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
+.laundry-card-del {
+  position: absolute;
+  top: 4px;
+  right: 4px;
   font-size: 9px;
+  color: #ccc;
+  border: none;
+  background: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px;
+}
+
+.laundry-card-del:hover { color: #cc0000; }
+
+.laundry-card-machine {
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #aaa;
-  padding: 1px 8px 2px 0;
-  border-bottom: 1px solid #eef2f7;
-}
-
-.laundry-row td {
-  padding: 2px 8px 2px 0;
   color: #333;
-  border-bottom: 1px solid #f5f7fa;
+  padding-right: 14px;
 }
 
-.laundry-row:last-child td { border-bottom: none; }
+.laundry-card-stats {
+  display: flex;
+  gap: 6px;
+  font-size: 10px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.laundry-card-cost {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e3070;
+  margin-top: 3px;
+}
