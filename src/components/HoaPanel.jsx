@@ -50,6 +50,28 @@ const HOA_DOCUMENTS = [
   { id: '1Vh5US5NUKaPNaI-nbNFbtE6KgG56Bm0H', title: 'Board Member Packet — May 2026' },
 ].map(d => ({ ...d, url: `https://drive.google.com/file/d/${d.id}/view` })).reverse()
 
+// Monthly financial summary pulled from the Board Member Packets above
+// (Balance Sheet / Cash Flow / Annual Budget sections of each PDF)
+const HOA_FINANCIALS = [
+  { month: 'Jun 2025', operating_cash: 117647.19, reserve_assets: 508434.67, total_assets: 626081.86, total_reserves: 719774.18, net_income_mtd: 31292.18, net_income_ytd: -12879.57, total_income_mtd: 55407.11, total_expense_mtd: 24114.93 },
+  { month: 'Jul 2025', operating_cash: 126271.37, reserve_assets: 513478.92, total_assets: 639750.29, total_reserves: 724818.43, net_income_mtd: 8624.18, net_income_ytd: -4255.39, total_income_mtd: 62203.88, total_expense_mtd: 53579.70 },
+  { month: 'Aug 2025', operating_cash: 157376.66, reserve_assets: 368702.34, total_assets: 526079.00, total_reserves: 729827.85, net_income_mtd: -118680.71, net_income_ytd: -122936.10, total_income_mtd: 58087.19, total_expense_mtd: 176767.90 },
+  { month: 'Sep 2025', operating_cash: 142149.25, reserve_assets: 373664.75, total_assets: 515814.00, total_reserves: 734790.26, net_income_mtd: -15327.41, net_income_ytd: -138263.51, total_income_mtd: 61584.97, total_expense_mtd: 76912.38 },
+  { month: 'Oct 2025', operating_cash: 71289.05, reserve_assets: 393095.14, total_assets: 464384.19, total_reserves: 739765.67, net_income_mtd: -56405.22, net_income_ytd: -194668.73, total_income_mtd: 64408.70, total_expense_mtd: 120813.92 },
+  { month: 'Nov 2025', operating_cash: 50117.37, reserve_assets: 398074.13, total_assets: 448191.50, total_reserves: 744744.66, net_income_mtd: -21271.68, net_income_ytd: -215940.41, total_income_mtd: 50386.74, total_expense_mtd: 71658.42 },
+  { month: 'Dec 2025', operating_cash: 142905.37, reserve_assets: 338235.21, total_assets: 481140.58, total_reserves: 684905.74, net_income_mtd: 92788.00, net_income_ytd: -123152.41, total_income_mtd: 70647.77, total_expense_mtd: -22140.23 },
+  { month: 'Jan 2026', operating_cash: 116713.12, reserve_assets: 279332.30, total_assets: 396045.42, total_reserves: 626002.83, net_income_mtd: -26192.25, net_income_ytd: -26192.25, total_income_mtd: 71279.82, total_expense_mtd: 97472.07 },
+  { month: 'Feb 2026', operating_cash: 144554.52, reserve_assets: 285204.30, total_assets: 429758.82, total_reserves: 631874.83, net_income_mtd: 27741.40, net_income_ytd: 1549.15, total_income_mtd: 69102.66, total_expense_mtd: 41361.26 },
+  { month: 'Mar 2026', operating_cash: 124824.77, reserve_assets: 291083.27, total_assets: 415908.04, total_reserves: 637753.80, net_income_mtd: -19829.75, net_income_ytd: -18280.60, total_income_mtd: 84555.52, total_expense_mtd: 104385.27 },
+  { month: 'Apr 2026', operating_cash: 159467.33, reserve_assets: 296965.58, total_assets: 456432.91, total_reserves: 643636.11, net_income_mtd: 34642.56, net_income_ytd: 16361.96, total_income_mtd: 61207.50, total_expense_mtd: 26564.94 },
+  { month: 'May 2026', operating_cash: 155541.61, reserve_assets: 302851.92, total_assets: 458393.53, total_reserves: 649522.45, net_income_mtd: -3925.72, net_income_ytd: 12436.24, total_income_mtd: 66618.28, total_expense_mtd: 70544.00 },
+]
+
+function fmtUSD(n) {
+  if (n === null || n === undefined) return '—'
+  return Number(n).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })
+}
+
 export default function HoaPanel({ userId }) {
   const { items, loading, addItem, updateItem, deleteItem } = useHoaItems(userId)
   const [tab, setTab] = useState('All')
@@ -58,7 +80,7 @@ export default function HoaPanel({ userId }) {
   const [editId, setEditId] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
 
-  const tabs = ['All', ...CATEGORIES, 'Documents']
+  const tabs = ['All', ...CATEGORIES, 'Financials', 'Documents']
   const filtered = tab === 'All' ? items : items.filter(i => i.category === tab)
 
   const counts = {}
@@ -103,7 +125,7 @@ export default function HoaPanel({ userId }) {
       {/* Header */}
       <div className="hoa-header">
         <span className="hoa-header-title">Park Reseda HOA</span>
-        {tab !== 'Documents' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
+        {tab !== 'Documents' && tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
       </div>
 
       {/* Stats row */}
@@ -122,11 +144,90 @@ export default function HoaPanel({ userId }) {
           <button
             key={t}
             className={`hoa-tab ${tab === t ? 'active' : ''}`}
-            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Documents' ? '#5c7d9e' : CAT_COLORS[t] }}
+            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Documents' ? '#5c7d9e' : t === 'Financials' ? '#3a5c4a' : CAT_COLORS[t] }}
             onClick={() => setTab(t)}
           >{t}</button>
         ))}
       </div>
+
+      {/* Financials tab */}
+      {tab === 'Financials' && (() => {
+        const latest = HOA_FINANCIALS[HOA_FINANCIALS.length - 1]
+        const maxAssets = Math.max(...HOA_FINANCIALS.map(m => m.total_assets || 0), 1)
+        return (
+          <div className="hoa-fin">
+            {latest && (
+              <div className="hoa-fin-stats">
+                <div className="hoa-fin-stat">
+                  <span className="hoa-fin-stat-lbl">Total Assets</span>
+                  <span className="hoa-fin-stat-num">{fmtUSD(latest.total_assets)}</span>
+                </div>
+                <div className="hoa-fin-stat">
+                  <span className="hoa-fin-stat-lbl">Reserve Funds</span>
+                  <span className="hoa-fin-stat-num">{fmtUSD(latest.total_reserves)}</span>
+                </div>
+                <div className="hoa-fin-stat">
+                  <span className="hoa-fin-stat-lbl">Operating Cash</span>
+                  <span className="hoa-fin-stat-num">{fmtUSD(latest.operating_cash)}</span>
+                </div>
+                <div className="hoa-fin-stat">
+                  <span className="hoa-fin-stat-lbl">Net Income (MTD)</span>
+                  <span className={`hoa-fin-stat-num ${Number(latest.net_income_mtd) < 0 ? 'neg' : 'pos'}`}>{fmtUSD(latest.net_income_mtd)}</span>
+                </div>
+              </div>
+            )}
+
+            <p className="hoa-fin-asof">{latest ? `As of ${latest.month}` : 'No financial data available yet.'} — pulled from the Board Member Packets in the HOA Google Drive folder.</p>
+
+            {HOA_FINANCIALS.length > 0 && (
+              <div className="hoa-fin-chart">
+                <span className="hoa-fin-chart-title">Total Assets by Month</span>
+                <div className="hoa-fin-bars">
+                  {HOA_FINANCIALS.map(m => (
+                    <div key={m.month} className="hoa-fin-bar-col" title={`${m.month}: ${fmtUSD(m.total_assets)}`}>
+                      <div className="hoa-fin-bar" style={{ height: `${Math.max(4, (m.total_assets / maxAssets) * 100)}%` }} />
+                      <span className="hoa-fin-bar-lbl">{m.month.split(' ')[0]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {HOA_FINANCIALS.length > 0 && (
+              <div className="hoa-fin-table-wrap">
+                <table className="hoa-fin-table">
+                  <thead>
+                    <tr>
+                      <th>Month</th>
+                      <th>Total Assets</th>
+                      <th>Reserves</th>
+                      <th>Operating Cash</th>
+                      <th>Income (MTD)</th>
+                      <th>Expense (MTD)</th>
+                      <th>Net Income (MTD)</th>
+                      <th>Net Income (YTD)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...HOA_FINANCIALS].reverse().map(m => (
+                      <tr key={m.month}>
+                        <td>{m.month}</td>
+                        <td>{fmtUSD(m.total_assets)}</td>
+                        <td>{fmtUSD(m.total_reserves)}</td>
+                        <td>{fmtUSD(m.operating_cash)}</td>
+                        <td>{fmtUSD(m.total_income_mtd)}</td>
+                        <td>{fmtUSD(m.total_expense_mtd)}</td>
+                        <td className={Number(m.net_income_mtd) < 0 ? 'neg' : 'pos'}>{fmtUSD(m.net_income_mtd)}</td>
+                        <td className={Number(m.net_income_ytd) < 0 ? 'neg' : 'pos'}>{fmtUSD(m.net_income_ytd)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )
+      })()}
 
       {/* Documents tab */}
       {tab === 'Documents' && (
@@ -148,7 +249,7 @@ export default function HoaPanel({ userId }) {
       )}
 
       {/* Add / Edit form */}
-      {tab !== 'Documents' && showForm && (
+      {tab !== 'Documents' && tab !== 'Financials' && showForm && (
         <form className="hoa-form" onSubmit={handleSubmit}>
           <div className="hoa-form-row">
             <select className="hoa-select" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
@@ -185,7 +286,7 @@ export default function HoaPanel({ userId }) {
       )}
 
       {/* Items list */}
-      {tab !== 'Documents' && <div className="hoa-list">
+      {tab !== 'Documents' && tab !== 'Financials' && <div className="hoa-list">
         {loading && <p className="hoa-empty">Loading…</p>}
         {!loading && filtered.length === 0 && <p className="hoa-empty">No items in this category.</p>}
         {filtered.map(item => {

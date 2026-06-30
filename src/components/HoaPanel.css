@@ -351,3 +351,116 @@
   font-size: 11px;
 }
 .hoa-doc-item a:hover { color: #1e3070; text-decoration: underline; }
+
+/* Financials tab */
+.hoa-fin {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 16px;
+}
+.hoa-fin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.hoa-fin-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f4f8f5;
+  border: 1px solid #dde8e0;
+}
+.hoa-fin-stat-lbl {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+}
+.hoa-fin-stat-num {
+  font-size: 16px;
+  font-weight: 700;
+  color: #222222;
+}
+.hoa-fin-stat-num.pos { color: #2e7d32; }
+.hoa-fin-stat-num.neg { color: #cc0000; }
+
+.hoa-fin-asof {
+  font-size: 11px;
+  color: #888;
+  margin: 0 0 16px;
+}
+
+.hoa-fin-chart {
+  margin-bottom: 18px;
+}
+.hoa-fin-chart-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 8px;
+}
+.hoa-fin-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 110px;
+  padding: 4px 4px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+.hoa-fin-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 4px;
+}
+.hoa-fin-bar {
+  width: 100%;
+  background: #3a5c4a;
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+}
+.hoa-fin-bar-lbl {
+  font-size: 8px;
+  color: #999;
+  white-space: nowrap;
+}
+
+.hoa-fin-table-wrap {
+  overflow-x: auto;
+}
+.hoa-fin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.hoa-fin-table th {
+  text-align: right;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #888;
+  padding: 6px 8px;
+  border-bottom: 2px solid #e0e0e0;
+  white-space: nowrap;
+}
+.hoa-fin-table th:first-child { text-align: left; }
+.hoa-fin-table td {
+  text-align: right;
+  padding: 6px 8px;
+  border-bottom: 1px solid #eef2f7;
+  color: #222222;
+  white-space: nowrap;
+}
+.hoa-fin-table td:first-child { text-align: left; font-weight: 600; }
+.hoa-fin-table td.pos { color: #2e7d32; }
+.hoa-fin-table td.neg { color: #cc0000; }
