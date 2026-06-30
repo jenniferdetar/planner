@@ -311,3 +311,43 @@
   cursor: pointer;
 }
 .hoa-del-btn:hover { background: #fdf0f0; }
+
+/* Documents tab */
+.hoa-docs {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 16px;
+}
+.hoa-docs-intro {
+  font-size: 11px;
+  color: #888;
+  margin: 0 0 12px;
+}
+.hoa-docs-intro a { color: #1e3070; font-weight: 600; }
+.hoa-docs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+}
+.hoa-doc-item {
+  border-bottom: 1px solid #eef2f7;
+  padding: 8px 0;
+}
+.hoa-doc-item a {
+  font-size: 12px;
+  font-weight: 600;
+  color: #222222;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hoa-doc-item a::before {
+  content: '📄';
+  font-size: 11px;
+}
+.hoa-doc-item a:hover { color: #1e3070; text-decoration: underline; }
