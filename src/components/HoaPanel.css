@@ -421,7 +421,8 @@
   color: #222222;
   white-space: nowrap;
 }
-.hoa-fin-table tbody tr:nth-child(even) td { background: #eef3fa; }
+.hoa-fin-table tbody tr:nth-child(odd) td { background: #fff; }
+.hoa-fin-table tbody tr:nth-child(even) td { background: #dce6f5; }
 .hoa-fin-table td:first-child { text-align: left; font-weight: 600; }
 .hoa-fin-table td:first-child a { color: #1e3070; text-decoration: none; }
 .hoa-fin-table td:first-child a:hover { text-decoration: underline; }
