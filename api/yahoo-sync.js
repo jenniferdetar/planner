@@ -1,9 +1,7 @@
 import { ImapFlow } from 'imapflow'
 
-// Reads CSEA webform submission emails from a Yahoo Mail inbox over IMAP.
-// Yahoo has no Gmail-style REST API, so this runs server-side using an
-// account app password (Yahoo Mail Plus required) and proxies plain text
-// bodies back to the client, which handles dedup/parsing/insert.
+// Reads all emails from the Yahoo Mail CSEA / Chapter 500 folder over IMAP.
+// Falls back to searching INBOX by sender if no dedicated folder is found.
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
@@ -26,28 +24,68 @@ export default async function handler(req, res) {
 
   try {
     await client.connect()
-    const lock = await client.getMailboxLock('INBOX')
-    try {
-      const uids = await client.search({
-        from: 'website@csea.com',
-        subject: 'Webform submission from',
-      })
-      const recent = (uids || []).slice(-50)
 
-      const messages = []
-      for await (const msg of client.fetch(recent, { uid: true, source: false, envelope: true, bodyParts: ['text'] })) {
-        const text = msg.bodyParts?.get('text')?.toString('utf8') || ''
-        messages.push({ id: String(msg.uid), text })
-      }
+    // Find the CSEA / Chapter 500 folder
+    const csea = await findCseaFolder(client)
+    const messages = csea
+      ? await readFolder(client, csea)
+      : await searchInbox(client)
 
-      res.status(200).json({ messages })
-    } finally {
-      lock.release()
-    }
+    res.status(200).json({ messages, folder: csea || 'INBOX (search)' })
   } catch (err) {
-    console.error('Yahoo IMAP sync error:', err)
-    res.status(502).json({ error: 'Failed to read Yahoo Mail inbox' })
+    console.error('Yahoo CSEA IMAP sync error:', err)
+    res.status(502).json({ error: err.message })
   } finally {
     await client.logout().catch(() => {})
   }
+}
+
+async function findCseaFolder(client) {
+  for await (const mb of client.list()) {
+    const p = mb.path.toLowerCase()
+    if (p.includes('csea') || p.includes('chapter 500') || p.includes('chapter500')) return mb.path
+  }
+  return null
+}
+
+async function readFolder(client, folderPath) {
+  const lock = await client.getMailboxLock(folderPath)
+  try {
+    const uids = await client.search({ all: true })
+    const recent = uids.slice(-100)
+    return await fetchMessages(client, recent)
+  } finally {
+    lock.release()
+  }
+}
+
+async function searchInbox(client) {
+  const lock = await client.getMailboxLock('INBOX')
+  try {
+    const uids = await client.search({ from: 'csea.com' })
+    const recent = (uids || []).slice(-100)
+    return await fetchMessages(client, recent)
+  } finally {
+    lock.release()
+  }
+}
+
+async function fetchMessages(client, uids) {
+  if (!uids.length) return []
+  const messages = []
+  for await (const msg of client.fetch(uids, { uid: true, envelope: true, bodyParts: ['text', '1'] })) {
+    const text =
+      msg.bodyParts?.get('text')?.toString('utf8') ||
+      msg.bodyParts?.get('1')?.toString('utf8') ||
+      ''
+    messages.push({
+      id: String(msg.uid),
+      subject: msg.envelope?.subject || '',
+      from: msg.envelope?.from?.[0]?.address || '',
+      fromName: msg.envelope?.from?.[0]?.name || '',
+      date: msg.envelope?.date?.toISOString?.() || '',
+      text: text.trim(),
+    })
+  }
+  return messages
 }

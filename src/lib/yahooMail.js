@@ -1,18 +1,40 @@
 import { parseWebformText, webformToInteraction } from './webformParser'
 
-// Calls the /api/yahoo-sync serverless function, which reads the Yahoo
-// inbox over IMAP server-side (Yahoo has no public Gmail-style mail API).
-export async function fetchYahooWebformEmails() {
+export async function fetchYahooCseaEmails() {
   const res = await fetch('/api/yahoo-sync', { method: 'POST' })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw new Error(body.error || `Yahoo sync error ${res.status}`)
+    throw new Error(body.error || `Yahoo CSEA sync error ${res.status}`)
   }
   const data = await res.json()
   return data.messages || []
 }
 
-// Parse a { id, text } message from /api/yahoo-sync into an interaction record
+// Try webform parse first; fall back to a generic interaction from subject/body.
 export function parseYahooEmailToInteraction(msg) {
-  return webformToInteraction(parseWebformText(msg.text || ''), 'yahoo_message_id', msg.id)
+  // Attempt structured webform parse
+  const parsed = parseWebformText(msg.text || '')
+  if (parsed.name) {
+    return webformToInteraction(parsed, 'yahoo_message_id', msg.id)
+  }
+
+  // Generic fallback: use sender name (or address) as member_name
+  const memberName = msg.fromName || msg.from || 'Unknown'
+  const date = msg.date ? msg.date.split('T')[0] : new Date().toISOString().split('T')[0]
+  const discussion = [msg.subject, msg.text?.slice(0, 800)].filter(Boolean).join('\n\n')
+
+  if (!discussion.trim()) return null
+
+  return {
+    category: 'General',
+    date_spoke: date,
+    member_name: memberName,
+    work_location: '',
+    discussion,
+    who_involved: 'Jennifer Detar',
+    contact_person: memberName,
+    point_of_contact: msg.from || '',
+    archived: false,
+    yahoo_message_id: msg.id,
+  }
 }

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
-import { fetchYahooWebformEmails, parseYahooEmailToInteraction } from '../lib/yahooMail'
+import { fetchYahooCseaEmails, parseYahooEmailToInteraction } from '../lib/yahooMail'
 
 export function useYahooMailSync() {
   const [syncing, setSyncing] = useState(false)
@@ -15,7 +15,7 @@ export function useYahooMailSync() {
     setError(null)
 
     try {
-      const messages = await fetchYahooWebformEmails()
+      const messages = await fetchYahooCseaEmails()
       if (!messages.length) { setLastSynced(new Date()); setSyncing(false); setNewCount(0); return }
 
       const ids = messages.map(m => m.id)
