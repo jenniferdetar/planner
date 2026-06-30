@@ -85,7 +85,7 @@ export default function HoaPanel({ userId }) {
   const [editId, setEditId] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
 
-  const tabs = ['All', ...CATEGORIES, 'Financials']
+  const tabs = ['All', ...CATEGORIES]
   const filtered = tab === 'All' ? items : items.filter(i => i.category === tab)
 
   const counts = {}
