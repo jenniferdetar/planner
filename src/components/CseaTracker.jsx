@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useCseaMembers, useWorkLocations } from '../hooks/useCseaData'
 import { useQuickLinks } from '../hooks/useQuickLinks'
 import { useGmailCseaSync } from '../hooks/useGmailCseaSync'
+import { useYahooMailSync } from '../hooks/useYahooMailSync'
 import ContractReference from './ContractReference'
 import './CseaTracker.css'
 
@@ -85,10 +86,12 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
   })
 
   const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount } = useGmailCseaSync(providerToken)
+  const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount } = useYahooMailSync()
 
   // Auto-sync when interactions tab is opened
   useEffect(() => {
     if (tab === 'interactions' && providerToken) syncGmail()
+    if (tab === 'interactions') syncYahoo()
   }, [tab, providerToken])
 
   const activeIssues = issues.filter(i => i.status === 'Open' || i.status === 'In Progress')
@@ -327,6 +330,9 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
                 {gmailSyncing ? 'Syncing…' : gmailNewCount != null ? `↻ Sync Gmail${gmailNewCount > 0 ? ` (+${gmailNewCount})` : ''}` : '↻ Sync Gmail'}
               </button>
             )}
+            <button className="csea-gmail-sync-btn" onClick={syncYahoo} disabled={yahooSyncing}>
+              {yahooSyncing ? 'Syncing…' : yahooNewCount != null ? `↻ Sync Yahoo Mail${yahooNewCount > 0 ? ` (+${yahooNewCount})` : ''}` : '↻ Sync Yahoo Mail'}
+            </button>
             <button className="csea-add-btn" onClick={() => setShowAddInteraction(true)}>+ Log Contact</button>
           </div>
 
