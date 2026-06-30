@@ -210,10 +210,10 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
               <button type="submit" className="icaap-save">Add</button>
             </div>
           </form>
-          <div className="icaap-note-list">
-            {icaapNotes.length === 0 && <p className="icaap-empty">No notes yet</p>}
+          <div className="csea-issue-list csea-interactions-grid">
+            {icaapNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
             {icaapNotes.map(n => (
-              <IcaapNoteRowItem key={n.id} note={n} onDelete={onDeleteIcaapNote} />
+              <IcaapNoteGroup key={n.id} note={n} onDelete={onDeleteIcaapNote} />
             ))}
           </div>
         </div>
@@ -1085,23 +1085,29 @@ function IcaapDashboard() {
   )
 }
 
-function IcaapNoteRowItem({ note: n, onDelete }) {
-  const [expanded, setExpanded] = useState(false)
+function IcaapNoteGroup({ note: n, onDelete }) {
+  const [collapsed, setCollapsed] = useState(true)
   return (
-    <div
-      className={`icaap-note-row${expanded ? ' expanded' : ''}`}
-      onClick={() => setExpanded(e => !e)}
-    >
-      <div className="icaap-note-meta">
-        <span className="icaap-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
-        {n.source && <span className="icaap-note-source">{n.source}</span>}
+    <div className="interaction-group">
+      <div className="interaction-group-header">
+        <span className="interaction-group-name">{n.source || 'Note'}</span>
+        {n.created_at && (
+          <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
+        )}
+        <button className="interaction-group-toggle" onClick={() => setCollapsed(c => !c)}>
+          {collapsed ? '▾' : '▴'}
+        </button>
       </div>
-      <div className="icaap-note-text">{n.note}</div>
-      <button
-        className="icaap-note-delete"
-        onClick={e => { e.stopPropagation(); onDelete?.(n.id) }}
-        title="Delete"
-      >×</button>
+      {!collapsed && (
+        <div className="interaction-group-items">
+          <div className="interaction-card">
+            <div className="interaction-header">
+              <button className="interaction-delete-btn" title="Delete" onClick={() => onDelete?.(n.id)}>✕</button>
+            </div>
+            <p className="interaction-disc-text">{n.note}</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
