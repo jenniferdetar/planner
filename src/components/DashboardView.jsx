@@ -579,12 +579,10 @@ export default function DashboardView({
             className={`dash-mobile-nav-btn${section === item.key ? ' active' : ''}`}
             onClick={() => setSection(item.key)}
           >
-            <span className="dash-mobile-nav-dot" style={{ background: section === item.key ? '#f7e84b' : item.color }} />
             {item.mobileLabel || item.label}
           </button>
         ))}
         <button className="dash-mobile-nav-btn dash-mobile-logout-btn" onClick={onSignOut}>
-          <span className="dash-mobile-nav-dot" style={{ background: '#e05c5c' }} />
           Logout
         </button>
       </nav>
