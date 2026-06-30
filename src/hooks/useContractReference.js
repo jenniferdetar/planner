@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
-export const CONTRACT_SEED = [
+const CONTRACT_SEED = [
   {
     issue_category: 'Discipline',
     issue_description: 'Notice of Unsatisfactory Service or Act',
