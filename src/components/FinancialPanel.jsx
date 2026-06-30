@@ -940,54 +940,43 @@ function LaundryTab({ userId }) {
               <span className="laundry-day-total">{totalQuarters} quarters · {fmt(totalCost)}</span>
             </div>
 
-            {(washSessions.length > 0 || drySessions.length > 0) && (
-              <table className="laundry-table">
-                <colgroup>
-                  <col style={{ width: '32%' }} />
-                  <col style={{ width: '12%' }} />
-                  <col style={{ width: '14%' }} />
-                  <col style={{ width: '14%' }} />
-                  <col style={{ width: '14%' }} />
-                  <col style={{ width: '14%' }} />
-                </colgroup>
-                <thead>
-                  <tr><th>Machine</th><th>Loads</th><th>Quarters</th><th>Minutes</th><th>Cost</th><th></th></tr>
-                </thead>
-                {washSessions.length > 0 && (
-                  <tbody>
-                    <tr className="laundry-section-row">
-                      <td colSpan={6} className="laundry-section-title">Washing</td>
-                    </tr>
-                    {washSessions.map(s => (
-                      <tr key={s.id} className="laundry-row">
-                        <td>{machineLabel(s.machine_type)}</td>
-                        <td>{s.loads}</td>
-                        <td>{s.quarters}</td>
-                        <td>{s.minutes} min</td>
-                        <td>{fmt(s.quarters * 0.25)}</td>
-                        <td><button className="fin-delete-btn" onClick={() => deleteSession(s.id)}>✕</button></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                )}
-                {drySessions.length > 0 && (
-                  <tbody>
-                    <tr className="laundry-section-row">
-                      <td colSpan={6} className="laundry-section-title">Drying</td>
-                    </tr>
-                    {drySessions.map(s => (
-                      <tr key={s.id} className="laundry-row">
-                        <td>{machineLabel(s.machine_type)}</td>
-                        <td>{s.loads}</td>
-                        <td>{s.quarters}</td>
-                        <td>{s.minutes} min</td>
-                        <td>{fmt(s.quarters * 0.25)}</td>
-                        <td><button className="fin-delete-btn" onClick={() => deleteSession(s.id)}>✕</button></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                )}
-              </table>
+            {washSessions.length > 0 && (
+              <div className="laundry-section">
+                <div className="laundry-section-title laundry-section-title--wash">Washing</div>
+                <div className="laundry-card-grid">
+                  {washSessions.map(s => (
+                    <div key={s.id} className="laundry-session-card">
+                      <button className="laundry-card-del" onClick={() => deleteSession(s.id)}>✕</button>
+                      <div className="laundry-card-machine">{machineLabel(s.machine_type)}</div>
+                      <div className="laundry-card-stats">
+                        <span>{s.loads} {s.loads === 1 ? 'load' : 'loads'}</span>
+                        <span>{s.quarters}q</span>
+                        <span>{s.minutes} min</span>
+                      </div>
+                      <div className="laundry-card-cost">{fmt(s.quarters * 0.25)}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {drySessions.length > 0 && (
+              <div className="laundry-section">
+                <div className="laundry-section-title laundry-section-title--dry">Drying</div>
+                <div className="laundry-card-grid">
+                  {drySessions.map(s => (
+                    <div key={s.id} className="laundry-session-card">
+                      <button className="laundry-card-del" onClick={() => deleteSession(s.id)}>✕</button>
+                      <div className="laundry-card-machine">{machineLabel(s.machine_type)}</div>
+                      <div className="laundry-card-stats">
+                        <span>{s.loads} {s.loads === 1 ? 'load' : 'loads'}</span>
+                        <span>{s.quarters}q</span>
+                        <span>{s.minutes} min</span>
+                      </div>
+                      <div className="laundry-card-cost">{fmt(s.quarters * 0.25)}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         )
