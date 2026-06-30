@@ -5,6 +5,7 @@ import { useRoles } from '../hooks/useRoles'
 import GoalsPanel from './GoalsPanel'
 import LibraryPanel from './LibraryPanel'
 import FavoriteVideosPanel from './FavoriteVideosPanel'
+import PersonalLinksPanel from './PersonalLinksPanel'
 import ValuesPanel from './ValuesPanel'
 import RolesPanel from './RolesPanel'
 import WantsPanel from './WantsPanel'
@@ -16,6 +17,7 @@ const SUB_TABS = [
   { key: 'checklist', label: 'Monthly Checklist', color: '#7ec8c8' },
   { key: 'library',   label: 'Library',           color: '#7ba7e0' },
   { key: 'videos',    label: 'Favorite Videos',   color: '#cc4444' },
+  { key: 'links',     label: 'Links',             color: '#3a9188' },
   { key: 'mantra',    label: 'Mantra & Mission',  color: '#e8a0a0' },
   { key: 'values',    label: 'Values',            color: '#8e44ad' },
   { key: 'budget',    label: 'Wants',             color: '#4a7a6a' },
@@ -94,6 +96,7 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
         />
       )}
       {subTab === 'videos' && <FavoriteVideosPanel userId={userId} />}
+      {subTab === 'links' && <PersonalLinksPanel userId={userId} />}
       {subTab === 'budget' && <WantsPanel providerToken={providerToken} />}
 
       {subTab === 'mantra' && (
