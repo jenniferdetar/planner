@@ -98,6 +98,34 @@
   overflow-y: auto;
 }
 
+.mantra-subtabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.mantra-subtab {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #9aaac8;
+  background: #f4f6fb;
+  border: 1px solid #d9e8f0;
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.mantra-subtab:hover:not(.active) { color: #1e3070; }
+
+.mantra-subtab.active {
+  color: #fff;
+  background: #1e3070;
+  border-color: #1e3070;
+}
+
 .mantra-header {
   display: flex;
   align-items: center;

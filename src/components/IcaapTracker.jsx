@@ -245,19 +245,25 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
               <button type="submit" className="icaap-save">Add</button>
             </div>
           </form>
-          <div className="icaap-item-list">
-            {quickLinks.length === 0 && <p className="icaap-empty">No links yet</p>}
+          <div className="csea-issue-list csea-interactions-grid">
+            {quickLinks.length === 0 && <p className="csea-empty">No links yet</p>}
             {quickLinks.map(l => (
-              <div key={l.id} className="csea-note-row">
-                <div className="csea-note-body">
-                  <a href={l.url} target="_blank" rel="noopener noreferrer" className="quick-link-anchor">{l.title}</a>
-                  {l.created_at && (
-                    <span className="quick-link-date">
-                      {new Date(l.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                    </span>
-                  )}
+              <div key={l.id} className="interaction-group">
+                <div className="interaction-group-header">
+                  <a href={l.url} target="_blank" rel="noopener noreferrer" className="interaction-group-name quick-link-anchor">{l.title}</a>
+                  <button className="interaction-delete-btn" title="Delete" onClick={() => deleteLink(l.id)}>✕</button>
                 </div>
-                <button className="csea-note-delete" onClick={() => deleteLink(l.id)}>✕</button>
+                {l.created_at && (
+                  <div className="interaction-group-items">
+                    <div className="interaction-card">
+                      <div className="interaction-header">
+                        <span className="interaction-date-badge">
+                          {new Date(l.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
