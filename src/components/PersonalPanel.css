@@ -199,6 +199,7 @@
   font-style: normal;
   color: #222222;
   margin: 0 0 24px;
+  white-space: pre-wrap;
 }
 
 .mantra-paragraph:last-child { margin-bottom: 0; }
