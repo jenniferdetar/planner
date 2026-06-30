@@ -318,3 +318,36 @@
   color: #fff;
   border-color: #e05c5c;
 }
+
+@media (max-width: 768px) {
+  .values-list-wrap {
+    padding: 12px 14px;
+  }
+
+  .values-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .values-card {
+    padding: 10px 12px;
+  }
+
+  .values-detail-nav {
+    padding: 8px 14px;
+  }
+
+  .values-detail-body {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .values-detail-title {
+    font-size: 20px;
+  }
+
+  .values-desc-textarea {
+    padding: 12px 14px;
+    font-size: 14px;
+    min-height: 200px;
+  }
+}

@@ -207,3 +207,40 @@
   color: #888;
   padding: 1px 4px;
 }
+
+@media (max-width: 768px) {
+  .month-nav {
+    padding: 8px 12px;
+    gap: 12px;
+  }
+
+  .month-title {
+    font-size: 15px;
+    min-width: 140px;
+  }
+
+  .mnav-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 15px;
+  }
+
+  .dow-header {
+    padding: 6px 0;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .cell-event,
+  .cell-event-time {
+    font-size: 10px !important;
+  }
+
+  .month-cell {
+    padding: 2px 3px;
+  }
+
+  .cell-num {
+    font-size: 11px;
+  }
+}
