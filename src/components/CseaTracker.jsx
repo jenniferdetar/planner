@@ -88,10 +88,18 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
   const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount } = useGmailCseaSync(providerToken)
   const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount } = useYahooMailSync()
 
+  const syncing = gmailSyncing || yahooSyncing
+  const totalNewCount = (gmailNewCount ?? 0) + (yahooNewCount ?? 0)
+  const hasSynced = gmailNewCount != null || yahooNewCount != null
+
+  function syncAll() {
+    if (providerToken) syncGmail()
+    syncYahoo()
+  }
+
   // Auto-sync when interactions tab is opened
   useEffect(() => {
-    if (tab === 'interactions' && providerToken) syncGmail()
-    if (tab === 'interactions') syncYahoo()
+    if (tab === 'interactions') syncAll()
   }, [tab, providerToken])
 
   const activeIssues = issues.filter(i => i.status === 'Open' || i.status === 'In Progress')
@@ -325,13 +333,8 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
             <button className="csea-archive-toggle" onClick={onToggleArchived}>
               {showArchived ? 'Hide Archived' : 'Show Archived'}
             </button>
-            {providerToken && (
-              <button className="csea-gmail-sync-btn" onClick={syncGmail} disabled={gmailSyncing}>
-                {gmailSyncing ? 'Syncing…' : gmailNewCount != null ? `↻ Sync Gmail${gmailNewCount > 0 ? ` (+${gmailNewCount})` : ''}` : '↻ Sync Gmail'}
-              </button>
-            )}
-            <button className="csea-gmail-sync-btn" onClick={syncYahoo} disabled={yahooSyncing}>
-              {yahooSyncing ? 'Syncing…' : yahooNewCount != null ? `↻ Sync Yahoo Mail${yahooNewCount > 0 ? ` (+${yahooNewCount})` : ''}` : '↻ Sync Yahoo Mail'}
+            <button className="csea-gmail-sync-btn" onClick={syncAll} disabled={syncing}>
+              {syncing ? 'Syncing…' : hasSynced ? `↻ Sync${totalNewCount > 0 ? ` (+${totalNewCount})` : ''}` : '↻ Sync'}
             </button>
             <button className="csea-add-btn" onClick={() => setShowAddInteraction(true)}>+ Log Contact</button>
           </div>
