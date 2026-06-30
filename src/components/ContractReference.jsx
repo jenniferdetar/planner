@@ -131,8 +131,6 @@ export default function ContractReference({ userId }) {
     )
   })
 
-  const selected = entries.find(e => e.id === selectedId) || null
-
   function handlePillClick(id) {
     setSelectedId(prev => prev === id ? null : id)
     setShowForm(false)
@@ -193,8 +191,7 @@ export default function ContractReference({ userId }) {
       )}
 
       <div className="cref-body">
-        {/* Pill grid */}
-        <div className="cref-pills">
+        <div className="csea-issue-list csea-interactions-grid">
           {loading && <p className="cref-empty">Loading…</p>}
 
           {!loading && entries.length === 0 && (
@@ -211,61 +208,48 @@ export default function ContractReference({ userId }) {
           )}
 
           {filtered.map(e => {
-            const color = CAT_COLORS[e.issue_category] || '#2a5878'
-            const isActive = selectedId === e.id
+            const isExpanded = selectedId === e.id && !editEntry
             return (
-              <button
-                key={e.id}
-                className={`cref-pill${isActive ? ' active' : ''}`}
-                style={{ '--pill-color': color }}
-                onClick={() => handlePillClick(e.id)}
-              >
-                <span className="cref-pill-dot" />
-                <span className="cref-pill-label">{e.issue_description}</span>
-                {(e.article_number || e.section_number) && (
-                  <span className="cref-pill-art">
-                    {e.article_number}{e.section_number ? ` § ${e.section_number}` : ''}
-                  </span>
+              <div key={e.id} className="interaction-group">
+                <div className="interaction-group-header">
+                  <span className="interaction-group-name">{e.issue_description}</span>
+                  {(e.article_number || e.section_number) && (
+                    <span className="cref-art-badge">
+                      {e.article_number}{e.section_number ? ` § ${e.section_number}` : ''}
+                    </span>
+                  )}
+                  <button className="interaction-group-toggle" onClick={() => handlePillClick(e.id)}>
+                    {isExpanded ? '▴' : '▾'}
+                  </button>
+                </div>
+                {isExpanded && (
+                  <div className="interaction-group-items">
+                    <div className="interaction-card">
+                      <div className="interaction-header">
+                        <span className="cref-cat-badge" style={{ background: CAT_COLORS[e.issue_category] || '#2a5878' }}>
+                          {e.issue_category}
+                        </span>
+                      </div>
+                      <p className="interaction-disc-text">{e.summary}</p>
+                      {e.notes && (
+                        <p className="cref-notes"><strong>Note:</strong> {e.notes}</p>
+                      )}
+                      <div className="cref-card-actions">
+                        <CopyButton text={buildAnswerText(e)} label="Copy Answer" />
+                        <CopyButton
+                          text={`${e.article_number ? `${e.article_number}${e.section_number ? ` § ${e.section_number}` : ''}: ` : ''}${e.summary}`}
+                          label="Copy Summary"
+                        />
+                        <button className="cref-edit-btn" onClick={() => setEditEntry(e)}>Edit</button>
+                        <button className="cref-del-btn" onClick={() => handleDelete(e.id)}>Delete</button>
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </button>
+              </div>
             )
           })}
         </div>
-
-        {/* Detail pane */}
-        {selected && !editEntry && (
-          <div className="cref-detail">
-            <div className="cref-detail-header">
-              <div className="cref-detail-meta">
-                <span className="cref-cat-badge" style={{ background: CAT_COLORS[selected.issue_category] || '#2a5878' }}>
-                  {selected.issue_category}
-                </span>
-                {(selected.article_number || selected.section_number) && (
-                  <span className="cref-art-badge">
-                    {selected.article_number}{selected.section_number ? ` § ${selected.section_number}` : ''}
-                  </span>
-                )}
-              </div>
-              <button className="cref-detail-close" onClick={() => setSelectedId(null)}>✕</button>
-            </div>
-
-            <h3 className="cref-detail-title">{selected.issue_description}</h3>
-            <p className="cref-summary">{selected.summary}</p>
-            {selected.notes && (
-              <p className="cref-notes"><strong>Note:</strong> {selected.notes}</p>
-            )}
-
-            <div className="cref-card-actions">
-              <CopyButton text={buildAnswerText(selected)} label="Copy Answer" />
-              <CopyButton
-                text={`${selected.article_number ? `${selected.article_number}${selected.section_number ? ` § ${selected.section_number}` : ''}: ` : ''}${selected.summary}`}
-                label="Copy Summary"
-              />
-              <button className="cref-edit-btn" onClick={() => setEditEntry(selected)}>Edit</button>
-              <button className="cref-del-btn" onClick={() => handleDelete(selected.id)}>Delete</button>
-            </div>
-          </div>
-        )}
       </div>
 
       {!loading && entries.length > 0 && (
