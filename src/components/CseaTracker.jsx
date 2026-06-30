@@ -71,7 +71,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
   const [noteText, setNoteText] = useState('')
   const [noteSource, setNoteSource] = useState('')
   const [noteTopic, setNoteTopic] = useState('')
-  const [showNotesList, setShowNotesList] = useState(false)
+  const [showAddNote, setShowAddNote] = useState(false)
 
   const [issueForm, setIssueForm] = useState({
     issue_type: 'Grievance', member_name: '', work_location: '',
@@ -207,48 +207,55 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
 
       {tab === 'notes' && (
         <div className="csea-panel">
-          <form className="csea-notes-form" onSubmit={async (e) => {
-            e.preventDefault()
-            if (!noteText.trim()) return
-            await onAddCseaNote?.(noteText.trim(), noteSource.trim(), noteTopic.trim())
-            setNoteText('')
-            setNoteSource('')
-            setNoteTopic('')
-          }}>
-            <textarea
-              className="csea-textarea"
-              placeholder="Note *"
-              rows={2}
-              value={noteText}
-              onChange={e => setNoteText(e.target.value)}
-            />
-            <input
-              className="csea-input"
-              placeholder="Topic (optional)"
-              value={noteTopic}
-              onChange={e => setNoteTopic(e.target.value)}
-            />
-            <div className="csea-notes-form-row">
-              <input
-                className="csea-input"
-                placeholder="Source (optional)"
-                value={noteSource}
-                onChange={e => setNoteSource(e.target.value)}
+          <div className="csea-toolbar">
+            <span />
+            <button className="csea-add-btn" onClick={() => setShowAddNote(true)}>+ Add Note</button>
+          </div>
+
+          {showAddNote && (
+            <form className="csea-form" onSubmit={async (e) => {
+              e.preventDefault()
+              if (!noteText.trim()) return
+              await onAddCseaNote?.(noteText.trim(), noteSource.trim(), noteTopic.trim())
+              setNoteText('')
+              setNoteSource('')
+              setNoteTopic('')
+              setShowAddNote(false)
+            }}>
+              <div className="csea-notes-form-row">
+                <input
+                  className="csea-input"
+                  placeholder="Topic (optional)"
+                  value={noteTopic}
+                  onChange={e => setNoteTopic(e.target.value)}
+                />
+                <input
+                  className="csea-input"
+                  placeholder="Source (optional)"
+                  value={noteSource}
+                  onChange={e => setNoteSource(e.target.value)}
+                />
+              </div>
+              <textarea
+                className="csea-textarea"
+                placeholder="Note *"
+                rows={2}
+                value={noteText}
+                onChange={e => setNoteText(e.target.value)}
               />
-              <button type="submit" className="csea-save">Add</button>
-            </div>
-          </form>
-          <button className="csea-notes-toggle" onClick={() => setShowNotesList(v => !v)}>
-            {showNotesList ? `Hide Notes (${cseaNotes.length})` : `Show Notes (${cseaNotes.length})`}
-          </button>
-          {showNotesList && (
-            <div className="csea-issue-list">
-              {cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
-              {cseaNotes.map(n => (
-                <CseaNoteRowItem key={n.id} note={n} onDelete={onDeleteCseaNote} />
-              ))}
-            </div>
+              <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
+                <button type="button" className="csea-cancel" onClick={() => setShowAddNote(false)}>Cancel</button>
+                <button type="submit" className="csea-save">Add</button>
+              </div>
+            </form>
           )}
+
+          <div className="csea-issue-list">
+            {cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
+            {cseaNotes.map(n => (
+              <CseaNoteGroup key={n.id} note={n} onDelete={onDeleteCseaNote} />
+            ))}
+          </div>
         </div>
       )}
 
@@ -397,30 +404,30 @@ function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
   )
 }
 
-function CseaNoteRowItem({ note: n, onDelete }) {
-  const [expanded, setExpanded] = useState(false)
+function CseaNoteGroup({ note: n, onDelete }) {
+  const [collapsed, setCollapsed] = useState(true)
   return (
-    <div
-      className={`csea-note-row${expanded ? ' expanded' : ''}`}
-      onClick={() => setExpanded(e => !e)}
-    >
-      <div className="csea-note-meta">
-        <span className="csea-note-date">{n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}</span>
-        {n.topic && <span className="csea-note-topic">{n.topic}</span>}
-        {!expanded && !n.topic && n.source && <span className="csea-note-source">{n.source}</span>}
-        <span className="csea-note-chevron">{expanded ? '▾' : '▸'}</span>
+    <div className="interaction-group">
+      <div className="interaction-group-header">
+        <span className="interaction-group-name">{n.topic || 'Note'}</span>
+        {n.created_at && (
+          <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
+        )}
+        <button className="interaction-group-toggle" onClick={() => setCollapsed(c => !c)}>
+          {collapsed ? '▾' : '▴'}
+        </button>
       </div>
-      {expanded && (
-        <>
-          {n.source && <div className="csea-note-source-full">{n.source}</div>}
-          <div className="csea-note-text">{n.note}</div>
-        </>
+      {!collapsed && (
+        <div className="interaction-group-items">
+          <div className="interaction-card">
+            <div className="interaction-header">
+              {n.source && <span className="interaction-cat-badge">{n.source}</span>}
+              <button className="interaction-delete-btn" title="Delete" onClick={() => onDelete?.(n.id)}>✕</button>
+            </div>
+            <p className="interaction-disc-text">{n.note}</p>
+          </div>
+        </div>
       )}
-      <button
-        className="csea-note-delete"
-        onClick={e => { e.stopPropagation(); onDelete?.(n.id) }}
-        title="Delete"
-      >×</button>
     </div>
   )
 }
