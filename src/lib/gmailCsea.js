@@ -39,11 +39,23 @@ function extractPlainText(payload) {
   if (payload.mimeType === 'text/plain' && payload.body?.data) {
     return decodeBase64(payload.body.data)
   }
+  // Prefer plain text parts before falling back to HTML
   if (payload.parts) {
+    const plain = payload.parts.find(p => p.mimeType === 'text/plain')
+    if (plain) return extractPlainText(plain)
     for (const part of payload.parts) {
       const text = extractPlainText(part)
       if (text) return text
     }
+  }
+  // Last resort: strip HTML tags from HTML-only emails
+  if (payload.mimeType === 'text/html' && payload.body?.data) {
+    const html = decodeBase64(payload.body.data)
+    return html
+      .replace(/<style[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s{2,}/g, ' ')
+      .trim()
   }
   return ''
 }
