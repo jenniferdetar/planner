@@ -1,4 +1,5 @@
 import { ImapFlow } from 'imapflow'
+import { simpleParser } from 'mailparser'
 
 // Reads emails from the Yahoo Mail HOA folder and returns them as structured records.
 export default async function handler(req, res) {
@@ -24,7 +25,6 @@ export default async function handler(req, res) {
   try {
     await client.connect()
 
-    // Find the HOA folder
     const hoaPath = await findHoaFolder(client)
     if (!hoaPath) {
       res.status(200).json({ messages: [], folders: await listFolders(client) })
@@ -37,17 +37,16 @@ export default async function handler(req, res) {
       const recent = uids.slice(-100)
 
       const messages = []
-      for await (const msg of client.fetch(recent, { uid: true, envelope: true, bodyParts: ['text', '1'] })) {
-        const text =
-          msg.bodyParts?.get('text')?.toString('utf8') ||
-          msg.bodyParts?.get('1')?.toString('utf8') ||
-          ''
+      for await (const msg of client.fetch(recent, { uid: true, envelope: true, source: true })) {
+        const parsed = await simpleParser(msg.source)
+        const text = parsed.text || parsed.html?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() || ''
+        const cleanText = stripBoilerplate(text)
         messages.push({
           id: String(msg.uid),
           subject: msg.envelope?.subject || '',
           from: msg.envelope?.from?.[0]?.address || '',
           date: msg.envelope?.date?.toISOString?.() || '',
-          text: text.trim(),
+          text: cleanText,
         })
       }
 
@@ -61,6 +60,18 @@ export default async function handler(req, res) {
   } finally {
     await client.logout().catch(() => {})
   }
+}
+
+function stripBoilerplate(text) {
+  if (!text) return ''
+  return text
+    // Strip quoted reply lines
+    .replace(/^>.*$/gm, '')
+    // Strip LBPM auto-footer
+    .replace(/If you need immediate assistance[\s\S]*$/i, '')
+    // Collapse excess blank lines
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }
 
 async function findHoaFolder(client) {

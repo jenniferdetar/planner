@@ -1,4 +1,5 @@
 import { ImapFlow } from 'imapflow'
+import { simpleParser } from 'mailparser'
 
 // Reads all emails from the Yahoo Mail CSEA / Chapter 500 folder over IMAP.
 // Falls back to searching INBOX by sender if no dedicated folder is found.
@@ -74,11 +75,9 @@ async function searchInbox(client) {
 async function fetchMessages(client, uids) {
   if (!uids.length) return []
   const messages = []
-  for await (const msg of client.fetch(uids, { uid: true, envelope: true, bodyParts: ['text', '1'] })) {
-    const text =
-      msg.bodyParts?.get('text')?.toString('utf8') ||
-      msg.bodyParts?.get('1')?.toString('utf8') ||
-      ''
+  for await (const msg of client.fetch(uids, { uid: true, envelope: true, source: true })) {
+    const parsed = await simpleParser(msg.source)
+    const text = parsed.text || parsed.html?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() || ''
     messages.push({
       id: String(msg.uid),
       subject: msg.envelope?.subject || '',
