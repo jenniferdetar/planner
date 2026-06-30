@@ -1193,14 +1193,14 @@
   opacity: 0.85;
 }
 
-.laundry-section { padding: 6px 14px 8px; }
+.laundry-section { padding: 4px 14px 5px; }
 
 .laundry-section-title {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 }
 
 .laundry-section-title--wash { color: #1e3070; }
@@ -1208,16 +1208,20 @@
 
 .laundry-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 4px;
 }
 
 .laundry-session-card {
   position: relative;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 6px;
   background: #f7fafc;
   border: 1px solid #e3edf3;
   border-radius: 6px;
-  padding: 6px 8px;
+  padding: 4px 22px 4px 8px;
 }
 
 .laundry-card-del {
@@ -1239,20 +1243,20 @@
   font-size: 11px;
   font-weight: 600;
   color: #333;
-  padding-right: 14px;
+  white-space: nowrap;
 }
 
 .laundry-card-stats {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   font-size: 10px;
   color: #888;
-  margin-top: 2px;
+  white-space: nowrap;
 }
 
 .laundry-card-cost {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: #1e3070;
-  margin-top: 3px;
+  margin-left: auto;
 }
