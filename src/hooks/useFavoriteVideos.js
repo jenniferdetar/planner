@@ -8,6 +8,10 @@ export function extractYouTubeId(url) {
   return match ? match[1] : null
 }
 
+function byTitle(a, b) {
+  return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
+}
+
 export function useFavoriteVideos(userId) {
   const [videos, setVideos] = useState([])
 
@@ -17,8 +21,7 @@ export function useFavoriteVideos(userId) {
       .from('favorite_videos')
       .select('*')
       .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .then(({ data }) => setVideos(data || []))
+      .then(({ data }) => setVideos((data || []).slice().sort(byTitle)))
   }, [userId])
 
   const addVideo = useCallback(async (url) => {
@@ -47,7 +50,7 @@ export function useFavoriteVideos(userId) {
       .insert({ url, video_id: videoId, title, channel, thumbnail_url, user_id: userId })
       .select().single()
     if (error) throw error
-    if (data) setVideos(prev => [data, ...prev])
+    if (data) setVideos(prev => [...prev, data].sort(byTitle))
   }, [userId])
 
   const deleteVideo = useCallback(async (id) => {
