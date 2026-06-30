@@ -355,6 +355,14 @@
   gap: 6px;
 }
 
+.csea-interactions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: 8px 12px;
+}
+.csea-interactions-grid .csea-empty { grid-column: 1 / -1; }
+
 .csea-empty {
   font-size: 13px;
   color: var(--csea-border);
