@@ -1012,3 +1012,25 @@
     position: static;
   }
 }
+
+@media (max-width: 768px) {
+  .zbb-header {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+
+  .zbb-month-label {
+    font-size: 13px;
+    min-width: 110px;
+  }
+
+  .zbb-nav-btn {
+    padding: 1px 8px;
+    font-size: 15px;
+  }
+
+  .zbb-chips {
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+}

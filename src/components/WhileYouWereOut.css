@@ -451,6 +451,54 @@
   font-style: italic;
 }
 
+/* ── MOBILE ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .wywo-wrap {
+    padding: 10px 12px;
+  }
+
+  .wywo-top-bar {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .wywo-tab {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .wywo-pad {
+    padding: 12px 14px 10px;
+  }
+
+  .wywo-title {
+    font-size: 16px;
+    margin: 4px 0 8px;
+  }
+
+  .wywo-field-label {
+    font-size: 12px;
+  }
+
+  .wywo-pad-btns {
+    margin-top: 10px;
+  }
+
+  .wywo-submit,
+  .wywo-print-btn {
+    font-size: 12px;
+    padding: 7px;
+  }
+
+  .wywo-empty {
+    padding: 24px;
+  }
+
+  .wywo-log-card {
+    padding: 10px 12px;
+  }
+}
+
 /* ── PRINT ───────────────────────────────────────────── */
 @media print {
   /* Hide everything on the page */

@@ -623,7 +623,7 @@
 
   .dash-main {
     flex: 1;
-    padding: 16px 14px 70px;
+    padding: 10px 10px 58px;
     overflow-y: auto;
   }
 
@@ -674,7 +674,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 58px;
+    height: 48px;
     background: #1a2332;
     display: flex;
     align-items: stretch;
@@ -685,22 +685,22 @@
 
   .dash-mobile-nav-btn {
     flex: 1;
-    min-width: 44px;
+    min-width: 38px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 2px;
     color: rgba(255,255,255,0.4);
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 600;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.3px;
     text-transform: uppercase;
     white-space: nowrap;
     cursor: pointer;
     border: none;
     background: none;
-    padding: 6px 4px;
+    padding: 4px 2px;
     transition: color 0.15s;
   }
 

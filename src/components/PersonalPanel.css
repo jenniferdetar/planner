@@ -231,3 +231,24 @@
 }
 
 .mantra-paragraph:last-child { margin-bottom: 0; }
+
+@media (max-width: 768px) {
+  .mantra-section {
+    padding: 10px 12px;
+  }
+
+  .mantra-content {
+    padding: 14px 16px;
+  }
+
+  .mantra-paragraph {
+    font-size: 14px;
+    line-height: 22px;
+    margin: 0 0 16px;
+  }
+
+  .mantra-textarea {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+}

@@ -32,6 +32,74 @@
   margin: 0;
 }
 
+.videos-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.videos-section + .videos-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e8f0;
+}
+
+.videos-section-header {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e3070;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.videos-subtitle-inline {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.tv-show-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tv-show-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f6f9fc;
+  border: 1px solid #d9e8f0;
+  border-radius: 7px;
+  padding: 8px 12px;
+}
+
+.tv-show-name {
+  font-size: 13px;
+  color: #1e3070;
+  font-weight: 500;
+}
+
+.delete-show-btn {
+  background: none;
+  border: none;
+  color: #bbb;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.12s, background 0.12s;
+}
+
+.delete-show-btn:hover {
+  color: #fff;
+  background: #e05c5c;
+}
+
 .videos-body {
   flex: 1;
   overflow-y: auto;
