@@ -41,11 +41,12 @@ export default async function handler(req, res) {
 }
 
 async function findCseaFolder(client) {
-  for await (const mb of client.list()) {
-    const p = mb.path.toLowerCase()
-    if (p.includes('csea') || p.includes('chapter 500') || p.includes('chapter500')) return mb.path
-  }
-  return null
+  const mailboxes = await client.list()
+  const mb = mailboxes.find(m => {
+    const p = m.path.toLowerCase()
+    return p.includes('csea') || p.includes('chapter 500') || p.includes('chapter500')
+  })
+  return mb?.path || null
 }
 
 async function readFolder(client, folderPath) {
