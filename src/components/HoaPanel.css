@@ -36,6 +36,43 @@
 }
 .hoa-add-btn:hover { background: rgba(255,255,255,0.2); }
 
+.hoa-sync-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+  cursor: pointer;
+}
+.hoa-sync-btn svg { width: 14px; height: 14px; }
+.hoa-sync-btn:hover:not(:disabled) { background: rgba(255,255,255,0.25); }
+.hoa-sync-btn:disabled { opacity: 0.5; cursor: default; }
+.hoa-sync-btn.spinning svg { animation: hoa-spin 0.8s linear infinite; }
+@keyframes hoa-spin { to { transform: rotate(360deg); } }
+.hoa-sync-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #e05c5c;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  line-height: 1;
+}
+
 /* Stats */
 .hoa-stats {
   display: flex;
