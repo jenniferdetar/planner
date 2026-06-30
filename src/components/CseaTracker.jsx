@@ -285,19 +285,26 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
               <button type="submit" className="csea-save">Add</button>
             </div>
           </form>
-          <div className="csea-issue-list">
+          <div className="csea-issue-list csea-interactions-grid">
             {quickLinks.length === 0 && <p className="csea-empty">No links yet</p>}
             {quickLinks.map(l => (
-              <div key={l.id} className="csea-note-row">
-                <div className="csea-note-body">
-                  <a href={l.url} target="_blank" rel="noopener noreferrer" className="quick-link-anchor">{l.title}</a>
-                  {l.created_at && (
-                    <span className="quick-link-date">
-                      {new Date(l.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                    </span>
-                  )}
+              <div key={l.id} className="interaction-group">
+                <div className="interaction-group-header">
+                  <span className="interaction-group-name">{l.title}</span>
+                  <button className="interaction-delete-btn" title="Delete" onClick={() => deleteLink(l.id)}>✕</button>
                 </div>
-                <button className="csea-note-delete" onClick={() => deleteLink(l.id)}>✕</button>
+                <div className="interaction-group-items">
+                  <div className="interaction-card">
+                    <div className="interaction-header">
+                      {l.created_at && (
+                        <span className="interaction-date-badge">
+                          {new Date(l.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                        </span>
+                      )}
+                    </div>
+                    <a href={l.url} target="_blank" rel="noopener noreferrer" className="quick-link-anchor">{l.url}</a>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
