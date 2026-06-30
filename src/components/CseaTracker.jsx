@@ -356,7 +356,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
             </form>
           )}
 
-          <div className="csea-issue-list">
+          <div className="csea-issue-list csea-interactions-grid">
             {interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
             {Object.entries(
               interactions.reduce((groups, i) => {
