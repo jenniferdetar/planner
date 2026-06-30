@@ -788,6 +788,20 @@
   font-weight: 700;
 }
 
+.csea-note-chevron {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--csea-border);
+  flex-shrink: 0;
+}
+
+.csea-note-source-full {
+  font-size: 10px;
+  color: var(--csea-blue);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
 .csea-notes-toggle {
   display: block;
   width: 100%;
@@ -810,16 +824,7 @@
   color: var(--csea-body);
   line-height: 1.5;
   white-space: pre-wrap;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
-
-.csea-note-row.expanded .csea-note-text {
-  display: block;
-  -webkit-line-clamp: unset;
-  overflow: visible;
+  margin-top: 4px;
 }
 
 .csea-note-delete {
