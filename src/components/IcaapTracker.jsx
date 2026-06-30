@@ -178,8 +178,8 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
             >May 2026</button>
           </div>
           {extraHoursTab === 'profdev' && <IcaapNotePanel userId={userId} noteKey="profdev-09-27-25" title="Professional Development — 09-27-25" color="#7ba7e0" />}
-          {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ec8c8" />}
-          {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#a0c878" />}
+          {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ba7e0" />}
+          {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#7ba7e0" />}
         </div>
       )}
 
