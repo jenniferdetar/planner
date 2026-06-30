@@ -623,7 +623,7 @@
 
   .dash-main {
     flex: 1;
-    padding: 10px 10px 58px;
+    padding: 10px 10px 80px;
     overflow-y: auto;
   }
 
@@ -668,68 +668,66 @@
     word-break: break-word;
   }
 
-  /* Bottom nav */
-  .dash-mobile-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 48px;
-    background: #1a2332;
+  /* Pill nav on Today page */
+  .dash-pill-nav {
     display: flex;
-    align-items: stretch;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    z-index: 200;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px 10px 24px;
   }
 
-  .dash-mobile-nav-btn {
-    flex: 1;
-    min-width: 38px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    color: rgba(255,255,255,0.4);
-    font-size: 7px;
+  .dash-pill-btn {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid #d0d5dd;
+    background: #f5f5f5;
+    color: #333;
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-    white-space: nowrap;
+    font-family: inherit;
     cursor: pointer;
-    border: none;
-    background: none;
-    padding: 4px 2px;
-    transition: color 0.15s;
+    transition: background 0.12s, border-color 0.12s;
+    white-space: nowrap;
   }
 
-  .dash-mobile-nav-btn.active {
-    color: #f7e84b;
+  .dash-pill-btn:hover {
+    background: #e8e8e8;
+    border-color: #aaa;
   }
 
-  .dash-mobile-nav-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-    margin-bottom: 1px;
+  .dash-pill-logout {
+    color: #999;
+    border-color: #e0e0e0;
   }
 
-  .dash-mobile-logout-btn {
-    flex: 0 0 auto;
-    min-width: 52px;
-    border-left: 1px solid rgba(255,255,255,0.08);
-    color: rgba(224,92,92,0.6);
-  }
-
-  .dash-mobile-logout-btn:hover {
-    color: #e05c5c;
+  /* Back-to-today pill on non-Today sections */
+  .dash-mobile-back-btn {
+    display: block;
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1px solid #d0d5dd;
+    background: #fff;
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    cursor: pointer;
+    z-index: 200;
+    white-space: nowrap;
   }
 }
 
 @media (min-width: 769px) {
-  .dash-mobile-nav {
+  .dash-pill-nav {
+    display: none;
+  }
+
+  .dash-mobile-back-btn {
     display: none;
   }
 }
