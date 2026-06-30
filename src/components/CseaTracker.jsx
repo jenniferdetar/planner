@@ -124,7 +124,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
       <div className="csea-tabs">
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions {interactions.length > 0 && <span className="csea-tab-badge">{new Set(interactions.map(i => i.member_name || 'Unknown')).size}</span>}</button>
-        <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {cseaNotes.length > 0 && <span className="csea-tab-badge">{cseaNotes.length}</span>}</button>
+        <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Topics {cseaNotes.length > 0 && <span className="csea-tab-badge">{cseaNotes.length}</span>}</button>
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="csea-tab-badge">{quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
       </div>
@@ -209,7 +209,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
         <div className="csea-panel">
           <div className="csea-toolbar">
             <span />
-            <button className="csea-add-btn" onClick={() => setShowAddNote(true)}>+ Add Note</button>
+            <button className="csea-add-btn" onClick={() => setShowAddNote(true)}>+ Add Topic</button>
           </div>
 
           {showAddNote && (
@@ -238,7 +238,7 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
               </div>
               <textarea
                 className="csea-textarea"
-                placeholder="Note *"
+                placeholder="Details *"
                 rows={2}
                 value={noteText}
                 onChange={e => setNoteText(e.target.value)}
@@ -250,8 +250,8 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
             </form>
           )}
 
-          <div className="csea-issue-list">
-            {cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
+          <div className="csea-issue-list csea-interactions-grid">
+            {cseaNotes.length === 0 && <p className="csea-empty">No topics yet</p>}
             {cseaNotes.map(n => (
               <CseaNoteGroup key={n.id} note={n} onDelete={onDeleteCseaNote} />
             ))}
