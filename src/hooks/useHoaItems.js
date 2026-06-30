@@ -48,5 +48,5 @@ export function useHoaItems(userId) {
     setItems(prev => prev.filter(i => i.id !== id))
   }
 
-  return { items, loading, addItem, updateItem, deleteItem }
+  return { items, loading, addItem, updateItem, deleteItem, reload: load }
 }
