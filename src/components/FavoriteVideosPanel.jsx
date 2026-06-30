@@ -3,7 +3,10 @@ import { useFavoriteVideos } from '../hooks/useFavoriteVideos'
 import './FavoriteVideosPanel.css'
 
 export default function FavoriteVideosPanel({ userId }) {
-  const { videos, addVideo, deleteVideo } = useFavoriteVideos(userId)
+  const { videos: unsortedVideos, addVideo, deleteVideo } = useFavoriteVideos(userId)
+  const videos = [...unsortedVideos].sort((a, b) =>
+    a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
+  )
   const [newUrl, setNewUrl] = useState('')
   const [adding, setAdding] = useState(false)
   const [error, setError] = useState('')
