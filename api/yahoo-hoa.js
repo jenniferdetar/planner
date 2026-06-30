@@ -64,14 +64,12 @@ export default async function handler(req, res) {
 }
 
 async function findHoaFolder(client) {
-  for await (const mb of client.list()) {
-    if (mb.path.toLowerCase().includes('hoa')) return mb.path
-  }
-  return null
+  const mailboxes = await client.list()
+  const mb = mailboxes.find(m => m.path.toLowerCase().includes('hoa'))
+  return mb?.path || null
 }
 
 async function listFolders(client) {
-  const folders = []
-  for await (const mb of client.list()) folders.push(mb.path)
-  return folders
+  const mailboxes = await client.list()
+  return mailboxes.map(m => m.path)
 }
