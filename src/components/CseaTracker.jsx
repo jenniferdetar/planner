@@ -83,6 +83,8 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
     category: 'General', member_name: '', work_location: '',
     discussion: '', who_involved: '', date_spoke: new Date().toISOString().split('T')[0],
   })
+  const [interactionIsGroup, setInteractionIsGroup] = useState(false)
+  const [groupParticipants, setGroupParticipants] = useState('')
 
   const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount } = useGmailCseaSync(providerToken)
 
@@ -111,9 +113,14 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
 
   async function handleAddInteraction(e) {
     e.preventDefault()
-    if (!interactionForm.member_name.trim()) return
-    await onAddInteraction(interactionForm)
+    const memberName = interactionIsGroup
+      ? `Group Chat (${groupParticipants.split(',').map(n => n.trim()).filter(Boolean).join(', ')})`
+      : interactionForm.member_name.trim()
+    if (interactionIsGroup ? !groupParticipants.trim() : !memberName) return
+    await onAddInteraction({ ...interactionForm, member_name: memberName })
     setInteractionForm({ category: 'General', member_name: '', work_location: '', discussion: '', who_involved: '', date_spoke: new Date().toISOString().split('T')[0] })
+    setGroupParticipants('')
+    setInteractionIsGroup(false)
     setShowAddInteraction(false)
   }
 
@@ -330,7 +337,27 @@ export default function CseaTracker({ userId, providerToken, issues, onAddIssue,
                   ))}
                 </div>
               </div>
-              <MemberSearch value={interactionForm.member_name} onChange={v => setInteractionForm(f => ({ ...f, member_name: v }))} />
+              <div className="csea-form-row">
+                <div className="csea-type-btns">
+                  <button type="button"
+                    className={`type-btn ${!interactionIsGroup ? 'active' : ''}`}
+                    style={{ '--tc': '#3164a0' }}
+                    onClick={() => setInteractionIsGroup(false)}
+                  >Single Member</button>
+                  <button type="button"
+                    className={`type-btn ${interactionIsGroup ? 'active' : ''}`}
+                    style={{ '--tc': '#3164a0' }}
+                    onClick={() => setInteractionIsGroup(true)}
+                  >Group Chat</button>
+                </div>
+              </div>
+              {interactionIsGroup ? (
+                <input className="csea-input" placeholder="Participants (comma-separated) *"
+                  value={groupParticipants}
+                  onChange={e => setGroupParticipants(e.target.value)} />
+              ) : (
+                <MemberSearch value={interactionForm.member_name} onChange={v => setInteractionForm(f => ({ ...f, member_name: v }))} />
+              )}
               <select className="csea-input" value={interactionForm.work_location}
                 onChange={e => setInteractionForm(f => ({ ...f, work_location: e.target.value }))}>
                 <option value="">Work location</option>
