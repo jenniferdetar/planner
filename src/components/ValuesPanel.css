@@ -95,104 +95,56 @@
   margin: 0;
 }
 
-.values-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.values-card {
+.values-subtabs {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  padding: 14px 16px;
-  border: 1px solid #d9e8f0;
-  border-left: 4px solid var(--val-color, #1e3070);
-  border-radius: 8px;
-  background: #faf9f7;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 16px;
+}
+
+.values-subtab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  background: #f4f6fb;
+  border: 1px solid #e0e5ee;
+  border-radius: 999px;
+  padding: 6px 14px;
   cursor: pointer;
-  text-align: left;
-  transition: box-shadow 0.15s, background 0.15s;
-  width: 100%;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
-.values-card:hover {
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+.values-subtab:hover {
+  background: #eaf0fb;
 }
 
-.values-card-dot {
-  display: inline-block;
+.values-subtab.active {
+  background: var(--val-color, #1e3070);
+  border-color: var(--val-color, #1e3070);
+  color: #fff;
+}
+
+.values-subtab-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
-  margin-bottom: 2px;
 }
 
-.values-card-name {
-  font-family: 'Nunito', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--val-color, #1e3070);
-}
-
-.values-card-preview {
-  font-size: 12px;
-  color: #999;
-  line-height: 1.4;
-}
-
-/* Detail view */
+/* Detail view (content for the selected value subtab) */
 .values-detail {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #fff;
-  overflow: hidden;
-}
-
-.values-detail-nav {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  border-bottom: 1px solid #d9e8f0;
-  background: #1e3070;
-  flex-shrink: 0;
-}
-
-.values-back-btn {
-  font-size: 13px;
-  font-weight: 600;
-  color: #fff;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: opacity 0.15s;
-}
-
-.values-back-btn:hover {
-  opacity: 0.7;
-}
-
-.values-detail-nav-title {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: rgba(255,255,255,0.75);
-  text-transform: uppercase;
-}
-
-.values-detail-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 28px 32px;
-  display: flex;
-  flex-direction: column;
   gap: 18px;
+  background: #fff;
+  overflow-y: auto;
 }
 
 .values-detail-title {
@@ -324,21 +276,13 @@
     padding: 12px 14px;
   }
 
-  .values-cards {
-    grid-template-columns: 1fr;
+  .values-subtabs {
+    gap: 4px;
   }
 
-  .values-card {
-    padding: 10px 12px;
-  }
-
-  .values-detail-nav {
-    padding: 8px 14px;
-  }
-
-  .values-detail-body {
-    padding: 14px 16px;
-    gap: 12px;
+  .values-subtab {
+    font-size: 11px;
+    padding: 5px 10px;
   }
 
   .values-detail-title {
