@@ -13,6 +13,139 @@ function contrastColor(hex) {
   return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1e3342' : '#ffffff'
 }
 
+// Shared state for splitting the goals grid across two binder pages.
+export function useGoalsCategories(userId, roles = []) {
+  const { byCategory, addGoal, updateGoal, deleteGoal } = usePersonalGoals(userId)
+  const orderedCategories = [
+    ...CATEGORY_ORDER.filter(c => byCategory[c]),
+    ...Object.keys(byCategory).filter(c => !CATEGORY_ORDER.includes(c)),
+  ]
+  const mid = Math.ceil(orderedCategories.length / 2)
+  return {
+    byCategory, addGoal, updateGoal, deleteGoal,
+    left: orderedCategories.slice(0, mid),
+    right: orderedCategories.slice(mid),
+    roles,
+    roleNameById: id => roles.find(r => r.id === id)?.name || '',
+  }
+}
+
+function GoalsCategoryGrid({ api, categories, half }) {
+  const { byCategory, addGoal, updateGoal, deleteGoal, roles, roleNameById } = api
+  const [addingCategory, setAddingCategory] = useState(null)
+  const [newGoalText, setNewGoalText] = useState('')
+  const [newGoalRole, setNewGoalRole] = useState('')
+
+  async function handleAddGoal(category) {
+    if (!newGoalText.trim()) return
+    await addGoal(category, newGoalText.trim(), newGoalRole || null)
+    setNewGoalText('')
+    setNewGoalRole('')
+    setAddingCategory(null)
+  }
+
+  return (
+    <div className={`goals-grid${half ? ' goals-grid-half' : ''}`}>
+      {categories.map((category, idx) => {
+        const color = idx % 2 === 0 ? '#1e3070' : '#ffb81c'
+        const goals = byCategory[category] || []
+        return (
+          <div key={category} className="goal-card">
+            <div className="goal-card-header" style={{ background: color }}>
+              <span className="goal-card-title" style={{ color: contrastColor(color) }}>{category}</span>
+            </div>
+            <div className="goal-card-body">
+              {goals.map(g => (
+                <div key={g.id} className={`goal-item${g.completed ? ' goal-item-completed' : ''}`}>
+                  <button
+                    className={`goal-check${g.completed ? ' checked' : ''}`}
+                    title={g.completed ? 'Mark incomplete' : 'Mark complete'}
+                    onClick={() => updateGoal(g.id, { completed: !g.completed })}
+                  />
+                  <div className="goal-item-main">
+                    <span className="goal-text">{g.goal_text}</span>
+                    {g.role_id && (
+                      <span className="goal-role-badge">{roleNameById(g.role_id)}</span>
+                    )}
+                  </div>
+                  <div className="goal-item-actions">
+                    {roles.length > 0 && (
+                      <select
+                        className="goal-role-select"
+                        value={g.role_id || ''}
+                        onChange={e => updateGoal(g.id, { role_id: e.target.value || null })}
+                        title="Assign to a role"
+                      >
+                        <option value="">— role —</option>
+                        {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                      </select>
+                    )}
+                    <button className="goal-del" onClick={() => deleteGoal(g.id)}>×</button>
+                  </div>
+                </div>
+              ))}
+              {addingCategory === category ? (
+                <div className="goal-add-form">
+                  <input
+                    autoFocus
+                    placeholder="New goal…"
+                    value={newGoalText}
+                    onChange={e => setNewGoalText(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') handleAddGoal(category)
+                      if (e.key === 'Escape') setAddingCategory(null)
+                    }}
+                    className="goal-add-input"
+                  />
+                  {roles.length > 0 && (
+                    <select className="goal-add-role-select" value={newGoalRole} onChange={e => setNewGoalRole(e.target.value)}>
+                      <option value="">No role</option>
+                      {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                    </select>
+                  )}
+                  <button className="goal-add-save" onClick={() => handleAddGoal(category)}>✓</button>
+                  <button className="goal-add-cancel" onClick={() => setAddingCategory(null)}>✕</button>
+                </div>
+              ) : (
+                <button
+                  className="goal-add-btn"
+                  onClick={() => { setAddingCategory(category); setNewGoalText(''); setNewGoalRole('') }}
+                >+ add</button>
+              )}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// Left binder page: title + first half of categories.
+export function GoalsPageLeft({ api }) {
+  return (
+    <div className="goals-panel">
+      <div className="goals-section">
+        <div className="goals-section-header">
+          <span className="goals-trophy">🏆</span>
+          <h3 className="goals-title">My Personal Goals</h3>
+        </div>
+        <GoalsCategoryGrid api={api} categories={api.left} half />
+      </div>
+    </div>
+  )
+}
+
+// Right binder page: continues with the remaining categories.
+export function GoalsPageRight({ api }) {
+  return (
+    <div className="goals-panel">
+      <div className="goals-section">
+        <GoalsCategoryGrid api={api} categories={api.right} half />
+      </div>
+    </div>
+  )
+}
+
 export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
   const { byCategory, addGoal, updateGoal, deleteGoal } = usePersonalGoals(userId)
   const { tasks: checklistTasks, isChecked, toggle: toggleCheck, addTask, updateTask, deleteTask: deleteChecklistTask } = usePersonalChecklist(userId)
