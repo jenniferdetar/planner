@@ -105,10 +105,10 @@
 
 .goal-item-main {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   flex: 1;
   min-width: 0;
-  gap: 1px;
+  gap: 6px;
 }
 
 .goal-role-badge {
@@ -118,12 +118,9 @@
   background: rgba(30,48,112,0.08);
   border-radius: 3px;
   padding: 1px 5px;
-  align-self: flex-start;
+  flex-shrink: 0;
   letter-spacing: 0.3px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
 }
 
 .goal-item-actions {
