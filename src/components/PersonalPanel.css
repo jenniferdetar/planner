@@ -233,6 +233,37 @@
 .mantra-paragraph:last-child { margin-bottom: 0; }
 
 @media (max-width: 768px) {
+  .personal-inline-tabs {
+    background: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 8px 10px;
+    gap: 6px;
+    overflow-x: visible;
+  }
+
+  .personal-inline-tab {
+    flex: 0 0 auto;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid #d0d5dd;
+    background: #fff;
+    color: #444;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid #d0d5dd;
+  }
+
+  .personal-inline-tab:hover:not(.active) { background: #e8e8e8; color: #222; border-color: #aaa; }
+
+  .personal-inline-tab.active {
+    background: #1e3070;
+    color: #fff;
+    border-color: #1e3070;
+    border-bottom-color: #1e3070;
+  }
+
   .mantra-section {
     padding: 10px 12px;
   }
