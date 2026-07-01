@@ -16,7 +16,7 @@ import PersonalPanel from './PersonalPanel'
 import RolesPanel from './RolesPanel'
 import GoalsPanel from './GoalsPanel'
 import MissionValuesPanel from './MissionValuesPanel'
-import NotesBrowser from './NotesBrowser'
+import { useNotesBrowser, NotesFolderTree, NotesContent } from './NotesBrowser'
 import WeatherQuoteHeader from './WeatherQuoteHeader'
 import { useRoles } from '../hooks/useRoles'
 
@@ -112,6 +112,7 @@ export default function LeatherDayView({
     return t === 'schedule' ? 'daily-tasks' : t
   })
   const { roles: lifeRoles } = useRoles(userId)
+  const notesApi = useNotesBrowser(userId)
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
   const [promotedToast, setPromotedToast] = useState(null)
@@ -182,6 +183,9 @@ export default function LeatherDayView({
   }
 
   const firstNavKey = ALL_TABS.find(t => t.nav)?.key
+  // Tabs that use a genuine two-page spread (left page + rings); everything
+  // else spans the full binder width as a single page.
+  const showLeftPage = rightTab === 'daily-tasks' || rightTab === 'master-tasks' || rightTab === 'notes'
 
   return (
     <div className="leather-outer">
@@ -192,10 +196,12 @@ export default function LeatherDayView({
           <div className="promote-toast">Sent to Master Tasks: {promotedToast}</div>
         )}
 
-        {/* ── Left page — Daily Tasks tab only; other tabs use the full two-page width ── */}
-        {rightTab === 'daily-tasks' && (
+        {/* ── Left page — a genuine second page for tabs that split content; full-width elsewhere ── */}
+        {showLeftPage && (
         <>
         <div className="binder-page left-page">
+          {rightTab === 'daily-tasks' && (
+          <>
           <div className="lp-col lp-col-left">
             <div className="lp-date-block">
               <div className="lp-day-num">{selectedDate.getDate()}</div>
@@ -254,6 +260,16 @@ export default function LeatherDayView({
               <LeftSchedule {...scheduleProps} />
             </div>
           </div>
+          </>
+          )}
+
+          {rightTab === 'master-tasks' && (
+            <MasterTasksPageLeft masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />
+          )}
+
+          {rightTab === 'notes' && (
+            <NotesFolderTree api={notesApi} />
+          )}
         </div>
 
         {/* ── Rings ── */}
@@ -282,7 +298,7 @@ export default function LeatherDayView({
                 />
               </div>
             )}
-            {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
+            {rightTab === 'master-tasks' && <MasterTasksPageRight masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
             {rightTab === 'roles' && (
               <div className="binder-view-wrap">
                 <RolesPanel userId={userId} />
@@ -309,7 +325,7 @@ export default function LeatherDayView({
             )}
             {rightTab === 'notes' && (
               <div className="binder-view-wrap">
-                <NotesBrowser userId={userId} />
+                <NotesContent api={notesApi} />
               </div>
             )}
 
@@ -706,7 +722,7 @@ const CATEGORY_COLORS = {
   'Personal Development': '#6a5a8a',
 }
 
-function MasterTasksPanel({ masterTasks, onDelete }) {
+function splitMasterTasksCategories(masterTasks) {
   const categoryMap = {}
   masterTasks.forEach(t => {
     const cat = t.category || 'Other'
@@ -714,24 +730,48 @@ function MasterTasksPanel({ masterTasks, onDelete }) {
     categoryMap[cat].push(t)
   })
   const categories = Object.keys(categoryMap)
+  const mid = Math.ceil(categories.length / 2)
+  return { categoryMap, left: categories.slice(0, mid), right: categories.slice(mid) }
+}
+
+function MasterTasksCategoryList({ categoryMap, categories, onDelete }) {
+  return (
+    <div className="rp-task-list rp-task-list-half">
+      {categories.map(cat => {
+        const color = CATEGORY_COLORS[cat] || '#aaa'
+        return (
+          <div key={cat} className="rp-priority-group">
+            <div className="rp-priority-label" style={{ color }}>{cat}</div>
+            {categoryMap[cat].map(task => <MasterRow key={task.id} task={task} onDelete={onDelete} color={color} />)}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// Left binder page: title/count + the first half of categories.
+function MasterTasksPageLeft({ masterTasks, onDelete }) {
+  const { categoryMap, left } = splitMasterTasksCategories(masterTasks)
   return (
     <div className="rp-panel">
       <div className="rp-header">
         <span className="rp-title">Master Tasks</span>
         <span className="rp-subtitle">{masterTasks.length} total</span>
       </div>
-      <div className="rp-task-list">
-        {masterTasks.length === 0 && <p className="rp-empty">No backlog tasks.</p>}
-        {categories.map(cat => {
-          const color = CATEGORY_COLORS[cat] || '#aaa'
-          return (
-            <div key={cat} className="rp-priority-group">
-              <div className="rp-priority-label" style={{ color }}>{cat}</div>
-              {categoryMap[cat].map(task => <MasterRow key={task.id} task={task} onDelete={onDelete} color={color} />)}
-            </div>
-          )
-        })}
-      </div>
+      {masterTasks.length === 0
+        ? <p className="rp-empty" style={{ padding: '6px 18px' }}>No backlog tasks.</p>
+        : <MasterTasksCategoryList categoryMap={categoryMap} categories={left} onDelete={onDelete} />}
+    </div>
+  )
+}
+
+// Right binder page: continues with the remaining categories.
+function MasterTasksPageRight({ masterTasks, onDelete }) {
+  const { categoryMap, right } = splitMasterTasksCategories(masterTasks)
+  return (
+    <div className="rp-panel">
+      <MasterTasksCategoryList categoryMap={categoryMap} categories={right} onDelete={onDelete} />
     </div>
   )
 }
