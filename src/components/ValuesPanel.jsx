@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { usePersonalValues } from '../hooks/usePersonalValues'
 import './ValuesPanel.css'
 
@@ -18,17 +18,11 @@ function colorHex(val) {
 
 export default function ValuesPanel({ userId }) {
   const { values, addValue, updateValue, deleteValue } = usePersonalValues(userId)
-  const [selected, setSelected] = useState(null) // id of active value subtab
+  const [openId, setOpenId] = useState(null) // id of value whose popup is open
   const [adding, setAdding] = useState(false)
   const [newName, setNewName] = useState('')
 
-  const current = values.find(v => v.id === selected)
-
-  // Keep a subtab selected whenever values exist.
-  useEffect(() => {
-    if (!selected && values.length > 0) setSelected(values[0].id)
-    if (selected && !values.find(v => v.id === selected)) setSelected(values[0]?.id ?? null)
-  }, [values, selected])
+  const current = values.find(v => v.id === openId)
 
   function handleDescChange(id, text) {
     updateValue(id, { description: text })
@@ -48,12 +42,12 @@ export default function ValuesPanel({ userId }) {
     const v = await addValue(newName.trim())
     setNewName('')
     setAdding(false)
-    if (v) setSelected(v.id)
+    if (v) setOpenId(v.id)
   }
 
   async function handleDelete(id) {
     await deleteValue(id)
-    if (selected === id) setSelected(null)
+    setOpenId(null)
   }
 
   return (
@@ -88,9 +82,9 @@ export default function ValuesPanel({ userId }) {
           {values.map(v => (
             <button
               key={v.id}
-              className={`values-subtab${selected === v.id ? ' active' : ''}`}
+              className="values-subtab"
               style={{ '--val-color': colorHex(v.color) }}
-              onClick={() => setSelected(v.id)}
+              onClick={() => setOpenId(v.id)}
             >
               <span className="values-subtab-dot" style={{ background: colorHex(v.color) }} />
               {v.name}
@@ -100,52 +94,56 @@ export default function ValuesPanel({ userId }) {
       )}
 
       {current && (
-        <div className="values-detail">
-          <h2 className="values-detail-title" style={{ color: colorHex(current.color) }}>
-            {current.name}
-          </h2>
+        <div className="values-modal-backdrop" onClick={() => setOpenId(null)}>
+          <div className="values-modal" onClick={e => e.stopPropagation()}>
+            <button className="values-modal-close" onClick={() => setOpenId(null)}>✕</button>
 
-          <div className="values-field-row">
-            <span className="values-field-label">Name</span>
-            <input
-              className="values-name-input"
-              value={current.name}
-              onChange={e => handleNameChange(current.id, e.target.value)}
-            />
-          </div>
+            <h2 className="values-detail-title" style={{ color: colorHex(current.color) }}>
+              {current.name}
+            </h2>
 
-          <div className="values-field-row">
-            <span className="values-field-label">Color</span>
-            <div className="values-color-picker">
-              {COLOR_OPTIONS.map(c => (
-                <button
-                  key={c.value}
-                  className={`values-color-swatch${current.color === c.value ? ' active' : ''}`}
-                  style={{ background: c.hex }}
-                  title={c.label}
-                  onClick={() => handleColorChange(current.id, c.value)}
-                />
-              ))}
-              <span className="values-color-label" style={{ color: colorHex(current.color) }}>
-                {COLOR_OPTIONS.find(c => c.value === current.color)?.label || ''}
-              </span>
+            <div className="values-field-row">
+              <span className="values-field-label">Name</span>
+              <input
+                className="values-name-input"
+                value={current.name}
+                onChange={e => handleNameChange(current.id, e.target.value)}
+              />
             </div>
-          </div>
 
-          <div className="values-field-row values-field-col">
-            <span className="values-field-label">Value Description</span>
-            <textarea
-              className="values-desc-textarea"
-              style={{ '--values-color': colorHex(current.color) }}
-              value={current.description}
-              onChange={e => handleDescChange(current.id, e.target.value)}
-              placeholder="Describe what this value means to you…"
-            />
-          </div>
+            <div className="values-field-row">
+              <span className="values-field-label">Color</span>
+              <div className="values-color-picker">
+                {COLOR_OPTIONS.map(c => (
+                  <button
+                    key={c.value}
+                    className={`values-color-swatch${current.color === c.value ? ' active' : ''}`}
+                    style={{ background: c.hex }}
+                    title={c.label}
+                    onClick={() => handleColorChange(current.id, c.value)}
+                  />
+                ))}
+                <span className="values-color-label" style={{ color: colorHex(current.color) }}>
+                  {COLOR_OPTIONS.find(c => c.value === current.color)?.label || ''}
+                </span>
+              </div>
+            </div>
 
-          <button className="values-delete-btn" onClick={() => handleDelete(current.id)}>
-            Delete
-          </button>
+            <div className="values-field-row values-field-col">
+              <span className="values-field-label">Value Description</span>
+              <textarea
+                className="values-desc-textarea"
+                style={{ '--values-color': colorHex(current.color) }}
+                value={current.description}
+                onChange={e => handleDescChange(current.id, e.target.value)}
+                placeholder="Describe what this value means to you…"
+              />
+            </div>
+
+            <button className="values-delete-btn" onClick={() => handleDelete(current.id)}>
+              Delete
+            </button>
+          </div>
         </div>
       )}
     </div>
