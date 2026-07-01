@@ -341,10 +341,8 @@ export default function LeatherDayView({
           )}
         </div>
 
-        {/* ── Rings ── */}
-        <div className="binder-rings">
-          {[0,1,2,3,4,5].map(i => <div key={i} className="ring-pair"><div className="ring" /></div>)}
-        </div>
+        {/* ── Divider ── */}
+        <div className="page-divider" />
         </>
         )}
 
