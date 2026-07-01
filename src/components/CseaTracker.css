@@ -392,23 +392,14 @@
 .issue-card.expanded { grid-column: 1 / -1; }
 
 .issue-header {
+  width: 100%;
+  height: 56px;
+  box-sizing: border-box;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 8px;
-  padding: 16px 20px;
+  padding: 9px 16px;
   cursor: pointer;
-}
-
-.issue-header-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.issue-header-bottom {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .issue-type-badge {
@@ -421,9 +412,11 @@
 }
 
 .issue-member {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--csea-blue);
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -448,7 +441,7 @@
 .issue-chevron { font-size: 11px; color: var(--csea-border); flex-shrink: 0; margin-left: auto; }
 
 .issue-body {
-  padding: 0 20px 16px;
+  padding: 0 16px 12px;
   border-top: 1px solid var(--csea-light-gray);
   display: flex;
   flex-direction: column;
@@ -613,20 +606,6 @@
   padding: 9px 16px;
   background: var(--csea-light-blue);
   border-bottom: 2px solid var(--csea-blue);
-}
-
-/* Matches .issue-header's stacked layout (top row / name / bottom row) so
-   Interaction and Topic tiles are the same height and width as Issue tiles. */
-.interaction-group-header--stacked {
-  height: auto;
-  min-height: 92px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 8px;
-  padding: 16px 20px;
-  cursor: pointer;
 }
 
 .interaction-group-name {
