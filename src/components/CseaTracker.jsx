@@ -511,16 +511,11 @@ function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
   const latest = [...items].sort((a, b) => (b.date_spoke || '').localeCompare(a.date_spoke || ''))[0]
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
-      <div className="interaction-group-header interaction-group-header--stacked" onClick={() => setCollapsed(c => !c)}>
-        <div className="issue-header-top">
-          {latest?.category && <span className="interaction-cat-badge">{latest.category}</span>}
-          {latest?.date_spoke && <span className="interaction-date-badge">{new Date(latest.date_spoke + 'T12:00:00').toLocaleDateString()}</span>}
-        </div>
+      <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
+        {latest?.category && <span className="interaction-cat-badge">{latest.category}</span>}
         <span className="interaction-group-name">{member}</span>
-        <div className="issue-header-bottom">
-          <span className="interaction-group-count">{items.length}</span>
-          <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
-        </div>
+        <span className="interaction-group-count">{items.length}</span>
+        <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
       </div>
       {!collapsed && (
         <div className="interaction-group-items">
@@ -537,15 +532,13 @@ function CseaNoteGroup({ note: n, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
-      <div className="interaction-group-header interaction-group-header--stacked" onClick={() => setCollapsed(c => !c)}>
-        <div className="issue-header-top">
-          {n.source && <span className="interaction-cat-badge">{n.source}</span>}
-          {n.created_at && <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>}
-        </div>
+      <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
+        {n.source && <span className="interaction-cat-badge">{n.source}</span>}
         <span className="interaction-group-name">{n.topic || 'Topic'}</span>
-        <div className="issue-header-bottom">
-          <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
-        </div>
+        {n.created_at && (
+          <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
+        )}
+        <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
       </div>
       {!collapsed && (
         <div className="interaction-group-items">
@@ -635,24 +628,20 @@ function IssueCard({ issue, onUpdateStatus, onDelete, notes = [], onAddNote, onD
   return (
     <div className={`issue-card ${issue.status === 'Resolved' || issue.status === 'Closed' ? 'resolved' : ''} ${expanded ? 'expanded' : ''}`}>
       <div className="issue-header" onClick={() => setExpanded(e => !e)}>
-        <div className="issue-header-top">
-          <span className="issue-type-badge" style={{ background: TYPE_COLORS[issue.issue_type] + '22', color: TYPE_COLORS[issue.issue_type] }}>
-            {issue.issue_type}
-          </span>
-          <span className="issue-status-badge" style={{ background: STATUS_COLORS[issue.status] + '22', color: STATUS_COLORS[issue.status] }}>
-            {issue.status}
-          </span>
-        </div>
+        <span className="issue-type-badge" style={{ background: TYPE_COLORS[issue.issue_type] + '22', color: TYPE_COLORS[issue.issue_type] }}>
+          {issue.issue_type}
+        </span>
         <span className="issue-member">{issue.member_name}</span>
-        <div className="issue-header-bottom">
-          {issue.priority && (
-            <span className="issue-priority" style={{ color: PRIORITY_COLORS[issue.priority] }}>
-              {issue.priority}
-            </span>
-          )}
-          {notes.length > 0 && <span className="issue-notes-count">{notes.length}</span>}
-          <span className="issue-chevron">{expanded ? '▾' : '▸'}</span>
-        </div>
+        {issue.priority && (
+          <span className="issue-priority" style={{ color: PRIORITY_COLORS[issue.priority] }}>
+            {issue.priority}
+          </span>
+        )}
+        <span className="issue-status-badge" style={{ background: STATUS_COLORS[issue.status] + '22', color: STATUS_COLORS[issue.status] }}>
+          {issue.status}
+        </span>
+        {notes.length > 0 && <span className="issue-notes-count">{notes.length}</span>}
+        <span className="issue-chevron">{expanded ? '▾' : '▸'}</span>
       </div>
 
       {expanded && (
