@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { isBeforeCurrentSchoolYear } from '../lib/schoolYear'
 
 export function useIcaapItems(userId) {
   const [items, setItems] = useState([])
@@ -11,7 +12,19 @@ export function useIcaapItems(userId) {
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
-      .then(({ data }) => setItems(data || []))
+      .then(async ({ data }) => {
+        const rows = data || []
+        setItems(rows)
+
+        // Auto-archive items due in a completed school year
+        const staleIds = rows
+          .filter(i => !i.archived && isBeforeCurrentSchoolYear(i.due_date))
+          .map(i => i.id)
+        if (staleIds.length) {
+          await supabase.from('icaap_items').update({ archived: true }).in('id', staleIds)
+          setItems(prev => prev.map(i => staleIds.includes(i.id) ? { ...i, archived: true } : i))
+        }
+      })
   }, [userId])
 
   async function addItem(fields) {
