@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { isBeforeCurrentSchoolYear } from '../lib/schoolYear'
 
 export const ATTENDANCE_MEMBERS = [
   'Pernin, Patricia',
@@ -20,7 +21,19 @@ export function useIcaapAttendance(userId) {
       .select('*')
       .eq('user_id', userId)
       .order('meeting_date', { ascending: false })
-      .then(({ data }) => setRecords(data || []))
+      .then(async ({ data }) => {
+        const rows = data || []
+        setRecords(rows)
+
+        // Auto-archive attendance from a completed school year
+        const staleIds = rows
+          .filter(r => !r.archived && isBeforeCurrentSchoolYear(r.meeting_date))
+          .map(r => r.id)
+        if (staleIds.length) {
+          await supabase.from('icaap_attendance').update({ archived: true }).in('id', staleIds)
+          setRecords(prev => prev.map(r => staleIds.includes(r.id) ? { ...r, archived: true } : r))
+        }
+      })
   }, [userId])
 
   async function upsertAttendance(meeting_date, member_name, status, notes, time_in) {

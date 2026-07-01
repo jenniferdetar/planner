@@ -1,4 +1,5 @@
 import { parseWebformText, webformToInteraction } from './webformParser'
+import { isSkippedSender } from './interactionSkipList'
 
 const GMAIL_API = 'https://gmail.googleapis.com/gmail/v1/users/me'
 
@@ -60,8 +61,17 @@ function extractPlainText(payload) {
   return ''
 }
 
+function getHeader(payload, name) {
+  const h = payload?.headers?.find(h => h.name.toLowerCase() === name.toLowerCase())
+  return h?.value || ''
+}
+
 // Parse a full Gmail message object into an interaction record
 export function parseEmailToInteraction(msg) {
+  const fromHeader = getHeader(msg.payload, 'From')
+  const fromEmail = fromHeader.match(/<([^>]+)>/)?.[1] || fromHeader
+  if (isSkippedSender(fromEmail)) return null
+
   const text = extractPlainText(msg.payload || {})
   return webformToInteraction(parseWebformText(text), 'gmail_message_id', msg.id)
 }

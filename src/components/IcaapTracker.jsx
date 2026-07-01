@@ -76,15 +76,19 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
 
   const token = import.meta.env.VITE_ASANA_TOKEN
 
-  const todo = items.filter(i => i.status === 'To Do')
-  const inProg = items.filter(i => i.status === 'In Progress')
-  const done = items.filter(i => i.status === 'Done')
-  const blocked = items.filter(i => i.status === 'Blocked')
+  const nonArchived = items.filter(i => !i.archived)
+  const archivedItems = items.filter(i => i.archived)
 
-  const activeItems = items.filter(i => i.status !== 'Done')
+  const todo = nonArchived.filter(i => i.status === 'To Do')
+  const inProg = nonArchived.filter(i => i.status === 'In Progress')
+  const done = nonArchived.filter(i => i.status === 'Done')
+  const blocked = nonArchived.filter(i => i.status === 'Blocked')
+
+  const activeItems = nonArchived.filter(i => i.status !== 'Done')
   const displayItems = filter === 'active' ? activeItems
     : filter === 'done' ? done
-    : items
+    : filter === 'archived' ? archivedItems
+    : nonArchived
 
   async function handleAdd(e) {
     e.preventDefault()
@@ -152,6 +156,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
         <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
+        <button data-t="list" className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>Tasks</button>
         <button data-t="notes" className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
         <button data-t="links" className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
         <button data-t="payroll" className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
@@ -286,11 +291,11 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
 
       {/* Toolbar */}
       <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links' || tab === 'payroll') ? 'none' : undefined }}>
-        {false ? (
+        {tab === 'list' ? (
           <div className="icaap-filter-pills">
-            {['active', 'done', 'all'].map(f => (
+            {['active', 'done', 'all', 'archived'].map(f => (
               <button key={f} className={`filter-pill ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
-                {f.charAt(0).toUpperCase() + f.slice(1)}
+                {f.charAt(0).toUpperCase() + f.slice(1)}{f === 'archived' && archivedItems.length > 0 ? ` (${archivedItems.length})` : ''}
               </button>
             ))}
           </div>
@@ -633,6 +638,9 @@ function ItemCard({ item, onUpdateItem, onDeleteItem, onPushToAsana, pushing, pu
                   {pushing ? '…' : pushResult === 'ok' ? '✓ Pushed' : pushResult === 'err' ? '✗ Failed' : '↑ Asana'}
                 </button>
               )}
+              <button className="icaap-archive-btn" onClick={() => onUpdateItem(item.id, { archived: !item.archived })}>
+                {item.archived ? 'Unarchive' : 'Archive'}
+              </button>
               <button className="icaap-delete-btn" onClick={() => onDeleteItem(item.id)}>Delete</button>
             </div>
           </div>
@@ -1445,7 +1453,7 @@ function parseTable(content) {
 }
 
 function IcaapNotePanel({ userId, noteKey, title, color }) {
-  const { content, handleChange, saved } = useIcaapNote(userId, noteKey)
+  const { content, handleChange, saved, archived, setArchived } = useIcaapNote(userId, noteKey)
   const [editing, setEditing] = useState(false)
   const table = parseTable(content)
 
@@ -1462,9 +1470,15 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
   return (
     <div className="icaap-note-panel">
       <div className="icaap-note-header" style={{ borderLeftColor: color }}>
-        {title && <span className="icaap-note-panel-title">{title}</span>}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {title && <span className="icaap-note-panel-title">{title}</span>}
+          {archived && <span className="icaap-note-archived-badge">Archived</span>}
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {saved && <span className="icaap-note-saved">Saved ✓</span>}
+          <button className="icaap-archive-btn" onClick={() => setArchived(!archived)}>
+            {archived ? 'Unarchive' : 'Archive'}
+          </button>
           <button className="icaap-note-edit-btn" onClick={() => setEditing(e => !e)}>
             {editing ? 'View Table' : 'Edit'}
           </button>

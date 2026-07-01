@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { lookupTVShow } from '../lib/tmdb'
 
 export function useFavoriteTVShows(userId) {
   const [shows, setShows] = useState([])
@@ -15,9 +16,25 @@ export function useFavoriteTVShows(userId) {
   }, [userId])
 
   const addShow = useCallback(async (name) => {
+    let meta = null
+    try {
+      meta = await lookupTVShow(name.trim())
+    } catch {
+      // TMDb lookup failed; fall back to just the show name
+    }
+
     const { data, error } = await supabase
       .from('favorite_tv_shows')
-      .insert({ name: name.trim(), user_id: userId })
+      .insert({
+        name: meta?.name || name.trim(),
+        user_id: userId,
+        poster_url: meta?.poster_url ?? null,
+        overview: meta?.overview ?? null,
+        first_air_date: meta?.first_air_date ?? null,
+        rating: meta?.rating ?? null,
+        imdb_id: meta?.imdb_id ?? null,
+        tmdb_id: meta?.tmdb_id ?? null,
+      })
       .select().single()
     if (error) throw error
     if (data) setShows(prev => [data, ...prev])

@@ -1,20 +1,19 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { currentSchoolYearStart } from '../lib/schoolYear'
 
-export const DASHBOARD_MONTHS = [
-  { key: 'Jul', paylogKey: 'Jul 2025', label: 'Jul' },
-  { key: 'Aug', paylogKey: 'Aug 2025', label: 'Aug' },
-  { key: 'Sep', paylogKey: 'Sep 2025', label: 'Sep' },
-  { key: 'Oct', paylogKey: 'Oct 2025', label: 'Oct' },
-  { key: 'Nov', paylogKey: 'Nov 2025', label: 'Nov' },
-  { key: 'Dec', paylogKey: 'Dec 2025', label: 'Dec' },
-  { key: 'Jan', paylogKey: 'Jan 2026', label: 'Jan' },
-  { key: 'Feb', paylogKey: 'Feb 2026', label: 'Feb' },
-  { key: 'Mar', paylogKey: 'Mar 2026', label: 'Mar' },
-  { key: 'Apr', paylogKey: 'Apr 2026', label: 'Apr' },
-  { key: 'May', paylogKey: 'May 2026', label: 'May' },
-  { key: 'Jun', paylogKey: 'Jun 2026', label: 'Jun' },
-]
+// Built from the school year in progress (July start year) so this doesn't
+// need a manual code update every July — e.g. for the year starting July
+// 2026: Jul 2026 ... Dec 2026, then Jan 2027 ... Jun 2027.
+const MONTH_ABBRS = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+
+export const DASHBOARD_MONTHS = (() => {
+  const startYear = currentSchoolYearStart().getFullYear()
+  return MONTH_ABBRS.map((key, i) => {
+    const year = i < 6 ? startYear : startYear + 1
+    return { key, paylogKey: `${key} ${year}`, label: key }
+  })
+})()
 
 // Normalize the month string from the form (col J) to a paylogKey like "Jan 2026"
 export function normalizePaylogMonth(raw) {

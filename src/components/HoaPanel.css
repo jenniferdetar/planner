@@ -226,107 +226,108 @@
 }
 .hoa-save-btn:hover { background: #1e3070; }
 
-/* Items list */
-.hoa-list {
+/* Items list — grouped by unit, mirroring the CSEA Interactions layout */
+.hoa-groups {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-content: start;
-  gap: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 14px;
 }
 .hoa-empty {
   color: #aaa;
   font-size: 12px;
   text-align: center;
   padding: 32px 16px;
-  grid-column: 1 / -1;
 }
 
-.hoa-item {
-  border-bottom: 1px solid #eef2f7;
-  border-right: 1px solid #eef2f7;
+.hoa-group {
+  border: 1px solid #d9e8f0;
+  border-radius: 6px;
+  overflow: hidden;
 }
-.hoa-item:nth-child(even) { border-right: none; }
-.hoa-item-main {
+
+.hoa-group-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
+  gap: 8px;
+  padding: 9px 12px;
+  background: #dce6f5;
+  border-bottom: 2px solid #1e3070;
   cursor: pointer;
-  transition: background 0.1s;
 }
-.hoa-item-main:hover { background: #faf8f4; }
-.hoa-item.expanded .hoa-item-main { background: #f0f4fc; }
-
-.hoa-item-cat-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.hoa-item-body {
+.hoa-group-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e3070;
   flex: 1;
   min-width: 0;
+}
+.hoa-group-count {
+  font-size: 11px;
+  font-weight: 700;
+  background: #ffb81c;
+  color: #1e3070;
+  padding: 1px 7px;
+  border-radius: 2px;
+}
+.hoa-group-toggle {
+  font-size: 13px;
+  color: #1e3070;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hoa-group-items {
   display: flex;
   flex-direction: column;
-  gap: 3px;
 }
-.hoa-item-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: #222222;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+.hoa-group-card {
+  background: #fff;
+  border-top: 1px solid #eef2f7;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-.hoa-item-unit {
-  color: #1e3070;
-  font-weight: 700;
-}
-.hoa-item-meta {
+.hoa-group-card:nth-child(even) { background: #fafcff; }
+
+.hoa-group-card-header {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
-.hoa-item-date {
-  font-size: 10px;
-  color: #aaa;
-}
-.hoa-item-priority {
+.hoa-group-cat-badge {
   font-size: 10px;
   font-weight: 700;
-}
-.hoa-item-status {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 10px;
-}
-.hoa-item-chevron {
-  font-size: 9px;
-  color: #bbb;
+  border-radius: 12px;
+  padding: 2px 7px;
   flex-shrink: 0;
 }
+.hoa-group-priority { font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.hoa-group-status { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 10px; flex-shrink: 0; }
+.hoa-group-date { font-size: 11px; color: #aaa; margin-left: auto; flex-shrink: 0; }
+.hoa-group-del {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.hoa-group-del:hover { color: #cc0000; }
 
-.hoa-item-detail {
-  padding: 8px 16px 12px 32px;
-  background: #faf8fc;
-  border-top: 1px solid #ece8f5;
-}
-.hoa-item-notes {
-  font-size: 12px;
-  color: #555;
-  line-height: 1.6;
-  margin: 0 0 10px;
-}
-.hoa-item-actions {
-  display: flex;
-  gap: 8px;
-}
-.hoa-edit-btn {
+.hoa-group-title { font-size: 13px; font-weight: 600; color: #222222; margin: 0; }
+.hoa-group-notes { font-size: 12px; color: #555; line-height: 1.5; margin: 0; white-space: pre-wrap; }
+.hoa-group-edit {
+  align-self: flex-start;
   font-size: 11px;
   font-weight: 600;
   padding: 3px 10px;
@@ -336,18 +337,7 @@
   background: transparent;
   cursor: pointer;
 }
-.hoa-edit-btn:hover { background: #dce6f5; }
-.hoa-del-btn {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 4px;
-  border: 1px solid #cc0000;
-  color: #cc0000;
-  background: transparent;
-  cursor: pointer;
-}
-.hoa-del-btn:hover { background: #fdf0f0; }
+.hoa-group-edit:hover { background: #dce6f5; }
 
 /* Financials tab */
 .hoa-fin {

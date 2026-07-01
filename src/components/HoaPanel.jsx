@@ -84,7 +84,6 @@ export default function HoaPanel({ userId }) {
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(BLANK)
   const [editId, setEditId] = useState(null)
-  const [expandedId, setExpandedId] = useState(null)
 
   const onImported = useCallback(() => reload?.(), [reload])
   const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount, error: yahooError } = useYahooHoaSync(userId, onImported)
@@ -116,7 +115,6 @@ export default function HoaPanel({ userId }) {
     })
     setEditId(item.id)
     setShowForm(true)
-    setExpandedId(null)
   }
 
   async function handleSubmit(e) {
@@ -296,42 +294,58 @@ export default function HoaPanel({ userId }) {
         </form>
       )}
 
-      {/* Items list */}
-      {tab !== 'Financials' && <div className="hoa-list">
+      {/* Items list — grouped by unit, mirroring the CSEA Interactions layout */}
+      {tab !== 'Financials' && <div className="hoa-groups">
         {loading && <p className="hoa-empty">Loading…</p>}
         {!loading && filtered.length === 0 && <p className="hoa-empty">No items in this category.</p>}
-        {filtered.map(item => {
-          const isOpen = expandedId === item.id
-          return (
-            <div key={item.id} className={`hoa-item ${isOpen ? 'expanded' : ''}`}>
-              <div className="hoa-item-main" onClick={() => setExpandedId(isOpen ? null : item.id)}>
-                <span className="hoa-item-cat-dot" style={{ background: CAT_COLORS[item.category] }} />
-                <div className="hoa-item-body">
-                  <span className="hoa-item-title">
-                    {item.unit && <span className="hoa-item-unit">Unit {item.unit} — </span>}
-                    {item.title}
-                  </span>
-                  <div className="hoa-item-meta">
-                    {item.item_date && <span className="hoa-item-date">{new Date(item.item_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
-                    <span className="hoa-item-priority" style={{ color: PRIORITY_COLORS[item.priority] }}>{item.priority}</span>
-                    <span className="hoa-item-status" style={{ background: STATUS_COLORS[item.status] + '22', color: STATUS_COLORS[item.status] }}>{item.status}</span>
-                  </div>
-                </div>
-                <span className="hoa-item-chevron">{isOpen ? '▲' : '▼'}</span>
-              </div>
-              {isOpen && (
-                <div className="hoa-item-detail">
-                  {item.notes && <p className="hoa-item-notes">{item.notes}</p>}
-                  <div className="hoa-item-actions">
-                    <button className="hoa-edit-btn" onClick={() => openEdit(item)}>Edit</button>
-                    <button className="hoa-del-btn" onClick={() => deleteItem(item.id)}>Delete</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )
-        })}
+        {Object.entries(
+          filtered.reduce((groups, item) => {
+            const key = item.unit ? `Unit ${item.unit}` : 'General / Board-Wide'
+            if (!groups[key]) groups[key] = []
+            groups[key].push(item)
+            return groups
+          }, {})
+        ).sort(([a], [b]) => {
+          if (a === 'General / Board-Wide') return 1
+          if (b === 'General / Board-Wide') return -1
+          return a.localeCompare(b, undefined, { numeric: true })
+        }).map(([unit, unitItems]) => (
+          <HoaUnitGroup key={unit} unit={unit} items={unitItems} onEdit={openEdit} onDelete={deleteItem} />
+        ))}
       </div>}
+    </div>
+  )
+}
+
+function HoaUnitGroup({ unit, items, onEdit, onDelete }) {
+  const [collapsed, setCollapsed] = useState(true)
+  return (
+    <div className="hoa-group">
+      <div className="hoa-group-header" onClick={() => setCollapsed(c => !c)}>
+        <span className="hoa-group-name">{unit}</span>
+        <span className="hoa-group-count">{items.length}</span>
+        <button className="hoa-group-toggle" onClick={e => { e.stopPropagation(); setCollapsed(c => !c) }}>
+          {collapsed ? '▾' : '▴'}
+        </button>
+      </div>
+      {!collapsed && (
+        <div className="hoa-group-items">
+          {items.map(item => (
+            <div key={item.id} className="hoa-group-card">
+              <div className="hoa-group-card-header">
+                <span className="hoa-group-cat-badge" style={{ background: CAT_COLORS[item.category] + '22', color: CAT_COLORS[item.category] }}>{item.category}</span>
+                <span className="hoa-group-priority" style={{ color: PRIORITY_COLORS[item.priority] }}>{item.priority}</span>
+                <span className="hoa-group-status" style={{ background: STATUS_COLORS[item.status] + '22', color: STATUS_COLORS[item.status] }}>{item.status}</span>
+                {item.item_date && <span className="hoa-group-date">{new Date(item.item_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
+                <button className="hoa-group-del" title="Delete" onClick={() => onDelete(item.id)}>✕</button>
+              </div>
+              <p className="hoa-group-title">{item.title}</p>
+              {item.notes && <p className="hoa-group-notes">{item.notes}</p>}
+              <button className="hoa-group-edit" onClick={() => onEdit(item)}>Edit</button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
