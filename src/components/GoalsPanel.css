@@ -81,6 +81,27 @@
   border-bottom: 1px solid #eef2f7;
 }
 
+.goal-check {
+  width: 12px;
+  height: 12px;
+  min-width: 12px;
+  border-radius: 50%;
+  border: 1.5px solid #b7c2d0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.goal-check.checked {
+  background: #2d7a4f;
+  border-color: #2d7a4f;
+}
+
+.goal-item-completed .goal-text {
+  color: #a7b0ba;
+  text-decoration: line-through;
+}
+
 .goal-item-main {
   display: flex;
   flex-direction: column;

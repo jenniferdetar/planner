@@ -1,0 +1,222 @@
+.nb-wrap {
+  display: flex;
+  height: 100%;
+  min-height: 400px;
+  border: 1px solid #d9e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.nb-tree-col {
+  width: 44%;
+  border-right: 1px solid #e6e9f0;
+  display: flex;
+  flex-direction: column;
+  background: #faf9f7;
+}
+
+.nb-tree-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #1e3070;
+}
+.nb-tree-title {
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+.nb-tree-count {
+  font-size: 10px;
+  color: rgba(255,255,255,0.7);
+}
+
+.nb-tree-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.nb-folder-group { display: flex; flex-direction: column; }
+
+.nb-folder-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12.5px;
+  color: #333;
+}
+.nb-folder-row:hover { background: #f0f0f0; }
+.nb-folder-row.active { background: #dce6f5; color: #1e3070; font-weight: 600; }
+
+.nb-folder-icon { font-size: 13px; }
+.nb-folder-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nb-folder-count {
+  font-size: 10px;
+  color: #999;
+  background: #eee;
+  border-radius: 8px;
+  padding: 1px 6px;
+}
+.nb-folder-chevron { color: #ccc; font-size: 13px; }
+
+.nb-add-subfolder-btn {
+  align-self: flex-start;
+  font-size: 10px;
+  color: #999;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0 6px;
+}
+.nb-add-subfolder-btn:hover { color: #1e3070; }
+
+.nb-new-folder-btn {
+  margin: 8px 12px;
+  font-size: 12px;
+  color: #1e3070;
+  background: none;
+  border: 1px dashed #b7c2d0;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.nb-add-folder-form {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 12px;
+}
+.nb-add-input {
+  flex: 1;
+  font-size: 11px;
+  padding: 4px 6px;
+  border: 1px solid #d9e8f0;
+  border-radius: 4px;
+  outline: none;
+}
+.nb-add-save, .nb-add-cancel {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.nb-empty {
+  font-size: 12px;
+  color: #bbb;
+  padding: 8px 14px;
+}
+
+.nb-content-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.nb-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #bbb;
+  gap: 8px;
+}
+.nb-placeholder-icon { font-size: 40px; }
+
+.nb-content-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e6e9f0;
+  font-family: 'Georgia', serif;
+  font-weight: 600;
+  color: #1e3070;
+}
+
+.nb-new-note-btn {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1e3070;
+  background: #dce6f5;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.nb-note-list { flex: 1; overflow-y: auto; }
+
+.nb-note-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+}
+.nb-note-row:hover { background: #f7f9fc; }
+.nb-note-title { font-weight: 600; font-size: 12.5px; color: #333; flex-shrink: 0; }
+.nb-note-preview { font-size: 11.5px; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+.nb-note-del { background: none; border: none; color: #ddd; cursor: pointer; font-size: 12px; }
+.nb-note-row:hover .nb-note-del { color: #e05c5c; }
+
+.nb-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 18px;
+}
+.nb-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.nb-back-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e3070;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.nb-editor-title {
+  font-family: 'Georgia', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e3070;
+  border: none;
+  outline: none;
+  padding: 4px 0;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #eee;
+}
+.nb-editor-body {
+  flex: 1;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 14px;
+  line-height: 26px;
+  border: none;
+  outline: none;
+  resize: none;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .nb-wrap { flex-direction: column; }
+  .nb-tree-col { width: 100%; max-height: 200px; }
+}

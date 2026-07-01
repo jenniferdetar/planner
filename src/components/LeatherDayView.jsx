@@ -13,6 +13,12 @@ import ContractReference from './ContractReference'
 import HoaPanel from './HoaPanel'
 import EisenhowerMatrix from './EisenhowerMatrix'
 import PersonalPanel from './PersonalPanel'
+import RolesPanel from './RolesPanel'
+import GoalsPanel from './GoalsPanel'
+import MissionValuesPanel from './MissionValuesPanel'
+import NotesBrowser from './NotesBrowser'
+import WeatherQuoteHeader from './WeatherQuoteHeader'
+import { useRoles } from '../hooks/useRoles'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
@@ -29,12 +35,19 @@ const TAB_CATEGORY = {
 }
 
 const ALL_TABS = [
+  { key: 'daily-tasks', label: 'Daily Tasks',  color: '#3a5c8a' },
+  { key: 'master-tasks',label: 'Master Tasks', color: '#1e5799' },
+  { key: 'roles',       label: 'Roles',        color: '#73a882' },
+  { key: 'goals',       label: 'Goals',        color: '#8bc34a' },
+  { key: 'meetings',    label: 'Meetings',     color: '#888888' },
+  { key: 'mission',     label: 'Mission',      color: '#4a90d9' },
+  { key: 'notes',       label: 'Notes',        color: '#f0a040' },
+  { key: 'journal',     label: 'Journal',      color: '#a0785a', external: 'https://penzu.com' },
   { key: 'csea',        label: 'CSEA',         color: '#1e3070', nav: true },
   { key: 'finance',     label: 'Finance',      color: '#1e5799', nav: true },
   { key: 'gcu',         label: 'GCU',          color: '#1e3070', nav: true },
   { key: 'hoa',         label: 'HOA',          color: '#1e5799', nav: true },
   { key: 'icaap',       label: 'iCAAP',        color: '#1e3070', nav: true },
-  { key: 'master-tasks',label: 'Master Tasks', color: '#1e5799' },
   { key: 'matrix',      label: 'Matrix',       color: '#1e3070', nav: true },
   { key: 'personal',    label: 'Personal',     color: '#1e5799', nav: true },
   { key: 'wywo',        label: 'WYWO',         color: '#1e3070', nav: true },
@@ -54,12 +67,14 @@ function formatHour(h) {
 export default function LeatherDayView({
   // current view from App
   view, onViewChange,
+  providerToken,
   // day props
   selectedDate, onDateChange,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
   timeBlocks, onAddBlock, onDeleteBlock,
   masterTasks, onAddMasterTask, onDeleteMasterTask, onUpdateMasterTask,
   sections, onUpdateSection,
+  noteContent, onNoteChange,
   asanaTasks, asanaTaskTags, onCycleAsanaTaskTag,
   // week props
   userId,
@@ -94,8 +109,9 @@ export default function LeatherDayView({
   const today = new Date()
   const [rightTab, setRightTab] = useState(() => {
     const t = viewToTab(view)
-    return (t === 'daily-tasks' || t === 'schedule') ? 'master-tasks' : t
+    return t === 'schedule' ? 'daily-tasks' : t
   })
+  const { roles: lifeRoles } = useRoles(userId)
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
   const [promotedToast, setPromotedToast] = useState(null)
@@ -115,10 +131,14 @@ export default function LeatherDayView({
   // Sync external view changes into tab state
   useEffect(() => {
     const tab = viewToTab(view)
-    setRightTab((tab === 'daily-tasks' || tab === 'schedule') ? 'master-tasks' : tab)
+    setRightTab(tab === 'schedule' ? 'daily-tasks' : tab)
   }, [view])
 
   function handleTabClick(tab) {
+    if (tab.external) {
+      window.open(tab.external, '_blank', 'noopener,noreferrer')
+      return
+    }
     setRightTab(tab.key)
     // sync back to App so sidebar stays in sync
     if (tab.nav) onViewChange?.(tab.key)
@@ -244,7 +264,50 @@ export default function LeatherDayView({
           <div className="right-page-inner">
 
             {/* Day content tabs */}
+            {rightTab === 'daily-tasks' && (
+              <div className="rp-panel">
+                <WeatherQuoteHeader />
+                <div className="rp-header">
+                  <span className="rp-title">Daily Notes</span>
+                </div>
+                <textarea
+                  className="rp-notes-area"
+                  value={noteContent || ''}
+                  onChange={e => onNoteChange?.(e.target.value)}
+                  placeholder="Notes for today…"
+                />
+              </div>
+            )}
             {rightTab === 'master-tasks' && <MasterTasksPanel masterTasks={masterTasks || []} onDelete={onDeleteMasterTask} />}
+            {rightTab === 'roles' && (
+              <div className="binder-view-wrap">
+                <RolesPanel userId={userId} />
+              </div>
+            )}
+            {rightTab === 'goals' && (
+              <div className="binder-view-wrap">
+                <GoalsPanel userId={userId} section="goals" roles={lifeRoles} />
+              </div>
+            )}
+            {rightTab === 'meetings' && (
+              <SectionTextPanel
+                sectionKey="meetings"
+                label="Meetings"
+                color="#888888"
+                value={sections?.meetings || ''}
+                onChange={onUpdateSection}
+              />
+            )}
+            {rightTab === 'mission' && (
+              <div className="binder-view-wrap">
+                <MissionValuesPanel userId={userId} />
+              </div>
+            )}
+            {rightTab === 'notes' && (
+              <div className="binder-view-wrap">
+                <NotesBrowser userId={userId} />
+              </div>
+            )}
 
             {/* Nav view tabs — render full view components inside binder */}
             {rightTab === 'week' && (
@@ -275,6 +338,7 @@ export default function LeatherDayView({
               <div className="binder-view-wrap">
                 <CseaTracker
                   userId={userId}
+                  providerToken={providerToken}
                   issues={cseaIssues || []}
                   onAddIssue={onAddCseaIssue}
                   onUpdateStatus={onUpdateCseaStatus}
@@ -398,6 +462,7 @@ export default function LeatherDayView({
               <div className="binder-view-wrap">
                 <PersonalPanel
                   userId={userId}
+                  providerToken={providerToken}
                   selectedDate={selectedDate}
                   onDateChange={onDateChange}
                   books={books || []}

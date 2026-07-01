@@ -1,0 +1,68 @@
+.mv-panel {
+  display: flex;
+  gap: 16px;
+  height: 100%;
+  min-height: 400px;
+}
+
+.mv-mission-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mv-mission-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #1e3070;
+  border-radius: 8px 8px 0 0;
+}
+
+.mv-mission-title {
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.mv-saved {
+  font-size: 11px;
+  color: #9be6a8;
+}
+
+.mv-mission-textarea {
+  flex: 1;
+  padding: 20px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 15px;
+  line-height: 28px;
+  color: #222;
+  background: #fff;
+  border: 1px solid #d9e8f0;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+}
+.mv-mission-textarea::placeholder { color: #ccc; }
+
+.mv-values-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d9e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .mv-panel {
+    flex-direction: column;
+  }
+}

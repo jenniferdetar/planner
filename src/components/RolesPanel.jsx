@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRoles } from '../hooks/useRoles'
+import { useRoleProgress } from '../hooks/useRoleProgress'
 import { supabase } from '../lib/supabase'
 import './RolesPanel.css'
 
@@ -21,6 +22,7 @@ function useRoleLinked(roleId) {
 export default function RolesPanel({ userId, roles: rolesProp }) {
   const { roles: rolesOwn, addRole, updateRole, deleteRole } = useRoles(userId)
   const roles = rolesProp ?? rolesOwn
+  const progressByRole = useRoleProgress(userId)
   const [detail, setDetail] = useState(null)
   const [adding, setAdding] = useState(false)
   const [newName, setNewName] = useState('')
@@ -118,7 +120,7 @@ export default function RolesPanel({ userId, roles: rolesProp }) {
   return (
     <div className="roles-list-wrap">
       <div className="roles-list-header">
-        <span className="roles-list-title">Roles</span>
+        <span className="roles-list-title">Life Roles</span>
         {!adding && (
           <button className="roles-add-btn" onClick={() => setAdding(true)}>+ Add Role</button>
         )}
@@ -144,24 +146,32 @@ export default function RolesPanel({ userId, roles: rolesProp }) {
         )}
 
         <div className="roles-cards">
-          {roles.map((r, i) => (
-            <button
-              key={r.id}
-              className="roles-card"
-              onClick={() => setDetail(r.id)}
-            >
-              <span className="roles-card-icon">{ROLE_ICONS[i % ROLE_ICONS.length]}</span>
-              <div className="roles-card-body">
-                <span className="roles-card-name">{r.name}</span>
-                {r.purpose && (
-                  <span className="roles-card-preview">
-                    {r.purpose.slice(0, 100)}{r.purpose.length > 100 ? '…' : ''}
-                  </span>
-                )}
-              </div>
-              <span className="roles-card-chevron">›</span>
-            </button>
-          ))}
+          {roles.map((r, i) => {
+            const progress = progressByRole[r.id]
+            const pct = progress?.pct ?? 0
+            return (
+              <button
+                key={r.id}
+                className="roles-card"
+                onClick={() => setDetail(r.id)}
+              >
+                <span className="roles-card-icon">{ROLE_ICONS[i % ROLE_ICONS.length]}</span>
+                <div className="roles-card-body">
+                  <span className="roles-card-name">{r.name}</span>
+                  <div className="roles-progress-row">
+                    <div className="roles-progress-track">
+                      <div className="roles-progress-fill" style={{ width: `${pct}%` }} />
+                    </div>
+                    <span className="roles-progress-pct">{pct}%</span>
+                  </div>
+                  {progress
+                    ? <span className="roles-card-goals">{progress.completed}/{progress.total} goals complete</span>
+                    : <span className="roles-card-goals">No linked goals</span>}
+                </div>
+                <span className="roles-card-chevron">›</span>
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>
