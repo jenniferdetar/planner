@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react'
 import { useDailyInspiration } from '../hooks/useDailyInspiration'
 import { useDailyLog } from '../hooks/useDailyLog'
+import { useMantra } from '../hooks/useMantra'
+import { useMission } from '../hooks/useMission'
 import './DashboardView.css'
 import CseaTracker from './CseaTracker'
 import IcaapTracker from './IcaapTracker'
@@ -43,6 +45,10 @@ const NAV_ITEMS = [
   { key: 'matrix',   label: 'Matrix',       color: '#9ca3af', group: 'module' },
   { key: 'wywo',     label: 'WYWO',         color: '#9ca3af', group: 'module' },
 ]
+
+function firstLine(text) {
+  return (text || '').split('\n').map(l => l.trim()).filter(Boolean)[0] || ''
+}
 
 function fmtTime(ts) {
   if (!ts) return ''
@@ -120,7 +126,11 @@ export default function DashboardView({
   onSignOut,
 }) {
   const [section, setSection] = useState('today')
-  const { verse, quote } = useDailyInspiration()
+  const { verse } = useDailyInspiration()
+  const { mantra } = useMantra(userId)
+  const { mission } = useMission(userId)
+  const mantraLine = firstLine(mantra)
+  const missionLine = firstLine(mission)
   const [newTask, setNewTask] = useState('')
   const [personalSubTab, setPersonalSubTab] = useState('goals')
   const [newBlockTitle, setNewBlockTitle] = useState('')
@@ -385,19 +395,23 @@ export default function DashboardView({
                   : <p className="dash-inspiration-loading">Loading…</p>
                 }
               </a>
-              <a className="dash-inspiration-card" href="https://www.brainyquote.com/quote_of_the_day" target="_blank" rel="noopener noreferrer">
+              <button
+                type="button"
+                className="dash-inspiration-card"
+                onClick={() => { setSection('personal'); setPersonalSubTab('mantra') }}
+              >
                 <div className="dash-inspiration-header">
-                  <span className="dash-inspiration-icon">❝</span>
-                  <span className="dash-inspiration-label">Quote of the Day</span>
+                  <span className="dash-inspiration-icon">✦</span>
+                  <span className="dash-inspiration-label">Mantra &amp; Mission</span>
                 </div>
-                {quote
+                {(mantraLine || missionLine)
                   ? <>
-                      <p className="dash-inspiration-text">{quote.text}</p>
-                      <span className="dash-inspiration-sub">— {quote.author}</span>
+                      {mantraLine && <p className="dash-inspiration-text">{mantraLine}</p>}
+                      {missionLine && <p className="dash-inspiration-text">{missionLine}</p>}
                     </>
-                  : <p className="dash-inspiration-loading">Loading…</p>
+                  : <p className="dash-inspiration-loading">Add your mantra &amp; mission in Personal</p>
                 }
-              </a>
+              </button>
             </div>
 
             {/* Mobile pill nav — only shown on Today page */}
