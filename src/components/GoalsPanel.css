@@ -17,19 +17,20 @@
   align-items: center;
   gap: 8px;
   justify-content: center;
-  padding: 8px 16px;
-  margin-bottom: 8px;
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 16px;
   background: #1e3070;
   flex-shrink: 0;
 }
 
 .goals-trophy {
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .goals-title {
   font-family: 'Nunito', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: #ffffff;
   text-transform: uppercase;

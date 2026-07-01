@@ -16,13 +16,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 16px;
   background: #1e3070;
   flex-shrink: 0;
 }
 
 .roles-list-title {
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.roles-detail-header {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  background: #1e3070;
+  flex-shrink: 0;
+}
+
+.roles-detail-header span {
+  font-size: 13px;
   font-weight: 600;
   color: #fff;
   letter-spacing: 2px;
@@ -195,7 +215,10 @@
   overflow: hidden;
 }
 
-.roles-detail-empty {
+.roles-detail-empty-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 10px;

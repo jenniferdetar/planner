@@ -223,6 +223,8 @@ export default function LeatherDayView({
         <div className="binder-page left-page">
           {rightTab === 'daily-tasks' && (
           <>
+          <div className="rp-header"><span className="rp-title">Daily Tasks</span></div>
+          <div className="lp-body-row">
           <div className="lp-col lp-col-left">
             <div className="lp-date-block">
               <div className="lp-day-num">{selectedDate.getDate()}</div>
@@ -280,6 +282,7 @@ export default function LeatherDayView({
             <div className="lp-sched-area">
               <LeftSchedule {...scheduleProps} />
             </div>
+          </div>
           </div>
           </>
           )}
@@ -679,6 +682,9 @@ function MasterTasksPageRight({ masterTasks, onDelete }) {
   const { categoryMap, right } = splitMasterTasksCategories(masterTasks)
   return (
     <div className="rp-panel">
+      <div className="rp-header">
+        <span className="rp-title">Master Tasks</span>
+      </div>
       <MasterTasksCategoryList categoryMap={categoryMap} categories={right} onDelete={onDelete} />
     </div>
   )

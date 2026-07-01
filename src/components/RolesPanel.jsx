@@ -129,9 +129,12 @@ export function RoleDetail({ api }) {
 
   if (!current) {
     return (
-      <div className="roles-detail roles-detail-empty">
-        <span className="roles-detail-empty-icon">🎯</span>
-        <p>Select a role to see its purpose and linked goals.</p>
+      <div className="roles-detail">
+        <div className="roles-detail-header"><span>Role Detail</span></div>
+        <div className="roles-detail-empty-body">
+          <span className="roles-detail-empty-icon">🎯</span>
+          <p>Select a role to see its purpose and linked goals.</p>
+        </div>
       </div>
     )
   }
@@ -139,6 +142,7 @@ export function RoleDetail({ api }) {
   const icon = ROLE_ICONS[api.roles.indexOf(current) % ROLE_ICONS.length]
   return (
     <div className="roles-detail">
+      <div className="roles-detail-header"><span>{current.name}</span></div>
       <div className="roles-detail-body">
         <div className="roles-detail-icon">{icon}</div>
         <input
