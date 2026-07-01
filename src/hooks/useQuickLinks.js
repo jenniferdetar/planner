@@ -48,11 +48,12 @@ export function useQuickLinks(userId, section) {
   }, [userId, section])
 
   async function addLink(title, url) {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('quick_links')
       .insert({ title, url, section, user_id: userId })
       .select()
       .single()
+    if (error) throw error
     if (data) setLinks((prev) => alpha([...prev, data]))
   }
 
