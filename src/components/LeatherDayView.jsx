@@ -115,7 +115,7 @@ export default function LeatherDayView({
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
   const [promotedToast, setPromotedToast] = useState(null)
-  const [personalSubTab, setPersonalSubTab] = useState('goals')
+  const [personalSubTab, setPersonalSubTab] = useState('roles')
 
   function handlePromoteTask(task) {
     const cat = TAB_CATEGORY[rightTab] || ''
@@ -192,7 +192,9 @@ export default function LeatherDayView({
           <div className="promote-toast">Sent to Master Tasks: {promotedToast}</div>
         )}
 
-        {/* ── Left page ── */}
+        {/* ── Left page — Daily Tasks tab only; other tabs use the full two-page width ── */}
+        {rightTab === 'daily-tasks' && (
+        <>
         <div className="binder-page left-page">
           <div className="lp-col lp-col-left">
             <div className="lp-date-block">
@@ -258,8 +260,10 @@ export default function LeatherDayView({
         <div className="binder-rings">
           {[0,1,2,3,4,5].map(i => <div key={i} className="ring-pair"><div className="ring" /></div>)}
         </div>
+        </>
+        )}
 
-        {/* ── Right page ── */}
+        {/* ── Right page (full binder width on every tab except Daily Tasks) ── */}
         <div className="binder-page right-page">
           <div className="right-page-inner">
 
@@ -471,19 +475,17 @@ export default function LeatherDayView({
                   onUpdateBookChapter={onUpdateBookChapter}
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
-                  allowedSubTabs={['goals', 'roles', 'checklist', 'library', 'videos', 'links', 'budget']}
+                  allowedSubTabs={['roles', 'checklist', 'library', 'videos', 'links', 'budget']}
                   subTab={personalSubTab}
                   onSubTabChange={setPersonalSubTab}
                 />
-                {personalSubTab === 'goals' && (
-                  <MiniMasterPanel
-                    tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.personal)}
-                    category={TAB_CATEGORY.personal}
-                    color={CATEGORY_COLORS[TAB_CATEGORY.personal]}
-                    onAdd={onAddMasterTask}
-                    onDelete={onDeleteMasterTask}
-                  />
-                )}
+                <MiniMasterPanel
+                  tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.personal)}
+                  category={TAB_CATEGORY.personal}
+                  color={CATEGORY_COLORS[TAB_CATEGORY.personal]}
+                  onAdd={onAddMasterTask}
+                  onDelete={onDeleteMasterTask}
+                />
               </div>
             )}
 
