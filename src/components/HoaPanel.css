@@ -465,3 +465,36 @@
 .hoa-fin-table td:first-child a:hover { text-decoration: underline; }
 .hoa-fin-table td.pos { color: #2e7d32; }
 .hoa-fin-table td.neg { color: #cc0000; }
+
+@media (max-width: 768px) {
+  .hoa-tabs {
+    background: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 8px 10px;
+    gap: 6px;
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .hoa-tab {
+    flex: 0 0 auto;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid #d0d5dd;
+    background: #fff;
+    color: #444;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid #d0d5dd;
+  }
+
+  .hoa-tab:hover { background: #e8e8e8; color: #222; border-color: #aaa; }
+
+  .hoa-tab.active {
+    background: #1e3070;
+    color: #fff;
+    border-color: #1e3070;
+  }
+}
