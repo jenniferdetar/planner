@@ -471,7 +471,7 @@ export default function LeatherDayView({
                   onUpdateBookChapter={onUpdateBookChapter}
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
-                  allowedSubTabs={['goals', 'library', 'mantra', 'roles']}
+                  allowedSubTabs={['goals', 'library', 'roles']}
                   subTab={personalSubTab}
                   onSubTabChange={setPersonalSubTab}
                 />
