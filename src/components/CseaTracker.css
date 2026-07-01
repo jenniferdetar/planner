@@ -355,10 +355,11 @@
 
 /* ── Issue list ────────────────────────────────────────────────────────── */
 .csea-issue-list {
-  padding: 10px 16px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
+  background: #f5f7fa;
 }
 
 .csea-interactions-grid {
@@ -380,21 +381,22 @@
   background: #fff;
   border: 1px solid var(--csea-light-gray);
   border-left: 4px solid var(--csea-blue);
-  border-radius: 3px;
+  border-radius: 10px;
   overflow: hidden;
-  transition: box-shadow 0.15s;
+  box-shadow: 0 1px 3px rgba(30,48,112,0.08);
+  transition: box-shadow 0.15s, transform 0.15s;
 }
 
 .issue-card:nth-child(even) { border-left-color: var(--csea-accent); }
-.issue-card:hover { box-shadow: 0 2px 8px rgba(30,48,112,0.12); }
+.issue-card:hover { box-shadow: 0 4px 14px rgba(30,48,112,0.14); transform: translateY(-1px); }
 .issue-card.resolved { opacity: 0.55; }
 
 .issue-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 12px;
-  height: 46px;
+  gap: 10px;
+  padding: 0 16px;
+  height: 52px;
   overflow: hidden;
   cursor: pointer;
 }
