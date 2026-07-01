@@ -926,61 +926,63 @@ function LaundryTab({ userId }) {
       {loading && <p className="fin-empty">Loading…</p>}
       {!loading && sessions.length === 0 && <p className="fin-empty">No laundry sessions yet.</p>}
 
-      {dates.map(date => {
-        const daySessions = byDate[date]
-        const washSessions = daySessions.filter(s => s.type === 'wash')
-        const drySessions = daySessions.filter(s => s.type === 'dry')
-        const totalQuarters = daySessions.reduce((s, x) => s + x.quarters, 0)
-        const totalCost = totalQuarters * 0.25
+      <div className="laundry-days-grid">
+        {dates.map(date => {
+          const daySessions = byDate[date]
+          const washSessions = daySessions.filter(s => s.type === 'wash')
+          const drySessions = daySessions.filter(s => s.type === 'dry')
+          const totalQuarters = daySessions.reduce((s, x) => s + x.quarters, 0)
+          const totalCost = totalQuarters * 0.25
 
-        return (
-          <div key={date} className="laundry-day">
-            <div className="laundry-day-header">
-              <span className="laundry-day-date">{fmtDate(date)}</span>
-              <span className="laundry-day-total">{totalQuarters} quarters · {fmt(totalCost)}</span>
+          return (
+            <div key={date} className="laundry-day">
+              <div className="laundry-day-header">
+                <span className="laundry-day-date">{fmtDate(date)}</span>
+                <span className="laundry-day-total">{totalQuarters} quarters · {fmt(totalCost)}</span>
+              </div>
+
+              {washSessions.length > 0 && (
+                <div className="laundry-section">
+                  <div className="laundry-section-title laundry-section-title--wash">Washing</div>
+                  <div className="laundry-card-grid">
+                    {washSessions.map(s => (
+                      <div key={s.id} className="laundry-session-card">
+                        <button className="laundry-card-del" onClick={() => deleteSession(s.id)}>✕</button>
+                        <div className="laundry-card-machine">{machineLabel(s.machine_type)}</div>
+                        <div className="laundry-card-stats">
+                          <span>{s.loads} {s.loads === 1 ? 'load' : 'loads'}</span>
+                          <span>{s.quarters}q</span>
+                          <span>{s.minutes} min</span>
+                        </div>
+                        <div className="laundry-card-cost">{fmt(s.quarters * 0.25)}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {drySessions.length > 0 && (
+                <div className="laundry-section">
+                  <div className="laundry-section-title laundry-section-title--dry">Drying</div>
+                  <div className="laundry-card-grid">
+                    {drySessions.map(s => (
+                      <div key={s.id} className="laundry-session-card">
+                        <button className="laundry-card-del" onClick={() => deleteSession(s.id)}>✕</button>
+                        <div className="laundry-card-machine">{machineLabel(s.machine_type)}</div>
+                        <div className="laundry-card-stats">
+                          <span>{s.loads} {s.loads === 1 ? 'load' : 'loads'}</span>
+                          <span>{s.quarters}q</span>
+                          <span>{s.minutes} min</span>
+                        </div>
+                        <div className="laundry-card-cost">{fmt(s.quarters * 0.25)}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-
-            {washSessions.length > 0 && (
-              <div className="laundry-section">
-                <div className="laundry-section-title laundry-section-title--wash">Washing</div>
-                <div className="laundry-card-grid">
-                  {washSessions.map(s => (
-                    <div key={s.id} className="laundry-session-card">
-                      <button className="laundry-card-del" onClick={() => deleteSession(s.id)}>✕</button>
-                      <div className="laundry-card-machine">{machineLabel(s.machine_type)}</div>
-                      <div className="laundry-card-stats">
-                        <span>{s.loads} {s.loads === 1 ? 'load' : 'loads'}</span>
-                        <span>{s.quarters}q</span>
-                        <span>{s.minutes} min</span>
-                      </div>
-                      <div className="laundry-card-cost">{fmt(s.quarters * 0.25)}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {drySessions.length > 0 && (
-              <div className="laundry-section">
-                <div className="laundry-section-title laundry-section-title--dry">Drying</div>
-                <div className="laundry-card-grid">
-                  {drySessions.map(s => (
-                    <div key={s.id} className="laundry-session-card">
-                      <button className="laundry-card-del" onClick={() => deleteSession(s.id)}>✕</button>
-                      <div className="laundry-card-machine">{machineLabel(s.machine_type)}</div>
-                      <div className="laundry-card-stats">
-                        <span>{s.loads} {s.loads === 1 ? 'load' : 'loads'}</span>
-                        <span>{s.quarters}q</span>
-                        <span>{s.minutes} min</span>
-                      </div>
-                      <div className="laundry-card-cost">{fmt(s.quarters * 0.25)}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }

@@ -526,6 +526,21 @@
   border-color: #cc0000;
 }
 
+.icaap-archive-btn {
+  font-size: 10px;
+  color: #999;
+  padding: 3px 8px;
+  border: 1px solid #d9e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.icaap-archive-btn:hover {
+  color: #1e3070;
+  border-color: #1e3070;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .icaap-board {

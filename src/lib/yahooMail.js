@@ -1,4 +1,6 @@
 import { parseWebformText, webformToInteraction } from './webformParser'
+import { isSkippedSender } from './interactionSkipList'
+import { summarizeEmailBody } from './emailSummary'
 
 export async function fetchYahooCseaEmails() {
   const res = await fetch('/api/yahoo-sync', { method: 'POST' })
@@ -18,10 +20,12 @@ export function parseYahooEmailToInteraction(msg) {
     return webformToInteraction(parsed, 'yahoo_message_id', msg.id)
   }
 
+  if (isSkippedSender(msg.from)) return null
+
   // Generic fallback: use sender name (or address) as member_name
   const memberName = msg.fromName || msg.from || 'Unknown'
   const date = msg.date ? msg.date.split('T')[0] : new Date().toISOString().split('T')[0]
-  const discussion = [msg.subject, msg.text?.slice(0, 800)].filter(Boolean).join('\n\n')
+  const discussion = [msg.subject, summarizeEmailBody(msg.text)].filter(Boolean).join('\n\n')
 
   if (!discussion.trim()) return null
 

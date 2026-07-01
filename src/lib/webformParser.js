@@ -1,3 +1,6 @@
+import { isSkippedSender } from './interactionSkipList'
+import { summarizeEmailBody } from './emailSummary'
+
 // Parses CSEA union webform submission text into structured fields.
 // Shared by Gmail and Yahoo Mail sync, since both deliver the same email format.
 export function parseWebformText(text) {
@@ -30,9 +33,10 @@ export function parseWebformText(text) {
 // idField/idValue let callers tag the record with the source message id (gmail_message_id or yahoo_message_id).
 export function webformToInteraction({ name, email, phone, message, date }, idField, idValue) {
   if (!name) return null
+  if (isSkippedSender(email)) return null
 
   const discussion = [
-    message,
+    summarizeEmailBody(message) || message,
     phone ? `Phone: ${phone}` : '',
     email ? `Email: ${email}` : '',
   ].filter(Boolean).join('\n')
