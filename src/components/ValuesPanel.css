@@ -122,12 +122,8 @@
 
 .values-subtab:hover {
   background: #eaf0fb;
-}
-
-.values-subtab.active {
-  background: var(--val-color, #1e3070);
   border-color: var(--val-color, #1e3070);
-  color: #fff;
+  color: var(--val-color, #1e3070);
 }
 
 .values-subtab-dot {
@@ -137,15 +133,45 @@
   flex-shrink: 0;
 }
 
-/* Detail view (content for the selected value subtab) */
-.values-detail {
-  flex: 1;
+/* Popup shown when a value subtab is clicked */
+.values-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,20,30,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.values-modal {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 18px;
   background: #fff;
-  overflow-y: auto;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
+
+.values-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 14px;
+  color: #999;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.values-modal-close:hover { color: #333; }
 
 .values-detail-title {
   font-family: 'Architects Daughter', cursive;
