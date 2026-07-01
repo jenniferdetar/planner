@@ -115,7 +115,7 @@ export default function LeatherDayView({
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
   const [promotedToast, setPromotedToast] = useState(null)
-  const [personalSubTab, setPersonalSubTab] = useState('roles')
+  const [personalSubTab, setPersonalSubTab] = useState('checklist')
 
   function handlePromoteTask(task) {
     const cat = TAB_CATEGORY[rightTab] || ''
@@ -475,7 +475,7 @@ export default function LeatherDayView({
                   onUpdateBookChapter={onUpdateBookChapter}
                   onDeleteBook={onDeleteBook}
                   onImportBooks={onImportBooks}
-                  allowedSubTabs={['roles', 'checklist', 'library', 'videos', 'links', 'budget']}
+                  allowedSubTabs={['checklist', 'library', 'videos', 'links', 'budget']}
                   subTab={personalSubTab}
                   onSubTabChange={setPersonalSubTab}
                 />
