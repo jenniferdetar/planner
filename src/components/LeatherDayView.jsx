@@ -192,7 +192,9 @@ export default function LeatherDayView({
           <div className="promote-toast">Sent to Master Tasks: {promotedToast}</div>
         )}
 
-        {/* ── Left page ── */}
+        {/* ── Left page — Daily Tasks tab only; other tabs use the full two-page width ── */}
+        {rightTab === 'daily-tasks' && (
+        <>
         <div className="binder-page left-page">
           <div className="lp-col lp-col-left">
             <div className="lp-date-block">
@@ -258,8 +260,10 @@ export default function LeatherDayView({
         <div className="binder-rings">
           {[0,1,2,3,4,5].map(i => <div key={i} className="ring-pair"><div className="ring" /></div>)}
         </div>
+        </>
+        )}
 
-        {/* ── Right page ── */}
+        {/* ── Right page (full binder width on every tab except Daily Tasks) ── */}
         <div className="binder-page right-page">
           <div className="right-page-inner">
 
