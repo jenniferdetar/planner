@@ -1,15 +1,44 @@
 .mv-panel {
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
   height: 100%;
   min-height: 400px;
+}
+
+.mv-subtabs {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.mv-subtab {
+  font-family: 'Georgia', serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #666;
+  background: #f4f6fb;
+  border: 1px solid #e0e5ee;
+  border-radius: 6px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.mv-subtab:hover { background: #eaf0fb; }
+
+.mv-subtab.active {
+  background: #1e3070;
+  border-color: #1e3070;
+  color: #fff;
 }
 
 .mv-mission-col {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  min-height: 0;
 }
 
 .mv-mission-header {
@@ -53,16 +82,10 @@
 
 .mv-values-col {
   flex: 1;
-  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   border: 1px solid #d9e8f0;
   border-radius: 8px;
   overflow: hidden;
-}
-
-@media (max-width: 768px) {
-  .mv-panel {
-    flex-direction: column;
-  }
 }

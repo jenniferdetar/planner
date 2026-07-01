@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { usePersonalValues } from '../hooks/usePersonalValues'
 import './ValuesPanel.css'
 
@@ -18,17 +18,20 @@ function colorHex(val) {
 
 export default function ValuesPanel({ userId }) {
   const { values, addValue, updateValue, deleteValue } = usePersonalValues(userId)
-  const [detail, setDetail] = useState(null) // id of value being viewed
+  const [selected, setSelected] = useState(null) // id of active value subtab
   const [adding, setAdding] = useState(false)
   const [newName, setNewName] = useState('')
-  const saveTimer = useRef({})
 
-  const current = values.find(v => v.id === detail)
+  const current = values.find(v => v.id === selected)
+
+  // Keep a subtab selected whenever values exist.
+  useEffect(() => {
+    if (!selected && values.length > 0) setSelected(values[0].id)
+    if (selected && !values.find(v => v.id === selected)) setSelected(values[0]?.id ?? null)
+  }, [values, selected])
 
   function handleDescChange(id, text) {
     updateValue(id, { description: text })
-    clearTimeout(saveTimer.current[id])
-    saveTimer.current[id] = setTimeout(() => {}, 0)
   }
 
   function handleNameChange(id, name) {
@@ -45,22 +48,59 @@ export default function ValuesPanel({ userId }) {
     const v = await addValue(newName.trim())
     setNewName('')
     setAdding(false)
-    if (v) setDetail(v.id)
+    if (v) setSelected(v.id)
   }
 
   async function handleDelete(id) {
     await deleteValue(id)
-    setDetail(null)
+    if (selected === id) setSelected(null)
   }
 
-  if (detail && current) {
-    return (
-      <div className="values-detail">
-        <div className="values-detail-nav">
-          <button className="values-back-btn" onClick={() => setDetail(null)}>‹ Back</button>
-          <span className="values-detail-nav-title">{current.name}</span>
+  return (
+    <div className="values-list-wrap">
+      <div className="values-list-header">
+        <h3 className="values-list-title">Values</h3>
+        {!adding && (
+          <button className="values-add-btn" onClick={() => setAdding(true)}>+ Add Value</button>
+        )}
+      </div>
+
+      {adding && (
+        <form className="values-add-form" onSubmit={handleAdd}>
+          <input
+            autoFocus
+            className="values-add-input"
+            value={newName}
+            onChange={e => setNewName(e.target.value)}
+            placeholder="Value name (e.g. Happiness)"
+          />
+          <button className="values-add-save" type="submit">Add</button>
+          <button className="values-add-cancel" type="button" onClick={() => { setAdding(false); setNewName('') }}>Cancel</button>
+        </form>
+      )}
+
+      {values.length === 0 && !adding && (
+        <p className="values-empty">No values yet. Add one to get started.</p>
+      )}
+
+      {values.length > 0 && (
+        <div className="values-subtabs">
+          {values.map(v => (
+            <button
+              key={v.id}
+              className={`values-subtab${selected === v.id ? ' active' : ''}`}
+              style={{ '--val-color': colorHex(v.color) }}
+              onClick={() => setSelected(v.id)}
+            >
+              <span className="values-subtab-dot" style={{ background: colorHex(v.color) }} />
+              {v.name}
+            </button>
+          ))}
         </div>
-        <div className="values-detail-body">
+      )}
+
+      {current && (
+        <div className="values-detail">
           <h2 className="values-detail-title" style={{ color: colorHex(current.color) }}>
             {current.name}
           </h2>
@@ -107,55 +147,7 @@ export default function ValuesPanel({ userId }) {
             Delete
           </button>
         </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="values-list-wrap">
-      <div className="values-list-header">
-        <h3 className="values-list-title">Values</h3>
-        {!adding && (
-          <button className="values-add-btn" onClick={() => setAdding(true)}>+ Add Value</button>
-        )}
-      </div>
-
-      {adding && (
-        <form className="values-add-form" onSubmit={handleAdd}>
-          <input
-            autoFocus
-            className="values-add-input"
-            value={newName}
-            onChange={e => setNewName(e.target.value)}
-            placeholder="Value name (e.g. Happiness)"
-          />
-          <button className="values-add-save" type="submit">Add</button>
-          <button className="values-add-cancel" type="button" onClick={() => { setAdding(false); setNewName('') }}>Cancel</button>
-        </form>
       )}
-
-      {values.length === 0 && !adding && (
-        <p className="values-empty">No values yet. Add one to get started.</p>
-      )}
-
-      <div className="values-cards">
-        {values.map(v => (
-          <button
-            key={v.id}
-            className="values-card"
-            style={{ '--val-color': colorHex(v.color) }}
-            onClick={() => setDetail(v.id)}
-          >
-            <span className="values-card-dot" style={{ background: colorHex(v.color) }} />
-            <span className="values-card-name">{v.name}</span>
-            {v.description && (
-              <span className="values-card-preview">
-                {v.description.slice(0, 80)}{v.description.length > 80 ? '…' : ''}
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
     </div>
   )
 }
