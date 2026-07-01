@@ -273,7 +273,7 @@ function HoaForm({ api }) {
 function HoaUnitGroup({ unit, items, onEdit, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
-    <div className="hoa-group">
+    <div className={`hoa-group${collapsed ? '' : ' expanded'}`}>
       <div className="hoa-group-header" onClick={() => setCollapsed(c => !c)}>
         <span className="hoa-group-name">{unit}</span>
         <span className="hoa-group-count">{items.length}</span>
