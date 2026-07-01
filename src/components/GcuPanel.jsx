@@ -39,8 +39,6 @@ function calcGPA(grades) {
   return (totalPoints / totalCredits).toFixed(2)
 }
 
-// Shared state so the "Completed" group and the "Core/Emphasis" groups can
-// render on separate binder pages while staying in sync.
 export function useGcuState() {
   const [statuses, setStatuses] = useState(() =>
     Object.fromEntries(GCU_COURSES.map(c => [c.code, c.type === 'completed' ? 'completed' : 'not started']))
@@ -118,8 +116,8 @@ function CourseGroup({ label, courses, api }) {
   )
 }
 
-// Left binder page: header/progress + Completed courses only.
-export function GcuPageLeft({ api, onPushToAsana, pushing }) {
+export default function GcuPanel({ onPushToAsana, pushing }) {
+  const api = useGcuState()
   return (
     <div className="gcu-panel">
       <div className="gcu-page-header">
@@ -145,32 +143,9 @@ export function GcuPageLeft({ api, onPushToAsana, pushing }) {
 
       <div className="gcu-body">
         <CourseGroup label="Completed" courses={api.completed} api={api} />
-      </div>
-    </div>
-  )
-}
-
-// Right binder page: everything else (Core Courses + emphasis).
-export function GcuPageRight({ api }) {
-  return (
-    <div className="gcu-panel">
-      <div className="gcu-page-header">
-        <span className="gcu-page-title">Core &amp; Emphasis Courses</span>
-      </div>
-      <div className="gcu-body">
         <CourseGroup label="Core Courses" courses={api.core} api={api} />
         <CourseGroup label="Government &amp; Policy Emphasis" courses={api.emphasis} api={api} />
       </div>
-    </div>
-  )
-}
-
-export default function GcuPanel({ onPushToAsana, pushing }) {
-  const api = useGcuState()
-  return (
-    <div className="gcu-panel-wrap">
-      <GcuPageLeft api={api} onPushToAsana={onPushToAsana} pushing={pushing} />
-      <GcuPageRight api={api} />
     </div>
   )
 }

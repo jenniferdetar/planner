@@ -1,9 +1,3 @@
-.hoa-panel-wrap {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
 .hoa-panel {
   display: flex;
   flex-direction: column;

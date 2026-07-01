@@ -13,9 +13,6 @@ function fmt(n) {
 const FULL_AMOUNT_BILLS = ['Mortgage', 'HOA', 'HELOC (California Credit Union)']
 const PALETTE = ['#3164a0', '#c77b3a', '#4a7a6a', '#9b59b6', '#c0392b', '#1abc9c', '#e07a5f', '#2e7d32']
 
-// Shared state so the tabbed content (Bills/Goals/Cash on Hand/Laundry/Notes)
-// can render on the left binder page while the budget envelopes always show
-// on the right page, staying in sync on the underlying data.
 export function useFinancialPage({
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
@@ -40,8 +37,7 @@ export function useFinancialPage({
   }
 }
 
-// Left binder page: summary stats + tabs (Bills/Goals/Cash on Hand/Laundry/Notes).
-export function FinancialPageLeft({ api }) {
+function FinancialPanelInner({ api }) {
   return (
     <div className="fin-panel">
       <div className="fin-summary">
@@ -66,7 +62,7 @@ export function FinancialPageLeft({ api }) {
       </div>
 
       <div className="fin-tabs">
-        {['bills', 'goals', 'coins', 'laundry', 'notes'].map(t => (
+        {['bills', 'goals', 'coins', 'budget', 'laundry', 'notes'].map(t => (
           <button key={t} className={`fin-tab ${api.tab === t ? 'active' : ''}`} onClick={() => api.setTab(t)}>
             {t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
@@ -76,18 +72,9 @@ export function FinancialPageLeft({ api }) {
       {api.tab === 'bills' && <BillsTab bills={api.bills} onAdd={api.onAddBill} onToggle={api.onToggleBillPaid} onDelete={api.onDeleteBill} />}
       {api.tab === 'goals' && <GoalsTab goals={api.goals} onUpdate={api.onUpdateGoalAmount} />}
       {api.tab === 'coins' && <CoinsTab userId={api.userId} />}
+      {api.tab === 'budget' && <ZeroBasedBudget userId={api.userId} bills={api.bills} />}
       {api.tab === 'laundry' && <LaundryTab userId={api.userId} />}
       {api.tab === 'notes' && <NotesTab userId={api.userId} />}
-    </div>
-  )
-}
-
-// Right binder page: budget envelopes, always visible.
-export function FinancialPageRight({ api }) {
-  return (
-    <div className="fin-panel">
-      <div className="fin-page-header"><span>Zero-Based Budget</span></div>
-      <ZeroBasedBudget userId={api.userId} bills={api.bills} />
     </div>
   )
 }
@@ -95,10 +82,7 @@ export function FinancialPageRight({ api }) {
 export default function FinancialPanel(props) {
   const api = useFinancialPage(props)
   return (
-    <div className="fin-panel-wrap">
-      <FinancialPageLeft api={api} />
-      <FinancialPageRight api={api} />
-    </div>
+    <FinancialPanelInner api={api} />
   )
 }
 

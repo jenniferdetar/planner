@@ -84,38 +84,10 @@ function IcaapStatsBar({ items }) {
   )
 }
 
-// Left binder page: Dashboard + Attendance.
-export function IcaapPageLeft({ userId, items, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
+export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, onDeleteItem, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
+  const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'icaap')
   const [tab, setTab] = useState('dashboard')
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
-
-  return (
-    <div className="icaap-tracker">
-      <IcaapStatsBar items={items} />
-      <div className="icaap-tabs">
-        <button className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
-        <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
-      </div>
-
-      {tab === 'dashboard' && <IcaapDashboard />}
-
-      {tab === 'attendance' && (
-        <AttendancePanel
-          date={attendanceDate}
-          onDateChange={setAttendanceDate}
-          records={attendanceRecords}
-          onUpsert={onUpsertAttendance}
-          onUpdateNotes={onUpdateAttendanceNotes}
-        />
-      )}
-    </div>
-  )
-}
-
-// Right binder page: Extra Hours, Tasks, Notes, Links, Payroll.
-export function IcaapPageRight({ userId, items, onAddItem, onUpdateItem, onDeleteItem, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
-  const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'icaap')
-  const [tab, setTab] = useState('extrahours')
   const [extraHoursTab, setExtraHoursTab] = useState('profdev')
   const [noteText, setNoteText] = useState('')
   const [noteSource, setNoteSource] = useState('')
@@ -177,13 +149,28 @@ export function IcaapPageRight({ userId, items, onAddItem, onUpdateItem, onDelet
 
   return (
     <div className="icaap-tracker">
+      <IcaapStatsBar items={items} />
       <div className="icaap-tabs">
+        <button className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
+        <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
         <button className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>Tasks</button>
         <button className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
       </div>
+
+      {tab === 'dashboard' && <IcaapDashboard />}
+
+      {tab === 'attendance' && (
+        <AttendancePanel
+          date={attendanceDate}
+          onDateChange={setAttendanceDate}
+          records={attendanceRecords}
+          onUpsert={onUpsertAttendance}
+          onUpdateNotes={onUpdateAttendanceNotes}
+        />
+      )}
 
       {tab === 'extrahours' && (
         <div className="icaap-extrahours">
@@ -372,15 +359,6 @@ export function IcaapPageRight({ userId, items, onAddItem, onUpdateItem, onDelet
           ))}
         </div>
       )}
-    </div>
-  )
-}
-
-export default function IcaapTracker(props) {
-  return (
-    <div className="icaap-tracker-wrap">
-      <IcaapPageLeft {...props} />
-      <IcaapPageRight {...props} />
     </div>
   )
 }

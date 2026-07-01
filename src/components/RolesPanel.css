@@ -1,9 +1,3 @@
-.roles-panel-wrap {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-}
-
 .roles-list-wrap {
   flex: 1;
   display: flex;
@@ -24,24 +18,6 @@
 }
 
 .roles-list-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.roles-detail-header {
-  display: flex;
-  align-items: center;
-  height: 34px;
-  box-sizing: border-box;
-  padding: 0 16px;
-  background: #1e3070;
-  flex-shrink: 0;
-}
-
-.roles-detail-header span {
   font-size: 13px;
   font-weight: 600;
   color: #fff;
@@ -136,7 +112,6 @@
   transition: box-shadow 0.15s, background 0.15s;
 }
 .roles-card:hover { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
-.roles-card.active { background: #fff; border-left-color: #ffb81c; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
 .roles-card-icon { font-size: 22px; flex-shrink: 0; }
 
@@ -215,18 +190,34 @@
   overflow: hidden;
 }
 
-.roles-detail-empty-body {
-  flex: 1;
+.roles-detail-nav {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: #bbb;
-  text-align: center;
-  padding: 32px;
+  gap: 12px;
+  padding: 12px 24px;
+  background: #1e3070;
+  flex-shrink: 0;
 }
-.roles-detail-empty-icon { font-size: 40px; }
+
+.roles-back-btn {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s;
+}
+.roles-back-btn:hover { opacity: 0.7; }
+
+.roles-detail-nav-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+}
 
 .roles-detail-body {
   flex: 1;

@@ -1,9 +1,3 @@
-.icaap-tracker-wrap {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
 .icaap-tracker {
   display: flex;
   flex-direction: column;
