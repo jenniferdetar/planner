@@ -217,7 +217,7 @@ export function CseaTrackerInner({ api }) {
             </form>
           )}
 
-          <div className="csea-issue-list">
+          <div className="csea-issue-list csea-interactions-grid">
             {api.displayIssues.length === 0 && (
               <p className="csea-empty">No {api.filter === 'active' ? 'active' : api.filter === 'resolved' ? 'resolved' : ''} issues</p>
             )}
@@ -627,22 +627,26 @@ function IssueCard({ issue, onUpdateStatus, onDelete, notes = [], onAddNote, onD
   }
 
   return (
-    <div className={`issue-card ${issue.status === 'Resolved' || issue.status === 'Closed' ? 'resolved' : ''}`}>
+    <div className={`issue-card ${issue.status === 'Resolved' || issue.status === 'Closed' ? 'resolved' : ''} ${expanded ? 'expanded' : ''}`}>
       <div className="issue-header" onClick={() => setExpanded(e => !e)}>
-        <span className="issue-type-badge" style={{ background: TYPE_COLORS[issue.issue_type] + '22', color: TYPE_COLORS[issue.issue_type] }}>
-          {issue.issue_type}
-        </span>
-        <span className="issue-member">{issue.member_name}</span>
-        {issue.priority && (
-          <span className="issue-priority" style={{ color: PRIORITY_COLORS[issue.priority] }}>
-            {issue.priority}
+        <div className="issue-header-top">
+          <span className="issue-type-badge" style={{ background: TYPE_COLORS[issue.issue_type] + '22', color: TYPE_COLORS[issue.issue_type] }}>
+            {issue.issue_type}
           </span>
-        )}
-        <span className="issue-status-badge" style={{ background: STATUS_COLORS[issue.status] + '22', color: STATUS_COLORS[issue.status] }}>
-          {issue.status}
-        </span>
-        {notes.length > 0 && <span className="issue-notes-count">{notes.length}</span>}
-        <span className="issue-chevron">{expanded ? '▾' : '▸'}</span>
+          <span className="issue-status-badge" style={{ background: STATUS_COLORS[issue.status] + '22', color: STATUS_COLORS[issue.status] }}>
+            {issue.status}
+          </span>
+        </div>
+        <span className="issue-member">{issue.member_name}</span>
+        <div className="issue-header-bottom">
+          {issue.priority && (
+            <span className="issue-priority" style={{ color: PRIORITY_COLORS[issue.priority] }}>
+              {issue.priority}
+            </span>
+          )}
+          {notes.length > 0 && <span className="issue-notes-count">{notes.length}</span>}
+          <span className="issue-chevron">{expanded ? '▾' : '▸'}</span>
+        </div>
       </div>
 
       {expanded && (
