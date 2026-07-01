@@ -7,7 +7,6 @@ import './MissionValuesPanel.css'
 const SUB_TABS = [
   { key: 'mission', label: 'Mission' },
   { key: 'mantra',  label: 'Mantra' },
-  { key: 'values',  label: 'Values' },
 ]
 
 function AutosaveTextPanel({ title, value, setValue, save, saved, placeholder }) {
@@ -40,10 +39,21 @@ function AutosaveTextPanel({ title, value, setValue, save, saved, placeholder })
   )
 }
 
-export default function MissionValuesPanel({ userId }) {
+// Left binder page: Mission/Mantra subtab toggle + the selected text.
+export default function MissionValuesPanel({ userId, side = 'left' }) {
   const { mission, setMission, save: saveMission, saved: missionSaved } = useMission(userId)
   const { mantra, setMantra, save: saveMantra, saved: mantraSaved } = useMantra(userId)
   const [subTab, setSubTab] = useState('mission')
+
+  if (side === 'right') {
+    return (
+      <div className="mv-panel">
+        <div className="mv-values-col">
+          <ValuesPanel userId={userId} />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="mv-panel">
@@ -77,12 +87,6 @@ export default function MissionValuesPanel({ userId }) {
           saved={mantraSaved}
           placeholder="Write your personal mantra here… what words center and inspire you?"
         />
-      )}
-
-      {subTab === 'values' && (
-        <div className="mv-values-col">
-          <ValuesPanel userId={userId} />
-        </div>
       )}
     </div>
   )

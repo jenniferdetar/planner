@@ -1222,6 +1222,18 @@ a.lp-task-title:hover {
   display: flex;
   flex-direction: column;
 }
+
+/* Sole content on its own binder page (paired module panel on the other page) */
+.mini-master-panel-standalone {
+  flex: 1;
+  width: 100%;
+  max-height: none;
+  border-top: none;
+  box-shadow: none;
+}
+.mini-master-panel-standalone .mmp-body {
+  overflow-y: auto;
+}
 .mmp-header {
   display: flex;
   align-items: center;
