@@ -533,7 +533,6 @@ function CseaNoteGroup({ note: n, onDelete }) {
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
       <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
-        {n.source && <span className="interaction-cat-badge">{n.source}</span>}
         <span className="interaction-group-name">{n.topic || 'Topic'}</span>
         {n.created_at && (
           <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
@@ -544,7 +543,6 @@ function CseaNoteGroup({ note: n, onDelete }) {
         <div className="interaction-group-items">
           <div className="interaction-card">
             <div className="interaction-header">
-              {n.source && <span className="interaction-cat-badge">{n.source}</span>}
               <button className="interaction-delete-btn" title="Delete" onClick={() => onDelete?.(n.id)}>✕</button>
             </div>
             <p className="interaction-disc-text">{n.note}</p>
