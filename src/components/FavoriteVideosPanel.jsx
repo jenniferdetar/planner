@@ -61,12 +61,12 @@ export default function FavoriteVideosPanel({ userId }) {
       <div className="videos-body">
         <div className="videos-section">
           <h3 className="videos-section-header">Favorite Videos</h3>
-          <p className="videos-subtitle-inline">Paste a YouTube link — the title is pulled in automatically</p>
+          <p className="videos-subtitle-inline">Paste a YouTube or TikTok link — the title is pulled in automatically</p>
           <form className="add-video-form" onSubmit={handleAddVideo}>
             <input
               type="url"
               className="add-video-input"
-              placeholder="Paste a YouTube link…"
+              placeholder="Paste a YouTube or TikTok link…"
               value={newUrl}
               onChange={e => setNewUrl(e.target.value)}
             />
@@ -78,7 +78,7 @@ export default function FavoriteVideosPanel({ userId }) {
 
           {videos.length === 0 ? (
             <div className="videos-empty">
-              <p>No favorite videos yet. Paste a link above to add one.</p>
+              <p>No favorite videos yet. Paste a YouTube or TikTok link above to add one.</p>
             </div>
           ) : (
             <div className="video-grid">
