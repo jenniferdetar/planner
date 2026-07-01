@@ -591,12 +591,15 @@
 /* ── Interaction groups ─────────────────────────────────────────────────── */
 .interaction-group {
   background: #fff;
+  border-left: 6px solid var(--csea-blue);
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(30,48,112,0.10), 0 8px 20px rgba(30,48,112,0.06);
   transition: box-shadow 0.18s, transform 0.18s;
 }
 
+.interaction-group:nth-child(even) { border-left-color: var(--csea-accent); }
+.interaction-group:nth-child(even) .interaction-group-header { border-bottom-color: var(--csea-accent); }
 .interaction-group:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
 .interaction-group.expanded { grid-column: 1 / -1; }
 
