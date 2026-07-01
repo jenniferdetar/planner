@@ -4,6 +4,7 @@ import { useQuickLinks } from '../hooks/useQuickLinks'
 import { useGmailCseaSync } from '../hooks/useGmailCseaSync'
 import { useYahooMailSync } from '../hooks/useYahooMailSync'
 import ContractReference from './ContractReference'
+import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifIntake'
 import './CseaTracker.css'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
@@ -242,6 +243,7 @@ export function CseaPageRight({ api }) {
         <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Topics {api.cseaNotes.length > 0 && <span className="csea-tab-badge">{api.cseaNotes.length}</span>}</button>
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
+        <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
       </div>
 
       {tab === 'notes' && (
@@ -355,6 +357,8 @@ export function CseaPageRight({ api }) {
         </div>
       )}
 
+      {tab === 'rif' && <RifIntakePanel />}
+
       {tab === 'interactions' && (
         <div className="csea-panel">
           <div className="csea-toolbar">
@@ -421,6 +425,89 @@ export function CseaPageRight({ api }) {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+const RIF_ACTION_COLORS = { RIF: '#3164a0', Demotion: '#f7941d', 'Double Demotion': '#8e2a2a' }
+
+function RifIntakePanel() {
+  const platformCounts = rifPlatformSummary()
+  const actionCounts = rifActionSummary()
+
+  return (
+    <div className="csea-panel">
+      <div className="csea-toolbar">
+        <span className="csea-toolbar-label">RIF Support Intake Report — Overview of Affected Agents by Platform</span>
+        <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{RIF_INTAKE.length} <span className="csea-inline-lbl">Total Agents</span></span>
+      </div>
+
+      <div className="rif-summary-row">
+        <div className="rif-summary-card">
+          <div className="rif-summary-title">Summary by Platform</div>
+          <table className="rif-summary-table">
+            <tbody>
+              {platformCounts.map(([platform, count]) => (
+                <tr key={platform}>
+                  <td>{platform}</td>
+                  <td className="rif-summary-count">{count}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="rif-summary-card">
+          <div className="rif-summary-title">RIF / Demotion Breakdown</div>
+          <table className="rif-summary-table">
+            <tbody>
+              {actionCounts.map(([action, count]) => (
+                <tr key={action}>
+                  <td>
+                    <span className="rif-action-dot" style={{ background: RIF_ACTION_COLORS[action] || '#53575a' }} />
+                    {action}
+                  </td>
+                  <td className="rif-summary-count">{count}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="csea-issue-list" style={{ padding: '0 16px 16px' }}>
+        <table className="rif-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Full Name</th>
+              <th>Employee ID</th>
+              <th>Personal Email</th>
+              <th>Platform</th>
+              <th>Job Title</th>
+              <th>Work Location</th>
+              <th>RIF or Demotion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {RIF_INTAKE.map((r, i) => (
+              <tr key={r.employeeId}>
+                <td>{i + 1}</td>
+                <td>{r.name}</td>
+                <td>{r.employeeId}</td>
+                <td>{r.email}</td>
+                <td>{r.platform}</td>
+                <td>{r.jobTitle}</td>
+                <td>{r.workLocation}</td>
+                <td>
+                  <span className="rif-action-badge" style={{ color: RIF_ACTION_COLORS[r.action] || '#53575a', background: (RIF_ACTION_COLORS[r.action] || '#53575a') + '22' }}>
+                    {r.action}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
