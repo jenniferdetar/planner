@@ -590,10 +590,15 @@
 
 /* ── Interaction groups ─────────────────────────────────────────────────── */
 .interaction-group {
-  border: 1px solid var(--csea-light-gray);
-  border-radius: 3px;
+  background: #fff;
+  border-radius: 14px;
   overflow: hidden;
+  box-shadow: 0 2px 6px rgba(30,48,112,0.10), 0 8px 20px rgba(30,48,112,0.06);
+  transition: box-shadow 0.18s, transform 0.18s;
 }
+
+.interaction-group:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
+.interaction-group.expanded { grid-column: 1 / -1; }
 
 .interaction-group-header {
   width: 100%;
@@ -602,7 +607,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 12px;
+  padding: 9px 16px;
   background: var(--csea-light-blue);
   border-bottom: 2px solid var(--csea-blue);
 }

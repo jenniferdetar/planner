@@ -509,7 +509,7 @@ function RifIntakePanel() {
 function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
-    <div className="interaction-group">
+    <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
       <div className="interaction-group-header">
         <span className="interaction-group-name">{member}</span>
         <span className="interaction-group-count">{items.length}</span>
@@ -531,7 +531,7 @@ function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
 function CseaNoteGroup({ note: n, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
-    <div className="interaction-group">
+    <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
       <div className="interaction-group-header">
         <span className="interaction-group-name">{n.topic || 'Topic'}</span>
         {n.created_at && (
