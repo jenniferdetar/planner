@@ -205,7 +205,7 @@ export default function LeatherDayView({
   const firstNavKey = ALL_TABS.find(t => t.nav)?.key
   // Tabs that use a genuine two-page spread (left page + rings); everything
   // else spans the full binder width as a single page.
-  const TWO_PAGE_TABS = new Set(['daily-tasks', 'master-tasks', 'notes', 'roles', 'goals', 'mission', 'csea', 'icaap', 'gcu', 'finance', 'hoa', 'personal'])
+  const TWO_PAGE_TABS = new Set(['daily-tasks', 'master-tasks', 'notes', 'roles', 'goals', 'meetings', 'mission', 'csea', 'icaap', 'gcu', 'finance', 'hoa', 'personal'])
   const showLeftPage = TWO_PAGE_TABS.has(rightTab)
 
   return (
@@ -301,6 +301,16 @@ export default function LeatherDayView({
             <GoalsPageLeft api={goalsPageApi} />
           )}
 
+          {rightTab === 'meetings' && (
+            <SectionTextPanel
+              sectionKey="meetings-agenda"
+              label="Agenda"
+              color="#888888"
+              value={sections?.['meetings-agenda'] || ''}
+              onChange={onUpdateSection}
+            />
+          )}
+
           {rightTab === 'mission' && (
             <MissionValuesPanel userId={userId} side="left" />
           )}
@@ -376,7 +386,7 @@ export default function LeatherDayView({
             {rightTab === 'meetings' && (
               <SectionTextPanel
                 sectionKey="meetings"
-                label="Meetings"
+                label="Meeting Notes"
                 color="#888888"
                 value={sections?.meetings || ''}
                 onChange={onUpdateSection}
