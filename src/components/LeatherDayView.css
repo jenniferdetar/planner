@@ -854,6 +854,7 @@ a.lp-task-title:hover {
 .rp-panel {
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
   overflow: hidden;
   background: #faf8f2;
@@ -906,6 +907,10 @@ a.lp-task-title:hover {
   padding: 6px 18px;
   column-count: 2;
   column-gap: 14px;
+}
+
+.rp-task-list-half {
+  column-count: 1;
 }
 
 .rp-empty {
