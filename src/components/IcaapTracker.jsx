@@ -54,9 +54,68 @@ async function getFirstWorkspace(token) {
   return data[0]?.gid ?? null
 }
 
-export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, onDeleteItem, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
-  const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'icaap')
+function IcaapStatsBar({ items }) {
+  const nonArchived = items.filter(i => !i.archived)
+  const counts = {
+    todo: nonArchived.filter(i => i.status === 'To Do').length,
+    inProg: nonArchived.filter(i => i.status === 'In Progress').length,
+    done: nonArchived.filter(i => i.status === 'Done').length,
+    blocked: nonArchived.filter(i => i.status === 'Blocked').length,
+  }
+  return (
+    <div className="icaap-stats">
+      <div className="icaap-stat">
+        <span className="icaap-stat-num" style={{ color: '#888' }}>{counts.todo}</span>
+        <span className="icaap-stat-lbl">To Do</span>
+      </div>
+      <div className="icaap-stat">
+        <span className="icaap-stat-num" style={{ color: '#4a90d9' }}>{counts.inProg}</span>
+        <span className="icaap-stat-lbl">In Progress</span>
+      </div>
+      <div className="icaap-stat">
+        <span className="icaap-stat-num" style={{ color: '#5cb85c' }}>{counts.done}</span>
+        <span className="icaap-stat-lbl">Done</span>
+      </div>
+      <div className="icaap-stat">
+        <span className="icaap-stat-num" style={{ color: '#e05c5c' }}>{counts.blocked}</span>
+        <span className="icaap-stat-lbl">Blocked</span>
+      </div>
+    </div>
+  )
+}
+
+// Left binder page: Dashboard + Attendance.
+export function IcaapPageLeft({ userId, items, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes }) {
   const [tab, setTab] = useState('dashboard')
+  const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
+
+  return (
+    <div className="icaap-tracker">
+      <IcaapStatsBar items={items} />
+      <div className="icaap-tabs">
+        <button className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
+        <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
+      </div>
+
+      {tab === 'dashboard' && <IcaapDashboard />}
+
+      {tab === 'attendance' && (
+        <AttendancePanel
+          date={attendanceDate}
+          onDateChange={setAttendanceDate}
+          records={attendanceRecords}
+          onUpsert={onUpsertAttendance}
+          onUpdateNotes={onUpdateAttendanceNotes}
+        />
+      )}
+    </div>
+  )
+}
+
+// Right binder page: Extra Hours, Tasks, Notes, Links, Payroll.
+export function IcaapPageRight({ userId, items, onAddItem, onUpdateItem, onDeleteItem, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
+  const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'icaap')
+  const [tab, setTab] = useState('extrahours')
   const [extraHoursTab, setExtraHoursTab] = useState('profdev')
   const [noteText, setNoteText] = useState('')
   const [noteSource, setNoteSource] = useState('')
@@ -64,7 +123,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
   const [linkUrl, setLinkUrl] = useState('')
   const [filter, setFilter] = useState('active')
   const [showForm, setShowForm] = useState(false)
-  const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
   const [pushingId, setPushingId] = useState(null)
   const [pushResult, setPushResult] = useState({}) // id -> 'ok' | 'err'
 
@@ -78,12 +136,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
 
   const nonArchived = items.filter(i => !i.archived)
   const archivedItems = items.filter(i => i.archived)
-
-  const todo = nonArchived.filter(i => i.status === 'To Do')
-  const inProg = nonArchived.filter(i => i.status === 'In Progress')
   const done = nonArchived.filter(i => i.status === 'Done')
-  const blocked = nonArchived.filter(i => i.status === 'Blocked')
-
   const activeItems = nonArchived.filter(i => i.status !== 'Done')
   const displayItems = filter === 'active' ? activeItems
     : filter === 'done' ? done
@@ -122,50 +175,16 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
     }
   }
 
-  const counts = {
-    todo: todo.length,
-    inProg: inProg.length,
-    done: done.length,
-    blocked: blocked.length,
-  }
-
   return (
     <div className="icaap-tracker">
-      {/* Stats bar */}
-      <div className="icaap-stats">
-        <div className="icaap-stat">
-          <span className="icaap-stat-num" style={{ color: '#888' }}>{counts.todo}</span>
-          <span className="icaap-stat-lbl">To Do</span>
-        </div>
-        <div className="icaap-stat">
-          <span className="icaap-stat-num" style={{ color: '#4a90d9' }}>{counts.inProg}</span>
-          <span className="icaap-stat-lbl">In Progress</span>
-        </div>
-        <div className="icaap-stat">
-          <span className="icaap-stat-num" style={{ color: '#5cb85c' }}>{counts.done}</span>
-          <span className="icaap-stat-lbl">Done</span>
-        </div>
-        <div className="icaap-stat">
-          <span className="icaap-stat-num" style={{ color: '#e05c5c' }}>{counts.blocked}</span>
-          <span className="icaap-stat-lbl">Blocked</span>
-        </div>
-      </div>
-
-      {/* Sub-tabs */}
       <div className="icaap-tabs">
-        <button data-t="dashboard" className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
-        <button data-t="attendance" className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
-        <button data-t="extrahours" className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
-        <button data-t="list" className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>Tasks</button>
-        <button data-t="notes" className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
-        <button data-t="links" className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
-        <button data-t="payroll" className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
+        <button className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
+        <button className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>Tasks</button>
+        <button className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
+        <button className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
+        <button className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
       </div>
 
-      {/* Dashboard tab */}
-      {tab === 'dashboard' && <IcaapDashboard />}
-
-      {/* Extra Hours tab */}
       {tab === 'extrahours' && (
         <div className="icaap-extrahours">
           <div className="icaap-extrahours-tabs">
@@ -188,7 +207,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </div>
       )}
 
-      {/* Notes tab */}
       {tab === 'notes' && (
         <div className="icaap-notes-section">
           <form className="icaap-notes-form" onSubmit={async (e) => {
@@ -275,22 +293,9 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </div>
       )}
 
-      {/* Attendance tab */}
-      {tab === 'attendance' && (
-        <AttendancePanel
-          date={attendanceDate}
-          onDateChange={setAttendanceDate}
-          records={attendanceRecords}
-          onUpsert={onUpsertAttendance}
-          onUpdateNotes={onUpdateAttendanceNotes}
-        />
-      )}
-
-      {/* Payroll tab */}
       {tab === 'payroll' && <PayrollSchedule />}
 
-      {/* Toolbar */}
-      <div className="icaap-toolbar" style={{ display: (tab === 'asana' || tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links' || tab === 'payroll') ? 'none' : undefined }}>
+      <div className="icaap-toolbar" style={{ display: (tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links' || tab === 'payroll') ? 'none' : undefined }}>
         {tab === 'list' ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all', 'archived'].map(f => (
@@ -303,8 +308,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button className="icaap-add-btn" onClick={() => setShowForm(true)}>+ Add Item</button>
       </div>
 
-      {/* Add form — hidden on Asana/Attendance tabs */}
-      {showForm && tab !== 'asana' && tab !== 'attendance' && tab !== 'notes' && (
+      {showForm && tab !== 'attendance' && tab !== 'notes' && (
         <form className="icaap-form" onSubmit={handleAdd}>
           <input className="icaap-input" placeholder="Title *" value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))} autoFocus />
@@ -352,8 +356,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         </form>
       )}
 
-
-      {/* List view */}
       {tab === 'list' && (
         <div className="icaap-list">
           {displayItems.length === 0 && (
@@ -370,6 +372,15 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+export default function IcaapTracker(props) {
+  return (
+    <div className="icaap-tracker-wrap">
+      <IcaapPageLeft {...props} />
+      <IcaapPageRight {...props} />
     </div>
   )
 }

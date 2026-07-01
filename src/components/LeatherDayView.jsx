@@ -4,13 +4,12 @@ import { TAG_COLORS } from '../hooks/useAsanaTaskTags'
 import { sameDay } from '../utils/dateUtils'
 import WeekView from './WeekView'
 import MonthView from './MonthView'
-import CseaTracker from './CseaTracker'
-import IcaapTracker from './IcaapTracker'
-import GcuPanel from './GcuPanel'
-import FinancialPanel from './FinancialPanel'
+import { useCseaPage, CseaPageLeft, CseaPageRight } from './CseaTracker'
+import { IcaapPageLeft, IcaapPageRight } from './IcaapTracker'
+import { useGcuState, GcuPageLeft, GcuPageRight } from './GcuPanel'
+import { useFinancialPage, FinancialPageLeft, FinancialPageRight } from './FinancialPanel'
 import WhileYouWereOut from './WhileYouWereOut'
-import ContractReference from './ContractReference'
-import HoaPanel from './HoaPanel'
+import { useHoaPage, HoaPageLeft, HoaPageRight } from './HoaPanel'
 import EisenhowerMatrix from './EisenhowerMatrix'
 import PersonalPanel from './PersonalPanel'
 import { useRolesPage, RolesList, RoleDetail } from './RolesPanel'
@@ -115,6 +114,25 @@ export default function LeatherDayView({
   const notesApi = useNotesBrowser(userId)
   const rolesPageApi = useRolesPage(userId)
   const goalsPageApi = useGoalsCategories(userId, lifeRoles)
+  const cseaPageApi = useCseaPage({
+    userId, providerToken,
+    issues: cseaIssues || [], onAddIssue: onAddCseaIssue, onUpdateStatus: onUpdateCseaStatus, onDeleteIssue: onDeleteCseaIssue,
+    interactions: cseaInteractions || [], onAddInteraction: onAddCseaInteraction, onUpdateInteraction: onUpdateCseaInteraction,
+    showArchived: showArchivedInteractions, onToggleArchived: onToggleArchivedInteractions,
+    asanaTasks: asanaCseaTasks || [], onCompleteAsanaTask, onUpdateAsanaTaskNotes,
+    cseaNotes: cseaNotes || [], onAddCseaNote, onDeleteCseaNote,
+    issueNotes: cseaIssueNotes || {}, onAddIssueNote: onAddCseaIssueNote, onDeleteIssueNote: onDeleteCseaIssueNote,
+  })
+  const gcuPageApi = useGcuState()
+  const hoaPageApi = useHoaPage(userId)
+  const financialPageApi = useFinancialPage({
+    transactions: transactions || [], onAddTransaction, onDeleteTransaction,
+    bills: bills || [], onAddBill, onToggleBillPaid, onDeleteBill,
+    goals: goals || [], onAddGoal, onUpdateGoalAmount, onDeleteGoal,
+    paychecks: paychecks || [], onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
+    userId,
+  })
+  const [personalSubTabRight, setPersonalSubTabRight] = useState('videos')
   const [newTaskText, setNewTaskText] = useState('')
   const [showAddTask, setShowAddTask] = useState(false)
   const [promotedToast, setPromotedToast] = useState(null)
@@ -284,77 +302,25 @@ export default function LeatherDayView({
             <MissionValuesPanel userId={userId} side="left" />
           )}
 
-          {rightTab === 'csea' && (
-            <CseaTracker
-              userId={userId}
-              providerToken={providerToken}
-              issues={cseaIssues || []}
-              onAddIssue={onAddCseaIssue}
-              onUpdateStatus={onUpdateCseaStatus}
-              onDeleteIssue={onDeleteCseaIssue}
-              interactions={cseaInteractions || []}
-              onAddInteraction={onAddCseaInteraction}
-              onUpdateInteraction={onUpdateCseaInteraction}
-              showArchived={showArchivedInteractions}
-              onToggleArchived={onToggleArchivedInteractions}
-              asanaTasks={asanaCseaTasks || []}
-              onCompleteAsanaTask={onCompleteAsanaTask}
-              onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
-              cseaNotes={cseaNotes || []}
-              onAddCseaNote={onAddCseaNote}
-              onDeleteCseaNote={onDeleteCseaNote}
-              issueNotes={cseaIssueNotes || {}}
-              onAddIssueNote={onAddCseaIssueNote}
-              onDeleteIssueNote={onDeleteCseaIssueNote}
-            />
-          )}
+          {rightTab === 'csea' && <CseaPageLeft api={cseaPageApi} />}
 
           {rightTab === 'icaap' && (
-            <IcaapTracker
+            <IcaapPageLeft
               userId={userId}
               items={icaapItems || []}
-              onAddItem={onAddIcaapItem}
-              onUpdateItem={onUpdateIcaapItem}
-              onDeleteItem={onDeleteIcaapItem}
-              asanaTasks={asanaIcaapTasks || []}
-              onCompleteAsanaTask={onCompleteAsanaTask}
-              onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
               attendanceRecords={attendanceRecords || []}
               onUpsertAttendance={onUpsertAttendance}
               onUpdateAttendanceNotes={onUpdateAttendanceNotes}
-              icaapNotes={icaapNotes || []}
-              onAddIcaapNote={onAddIcaapNote}
-              onDeleteIcaapNote={onDeleteIcaapNote}
             />
           )}
 
           {rightTab === 'gcu' && (
-            <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
+            <GcuPageLeft api={gcuPageApi} onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
           )}
 
-          {rightTab === 'finance' && (
-            <FinancialPanel
-              transactions={transactions || []}
-              onAddTransaction={onAddTransaction}
-              onDeleteTransaction={onDeleteTransaction}
-              bills={bills || []}
-              onAddBill={onAddBill}
-              onToggleBillPaid={onToggleBillPaid}
-              onDeleteBill={onDeleteBill}
-              goals={goals || []}
-              onAddGoal={onAddGoal}
-              onUpdateGoalAmount={onUpdateGoalAmount}
-              onDeleteGoal={onDeleteGoal}
-              paychecks={paychecks || []}
-              onAddPaycheck={onAddPaycheck}
-              onUpdatePaycheckAmount={onUpdatePaycheckAmount}
-              onTogglePaycheckBill={onTogglePaycheckBill}
-              onDeletePaycheck={onDeletePaycheck}
-              userId={userId}
-            />
-          )}
+          {rightTab === 'finance' && <FinancialPageLeft api={financialPageApi} />}
 
-          {rightTab === 'hoa' && <HoaPanel userId={userId} />}
+          {rightTab === 'hoa' && <HoaPageLeft api={hoaPageApi} />}
 
           {rightTab === 'personal' && (
             <PersonalPanel
@@ -368,7 +334,7 @@ export default function LeatherDayView({
               onUpdateBookChapter={onUpdateBookChapter}
               onDeleteBook={onDeleteBook}
               onImportBooks={onImportBooks}
-              allowedSubTabs={['checklist', 'library', 'videos', 'links', 'budget']}
+              allowedSubTabs={['checklist', 'library']}
               subTab={personalSubTab}
               onSubTabChange={setPersonalSubTab}
             />
@@ -449,74 +415,47 @@ export default function LeatherDayView({
                 />
               </div>
             )}
-            {rightTab === 'csea' && (
-              <MiniMasterPanel
-                tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.csea)}
-                category={TAB_CATEGORY.csea}
-                color={CATEGORY_COLORS[TAB_CATEGORY.csea]}
-                onAdd={onAddMasterTask}
-                onDelete={onDeleteMasterTask}
-              standalone
-              />
-            )}
+            {rightTab === 'csea' && <CseaPageRight api={cseaPageApi} />}
             {rightTab === 'icaap' && (
-              <MiniMasterPanel
-                tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.icaap)}
-                category={TAB_CATEGORY.icaap}
-                color={CATEGORY_COLORS[TAB_CATEGORY.icaap]}
-                onAdd={onAddMasterTask}
-                onDelete={onDeleteMasterTask}
-              standalone
+              <IcaapPageRight
+                userId={userId}
+                items={icaapItems || []}
+                onAddItem={onAddIcaapItem}
+                onUpdateItem={onUpdateIcaapItem}
+                onDeleteItem={onDeleteIcaapItem}
+                icaapNotes={icaapNotes || []}
+                onAddIcaapNote={onAddIcaapNote}
+                onDeleteIcaapNote={onDeleteIcaapNote}
               />
             )}
-            {rightTab === 'gcu' && (
-              <MiniMasterPanel
-                tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.gcu)}
-                category={TAB_CATEGORY.gcu}
-                color={CATEGORY_COLORS[TAB_CATEGORY.gcu]}
-                onAdd={onAddMasterTask}
-                onDelete={onDeleteMasterTask}
-              standalone
-              />
-            )}
-            {rightTab === 'finance' && (
-              <MiniMasterPanel
-                tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.finance)}
-                category={TAB_CATEGORY.finance}
-                color={CATEGORY_COLORS[TAB_CATEGORY.finance]}
-                onAdd={onAddMasterTask}
-                onDelete={onDeleteMasterTask}
-              standalone
-              />
-            )}
+            {rightTab === 'gcu' && <GcuPageRight api={gcuPageApi} />}
+            {rightTab === 'finance' && <FinancialPageRight api={financialPageApi} />}
             {rightTab === 'wywo' && (
               <div className="binder-view-wrap">
                 <WhileYouWereOut userId={userId} />
               </div>
             )}
-            {rightTab === 'hoa' && (
-              <MiniMasterPanel
-                tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.hoa)}
-                category={TAB_CATEGORY.hoa}
-                color={CATEGORY_COLORS[TAB_CATEGORY.hoa]}
-                onAdd={onAddMasterTask}
-                onDelete={onDeleteMasterTask}
-              standalone
-              />
-            )}
+            {rightTab === 'hoa' && <HoaPageRight api={hoaPageApi} />}
             {rightTab === 'matrix' && (
               <div className="binder-view-wrap">
                 <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
               </div>
             )}
             {rightTab === 'personal' && (
-              <MiniMasterPanel
-                tasks={(masterTasks || []).filter(t => t.category === TAB_CATEGORY.personal)}
-                category={TAB_CATEGORY.personal}
-                color={CATEGORY_COLORS[TAB_CATEGORY.personal]}
-                onAdd={onAddMasterTask}
-                onDelete={onDeleteMasterTask}
-              standalone
+              <PersonalPanel
+                userId={userId}
+                providerToken={providerToken}
+                selectedDate={selectedDate}
+                onDateChange={onDateChange}
+                books={books || []}
+                onAddBook={onAddBook}
+                onUpdateBookStatus={onUpdateBookStatus}
+                onUpdateBookChapter={onUpdateBookChapter}
+                onDeleteBook={onDeleteBook}
+                onImportBooks={onImportBooks}
+                allowedSubTabs={['videos', 'links', 'budget']}
+                subTab={personalSubTabRight}
+                onSubTabChange={setPersonalSubTabRight}
               />
             )}
 
@@ -624,50 +563,6 @@ function LpTaskRow({ task, index, onToggle, onDelete, done, tag, onCycleTag, onP
       )}
       {hovered && onPromote && <button className="lp-promote-btn" title="Send to Master Tasks" onClick={() => onPromote(task)}>↑</button>}
       {hovered && <button className="lp-del-btn" onClick={() => onDelete(task.id)}>✕</button>}
-    </div>
-  )
-}
-
-function MiniMasterPanel({ tasks, category, color, onAdd, onDelete, standalone }) {
-  const [collapsed, setCollapsed] = useState(false)
-  const [showAdd, setShowAdd] = useState(false)
-  const [text, setText] = useState('')
-
-  function handleAdd(e) {
-    e.preventDefault()
-    if (!text.trim()) return
-    onAdd?.(text.trim(), 'medium', category)
-    setText('')
-    setShowAdd(false)
-  }
-
-  return (
-    <div className={`mini-master-panel${standalone ? ' mini-master-panel-standalone' : ''}`}>
-      <div className="mmp-header" onClick={() => setCollapsed(c => !c)}>
-        <span className="mmp-title" style={{ color }}>Master Tasks</span>
-        <span className="mmp-count">{tasks.length}</span>
-        <button className="mmp-add-btn" title="Add master task" onClick={e => { e.stopPropagation(); setShowAdd(s => !s); setCollapsed(false) }}>+</button>
-        <span className="mmp-caret">{collapsed ? '▾' : '▴'}</span>
-      </div>
-      {!collapsed && (
-        <div className="mmp-body">
-          {showAdd && (
-            <form className="mmp-add-form" onSubmit={handleAdd}>
-              <input autoFocus value={text} onChange={e => setText(e.target.value)} placeholder="Add backlog task…" className="mmp-input" />
-              <button type="submit" className="mmp-save">Add</button>
-              <button type="button" className="mmp-cancel" onClick={() => setShowAdd(false)}>✕</button>
-            </form>
-          )}
-          {tasks.length === 0 && !showAdd && <p className="mmp-empty">No {category} tasks in backlog.</p>}
-          {tasks.map(t => (
-            <div key={t.id} className="mmp-row">
-              <span className="mmp-dot" style={{ background: color }} />
-              <span className="mmp-text">{t.title}</span>
-              <button className="mmp-del" onClick={() => onDelete?.(t.id)}>✕</button>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   )
 }
