@@ -553,6 +553,12 @@
   border-color: #d1d5db;
 }
 
+button.dash-inspiration-card {
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
 .dash-inspiration-header {
   display: flex;
   align-items: center;
