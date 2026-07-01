@@ -62,9 +62,25 @@ export default async function handler(req, res) {
   }
 }
 
+// Some forwarded/nested messages leave a raw base64-encoded body (or a
+// stray MIME boundary header) in the parsed plain text instead of being
+// decoded — decode it back to readable text before summarizing.
+function decodeStrayBase64(text) {
+  if (!text) return text
+  let out = text.replace(/^\t?boundary="[^"]*"\s*/i, '')
+  const stripped = out.replace(/\s+/g, '')
+  if (stripped.length > 60 && /^[A-Za-z0-9+/=]+$/.test(stripped)) {
+    try {
+      const decoded = Buffer.from(stripped, 'base64').toString('utf8')
+      if (decoded && /[a-zA-Z]{3,}/.test(decoded)) out = decoded
+    } catch { /* not valid base64, leave as-is */ }
+  }
+  return out
+}
+
 function stripBoilerplate(text) {
   if (!text) return ''
-  return text
+  return decodeStrayBase64(text)
     // Strip quoted reply lines
     .replace(/^>.*$/gm, '')
     // Strip LBPM auto-footer

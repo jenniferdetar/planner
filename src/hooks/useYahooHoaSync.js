@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { summarizeEmailBody } from '../lib/emailSummary'
 
 function emailToHoaItem(msg) {
   const subject = (msg.subject || '').trim()
@@ -17,7 +18,7 @@ function emailToHoaItem(msg) {
   return {
     category,
     title: subject || '(no subject)',
-    notes: body.slice(0, 1000) || null,
+    notes: summarizeEmailBody(body) || null,
     priority: 'Medium',
     status: 'Not Started',
     item_date: date,

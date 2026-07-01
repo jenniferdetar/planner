@@ -20,5 +20,5 @@ export function summarizeEmailBody(text, maxSentences = 3) {
   if (!body) return ''
 
   const sentences = body.replace(/\s+/g, ' ').match(/[^.!?]+[.!?]+(\s|$)/g) || [body]
-  return sentences.slice(0, maxSentences).join(' ').trim()
+  return sentences.slice(0, maxSentences).join('').replace(/\s+/g, ' ').trim()
 }
