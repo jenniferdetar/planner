@@ -8,6 +8,10 @@ export function extractYouTubeId(url) {
   return match ? match[1] : null
 }
 
+export function isTikTokUrl(url) {
+  return /tiktok\.com/i.test(url)
+}
+
 export function useFavoriteVideos(userId) {
   const [videos, setVideos] = useState([])
 
@@ -22,29 +26,52 @@ export function useFavoriteVideos(userId) {
   }, [userId])
 
   const addVideo = useCallback(async (url) => {
-    const videoId = extractYouTubeId(url)
-    if (!videoId) throw new Error('That doesn\'t look like a YouTube link.')
+    const youtubeId = extractYouTubeId(url)
+    const tiktok = isTikTokUrl(url)
+
+    if (!youtubeId && !tiktok) {
+      throw new Error("That doesn't look like a YouTube or TikTok link.")
+    }
 
     let title = url
     let channel = ''
-    try {
-      const res = await fetch(
-        `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`
-      )
-      if (res.ok) {
-        const meta = await res.json()
-        title = meta.title || title
-        channel = meta.author_name || ''
-      }
-    } catch {
-      // oEmbed lookup failed; fall back to the raw URL as the title
-    }
+    let thumbnail_url = null
+    let video_id = youtubeId || null
 
-    const thumbnail_url = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+    if (youtubeId) {
+      try {
+        const res = await fetch(
+          `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`
+        )
+        if (res.ok) {
+          const meta = await res.json()
+          title = meta.title || title
+          channel = meta.author_name || ''
+        }
+      } catch {
+        // oEmbed lookup failed; fall back to the raw URL as the title
+      }
+      thumbnail_url = `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`
+    } else {
+      // TikTok
+      try {
+        const res = await fetch(
+          `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`
+        )
+        if (res.ok) {
+          const meta = await res.json()
+          title = meta.title || title
+          channel = meta.author_name || ''
+          thumbnail_url = meta.thumbnail_url || null
+        }
+      } catch {
+        // oEmbed lookup failed; fall back to the raw URL as the title
+      }
+    }
 
     const { data, error } = await supabase
       .from('favorite_videos')
-      .insert({ url, video_id: videoId, title, channel, thumbnail_url, user_id: userId })
+      .insert({ url, video_id, title, channel, thumbnail_url, user_id: userId })
       .select().single()
     if (error) throw error
     if (data) setVideos(prev => [data, ...prev])
