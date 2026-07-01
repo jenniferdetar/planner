@@ -78,17 +78,18 @@ function fmtUSD(n) {
   return Number(n).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })
 }
 
-export default function HoaPanel({ userId }) {
+// Shared state so the header/stats/form and the item groups can render on
+// separate binder pages while staying in sync.
+export function useHoaPage(userId) {
   const { items, loading, addItem, updateItem, deleteItem, reload } = useHoaItems(userId)
   const [tab, setTab] = useState('All')
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(BLANK)
   const [editId, setEditId] = useState(null)
+  const [showArchived, setShowArchived] = useState(false)
 
   const onImported = useCallback(() => reload?.(), [reload])
   const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount, error: yahooError } = useYahooHoaSync(userId, onImported)
-
-  const [showArchived, setShowArchived] = useState(false)
 
   const tabs = ['All', ...CATEGORIES]
   const visibleItems = showArchived ? items : items.filter(i => !i.archived)
@@ -130,190 +131,143 @@ export default function HoaPanel({ userId }) {
     setForm(BLANK)
   }
 
+  const groupEntries = Object.entries(
+    filtered.reduce((groups, item) => {
+      const key = item.unit ? `Unit ${item.unit}` : 'General / Board-Wide'
+      if (!groups[key]) groups[key] = []
+      groups[key].push(item)
+      return groups
+    }, {})
+  ).sort(([a], [b]) => {
+    if (a === 'General / Board-Wide') return 1
+    if (b === 'General / Board-Wide') return -1
+    return a.localeCompare(b, undefined, { numeric: true })
+  })
+  const mid = Math.ceil(groupEntries.length / 2)
+
+  return {
+    tabs, tab, setTab, showForm, setShowForm, form, setForm, editId, setEditId, showArchived, setShowArchived,
+    syncYahoo, yahooSyncing, yahooNewCount, yahooError,
+    counts, loading, filtered,
+    leftGroups: groupEntries.slice(0, mid), rightGroups: groupEntries.slice(mid),
+    openAdd, openEdit, handleSubmit, deleteItem,
+  }
+}
+
+function HoaFinancials() {
+  const latest = HOA_FINANCIALS[HOA_FINANCIALS.length - 1]
+  const maxAssets = Math.max(...HOA_FINANCIALS.map(m => m.total_assets || 0), 1)
   return (
-    <div className="hoa-panel">
-      {/* Header */}
-      <div className="hoa-header">
-        <span className="hoa-header-title">Park Reseda HOA</span>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <button
-            className={`hoa-sync-btn${yahooSyncing ? ' spinning' : ''}`}
-            onClick={syncYahoo}
-            disabled={yahooSyncing}
-            title={yahooError || (yahooNewCount != null ? `Last sync: ${yahooNewCount} new` : 'Sync Yahoo HOA emails')}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M23 4v6h-6"/>
-              <path d="M1 20v-6h6"/>
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-            </svg>
-            {yahooNewCount > 0 && <span className="hoa-sync-badge">{yahooNewCount}</span>}
-          </button>
-          <button className="hoa-add-btn" style={{ opacity: 0.75, fontSize: '10px' }} onClick={() => setShowArchived(a => !a)}>
-            {showArchived ? 'Hide Archived' : 'Show Archived'}
-          </button>
-          {tab !== 'Financials' && <button className="hoa-add-btn" onClick={openAdd}>+ Add Item</button>}
+    <div className="hoa-fin">
+      {latest && (
+        <div className="hoa-fin-stats">
+          <div className="hoa-fin-stat">
+            <span className="hoa-fin-stat-lbl">Total Assets</span>
+            <span className="hoa-fin-stat-num">{fmtUSD(latest.total_assets)}</span>
+          </div>
+          <div className="hoa-fin-stat">
+            <span className="hoa-fin-stat-lbl">Reserve Funds</span>
+            <span className="hoa-fin-stat-num">{fmtUSD(latest.total_reserves)}</span>
+          </div>
+          <div className="hoa-fin-stat">
+            <span className="hoa-fin-stat-lbl">Operating Cash</span>
+            <span className="hoa-fin-stat-num">{fmtUSD(latest.operating_cash)}</span>
+          </div>
+          <div className="hoa-fin-stat">
+            <span className="hoa-fin-stat-lbl">Net Income (MTD)</span>
+            <span className={`hoa-fin-stat-num ${Number(latest.net_income_mtd) < 0 ? 'neg' : 'pos'}`}>{fmtUSD(latest.net_income_mtd)}</span>
+          </div>
         </div>
-      </div>
-
-      {/* Stats row */}
-      <div className="hoa-stats">
-        {CATEGORIES.map(c => (
-          <div key={c} className="hoa-stat" style={{ '--cat': CAT_COLORS[c] }}>
-            <span className="hoa-stat-num">{counts[c]}</span>
-            <span className="hoa-stat-lbl">{c}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Category tabs */}
-      <div className="hoa-tabs">
-        {tabs.map(t => (
-          <button
-            key={t}
-            className={`hoa-tab ${tab === t ? 'active' : ''}`}
-            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Financials' ? '#3a5c4a' : CAT_COLORS[t] }}
-            onClick={() => setTab(t)}
-          >{t}</button>
-        ))}
-      </div>
-
-      {/* Financials tab */}
-      {tab === 'Financials' && (() => {
-        const latest = HOA_FINANCIALS[HOA_FINANCIALS.length - 1]
-        const maxAssets = Math.max(...HOA_FINANCIALS.map(m => m.total_assets || 0), 1)
-        return (
-          <div className="hoa-fin">
-            {latest && (
-              <div className="hoa-fin-stats">
-                <div className="hoa-fin-stat">
-                  <span className="hoa-fin-stat-lbl">Total Assets</span>
-                  <span className="hoa-fin-stat-num">{fmtUSD(latest.total_assets)}</span>
-                </div>
-                <div className="hoa-fin-stat">
-                  <span className="hoa-fin-stat-lbl">Reserve Funds</span>
-                  <span className="hoa-fin-stat-num">{fmtUSD(latest.total_reserves)}</span>
-                </div>
-                <div className="hoa-fin-stat">
-                  <span className="hoa-fin-stat-lbl">Operating Cash</span>
-                  <span className="hoa-fin-stat-num">{fmtUSD(latest.operating_cash)}</span>
-                </div>
-                <div className="hoa-fin-stat">
-                  <span className="hoa-fin-stat-lbl">Net Income (MTD)</span>
-                  <span className={`hoa-fin-stat-num ${Number(latest.net_income_mtd) < 0 ? 'neg' : 'pos'}`}>{fmtUSD(latest.net_income_mtd)}</span>
-                </div>
-              </div>
-            )}
-
-            <p className="hoa-fin-asof">{latest ? `As of ${latest.month}` : 'No financial data available yet.'} — pulled from the Board Member Packets in the HOA Google Drive folder.</p>
-
-            {HOA_FINANCIALS.length > 0 && (
-              <div className="hoa-fin-chart">
-                <span className="hoa-fin-chart-title">Total Assets by Month</span>
-                <div className="hoa-fin-bars">
-                  {HOA_FINANCIALS.map(m => (
-                    <div key={m.month} className="hoa-fin-bar-col" title={`${m.month}: ${fmtUSD(m.total_assets)}`}>
-                      <div className="hoa-fin-bar" style={{ height: `${Math.max(4, (m.total_assets / maxAssets) * 100)}%` }} />
-                      <span className="hoa-fin-bar-lbl">{m.month.split(' ')[0]}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {HOA_FINANCIALS.length > 0 && (
-              <div className="hoa-fin-table-wrap">
-                <table className="hoa-fin-table">
-                  <thead>
-                    <tr>
-                      <th>Month</th>
-                      <th>Total Assets</th>
-                      <th>Reserves</th>
-                      <th>Operating Cash</th>
-                      <th>Income (MTD)</th>
-                      <th>Expense (MTD)</th>
-                      <th>Net Income (MTD)</th>
-                      <th>Net Income (YTD)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[...HOA_FINANCIALS].reverse().map(m => (
-                      <tr key={m.month}>
-                        <td>{m.docUrl ? <a href={m.docUrl} target="_blank" rel="noreferrer noopener">{m.month}</a> : m.month}</td>
-                        <td>{fmtUSD(m.total_assets)}</td>
-                        <td>{fmtUSD(m.total_reserves)}</td>
-                        <td>{fmtUSD(m.operating_cash)}</td>
-                        <td>{fmtUSD(m.total_income_mtd)}</td>
-                        <td>{fmtUSD(m.total_expense_mtd)}</td>
-                        <td className={Number(m.net_income_mtd) < 0 ? 'neg' : 'pos'}>{fmtUSD(m.net_income_mtd)}</td>
-                        <td className={Number(m.net_income_ytd) < 0 ? 'neg' : 'pos'}>{fmtUSD(m.net_income_ytd)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )
-      })()}
-
-      {/* Add / Edit form */}
-      {tab !== 'Financials' && showForm && (
-        <form className="hoa-form" onSubmit={handleSubmit}>
-          <div className="hoa-form-row">
-            <select className="hoa-select" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
-              {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-            </select>
-            <input className="hoa-input hoa-input-sm" placeholder="Unit #" value={form.unit} onChange={e => setForm(f => ({ ...f, unit: e.target.value }))} />
-            <input type="date" className="hoa-input hoa-input-sm" value={form.item_date} onChange={e => setForm(f => ({ ...f, item_date: e.target.value }))} />
-          </div>
-          <input className="hoa-input" placeholder="Title *" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
-          <div className="hoa-form-row">
-            <div className="hoa-btn-group">
-              {PRIORITIES.map(p => (
-                <button key={p} type="button"
-                  className={`hoa-btn-option ${form.priority === p ? 'active' : ''}`}
-                  style={{ '--bc': PRIORITY_COLORS[p] }}
-                  onClick={() => setForm(f => ({ ...f, priority: p }))}>{p}</button>
-              ))}
-            </div>
-            <div className="hoa-btn-group">
-              {STATUSES.map(s => (
-                <button key={s} type="button"
-                  className={`hoa-btn-option ${form.status === s ? 'active' : ''}`}
-                  style={{ '--bc': STATUS_COLORS[s] }}
-                  onClick={() => setForm(f => ({ ...f, status: s }))}>{s}</button>
-              ))}
-            </div>
-          </div>
-          <textarea className="hoa-textarea" rows={3} placeholder="Notes…" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
-          <div className="hoa-form-actions">
-            <button type="button" className="hoa-cancel-btn" onClick={() => { setShowForm(false); setEditId(null) }}>Cancel</button>
-            <button type="submit" className="hoa-save-btn">{editId ? 'Save Changes' : 'Add Item'}</button>
-          </div>
-        </form>
       )}
 
-      {/* Items list — grouped by unit, mirroring the CSEA Interactions layout */}
-      {tab !== 'Financials' && <div className="hoa-groups">
-        {loading && <p className="hoa-empty">Loading…</p>}
-        {!loading && filtered.length === 0 && <p className="hoa-empty">No items in this category.</p>}
-        {Object.entries(
-          filtered.reduce((groups, item) => {
-            const key = item.unit ? `Unit ${item.unit}` : 'General / Board-Wide'
-            if (!groups[key]) groups[key] = []
-            groups[key].push(item)
-            return groups
-          }, {})
-        ).sort(([a], [b]) => {
-          if (a === 'General / Board-Wide') return 1
-          if (b === 'General / Board-Wide') return -1
-          return a.localeCompare(b, undefined, { numeric: true })
-        }).map(([unit, unitItems]) => (
-          <HoaUnitGroup key={unit} unit={unit} items={unitItems} onEdit={openEdit} onDelete={deleteItem} />
-        ))}
-      </div>}
+      <p className="hoa-fin-asof">{latest ? `As of ${latest.month}` : 'No financial data available yet.'} — pulled from the Board Member Packets in the HOA Google Drive folder.</p>
+
+      {HOA_FINANCIALS.length > 0 && (
+        <div className="hoa-fin-chart">
+          <span className="hoa-fin-chart-title">Total Assets by Month</span>
+          <div className="hoa-fin-bars">
+            {HOA_FINANCIALS.map(m => (
+              <div key={m.month} className="hoa-fin-bar-col" title={`${m.month}: ${fmtUSD(m.total_assets)}`}>
+                <div className="hoa-fin-bar" style={{ height: `${Math.max(4, (m.total_assets / maxAssets) * 100)}%` }} />
+                <span className="hoa-fin-bar-lbl">{m.month.split(' ')[0]}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {HOA_FINANCIALS.length > 0 && (
+        <div className="hoa-fin-table-wrap">
+          <table className="hoa-fin-table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Total Assets</th>
+                <th>Reserves</th>
+                <th>Operating Cash</th>
+                <th>Income (MTD)</th>
+                <th>Expense (MTD)</th>
+                <th>Net Income (MTD)</th>
+                <th>Net Income (YTD)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...HOA_FINANCIALS].reverse().map(m => (
+                <tr key={m.month}>
+                  <td>{m.docUrl ? <a href={m.docUrl} target="_blank" rel="noreferrer noopener">{m.month}</a> : m.month}</td>
+                  <td>{fmtUSD(m.total_assets)}</td>
+                  <td>{fmtUSD(m.total_reserves)}</td>
+                  <td>{fmtUSD(m.operating_cash)}</td>
+                  <td>{fmtUSD(m.total_income_mtd)}</td>
+                  <td>{fmtUSD(m.total_expense_mtd)}</td>
+                  <td className={Number(m.net_income_mtd) < 0 ? 'neg' : 'pos'}>{fmtUSD(m.net_income_mtd)}</td>
+                  <td className={Number(m.net_income_ytd) < 0 ? 'neg' : 'pos'}>{fmtUSD(m.net_income_ytd)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
+  )
+}
+
+function HoaForm({ api }) {
+  const { form, setForm, editId, handleSubmit, setShowForm, setEditId } = api
+  return (
+    <form className="hoa-form" onSubmit={handleSubmit}>
+      <div className="hoa-form-row">
+        <select className="hoa-select" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
+          {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+        </select>
+        <input className="hoa-input hoa-input-sm" placeholder="Unit #" value={form.unit} onChange={e => setForm(f => ({ ...f, unit: e.target.value }))} />
+        <input type="date" className="hoa-input hoa-input-sm" value={form.item_date} onChange={e => setForm(f => ({ ...f, item_date: e.target.value }))} />
+      </div>
+      <input className="hoa-input" placeholder="Title *" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
+      <div className="hoa-form-row">
+        <div className="hoa-btn-group">
+          {PRIORITIES.map(p => (
+            <button key={p} type="button"
+              className={`hoa-btn-option ${form.priority === p ? 'active' : ''}`}
+              style={{ '--bc': PRIORITY_COLORS[p] }}
+              onClick={() => setForm(f => ({ ...f, priority: p }))}>{p}</button>
+          ))}
+        </div>
+        <div className="hoa-btn-group">
+          {STATUSES.map(s => (
+            <button key={s} type="button"
+              className={`hoa-btn-option ${form.status === s ? 'active' : ''}`}
+              style={{ '--bc': STATUS_COLORS[s] }}
+              onClick={() => setForm(f => ({ ...f, status: s }))}>{s}</button>
+          ))}
+        </div>
+      </div>
+      <textarea className="hoa-textarea" rows={3} placeholder="Notes…" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
+      <div className="hoa-form-actions">
+        <button type="button" className="hoa-cancel-btn" onClick={() => { setShowForm(false); setEditId(null) }}>Cancel</button>
+        <button type="submit" className="hoa-save-btn">{editId ? 'Save Changes' : 'Add Item'}</button>
+      </div>
+    </form>
   )
 }
 
@@ -346,6 +300,95 @@ function HoaUnitGroup({ unit, items, onEdit, onDelete }) {
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+function HoaGroupList({ groups, api }) {
+  return (
+    <div className="hoa-groups">
+      {api.loading && <p className="hoa-empty">Loading…</p>}
+      {!api.loading && groups.length === 0 && <p className="hoa-empty">No items in this category.</p>}
+      {groups.map(([unit, unitItems]) => (
+        <HoaUnitGroup key={unit} unit={unit} items={unitItems} onEdit={api.openEdit} onDelete={api.deleteItem} />
+      ))}
+    </div>
+  )
+}
+
+// Left binder page: header, stats, category tabs, financials/form, and the
+// first half of unit groups.
+export function HoaPageLeft({ api }) {
+  return (
+    <div className="hoa-panel">
+      <div className="hoa-header">
+        <span className="hoa-header-title">Park Reseda HOA</span>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            className={`hoa-sync-btn${api.yahooSyncing ? ' spinning' : ''}`}
+            onClick={api.syncYahoo}
+            disabled={api.yahooSyncing}
+            title={api.yahooError || (api.yahooNewCount != null ? `Last sync: ${api.yahooNewCount} new` : 'Sync Yahoo HOA emails')}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 4v6h-6"/>
+              <path d="M1 20v-6h6"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            {api.yahooNewCount > 0 && <span className="hoa-sync-badge">{api.yahooNewCount}</span>}
+          </button>
+          <button className="hoa-add-btn" style={{ opacity: 0.75, fontSize: '10px' }} onClick={() => api.setShowArchived(a => !a)}>
+            {api.showArchived ? 'Hide Archived' : 'Show Archived'}
+          </button>
+          {api.tab !== 'Financials' && <button className="hoa-add-btn" onClick={api.openAdd}>+ Add Item</button>}
+        </div>
+      </div>
+
+      <div className="hoa-stats">
+        {CATEGORIES.map(c => (
+          <div key={c} className="hoa-stat" style={{ '--cat': CAT_COLORS[c] }}>
+            <span className="hoa-stat-num">{api.counts[c]}</span>
+            <span className="hoa-stat-lbl">{c}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="hoa-tabs">
+        {api.tabs.map(t => (
+          <button
+            key={t}
+            className={`hoa-tab ${api.tab === t ? 'active' : ''}`}
+            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Financials' ? '#3a5c4a' : CAT_COLORS[t] }}
+            onClick={() => api.setTab(t)}
+          >{t}</button>
+        ))}
+      </div>
+
+      {api.tab === 'Financials' && <HoaFinancials />}
+      {api.tab !== 'Financials' && api.showForm && <HoaForm api={api} />}
+      {api.tab !== 'Financials' && <HoaGroupList groups={api.leftGroups} api={api} />}
+    </div>
+  )
+}
+
+// Right binder page: the rest of the unit groups.
+export function HoaPageRight({ api }) {
+  if (api.tab === 'Financials') {
+    return <div className="hoa-panel" />
+  }
+  return (
+    <div className="hoa-panel">
+      <HoaGroupList groups={api.rightGroups} api={api} />
+    </div>
+  )
+}
+
+export default function HoaPanel({ userId }) {
+  const api = useHoaPage(userId)
+  return (
+    <div className="hoa-panel-wrap">
+      <HoaPageLeft api={api} />
+      <HoaPageRight api={api} />
     </div>
   )
 }

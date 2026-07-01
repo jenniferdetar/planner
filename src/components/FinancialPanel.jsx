@@ -13,14 +13,17 @@ function fmt(n) {
 const FULL_AMOUNT_BILLS = ['Mortgage', 'HOA', 'HELOC (California Credit Union)']
 const PALETTE = ['#3164a0', '#c77b3a', '#4a7a6a', '#9b59b6', '#c0392b', '#1abc9c', '#e07a5f', '#2e7d32']
 
-export default function FinancialPanel({
+// Shared state so the tabbed content (Bills/Goals/Cash on Hand/Laundry/Notes)
+// can render on the left binder page while the budget envelopes always show
+// on the right page, staying in sync on the underlying data.
+export function useFinancialPage({
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   paychecks = [], onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   userId,
 }) {
-  const [tab, setTab] = useState('budget')
+  const [tab, setTab] = useState('bills')
 
   const thisMonth = new Date().toISOString().slice(0, 7)
   const monthlyTxns = transactions.filter(t => t.txn_date?.startsWith(thisMonth))
@@ -28,6 +31,17 @@ export default function FinancialPanel({
   const totalExpenses = monthlyTxns.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0)
   const unpaidBills = bills.filter(b => !b.paid).reduce((s, b) => s + Number(b.amount), 0)
 
+  return {
+    transactions, onAddTransaction, onDeleteTransaction,
+    bills, onAddBill, onToggleBillPaid, onDeleteBill,
+    goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
+    paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
+    userId, tab, setTab, totalIncome, totalExpenses, unpaidBills,
+  }
+}
+
+// Left binder page: summary stats + tabs (Bills/Goals/Cash on Hand/Laundry/Notes).
+export function FinancialPageLeft({ api }) {
   return (
     <div className="fin-panel">
       <div className="fin-summary">
@@ -35,36 +49,54 @@ export default function FinancialPanel({
           <div className="fin-stat-header fin-stat-header--income">
             <span className="fin-stat-lbl">Income</span>
           </div>
-          <span className="fin-stat-num income">{fmt(totalIncome)}</span>
+          <span className="fin-stat-num income">{fmt(api.totalIncome)}</span>
         </div>
         <div className="fin-stat">
           <div className="fin-stat-header fin-stat-header--expense">
             <span className="fin-stat-lbl">Spent</span>
           </div>
-          <span className="fin-stat-num expense">{fmt(totalExpenses)}</span>
+          <span className="fin-stat-num expense">{fmt(api.totalExpenses)}</span>
         </div>
         <div className="fin-stat">
           <div className="fin-stat-header fin-stat-header--bills">
             <span className="fin-stat-lbl">Bills Due</span>
           </div>
-          <span className="fin-stat-num bills-due">{fmt(unpaidBills)}</span>
+          <span className="fin-stat-num bills-due">{fmt(api.unpaidBills)}</span>
         </div>
       </div>
 
       <div className="fin-tabs">
-        {['bills', 'goals', 'coins', 'budget', 'laundry', 'notes'].map(t => (
-          <button key={t} className={`fin-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
+        {['bills', 'goals', 'coins', 'laundry', 'notes'].map(t => (
+          <button key={t} className={`fin-tab ${api.tab === t ? 'active' : ''}`} onClick={() => api.setTab(t)}>
             {t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
         ))}
       </div>
 
-      {tab === 'bills' && <BillsTab bills={bills} onAdd={onAddBill} onToggle={onToggleBillPaid} onDelete={onDeleteBill} />}
-      {tab === 'goals' && <GoalsTab goals={goals} onUpdate={onUpdateGoalAmount} />}
-      {tab === 'coins' && <CoinsTab userId={userId} />}
-      {tab === 'budget' && <ZeroBasedBudget userId={userId} bills={bills} />}
-      {tab === 'laundry' && <LaundryTab userId={userId} />}
-      {tab === 'notes' && <NotesTab userId={userId} />}
+      {api.tab === 'bills' && <BillsTab bills={api.bills} onAdd={api.onAddBill} onToggle={api.onToggleBillPaid} onDelete={api.onDeleteBill} />}
+      {api.tab === 'goals' && <GoalsTab goals={api.goals} onUpdate={api.onUpdateGoalAmount} />}
+      {api.tab === 'coins' && <CoinsTab userId={api.userId} />}
+      {api.tab === 'laundry' && <LaundryTab userId={api.userId} />}
+      {api.tab === 'notes' && <NotesTab userId={api.userId} />}
+    </div>
+  )
+}
+
+// Right binder page: budget envelopes, always visible.
+export function FinancialPageRight({ api }) {
+  return (
+    <div className="fin-panel">
+      <ZeroBasedBudget userId={api.userId} bills={api.bills} />
+    </div>
+  )
+}
+
+export default function FinancialPanel(props) {
+  const api = useFinancialPage(props)
+  return (
+    <div className="fin-panel-wrap">
+      <FinancialPageLeft api={api} />
+      <FinancialPageRight api={api} />
     </div>
   )
 }

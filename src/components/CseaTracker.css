@@ -21,6 +21,12 @@
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
+.csea-tracker-wrap {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
 .csea-tracker {
   display: flex;
   flex-direction: column;

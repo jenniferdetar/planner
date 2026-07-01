@@ -39,7 +39,9 @@ function calcGPA(grades) {
   return (totalPoints / totalCredits).toFixed(2)
 }
 
-export default function GcuPanel({ onPushToAsana, pushing }) {
+// Shared state so the "Completed" group and the "Core/Emphasis" groups can
+// render on separate binder pages while staying in sync.
+export function useGcuState() {
   const [statuses, setStatuses] = useState(() =>
     Object.fromEntries(GCU_COURSES.map(c => [c.code, c.type === 'completed' ? 'completed' : 'not started']))
   )
@@ -66,6 +68,58 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
   const done = GCU_COURSES.filter(c => statuses[c.code] === 'completed').reduce((s, c) => s + c.credits, 0)
   const gpa = calcGPA(grades)
 
+  return { statuses, grades, expanded, setExpanded, setGrade, cycleStatus, completed, core, emphasis, total, done, gpa }
+}
+
+function CourseGroup({ label, courses, api }) {
+  const { statuses, grades, expanded, setExpanded, cycleStatus, setGrade } = api
+  return (
+    <div className="gcu-group">
+      <div className="gcu-group-label" dangerouslySetInnerHTML={{ __html: label }} />
+      {courses.map(course => {
+        const status = statuses[course.code]
+        const isOpen = expanded === course.code
+        return (
+          <div key={course.code} className={`gcu-course-row ${isOpen ? 'open' : ''}`}>
+            <div className="gcu-course-main" onClick={() => setExpanded(isOpen ? null : course.code)}>
+              <button
+                className="gcu-status-dot"
+                style={{ background: STATUS_COLORS[status] }}
+                onClick={e => { e.stopPropagation(); cycleStatus(course.code) }}
+                title={`Status: ${status}`}
+              />
+              <div className="gcu-course-info">
+                <span className="gcu-course-code">{course.code}</span>
+                <span className="gcu-course-name">{course.name}</span>
+                {course.end && <span className="gcu-course-due"><span className="gcu-due-label">Due</span> {course.end}</span>}
+              </div>
+              <div className="gcu-controls">
+                <input
+                  className="gcu-grade-input"
+                  type="text"
+                  value={grades[course.code]}
+                  onChange={e => setGrade(course.code, e.target.value)}
+                  onClick={e => e.stopPropagation()}
+                  placeholder="Grade"
+                  maxLength={6}
+                />
+                <span className="gcu-credits">{course.credits} cr</span>
+                <span className="gcu-status-label" style={{ color: STATUS_COLORS[status] }}>{status}</span>
+                <span className="gcu-chevron">{isOpen ? '▲' : '▾'}</span>
+              </div>
+            </div>
+            {isOpen && (
+              <div className="gcu-course-desc">{course.description}</div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// Left binder page: header/progress + Completed courses only.
+export function GcuPageLeft({ api, onPushToAsana, pushing }) {
   return (
     <div className="gcu-panel">
       <div className="gcu-header">
@@ -83,92 +137,39 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
           </button>
         </div>
         <div className="gcu-progress-bar-wrap">
-          <div className="gcu-progress-bar" style={{ width: `${(done / total) * 100}%` }} />
+          <div className="gcu-progress-bar" style={{ width: `${(api.done / api.total) * 100}%` }} />
         </div>
         <div className="gcu-progress-label">
-          {done} / {total} credit hours complete
-          {gpa !== null && <span className="gcu-gpa-badge">GPA {gpa}</span>}
+          {api.done} / {api.total} credit hours complete
+          {api.gpa !== null && <span className="gcu-gpa-badge">GPA {api.gpa}</span>}
         </div>
       </div>
 
       <div className="gcu-body">
-        <CourseGroup
-          label="Completed"
-          courses={completed}
-          statuses={statuses}
-          grades={grades}
-          expanded={expanded}
-          onToggle={setExpanded}
-          onCycle={cycleStatus}
-          onGrade={setGrade}
-        />
-        <CourseGroup
-          label="Core Courses"
-          courses={core}
-          statuses={statuses}
-          grades={grades}
-          expanded={expanded}
-          onToggle={setExpanded}
-          onCycle={cycleStatus}
-          onGrade={setGrade}
-        />
-        <CourseGroup
-          label="Government &amp; Policy Emphasis"
-          courses={emphasis}
-          statuses={statuses}
-          grades={grades}
-          expanded={expanded}
-          onToggle={setExpanded}
-          onCycle={cycleStatus}
-          onGrade={setGrade}
-        />
+        <CourseGroup label="Completed" courses={api.completed} api={api} />
       </div>
     </div>
   )
 }
 
-function CourseGroup({ label, courses, statuses, grades, expanded, onToggle, onCycle, onGrade }) {
+// Right binder page: everything else (Core Courses + emphasis).
+export function GcuPageRight({ api }) {
   return (
-    <div className="gcu-group">
-      <div className="gcu-group-label" dangerouslySetInnerHTML={{ __html: label }} />
-      {courses.map(course => {
-        const status = statuses[course.code]
-        const isOpen = expanded === course.code
-        return (
-          <div key={course.code} className={`gcu-course-row ${isOpen ? 'open' : ''}`}>
-            <div className="gcu-course-main" onClick={() => onToggle(isOpen ? null : course.code)}>
-              <button
-                className="gcu-status-dot"
-                style={{ background: STATUS_COLORS[status] }}
-                onClick={e => { e.stopPropagation(); onCycle(course.code) }}
-                title={`Status: ${status}`}
-              />
-              <div className="gcu-course-info">
-                <span className="gcu-course-code">{course.code}</span>
-                <span className="gcu-course-name">{course.name}</span>
-                {course.end && <span className="gcu-course-due"><span className="gcu-due-label">Due</span> {course.end}</span>}
-              </div>
-              <div className="gcu-controls">
-                <input
-                  className="gcu-grade-input"
-                  type="text"
-                  value={grades[course.code]}
-                  onChange={e => onGrade(course.code, e.target.value)}
-                  onClick={e => e.stopPropagation()}
-                  placeholder="Grade"
-                  maxLength={6}
-                />
-                <span className="gcu-credits">{course.credits} cr</span>
-                <span className="gcu-status-label" style={{ color: STATUS_COLORS[status] }}>{status}</span>
-                <span className="gcu-chevron">{isOpen ? '▲' : '▾'}</span>
-              </div>
-            </div>
-            {isOpen && (
-              <div className="gcu-course-desc">{course.description}</div>
-            )}
-          </div>
-        )
-      })}
+    <div className="gcu-panel">
+      <div className="gcu-body">
+        <CourseGroup label="Core Courses" courses={api.core} api={api} />
+        <CourseGroup label="Government &amp; Policy Emphasis" courses={api.emphasis} api={api} />
+      </div>
+    </div>
+  )
+}
+
+export default function GcuPanel({ onPushToAsana, pushing }) {
+  const api = useGcuState()
+  return (
+    <div className="gcu-panel-wrap">
+      <GcuPageLeft api={api} onPushToAsana={onPushToAsana} pushing={pushing} />
+      <GcuPageRight api={api} />
     </div>
   )
 }
