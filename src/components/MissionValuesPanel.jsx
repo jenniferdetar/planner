@@ -1,28 +1,49 @@
 import { useState, useEffect, useRef } from 'react'
 import { useMission } from '../hooks/useMission'
+import { useMantra } from '../hooks/useMantra'
 import ValuesPanel from './ValuesPanel'
 import './MissionValuesPanel.css'
 
 const SUB_TABS = [
   { key: 'mission', label: 'Mission' },
+  { key: 'mantra',  label: 'Mantra' },
   { key: 'values',  label: 'Values' },
 ]
 
-export default function MissionValuesPanel({ userId }) {
-  const { mission, setMission, save, saved } = useMission(userId)
-  const [text, setText] = useState(mission)
-  const [subTab, setSubTab] = useState('mission')
+function AutosaveTextPanel({ title, value, setValue, save, saved, placeholder }) {
+  const [text, setText] = useState(value)
   const saveTimer = useRef(null)
 
-  useEffect(() => { setText(mission) }, [mission])
+  useEffect(() => { setText(value) }, [value])
 
   function handleChange(e) {
     const val = e.target.value
     setText(val)
-    setMission(val)
+    setValue(val)
     clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => save(val), 800)
   }
+
+  return (
+    <div className="mv-mission-col">
+      <div className="mv-mission-header">
+        <span className="mv-mission-title">{title}</span>
+        {saved && <span className="mv-saved">Saved ✓</span>}
+      </div>
+      <textarea
+        className="mv-mission-textarea"
+        value={text}
+        onChange={handleChange}
+        placeholder={placeholder}
+      />
+    </div>
+  )
+}
+
+export default function MissionValuesPanel({ userId }) {
+  const { mission, setMission, save: saveMission, saved: missionSaved } = useMission(userId)
+  const { mantra, setMantra, save: saveMantra, saved: mantraSaved } = useMantra(userId)
+  const [subTab, setSubTab] = useState('mission')
 
   return (
     <div className="mv-panel">
@@ -37,18 +58,25 @@ export default function MissionValuesPanel({ userId }) {
       </div>
 
       {subTab === 'mission' && (
-        <div className="mv-mission-col">
-          <div className="mv-mission-header">
-            <span className="mv-mission-title">Mission Statement</span>
-            {saved && <span className="mv-saved">Saved ✓</span>}
-          </div>
-          <textarea
-            className="mv-mission-textarea"
-            value={text}
-            onChange={handleChange}
-            placeholder="Write your personal mission statement here…"
-          />
-        </div>
+        <AutosaveTextPanel
+          title="Mission Statement"
+          value={mission}
+          setValue={setMission}
+          save={saveMission}
+          saved={missionSaved}
+          placeholder="Write your personal mission statement here…"
+        />
+      )}
+
+      {subTab === 'mantra' && (
+        <AutosaveTextPanel
+          title="My Personal Mantra"
+          value={mantra}
+          setValue={setMantra}
+          save={saveMantra}
+          saved={mantraSaved}
+          placeholder="Write your personal mantra here… what words center and inspire you?"
+        />
       )}
 
       {subTab === 'values' && (
