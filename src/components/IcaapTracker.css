@@ -970,6 +970,18 @@ a.tr-title-link:hover {
   letter-spacing: 0.01em;
 }
 
+.icaap-note-archived-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #999;
+  background: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+}
+
 .icaap-note-edit-btn {
   font-size: 11px;
   font-weight: 600;

@@ -16,6 +16,7 @@ export default function FavoriteVideosPanel({ userId }) {
   const [adding, setAdding] = useState(false)
   const [error, setError] = useState('')
   const [hoveredId, setHoveredId] = useState(null)
+  const [hoveredShowId, setHoveredShowId] = useState(null)
   const [newShow, setNewShow] = useState('')
   const [addingShow, setAddingShow] = useState(false)
   const [showError, setShowError] = useState('')
@@ -119,6 +120,7 @@ export default function FavoriteVideosPanel({ userId }) {
 
         <div className="videos-section">
           <h3 className="videos-section-header">Favorite TV Shows</h3>
+          <p className="videos-subtitle-inline">Enter a show name — poster and details are pulled in automatically</p>
           <form className="add-video-form" onSubmit={handleAddShow}>
             <input
               type="text"
@@ -138,20 +140,53 @@ export default function FavoriteVideosPanel({ userId }) {
               <p>No favorite TV shows yet. Add one above.</p>
             </div>
           ) : (
-            <ul className="tv-show-list">
-              {sortedShows.map(show => (
-                <li key={show.id} className="tv-show-item">
-                  <span className="tv-show-name">{show.name}</span>
-                  <button
-                    className="delete-show-btn"
-                    onClick={() => deleteShow(show.id)}
-                    title="Remove show"
+            <div className="video-grid">
+              {sortedShows.map(show => {
+                const imdbUrl = show.imdb_id ? `https://www.imdb.com/title/${show.imdb_id}/` : null
+                const year = show.first_air_date ? show.first_air_date.slice(0, 4) : ''
+                return (
+                  <div
+                    key={show.id}
+                    className="video-card"
+                    onMouseEnter={() => setHoveredShowId(show.id)}
+                    onMouseLeave={() => setHoveredShowId(null)}
                   >
-                    ✕
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    {imdbUrl ? (
+                      <a href={imdbUrl} target="_blank" rel="noopener noreferrer" className="video-thumb-link">
+                        {show.poster_url ? (
+                          <img className="video-thumb tv-poster-thumb" src={show.poster_url} alt={show.name} loading="lazy" />
+                        ) : (
+                          <div className="video-thumb tv-poster-thumb video-thumb-placeholder">📺</div>
+                        )}
+                      </a>
+                    ) : show.poster_url ? (
+                      <img className="video-thumb tv-poster-thumb" src={show.poster_url} alt={show.name} loading="lazy" />
+                    ) : (
+                      <div className="video-thumb tv-poster-thumb video-thumb-placeholder">📺</div>
+                    )}
+                    <div className="video-card-body">
+                      {imdbUrl ? (
+                        <a href={imdbUrl} target="_blank" rel="noopener noreferrer" className="video-title">{show.name}</a>
+                      ) : (
+                        <span className="video-title">{show.name}</span>
+                      )}
+                      {(year || show.rating) && (
+                        <span className="video-channel">{year}{year && show.rating ? ' · ' : ''}{show.rating ? `★ ${Number(show.rating).toFixed(1)}` : ''}</span>
+                      )}
+                    </div>
+                    {hoveredShowId === show.id && (
+                      <button
+                        className="delete-video-btn"
+                        onClick={() => deleteShow(show.id)}
+                        title="Remove show"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           )}
         </div>
       </div>

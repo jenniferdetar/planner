@@ -1453,7 +1453,7 @@ function parseTable(content) {
 }
 
 function IcaapNotePanel({ userId, noteKey, title, color }) {
-  const { content, handleChange, saved } = useIcaapNote(userId, noteKey)
+  const { content, handleChange, saved, archived, setArchived } = useIcaapNote(userId, noteKey)
   const [editing, setEditing] = useState(false)
   const table = parseTable(content)
 
@@ -1470,9 +1470,15 @@ function IcaapNotePanel({ userId, noteKey, title, color }) {
   return (
     <div className="icaap-note-panel">
       <div className="icaap-note-header" style={{ borderLeftColor: color }}>
-        {title && <span className="icaap-note-panel-title">{title}</span>}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {title && <span className="icaap-note-panel-title">{title}</span>}
+          {archived && <span className="icaap-note-archived-badge">Archived</span>}
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {saved && <span className="icaap-note-saved">Saved ✓</span>}
+          <button className="icaap-archive-btn" onClick={() => setArchived(!archived)}>
+            {archived ? 'Unarchive' : 'Archive'}
+          </button>
           <button className="icaap-note-edit-btn" onClick={() => setEditing(e => !e)}>
             {editing ? 'View Table' : 'Edit'}
           </button>
