@@ -148,98 +148,105 @@ export function useCseaPage({ userId, providerToken, issues, onAddIssue, onUpdat
   }
 }
 
-// Left binder page: Issues only.
+// Left binder page: Issues / Interactions, switchable.
 export function CseaPageLeft({ api }) {
+  const [tab, setTab] = useState('issues')
+
   return (
     <div className="csea-tracker">
       <div className="csea-tabs">
-        <button className="csea-tab active">Issues</button>
+        <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
+        <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions {api.interactions.length > 0 && <span className="csea-tab-badge">{new Set(api.interactions.map(i => i.member_name || 'Unknown')).size}</span>}</button>
       </div>
-      <div className="csea-panel">
-        <div className="csea-toolbar">
-          <div className="csea-filter-pills">
-            {['active', 'resolved', 'all'].map(f => (
-              <button key={f} className={`filter-pill ${api.filter === f ? 'active' : ''}`} onClick={() => api.setFilter(f)}>
-                {f.charAt(0).toUpperCase() + f.slice(1)}
-              </button>
-            ))}
-            <span className="csea-inline-stat" style={{ color: '#e05c5c' }}>{api.counts.Grievance} <span className="csea-inline-lbl">Grievances</span></span>
-            <span className="csea-inline-stat" style={{ color: '#f0a040' }}>{api.counts.Gripe} <span className="csea-inline-lbl">Gripes</span></span>
-            <span className="csea-inline-stat" style={{ color: '#5c9ee0' }}>{api.counts.Complaint} <span className="csea-inline-lbl">Complaints</span></span>
+
+      {tab === 'issues' && (
+        <div className="csea-panel">
+          <div className="csea-toolbar">
+            <div className="csea-filter-pills">
+              {['active', 'resolved', 'all'].map(f => (
+                <button key={f} className={`filter-pill ${api.filter === f ? 'active' : ''}`} onClick={() => api.setFilter(f)}>
+                  {f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+              <span className="csea-inline-stat" style={{ color: '#e05c5c' }}>{api.counts.Grievance} <span className="csea-inline-lbl">Grievances</span></span>
+              <span className="csea-inline-stat" style={{ color: '#f0a040' }}>{api.counts.Gripe} <span className="csea-inline-lbl">Gripes</span></span>
+              <span className="csea-inline-stat" style={{ color: '#5c9ee0' }}>{api.counts.Complaint} <span className="csea-inline-lbl">Complaints</span></span>
+            </div>
+            <button className="csea-add-btn" onClick={() => api.setShowAddIssue(true)}>+ Log Issue</button>
           </div>
-          <button className="csea-add-btn" onClick={() => api.setShowAddIssue(true)}>+ Log Issue</button>
-        </div>
 
-        {api.showAddIssue && (
-          <form className="csea-form" onSubmit={api.handleAddIssue}>
-            <div className="csea-form-row">
-              <div className="csea-type-btns">
-                {ISSUE_TYPES.map(t => (
-                  <button key={t} type="button"
-                    className={`type-btn ${api.issueForm.issue_type === t ? 'active' : ''}`}
-                    style={{ '--tc': TYPE_COLORS[t] }}
-                    onClick={() => api.setIssueForm(f => ({ ...f, issue_type: t }))}
-                  >{t}</button>
-                ))}
+          {api.showAddIssue && (
+            <form className="csea-form" onSubmit={api.handleAddIssue}>
+              <div className="csea-form-row">
+                <div className="csea-type-btns">
+                  {ISSUE_TYPES.map(t => (
+                    <button key={t} type="button"
+                      className={`type-btn ${api.issueForm.issue_type === t ? 'active' : ''}`}
+                      style={{ '--tc': TYPE_COLORS[t] }}
+                      onClick={() => api.setIssueForm(f => ({ ...f, issue_type: t }))}
+                    >{t}</button>
+                  ))}
+                </div>
               </div>
-            </div>
-            <MemberSearch value={api.issueForm.member_name} onChange={v => api.setIssueForm(f => ({ ...f, member_name: v }))} />
-            <select className="csea-input" value={api.issueForm.work_location}
-              onChange={e => api.setIssueForm(f => ({ ...f, work_location: e.target.value }))}>
-              <option value="">Work location</option>
-              {api.workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
-            </select>
-            <textarea className="csea-textarea" placeholder="Description *" rows={3} value={api.issueForm.description}
-              onChange={e => api.setIssueForm(f => ({ ...f, description: e.target.value }))} />
-            <input className="csea-input" placeholder="Involved parties" value={api.issueForm.involved_parties}
-              onChange={e => api.setIssueForm(f => ({ ...f, involved_parties: e.target.value }))} />
-            <div className="csea-form-row">
-              <div className="csea-priority-btns">
-                {PRIORITIES.map(p => (
-                  <button key={p} type="button"
-                    className={`priority-btn ${api.issueForm.priority === p ? 'active' : ''}`}
-                    style={{ '--pc': PRIORITY_COLORS[p] }}
-                    onClick={() => api.setIssueForm(f => ({ ...f, priority: p }))}
-                  >{p}</button>
-                ))}
+              <MemberSearch value={api.issueForm.member_name} onChange={v => api.setIssueForm(f => ({ ...f, member_name: v }))} />
+              <select className="csea-input" value={api.issueForm.work_location}
+                onChange={e => api.setIssueForm(f => ({ ...f, work_location: e.target.value }))}>
+                <option value="">Work location</option>
+                {api.workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+              </select>
+              <textarea className="csea-textarea" placeholder="Description *" rows={3} value={api.issueForm.description}
+                onChange={e => api.setIssueForm(f => ({ ...f, description: e.target.value }))} />
+              <input className="csea-input" placeholder="Involved parties" value={api.issueForm.involved_parties}
+                onChange={e => api.setIssueForm(f => ({ ...f, involved_parties: e.target.value }))} />
+              <div className="csea-form-row">
+                <div className="csea-priority-btns">
+                  {PRIORITIES.map(p => (
+                    <button key={p} type="button"
+                      className={`priority-btn ${api.issueForm.priority === p ? 'active' : ''}`}
+                      style={{ '--pc': PRIORITY_COLORS[p] }}
+                      onClick={() => api.setIssueForm(f => ({ ...f, priority: p }))}
+                    >{p}</button>
+                  ))}
+                </div>
+                <div className="csea-form-actions">
+                  <button type="button" className="csea-cancel" onClick={() => api.setShowAddIssue(false)}>Cancel</button>
+                  <button type="submit" className="csea-save">Save</button>
+                </div>
               </div>
-              <div className="csea-form-actions">
-                <button type="button" className="csea-cancel" onClick={() => api.setShowAddIssue(false)}>Cancel</button>
-                <button type="submit" className="csea-save">Save</button>
-              </div>
-            </div>
-          </form>
-        )}
-
-        <div className="csea-issue-list">
-          {api.displayIssues.length === 0 && (
-            <p className="csea-empty">No {api.filter === 'active' ? 'active' : api.filter === 'resolved' ? 'resolved' : ''} issues</p>
+            </form>
           )}
-          {api.displayIssues.map(issue => (
-            <IssueCard
-              key={issue.id}
-              issue={issue}
-              onUpdateStatus={api.onUpdateStatus}
-              onDelete={api.onDeleteIssue}
-              notes={api.issueNotes[issue.id] || []}
-              onAddNote={(text, date) => api.onAddIssueNote?.(issue.id, text, date)}
-              onDeleteNote={(noteId) => api.onDeleteIssueNote?.(issue.id, noteId)}
-            />
-          ))}
+
+          <div className="csea-issue-list">
+            {api.displayIssues.length === 0 && (
+              <p className="csea-empty">No {api.filter === 'active' ? 'active' : api.filter === 'resolved' ? 'resolved' : ''} issues</p>
+            )}
+            {api.displayIssues.map(issue => (
+              <IssueCard
+                key={issue.id}
+                issue={issue}
+                onUpdateStatus={api.onUpdateStatus}
+                onDelete={api.onDeleteIssue}
+                notes={api.issueNotes[issue.id] || []}
+                onAddNote={(text, date) => api.onAddIssueNote?.(issue.id, text, date)}
+                onDeleteNote={(noteId) => api.onDeleteIssueNote?.(issue.id, noteId)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {tab === 'interactions' && <InteractionsPanel api={api} />}
     </div>
   )
 }
 
-// Right binder page: Interactions / Topics / Links / Contract, switchable.
+// Right binder page: Topics / Links / Contract / RIF Intake, switchable.
 export function CseaPageRight({ api }) {
-  const [tab, setTab] = useState('interactions')
+  const [tab, setTab] = useState('notes')
 
   return (
     <div className="csea-tracker">
       <div className="csea-tabs">
-        <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions {api.interactions.length > 0 && <span className="csea-tab-badge">{new Set(api.interactions.map(i => i.member_name || 'Unknown')).size}</span>}</button>
         <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Topics {api.cseaNotes.length > 0 && <span className="csea-tab-badge">{api.cseaNotes.length}</span>}</button>
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
@@ -358,73 +365,75 @@ export function CseaPageRight({ api }) {
       )}
 
       {tab === 'rif' && <RifIntakePanel />}
+    </div>
+  )
+}
 
-      {tab === 'interactions' && (
-        <div className="csea-panel">
-          <div className="csea-toolbar">
-            <button className="csea-archive-toggle" onClick={api.onToggleArchived}>
-              {api.showArchived ? 'Hide Archived' : 'Show Archived'}
-            </button>
-            <button className="csea-gmail-sync-btn" onClick={api.syncAll} disabled={api.syncing}>
-              {api.syncing ? 'Syncing…' : api.hasSynced ? `↻ Sync${api.totalNewCount > 0 ? ` (+${api.totalNewCount})` : ''}` : '↻ Sync'}
-            </button>
-            <button className="csea-add-btn" onClick={() => api.setShowAddInteraction(true)}>+ Log Contact</button>
+function InteractionsPanel({ api }) {
+  return (
+    <div className="csea-panel">
+      <div className="csea-toolbar">
+        <button className="csea-archive-toggle" onClick={api.onToggleArchived}>
+          {api.showArchived ? 'Hide Archived' : 'Show Archived'}
+        </button>
+        <button className="csea-gmail-sync-btn" onClick={api.syncAll} disabled={api.syncing}>
+          {api.syncing ? 'Syncing…' : api.hasSynced ? `↻ Sync${api.totalNewCount > 0 ? ` (+${api.totalNewCount})` : ''}` : '↻ Sync'}
+        </button>
+        <button className="csea-add-btn" onClick={() => api.setShowAddInteraction(true)}>+ Log Contact</button>
+      </div>
+
+      {api.showAddInteraction && (
+        <form className="csea-form" onSubmit={api.handleAddInteraction}>
+          <div className="csea-form-row">
+            <div className="csea-type-btns">
+              {INTERACTION_CATEGORIES.map(c => (
+                <button key={c} type="button"
+                  className={`type-btn ${api.interactionForm.category === c ? 'active' : ''}`}
+                  style={{ '--tc': '#3164a0' }}
+                  onClick={() => api.setInteractionForm(f => ({ ...f, category: c }))}
+                >{c}</button>
+              ))}
+            </div>
           </div>
-
-          {api.showAddInteraction && (
-            <form className="csea-form" onSubmit={api.handleAddInteraction}>
-              <div className="csea-form-row">
-                <div className="csea-type-btns">
-                  {INTERACTION_CATEGORIES.map(c => (
-                    <button key={c} type="button"
-                      className={`type-btn ${api.interactionForm.category === c ? 'active' : ''}`}
-                      style={{ '--tc': '#3164a0' }}
-                      onClick={() => api.setInteractionForm(f => ({ ...f, category: c }))}
-                    >{c}</button>
-                  ))}
-                </div>
-              </div>
-              <MemberSearch value={api.interactionForm.member_name} onChange={v => api.setInteractionForm(f => ({ ...f, member_name: v }))} />
-              <select className="csea-input" value={api.interactionForm.work_location}
-                onChange={e => api.setInteractionForm(f => ({ ...f, work_location: e.target.value }))}>
-                <option value="">Work location</option>
-                {api.workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
-              </select>
-              <input className="csea-input" type="date" value={api.interactionForm.date_spoke}
-                onChange={e => api.setInteractionForm(f => ({ ...f, date_spoke: e.target.value }))} />
-              <textarea className="csea-textarea" placeholder="What was discussed?" rows={3} value={api.interactionForm.discussion}
-                onChange={e => api.setInteractionForm(f => ({ ...f, discussion: e.target.value }))} />
-              <input className="csea-input" placeholder="Others involved" value={api.interactionForm.who_involved}
-                onChange={e => api.setInteractionForm(f => ({ ...f, who_involved: e.target.value }))} />
-              <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
-                <button type="button" className="csea-cancel" onClick={() => api.setShowAddInteraction(false)}>Cancel</button>
-                <button type="submit" className="csea-save">Save</button>
-              </div>
-            </form>
-          )}
-
-          <div className="csea-issue-list csea-interactions-grid">
-            {api.interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
-            {Object.entries(
-              api.interactions.reduce((groups, i) => {
-                const raw = i.member_name || 'Unknown'
-                // Expand "Group Chat (Name1, Name2, ...)" into individual names
-                const gcMatch = raw.match(/^Group Chat\s*\((.+)\)$/i)
-                const keys = gcMatch
-                  ? gcMatch[1].split(',').map(n => n.trim()).filter(Boolean)
-                  : [raw]
-                keys.forEach(key => {
-                  if (!groups[key]) groups[key] = []
-                  groups[key].push(i)
-                })
-                return groups
-              }, {})
-            ).sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
-              <MemberInteractionGroup key={member} member={member} items={items} onUpdate={api.onUpdateInteraction} workLocations={api.workLocations} />
-            ))}
+          <MemberSearch value={api.interactionForm.member_name} onChange={v => api.setInteractionForm(f => ({ ...f, member_name: v }))} />
+          <select className="csea-input" value={api.interactionForm.work_location}
+            onChange={e => api.setInteractionForm(f => ({ ...f, work_location: e.target.value }))}>
+            <option value="">Work location</option>
+            {api.workLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+          </select>
+          <input className="csea-input" type="date" value={api.interactionForm.date_spoke}
+            onChange={e => api.setInteractionForm(f => ({ ...f, date_spoke: e.target.value }))} />
+          <textarea className="csea-textarea" placeholder="What was discussed?" rows={3} value={api.interactionForm.discussion}
+            onChange={e => api.setInteractionForm(f => ({ ...f, discussion: e.target.value }))} />
+          <input className="csea-input" placeholder="Others involved" value={api.interactionForm.who_involved}
+            onChange={e => api.setInteractionForm(f => ({ ...f, who_involved: e.target.value }))} />
+          <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
+            <button type="button" className="csea-cancel" onClick={() => api.setShowAddInteraction(false)}>Cancel</button>
+            <button type="submit" className="csea-save">Save</button>
           </div>
-        </div>
+        </form>
       )}
+
+      <div className="csea-issue-list csea-interactions-grid">
+        {api.interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
+        {Object.entries(
+          api.interactions.reduce((groups, i) => {
+            const raw = i.member_name || 'Unknown'
+            // Expand "Group Chat (Name1, Name2, ...)" into individual names
+            const gcMatch = raw.match(/^Group Chat\s*\((.+)\)$/i)
+            const keys = gcMatch
+              ? gcMatch[1].split(',').map(n => n.trim()).filter(Boolean)
+              : [raw]
+            keys.forEach(key => {
+              if (!groups[key]) groups[key] = []
+              groups[key].push(i)
+            })
+            return groups
+          }, {})
+        ).sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
+          <MemberInteractionGroup key={member} member={member} items={items} onUpdate={api.onUpdateInteraction} workLocations={api.workLocations} />
+        ))}
+      </div>
     </div>
   )
 }
