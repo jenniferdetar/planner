@@ -143,13 +143,12 @@ export function useHoaPage(userId) {
     if (b === 'General / Board-Wide') return -1
     return a.localeCompare(b, undefined, { numeric: true })
   })
-  const mid = Math.ceil(groupEntries.length / 2)
 
   return {
     tabs, tab, setTab, showForm, setShowForm, form, setForm, editId, setEditId, showArchived, setShowArchived,
     syncYahoo, yahooSyncing, yahooNewCount, yahooError,
     counts, loading, filtered,
-    leftGroups: groupEntries.slice(0, mid), rightGroups: groupEntries.slice(mid),
+    groups: groupEntries,
     openAdd, openEdit, handleSubmit, deleteItem,
   }
 }
@@ -316,9 +315,7 @@ function HoaGroupList({ groups, api }) {
   )
 }
 
-// Left binder page: header, stats, category tabs, financials/form, and the
-// first half of unit groups.
-export function HoaPageLeft({ api }) {
+function HoaPanelInner({ api }) {
   return (
     <div className="hoa-panel">
       <div className="hoa-header">
@@ -366,34 +363,12 @@ export function HoaPageLeft({ api }) {
 
       {api.tab === 'Financials' && <HoaFinancials />}
       {api.tab !== 'Financials' && api.showForm && <HoaForm api={api} />}
-      {api.tab !== 'Financials' && <HoaGroupList groups={api.leftGroups} api={api} />}
-    </div>
-  )
-}
-
-// Right binder page: the rest of the unit groups.
-export function HoaPageRight({ api }) {
-  if (api.tab === 'Financials') {
-    return (
-      <div className="hoa-panel">
-        <div className="hoa-header"><span className="hoa-header-title">Park Reseda HOA</span></div>
-      </div>
-    )
-  }
-  return (
-    <div className="hoa-panel">
-      <div className="hoa-header"><span className="hoa-header-title">{api.tab}</span></div>
-      <HoaGroupList groups={api.rightGroups} api={api} />
+      {api.tab !== 'Financials' && <HoaGroupList groups={api.groups} api={api} />}
     </div>
   )
 }
 
 export default function HoaPanel({ userId }) {
   const api = useHoaPage(userId)
-  return (
-    <div className="hoa-panel-wrap">
-      <HoaPageLeft api={api} />
-      <HoaPageRight api={api} />
-    </div>
-  )
+  return <HoaPanelInner api={api} />
 }

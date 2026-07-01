@@ -61,8 +61,6 @@ const PRIORITY_COLORS = { High: '#cc0000', Medium: '#f7941d', Low: '#3164a0' }
 
 const INTERACTION_CATEGORIES = ['General', 'Grievance', 'Benefits', 'Discipline', 'Contract', 'Other']
 
-// Shared state so Issues (left page) and Interactions/Topics/Links/Contract
-// (right page) can render independently while staying in sync.
 export function useCseaPage({ userId, providerToken, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote }) {
   const workLocations = useWorkLocations()
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
@@ -148,8 +146,7 @@ export function useCseaPage({ userId, providerToken, issues, onAddIssue, onUpdat
   }
 }
 
-// Left binder page: Issues / Interactions, switchable.
-export function CseaPageLeft({ api }) {
+export function CseaTrackerInner({ api }) {
   const [tab, setTab] = useState('issues')
 
   return (
@@ -157,6 +154,10 @@ export function CseaPageLeft({ api }) {
       <div className="csea-tabs">
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions {api.interactions.length > 0 && <span className="csea-tab-badge">{new Set(api.interactions.map(i => i.member_name || 'Unknown')).size}</span>}</button>
+        <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Topics {api.cseaNotes.length > 0 && <span className="csea-tab-badge">{api.cseaNotes.length}</span>}</button>
+        <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
+        <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
+        <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
       </div>
 
       {tab === 'issues' && (
@@ -236,22 +237,6 @@ export function CseaPageLeft({ api }) {
       )}
 
       {tab === 'interactions' && <InteractionsPanel api={api} />}
-    </div>
-  )
-}
-
-// Right binder page: Topics / Links / Contract / RIF Intake, switchable.
-export function CseaPageRight({ api }) {
-  const [tab, setTab] = useState('notes')
-
-  return (
-    <div className="csea-tracker">
-      <div className="csea-tabs">
-        <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Topics {api.cseaNotes.length > 0 && <span className="csea-tab-badge">{api.cseaNotes.length}</span>}</button>
-        <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
-        <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
-        <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
-      </div>
 
       {tab === 'notes' && (
         <div className="csea-panel">
@@ -724,9 +709,6 @@ function IssueCard({ issue, onUpdateStatus, onDelete, notes = [], onAddNote, onD
 export default function CseaTracker(props) {
   const api = useCseaPage(props)
   return (
-    <div className="csea-tracker-wrap">
-      <CseaPageLeft api={api} />
-      <CseaPageRight api={api} />
-    </div>
+    <CseaTrackerInner api={api} />
   )
 }

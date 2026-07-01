@@ -6,12 +6,6 @@
   --gcu-gold:  #ffb81c;
 }
 
-.gcu-panel-wrap {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
 .gcu-panel {
   display: flex;
   flex-direction: column;

@@ -1,9 +1,3 @@
-.fin-panel-wrap {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
 .fin-panel {
   display: flex;
   flex-direction: column;
