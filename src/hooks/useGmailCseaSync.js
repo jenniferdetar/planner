@@ -1,6 +1,9 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
-import { fetchCseaWebformEmails, fetchEmailBody, parseEmailToInteraction } from '../lib/gmailCsea'
+import {
+  fetchCseaWebformEmails, fetchEmailBody, parseEmailToInteraction,
+  fetchEmilyRaabEmails, fetchEmailMetadata, parseEmilyRaabEmailToInteraction,
+} from '../lib/gmailCsea'
 
 export function useGmailCseaSync(providerToken) {
   const [syncing, setSyncing] = useState(false)
@@ -13,26 +16,47 @@ export function useGmailCseaSync(providerToken) {
     setNewCount(null)
 
     try {
-      const messages = await fetchCseaWebformEmails(providerToken)
-      if (!messages.length) { setLastSynced(new Date()); setSyncing(false); setNewCount(0); return }
-
-      // Get already-imported message IDs
-      const ids = messages.map(m => m.id)
-      const { data: existing } = await supabase
-        .from('member_interactions')
-        .select('gmail_message_id')
-        .in('gmail_message_id', ids)
-      const existingIds = new Set((existing || []).map(r => r.gmail_message_id))
-
-      const toImport = messages.filter(m => !existingIds.has(m.id))
       let imported = 0
 
-      for (const msg of toImport) {
-        const full = await fetchEmailBody(providerToken, msg.id)
-        const record = parseEmailToInteraction(full)
-        if (!record) continue
-        const { error } = await supabase.from('member_interactions').insert(record)
-        if (!error) imported++
+      // --- Webform submissions ---
+      const messages = await fetchCseaWebformEmails(providerToken)
+      if (messages.length) {
+        const ids = messages.map(m => m.id)
+        const { data: existing } = await supabase
+          .from('member_interactions')
+          .select('gmail_message_id')
+          .in('gmail_message_id', ids)
+        const existingIds = new Set((existing || []).map(r => r.gmail_message_id))
+
+        for (const msg of messages.filter(m => !existingIds.has(m.id))) {
+          const full = await fetchEmailBody(providerToken, msg.id)
+          const record = parseEmailToInteraction(full)
+          if (!record) continue
+          const { error } = await supabase.from('member_interactions').insert(record)
+          if (!error) imported++
+        }
+      }
+
+      // --- Emily Raab emails (from her or CC'd) ---
+      const threads = await fetchEmilyRaabEmails(providerToken)
+      if (threads.length) {
+        const threadIds = threads.map(t => t.threadId)
+        const { data: existingThreads } = await supabase
+          .from('member_interactions')
+          .select('gmail_message_id')
+          .in('gmail_message_id', threadIds)
+        const existingThreadIds = new Set((existingThreads || []).map(r => r.gmail_message_id))
+
+        for (const { threadId, msgId } of threads.filter(t => !existingThreadIds.has(t.threadId))) {
+          try {
+            const msg = await fetchEmailMetadata(providerToken, msgId)
+            const record = parseEmilyRaabEmailToInteraction(msg, threadId)
+            const { error } = await supabase.from('member_interactions').insert(record)
+            if (!error) imported++
+          } catch (err) {
+            console.error('Emily Raab email import error:', err)
+          }
+        }
       }
 
       setNewCount(imported)
