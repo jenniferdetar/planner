@@ -43,14 +43,14 @@ const ALL_TABS = [
   { key: 'mission',     label: 'Mission',      color: '#4a90d9' },
   { key: 'notes',       label: 'Notes',        color: '#f0a040' },
   { key: 'journal',     label: 'Journal',      color: '#a0785a', external: 'https://penzu.com' },
-  { key: 'csea',        label: 'CSEA',         color: '#1e3070', nav: true },
-  { key: 'finance',     label: 'Finance',      color: '#1e5799', nav: true },
-  { key: 'gcu',         label: 'GCU',          color: '#1e3070', nav: true },
-  { key: 'hoa',         label: 'HOA',          color: '#1e5799', nav: true },
-  { key: 'icaap',       label: 'iCAAP',        color: '#1e3070', nav: true },
-  { key: 'matrix',      label: 'Matrix',       color: '#1e3070', nav: true },
-  { key: 'personal',    label: 'Personal',     color: '#1e5799', nav: true },
-  { key: 'wywo',        label: 'WYWO',         color: '#1e3070', nav: true },
+  { key: 'csea',        label: 'CSEA',         color: '#b87a38', nav: true },
+  { key: 'finance',     label: 'Finance',      color: '#8a5a3a', nav: true },
+  { key: 'gcu',         label: 'GCU',          color: '#5a7848', nav: true },
+  { key: 'hoa',         label: 'HOA',          color: '#4a7a6a', nav: true },
+  { key: 'icaap',       label: 'iCAAP',        color: '#3a5c4a', nav: true },
+  { key: 'matrix',      label: 'Matrix',       color: '#a04040', nav: true },
+  { key: 'personal',    label: 'Personal',     color: '#6a5a8a', nav: true },
+  { key: 'wywo',        label: 'WYWO',         color: '#4a6a8a', nav: true },
 ]
 
 const DAY_CONTENT_KEYS = new Set(['daily-tasks','schedule','master-tasks'])
