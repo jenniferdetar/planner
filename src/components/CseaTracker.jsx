@@ -66,6 +66,7 @@ export function useCseaPage({ userId, providerToken, issues, onAddIssue, onUpdat
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
   const [linkTitle, setLinkTitle] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
+  const [showAddLink, setShowAddLink] = useState(false)
   const [showAddIssue, setShowAddIssue] = useState(false)
   const [showAddInteraction, setShowAddInteraction] = useState(false)
   const [filter, setFilter] = useState('active')
@@ -133,7 +134,7 @@ export function useCseaPage({ userId, providerToken, issues, onAddIssue, onUpdat
 
   return {
     userId, workLocations, quickLinks, addLink, deleteLink,
-    linkTitle, setLinkTitle, linkUrl, setLinkUrl,
+    linkTitle, setLinkTitle, linkUrl, setLinkUrl, showAddLink, setShowAddLink,
     showAddIssue, setShowAddIssue, showAddInteraction, setShowAddInteraction,
     filter, setFilter, noteText, setNoteText, noteSource, setNoteSource, noteTopic, setNoteTopic,
     showAddNote, setShowAddNote,
@@ -294,30 +295,46 @@ export function CseaTrackerInner({ api }) {
 
       {tab === 'links' && (
         <div className="csea-panel">
-          <form className="csea-notes-form" onSubmit={async (e) => {
-            e.preventDefault()
-            if (!api.linkTitle.trim() || !api.linkUrl.trim()) return
-            const url = api.linkUrl.trim().startsWith('http') ? api.linkUrl.trim() : 'https://' + api.linkUrl.trim()
-            await api.addLink(api.linkTitle.trim(), url)
-            api.setLinkTitle('')
-            api.setLinkUrl('')
-          }}>
-            <input
-              className="csea-input"
-              placeholder="Label *"
-              value={api.linkTitle}
-              onChange={e => api.setLinkTitle(e.target.value)}
-            />
-            <div className="csea-notes-form-row">
-              <input
-                className="csea-input"
-                placeholder="URL *"
-                value={api.linkUrl}
-                onChange={e => api.setLinkUrl(e.target.value)}
-              />
-              <button type="submit" className="csea-save">Add</button>
+          <div className="csea-toolbar" style={{ justifyContent: 'flex-end' }}>
+            <button className="csea-add-btn" onClick={() => api.setShowAddLink(true)}>+ Add Link</button>
+          </div>
+
+          {api.showAddLink && (
+            <div className="csea-modal-overlay" onClick={() => api.setShowAddLink(false)}>
+              <form
+                className="csea-modal"
+                onClick={e => e.stopPropagation()}
+                onSubmit={async (e) => {
+                  e.preventDefault()
+                  if (!api.linkTitle.trim() || !api.linkUrl.trim()) return
+                  const url = api.linkUrl.trim().startsWith('http') ? api.linkUrl.trim() : 'https://' + api.linkUrl.trim()
+                  await api.addLink(api.linkTitle.trim(), url)
+                  api.setLinkTitle('')
+                  api.setLinkUrl('')
+                  api.setShowAddLink(false)
+                }}
+              >
+                <input
+                  className="csea-input"
+                  placeholder="Label *"
+                  value={api.linkTitle}
+                  onChange={e => api.setLinkTitle(e.target.value)}
+                  autoFocus
+                />
+                <input
+                  className="csea-input"
+                  placeholder="URL *"
+                  value={api.linkUrl}
+                  onChange={e => api.setLinkUrl(e.target.value)}
+                />
+                <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
+                  <button type="button" className="csea-cancel" onClick={() => api.setShowAddLink(false)}>Cancel</button>
+                  <button type="submit" className="csea-save">Add</button>
+                </div>
+              </form>
             </div>
-          </form>
+          )}
+
           <div className="csea-issue-list csea-interactions-grid">
             {api.quickLinks.length === 0 && <p className="csea-empty">No links yet</p>}
             {api.quickLinks.map(l => (
