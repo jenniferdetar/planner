@@ -355,11 +355,11 @@
 
 /* ── Issue list ────────────────────────────────────────────────────────── */
 .csea-issue-list {
-  padding: 14px 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: #f5f7fa;
+  gap: 18px;
+  background: #e9edf3;
 }
 
 .csea-interactions-grid {
@@ -379,26 +379,36 @@
 
 .issue-card {
   background: #fff;
-  border: 1px solid var(--csea-light-gray);
-  border-left: 4px solid var(--csea-blue);
-  border-radius: 10px;
+  border-left: 6px solid var(--csea-blue);
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(30,48,112,0.08);
-  transition: box-shadow 0.15s, transform 0.15s;
+  box-shadow: 0 2px 6px rgba(30,48,112,0.10), 0 8px 20px rgba(30,48,112,0.06);
+  transition: box-shadow 0.18s, transform 0.18s;
 }
 
 .issue-card:nth-child(even) { border-left-color: var(--csea-accent); }
-.issue-card:hover { box-shadow: 0 4px 14px rgba(30,48,112,0.14); transform: translateY(-1px); }
+.issue-card:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
 .issue-card.resolved { opacity: 0.55; }
+.issue-card.expanded { grid-column: 1 / -1; }
 
 .issue-header {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px;
+  cursor: pointer;
+}
+
+.issue-header-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.issue-header-bottom {
+  display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 16px;
-  height: 52px;
-  overflow: hidden;
-  cursor: pointer;
 }
 
 .issue-type-badge {
@@ -411,11 +421,9 @@
 }
 
 .issue-member {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--csea-blue);
-  flex: 1;
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -434,12 +442,13 @@
   padding: 2px 7px;
   border-radius: 12px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
-.issue-chevron { font-size: 11px; color: var(--csea-border); flex-shrink: 0; }
+.issue-chevron { font-size: 11px; color: var(--csea-border); flex-shrink: 0; margin-left: auto; }
 
 .issue-body {
-  padding: 0 12px 10px;
+  padding: 0 20px 16px;
   border-top: 1px solid var(--csea-light-gray);
   display: flex;
   flex-direction: column;
