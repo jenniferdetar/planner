@@ -14,13 +14,13 @@ export async function fetchYahooCseaEmails() {
 
 // Try webform parse first; fall back to a generic interaction from subject/body.
 export function parseYahooEmailToInteraction(msg) {
+  if (isSkippedSender(msg.from)) return null
+
   // Attempt structured webform parse
   const parsed = parseWebformText(msg.text || '')
   if (parsed.name) {
     return webformToInteraction(parsed, 'yahoo_message_id', msg.id)
   }
-
-  if (isSkippedSender(msg.from)) return null
 
   // Generic fallback: use sender name (or address) as member_name
   const memberName = msg.fromName || msg.from || 'Unknown'
