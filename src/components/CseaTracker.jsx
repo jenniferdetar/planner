@@ -508,14 +508,19 @@ function RifIntakePanel() {
 
 function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
   const [collapsed, setCollapsed] = useState(true)
+  const latest = [...items].sort((a, b) => (b.date_spoke || '').localeCompare(a.date_spoke || ''))[0]
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
-      <div className="interaction-group-header">
+      <div className="interaction-group-header interaction-group-header--stacked" onClick={() => setCollapsed(c => !c)}>
+        <div className="issue-header-top">
+          {latest?.category && <span className="interaction-cat-badge">{latest.category}</span>}
+          {latest?.date_spoke && <span className="interaction-date-badge">{new Date(latest.date_spoke + 'T12:00:00').toLocaleDateString()}</span>}
+        </div>
         <span className="interaction-group-name">{member}</span>
-        <span className="interaction-group-count">{items.length}</span>
-        <button className="interaction-group-toggle" onClick={() => setCollapsed(c => !c)}>
-          {collapsed ? '▾' : '▴'}
-        </button>
+        <div className="issue-header-bottom">
+          <span className="interaction-group-count">{items.length}</span>
+          <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
+        </div>
       </div>
       {!collapsed && (
         <div className="interaction-group-items">
@@ -532,14 +537,15 @@ function CseaNoteGroup({ note: n, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
-      <div className="interaction-group-header">
+      <div className="interaction-group-header interaction-group-header--stacked" onClick={() => setCollapsed(c => !c)}>
+        <div className="issue-header-top">
+          {n.source && <span className="interaction-cat-badge">{n.source}</span>}
+          {n.created_at && <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>}
+        </div>
         <span className="interaction-group-name">{n.topic || 'Topic'}</span>
-        {n.created_at && (
-          <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
-        )}
-        <button className="interaction-group-toggle" onClick={() => setCollapsed(c => !c)}>
-          {collapsed ? '▾' : '▴'}
-        </button>
+        <div className="issue-header-bottom">
+          <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
+        </div>
       </div>
       {!collapsed && (
         <div className="interaction-group-items">
