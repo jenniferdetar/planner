@@ -18,7 +18,7 @@ import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
 import { useFamilyTree } from './hooks/useFamilyTree'
-import DashboardView from './components/DashboardView'
+import LeatherDayView from './components/LeatherDayView'
 import LoginScreen from './components/LoginScreen'
 import './App.css'
 
@@ -226,7 +226,9 @@ export default function App() {
   if (!session) return <LoginScreen />
 
   return (
-      <DashboardView
+      <LeatherDayView
+        view={view}
+        onViewChange={setView}
         userId={userId}
         providerToken={providerToken}
         selectedDate={selectedDate}
@@ -242,6 +244,10 @@ export default function App() {
         onAddMasterTask={addMasterTask}
         onDeleteMasterTask={deleteMasterTask}
         onUpdateMasterTask={updateMasterTask}
+        sections={sections}
+        onUpdateSection={updateSection}
+        noteContent={noteContent}
+        onNoteChange={onNoteChange}
         cseaIssues={cseaIssues}
         onAddCseaIssue={addCseaIssue}
         onUpdateCseaStatus={updateCseaStatus}

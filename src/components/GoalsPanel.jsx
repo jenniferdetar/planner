@@ -60,7 +60,12 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
                   </div>
                   <div className="goal-card-body">
                     {goals.map(g => (
-                      <div key={g.id} className="goal-item">
+                      <div key={g.id} className={`goal-item${g.completed ? ' goal-item-completed' : ''}`}>
+                        <button
+                          className={`goal-check${g.completed ? ' checked' : ''}`}
+                          title={g.completed ? 'Mark incomplete' : 'Mark complete'}
+                          onClick={() => updateGoal(g.id, { completed: !g.completed })}
+                        />
                         <div className="goal-item-main">
                           <span className="goal-text">{g.goal_text}</span>
                           {g.role_id && (

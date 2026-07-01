@@ -763,7 +763,7 @@ a.lp-task-title:hover {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 48px;
+  width: 68px;
   overflow-y: auto;
   overflow-x: hidden;
   gap: 0;
@@ -774,10 +774,11 @@ a.lp-task-title:hover {
 
 .right-tab {
   flex-shrink: 0;
-  min-height: 64px;
+  min-height: 88px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 3px;
   cursor: pointer;
   background: var(--tab-color);
   border: none;
@@ -790,9 +791,9 @@ a.lp-task-title:hover {
 .right-tab span {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: rgba(255,255,255,0.9);
   white-space: nowrap;

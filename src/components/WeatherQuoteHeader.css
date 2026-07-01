@@ -1,0 +1,61 @@
+.wqh-banner {
+  background: linear-gradient(135deg, #2a4d7a, #1e3070);
+  color: #f0f4fa;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+}
+
+.wqh-quote {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  opacity: 0.92;
+}
+
+.wqh-quote-author {
+  font-style: normal;
+  font-weight: 600;
+  margin-left: 6px;
+  opacity: 0.75;
+}
+
+.wqh-weather-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wqh-weather-icon {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.wqh-weather-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.wqh-weather-location {
+  font-family: 'Georgia', serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.wqh-weather-condition {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.wqh-weather-temps {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font-size: 11px;
+  opacity: 0.9;
+}
