@@ -612,24 +612,37 @@
   border-bottom: 2px solid var(--csea-blue);
 }
 
+/* Matches .issue-header's stacked layout (top row / name / bottom row) so
+   Interaction and Topic tiles are the same height and width as Issue tiles. */
+.interaction-group-header--stacked {
+  height: auto;
+  min-height: 92px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 16px 20px;
+  cursor: pointer;
+}
+
 .interaction-group-name {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--csea-blue);
   flex: 1;
   min-width: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
   overflow: hidden;
-  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .interaction-group-count {
   font-size: 11px; font-weight: 700;
   background: var(--csea-yellow); color: var(--csea-blue);
   padding: 1px 7px; border-radius: 2px;
+  flex-shrink: 0;
 }
-.interaction-group-toggle { font-size: 13px; color: var(--csea-link); background: none; border: none; cursor: pointer; }
+.interaction-group-toggle { font-size: 13px; color: var(--csea-link); background: none; border: none; cursor: pointer; margin-left: auto; flex-shrink: 0; }
 .interaction-group-toggle:hover { color: var(--csea-blue); }
 
 .interaction-group-items .interaction-card {
