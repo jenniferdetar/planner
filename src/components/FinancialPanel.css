@@ -65,10 +65,12 @@
 
 .fin-tabs {
   display: flex;
+  height: 34px;
+  box-sizing: border-box;
   background: #1e3070;
   border-bottom: 2px solid #0d1a40;
   flex-shrink: 0;
-  padding: 6px 16px 0;
+  padding: 0 16px;
   gap: 0;
   overflow-x: auto;
   scrollbar-width: none;
@@ -78,7 +80,11 @@
 
 .fin-tab {
   flex: 1;
-  padding: 5px 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -95,6 +101,24 @@
 
 .fin-tab:hover { color: #fff; }
 .fin-tab.active { color: #fff; border-bottom-color: #ffb81c; }
+
+.fin-page-header {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  background: #1e3070;
+  border-bottom: 1px solid #0d1a40;
+  flex-shrink: 0;
+}
+.fin-page-header span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
 
 
 .fin-content {

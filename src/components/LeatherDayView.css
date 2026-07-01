@@ -55,7 +55,15 @@
   border-right: 1px solid #e0d8cc;
   /* equal to right page */
   display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.lp-body-row {
+  display: flex;
   flex-direction: row;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -838,18 +846,20 @@ a.lp-task-title:hover {
 }
 
 .rp-header {
-  padding: 14px 18px 10px;
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 18px;
   border-bottom: 2px solid rgba(191,191,191,0.2);
   flex-shrink: 0;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
   background: #faf8f2;
 }
 
 .rp-title {
   font-family: 'Georgia', serif;
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 400;
   color: #2a1f10;
   letter-spacing: 0.3px;
@@ -1160,7 +1170,7 @@ a.lp-task-title:hover {
 
 @media (max-width: 680px) {
   .leather-binder { flex-direction: column; }
-  .left-page { flex-direction: column; }
+  .lp-body-row { flex-direction: column; }
   .lp-col-right { flex: none; }
   .page-divider {
     width: 100%; height: 6px;

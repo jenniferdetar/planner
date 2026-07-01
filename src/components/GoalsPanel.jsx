@@ -124,11 +124,11 @@ function GoalsCategoryGrid({ api, categories, half }) {
 export function GoalsPageLeft({ api }) {
   return (
     <div className="goals-panel">
+      <div className="goals-section-header">
+        <span className="goals-trophy">🏆</span>
+        <h3 className="goals-title">My Personal Goals</h3>
+      </div>
       <div className="goals-section">
-        <div className="goals-section-header">
-          <span className="goals-trophy">🏆</span>
-          <h3 className="goals-title">My Personal Goals</h3>
-        </div>
         <GoalsCategoryGrid api={api} categories={api.left} half />
       </div>
     </div>
@@ -139,6 +139,10 @@ export function GoalsPageLeft({ api }) {
 export function GoalsPageRight({ api }) {
   return (
     <div className="goals-panel">
+      <div className="goals-section-header">
+        <span className="goals-trophy">🏆</span>
+        <h3 className="goals-title">My Personal Goals</h3>
+      </div>
       <div className="goals-section">
         <GoalsCategoryGrid api={api} categories={api.right} half />
       </div>

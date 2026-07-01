@@ -59,6 +59,8 @@ export default function ValuesPanel({ userId }) {
         )}
       </div>
 
+      <div className="values-list-content">
+
       {adding && (
         <form className="values-add-form" onSubmit={handleAdd}>
           <input
@@ -92,6 +94,8 @@ export default function ValuesPanel({ userId }) {
           ))}
         </div>
       )}
+
+      </div>
 
       {current && (
         <div className="values-modal-backdrop" onClick={() => setOpenId(null)}>

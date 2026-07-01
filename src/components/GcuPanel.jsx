@@ -122,20 +122,18 @@ function CourseGroup({ label, courses, api }) {
 export function GcuPageLeft({ api, onPushToAsana, pushing }) {
   return (
     <div className="gcu-panel">
-      <div className="gcu-header">
-        <div className="gcu-title-row">
-          <div>
-            <h2 className="gcu-title">MPA – Government &amp; Policy</h2>
-            <p className="gcu-subtitle">Grand Canyon University · College of Humanities and Social Sciences · <a href="https://newportal.gcu.edu/#!/dashboard" target="_blank" rel="noreferrer" style={{ color: '#ffb81c' }}>Student Portal</a></p>
-          </div>
-          <button
-            className={`gcu-asana-btn ${pushing ? 'pushing' : ''}`}
-            onClick={onPushToAsana}
-            disabled={pushing}
-          >
-            {pushing ? '⏳ Pushing…' : '↑ Push to Asana'}
-          </button>
-        </div>
+      <div className="gcu-page-header">
+        <span className="gcu-page-title">MPA – Government &amp; Policy</span>
+        <button
+          className={`gcu-asana-btn ${pushing ? 'pushing' : ''}`}
+          onClick={onPushToAsana}
+          disabled={pushing}
+        >
+          {pushing ? '⏳ Pushing…' : '↑ Push to Asana'}
+        </button>
+      </div>
+      <div className="gcu-progress-section">
+        <p className="gcu-subtitle">Grand Canyon University · College of Humanities and Social Sciences · <a href="https://newportal.gcu.edu/#!/dashboard" target="_blank" rel="noreferrer" style={{ color: '#ffb81c' }}>Student Portal</a></p>
         <div className="gcu-progress-bar-wrap">
           <div className="gcu-progress-bar" style={{ width: `${(api.done / api.total) * 100}%` }} />
         </div>
@@ -156,6 +154,9 @@ export function GcuPageLeft({ api, onPushToAsana, pushing }) {
 export function GcuPageRight({ api }) {
   return (
     <div className="gcu-panel">
+      <div className="gcu-page-header">
+        <span className="gcu-page-title">Core &amp; Emphasis Courses</span>
+      </div>
       <div className="gcu-body">
         <CourseGroup label="Core Courses" courses={api.core} api={api} />
         <CourseGroup label="Government &amp; Policy Emphasis" courses={api.emphasis} api={api} />

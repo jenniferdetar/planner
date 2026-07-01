@@ -374,10 +374,15 @@ export function HoaPageLeft({ api }) {
 // Right binder page: the rest of the unit groups.
 export function HoaPageRight({ api }) {
   if (api.tab === 'Financials') {
-    return <div className="hoa-panel" />
+    return (
+      <div className="hoa-panel">
+        <div className="hoa-header"><span className="hoa-header-title">Park Reseda HOA</span></div>
+      </div>
+    )
   }
   return (
     <div className="hoa-panel">
+      <div className="hoa-header"><span className="hoa-header-title">{api.tab}</span></div>
       <HoaGroupList groups={api.rightGroups} api={api} />
     </div>
   )

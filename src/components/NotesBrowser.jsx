@@ -107,19 +107,24 @@ export function NotesFolderTree({ api }) {
 }
 
 export function NotesContent({ api }) {
+  const folderName = api.selectedFolder ? api.folders.find(f => f.id === api.selectedFolder)?.name : null
+
   return (
     <div className="nb-content-col nb-content-col-standalone">
       {!api.selectedFolder && (
-        <div className="nb-placeholder">
-          <span className="nb-placeholder-icon">📂</span>
-          <p>Select a folder.</p>
-        </div>
+        <>
+          <div className="nb-content-header"><span>Notes</span></div>
+          <div className="nb-placeholder">
+            <span className="nb-placeholder-icon">📂</span>
+            <p>Select a folder.</p>
+          </div>
+        </>
       )}
 
       {api.selectedFolder && !api.currentNote && (
         <>
           <div className="nb-content-header">
-            <span>{api.folders.find(f => f.id === api.selectedFolder)?.name}</span>
+            <span>{folderName}</span>
             <button className="nb-new-note-btn" onClick={api.handleAddNote}>+ New Note</button>
           </div>
           <div className="nb-note-list">
@@ -136,24 +141,26 @@ export function NotesContent({ api }) {
       )}
 
       {api.currentNote && (
-        <div className="nb-editor">
-          <div className="nb-editor-header">
+        <>
+          <div className="nb-content-header">
             <button className="nb-back-btn" onClick={() => api.setSelectedNote(null)}>‹ Back</button>
             <button className="nb-note-del" onClick={() => { api.deleteNote(api.currentNote.id); api.setSelectedNote(null) }}>Delete</button>
           </div>
-          <input
-            className="nb-editor-title"
-            value={api.currentNote.title}
-            onChange={e => api.handleBodyChange('title', e.target.value)}
-            placeholder="Untitled"
-          />
-          <textarea
-            className="nb-editor-body"
-            value={api.currentNote.body}
-            onChange={e => api.handleBodyChange('body', e.target.value)}
-            placeholder="Start writing…"
-          />
-        </div>
+          <div className="nb-editor">
+            <input
+              className="nb-editor-title"
+              value={api.currentNote.title}
+              onChange={e => api.handleBodyChange('title', e.target.value)}
+              placeholder="Untitled"
+            />
+            <textarea
+              className="nb-editor-body"
+              value={api.currentNote.body}
+              onChange={e => api.handleBodyChange('body', e.target.value)}
+              placeholder="Start writing…"
+            />
+          </div>
+        </>
       )}
     </div>
   )

@@ -86,6 +86,7 @@ export function FinancialPageLeft({ api }) {
 export function FinancialPageRight({ api }) {
   return (
     <div className="fin-panel">
+      <div className="fin-page-header"><span>Zero-Based Budget</span></div>
       <ZeroBasedBudget userId={api.userId} bills={api.bills} />
     </div>
   )

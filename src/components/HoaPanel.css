@@ -19,16 +19,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 16px;
   border-bottom: 1px solid #d9e8f0;
   flex-shrink: 0;
   background: #1e3070;
 }
 .hoa-header-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #fff;
   letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 .hoa-add-btn {
   font-size: 11px;
@@ -113,17 +116,23 @@
 /* Category tabs */
 .hoa-tabs {
   display: flex;
+  height: 34px;
+  box-sizing: border-box;
   gap: 0;
-  padding: 6px 10px 0;
+  padding: 0 10px;
   background: #1e3070;
   border-bottom: 2px solid #0d1a40;
   flex-shrink: 0;
   overflow-x: auto;
 }
 .hoa-tab {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 11px;
   font-weight: 600;
-  padding: 5px 10px;
+  padding: 0 10px;
   border: none;
   background: transparent;
   color: rgba(255,255,255,0.55);
