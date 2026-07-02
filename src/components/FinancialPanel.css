@@ -1132,6 +1132,11 @@
   outline: none;
 }
 
+.budget-input.text {
+  width: 140px;
+  text-align: left;
+}
+
 .total-val { color: #1e3070; font-size: 12px; }
 
 .budget-net-row td {
