@@ -1092,15 +1092,13 @@ function summarizeNote(text) {
 function IcaapNoteGroup({ note: n, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
-    <div className="interaction-group">
-      <div className="interaction-group-header">
-        <span className="interaction-group-name">{n.source || summarizeNote(n.note)}</span>
+    <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
+      <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
+        <span className="interaction-group-name">{summarizeNote(n.note)}</span>
         {n.created_at && (
           <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
         )}
-        <button className="interaction-group-toggle" onClick={() => setCollapsed(c => !c)}>
-          {collapsed ? '▾' : '▴'}
-        </button>
+        <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
       </div>
       {!collapsed && (
         <div className="interaction-group-items">
@@ -1108,6 +1106,7 @@ function IcaapNoteGroup({ note: n, onDelete }) {
             <div className="interaction-header">
               <button className="interaction-delete-btn" title="Delete" onClick={() => onDelete?.(n.id)}>✕</button>
             </div>
+            {n.source && <p className="interaction-who-text">Source: {n.source}</p>}
             <p className="interaction-disc-text">{n.note}</p>
           </div>
         </div>
