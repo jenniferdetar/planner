@@ -152,7 +152,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 6px 12px;
-  background: #002266;
+  background: #1e3070;
   border-bottom: 1px solid #0d1a40;
   flex-shrink: 0;
 }
@@ -1103,9 +1103,9 @@
   border-bottom: 2px solid #d9e8f0;
 }
 
-.budget-row:nth-child(odd) { background: #fff; }
-.budget-row:nth-child(even) { background: rgba(30,48,112,0.03); }
-.budget-row:hover td { background: rgba(30,48,112,0.06); }
+.budget-row:nth-child(odd) { background: rgba(30,48,112,0.08); }
+.budget-row:nth-child(even) { background: #fff; }
+.budget-row:hover td { background: rgba(30,48,112,0.14); }
 
 .budget-td {
   padding: 4px 10px;

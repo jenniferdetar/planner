@@ -181,6 +181,9 @@ function BillsTab({ bills, onAdd, onToggle, onDelete }) {
 
   return (
     <div className="fin-content">
+      <div className="budget-header">
+        <h2 className="budget-title">Bills</h2>
+      </div>
       <div className="fin-toolbar">
         <span className="fin-toolbar-label">{unpaid.length} bills remaining</span>
         <button className="fin-add-btn" onClick={() => setShowForm(true)}>+ Add Bill</button>
@@ -304,6 +307,9 @@ export function GoalsTab({ goals, onUpdate }) {
 
   return (
     <div className="fin-content">
+      <div className="budget-header">
+        <h2 className="budget-title">Emergency Fund Goals</h2>
+      </div>
       <div className="fin-goals-grid">
         {sortedRows.map((row, idx) => {
           const color = PALETTE[idx % PALETTE.length]
@@ -541,8 +547,10 @@ function CoinsTab({ userId }) {
 
   return (
     <div className="fin-content">
+      <div className="budget-header">
+        <h2 className="budget-title">Cash on Hand</h2>
+      </div>
       <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Cash on Hand</span>
         <span className="coins-total-badge">{fmt(total)}</span>
         {saving && <span style={{ fontSize: 11, color: '#999' }}>Saving…</span>}
         <button className="fin-cancel" onClick={reset}>Reset</button>
@@ -1331,8 +1339,10 @@ function SinkingFundsTab({ userId }) {
 
   return (
     <div className="fin-content">
+      <div className="budget-header">
+        <h2 className="budget-title">Sinking Funds</h2>
+      </div>
       <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Sinking Funds</span>
         <span className="coins-total-badge">{fmt(total)}</span>
         <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Fund</button>
       </div>
@@ -1472,8 +1482,11 @@ function LaundryTab({ userId }) {
 
   return (
     <div className="fin-content laundry-content">
+      <div className="budget-header">
+        <h2 className="budget-title">Laundry Tracker</h2>
+      </div>
       <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Laundry Tracker</span>
+        <span className="fin-toolbar-label">Log a wash or dry cycle</span>
         <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Log Load</button>
       </div>
 
@@ -1583,8 +1596,11 @@ function NotesTab({ userId }) {
 
   return (
     <div className="fin-content">
+      <div className="budget-header">
+        <h2 className="budget-title">Financial Notes</h2>
+      </div>
       <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Financial Notes</span>
+        <span className="fin-toolbar-label">Jot down notes, reminders, account details</span>
         <span className="fin-notes-saved">{saved ? 'Saved' : 'Saves automatically'}</span>
       </div>
       <textarea
