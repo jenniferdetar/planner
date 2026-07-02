@@ -13,7 +13,7 @@ function fmt(n) {
 const FULL_AMOUNT_BILLS = ['Mortgage', 'HOA', 'HELOC (California Credit Union)']
 const PALETTE = ['#3164a0', '#c77b3a', '#4a7a6a', '#9b59b6', '#c0392b', '#1abc9c', '#e07a5f', '#2e7d32']
 
-export function useFinancialPage({
+function useFinancialPage({
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
@@ -232,7 +232,7 @@ function BillCard({ bill, index, onToggle, onDelete }) {
   )
 }
 
-export function GoalsTab({ goals, onUpdate }) {
+function GoalsTab({ goals, onUpdate }) {
   const [editing, setEditing] = useState(null)
   const [editVal, setEditVal] = useState('')
 
