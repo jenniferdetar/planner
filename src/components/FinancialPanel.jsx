@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react'
 import { supabase } from '../lib/supabase'
-import { useIcaapNote } from '../hooks/useIcaapNote'
 import './FinancialPanel.css'
+import './CseaTracker.css'
 import ZeroBasedBudget from './ZeroBasedBudget'
 
 const EXPENSE_CATEGORIES = ['Housing', 'Food', 'Transport', 'Utilities', 'Healthcare', 'Entertainment', 'Shopping', 'Savings', 'Other']
@@ -1671,24 +1671,117 @@ function LaundryTab({ userId }) {
 
 // ─── Notes ──────────────────────────────────────────────────────────────────
 
+function FinNoteGroup({ note: n, onDelete }) {
+  const [collapsed, setCollapsed] = useState(true)
+  const snippet = n.note.length > 60 ? n.note.slice(0, 60).trim() + '…' : n.note
+  return (
+    <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
+      <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
+        <span className="interaction-group-name">{snippet}</span>
+        {n.created_at && (
+          <span className="interaction-date-badge">
+            {new Date(n.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+          </span>
+        )}
+        <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
+      </div>
+      {!collapsed && (
+        <div className="interaction-group-items">
+          <div className="interaction-card">
+            <div className="interaction-header">
+              {n.topic && <span className="interaction-cat-badge">{n.topic}</span>}
+              <button className="interaction-delete-btn" title="Delete" onClick={() => onDelete?.(n.id)}>✕</button>
+            </div>
+            {n.source && <p className="interaction-who-text">Source: {n.source}</p>}
+            <p className="interaction-disc-text">{n.note}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function NotesTab({ userId }) {
-  const { content, handleChange, saved } = useIcaapNote(userId, 'financial')
+  const [notes, setNotes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [showAdd, setShowAdd] = useState(false)
+  const [noteTopic, setNoteTopic] = useState('')
+  const [noteSource, setNoteSource] = useState('')
+  const [noteText, setNoteText] = useState('')
+
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('financial_notes').select('*').eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => { if (data) setNotes(data); setLoading(false) })
+  }, [userId])
+
+  async function handleAdd(e) {
+    e.preventDefault()
+    if (!noteText.trim()) return
+    const payload = { user_id: userId, note: noteText.trim(), topic: noteTopic.trim() || null, source: noteSource.trim() || null }
+    const { data } = await supabase.from('financial_notes').insert(payload).select().single()
+    if (data) setNotes(n => [data, ...n])
+    setNoteTopic('')
+    setNoteSource('')
+    setNoteText('')
+    setShowAdd(false)
+  }
+
+  async function deleteNote(id) {
+    await supabase.from('financial_notes').delete().eq('id', id)
+    setNotes(n => n.filter(x => x.id !== id))
+  }
 
   return (
     <div className="fin-content">
       <div className="budget-header">
         <h2 className="budget-title">Financial Notes</h2>
       </div>
-      <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Jot down notes, reminders, account details</span>
-        <span className="fin-notes-saved">{saved ? 'Saved' : 'Saves automatically'}</span>
+      <div className="csea-panel">
+        <div className="csea-toolbar">
+          <span className="fin-toolbar-label">Dated notes, reminders, account details</span>
+          <button className="csea-add-btn" onClick={() => setShowAdd(true)}>+ Add Note</button>
+        </div>
+
+        {showAdd && (
+          <form className="csea-form" onSubmit={handleAdd}>
+            <div className="csea-notes-form-row">
+              <input
+                className="csea-input"
+                placeholder="Topic (optional)"
+                value={noteTopic}
+                onChange={e => setNoteTopic(e.target.value)}
+                autoFocus
+              />
+              <input
+                className="csea-input"
+                placeholder="Source (optional)"
+                value={noteSource}
+                onChange={e => setNoteSource(e.target.value)}
+              />
+            </div>
+            <textarea
+              className="csea-textarea"
+              placeholder="Details *"
+              rows={2}
+              value={noteText}
+              onChange={e => setNoteText(e.target.value)}
+            />
+            <div className="csea-form-actions" style={{ justifyContent: 'flex-end' }}>
+              <button type="button" className="csea-cancel" onClick={() => setShowAdd(false)}>Cancel</button>
+              <button type="submit" className="csea-save">Add</button>
+            </div>
+          </form>
+        )}
+
+        <div className="csea-issue-list csea-interactions-grid">
+          {!loading && notes.length === 0 && <p className="csea-empty">No notes yet</p>}
+          {notes.map(n => (
+            <FinNoteGroup key={n.id} note={n} onDelete={deleteNote} />
+          ))}
+        </div>
       </div>
-      <textarea
-        className="fin-notes-area"
-        placeholder="Jot down financial notes, reminders, account details…"
-        value={content}
-        onChange={e => handleChange(e.target.value)}
-      />
     </div>
   )
 }
