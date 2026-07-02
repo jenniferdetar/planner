@@ -6,6 +6,13 @@ import ZeroBasedBudget from './ZeroBasedBudget'
 
 const EXPENSE_CATEGORIES = ['Housing', 'Food', 'Transport', 'Utilities', 'Healthcare', 'Entertainment', 'Shopping', 'Savings', 'Other']
 
+const TAB_LABELS = {
+  coins: 'Cash on Hand',
+  debt: 'Debt Snowball',
+  networth: 'Net Worth',
+  savings: 'Sinking Funds',
+}
+
 function fmt(n) {
   return Number(n).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 })
 }
@@ -62,9 +69,9 @@ function FinancialPanelInner({ api }) {
       </div>
 
       <div className="fin-tabs">
-        {['bills', 'goals', 'coins', 'budget', 'laundry', 'notes'].map(t => (
+        {['bills', 'goals', 'coins', 'budget', 'debt', 'networth', 'savings', 'laundry', 'notes'].map(t => (
           <button key={t} className={`fin-tab ${api.tab === t ? 'active' : ''}`} onClick={() => api.setTab(t)}>
-            {t === 'coins' ? 'Cash on Hand' : t.charAt(0).toUpperCase() + t.slice(1)}
+            {TAB_LABELS[t] || t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
         ))}
       </div>
@@ -73,6 +80,9 @@ function FinancialPanelInner({ api }) {
       {api.tab === 'goals' && <GoalsTab goals={api.goals} onUpdate={api.onUpdateGoalAmount} />}
       {api.tab === 'coins' && <CoinsTab userId={api.userId} />}
       {api.tab === 'budget' && <ZeroBasedBudget userId={api.userId} bills={api.bills} />}
+      {api.tab === 'debt' && <DebtSnowballTab userId={api.userId} />}
+      {api.tab === 'networth' && <NetWorthTab userId={api.userId} />}
+      {api.tab === 'savings' && <SinkingFundsTab userId={api.userId} />}
       {api.tab === 'laundry' && <LaundryTab userId={api.userId} />}
       {api.tab === 'notes' && <NotesTab userId={api.userId} />}
     </div>
@@ -815,6 +825,429 @@ function BudgetTab({ bills, userId }) {
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  )
+}
+
+// ─── Debt Snowball ──────────────────────────────────────────────────────────
+
+function DebtSnowballTab({ userId }) {
+  const [debts, setDebts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [form, setForm] = useState({ name: '', total_payoff: '', minimum_payment: '' })
+  const [editCell, setEditCell] = useState(null) // { id, field }
+  const [editVal, setEditVal] = useState('')
+
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('debts').select('*').eq('user_id', userId)
+      .then(({ data }) => { if (data) setDebts(data); setLoading(false) })
+  }, [userId])
+
+  async function handleAdd(e) {
+    e.preventDefault()
+    if (!form.name.trim()) return
+    const payload = {
+      user_id: userId,
+      name: form.name.trim(),
+      total_payoff: parseFloat(form.total_payoff) || 0,
+      minimum_payment: parseFloat(form.minimum_payment) || 0,
+    }
+    const { data } = await supabase.from('debts').insert(payload).select().single()
+    if (data) setDebts(d => [...d, data])
+    setForm({ name: '', total_payoff: '', minimum_payment: '' })
+    setShowForm(false)
+  }
+
+  async function saveField(debt, field, value) {
+    const val = parseFloat(value) || 0
+    await supabase.from('debts').update({ [field]: val }).eq('id', debt.id)
+    setDebts(d => d.map(x => x.id === debt.id ? { ...x, [field]: val } : x))
+    setEditCell(null)
+  }
+
+  async function deleteDebt(id) {
+    await supabase.from('debts').delete().eq('id', id)
+    setDebts(d => d.filter(x => x.id !== id))
+  }
+
+  // Smallest balance first, per the snowball method
+  const sorted = [...debts].sort((a, b) => Number(a.total_payoff) - Number(b.total_payoff))
+
+  let running = 0
+  const rows = sorted.map(d => {
+    running += Number(d.minimum_payment)
+    return { ...d, newPayment: running }
+  })
+
+  const totalPayoff = debts.reduce((s, d) => s + Number(d.total_payoff), 0)
+  const totalMinimum = debts.reduce((s, d) => s + Number(d.minimum_payment), 0)
+
+  return (
+    <div className="budget-wrap">
+      <div className="budget-header">
+        <h2 className="budget-title">Debt Snowball</h2>
+      </div>
+
+      <div className="budget-summary-bar">
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Total Debt</span>
+          <span className="budget-summary-val">{fmt(totalPayoff)}</span>
+        </div>
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Total Minimums</span>
+          <span className="budget-summary-val">{fmt(totalMinimum)}</span>
+        </div>
+      </div>
+
+      <div className="fin-toolbar">
+        <span className="fin-toolbar-label">Smallest balance first — snowball order</span>
+        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Debt</button>
+      </div>
+
+      {showForm && (
+        <form className="fin-form" onSubmit={handleAdd}>
+          <input className="fin-input" placeholder="Debt name (e.g. Visa, Student Loan) *" value={form.name}
+            onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required autoFocus />
+          <div className="fin-form-row">
+            <input className="fin-input amount" type="number" placeholder="Total payoff" step="0.01" min="0"
+              value={form.total_payoff} onChange={e => setForm(f => ({ ...f, total_payoff: e.target.value }))} />
+            <input className="fin-input amount" type="number" placeholder="Minimum payment" step="0.01" min="0"
+              value={form.minimum_payment} onChange={e => setForm(f => ({ ...f, minimum_payment: e.target.value }))} />
+          </div>
+          <div className="fin-form-actions">
+            <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
+            <button type="submit" className="fin-save">Save</button>
+          </div>
+        </form>
+      )}
+
+      <div className="budget-table-wrap">
+        {!loading && rows.length === 0 && <p className="fin-empty">No debts added yet.</p>}
+        {rows.length > 0 && (
+          <table className="budget-table">
+            <thead>
+              <tr>
+                <th className="budget-th cat">Debt</th>
+                <th className="budget-th">Total Payoff</th>
+                <th className="budget-th">Minimum</th>
+                <th className="budget-th">Snowball Payment</th>
+                <th className="budget-th del-col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map(row => (
+                <tr key={row.id} className="budget-row">
+                  <td className="budget-td cat">{row.name}</td>
+                  <td className="budget-td num">
+                    {editCell?.id === row.id && editCell.field === 'total_payoff' ? (
+                      <input className="budget-input" type="number" autoFocus value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={() => saveField(row, 'total_payoff', editVal)}
+                        onKeyDown={e => e.key === 'Enter' && saveField(row, 'total_payoff', editVal)}
+                        min="0" step="0.01" />
+                    ) : (
+                      <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.id, field: 'total_payoff' }); setEditVal(String(row.total_payoff)) }}>
+                        {fmt(row.total_payoff)}
+                      </span>
+                    )}
+                  </td>
+                  <td className="budget-td num">
+                    {editCell?.id === row.id && editCell.field === 'minimum_payment' ? (
+                      <input className="budget-input" type="number" autoFocus value={editVal}
+                        onChange={e => setEditVal(e.target.value)}
+                        onBlur={() => saveField(row, 'minimum_payment', editVal)}
+                        onKeyDown={e => e.key === 'Enter' && saveField(row, 'minimum_payment', editVal)}
+                        min="0" step="0.01" />
+                    ) : (
+                      <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.id, field: 'minimum_payment' }); setEditVal(String(row.minimum_payment)) }}>
+                        {fmt(row.minimum_payment)}
+                      </span>
+                    )}
+                  </td>
+                  <td className="budget-td num" style={{ fontWeight: 700, color: '#1e3070' }}>{fmt(row.newPayment)}</td>
+                  <td className="budget-td del-col">
+                    <button className="budget-del" onClick={() => deleteDebt(row.id)}>×</button>
+                  </td>
+                </tr>
+              ))}
+              <tr className="budget-net-row">
+                <td className="budget-td cat">TOTAL</td>
+                <td className="budget-td num net-val">{fmt(totalPayoff)}</td>
+                <td className="budget-td num net-val">{fmt(totalMinimum)}</td>
+                <td colSpan={2}></td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Net Worth ──────────────────────────────────────────────────────────────
+
+function NetWorthTab({ userId }) {
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [form, setForm] = useState({ item: '', value: '', debt: '' })
+  const [editCell, setEditCell] = useState(null)
+  const [editVal, setEditVal] = useState('')
+
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('net_worth_items').select('*').eq('user_id', userId).order('sort_order')
+      .then(({ data }) => { if (data) setItems(data); setLoading(false) })
+  }, [userId])
+
+  async function handleAdd(e) {
+    e.preventDefault()
+    if (!form.item.trim()) return
+    const payload = {
+      user_id: userId,
+      item: form.item.trim(),
+      value: parseFloat(form.value) || 0,
+      debt: parseFloat(form.debt) || 0,
+      sort_order: items.length,
+    }
+    const { data } = await supabase.from('net_worth_items').insert(payload).select().single()
+    if (data) setItems(i => [...i, data])
+    setForm({ item: '', value: '', debt: '' })
+    setShowForm(false)
+  }
+
+  async function saveField(row, field, value) {
+    const val = parseFloat(value) || 0
+    await supabase.from('net_worth_items').update({ [field]: val }).eq('id', row.id)
+    setItems(i => i.map(x => x.id === row.id ? { ...x, [field]: val } : x))
+    setEditCell(null)
+  }
+
+  async function deleteItem(id) {
+    await supabase.from('net_worth_items').delete().eq('id', id)
+    setItems(i => i.filter(x => x.id !== id))
+  }
+
+  const totalValue = items.reduce((s, r) => s + Number(r.value), 0)
+  const totalDebt = items.reduce((s, r) => s + Number(r.debt), 0)
+  const netWorth = totalValue - totalDebt
+
+  return (
+    <div className="budget-wrap">
+      <div className="budget-header">
+        <h2 className="budget-title">Net Worth</h2>
+      </div>
+
+      <div className="budget-summary-bar">
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Assets</span>
+          <span className="budget-summary-val">{fmt(totalValue)}</span>
+        </div>
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Debt</span>
+          <span className="budget-summary-val">{fmt(totalDebt)}</span>
+        </div>
+        <div className="budget-summary-item" style={{ background: netWorth >= 0 ? '#1a6b2a22' : '#e05c5c22' }}>
+          <span className="budget-summary-lbl">Net Worth</span>
+          <span className="budget-summary-val" style={{ color: netWorth >= 0 ? '#1a6b2a' : '#e05c5c' }}>{fmt(netWorth)}</span>
+        </div>
+      </div>
+
+      <div className="fin-toolbar">
+        <span className="fin-toolbar-label">Assets and what's owed against them</span>
+        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Item</button>
+      </div>
+
+      {showForm && (
+        <form className="fin-form" onSubmit={handleAdd}>
+          <input className="fin-input" placeholder="Item (e.g. Real Estate, Car, Checking Account) *" value={form.item}
+            onChange={e => setForm(f => ({ ...f, item: e.target.value }))} required autoFocus />
+          <div className="fin-form-row">
+            <input className="fin-input amount" type="number" placeholder="Value" step="0.01" min="0"
+              value={form.value} onChange={e => setForm(f => ({ ...f, value: e.target.value }))} />
+            <input className="fin-input amount" type="number" placeholder="Debt owed" step="0.01" min="0"
+              value={form.debt} onChange={e => setForm(f => ({ ...f, debt: e.target.value }))} />
+          </div>
+          <div className="fin-form-actions">
+            <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
+            <button type="submit" className="fin-save">Save</button>
+          </div>
+        </form>
+      )}
+
+      <div className="budget-table-wrap">
+        {!loading && items.length === 0 && <p className="fin-empty">No items added yet.</p>}
+        {items.length > 0 && (
+          <table className="budget-table">
+            <thead>
+              <tr>
+                <th className="budget-th cat">Item</th>
+                <th className="budget-th">Value</th>
+                <th className="budget-th">Debt</th>
+                <th className="budget-th">Equity</th>
+                <th className="budget-th del-col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map(row => {
+                const equity = Number(row.value) - Number(row.debt)
+                return (
+                  <tr key={row.id} className="budget-row">
+                    <td className="budget-td cat">{row.item}</td>
+                    <td className="budget-td num">
+                      {editCell?.id === row.id && editCell.field === 'value' ? (
+                        <input className="budget-input" type="number" autoFocus value={editVal}
+                          onChange={e => setEditVal(e.target.value)}
+                          onBlur={() => saveField(row, 'value', editVal)}
+                          onKeyDown={e => e.key === 'Enter' && saveField(row, 'value', editVal)}
+                          min="0" step="0.01" />
+                      ) : (
+                        <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.id, field: 'value' }); setEditVal(String(row.value)) }}>
+                          {fmt(row.value)}
+                        </span>
+                      )}
+                    </td>
+                    <td className="budget-td num">
+                      {editCell?.id === row.id && editCell.field === 'debt' ? (
+                        <input className="budget-input" type="number" autoFocus value={editVal}
+                          onChange={e => setEditVal(e.target.value)}
+                          onBlur={() => saveField(row, 'debt', editVal)}
+                          onKeyDown={e => e.key === 'Enter' && saveField(row, 'debt', editVal)}
+                          min="0" step="0.01" />
+                      ) : (
+                        <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.id, field: 'debt' }); setEditVal(String(row.debt)) }}>
+                          {fmt(row.debt)}
+                        </span>
+                      )}
+                    </td>
+                    <td className="budget-td num" style={{ fontWeight: 700, color: equity >= 0 ? '#1a6b2a' : '#e05c5c' }}>{fmt(equity)}</td>
+                    <td className="budget-td del-col">
+                      <button className="budget-del" onClick={() => deleteItem(row.id)}>×</button>
+                    </td>
+                  </tr>
+                )
+              })}
+              <tr className="budget-net-row">
+                <td className="budget-td cat">TOTAL</td>
+                <td className="budget-td num net-val">{fmt(totalValue)}</td>
+                <td className="budget-td num net-val">{fmt(totalDebt)}</td>
+                <td className="budget-td num net-val">{fmt(netWorth)}</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Sinking Funds ──────────────────────────────────────────────────────────
+
+const SUGGESTED_FUNDS = [
+  'Emergency Fund', 'Retirement Fund', 'College Fund', 'Car Replacement',
+  'Home Repairs', 'Homeowner\'s Insurance', 'Health Insurance', 'Vacation', 'Gifts',
+]
+
+function SinkingFundsTab({ userId }) {
+  const [funds, setFunds] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [newName, setNewName] = useState('')
+  const [editing, setEditing] = useState(null)
+  const [editVal, setEditVal] = useState('')
+
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('sinking_funds').select('*').eq('user_id', userId).order('sort_order')
+      .then(({ data }) => { if (data) setFunds(data); setLoading(false) })
+  }, [userId])
+
+  async function addFund(name) {
+    if (!name.trim() || funds.some(f => f.name.toLowerCase() === name.trim().toLowerCase())) return
+    const payload = { user_id: userId, name: name.trim(), balance: 0, sort_order: funds.length }
+    const { data } = await supabase.from('sinking_funds').insert(payload).select().single()
+    if (data) setFunds(f => [...f, data])
+    setNewName('')
+    setShowForm(false)
+  }
+
+  async function saveBalance(fund, value) {
+    const val = parseFloat(value) || 0
+    await supabase.from('sinking_funds').update({ balance: val, updated_at: new Date().toISOString() }).eq('id', fund.id)
+    setFunds(f => f.map(x => x.id === fund.id ? { ...x, balance: val } : x))
+    setEditing(null)
+  }
+
+  async function deleteFund(id) {
+    await supabase.from('sinking_funds').delete().eq('id', id)
+    setFunds(f => f.filter(x => x.id !== id))
+  }
+
+  const total = funds.reduce((s, f) => s + Number(f.balance), 0)
+  const available = SUGGESTED_FUNDS.filter(n => !funds.some(f => f.name.toLowerCase() === n.toLowerCase()))
+
+  return (
+    <div className="fin-content">
+      <div className="fin-toolbar">
+        <span className="fin-toolbar-label">Sinking Funds</span>
+        <span className="coins-total-badge">{fmt(total)}</span>
+        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Fund</button>
+      </div>
+
+      {showForm && (
+        <form className="fin-form" onSubmit={e => { e.preventDefault(); addFund(newName) }}>
+          <input className="fin-input" placeholder="Fund name" value={newName}
+            onChange={e => setNewName(e.target.value)} autoFocus />
+          {available.length > 0 && (
+            <div className="fin-form-row" style={{ flexWrap: 'wrap', gap: 6 }}>
+              {available.map(n => (
+                <button key={n} type="button" className="fin-edit-btn" onClick={() => addFund(n)}>{n}</button>
+              ))}
+            </div>
+          )}
+          <div className="fin-form-actions">
+            <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
+            <button type="submit" className="fin-save">Save</button>
+          </div>
+        </form>
+      )}
+
+      {!loading && funds.length === 0 && <p className="fin-empty">No sinking funds yet.</p>}
+
+      <div className="fin-goals-grid">
+        {funds.map((fund, idx) => {
+          const color = PALETTE[idx % PALETTE.length]
+          const isEditing = editing === fund.id
+          return (
+            <div key={fund.id} className="goal-card" style={{ '--card-color': color }}>
+              <div className="goal-card-top" style={{ background: color }} />
+              <button className="fin-bill-card-delete" onClick={() => deleteFund(fund.id)}>✕</button>
+              <div className="goal-card-name">{fund.name}</div>
+              <div className="goal-card-body">
+                {isEditing ? (
+                  <input
+                    className="goal-card-input"
+                    type="number" step="0.01" min="0"
+                    value={editVal}
+                    onChange={e => setEditVal(e.target.value)}
+                    onBlur={() => saveBalance(fund, editVal)}
+                    onKeyDown={e => { if (e.key === 'Enter') saveBalance(fund, editVal); if (e.key === 'Escape') setEditing(null) }}
+                    autoFocus
+                  />
+                ) : (
+                  <span className="goal-card-saved" style={{ cursor: 'pointer' }}
+                    onClick={() => { setEditing(fund.id); setEditVal(String(fund.balance)) }}>
+                    {fmt(fund.balance)}
+                  </span>
+                )}
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
