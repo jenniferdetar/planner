@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { supabase } from '../lib/supabase'
 import { useIcaapNote } from '../hooks/useIcaapNote'
 import './FinancialPanel.css'
@@ -836,9 +836,10 @@ function DebtSnowballTab({ userId }) {
   const [debts, setDebts] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ name: '', total_payoff: '', minimum_payment: '' })
+  const [form, setForm] = useState({ name: '', total_payoff: '', minimum_payment: '', group_name: '' })
   const [editCell, setEditCell] = useState(null) // { id, field }
   const [editVal, setEditVal] = useState('')
+  const [expanded, setExpanded] = useState({}) // { [groupName]: bool }
 
   useEffect(() => {
     if (!userId) return
@@ -854,10 +855,11 @@ function DebtSnowballTab({ userId }) {
       name: form.name.trim(),
       total_payoff: parseFloat(form.total_payoff) || 0,
       minimum_payment: parseFloat(form.minimum_payment) || 0,
+      group_name: form.group_name.trim() || null,
     }
     const { data } = await supabase.from('debts').insert(payload).select().single()
     if (data) setDebts(d => [...d, data])
-    setForm({ name: '', total_payoff: '', minimum_payment: '' })
+    setForm({ name: '', total_payoff: '', minimum_payment: '', group_name: '' })
     setShowForm(false)
   }
 
@@ -873,13 +875,37 @@ function DebtSnowballTab({ userId }) {
     setDebts(d => d.filter(x => x.id !== id))
   }
 
+  function toggleExpand(groupName) {
+    setExpanded(e => ({ ...e, [groupName]: !e[groupName] }))
+  }
+
+  // Roll grouped debts up into a single snowball-order entry; ungrouped debts stay individual
+  const groupMap = new Map()
+  const singles = []
+  debts.forEach(d => {
+    if (d.group_name) {
+      if (!groupMap.has(d.group_name)) groupMap.set(d.group_name, [])
+      groupMap.get(d.group_name).push(d)
+    } else {
+      singles.push({ isGroup: false, key: d.id, name: d.name, total_payoff: Number(d.total_payoff), minimum_payment: Number(d.minimum_payment), debt: d })
+    }
+  })
+  const groups = Array.from(groupMap.entries()).map(([name, members]) => ({
+    isGroup: true,
+    key: `group:${name}`,
+    name,
+    total_payoff: members.reduce((s, m) => s + Number(m.total_payoff), 0),
+    minimum_payment: members.reduce((s, m) => s + Number(m.minimum_payment), 0),
+    members: [...members].sort((a, b) => Number(a.total_payoff) - Number(b.total_payoff)),
+  }))
+
   // Smallest balance first, per the snowball method
-  const sorted = [...debts].sort((a, b) => Number(a.total_payoff) - Number(b.total_payoff))
+  const sorted = [...groups, ...singles].sort((a, b) => a.total_payoff - b.total_payoff)
 
   let running = 0
-  const rows = sorted.map(d => {
-    running += Number(d.minimum_payment)
-    return { ...d, newPayment: running }
+  const rows = sorted.map(row => {
+    running += row.minimum_payment
+    return { ...row, newPayment: running }
   })
 
   const totalPayoff = debts.reduce((s, d) => s + Number(d.total_payoff), 0)
@@ -909,7 +935,7 @@ function DebtSnowballTab({ userId }) {
 
       {showForm && (
         <form className="fin-form" onSubmit={handleAdd}>
-          <input className="fin-input" placeholder="Debt name (e.g. Visa, Student Loan) *" value={form.name}
+          <input className="fin-input" placeholder="Debt name (e.g. Visa, Loan 6306) *" value={form.name}
             onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required autoFocus />
           <div className="fin-form-row">
             <input className="fin-input amount" type="number" placeholder="Total payoff" step="0.01" min="0"
@@ -917,6 +943,8 @@ function DebtSnowballTab({ userId }) {
             <input className="fin-input amount" type="number" placeholder="Minimum payment" step="0.01" min="0"
               value={form.minimum_payment} onChange={e => setForm(f => ({ ...f, minimum_payment: e.target.value }))} />
           </div>
+          <input className="fin-input" placeholder="Group (optional, e.g. Nelnet – Student Loans)" value={form.group_name}
+            onChange={e => setForm(f => ({ ...f, group_name: e.target.value }))} />
           <div className="fin-form-actions">
             <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
             <button type="submit" className="fin-save">Save</button>
@@ -939,39 +967,93 @@ function DebtSnowballTab({ userId }) {
             </thead>
             <tbody>
               {rows.map(row => (
-                <tr key={row.id} className="budget-row">
-                  <td className="budget-td cat">{row.name}</td>
-                  <td className="budget-td num">
-                    {editCell?.id === row.id && editCell.field === 'total_payoff' ? (
-                      <input className="budget-input" type="number" autoFocus value={editVal}
-                        onChange={e => setEditVal(e.target.value)}
-                        onBlur={() => saveField(row, 'total_payoff', editVal)}
-                        onKeyDown={e => e.key === 'Enter' && saveField(row, 'total_payoff', editVal)}
-                        min="0" step="0.01" />
-                    ) : (
-                      <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.id, field: 'total_payoff' }); setEditVal(String(row.total_payoff)) }}>
-                        {fmt(row.total_payoff)}
-                      </span>
-                    )}
-                  </td>
-                  <td className="budget-td num">
-                    {editCell?.id === row.id && editCell.field === 'minimum_payment' ? (
-                      <input className="budget-input" type="number" autoFocus value={editVal}
-                        onChange={e => setEditVal(e.target.value)}
-                        onBlur={() => saveField(row, 'minimum_payment', editVal)}
-                        onKeyDown={e => e.key === 'Enter' && saveField(row, 'minimum_payment', editVal)}
-                        min="0" step="0.01" />
-                    ) : (
-                      <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.id, field: 'minimum_payment' }); setEditVal(String(row.minimum_payment)) }}>
-                        {fmt(row.minimum_payment)}
-                      </span>
-                    )}
-                  </td>
-                  <td className="budget-td num" style={{ fontWeight: 700, color: '#1e3070' }}>{fmt(row.newPayment)}</td>
-                  <td className="budget-td del-col">
-                    <button className="budget-del" onClick={() => deleteDebt(row.id)}>×</button>
-                  </td>
-                </tr>
+                <Fragment key={row.key}>
+                  <tr className="budget-row">
+                    <td className="budget-td cat">
+                      {row.isGroup ? (
+                        <button
+                          type="button"
+                          className="debt-group-toggle"
+                          onClick={() => toggleExpand(row.name)}
+                        >
+                          <span className="debt-group-chevron">{expanded[row.name] ? '▾' : '▸'}</span>
+                          {row.name}
+                          <span className="debt-group-count">({row.members.length} loans — show breakdown)</span>
+                        </button>
+                      ) : row.name}
+                    </td>
+                    <td className="budget-td num">
+                      {row.isGroup ? fmt(row.total_payoff) : (
+                        editCell?.id === row.debt.id && editCell.field === 'total_payoff' ? (
+                          <input className="budget-input" type="number" autoFocus value={editVal}
+                            onChange={e => setEditVal(e.target.value)}
+                            onBlur={() => saveField(row.debt, 'total_payoff', editVal)}
+                            onKeyDown={e => e.key === 'Enter' && saveField(row.debt, 'total_payoff', editVal)}
+                            min="0" step="0.01" />
+                        ) : (
+                          <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.debt.id, field: 'total_payoff' }); setEditVal(String(row.debt.total_payoff)) }}>
+                            {fmt(row.total_payoff)}
+                          </span>
+                        )
+                      )}
+                    </td>
+                    <td className="budget-td num">
+                      {row.isGroup ? fmt(row.minimum_payment) : (
+                        editCell?.id === row.debt.id && editCell.field === 'minimum_payment' ? (
+                          <input className="budget-input" type="number" autoFocus value={editVal}
+                            onChange={e => setEditVal(e.target.value)}
+                            onBlur={() => saveField(row.debt, 'minimum_payment', editVal)}
+                            onKeyDown={e => e.key === 'Enter' && saveField(row.debt, 'minimum_payment', editVal)}
+                            min="0" step="0.01" />
+                        ) : (
+                          <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.debt.id, field: 'minimum_payment' }); setEditVal(String(row.debt.minimum_payment)) }}>
+                            {fmt(row.minimum_payment)}
+                          </span>
+                        )
+                      )}
+                    </td>
+                    <td className="budget-td num" style={{ fontWeight: 700, color: '#1e3070' }}>{fmt(row.newPayment)}</td>
+                    <td className="budget-td del-col">
+                      {!row.isGroup && <button className="budget-del" onClick={() => deleteDebt(row.debt.id)}>×</button>}
+                    </td>
+                  </tr>
+
+                  {row.isGroup && expanded[row.name] && row.members.map(m => (
+                    <tr key={m.id} className="budget-row debt-group-member-row">
+                      <td className="budget-td cat debt-group-member-name">{m.name}</td>
+                      <td className="budget-td num">
+                        {editCell?.id === m.id && editCell.field === 'total_payoff' ? (
+                          <input className="budget-input" type="number" autoFocus value={editVal}
+                            onChange={e => setEditVal(e.target.value)}
+                            onBlur={() => saveField(m, 'total_payoff', editVal)}
+                            onKeyDown={e => e.key === 'Enter' && saveField(m, 'total_payoff', editVal)}
+                            min="0" step="0.01" />
+                        ) : (
+                          <span className="budget-cell-val" onClick={() => { setEditCell({ id: m.id, field: 'total_payoff' }); setEditVal(String(m.total_payoff)) }}>
+                            {fmt(m.total_payoff)}
+                          </span>
+                        )}
+                      </td>
+                      <td className="budget-td num">
+                        {editCell?.id === m.id && editCell.field === 'minimum_payment' ? (
+                          <input className="budget-input" type="number" autoFocus value={editVal}
+                            onChange={e => setEditVal(e.target.value)}
+                            onBlur={() => saveField(m, 'minimum_payment', editVal)}
+                            onKeyDown={e => e.key === 'Enter' && saveField(m, 'minimum_payment', editVal)}
+                            min="0" step="0.01" />
+                        ) : (
+                          <span className="budget-cell-val" onClick={() => { setEditCell({ id: m.id, field: 'minimum_payment' }); setEditVal(String(m.minimum_payment)) }}>
+                            {fmt(m.minimum_payment)}
+                          </span>
+                        )}
+                      </td>
+                      <td className="budget-td num"></td>
+                      <td className="budget-td del-col">
+                        <button className="budget-del" onClick={() => deleteDebt(m.id)}>×</button>
+                      </td>
+                    </tr>
+                  ))}
+                </Fragment>
               ))}
               <tr className="budget-net-row">
                 <td className="budget-td cat">TOTAL</td>
