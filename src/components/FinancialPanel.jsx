@@ -259,6 +259,10 @@ export function GoalsTab({ goals, onUpdate }) {
     if (is3) rows[billName].mo3 = g
     if (is6) rows[billName].mo6 = g
   })
+  const dueDateLabel = d => {
+    if (!d) return null
+    return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
   const sortedRows = Object.values(rows).sort((a, b) => a.name.localeCompare(b.name))
 
   function startEdit(goal, e) {
@@ -313,10 +317,12 @@ export function GoalsTab({ goals, onUpdate }) {
       <div className="fin-goals-grid">
         {sortedRows.map((row, idx) => {
           const color = PALETTE[idx % PALETTE.length]
+          const due = dueDateLabel((row.mo3 || row.mo6)?.due_date)
           return (
             <div key={row.name} className="goal-card" style={{ '--card-color': color }}>
               <div className="goal-card-top" style={{ background: color }} />
               <div className="goal-card-name">{row.name}</div>
+              {due && <div className="goal-card-due">Due {due}</div>}
               <div className="goal-card-body">
                 <GoalBar goal={row.mo3} label="3 mo" />
                 <GoalBar goal={row.mo6} label="6 mo" />
