@@ -819,6 +819,14 @@
   padding: 8px 10px 4px;
 }
 
+.goal-card-due {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #aaa;
+  padding: 0 10px 4px;
+}
+
 .goal-card-body {
   padding: 4px 10px 10px;
   display: flex;
