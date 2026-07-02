@@ -1196,6 +1196,13 @@
   color: #666 !important;
 }
 
+.debt-payoff-caveat {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  color: rgba(255,255,255,0.4);
+}
+
 /* ─── Laundry Tracker ────────────────────────────────────── */
 .laundry-content { overflow-y: auto; }
 

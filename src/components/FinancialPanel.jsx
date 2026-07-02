@@ -832,6 +832,45 @@ function BudgetTab({ bills, userId }) {
 
 // ─── Debt Snowball ──────────────────────────────────────────────────────────
 
+// Simulates the snowball month by month (no interest — balances only move via
+// minimum payments, plus the full rolled-in payment once a debt becomes the
+// active target). Rows must already be sorted smallest-balance-first.
+function simulateSnowball(rows) {
+  const n = rows.length
+  const monthsPaidOff = new Array(n).fill(null)
+  if (n === 0) return { monthsPaidOff, totalMonths: 0 }
+
+  const balances = rows.map(r => r.total_payoff)
+  const mins = rows.map(r => r.minimum_payment)
+  const MAX_MONTHS = 1200 // 100-year safety cap
+
+  let target = balances.findIndex(b => b > 0)
+  let month = 0
+  while (target !== -1 && month < MAX_MONTHS) {
+    month++
+    const rolledIn = mins.slice(0, target).reduce((s, m) => s + m, 0)
+    balances[target] = Math.max(0, balances[target] - (mins[target] + rolledIn))
+    for (let j = target + 1; j < n; j++) {
+      if (balances[j] > 0) balances[j] = Math.max(0, balances[j] - mins[j])
+    }
+    if (balances[target] <= 0.005) {
+      monthsPaidOff[target] = month
+      target = -1
+      for (let j = 0; j < n; j++) {
+        if (monthsPaidOff[j] === null && balances[j] > 0) { target = j; break }
+      }
+    }
+  }
+  return { monthsPaidOff, totalMonths: month }
+}
+
+function payoffLabel(months) {
+  if (months == null) return '100+ yrs'
+  const d = new Date()
+  d.setMonth(d.getMonth() + months)
+  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
+
 function DebtSnowballTab({ userId }) {
   const [debts, setDebts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -903,10 +942,14 @@ function DebtSnowballTab({ userId }) {
   const sorted = [...groups, ...singles].sort((a, b) => a.total_payoff - b.total_payoff)
 
   let running = 0
-  const rows = sorted.map(row => {
+  const withPayment = sorted.map(row => {
     running += row.minimum_payment
     return { ...row, newPayment: running }
   })
+
+  const { monthsPaidOff, totalMonths } = simulateSnowball(sorted)
+  const rows = withPayment.map((row, i) => ({ ...row, monthsToPayoff: monthsPaidOff[i] }))
+  const overallMonths = rows.length > 0 ? monthsPaidOff[monthsPaidOff.length - 1] : null
 
   const totalPayoff = debts.reduce((s, d) => s + Number(d.total_payoff), 0)
   const totalMinimum = debts.reduce((s, d) => s + Number(d.minimum_payment), 0)
@@ -926,10 +969,21 @@ function DebtSnowballTab({ userId }) {
           <span className="budget-summary-lbl">Total Minimums</span>
           <span className="budget-summary-val">{fmt(totalMinimum)}</span>
         </div>
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Debt-Free By</span>
+          <span className="budget-summary-val">{rows.length > 0 ? payoffLabel(overallMonths) : '—'}</span>
+        </div>
       </div>
 
       <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Smallest balance first — snowball order</span>
+        <span className="fin-toolbar-label">
+          Smallest balance first — snowball order
+          {rows.length > 0 && (
+            <span className="debt-payoff-caveat">
+              {' '}· {overallMonths != null ? `~${overallMonths} mo to debt-free` : '100+ years to debt-free'} at current minimums (excludes interest)
+            </span>
+          )}
+        </span>
         <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Debt</button>
       </div>
 
@@ -962,6 +1016,7 @@ function DebtSnowballTab({ userId }) {
                 <th className="budget-th">Total Payoff</th>
                 <th className="budget-th">Minimum</th>
                 <th className="budget-th">Snowball Payment</th>
+                <th className="budget-th">Payoff</th>
                 <th className="budget-th del-col"></th>
               </tr>
             </thead>
@@ -1013,6 +1068,7 @@ function DebtSnowballTab({ userId }) {
                       )}
                     </td>
                     <td className="budget-td num" style={{ fontWeight: 700, color: '#1e3070' }}>{fmt(row.newPayment)}</td>
+                    <td className="budget-td num">{payoffLabel(row.monthsToPayoff)}</td>
                     <td className="budget-td del-col">
                       {!row.isGroup && <button className="budget-del" onClick={() => deleteDebt(row.debt.id)}>×</button>}
                     </td>
@@ -1048,6 +1104,7 @@ function DebtSnowballTab({ userId }) {
                         )}
                       </td>
                       <td className="budget-td num"></td>
+                      <td className="budget-td num"></td>
                       <td className="budget-td del-col">
                         <button className="budget-del" onClick={() => deleteDebt(m.id)}>×</button>
                       </td>
@@ -1059,7 +1116,7 @@ function DebtSnowballTab({ userId }) {
                 <td className="budget-td cat">TOTAL</td>
                 <td className="budget-td num net-val">{fmt(totalPayoff)}</td>
                 <td className="budget-td num net-val">{fmt(totalMinimum)}</td>
-                <td colSpan={2}></td>
+                <td colSpan={3}></td>
               </tr>
             </tbody>
           </table>
