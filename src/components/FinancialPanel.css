@@ -361,7 +361,7 @@
 .fin-bill-grid {
   padding: 8px 10px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
   align-content: start;
 }
@@ -1371,5 +1371,9 @@
     background: #1e3070;
     color: #fff;
     border-color: #1e3070;
+  }
+
+  .fin-bill-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
