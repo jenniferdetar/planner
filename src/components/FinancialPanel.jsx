@@ -1673,10 +1673,11 @@ function LaundryTab({ userId }) {
 
 function FinNoteGroup({ note: n, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
+  const snippet = n.note.length > 60 ? n.note.slice(0, 60).trim() + '…' : n.note
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
       <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
-        <span className="interaction-group-name">{n.topic || 'Note'}</span>
+        <span className="interaction-group-name">{snippet}</span>
         {n.created_at && (
           <span className="interaction-date-badge">
             {new Date(n.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
@@ -1688,9 +1689,10 @@ function FinNoteGroup({ note: n, onDelete }) {
         <div className="interaction-group-items">
           <div className="interaction-card">
             <div className="interaction-header">
-              {n.source && <span className="interaction-cat-badge">{n.source}</span>}
+              {n.topic && <span className="interaction-cat-badge">{n.topic}</span>}
               <button className="interaction-delete-btn" title="Delete" onClick={() => onDelete?.(n.id)}>✕</button>
             </div>
+            {n.source && <p className="interaction-who-text">Source: {n.source}</p>}
             <p className="interaction-disc-text">{n.note}</p>
           </div>
         </div>
