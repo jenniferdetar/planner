@@ -1170,6 +1170,32 @@
 }
 .budget-del:hover { color: #cc0000; }
 
+/* ── Debt Snowball group rows ── */
+.debt-group-toggle {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: #1e3070;
+  cursor: pointer;
+  text-align: left;
+}
+.debt-group-toggle:hover { text-decoration: underline; }
+.debt-group-chevron { color: #999; font-size: 10px; }
+.debt-group-count { font-size: 11px; font-weight: 400; color: #7db8f5; }
+
+.debt-group-member-row .budget-td { background: #f7fafc; }
+.debt-group-member-name {
+  padding-left: 28px !important;
+  font-size: 12px;
+  font-weight: 400;
+  color: #666 !important;
+}
+
 /* ─── Laundry Tracker ────────────────────────────────────── */
 .laundry-content { overflow-y: auto; }
 
