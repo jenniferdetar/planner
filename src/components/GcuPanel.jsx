@@ -39,7 +39,7 @@ function calcGPA(grades) {
   return (totalPoints / totalCredits).toFixed(2)
 }
 
-export function useGcuState() {
+function useGcuState() {
   const [statuses, setStatuses] = useState(() =>
     Object.fromEntries(GCU_COURSES.map(c => [c.code, c.type === 'completed' ? 'completed' : 'not started']))
   )

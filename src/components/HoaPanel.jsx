@@ -80,7 +80,7 @@ function fmtUSD(n) {
 
 // Shared state so the header/stats/form and the item groups can render on
 // separate binder pages while staying in sync.
-export function useHoaPage(userId) {
+function useHoaPage(userId) {
   const { items, loading, addItem, updateItem, deleteItem, reload } = useHoaItems(userId)
   const [tab, setTab] = useState('All')
   const [showForm, setShowForm] = useState(false)
