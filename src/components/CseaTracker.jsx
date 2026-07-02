@@ -525,11 +525,9 @@ function RifIntakePanel() {
 
 function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
   const [collapsed, setCollapsed] = useState(true)
-  const latest = [...items].sort((a, b) => (b.date_spoke || '').localeCompare(a.date_spoke || ''))[0]
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
       <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
-        {latest?.category && <span className="interaction-cat-badge">{latest.category}</span>}
         <span className="interaction-group-name">{member}</span>
         <span className="interaction-group-count">{items.length}</span>
         <span className="interaction-group-toggle">{collapsed ? '▾' : '▴'}</span>
