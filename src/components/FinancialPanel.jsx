@@ -852,21 +852,22 @@ function simulateSnowball(rows) {
   const mins = rows.map(r => r.minimum_payment)
   const MAX_MONTHS = 1200 // 100-year safety cap
 
-  let target = balances.findIndex(b => b > 0)
+  balances.forEach((b, i) => { if (b <= 0.005) monthsPaidOff[i] = 0 })
+
   let month = 0
-  while (target !== -1 && month < MAX_MONTHS) {
+  while (monthsPaidOff.includes(null) && month < MAX_MONTHS) {
     month++
-    const rolledIn = mins.slice(0, target).reduce((s, m) => s + m, 0)
+    const target = monthsPaidOff.findIndex(m => m === null)
+    // Every already-paid-off debt's minimum permanently rolls into whichever debt is currently active
+    const rolledIn = mins.reduce((s, m, j) => (monthsPaidOff[j] !== null ? s + m : s), 0)
     balances[target] = Math.max(0, balances[target] - (mins[target] + rolledIn))
-    for (let j = target + 1; j < n; j++) {
-      if (balances[j] > 0) balances[j] = Math.max(0, balances[j] - mins[j])
+    for (let j = 0; j < n; j++) {
+      if (j === target || monthsPaidOff[j] !== null) continue
+      balances[j] = Math.max(0, balances[j] - mins[j])
     }
-    if (balances[target] <= 0.005) {
-      monthsPaidOff[target] = month
-      target = -1
-      for (let j = 0; j < n; j++) {
-        if (monthsPaidOff[j] === null && balances[j] > 0) { target = j; break }
-      }
+    // A lower-priority debt can finish "in the background" from its own minimum before its turn
+    for (let j = 0; j < n; j++) {
+      if (monthsPaidOff[j] === null && balances[j] <= 0.005) monthsPaidOff[j] = month
     }
   }
   return { monthsPaidOff, totalMonths: month }
@@ -883,7 +884,7 @@ function DebtSnowballTab({ userId }) {
   const [debts, setDebts] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ name: '', total_payoff: '', minimum_payment: '', group_name: '', owner: '' })
+  const [form, setForm] = useState({ name: '', total_payoff: '', minimum_payment: '', group_name: '', owner: '', goal_months: '' })
   const [editCell, setEditCell] = useState(null) // { id, field }
   const [editVal, setEditVal] = useState('')
   const [expanded, setExpanded] = useState({}) // { [groupName]: bool }
@@ -904,10 +905,11 @@ function DebtSnowballTab({ userId }) {
       minimum_payment: parseFloat(form.minimum_payment) || 0,
       group_name: form.group_name.trim() || null,
       owner: form.owner.trim() || null,
+      goal_months: form.goal_months.trim() === '' ? null : parseInt(form.goal_months, 10) || null,
     }
     const { data } = await supabase.from('debts').insert(payload).select().single()
     if (data) setDebts(d => [...d, data])
-    setForm({ name: '', total_payoff: '', minimum_payment: '', group_name: '', owner: '' })
+    setForm({ name: '', total_payoff: '', minimum_payment: '', group_name: '', owner: '', goal_months: '' })
     setShowForm(false)
   }
 
@@ -922,6 +924,13 @@ function DebtSnowballTab({ userId }) {
     const val = value.trim() || null
     await supabase.from('debts').update({ owner: val }).in('id', ids)
     setDebts(d => d.map(x => ids.includes(x.id) ? { ...x, owner: val } : x))
+    setEditCell(null)
+  }
+
+  async function saveGoal(ids, value) {
+    const val = value.trim() === '' ? null : parseInt(value, 10) || null
+    await supabase.from('debts').update({ goal_months: val }).in('id', ids)
+    setDebts(d => d.map(x => ids.includes(x.id) ? { ...x, goal_months: val } : x))
     setEditCell(null)
   }
 
@@ -942,11 +951,12 @@ function DebtSnowballTab({ userId }) {
       if (!groupMap.has(d.group_name)) groupMap.set(d.group_name, [])
       groupMap.get(d.group_name).push(d)
     } else {
-      singles.push({ isGroup: false, key: d.id, name: d.name, total_payoff: Number(d.total_payoff), minimum_payment: Number(d.minimum_payment), owner: d.owner || '', debt: d })
+      singles.push({ isGroup: false, key: d.id, name: d.name, total_payoff: Number(d.total_payoff), minimum_payment: Number(d.minimum_payment), owner: d.owner || '', goalMonths: d.goal_months ?? null, debt: d })
     }
   })
   const groups = Array.from(groupMap.entries()).map(([name, members]) => {
     const ownerSet = new Set(members.map(m => m.owner || ''))
+    const goalSet = new Set(members.map(m => m.goal_months ?? null))
     return {
       isGroup: true,
       key: `group:${name}`,
@@ -955,6 +965,7 @@ function DebtSnowballTab({ userId }) {
       minimum_payment: members.reduce((s, m) => s + Number(m.minimum_payment), 0),
       members: [...members].sort((a, b) => Number(a.total_payoff) - Number(b.total_payoff)),
       owner: ownerSet.size === 1 ? [...ownerSet][0] : 'Mixed',
+      goalMonths: goalSet.size === 1 ? [...goalSet][0] : null,
     }
   })
 
@@ -1023,6 +1034,8 @@ function DebtSnowballTab({ userId }) {
             <input className="fin-input" placeholder="Owner (optional, e.g. Jennifer)" value={form.owner}
               onChange={e => setForm(f => ({ ...f, owner: e.target.value }))} />
           </div>
+          <input className="fin-input" type="number" min="0" step="1" placeholder="Payoff goal in months (optional, e.g. 60 for 5 years)" value={form.goal_months}
+            onChange={e => setForm(f => ({ ...f, goal_months: e.target.value }))} />
           <div className="fin-form-actions">
             <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
             <button type="submit" className="fin-save">Save</button>
@@ -1041,6 +1054,7 @@ function DebtSnowballTab({ userId }) {
                 <th className="budget-th">Minimum</th>
                 <th className="budget-th">Snowball Payment</th>
                 <th className="budget-th">Payoff</th>
+                <th className="budget-th">Goal</th>
                 <th className="budget-th">Owner</th>
                 <th className="budget-th del-col"></th>
               </tr>
@@ -1093,7 +1107,25 @@ function DebtSnowballTab({ userId }) {
                       )}
                     </td>
                     <td className="budget-td num" style={{ fontWeight: 700, color: '#1e3070' }}>{fmt(row.newPayment)}</td>
-                    <td className="budget-td num">{payoffLabel(row.monthsToPayoff)}</td>
+                    <td className="budget-td num" style={row.goalMonths != null ? { fontWeight: 700, color: row.monthsToPayoff != null && row.monthsToPayoff <= row.goalMonths ? '#1a6b2a' : '#cc0000' } : undefined}>
+                      {payoffLabel(row.monthsToPayoff)}
+                      {row.goalMonths != null && (
+                        <span className="debt-goal-badge">{row.monthsToPayoff != null && row.monthsToPayoff <= row.goalMonths ? '✓ on track' : '⚠ behind'}</span>
+                      )}
+                    </td>
+                    <td className="budget-td num">
+                      {editCell?.id === row.key && editCell.field === 'goal_months' ? (
+                        <input className="budget-input" type="number" autoFocus value={editVal}
+                          onChange={e => setEditVal(e.target.value)}
+                          onBlur={() => saveGoal(row.isGroup ? row.members.map(m => m.id) : [row.debt.id], editVal)}
+                          onKeyDown={e => e.key === 'Enter' && saveGoal(row.isGroup ? row.members.map(m => m.id) : [row.debt.id], editVal)}
+                          min="0" step="1" placeholder="months" />
+                      ) : (
+                        <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.key, field: 'goal_months' }); setEditVal(row.goalMonths != null ? String(row.goalMonths) : '') }}>
+                          {row.goalMonths != null ? `${row.goalMonths}mo (${payoffLabel(row.goalMonths)})` : <span className="budget-empty">—</span>}
+                        </span>
+                      )}
+                    </td>
                     <td className="budget-td cat">
                       {editCell?.id === row.key && editCell.field === 'owner' ? (
                         <input className="budget-input text" type="text" autoFocus value={editVal}
@@ -1142,6 +1174,7 @@ function DebtSnowballTab({ userId }) {
                       </td>
                       <td className="budget-td num"></td>
                       <td className="budget-td num"></td>
+                      <td className="budget-td num"></td>
                       <td className="budget-td cat">
                         {editCell?.id === m.id && editCell.field === 'owner' ? (
                           <input className="budget-input text" type="text" autoFocus value={editVal}
@@ -1165,7 +1198,7 @@ function DebtSnowballTab({ userId }) {
                 <td className="budget-td cat">TOTAL</td>
                 <td className="budget-td num net-val">{fmt(totalPayoff)}</td>
                 <td className="budget-td num net-val">{fmt(totalMinimum)}</td>
-                <td colSpan={4}></td>
+                <td colSpan={5}></td>
               </tr>
             </tbody>
           </table>

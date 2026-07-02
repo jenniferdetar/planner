@@ -1208,6 +1208,13 @@
   color: rgba(255,255,255,0.4);
 }
 
+.debt-goal-badge {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 /* ─── Laundry Tracker ────────────────────────────────────── */
 .laundry-content { overflow-y: auto; }
 
