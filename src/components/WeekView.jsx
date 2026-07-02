@@ -44,18 +44,36 @@ function normalizeTitle(t) {
   return (t || '')
     .replace(/^\d{1,2}(:\d{2})?\s*(AM|PM)?\s*/i, '')
     .replace(/\s+via\s+zoom(\s+meeting)?$/i, '')
+    .replace(/\\([,;])/g, '$1') // unescape stray ICS-style "\," / "\;"
     .toLowerCase()
     .trim()
 }
 
+// Same-time events whose titles share a long common prefix are almost
+// certainly the same event synced twice with one copy truncated/mangled
+// (e.g. an ICS import that cut off mid-word). Keep the longer title.
+function isLikelyDuplicate(keyA, keyB, sameTime) {
+  if (keyA === keyB) return true
+  if (!sameTime) return false
+  const shorter = keyA.length <= keyB.length ? keyA : keyB
+  const longer = keyA.length <= keyB.length ? keyB : keyA
+  return shorter.length >= 20 && longer.startsWith(shorter.slice(0, 20))
+}
+
 function dedupeEvents(events) {
-  const seen = new Set()
-  return events.filter(e => {
+  const kept = []
+  for (const e of events) {
     const key = normalizeTitle(e.title || e.text)
-    if (seen.has(key)) return false
-    seen.add(key)
-    return true
-  })
+    const dupIndex = kept.findIndex(k =>
+      isLikelyDuplicate(key, normalizeTitle(k.title || k.text), (k._sortKey || '') === (e._sortKey || ''))
+    )
+    if (dupIndex === -1) {
+      kept.push(e)
+    } else if ((e.title || e.text || '').length > (kept[dupIndex].title || kept[dupIndex].text || '').length) {
+      kept[dupIndex] = e
+    }
+  }
+  return kept
 }
 
 function getWeekStart(date) {
