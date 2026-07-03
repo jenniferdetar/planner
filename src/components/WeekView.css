@@ -134,6 +134,12 @@
   transform: scale(1.1);
 }
 
+.habit-dot-na {
+  border-color: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
 /* Motivational banner */
 .week-banner {
   background: #1e3070;
