@@ -113,9 +113,15 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
               className={`mantra-subtab ${mantraInnerTab === 'mission' ? 'active' : ''}`}
               onClick={() => setMantraInnerTab('mission')}
             >Mission</button>
+            <button
+              className={`mantra-subtab ${mantraInnerTab === 'values' ? 'active' : ''}`}
+              onClick={() => setMantraInnerTab('values')}
+            >Values</button>
           </div>
 
-          {mantraInnerTab === 'mantra' ? (
+          {mantraInnerTab === 'values' ? (
+            <ValuesPanel userId={userId} />
+          ) : mantraInnerTab === 'mantra' ? (
             <>
               <div className="mantra-header">
                 <h3 className="mantra-title" style={{ color: activeColor }}>My Personal Mantra</h3>
