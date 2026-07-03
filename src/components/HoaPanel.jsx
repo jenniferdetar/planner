@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useHoaItems, CATEGORIES, PRIORITIES, STATUSES } from '../hooks/useHoaItems'
 import { useYahooHoaSync } from '../hooks/useYahooHoaSync'
+import { useGmailHoaSync } from '../hooks/useGmailHoaSync'
 import './HoaPanel.css'
 
 const STATUS_COLORS = {
@@ -80,7 +81,7 @@ function fmtUSD(n) {
 
 // Shared state so the header/stats/form and the item groups can render on
 // separate binder pages while staying in sync.
-export function useHoaPage(userId) {
+export function useHoaPage(userId, providerToken) {
   const { items, loading, addItem, updateItem, deleteItem, reload } = useHoaItems(userId)
   const [tab, setTab] = useState('All')
   const [showForm, setShowForm] = useState(false)
@@ -90,6 +91,7 @@ export function useHoaPage(userId) {
 
   const onImported = useCallback(() => reload?.(), [reload])
   const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount, error: yahooError } = useYahooHoaSync(userId, onImported)
+  const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount, error: gmailError } = useGmailHoaSync(userId, providerToken, onImported)
 
   const tabs = ['All', ...CATEGORIES]
   const visibleItems = showArchived ? items : items.filter(i => !i.archived)
@@ -147,6 +149,7 @@ export function useHoaPage(userId) {
   return {
     tabs, tab, setTab, showForm, setShowForm, form, setForm, editId, setEditId, showArchived, setShowArchived,
     syncYahoo, yahooSyncing, yahooNewCount, yahooError,
+    syncGmail, gmailSyncing, gmailNewCount, gmailError, hasGmailToken: !!providerToken,
     counts, loading, filtered,
     groups: groupEntries,
     openAdd, openEdit, handleSubmit, deleteItem,
@@ -334,6 +337,20 @@ function HoaPanelInner({ api }) {
             </svg>
             {api.yahooNewCount > 0 && <span className="hoa-sync-badge">{api.yahooNewCount}</span>}
           </button>
+          {api.hasGmailToken && (
+            <button
+              className={`hoa-sync-btn${api.gmailSyncing ? ' spinning' : ''}`}
+              onClick={api.syncGmail}
+              disabled={api.gmailSyncing}
+              title={api.gmailError || (api.gmailNewCount != null ? `Last sync: ${api.gmailNewCount} new` : 'Sync Gmail for elevator-related emails')}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 4h16v16H4z"/>
+                <path d="m4 6 8 7 8-7"/>
+              </svg>
+              {api.gmailNewCount > 0 && <span className="hoa-sync-badge">{api.gmailNewCount}</span>}
+            </button>
+          )}
           <button className="hoa-add-btn" style={{ opacity: 0.75, fontSize: '10px' }} onClick={() => api.setShowArchived(a => !a)}>
             {api.showArchived ? 'Hide Archived' : 'Show Archived'}
           </button>
@@ -368,7 +385,7 @@ function HoaPanelInner({ api }) {
   )
 }
 
-export default function HoaPanel({ userId }) {
-  const api = useHoaPage(userId)
+export default function HoaPanel({ userId, providerToken }) {
+  const api = useHoaPage(userId, providerToken)
   return <HoaPanelInner api={api} />
 }

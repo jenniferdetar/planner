@@ -48,7 +48,7 @@ export default async function handler(req, res) {
     for (const folderPath of folders) {
       const lock = await client.getMailboxLock(folderPath)
       try {
-        const uids = await searchHoaAddresses(client)
+        const uids = await searchHoaMessages(client)
         const recent = uids.slice(-200)
 
         for await (const msg of client.fetch(recent, { uid: true, envelope: true, source: true })) {
@@ -86,12 +86,15 @@ export default async function handler(req, res) {
   }
 }
 
-// Matches any message where an HOA correspondent appears as sender, recipient, or cc.
-async function searchHoaAddresses(client) {
+// Matches any message where an HOA correspondent appears as sender, recipient,
+// or cc — or that mentions "elevator" anywhere, since elevator vendors/managers
+// often aren't in the correspondent list above.
+async function searchHoaMessages(client) {
   const or = []
   for (const addr of HOA_ADDRESSES) {
     or.push({ from: addr }, { to: addr }, { cc: addr })
   }
+  or.push({ subject: 'elevator' }, { body: 'elevator' })
   return client.search({ or })
 }
 
