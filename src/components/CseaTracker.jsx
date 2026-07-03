@@ -5,6 +5,7 @@ import { useGmailCseaSync } from '../hooks/useGmailCseaSync'
 import { useYahooMailSync } from '../hooks/useYahooMailSync'
 import ContractReference from './ContractReference'
 import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifIntake'
+import { isEboardMember } from '../lib/eboardMembers'
 import './CseaTracker.css'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
@@ -372,9 +373,15 @@ export function CseaTrackerInner({ api }) {
 }
 
 function InteractionsPanel({ api }) {
+  const [subTab, setSubTab] = useState('members')
+
   return (
     <div className="csea-panel">
       <div className="csea-toolbar">
+        <div className="csea-filter-pills">
+          <button className={`filter-pill ${subTab === 'members' ? 'active' : ''}`} onClick={() => setSubTab('members')}>Members</button>
+          <button className={`filter-pill ${subTab === 'eboard' ? 'active' : ''}`} onClick={() => setSubTab('eboard')}>E-Board</button>
+        </div>
         <button className="csea-archive-toggle" onClick={api.onToggleArchived}>
           {api.showArchived ? 'Hide Archived' : 'Show Archived'}
         </button>
@@ -432,7 +439,8 @@ function InteractionsPanel({ api }) {
             })
             return groups
           }, {})
-        ).sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
+        ).filter(([member]) => isEboardMember(member) === (subTab === 'eboard'))
+          .sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
           <MemberInteractionGroup key={member} member={member} items={items} onUpdate={api.onUpdateInteraction} workLocations={api.workLocations} />
         ))}
       </div>
