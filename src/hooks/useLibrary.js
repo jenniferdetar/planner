@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { fetchBookCoverUrl } from '../lib/bookCovers'
 
 export const SHELVES = ['Fiction', 'Business', 'Religious', 'Education', 'Self-Help', 'Magazine']
 
 export function useLibrary(userId) {
   const [books, setBooks] = useState([])
+  const [coverSync, setCoverSync] = useState({ syncing: false, done: 0, total: 0, found: 0 })
 
   const reload = useCallback(async () => {
     if (!userId) return
@@ -18,13 +20,26 @@ export function useLibrary(userId) {
 
   useEffect(() => { reload() }, [reload])
 
+  const attachCover = useCallback(async (id, title, author) => {
+    const coverUrl = await fetchBookCoverUrl(title, author)
+    if (!coverUrl) return
+    const { data } = await supabase
+      .from('library_books')
+      .update({ cover_url: coverUrl })
+      .eq('id', id).select().single()
+    if (data) setBooks(prev => prev.map(b => b.id === id ? data : b))
+  }, [])
+
   const addBook = useCallback(async (title, author, shelf, status = 'want-to-read') => {
     const { data } = await supabase
       .from('library_books')
       .insert({ title, author, shelf, status, user_id: userId })
       .select().single()
-    if (data) setBooks(prev => [...prev, data])
-  }, [userId])
+    if (data) {
+      setBooks(prev => [...prev, data])
+      attachCover(data.id, data.title, data.author)
+    }
+  }, [userId, attachCover])
 
   const updateStatus = useCallback(async (id, status) => {
     const { data } = await supabase
@@ -58,5 +73,29 @@ export function useLibrary(userId) {
     if (data) setBooks(prev => [...prev, ...data])
   }, [userId])
 
-  return { books, addBook, updateStatus, updateChapter, deleteBook, importDefaults, reload }
+  const fetchCovers = useCallback(async () => {
+    const targets = books.filter(b => !b.cover_url && b.title)
+    if (!targets.length || coverSync.syncing) return
+    setCoverSync({ syncing: true, done: 0, total: targets.length, found: 0 })
+    let found = 0
+    for (let i = 0; i < targets.length; i++) {
+      const book = targets[i]
+      const coverUrl = await fetchBookCoverUrl(book.title, book.author)
+      if (coverUrl) {
+        const { data } = await supabase
+          .from('library_books')
+          .update({ cover_url: coverUrl })
+          .eq('id', book.id).select().single()
+        if (data) {
+          setBooks(prev => prev.map(b => b.id === book.id ? data : b))
+          found++
+        }
+      }
+      setCoverSync({ syncing: true, done: i + 1, total: targets.length, found })
+      await new Promise(r => setTimeout(r, 120))
+    }
+    setCoverSync({ syncing: false, done: targets.length, total: targets.length, found })
+  }, [books, coverSync.syncing])
+
+  return { books, addBook, updateStatus, updateChapter, deleteBook, importDefaults, reload, coverSync, fetchCovers }
 }

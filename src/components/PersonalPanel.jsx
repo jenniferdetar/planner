@@ -33,7 +33,7 @@ const FRAMEWORK = [
   { key: 'checklist', label: 'Checklist' },
 ]
 
-export default function PersonalPanel({ userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
+export default function PersonalPanel({ userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
   const visibleTabs = allowedSubTabs ? SUB_TABS.filter(t => allowedSubTabs.includes(t.key)) : SUB_TABS
   const defaultTab = visibleTabs[0]?.key || 'goals'
 
@@ -94,6 +94,8 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
           onDeleteBook={onDeleteBook}
           onImportBooks={onImportBooks}
           onReloadBooks={onReloadBooks}
+          bookCoverSync={bookCoverSync}
+          onFetchBookCovers={onFetchBookCovers}
         />
       )}
       {subTab === 'videos' && <FavoriteVideosPanel userId={userId} />}
@@ -111,9 +113,15 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
               className={`mantra-subtab ${mantraInnerTab === 'mission' ? 'active' : ''}`}
               onClick={() => setMantraInnerTab('mission')}
             >Mission</button>
+            <button
+              className={`mantra-subtab ${mantraInnerTab === 'values' ? 'active' : ''}`}
+              onClick={() => setMantraInnerTab('values')}
+            >Values</button>
           </div>
 
-          {mantraInnerTab === 'mantra' ? (
+          {mantraInnerTab === 'values' ? (
+            <ValuesPanel userId={userId} />
+          ) : mantraInnerTab === 'mantra' ? (
             <>
               <div className="mantra-header">
                 <h3 className="mantra-title" style={{ color: activeColor }}>My Personal Mantra</h3>

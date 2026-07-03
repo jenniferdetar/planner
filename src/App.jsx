@@ -84,7 +84,7 @@ export default function App() {
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { notes: icaapNotes, addNote: addIcaapNote, deleteNote: deleteIcaapNote } = useIcaapNotes(userId)
-  const { books, addBook, updateStatus: updateBookStatus, updateChapter: updateBookChapter, deleteBook, importDefaults: importBooks, reload: reloadBooks } = useLibrary(userId)
+  const { books, addBook, updateStatus: updateBookStatus, updateChapter: updateBookChapter, deleteBook, importDefaults: importBooks, reload: reloadBooks, coverSync: bookCoverSync, fetchCovers: fetchBookCovers } = useLibrary(userId)
   const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
   const { tags: asanaTaskTags, cycleTag: cycleAsanaTaskTag } = useAsanaTaskTags()
@@ -296,6 +296,8 @@ export default function App() {
         onDeleteBook={deleteBook}
         onImportBooks={importBooks}
         onReloadBooks={reloadBooks}
+        bookCoverSync={bookCoverSync}
+        onFetchBookCovers={fetchBookCovers}
         calendarBlocks={allCalendarBlocks}
         weeklyTasks={weeklyTasks}
         onToggleWeeklyTask={handleToggleWeeklyTask}
