@@ -3,7 +3,7 @@ import { isSkippedSender } from './interactionSkipList'
 import { summarizeEmailBody } from './emailSummary'
 
 export async function fetchYahooCseaEmails() {
-  const res = await fetch('/api/yahoo-sync', { method: 'POST' })
+  const res = await fetch('/api/yahoo-sync', { method: 'POST', signal: AbortSignal.timeout(35000) })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error || `Yahoo CSEA sync error ${res.status}`)

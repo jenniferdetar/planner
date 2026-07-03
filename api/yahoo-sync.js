@@ -21,6 +21,9 @@ export default async function handler(req, res) {
     secure: true,
     auth: { user: YAHOO_EMAIL, pass: YAHOO_APP_PASSWORD },
     logger: false,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 20000,
   })
 
   try {

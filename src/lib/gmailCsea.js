@@ -11,6 +11,7 @@ export async function fetchCseaWebformEmails(providerToken) {
   })
   const res = await fetch(`${GMAIL_API}/messages?${params}`, {
     headers: { Authorization: `Bearer ${providerToken}` },
+    signal: AbortSignal.timeout(20000),
   })
   if (!res.ok) {
     if (res.status === 401) throw new Error('GMAIL_AUTH_EXPIRED')
@@ -23,6 +24,7 @@ export async function fetchCseaWebformEmails(providerToken) {
 export async function fetchEmailBody(providerToken, messageId) {
   const res = await fetch(`${GMAIL_API}/messages/${messageId}?format=full`, {
     headers: { Authorization: `Bearer ${providerToken}` },
+    signal: AbortSignal.timeout(20000),
   })
   if (!res.ok) throw new Error(`Gmail fetch error ${res.status}`)
   return res.json()
