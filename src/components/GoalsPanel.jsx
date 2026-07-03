@@ -66,12 +66,10 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
                           title={g.completed ? 'Mark incomplete' : 'Mark complete'}
                           onClick={() => updateGoal(g.id, { completed: !g.completed })}
                         />
-                        <div className="goal-item-main">
-                          <span className="goal-text">{g.goal_text}</span>
-                          {g.role_id && (
-                            <span className="goal-role-badge">{roleNameById(g.role_id)}</span>
-                          )}
-                        </div>
+                        <span className="goal-text">{g.goal_text}</span>
+                        {g.role_id && (
+                          <span className="goal-role-badge">{roleNameById(g.role_id)}</span>
+                        )}
                         <div className="goal-item-actions">
                           {roles.length > 0 && (
                             <select

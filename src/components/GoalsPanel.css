@@ -103,14 +103,6 @@
   text-decoration: line-through;
 }
 
-.goal-item-main {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  min-width: 0;
-  gap: 6px;
-}
-
 .goal-role-badge {
   font-size: 9px;
   font-weight: 700;
@@ -140,7 +132,8 @@
   border-radius: 3px;
   background: #fff;
   color: #555;
-  max-width: 90px;
+  width: 74px;
+  flex-shrink: 0;
   cursor: pointer;
 }
 
@@ -163,6 +156,7 @@
   font-size: 11.5px;
   color: #444;
   flex: 1;
+  min-width: 0;
   line-height: 24px;
   white-space: nowrap;
   overflow: hidden;
