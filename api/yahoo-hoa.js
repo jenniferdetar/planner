@@ -1,7 +1,18 @@
 import { ImapFlow } from 'imapflow'
 import { simpleParser } from 'mailparser'
 
-// Reads emails from the Yahoo Mail HOA folder and returns them as structured records.
+// HOA correspondents — emails to/from/cc'ing any of these are pulled in as
+// HOA items regardless of which folder they're filed in.
+const HOA_ADDRESSES = [
+  'n0rmavalencia@hotmail.com',
+  'gutierrez.emelly01@gmail.com',
+  'detar.jennifer@yahoo.com',
+  'parkreseda111@gmail.com',
+  'vanoosheh@wilshireinsurance.com',
+]
+
+// Reads emails involving the HOA correspondents above and returns them as
+// structured records, regardless of which folder they're filed in.
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
@@ -28,41 +39,60 @@ export default async function handler(req, res) {
   try {
     await client.connect()
 
+    const folders = ['INBOX']
     const hoaPath = await findHoaFolder(client)
-    if (!hoaPath) {
-      res.status(200).json({ messages: [], folders: await listFolders(client) })
-      return
-    }
+    if (hoaPath && hoaPath !== 'INBOX') folders.push(hoaPath)
 
-    const lock = await client.getMailboxLock(hoaPath)
-    try {
-      const uids = await client.search({ all: true })
-      const recent = uids.slice(-100)
+    const seen = new Set()
+    const messages = []
+    for (const folderPath of folders) {
+      const lock = await client.getMailboxLock(folderPath)
+      try {
+        const uids = await searchHoaAddresses(client)
+        const recent = uids.slice(-200)
 
-      const messages = []
-      for await (const msg of client.fetch(recent, { uid: true, envelope: true, source: true })) {
-        const parsed = await simpleParser(msg.source)
-        const text = parsed.text || parsed.html?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() || ''
-        const cleanText = stripBoilerplate(text)
-        messages.push({
-          id: String(msg.uid),
-          subject: msg.envelope?.subject || '',
-          from: msg.envelope?.from?.[0]?.address || '',
-          date: msg.envelope?.date?.toISOString?.() || '',
-          text: cleanText,
-        })
+        for await (const msg of client.fetch(recent, { uid: true, envelope: true, source: true })) {
+          const key = `${folderPath}:${msg.uid}`
+          if (seen.has(key)) continue
+          seen.add(key)
+
+          const parsed = await simpleParser(msg.source)
+          const text = parsed.text || parsed.html?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() || ''
+          const cleanText = stripBoilerplate(text)
+          // Keep bare UIDs for the legacy HOA-folder path so they stay
+          // compatible with previously-imported yahoo_uid values; prefix
+          // UIDs from any other folder (e.g. INBOX) to avoid collisions,
+          // since IMAP UIDs are only unique within a single folder.
+          const needsPrefix = folders.length > 1 && folderPath !== hoaPath
+          messages.push({
+            id: needsPrefix ? `${folderPath}:${msg.uid}` : String(msg.uid),
+            subject: msg.envelope?.subject || '',
+            from: msg.envelope?.from?.[0]?.address || '',
+            date: msg.envelope?.date?.toISOString?.() || '',
+            text: cleanText,
+          })
+        }
+      } finally {
+        lock.release()
       }
-
-      res.status(200).json({ messages, folder: hoaPath })
-    } finally {
-      lock.release()
     }
+
+    res.status(200).json({ messages, folders })
   } catch (err) {
     console.error('Yahoo HOA IMAP error:', err)
     res.status(502).json({ error: err.message })
   } finally {
     await client.logout().catch(() => {})
   }
+}
+
+// Matches any message where an HOA correspondent appears as sender, recipient, or cc.
+async function searchHoaAddresses(client) {
+  const or = []
+  for (const addr of HOA_ADDRESSES) {
+    or.push({ from: addr }, { to: addr }, { cc: addr })
+  }
+  return client.search({ or })
 }
 
 // Some forwarded/nested messages leave a raw base64-encoded body (or a
@@ -97,9 +127,4 @@ async function findHoaFolder(client) {
   const mailboxes = await client.list()
   const mb = mailboxes.find(m => m.path.toLowerCase().includes('hoa'))
   return mb?.path || null
-}
-
-async function listFolders(client) {
-  const mailboxes = await client.list()
-  return mailboxes.map(m => m.path)
 }

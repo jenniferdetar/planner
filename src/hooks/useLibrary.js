@@ -6,15 +6,17 @@ export const SHELVES = ['Fiction', 'Business', 'Religious', 'Education', 'Self-H
 export function useLibrary(userId) {
   const [books, setBooks] = useState([])
 
-  useEffect(() => {
+  const reload = useCallback(async () => {
     if (!userId) return
-    supabase
+    const { data } = await supabase
       .from('library_books')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: true })
-      .then(({ data }) => setBooks(data || []))
+    setBooks(data || [])
   }, [userId])
+
+  useEffect(() => { reload() }, [reload])
 
   const addBook = useCallback(async (title, author, shelf, status = 'want-to-read') => {
     const { data } = await supabase
@@ -56,5 +58,5 @@ export function useLibrary(userId) {
     if (data) setBooks(prev => [...prev, ...data])
   }, [userId])
 
-  return { books, addBook, updateStatus, updateChapter, deleteBook, importDefaults }
+  return { books, addBook, updateStatus, updateChapter, deleteBook, importDefaults, reload }
 }

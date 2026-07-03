@@ -84,7 +84,7 @@ export default function App() {
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { notes: icaapNotes, addNote: addIcaapNote, deleteNote: deleteIcaapNote } = useIcaapNotes(userId)
-  const { books, addBook, updateStatus: updateBookStatus, updateChapter: updateBookChapter, deleteBook, importDefaults: importBooks } = useLibrary(userId)
+  const { books, addBook, updateStatus: updateBookStatus, updateChapter: updateBookChapter, deleteBook, importDefaults: importBooks, reload: reloadBooks } = useLibrary(userId)
   const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
   const { sections, updateSection } = usePlannerSections(userId)
   const { tags: asanaTaskTags, cycleTag: cycleAsanaTaskTag } = useAsanaTaskTags()
@@ -295,6 +295,7 @@ export default function App() {
         onUpdateBookChapter={updateBookChapter}
         onDeleteBook={deleteBook}
         onImportBooks={importBooks}
+        onReloadBooks={reloadBooks}
         calendarBlocks={allCalendarBlocks}
         weeklyTasks={weeklyTasks}
         onToggleWeeklyTask={handleToggleWeeklyTask}
