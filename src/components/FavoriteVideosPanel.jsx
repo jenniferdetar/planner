@@ -120,12 +120,12 @@ export default function FavoriteVideosPanel({ userId }) {
 
         <div className="videos-section">
           <h3 className="videos-section-header">Favorite TV Shows</h3>
-          <p className="videos-subtitle-inline">Enter a show name — poster and details are pulled in automatically</p>
+          <p className="videos-subtitle-inline">Enter a show name or paste an IMDb link — poster, details, and the IMDb link are pulled in automatically</p>
           <form className="add-video-form" onSubmit={handleAddShow}>
             <input
               type="text"
               className="add-video-input"
-              placeholder="Enter a TV show name…"
+              placeholder="Show name or IMDb link (e.g. imdb.com/title/tt0944947)…"
               value={newShow}
               onChange={e => setNewShow(e.target.value)}
             />
