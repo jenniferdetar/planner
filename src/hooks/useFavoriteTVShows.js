@@ -18,6 +18,12 @@ export function useFavoriteTVShows(userId) {
   const addShow = useCallback(async (input) => {
     const trimmed = input.trim()
     const imdbId = extractImdbId(trimmed)
+
+    const alreadyAdded = imdbId
+      ? shows.some(s => s.imdb_id === imdbId)
+      : shows.some(s => s.name.toLowerCase() === trimmed.toLowerCase())
+    if (alreadyAdded) throw new Error('That show is already in your list.')
+
     let meta = null
     try {
       meta = imdbId ? await lookupByImdbId(imdbId) : await lookupTVShow(trimmed)
@@ -40,7 +46,7 @@ export function useFavoriteTVShows(userId) {
       .select().single()
     if (error) throw error
     if (data) setShows(prev => [data, ...prev])
-  }, [userId])
+  }, [userId, shows])
 
   const deleteShow = useCallback(async (id) => {
     await supabase.from('favorite_tv_shows').delete().eq('id', id)
