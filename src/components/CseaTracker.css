@@ -697,6 +697,8 @@
 .interaction-disc-text { font-size: 13px; color: var(--csea-body); line-height: 1.5; margin: 0; white-space: pre-wrap; }
 .interaction-who-text { font-size: 11px; color: var(--csea-dark-gray); margin: 0; }
 .interaction-poc-text { font-size: 11px; color: var(--csea-dark-gray); margin: 0; }
+.interaction-doc-link { font-size: 11px; color: var(--csea-blue); text-decoration: none; margin-top: 2px; }
+.interaction-doc-link:hover { text-decoration: underline; }
 
 /* ── Asana tasks ─────────────────────────────────────────────────────────── */
 .asana-task-row {

@@ -588,6 +588,9 @@ function InteractionCard({ interaction: i, onUpdate }) {
       {i.discussion && <p className="interaction-disc-text">{i.discussion}</p>}
       {i.who_involved && <p className="interaction-who-text">With: {i.who_involved}</p>}
       {i.point_of_contact && <p className="interaction-poc-text">Contact: {i.point_of_contact}</p>}
+      {i.meeting_doc_url && (
+        <a className="interaction-doc-link" href={i.meeting_doc_url} target="_blank" rel="noreferrer">📄 Meeting Notes</a>
+      )}
     </div>
   )
 }
