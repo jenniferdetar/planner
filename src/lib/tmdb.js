@@ -1,11 +1,17 @@
 const TMDB_API = 'https://api.themoviedb.org/3'
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342'
 
-// VITE_TMDB_API_KEY holds a TMDb v4 Read Access Token (the long JWT-style
-// value from Settings → API), which authenticates via a Bearer header —
-// unlike the classic v3 key, it does not work as an ?api_key= query param.
-function authHeaders(key) {
-  return { accept: 'application/json', Authorization: `Bearer ${key}` }
+// VITE_TMDB_API_KEY accepts either TMDb credential from Settings → API:
+// the classic v3 API Key (a short hex string, sent as ?api_key=) or the
+// v4 Read Access Token (a long JWT, sent as an Authorization: Bearer
+// header) — the two are mutually exclusive auth methods, so detect which
+// one was configured instead of requiring a specific one.
+function tmdbFetch(url, key) {
+  if (key.includes('.')) {
+    return fetch(url, { headers: { accept: 'application/json', Authorization: `Bearer ${key}` } })
+  }
+  const sep = url.includes('?') ? '&' : '?'
+  return fetch(`${url}${sep}api_key=${key}`)
 }
 
 // Pulls an IMDb title id (e.g. "tt0944947") out of a pasted IMDb URL,
@@ -22,19 +28,13 @@ export async function lookupTVShow(name) {
   const key = import.meta.env.VITE_TMDB_API_KEY
   if (!key) return null
 
-  const searchRes = await fetch(
-    `${TMDB_API}/search/tv?query=${encodeURIComponent(name)}`,
-    { headers: authHeaders(key) }
-  )
+  const searchRes = await tmdbFetch(`${TMDB_API}/search/tv?query=${encodeURIComponent(name)}`, key)
   if (!searchRes.ok) return null
   const searchData = await searchRes.json()
   const match = searchData.results?.[0]
   if (!match) return null
 
-  const detailRes = await fetch(
-    `${TMDB_API}/tv/${match.id}?append_to_response=external_ids`,
-    { headers: authHeaders(key) }
-  )
+  const detailRes = await tmdbFetch(`${TMDB_API}/tv/${match.id}?append_to_response=external_ids`, key)
   const detail = detailRes.ok ? await detailRes.json() : {}
 
   return {
@@ -55,10 +55,7 @@ export async function lookupByImdbId(imdbId) {
   const key = import.meta.env.VITE_TMDB_API_KEY
   if (!key) return null
 
-  const res = await fetch(
-    `${TMDB_API}/find/${imdbId}?external_source=imdb_id`,
-    { headers: authHeaders(key) }
-  )
+  const res = await tmdbFetch(`${TMDB_API}/find/${imdbId}?external_source=imdb_id`, key)
   if (!res.ok) return null
   const data = await res.json()
   const match = data.tv_results?.[0] || data.movie_results?.[0]
