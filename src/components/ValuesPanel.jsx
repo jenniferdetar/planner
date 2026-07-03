@@ -18,36 +18,15 @@ function colorHex(val) {
 
 export default function ValuesPanel({ userId }) {
   const { values, addValue, updateValue, deleteValue } = usePersonalValues(userId)
-  const [openId, setOpenId] = useState(null) // id of value whose popup is open
   const [adding, setAdding] = useState(false)
   const [newName, setNewName] = useState('')
-
-  const current = values.find(v => v.id === openId)
-
-  function handleDescChange(id, text) {
-    updateValue(id, { description: text })
-  }
-
-  function handleNameChange(id, name) {
-    updateValue(id, { name })
-  }
-
-  function handleColorChange(id, color) {
-    updateValue(id, { color })
-  }
 
   async function handleAdd(e) {
     e.preventDefault()
     if (!newName.trim()) return
-    const v = await addValue(newName.trim())
+    await addValue(newName.trim())
     setNewName('')
     setAdding(false)
-    if (v) setOpenId(v.id)
-  }
-
-  async function handleDelete(id) {
-    await deleteValue(id)
-    setOpenId(null)
   }
 
   return (
@@ -80,38 +59,38 @@ export default function ValuesPanel({ userId }) {
       )}
 
       {values.length > 0 && (
-        <div className="values-subtabs">
+        <div className="values-grid">
           {values.map(v => (
-            <button
-              key={v.id}
-              className="values-subtab"
-              style={{ '--val-color': colorHex(v.color) }}
-              onClick={() => setOpenId(v.id)}
-            >
-              <span className="values-subtab-dot" style={{ background: colorHex(v.color) }} />
-              {v.name}
-            </button>
+            <ValueGroup key={v.id} value={v} onUpdate={updateValue} onDelete={deleteValue} />
           ))}
         </div>
       )}
 
       </div>
+    </div>
+  )
+}
 
-      {current && (
-        <div className="values-modal-backdrop" onClick={() => setOpenId(null)}>
-          <div className="values-modal" onClick={e => e.stopPropagation()}>
-            <button className="values-modal-close" onClick={() => setOpenId(null)}>✕</button>
+function ValueGroup({ value: v, onUpdate, onDelete }) {
+  const [collapsed, setCollapsed] = useState(true)
+  const color = colorHex(v.color)
 
-            <h2 className="values-detail-title" style={{ color: colorHex(current.color) }}>
-              {current.name}
-            </h2>
-
+  return (
+    <div className={`value-group${collapsed ? '' : ' expanded'}`}>
+      <div className="value-group-header" style={{ '--vc': color }} onClick={() => setCollapsed(c => !c)}>
+        <span className="value-group-dot" style={{ background: color }} />
+        <span className="value-group-name">{v.name}</span>
+        <span className="value-group-toggle">{collapsed ? '▾' : '▴'}</span>
+      </div>
+      {!collapsed && (
+        <div className="value-group-items">
+          <div className="value-card">
             <div className="values-field-row">
               <span className="values-field-label">Name</span>
               <input
                 className="values-name-input"
-                value={current.name}
-                onChange={e => handleNameChange(current.id, e.target.value)}
+                value={v.name}
+                onChange={e => onUpdate(v.id, { name: e.target.value })}
               />
             </div>
 
@@ -121,30 +100,28 @@ export default function ValuesPanel({ userId }) {
                 {COLOR_OPTIONS.map(c => (
                   <button
                     key={c.value}
-                    className={`values-color-swatch${current.color === c.value ? ' active' : ''}`}
+                    type="button"
+                    className={`values-color-swatch${v.color === c.value ? ' active' : ''}`}
                     style={{ background: c.hex }}
                     title={c.label}
-                    onClick={() => handleColorChange(current.id, c.value)}
+                    onClick={() => onUpdate(v.id, { color: c.value })}
                   />
                 ))}
-                <span className="values-color-label" style={{ color: colorHex(current.color) }}>
-                  {COLOR_OPTIONS.find(c => c.value === current.color)?.label || ''}
+                <span className="values-color-label" style={{ color }}>
+                  {COLOR_OPTIONS.find(c => c.value === v.color)?.label || ''}
                 </span>
               </div>
             </div>
 
-            <div className="values-field-row values-field-col">
-              <span className="values-field-label">Value Description</span>
-              <textarea
-                className="values-desc-textarea"
-                style={{ '--values-color': colorHex(current.color) }}
-                value={current.description}
-                onChange={e => handleDescChange(current.id, e.target.value)}
-                placeholder="Describe what this value means to you…"
-              />
-            </div>
+            <textarea
+              className="values-desc-textarea"
+              style={{ '--values-color': color }}
+              value={v.description}
+              onChange={e => onUpdate(v.id, { description: e.target.value })}
+              placeholder="Describe what this value means to you…"
+            />
 
-            <button className="values-delete-btn" onClick={() => handleDelete(current.id)}>
+            <button className="values-delete-btn" onClick={() => onDelete(v.id)}>
               Delete
             </button>
           </div>

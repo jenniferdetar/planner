@@ -101,89 +101,67 @@
   margin: 0;
 }
 
-.values-subtabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 16px;
+/* ── Values grid (grouped-card layout, matching CSEA interactions) ───────── */
+.values-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-content: start;
+  gap: 8px 12px;
 }
 
-.values-subtab {
+.value-group {
+  background: #fff;
+  border-left: 6px solid var(--vc, #2980b9);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(30,48,112,0.10), 0 8px 20px rgba(30,48,112,0.06);
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+
+.value-group:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
+.value-group.expanded { grid-column: 1 / -1; }
+
+.value-group-header {
+  width: 100%;
+  height: 56px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: #666;
-  background: #f4f6fb;
-  border: 1px solid #e0e5ee;
-  border-radius: 999px;
-  padding: 6px 14px;
+  gap: 8px;
+  padding: 9px 16px;
+  background: color-mix(in srgb, var(--vc, #2980b9) 10%, #fff);
+  border-bottom: 2px solid var(--vc, #2980b9);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
-.values-subtab:hover {
-  background: #eaf0fb;
-  border-color: var(--val-color, #1e3070);
-  color: var(--val-color, #1e3070);
-}
-
-.values-subtab-dot {
-  width: 8px;
-  height: 8px;
+.value-group-dot {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-/* Popup shown when a value subtab is clicked */
-.values-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(20,20,30,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 20px;
+.value-group-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--vc, #2980b9);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.values-modal {
-  position: relative;
-  width: 100%;
-  max-width: 520px;
-  max-height: 85vh;
-  overflow-y: auto;
+.value-group-toggle { font-size: 13px; color: var(--vc, #2980b9); background: none; border: none; cursor: pointer; margin-left: auto; flex-shrink: 0; }
+
+.value-group-items { border-top: 1px solid #eee; }
+
+.value-card {
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 32px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-.values-modal-close {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  font-size: 14px;
-  color: #999;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-.values-modal-close:hover { color: #333; }
-
-.values-detail-title {
-  font-family: 'Architects Daughter', cursive;
-  font-size: 28px;
-  font-weight: 400;
-  margin: 0 0 4px;
+  gap: 12px;
 }
 
 .values-field-row {
@@ -257,18 +235,18 @@
 
 .values-desc-textarea {
   width: 100%;
-  min-height: 300px;
-  padding: 20px 24px;
+  min-height: 110px;
+  padding: 12px 14px;
   font-family: 'Architects Daughter', cursive;
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 15px;
+  line-height: 22px;
   color: #222;
   background: #fff;
   border: 1px solid #d9e8f0;
-  border-top: 4px solid var(--values-color, #1e3070);
+  border-top: 3px solid var(--values-color, #1e3070);
   border-radius: 8px;
   outline: none;
-  resize: none;
+  resize: vertical;
   box-sizing: border-box;
   transition: box-shadow 0.15s;
 }
@@ -308,22 +286,13 @@
     padding: 12px 14px;
   }
 
-  .values-subtabs {
-    gap: 4px;
-  }
-
-  .values-subtab {
-    font-size: 11px;
-    padding: 5px 10px;
-  }
-
-  .values-detail-title {
-    font-size: 20px;
+  .values-grid {
+    grid-template-columns: 1fr;
   }
 
   .values-desc-textarea {
-    padding: 12px 14px;
+    padding: 10px 12px;
     font-size: 14px;
-    min-height: 200px;
+    min-height: 90px;
   }
 }
