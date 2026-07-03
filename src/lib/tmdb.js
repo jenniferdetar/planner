@@ -1,6 +1,13 @@
 const TMDB_API = 'https://api.themoviedb.org/3'
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342'
 
+// VITE_TMDB_API_KEY holds a TMDb v4 Read Access Token (the long JWT-style
+// value from Settings → API), which authenticates via a Bearer header —
+// unlike the classic v3 key, it does not work as an ?api_key= query param.
+function authHeaders(key) {
+  return { accept: 'application/json', Authorization: `Bearer ${key}` }
+}
+
 // Pulls an IMDb title id (e.g. "tt0944947") out of a pasted IMDb URL,
 // or returns it as-is if the user typed the bare id.
 export function extractImdbId(input) {
@@ -16,7 +23,8 @@ export async function lookupTVShow(name) {
   if (!key) return null
 
   const searchRes = await fetch(
-    `${TMDB_API}/search/tv?api_key=${key}&query=${encodeURIComponent(name)}`
+    `${TMDB_API}/search/tv?query=${encodeURIComponent(name)}`,
+    { headers: authHeaders(key) }
   )
   if (!searchRes.ok) return null
   const searchData = await searchRes.json()
@@ -24,7 +32,8 @@ export async function lookupTVShow(name) {
   if (!match) return null
 
   const detailRes = await fetch(
-    `${TMDB_API}/tv/${match.id}?api_key=${key}&append_to_response=external_ids`
+    `${TMDB_API}/tv/${match.id}?append_to_response=external_ids`,
+    { headers: authHeaders(key) }
   )
   const detail = detailRes.ok ? await detailRes.json() : {}
 
@@ -47,7 +56,8 @@ export async function lookupByImdbId(imdbId) {
   if (!key) return null
 
   const res = await fetch(
-    `${TMDB_API}/find/${imdbId}?api_key=${key}&external_source=imdb_id`
+    `${TMDB_API}/find/${imdbId}?external_source=imdb_id`,
+    { headers: authHeaders(key) }
   )
   if (!res.ok) return null
   const data = await res.json()
