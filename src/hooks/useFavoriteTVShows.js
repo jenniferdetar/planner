@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
-import { lookupTVShow } from '../lib/tmdb'
+import { lookupTVShow, lookupByImdbId, extractImdbId } from '../lib/tmdb'
 
 export function useFavoriteTVShows(userId) {
   const [shows, setShows] = useState([])
@@ -15,24 +15,26 @@ export function useFavoriteTVShows(userId) {
       .then(({ data }) => setShows(data || []))
   }, [userId])
 
-  const addShow = useCallback(async (name) => {
+  const addShow = useCallback(async (input) => {
+    const trimmed = input.trim()
+    const imdbId = extractImdbId(trimmed)
     let meta = null
     try {
-      meta = await lookupTVShow(name.trim())
+      meta = imdbId ? await lookupByImdbId(imdbId) : await lookupTVShow(trimmed)
     } catch {
-      // TMDb lookup failed; fall back to just the show name
+      // TMDb lookup failed; fall back to what we already know
     }
 
     const { data, error } = await supabase
       .from('favorite_tv_shows')
       .insert({
-        name: meta?.name || name.trim(),
+        name: meta?.name || (imdbId ? imdbId : trimmed),
         user_id: userId,
         poster_url: meta?.poster_url ?? null,
         overview: meta?.overview ?? null,
         first_air_date: meta?.first_air_date ?? null,
         rating: meta?.rating ?? null,
-        imdb_id: meta?.imdb_id ?? null,
+        imdb_id: meta?.imdb_id ?? imdbId ?? null,
         tmdb_id: meta?.tmdb_id ?? null,
       })
       .select().single()
