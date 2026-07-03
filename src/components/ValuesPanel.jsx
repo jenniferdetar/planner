@@ -2,19 +2,9 @@ import { useState } from 'react'
 import { usePersonalValues } from '../hooks/usePersonalValues'
 import './ValuesPanel.css'
 
-const COLOR_OPTIONS = [
-  { label: 'Red',    value: 'red',    hex: '#c0392b' },
-  { label: 'Blue',   value: 'blue',   hex: '#2980b9' },
-  { label: 'Green',  value: 'green',  hex: '#27ae60' },
-  { label: 'Purple', value: 'purple', hex: '#8e44ad' },
-  { label: 'Orange', value: 'orange', hex: '#e67e22' },
-  { label: 'Gold',   value: 'gold',   hex: '#d4a017' },
-  { label: 'Teal',   value: 'teal',   hex: '#16a085' },
-]
-
-function colorHex(val) {
-  return COLOR_OPTIONS.find(c => c.value === val)?.hex || '#2980b9'
-}
+// Cards cycle through this palette by position so the grid always has
+// visual variety, instead of relying on someone picking a color per value.
+const PALETTE = ['#c0392b', '#2980b9', '#27ae60', '#8e44ad', '#e67e22', '#d4a017', '#16a085']
 
 export default function ValuesPanel({ userId }) {
   const { values, addValue, updateValue, deleteValue } = usePersonalValues(userId)
@@ -60,8 +50,8 @@ export default function ValuesPanel({ userId }) {
 
       {values.length > 0 && (
         <div className="values-grid">
-          {values.map(v => (
-            <ValueGroup key={v.id} value={v} onUpdate={updateValue} onDelete={deleteValue} />
+          {values.map((v, idx) => (
+            <ValueGroup key={v.id} value={v} color={PALETTE[idx % PALETTE.length]} onUpdate={updateValue} onDelete={deleteValue} />
           ))}
         </div>
       )}
@@ -71,9 +61,8 @@ export default function ValuesPanel({ userId }) {
   )
 }
 
-function ValueGroup({ value: v, onUpdate, onDelete }) {
+function ValueGroup({ value: v, color, onUpdate, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
-  const color = colorHex(v.color)
 
   return (
     <div className={`value-group${collapsed ? '' : ' expanded'}`}>
@@ -92,25 +81,6 @@ function ValueGroup({ value: v, onUpdate, onDelete }) {
                 value={v.name}
                 onChange={e => onUpdate(v.id, { name: e.target.value })}
               />
-            </div>
-
-            <div className="values-field-row">
-              <span className="values-field-label">Color</span>
-              <div className="values-color-picker">
-                {COLOR_OPTIONS.map(c => (
-                  <button
-                    key={c.value}
-                    type="button"
-                    className={`values-color-swatch${v.color === c.value ? ' active' : ''}`}
-                    style={{ background: c.hex }}
-                    title={c.label}
-                    onClick={() => onUpdate(v.id, { color: c.value })}
-                  />
-                ))}
-                <span className="values-color-label" style={{ color }}>
-                  {COLOR_OPTIONS.find(c => c.value === v.color)?.label || ''}
-                </span>
-              </div>
             </div>
 
             <textarea

@@ -83,11 +83,21 @@ function getWeekStart(date) {
   return d
 }
 
+// A habit is either a plain name (applies every day) or { name, days } to
+// restrict it to specific days of the week (0 = Sunday … 6 = Saturday).
 const HABITS = {
   'Home Care': ['Make beds', 'Cleaning', 'Recycling'],
   'Self Care': ['Shower', 'Read', 'Bring lunch to work'],
   'Week Days': ['Get up at 5:00 am', 'Leave work at 3:30 pm', 'Take train to work', 'Listen to Bible app'],
-  'Weekends': ['Get up at 7:00 am', 'Plan/prep meals', 'Laundry'],
+  'Weekends': ['Get up at 7:00 am', 'Plan/prep meals', { name: 'Laundry', days: [6] }],
+}
+
+function habitName(h) {
+  return typeof h === 'string' ? h : h.name
+}
+
+function habitDays(h) {
+  return typeof h === 'string' ? null : h.days
 }
 
 const HABIT_COLORS = {
@@ -174,13 +184,19 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                 ))}
               </div>
             </div>
-            {habits.map(habit => (
-              <div key={habit} className="habit-row">
-                <span className="habit-name">{habit}</span>
+            {habits.map(habit => {
+              const name = habitName(habit)
+              const restrictDays = habitDays(habit)
+              return (
+              <div key={name} className="habit-row">
+                <span className="habit-name">{name}</span>
                 <div className="habit-dots">
                   {days.map((day, i) => {
+                    if (restrictDays && !restrictDays.includes(i)) {
+                      return <span key={i} className="habit-dot habit-dot-na" />
+                    }
                     const dateStr = toDateStr(day)
-                    const done = isCompleted(category, habit, dateStr)
+                    const done = isCompleted(category, name, dateStr)
                     return (
                       <button
                         key={i}
@@ -189,14 +205,15 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                           borderColor: HABIT_COLORS[category],
                           background: done ? HABIT_COLORS[category] : 'transparent',
                         }}
-                        onClick={() => toggleHabit(category, habit, dateStr)}
+                        onClick={() => toggleHabit(category, name, dateStr)}
                         title={`${DAY_NAMES_FULL[i]} ${MONTH_SHORT[day.getMonth()]} ${day.getDate()}`}
                       />
                     )
                   })}
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         ))}
       </div>
