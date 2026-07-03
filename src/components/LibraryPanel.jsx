@@ -134,7 +134,7 @@ const DEFAULTS = [
   { title: 'Popular Mechanics', author: '', shelf: 'Magazine', status: 'want-to-read' },
 ]
 
-export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks }) {
+export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers }) {
   const { sync: syncYahooBooks, syncing: yahooBooksSyncing, newCount: yahooBooksNewCount, error: yahooBooksError } = useYahooBookSync(userId, onReloadBooks)
   const [activeShelf, setActiveShelf] = useState(WANT_TO_READ_TAB)
   const [newTitle, setNewTitle] = useState('')
@@ -143,6 +143,9 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
   const [hoveredId, setHoveredId] = useState(null)
   const [importing, setImporting] = useState(false)
   const [taskAdded, setTaskAdded] = useState(false)
+  const [brokenCovers, setBrokenCovers] = useState(() => new Set())
+
+  const missingCoverCount = books.filter(b => !b.cover_url).length
 
   const isWantToRead = activeShelf === WANT_TO_READ_TAB
 
@@ -209,6 +212,18 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
           <button className="import-btn" onClick={handleImport} disabled={importing}>
             {importing ? 'Importing…' : '↓ Sync Nook library'}
           </button>
+          {missingCoverCount > 0 && (
+            <button
+              className="import-btn"
+              onClick={onFetchBookCovers}
+              disabled={bookCoverSync?.syncing}
+              title="Look up cover photos for books that don't have one yet"
+            >
+              {bookCoverSync?.syncing
+                ? `Finding covers… ${bookCoverSync.done}/${bookCoverSync.total}`
+                : `🖼 Add photos (${missingCoverCount})`}
+            </button>
+          )}
           <button
             className="import-btn"
             onClick={syncYahooBooks}
@@ -254,6 +269,7 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
         <div className="book-grid">
           {shelfBooks.map((book, idx) => {
             const paletteColor = PALETTE[idx % PALETTE.length]
+            const showCover = book.cover_url && !brokenCovers.has(book.id)
             return (
             <div
               key={book.id}
@@ -261,7 +277,19 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
               onMouseEnter={() => setHoveredId(book.id)}
               onMouseLeave={() => setHoveredId(null)}
             >
-              <div className="book-card-spine" style={{ background: paletteColor + '33', borderTopColor: paletteColor }} />
+              {showCover ? (
+                <div className="book-card-cover">
+                  <img
+                    src={book.cover_url}
+                    alt=""
+                    className="book-cover-img"
+                    loading="lazy"
+                    onError={() => setBrokenCovers(prev => new Set(prev).add(book.id))}
+                  />
+                </div>
+              ) : (
+                <div className="book-card-spine" style={{ background: paletteColor + '33', borderTopColor: paletteColor }} />
+              )}
               <div className="book-card-body">
                 <span className="book-title">{book.title}</span>
                 {book.author && <span className="book-author">{book.author}</span>}

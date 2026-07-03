@@ -33,7 +33,7 @@ const FRAMEWORK = [
   { key: 'checklist', label: 'Checklist' },
 ]
 
-export default function PersonalPanel({ userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
+export default function PersonalPanel({ userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
   const visibleTabs = allowedSubTabs ? SUB_TABS.filter(t => allowedSubTabs.includes(t.key)) : SUB_TABS
   const defaultTab = visibleTabs[0]?.key || 'goals'
 
@@ -94,6 +94,8 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
           onDeleteBook={onDeleteBook}
           onImportBooks={onImportBooks}
           onReloadBooks={onReloadBooks}
+          bookCoverSync={bookCoverSync}
+          onFetchBookCovers={onFetchBookCovers}
         />
       )}
       {subTab === 'videos' && <FavoriteVideosPanel userId={userId} />}
