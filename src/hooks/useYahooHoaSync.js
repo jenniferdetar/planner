@@ -38,7 +38,7 @@ export function useYahooHoaSync(userId, onImported) {
     setError(null)
 
     try {
-      const res = await fetch('/api/yahoo-hoa', { method: 'POST' })
+      const res = await fetch('/api/yahoo-hoa', { method: 'POST', signal: AbortSignal.timeout(35000) })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
         throw new Error(body.error || `Yahoo HOA sync error ${res.status}`)
