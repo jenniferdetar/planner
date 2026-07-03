@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { SHELVES } from '../hooks/useLibrary'
+import { useYahooBookSync } from '../hooks/useYahooBookSync'
 import { supabase } from '../lib/supabase'
 import './LibraryPanel.css'
 
@@ -133,7 +134,8 @@ const DEFAULTS = [
   { title: 'Popular Mechanics', author: '', shelf: 'Magazine', status: 'want-to-read' },
 ]
 
-export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus, onUpdateBookChapter, onDeleteBook, onImportBooks }) {
+export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks }) {
+  const { sync: syncYahooBooks, syncing: yahooBooksSyncing, newCount: yahooBooksNewCount, error: yahooBooksError } = useYahooBookSync(userId, onReloadBooks)
   const [activeShelf, setActiveShelf] = useState(WANT_TO_READ_TAB)
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
@@ -206,6 +208,14 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
           )}
           <button className="import-btn" onClick={handleImport} disabled={importing}>
             {importing ? 'Importing…' : '↓ Sync Nook library'}
+          </button>
+          <button
+            className="import-btn"
+            onClick={syncYahooBooks}
+            disabled={yahooBooksSyncing}
+            title={yahooBooksError || (yahooBooksNewCount != null ? `Last sync: ${yahooBooksNewCount} new` : 'Pull Barnes & Noble order confirmations from Yahoo Mail')}
+          >
+            {yahooBooksSyncing ? 'Syncing…' : `↓ Sync B&N orders${yahooBooksNewCount > 0 ? ` (+${yahooBooksNewCount})` : ''}`}
           </button>
         </div>
       </div>
