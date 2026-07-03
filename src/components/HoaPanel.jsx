@@ -273,6 +273,23 @@ function HoaForm({ api }) {
   )
 }
 
+function HoaItemCard({ item, onEdit, onDelete, standalone }) {
+  return (
+    <div className={`hoa-group-card${standalone ? ' standalone' : ''}`}>
+      <div className="hoa-group-card-header">
+        <span className="hoa-group-cat-badge" style={{ background: CAT_COLORS[item.category] + '22', color: CAT_COLORS[item.category] }}>{item.category}</span>
+        <span className="hoa-group-priority" style={{ color: PRIORITY_COLORS[item.priority] }}>{item.priority}</span>
+        <span className="hoa-group-status" style={{ background: STATUS_COLORS[item.status] + '22', color: STATUS_COLORS[item.status] }}>{item.status}</span>
+        {item.item_date && <span className="hoa-group-date">{new Date(item.item_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
+        <button className="hoa-group-del" title="Delete" onClick={() => onDelete(item.id)}>✕</button>
+      </div>
+      <p className="hoa-group-title">{item.title}</p>
+      {item.notes && <p className="hoa-group-notes">{item.notes}</p>}
+      <button className="hoa-group-edit" onClick={() => onEdit(item)}>Edit</button>
+    </div>
+  )
+}
+
 function HoaUnitGroup({ unit, items, onEdit, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
@@ -287,18 +304,7 @@ function HoaUnitGroup({ unit, items, onEdit, onDelete }) {
       {!collapsed && (
         <div className="hoa-group-items">
           {items.map(item => (
-            <div key={item.id} className="hoa-group-card">
-              <div className="hoa-group-card-header">
-                <span className="hoa-group-cat-badge" style={{ background: CAT_COLORS[item.category] + '22', color: CAT_COLORS[item.category] }}>{item.category}</span>
-                <span className="hoa-group-priority" style={{ color: PRIORITY_COLORS[item.priority] }}>{item.priority}</span>
-                <span className="hoa-group-status" style={{ background: STATUS_COLORS[item.status] + '22', color: STATUS_COLORS[item.status] }}>{item.status}</span>
-                {item.item_date && <span className="hoa-group-date">{new Date(item.item_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
-                <button className="hoa-group-del" title="Delete" onClick={() => onDelete(item.id)}>✕</button>
-              </div>
-              <p className="hoa-group-title">{item.title}</p>
-              {item.notes && <p className="hoa-group-notes">{item.notes}</p>}
-              <button className="hoa-group-edit" onClick={() => onEdit(item)}>Edit</button>
-            </div>
+            <HoaItemCard key={item.id} item={item} onEdit={onEdit} onDelete={onDelete} />
           ))}
         </div>
       )}
@@ -312,7 +318,11 @@ function HoaGroupList({ groups, api }) {
       {api.loading && <p className="hoa-empty">Loading…</p>}
       {!api.loading && groups.length === 0 && <p className="hoa-empty">No items in this category.</p>}
       {groups.map(([unit, unitItems]) => (
-        <HoaUnitGroup key={unit} unit={unit} items={unitItems} onEdit={api.openEdit} onDelete={api.deleteItem} />
+        unit === 'General / Board-Wide'
+          ? unitItems.map(item => (
+              <HoaItemCard key={item.id} item={item} onEdit={api.openEdit} onDelete={api.deleteItem} standalone />
+            ))
+          : <HoaUnitGroup key={unit} unit={unit} items={unitItems} onEdit={api.openEdit} onDelete={api.deleteItem} />
       ))}
     </div>
   )

@@ -325,6 +325,17 @@
 }
 .hoa-group-card:nth-child(even) { background: #fafcff; }
 
+.hoa-group-card.standalone {
+  border-top: none;
+  border-left: 6px solid #1e3070;
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 6px rgba(30,48,112,0.10), 0 8px 20px rgba(30,48,112,0.06);
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+.hoa-group-card.standalone:nth-child(even) { border-left-color: #ffb81c; background: #fff; }
+.hoa-group-card.standalone:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
+
 .hoa-group-card-header {
   display: flex;
   align-items: center;
