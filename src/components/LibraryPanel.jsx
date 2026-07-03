@@ -143,6 +143,7 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
   const [hoveredId, setHoveredId] = useState(null)
   const [importing, setImporting] = useState(false)
   const [taskAdded, setTaskAdded] = useState(false)
+  const [addingTask, setAddingTask] = useState(false)
   const [brokenCovers, setBrokenCovers] = useState(() => new Set())
 
   const missingCoverCount = books.filter(b => !b.cover_url).length
@@ -155,13 +156,24 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
     .sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0))[0] || null
 
   async function handleAddReadingTask() {
-    if (!currentBook || !userId) return
+    if (!currentBook || !userId || addingTask) return
+    setAddingTask(true)
     const today = new Date()
     const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`
     const chap = currentBook.current_chapter || 0
     const total = currentBook.total_chapters ? `/${currentBook.total_chapters}` : ''
     const title = `📖 Read: ${currentBook.title} — Ch.${chap}${total}`
-    await supabase.from('opus_tasks').insert({ title, priority: 'medium', due_date: dateStr, completed: false, user_id: userId })
+    const { data: existing } = await supabase
+      .from('opus_tasks')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('due_date', dateStr)
+      .eq('title', title)
+      .limit(1)
+    if (!existing?.length) {
+      await supabase.from('opus_tasks').insert({ title, priority: 'medium', due_date: dateStr, completed: false, user_id: userId })
+    }
+    setAddingTask(false)
     setTaskAdded(true)
     setTimeout(() => setTaskAdded(false), 3000)
   }
@@ -205,8 +217,8 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
         </div>
         <div className="library-header-actions">
           {currentBook && (
-            <button className="reading-task-btn" onClick={handleAddReadingTask} title={`Add today's reading task for "${currentBook.title}"`}>
-              {taskAdded ? '✓ Added!' : '📖 Add reading task'}
+            <button className="reading-task-btn" onClick={handleAddReadingTask} disabled={addingTask} title={`Add today's reading task for "${currentBook.title}"`}>
+              {taskAdded ? '✓ Added!' : addingTask ? 'Adding…' : '📖 Add reading task'}
             </button>
           )}
           <button className="import-btn" onClick={handleImport} disabled={importing}>
