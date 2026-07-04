@@ -1493,10 +1493,10 @@ const MACHINE_TYPES = [
 function quartersFor(cost) { return Math.round(cost / 0.25) }
 
 // Dryer pricing: $1.75 (7 quarters) buys a 45-minute base cycle. Each additional
-// quarter beyond the base buys 7 more minutes.
+// quarter beyond the base buys 6 more minutes.
 const DRYER_BASE_QUARTERS = 7
 const DRYER_BASE_MINUTES = 45
-const DRYER_MINUTES_PER_QUARTER = 7
+const DRYER_MINUTES_PER_QUARTER = 6
 
 function dryerQuartersForMinutes(minutes) {
   const extraMinutes = Math.max(0, (parseInt(minutes) || 0) - DRYER_BASE_MINUTES)
@@ -1609,7 +1609,7 @@ function LaundryTab({ userId }) {
       </div>
 
       <div className="laundry-note">
-        Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75 for 45 min base (7 quarters), +1 quarter = +7 min
+        Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75 for 45 min base (7 quarters), +1 quarter = +6 min
       </div>
 
       <div className="budget-summary-bar">
