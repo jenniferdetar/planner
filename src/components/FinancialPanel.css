@@ -1283,16 +1283,35 @@
 
 .laundry-section { padding: 4px 14px 5px; }
 
+.laundry-section-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
 .laundry-section-title {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  margin-bottom: 3px;
+}
+
+.laundry-section-total {
+  font-size: 10px;
+  color: #888;
+  white-space: nowrap;
 }
 
 .laundry-section-title--wash { color: #1e3070; }
 .laundry-section-title--dry  { color: #c77b3a; }
+
+.laundry-summary-sub {
+  font-size: 10px;
+  color: #888;
+  margin-top: 1px;
+}
 
 .laundry-card-grid {
   display: grid;
