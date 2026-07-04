@@ -274,6 +274,59 @@ function HoaForm({ api }) {
   )
 }
 
+function stripReplyPrefixes(title) {
+  let s = (title || '').trim()
+  let prev
+  do {
+    prev = s
+    s = s.replace(/^(re|fwd?|fw)\s*:\s*/i, '').trim()
+  } while (s !== prev)
+  return s
+}
+
+// Groups items that share the same email subject (ignoring Re:/Fwd: prefixes),
+// preserving each subject's first-seen order (items already arrive newest-first).
+function groupBySubject(items) {
+  const map = new Map()
+  for (const item of items) {
+    const key = stripReplyPrefixes(item.title).toLowerCase()
+    if (!map.has(key)) map.set(key, [])
+    map.get(key).push(item)
+  }
+  return Array.from(map.values())
+}
+
+function renderGroupedItems(items, onEdit, onDelete, standalone) {
+  return groupBySubject(items).map(group =>
+    group.length > 1
+      ? <HoaSubjectGroup key={group[0].id} items={group} onEdit={onEdit} onDelete={onDelete} />
+      : <HoaItemCard key={group[0].id} item={group[0]} onEdit={onEdit} onDelete={onDelete} standalone={standalone} />
+  )
+}
+
+function HoaSubjectGroup({ items, onEdit, onDelete }) {
+  const [collapsed, setCollapsed] = useState(true)
+  const subject = stripReplyPrefixes(items[0].title)
+  return (
+    <div className={`hoa-group${collapsed ? '' : ' expanded'}`}>
+      <div className="hoa-group-header" onClick={() => setCollapsed(c => !c)}>
+        <span className="hoa-group-name">{subject}</span>
+        <span className="hoa-group-count">{items.length}</span>
+        <button className="hoa-group-toggle" onClick={e => { e.stopPropagation(); setCollapsed(c => !c) }}>
+          {collapsed ? '▾' : '▴'}
+        </button>
+      </div>
+      {!collapsed && (
+        <div className="hoa-group-items">
+          {items.map(item => (
+            <HoaItemCard key={item.id} item={item} onEdit={onEdit} onDelete={onDelete} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function HoaItemCard({ item, onEdit, onDelete, standalone }) {
   return (
     <div className={`hoa-group-card${standalone ? ' standalone' : ''}`}>
@@ -304,9 +357,7 @@ function HoaUnitGroup({ unit, items, onEdit, onDelete }) {
       </div>
       {!collapsed && (
         <div className="hoa-group-items">
-          {items.map(item => (
-            <HoaItemCard key={item.id} item={item} onEdit={onEdit} onDelete={onDelete} />
-          ))}
+          {renderGroupedItems(items, onEdit, onDelete, false)}
         </div>
       )}
     </div>
@@ -320,9 +371,7 @@ function HoaGroupList({ groups, api }) {
       {!api.loading && groups.length === 0 && <p className="hoa-empty">No items in this category.</p>}
       {groups.map(([unit, unitItems]) => (
         unit === 'General / Board-Wide'
-          ? unitItems.map(item => (
-              <HoaItemCard key={item.id} item={item} onEdit={api.openEdit} onDelete={api.deleteItem} standalone />
-            ))
+          ? renderGroupedItems(unitItems, api.openEdit, api.deleteItem, true)
           : <HoaUnitGroup key={unit} unit={unit} items={unitItems} onEdit={api.openEdit} onDelete={api.deleteItem} />
       ))}
     </div>
