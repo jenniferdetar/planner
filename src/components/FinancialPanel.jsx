@@ -1492,6 +1492,26 @@ const MACHINE_TYPES = [
 
 function quartersFor(cost) { return Math.round(cost / 0.25) }
 
+// Dryer pricing: $1.75 (7 quarters) buys a 45-minute base cycle. Each additional
+// quarter beyond the base buys 7 more minutes.
+const DRYER_BASE_QUARTERS = 7
+const DRYER_BASE_MINUTES = 45
+const DRYER_MINUTES_PER_QUARTER = 7
+
+function dryerQuartersForMinutes(minutes) {
+  const extraMinutes = Math.max(0, (parseInt(minutes) || 0) - DRYER_BASE_MINUTES)
+  return DRYER_BASE_QUARTERS + Math.ceil(extraMinutes / DRYER_MINUTES_PER_QUARTER)
+}
+
+function dryerMinutesForQuarters(quarters) {
+  const extraQuarters = Math.max(0, (parseInt(quarters) || 0) - DRYER_BASE_QUARTERS)
+  return DRYER_BASE_MINUTES + extraQuarters * DRYER_MINUTES_PER_QUARTER
+}
+
+function perLoadQuartersFor(machine, minutes) {
+  return machine.key === 'dryer' ? dryerQuartersForMinutes(minutes) : quartersFor(machine.costPerLoad)
+}
+
 function LaundryTab({ userId }) {
   const [sessions, setSessions] = useState([])
   const [showForm, setShowForm] = useState(false)
@@ -1515,19 +1535,43 @@ function LaundryTab({ userId }) {
 
   function onMachineChange(machineKey) {
     const m = MACHINE_TYPES.find(x => x.key === machineKey)
-    setForm(f => ({
-      ...f,
-      machine_type: machineKey,
-      type: m.type,
-      quarters: quartersFor(m.costPerLoad * f.loads),
-      minutes: m.defaultMinutes || f.minutes,
-    }))
+    setForm(f => {
+      const minutes = m.defaultMinutes || f.minutes
+      return {
+        ...f,
+        machine_type: machineKey,
+        type: m.type,
+        minutes,
+        quarters: perLoadQuartersFor(m, minutes) * f.loads,
+      }
+    })
   }
 
   function onLoadsChange(loads) {
     const n = parseInt(loads) || 1
     const m = MACHINE_TYPES.find(x => x.key === form.machine_type)
-    setForm(f => ({ ...f, loads: n, quarters: quartersFor(m.costPerLoad * n) }))
+    setForm(f => ({ ...f, loads: n, quarters: perLoadQuartersFor(m, f.minutes) * n }))
+  }
+
+  function onMinutesChange(minutes) {
+    const m = MACHINE_TYPES.find(x => x.key === form.machine_type)
+    if (m.key !== 'dryer') {
+      setForm(f => ({ ...f, minutes }))
+      return
+    }
+    setForm(f => ({ ...f, minutes, quarters: dryerQuartersForMinutes(minutes) * f.loads }))
+  }
+
+  function onQuartersChange(quarters) {
+    const m = MACHINE_TYPES.find(x => x.key === form.machine_type)
+    if (m.key !== 'dryer') {
+      setForm(f => ({ ...f, quarters }))
+      return
+    }
+    setForm(f => {
+      const perLoadQuarters = Math.max(DRYER_BASE_QUARTERS, Math.round((parseInt(quarters) || 0) / (f.loads || 1)))
+      return { ...f, quarters, minutes: dryerMinutesForQuarters(perLoadQuarters) }
+    })
   }
 
   async function handleSubmit(e) {
@@ -1571,7 +1615,7 @@ function LaundryTab({ userId }) {
       </div>
 
       <div className="laundry-note">
-        Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75/load (45 min default)
+        Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75 for 45 min base (7 quarters), +1 quarter = +7 min
       </div>
 
       {showForm && (
@@ -1590,11 +1634,11 @@ function LaundryTab({ userId }) {
             </label>
             <label className="laundry-lbl">
               <span>Quarters</span>
-              <input className="fin-input" type="number" min="0" value={form.quarters} onChange={e => setForm(f => ({ ...f, quarters: e.target.value }))} />
+              <input className="fin-input" type="number" min="0" value={form.quarters} onChange={e => onQuartersChange(e.target.value)} />
             </label>
             <label className="laundry-lbl">
               <span>Minutes</span>
-              <input className="fin-input" type="number" min="0" value={form.minutes} onChange={e => setForm(f => ({ ...f, minutes: e.target.value }))} />
+              <input className="fin-input" type="number" min="0" value={form.minutes} onChange={e => onMinutesChange(e.target.value)} />
             </label>
           </div>
           <input className="fin-input" placeholder="Notes (optional)" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
