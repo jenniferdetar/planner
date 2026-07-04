@@ -1247,6 +1247,34 @@
   letter-spacing: 0.5px;
 }
 
+.laundry-computed {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  font-size: 11px;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.laundry-computed-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3070;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.laundry-computed-sub {
+  font-size: 10px;
+  font-weight: 500;
+  color: #aaa;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 .laundry-days-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
