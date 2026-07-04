@@ -1512,6 +1512,14 @@ function perLoadQuartersFor(machine, minutes) {
   return machine.key === 'dryer' ? dryerQuartersForMinutes(minutes) : quartersFor(machine.costPerLoad)
 }
 
+function sumSessions(list) {
+  return list.reduce((acc, s) => ({
+    loads: acc.loads + s.loads,
+    quarters: acc.quarters + s.quarters,
+    minutes: acc.minutes + s.minutes,
+  }), { loads: 0, quarters: 0, minutes: 0 })
+}
+
 function LaundryTab({ userId }) {
   const [sessions, setSessions] = useState([])
   const [showForm, setShowForm] = useState(false)
@@ -1604,6 +1612,9 @@ function LaundryTab({ userId }) {
     return MACHINE_TYPES.find(m => m.key === key)?.label || key
   }
 
+  const washTotals = sumSessions(sessions.filter(s => s.type === 'wash'))
+  const dryTotals = sumSessions(sessions.filter(s => s.type === 'dry'))
+
   return (
     <div className="fin-content laundry-content">
       <div className="budget-header">
@@ -1616,6 +1627,19 @@ function LaundryTab({ userId }) {
 
       <div className="laundry-note">
         Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75 for 45 min base (7 quarters), +1 quarter = +7 min
+      </div>
+
+      <div className="budget-summary-bar">
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl" style={{ color: '#1e3070' }}>Wash Total</span>
+          <span className="budget-summary-val" style={{ color: '#1e3070' }}>{fmt(washTotals.quarters * 0.25)}</span>
+          <span className="laundry-summary-sub">{washTotals.loads} {washTotals.loads === 1 ? 'load' : 'loads'} · {washTotals.quarters}q</span>
+        </div>
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl" style={{ color: '#c77b3a' }}>Dryer Total</span>
+          <span className="budget-summary-val" style={{ color: '#c77b3a' }}>{fmt(dryTotals.quarters * 0.25)}</span>
+          <span className="laundry-summary-sub">{dryTotals.loads} {dryTotals.loads === 1 ? 'load' : 'loads'} · {dryTotals.quarters}q · {dryTotals.minutes} min</span>
+        </div>
       </div>
 
       {showForm && (
@@ -1659,6 +1683,8 @@ function LaundryTab({ userId }) {
           const drySessions = daySessions.filter(s => s.type === 'dry')
           const totalQuarters = daySessions.reduce((s, x) => s + x.quarters, 0)
           const totalCost = totalQuarters * 0.25
+          const dayWashTotals = sumSessions(washSessions)
+          const dayDryTotals = sumSessions(drySessions)
 
           return (
             <div key={date} className="laundry-day">
@@ -1669,7 +1695,10 @@ function LaundryTab({ userId }) {
 
               {washSessions.length > 0 && (
                 <div className="laundry-section">
-                  <div className="laundry-section-title laundry-section-title--wash">Washing</div>
+                  <div className="laundry-section-title-row">
+                    <div className="laundry-section-title laundry-section-title--wash">Washing</div>
+                    <div className="laundry-section-total">{dayWashTotals.loads} {dayWashTotals.loads === 1 ? 'load' : 'loads'} · {dayWashTotals.quarters}q · {fmt(dayWashTotals.quarters * 0.25)}</div>
+                  </div>
                   <div className="laundry-card-grid">
                     {washSessions.map(s => (
                       <div key={s.id} className="laundry-session-card">
@@ -1688,7 +1717,10 @@ function LaundryTab({ userId }) {
               )}
               {drySessions.length > 0 && (
                 <div className="laundry-section">
-                  <div className="laundry-section-title laundry-section-title--dry">Drying</div>
+                  <div className="laundry-section-title-row">
+                    <div className="laundry-section-title laundry-section-title--dry">Drying</div>
+                    <div className="laundry-section-total">{dayDryTotals.loads} {dayDryTotals.loads === 1 ? 'load' : 'loads'} · {dayDryTotals.quarters}q · {fmt(dayDryTotals.quarters * 0.25)} · {dayDryTotals.minutes} min</div>
+                  </div>
                   <div className="laundry-card-grid">
                     {drySessions.map(s => (
                       <div key={s.id} className="laundry-session-card">
