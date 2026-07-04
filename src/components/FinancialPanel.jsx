@@ -1503,11 +1503,6 @@ function dryerQuartersForMinutes(minutes) {
   return DRYER_BASE_QUARTERS + Math.ceil(extraMinutes / DRYER_MINUTES_PER_QUARTER)
 }
 
-function dryerMinutesForQuarters(quarters) {
-  const extraQuarters = Math.max(0, (parseInt(quarters) || 0) - DRYER_BASE_QUARTERS)
-  return DRYER_BASE_MINUTES + extraQuarters * DRYER_MINUTES_PER_QUARTER
-}
-
 function perLoadQuartersFor(machine, minutes) {
   return machine.key === 'dryer' ? dryerQuartersForMinutes(minutes) : quartersFor(machine.costPerLoad)
 }
@@ -1568,18 +1563,6 @@ function LaundryTab({ userId }) {
       return
     }
     setForm(f => ({ ...f, minutes, quarters: dryerQuartersForMinutes(minutes) * f.loads }))
-  }
-
-  function onQuartersChange(quarters) {
-    const m = MACHINE_TYPES.find(x => x.key === form.machine_type)
-    if (m.key !== 'dryer') {
-      setForm(f => ({ ...f, quarters }))
-      return
-    }
-    setForm(f => {
-      const perLoadQuarters = Math.max(DRYER_BASE_QUARTERS, Math.round((parseInt(quarters) || 0) / (f.loads || 1)))
-      return { ...f, quarters, minutes: dryerMinutesForQuarters(perLoadQuarters) }
-    })
   }
 
   async function handleSubmit(e) {
@@ -1656,14 +1639,17 @@ function LaundryTab({ userId }) {
               <span>Loads</span>
               <input className="fin-input" type="number" min="1" value={form.loads} onChange={e => onLoadsChange(e.target.value)} />
             </label>
-            <label className="laundry-lbl">
-              <span>Quarters</span>
-              <input className="fin-input" type="number" min="0" value={form.quarters} onChange={e => onQuartersChange(e.target.value)} />
-            </label>
-            <label className="laundry-lbl">
-              <span>Minutes</span>
-              <input className="fin-input" type="number" min="0" value={form.minutes} onChange={e => onMinutesChange(e.target.value)} />
-            </label>
+            {form.machine_type === 'dryer' && (
+              <label className="laundry-lbl">
+                <span>Minutes</span>
+                <input className="fin-input" type="number" min="0" value={form.minutes} onChange={e => onMinutesChange(e.target.value)} />
+              </label>
+            )}
+            <div className="laundry-computed">
+              <span>Cost</span>
+              <div className="laundry-computed-val">{fmt(form.quarters * 0.25)}</div>
+              <div className="laundry-computed-sub">{form.quarters} {form.quarters === 1 ? 'quarter' : 'quarters'}</div>
+            </div>
           </div>
           <input className="fin-input" placeholder="Notes (optional)" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
           <div className="fin-form-actions">
