@@ -969,7 +969,7 @@ function DebtSnowballTab({ userId }) {
       name,
       total_payoff: members.reduce((s, m) => s + Number(m.total_payoff), 0),
       minimum_payment: members.reduce((s, m) => s + Number(m.minimum_payment), 0),
-      members: [...members].sort((a, b) => Number(a.total_payoff) - Number(b.total_payoff)),
+      members: [...members].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })),
       owner: ownerSet.size === 1 ? [...ownerSet][0] : 'Mixed',
       goalMonths: goalSet.size === 1 ? [...goalSet][0] : null,
     }
