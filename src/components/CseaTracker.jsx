@@ -494,38 +494,40 @@ function RifIntakePanel() {
       </div>
 
       <div className="csea-issue-list" style={{ padding: '0 16px 16px' }}>
-        <table className="rif-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Full Name</th>
-              <th>Employee ID</th>
-              <th>Personal Email</th>
-              <th>Platform</th>
-              <th>Job Title</th>
-              <th>Work Location</th>
-              <th>RIF or Demotion</th>
-            </tr>
-          </thead>
-          <tbody>
-            {RIF_INTAKE.map((r, i) => (
-              <tr key={r.employeeId}>
-                <td>{i + 1}</td>
-                <td>{r.name}</td>
-                <td>{r.employeeId}</td>
-                <td>{r.email}</td>
-                <td>{r.platform}</td>
-                <td>{r.jobTitle}</td>
-                <td>{r.workLocation}</td>
-                <td>
-                  <span className="rif-action-badge" style={{ color: RIF_ACTION_COLORS[r.action] || '#53575a', background: (RIF_ACTION_COLORS[r.action] || '#53575a') + '22' }}>
-                    {r.action}
-                  </span>
-                </td>
+        <div className="rif-table-wrap">
+          <table className="rif-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Employee ID</th>
+                <th>Personal Email</th>
+                <th>Platform</th>
+                <th>Job Title</th>
+                <th>Work Location</th>
+                <th>RIF or Demotion</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {RIF_INTAKE.map((r, i) => (
+                <tr key={r.employeeId}>
+                  <td>{i + 1}</td>
+                  <td>{r.name}</td>
+                  <td>{r.employeeId}</td>
+                  <td>{r.email}</td>
+                  <td>{r.platform}</td>
+                  <td>{r.jobTitle}</td>
+                  <td>{r.workLocation}</td>
+                  <td>
+                    <span className="rif-action-badge" style={{ color: RIF_ACTION_COLORS[r.action] || '#53575a', background: (RIF_ACTION_COLORS[r.action] || '#53575a') + '22' }}>
+                      {r.action}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

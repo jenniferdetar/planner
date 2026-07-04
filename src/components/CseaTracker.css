@@ -980,8 +980,15 @@
   margin-right: 6px;
 }
 
+.rif-table-wrap {
+  max-height: 60vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .rif-table {
   width: 100%;
+  min-width: 760px;
   border-collapse: collapse;
   font-size: 12.5px;
   background: #fff;
