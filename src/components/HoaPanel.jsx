@@ -123,6 +123,7 @@ export function useHoaPage(userId, providerToken) {
   async function handleSubmit(e) {
     e.preventDefault()
     const fields = { ...form, unit: form.unit || null, item_date: form.item_date || null, notes: form.notes || null }
+    if (fields.status === 'Completed') fields.archived = true
     if (editId) {
       await updateItem(editId, fields)
     } else {
