@@ -27,7 +27,9 @@ export default function FavoriteVideosPanel({ userId }) {
     setAdding(true)
     setError('')
     try {
-      await addVideo(newUrl.trim())
+      const trimmed = newUrl.trim()
+      const url = trimmed.startsWith('http') ? trimmed : 'https://' + trimmed
+      await addVideo(url)
       setNewUrl('')
     } catch (err) {
       setError(err.message || 'Could not add that video.')
@@ -65,7 +67,7 @@ export default function FavoriteVideosPanel({ userId }) {
           <p className="videos-subtitle-inline">Paste a YouTube or TikTok link — the title is pulled in automatically</p>
           <form className="add-video-form" onSubmit={handleAddVideo}>
             <input
-              type="url"
+              type="text"
               className="add-video-input"
               placeholder="Paste a YouTube or TikTok link…"
               value={newUrl}
