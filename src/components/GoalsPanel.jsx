@@ -33,7 +33,7 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
   }
 
   const orderedCategories = [
-    ...CATEGORY_ORDER.filter(c => byCategory[c]),
+    ...CATEGORY_ORDER,
     ...Object.keys(byCategory).filter(c => !CATEGORY_ORDER.includes(c)),
   ]
 
