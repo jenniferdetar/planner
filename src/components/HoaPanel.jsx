@@ -414,7 +414,7 @@ function HoaPanelInner({ api }) {
           <button className="hoa-add-btn" style={{ opacity: 0.75, fontSize: '10px' }} onClick={() => api.setShowArchived(a => !a)}>
             {api.showArchived ? 'Hide Archived' : 'Show Archived'}
           </button>
-          {api.tab !== 'Financials' && <button className="hoa-add-btn" onClick={api.openAdd}>+ Add Item</button>}
+          <button className="hoa-add-btn" onClick={api.openAdd}>+ Add Item</button>
         </div>
       </div>
 
@@ -439,8 +439,8 @@ function HoaPanelInner({ api }) {
       </div>
 
       {api.tab === 'Financials' && <HoaFinancials />}
-      {api.tab !== 'Financials' && api.showForm && <HoaForm api={api} />}
-      {api.tab !== 'Financials' && <HoaGroupList groups={api.groups} api={api} />}
+      {api.showForm && <HoaForm api={api} />}
+      <HoaGroupList groups={api.groups} api={api} />
     </div>
   )
 }
