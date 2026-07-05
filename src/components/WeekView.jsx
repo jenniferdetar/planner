@@ -94,7 +94,11 @@ const HABITS = {
     { name: 'Take train to work', days: [1, 2, 3, 4, 5] },
     { name: 'Listen to Bible app', days: [1, 2, 3, 4, 5] },
   ],
-  'Weekends': ['Get up at 7:00 am', 'Plan/prep meals', { name: 'Laundry', days: [6] }],
+  'Weekends': [
+    { name: 'Get up at 7:00 am', days: [0, 6] },
+    { name: 'Plan/prep meals', days: [0, 6] },
+    { name: 'Laundry', days: [6] },
+  ],
 }
 
 function habitName(h) {
