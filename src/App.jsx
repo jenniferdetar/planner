@@ -297,6 +297,11 @@ export default function App() {
         onDeleteBook={deleteBook}
         onImportBooks={importBooks}
         onReloadBooks={reloadBooks}
+        familyMembers={familyMembers}
+        onAddFamilyMember={addFamilyMember}
+        onUpdateFamilyMember={updateFamilyMember}
+        onDeleteFamilyMember={deleteFamilyMember}
+        onImportFamilyDefaults={importFamilyDefaults}
         bookCoverSync={bookCoverSync}
         onFetchBookCovers={fetchBookCovers}
         calendarBlocks={allCalendarBlocks}
