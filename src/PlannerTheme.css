@@ -354,10 +354,10 @@ select:focus {
   background: rgba(191,191,191,0.6);
 }
 
-/* ─── Quiet-flourish accent (site-wide, everything outside .personal-panel) ─
+/* ─── Quiet-flourish accent (site-wide, everything outside .em-root) ───────
    A small seal tick on panel titles and a top accent on cards that don't
-   already carry a color bar. The Personal page overrides all of this with
-   its own scrapbook treatment — see PersonalScrapbook.css. ────────────────── */
+   already carry a color bar. The Eisenhower Matrix overrides all of this
+   with its own scrapbook treatment — see MatrixScrapbook.css. ────────────── */
 .week-title,
 .month-title,
 .section-panel-title h2,
@@ -365,10 +365,24 @@ select:focus {
 .gcu-page-title,
 .hoa-header-title,
 .wywo-title,
-.ft-title {
+.ft-title,
+.goals-title,
+.roles-list-title,
+.library-title,
+.videos-title,
+.links-title,
+.values-list-title,
+.wants-title,
+.mantra-title,
+.checklist-title,
+.goal-card-title {
   display: flex !important;
   align-items: center;
   gap: 7px;
+}
+.checklist-title,
+.goal-card-title {
+  justify-content: center;
 }
 .week-title::before,
 .month-title::before,
@@ -377,7 +391,17 @@ select:focus {
 .gcu-page-title::before,
 .hoa-header-title::before,
 .wywo-title::before,
-.ft-title::before {
+.ft-title::before,
+.goals-title::before,
+.roles-list-title::before,
+.library-title::before,
+.videos-title::before,
+.links-title::before,
+.values-list-title::before,
+.wants-title::before,
+.mantra-title::before,
+.checklist-title::before,
+.goal-card-title::before {
   content: "\2605";
   color: currentColor;
   opacity: 0.55;
