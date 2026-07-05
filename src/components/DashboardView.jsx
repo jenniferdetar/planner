@@ -205,7 +205,8 @@ export default function DashboardView({
       {/* ── Sidebar ── */}
       <aside className="dash-sidebar">
         <div className="dash-brand">
-          <span className="dash-brand-name">Planner</span>
+          <span className="dash-brand-icon">&#9670;</span>
+          <span className="dash-brand-name">My Meridian Planner</span>
         </div>
 
         {/* Mini calendar */}
