@@ -9,6 +9,7 @@ import PersonalLinksPanel from './PersonalLinksPanel'
 import ValuesPanel from './ValuesPanel'
 import RolesPanel from './RolesPanel'
 import WantsPanel from './WantsPanel'
+import FamilyTreePanel from './FamilyTreePanel'
 import './PersonalPanel.css'
 
 const SUB_TABS = [
@@ -20,6 +21,7 @@ const SUB_TABS = [
   { key: 'links',     label: 'Links',             color: '#3a9188' },
   { key: 'mantra',    label: 'Mantra & Mission',  color: '#e8a0a0' },
   { key: 'budget',    label: 'Wants',             color: '#4a7a6a' },
+  { key: 'family',    label: 'Family',            color: '#5cb85c' },
 ]
 
 // Clickable framework flow shown above content
@@ -31,7 +33,11 @@ const FRAMEWORK = [
   { key: 'checklist', label: 'Checklist' },
 ]
 
-export default function PersonalPanel({ userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers, subTab: subTabProp, onSubTabChange, allowedSubTabs }) {
+export default function PersonalPanel({
+  userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers,
+  familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
+  subTab: subTabProp, onSubTabChange, allowedSubTabs,
+}) {
   const visibleTabs = allowedSubTabs ? SUB_TABS.filter(t => allowedSubTabs.includes(t.key)) : SUB_TABS
   const defaultTab = visibleTabs[0]?.key || 'goals'
 
@@ -99,6 +105,15 @@ export default function PersonalPanel({ userId, providerToken, books, onAddBook,
       {subTab === 'videos' && <FavoriteVideosPanel userId={userId} />}
       {subTab === 'links' && <PersonalLinksPanel userId={userId} />}
       {subTab === 'budget' && <WantsPanel providerToken={providerToken} />}
+      {subTab === 'family' && (
+        <FamilyTreePanel
+          members={familyMembers}
+          onAddMember={onAddFamilyMember}
+          onUpdateMember={onUpdateFamilyMember}
+          onDeleteMember={onDeleteFamilyMember}
+          onImportDefaults={onImportFamilyDefaults}
+        />
+      )}
 
       {subTab === 'mantra' && (
         <div className="mantra-section">

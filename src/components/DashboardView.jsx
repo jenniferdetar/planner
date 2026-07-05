@@ -123,6 +123,7 @@ export default function DashboardView({
   paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   onPushGcuToAsana, gcuPushing,
   books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks,
+  familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
   onSignOut,
 }) {
   const [section, setSection] = useState('today')
@@ -590,6 +591,11 @@ export default function DashboardView({
               onDeleteBook={onDeleteBook}
               onImportBooks={onImportBooks}
               onReloadBooks={onReloadBooks}
+              familyMembers={familyMembers}
+              onAddFamilyMember={onAddFamilyMember}
+              onUpdateFamilyMember={onUpdateFamilyMember}
+              onDeleteFamilyMember={onDeleteFamilyMember}
+              onImportFamilyDefaults={onImportFamilyDefaults}
               subTab={personalSubTab}
               onSubTabChange={setPersonalSubTab}
             />
