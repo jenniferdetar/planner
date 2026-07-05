@@ -1,0 +1,223 @@
+/*
+ * PersonalScrapbook.css
+ * Full "vintage Americana" treatment for the Personal page only.
+ * Loaded after PlannerTheme.css; every rule is scoped under .personal-panel
+ * so it never leaks into Finance, CSEA, iCAAP, GCU, HOA, or the daily/week/
+ * month views, even where those share a class name (e.g. .goal-card is also
+ * used by FinancialPanel, which keeps the quiet-flourish look instead).
+ */
+
+/* ─── Kraft-paper ground ──────────────────────────────────────────────────── */
+.personal-panel {
+  background-color: #e7dcbd !important;
+  background-image:
+    radial-gradient(circle at 18% 28%, rgba(139,115,74,0.12) 0, transparent 45%),
+    radial-gradient(circle at 82% 68%, rgba(139,115,74,0.10) 0, transparent 50%),
+    radial-gradient(circle at 55% 10%, rgba(255,255,255,0.28) 0, transparent 40%),
+    repeating-linear-gradient(45deg, rgba(139,115,74,0.035) 0 1px, transparent 1px 3px) !important;
+}
+
+.personal-panel .goals-panel,
+.personal-panel .roles-list-wrap,
+.personal-panel .roles-content,
+.personal-panel .roles-detail,
+.personal-panel .roles-detail-body,
+.personal-panel .library-panel,
+.personal-panel .library-body,
+.personal-panel .videos-panel,
+.personal-panel .videos-body,
+.personal-panel .links-panel,
+.personal-panel .links-body,
+.personal-panel .values-list-wrap,
+.personal-panel .values-list-content,
+.personal-panel .wants-panel,
+.personal-panel .mantra-section {
+  background: transparent !important;
+}
+
+/* ─── Tab strip → ribbon ──────────────────────────────────────────────────── */
+.personal-panel .personal-inline-tabs {
+  background: linear-gradient(#a23b3b, #872f2f) !important;
+  border-bottom: 3px solid #c9a86b !important;
+}
+.personal-panel .personal-inline-tab {
+  color: rgba(246,236,210,0.75) !important;
+  font-family: Georgia, 'Iowan Old Style', serif;
+  letter-spacing: 0.06em;
+}
+.personal-panel .personal-inline-tab:hover:not(.active) { color: #fff !important; }
+.personal-panel .personal-inline-tab.active {
+  color: #fff !important;
+  border-bottom-color: #c9a86b !important;
+}
+.personal-panel .personal-inline-tab.active::before {
+  content: "\2605 ";
+  color: #f6ecd2;
+}
+
+@media (max-width: 768px) {
+  .personal-panel .personal-inline-tabs { background: #872f2f !important; }
+  .personal-panel .personal-inline-tab {
+    background: #f6efd9 !important;
+    color: #872f2f !important;
+    border-color: #c9a86b !important;
+  }
+  .personal-panel .personal-inline-tab.active {
+    background: #872f2f !important;
+    color: #fff !important;
+    border-color: #872f2f !important;
+  }
+}
+
+/* ─── Framework strip ─────────────────────────────────────────────────────── */
+.personal-panel .personal-framework-strip {
+  background: rgba(255,255,255,0.35) !important;
+  border-bottom: 1px solid rgba(135,47,47,0.18) !important;
+}
+
+/* ─── Header plaques (dark navy bars) ─────────────────────────────────────── */
+.personal-panel .goals-section-header,
+.personal-panel .roles-list-header,
+.personal-panel .library-header,
+.personal-panel .videos-header,
+.personal-panel .links-header,
+.personal-panel .values-list-header,
+.personal-panel .roles-detail-nav,
+.personal-panel .mantra-header {
+  background: linear-gradient(#1e3070, #142057) !important;
+  border-bottom: 2px solid #c9a86b !important;
+}
+
+.personal-panel .goals-title,
+.personal-panel .roles-list-title,
+.personal-panel .library-title,
+.personal-panel .videos-title,
+.personal-panel .links-title,
+.personal-panel .values-list-title,
+.personal-panel .mantra-title {
+  font-family: Georgia, 'Iowan Old Style', serif !important;
+  letter-spacing: 0.08em !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.personal-panel .goals-title::before, .personal-panel .goals-title::after,
+.personal-panel .roles-list-title::before, .personal-panel .roles-list-title::after,
+.personal-panel .library-title::before, .personal-panel .library-title::after,
+.personal-panel .videos-title::before, .personal-panel .videos-title::after,
+.personal-panel .links-title::before, .personal-panel .links-title::after,
+.personal-panel .values-list-title::before, .personal-panel .values-list-title::after,
+.personal-panel .mantra-title::before, .personal-panel .mantra-title::after {
+  content: "\2605";
+  color: #c9a86b;
+  font-size: 0.75em;
+}
+
+/* Light header (Wants) — parchment plaque instead of navy */
+.personal-panel .wants-header {
+  background: #f3ead2 !important;
+  border-bottom: 2px solid #c9a86b !important;
+  margin: 0 -12px 4px;
+  padding: 10px 12px 8px !important;
+}
+.personal-panel .wants-title {
+  font-family: Georgia, 'Iowan Old Style', serif !important;
+  letter-spacing: 0.06em !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.personal-panel .wants-title::before, .personal-panel .wants-title::after {
+  content: "\2605";
+  color: #a23b3b;
+  font-size: 0.75em;
+}
+
+/* ─── Cards → parchment stickers ──────────────────────────────────────────── */
+.personal-panel .goal-card,
+.personal-panel .book-card,
+.personal-panel .video-card,
+.personal-panel .value-group {
+  background: #f6efd9 !important;
+  border-color: #8f7b4d !important;
+  box-shadow: 3px 4px 0 rgba(23,36,82,0.10), 0 1px 6px rgba(0,0,0,0.10) !important;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.personal-panel .goals-grid > .goal-card:nth-child(odd),
+.personal-panel .book-grid > .book-card:nth-child(odd),
+.personal-panel .video-grid > .video-card:nth-child(odd),
+.personal-panel .values-grid > .value-group:nth-child(odd) {
+  transform: rotate(-0.6deg);
+}
+.personal-panel .goals-grid > .goal-card:nth-child(even),
+.personal-panel .book-grid > .book-card:nth-child(even),
+.personal-panel .video-grid > .video-card:nth-child(even),
+.personal-panel .values-grid > .value-group:nth-child(even) {
+  transform: rotate(0.6deg);
+}
+.personal-panel .goal-card:hover,
+.personal-panel .book-card:hover,
+.personal-panel .video-card:hover,
+.personal-panel .value-group:hover {
+  transform: rotate(0deg) translateY(-2px) !important;
+  box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14) !important;
+}
+
+.personal-panel .goal-card { position: relative; }
+.personal-panel .goal-card::before,
+.personal-panel .goal-card::after {
+  content: "\2605";
+  position: absolute;
+  top: 4px;
+  font-size: 8px;
+  color: #a23b3b;
+  opacity: 0.75;
+  z-index: 1;
+}
+.personal-panel .goal-card::before { left: 6px; }
+.personal-panel .goal-card::after { right: 6px; }
+
+.personal-panel .book-card-spine { border-top-color: #a23b3b !important; }
+.personal-panel .video-thumb { background: #872f2f !important; }
+
+.personal-panel .value-group {
+  border-left-width: 6px !important;
+}
+
+/* Role cards (list-style, not tiled) — recolor accent, keep as rows */
+.personal-panel .roles-card {
+  background: #f6efd9 !important;
+  border-left-color: #a23b3b !important;
+  box-shadow: 2px 3px 0 rgba(23,36,82,0.08), 0 6px 16px rgba(0,0,0,0.06) !important;
+}
+.personal-panel .roles-card:nth-child(even) { border-left-color: #c9a86b !important; }
+.personal-panel .roles-card-name { font-family: Georgia, 'Iowan Old Style', serif !important; }
+
+/* ─── Mantra / mission content ────────────────────────────────────────────── */
+.personal-panel .mantra-content,
+.personal-panel .mantra-textarea {
+  background-color: #f6efd9 !important;
+  border-color: #8f7b4d !important;
+}
+.personal-panel .mantra-paragraph {
+  color: #2b2418 !important;
+}
+.personal-panel .mantra-subtab {
+  background: #f3ead2 !important;
+  border-color: #c9a86b !important;
+  color: #872f2f !important;
+}
+.personal-panel .mantra-subtab.active {
+  background: #872f2f !important;
+  border-color: #872f2f !important;
+  color: #fff !important;
+}
+
+/* ─── Checklist table header ──────────────────────────────────────────────── */
+.personal-panel .checklist-title {
+  font-family: Georgia, 'Iowan Old Style', serif !important;
+}
+.personal-panel .checklist-table thead th,
+.personal-panel .checklist-table thead th.task-col {
+  background: linear-gradient(#1e3070, #142057) !important;
+}
