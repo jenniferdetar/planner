@@ -65,7 +65,7 @@ function dedupeEvents(events) {
   for (const e of events) {
     const key = normalizeTitle(e.title || e.text)
     const dupIndex = kept.findIndex(k =>
-      isLikelyDuplicate(key, normalizeTitle(k.title || k.text), (k._sortKey || '') === (e._sortKey || ''))
+      isLikelyDuplicate(key, normalizeTitle(k.title || k.text), k._sortKey === e._sortKey)
     )
     if (dupIndex === -1) {
       kept.push(e)
@@ -240,19 +240,24 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
             .filter(m => m.date === dateStr)
             .map(m => {
               let startLabel = null
+              let sortMins = -1
               if (m.start_time) {
                 const [h, min] = m.start_time.split(':').map(Number)
                 const suffix = h >= 12 ? 'PM' : 'AM'
                 const h12 = h % 12 || 12
                 startLabel = `${h12}:${String(min).padStart(2, '0')} ${suffix}`
+                sortMins = h * 60 + min
               }
-              return { id: m.id, title: m.title, color: m.color || '#1e3070', startLabel, _sortKey: m.start_time || '' }
+              return { id: m.id, title: m.title, color: m.color || '#1e3070', startLabel, _sortKey: sortMins }
             })
           const calEvents = (calendarBlocks || [])
             .filter(b => b.startIso?.startsWith(dateStr))
-            .map(b => ({ ...b, _sortKey: b.startIso || '' }))
+            .map(b => {
+              const start = new Date(b.startIso)
+              return { ...b, _sortKey: start.getHours() * 60 + start.getMinutes() }
+            })
           const events = dedupeEvents([...meetingEvents, ...calEvents])
-            .sort((a, b) => (a._sortKey || '').localeCompare(b._sortKey || ''))
+            .sort((a, b) => a._sortKey - b._sortKey)
           const isToday = day.getTime() === today.getTime()
 
           return (
