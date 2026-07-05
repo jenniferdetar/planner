@@ -88,7 +88,12 @@ function getWeekStart(date) {
 const HABITS = {
   'Home Care': ['Make beds', 'Cleaning', 'Recycling'],
   'Self Care': ['Shower', 'Read', 'Bring lunch to work'],
-  'Week Days': ['Get up at 5:00 am', 'Leave work at 3:30 pm', 'Take train to work', 'Listen to Bible app'],
+  'Week Days': [
+    { name: 'Get up at 5:00 am', days: [1, 2, 3, 4, 5] },
+    { name: 'Leave work at 3:30 pm', days: [1, 2, 3, 4, 5] },
+    { name: 'Take train to work', days: [1, 2, 3, 4, 5] },
+    { name: 'Listen to Bible app', days: [1, 2, 3, 4, 5] },
+  ],
   'Weekends': ['Get up at 7:00 am', 'Plan/prep meals', { name: 'Laundry', days: [6] }],
 }
 
