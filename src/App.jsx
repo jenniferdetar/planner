@@ -1,5 +1,5 @@
 import './PlannerTheme.css'
-import './MatrixScrapbook.css'
+import './Scrapbook.css'
 import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { supabase, signOut, signInWithGoogle } from './lib/supabase'

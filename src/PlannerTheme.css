@@ -354,10 +354,10 @@ select:focus {
   background: rgba(191,191,191,0.6);
 }
 
-/* ─── Quiet-flourish accent (site-wide, everything outside .em-root) ───────
+/* ─── Quiet-flourish accent (everything outside Personal/Matrix) ───────────
    A small seal tick on panel titles and a top accent on cards that don't
-   already carry a color bar. The Eisenhower Matrix overrides all of this
-   with its own scrapbook treatment — see MatrixScrapbook.css. ────────────── */
+   already carry a color bar. The Personal page and Eisenhower Matrix
+   override this with the full scrapbook treatment — see Scrapbook.css. ──── */
 .week-title,
 .month-title,
 .section-panel-title h2,
@@ -375,7 +375,10 @@ select:focus {
 .wants-title,
 .mantra-title,
 .checklist-title,
-.goal-card-title {
+.goal-card-title,
+.dash-page-title,
+.icaap-card-title,
+.dash-card-title {
   display: flex !important;
   align-items: center;
   gap: 7px;
@@ -401,29 +404,38 @@ select:focus {
 .wants-title::before,
 .mantra-title::before,
 .checklist-title::before,
-.goal-card-title::before {
+.goal-card-title::before,
+.dash-page-title::before,
+.icaap-card-title::before,
+.dash-card-title::before {
   content: "\2605";
   color: currentColor;
   opacity: 0.55;
   font-size: 0.7em;
 }
 
-.icaap-card {
-  position: relative;
+.icaap-card,
+.dash-card {
   border-top: 3px solid var(--pt-accent) !important;
 }
-.icaap-card::before {
-  content: "\2605";
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--pt-bg-card);
-  color: var(--pt-accent);
-  font-size: 10px;
-  padding: 0 4px;
-}
 
-.sidebar-header {
-  box-shadow: 0 1px 0 rgba(255,184,28,0.18) !important;
+/* ─── Real app chrome (DashboardView's own sidebar — Sidebar.jsx is unused) ── */
+.dash-sidebar {
+  background: linear-gradient(180deg, #1e3070, #16244f) !important;
+}
+.dash-brand {
+  display: flex !important;
+  justify-content: flex-start !important;
+  gap: 8px;
+  padding: 14px 14px 12px !important;
+}
+.dash-brand-icon {
+  color: #ffb81c;
+  font-size: 13px;
+}
+.dash-brand-name {
+  font-family: Georgia, 'Iowan Old Style', serif !important;
+  font-size: 14px !important;
+  line-height: 1.25;
+  letter-spacing: 0.2px !important;
 }
