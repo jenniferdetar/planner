@@ -353,3 +353,53 @@ select:focus {
 *::-webkit-scrollbar-thumb:hover {
   background: rgba(191,191,191,0.6);
 }
+
+/* ─── Quiet-flourish accent (site-wide, everything outside .personal-panel) ─
+   A small seal tick on panel titles and a top accent on cards that don't
+   already carry a color bar. The Personal page overrides all of this with
+   its own scrapbook treatment — see PersonalScrapbook.css. ────────────────── */
+.week-title,
+.month-title,
+.section-panel-title h2,
+.budget-title,
+.gcu-page-title,
+.hoa-header-title,
+.wywo-title,
+.ft-title {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+}
+.week-title::before,
+.month-title::before,
+.section-panel-title h2::before,
+.budget-title::before,
+.gcu-page-title::before,
+.hoa-header-title::before,
+.wywo-title::before,
+.ft-title::before {
+  content: "\2605";
+  color: currentColor;
+  opacity: 0.55;
+  font-size: 0.7em;
+}
+
+.icaap-card {
+  position: relative;
+  border-top: 3px solid var(--pt-accent) !important;
+}
+.icaap-card::before {
+  content: "\2605";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--pt-bg-card);
+  color: var(--pt-accent);
+  font-size: 10px;
+  padding: 0 4px;
+}
+
+.sidebar-header {
+  box-shadow: 0 1px 0 rgba(255,184,28,0.18) !important;
+}
