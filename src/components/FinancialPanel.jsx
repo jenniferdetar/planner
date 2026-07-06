@@ -277,35 +277,36 @@ export function GoalsTab({ goals, onUpdate }) {
     setEditing(null)
   }
 
-  function GoalBar({ goal, label }) {
-    if (!goal) return null
+  function GoalCell({ goal, color }) {
+    if (!goal) return <td className="budget-td goal-td"><span className="budget-empty">—</span></td>
     const pct = goal.target_amount > 0 ? Math.min(100, Math.round((goal.current_amount / goal.target_amount) * 100)) : 0
     const isEditing = editing === goal.id
     return (
-      <div className="goal-card-row">
-        <span className="goal-card-label">{label}</span>
-        {isEditing ? (
-          <input
-            className="goal-card-input"
-            type="number" step="0.01" min="0"
-            value={editVal}
-            onChange={e => setEditVal(e.target.value)}
-            onBlur={commitEdit}
-            onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') setEditing(null) }}
-            autoFocus
-            onClick={e => e.stopPropagation()}
-          />
-        ) : (
-          <span className="goal-card-amounts" onClick={e => startEdit(goal, e)}>
-            <span className="goal-card-saved">{fmt(goal.current_amount)}</span>
-            <span className="goal-card-target">/ {fmt(goal.target_amount)}</span>
-          </span>
-        )}
-        <div className="goal-card-bar">
-          <div className="goal-card-fill" style={{ width: `${pct}%`, background: pct >= 100 ? '#5cb85c' : 'var(--card-color, #3164a0)' }} />
+      <td className="budget-td goal-td">
+        <div className="goal-card-row">
+          {isEditing ? (
+            <input
+              className="goal-card-input"
+              type="number" step="0.01" min="0"
+              value={editVal}
+              onChange={e => setEditVal(e.target.value)}
+              onBlur={commitEdit}
+              onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') setEditing(null) }}
+              autoFocus
+              onClick={e => e.stopPropagation()}
+            />
+          ) : (
+            <span className="goal-card-amounts" onClick={e => startEdit(goal, e)}>
+              <span className="goal-card-saved">{fmt(goal.current_amount)}</span>
+              <span className="goal-card-target">/ {fmt(goal.target_amount)}</span>
+            </span>
+          )}
+          <div className="goal-card-bar" style={{ '--card-color': color }}>
+            <div className="goal-card-fill" style={{ width: `${pct}%`, background: pct >= 100 ? '#5cb85c' : 'var(--card-color, #3164a0)' }} />
+          </div>
+          <span className="goal-card-pct">{pct}%</span>
         </div>
-        <span className="goal-card-pct">{pct}%</span>
-      </div>
+      </td>
     )
   }
 
@@ -314,22 +315,34 @@ export function GoalsTab({ goals, onUpdate }) {
       <div className="budget-header">
         <h2 className="budget-title">Emergency Fund Goals</h2>
       </div>
-      <div className="fin-goals-grid">
-        {sortedRows.map((row, idx) => {
-          const color = PALETTE[idx % PALETTE.length]
-          const due = dueDateLabel((row.mo3 || row.mo6)?.due_date)
-          return (
-            <div key={row.name} className="goal-card" style={{ '--card-color': color }}>
-              <div className="goal-card-top" style={{ background: color }} />
-              <div className="goal-card-name">{row.name}</div>
-              {due && <div className="goal-card-due">Due {due}</div>}
-              <div className="goal-card-body">
-                <GoalBar goal={row.mo3} label="3 mo" />
-                <GoalBar goal={row.mo6} label="6 mo" />
-              </div>
-            </div>
-          )
-        })}
+      <div className="budget-table-wrap">
+        {sortedRows.length === 0 && <p className="fin-empty">No goals added yet.</p>}
+        {sortedRows.length > 0 && (
+          <table className="budget-table">
+            <thead>
+              <tr>
+                <th className="budget-th cat">Goal Name</th>
+                <th className="budget-th">3 Months</th>
+                <th className="budget-th">6 Months</th>
+                <th className="budget-th">Due Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedRows.map((row, idx) => {
+                const color = PALETTE[idx % PALETTE.length]
+                const due = dueDateLabel((row.mo3 || row.mo6)?.due_date)
+                return (
+                  <tr key={row.name} className="budget-row">
+                    <td className="budget-td cat">{row.name}</td>
+                    <GoalCell goal={row.mo3} color={color} />
+                    <GoalCell goal={row.mo6} color={color} />
+                    <td className="budget-td">{due ? `Due ${due}` : <span className="budget-empty">—</span>}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   )

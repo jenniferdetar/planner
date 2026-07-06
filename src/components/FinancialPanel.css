@@ -878,6 +878,13 @@
   text-align: right;
 }
 
+.goal-td {
+  min-width: 160px;
+  vertical-align: top;
+}
+
+.goal-td .goal-card-row { gap: 3px; padding: 3px 0; }
+
 .goal-card-input {
   width: 100%;
   border: none;

@@ -74,6 +74,55 @@ const HOA_FINANCIALS = HOA_FINANCIALS_RAW.map(m => {
   return { ...m, docUrl: doc?.url }
 })
 
+// Unit → owner name directory, compiled from the Aged Receivable Detail
+// section of the Board Member Packets above. That report only lists units
+// with a nonzero balance in a given month, so this is a partial roster
+// (whichever units have shown up with a charge across the sampled packets),
+// not a complete list of every unit in the building.
+const HOA_UNITS = [
+  { unit: '008', name: 'Estrada, Esmith' },
+  { unit: '009', name: 'Ojinaga, Vanessa P.' },
+  { unit: '010', name: 'Arredondo, Carmen' },
+  { unit: '014', name: 'Subhan, Salik' },
+  { unit: '015', name: 'Torivio, Araceli' },
+  { unit: '017', name: 'Miranda, Vitelio' },
+  { unit: '018', name: 'Gold, Michael' },
+  { unit: '019', name: 'Melara, Luis E., Domingo, Edgard A' },
+  { unit: '022', name: 'Linaritakis, Nikolaos' },
+  { unit: '024', name: 'LLC, ARKBEC' },
+  { unit: '026', name: 'Lozano, Maria' },
+  { unit: '029', name: 'Gliadkovsky, Kirill' },
+  { unit: '037', name: 'Sy, Domingo' },
+  { unit: '040', name: 'Ramos, Roxana' },
+  { unit: '045', name: 'Magee, Lisa D.' },
+  { unit: '046', name: 'Roberto, Victor' },
+  { unit: '048', name: 'Rivera, Carlos Alberto & Yeny Aracely' },
+  { unit: '050', name: 'Golmohammadi, Abbas' },
+  { unit: '051', name: 'Ruiz, Marta' },
+  { unit: '060', name: 'Ibrahim, Ted' },
+  { unit: '062', name: 'Naderi, Afsaneh' },
+  { unit: '064', name: 'Timakov, Alla' },
+  { unit: '065', name: 'Fernandez, Maria' },
+  { unit: '069', name: 'Moreno, Marta R.' },
+  { unit: '072', name: 'Valencia, Pedro' },
+  { unit: '079', name: 'Silva, Marivi Yusunggay' },
+  { unit: '081', name: 'Patel, Bharat' },
+  { unit: '087', name: 'Ramos, Carla' },
+  { unit: '088', name: 'Alejandra Flores, Alfredo Ruiz &' },
+  { unit: '090', name: 'Carter, Anita' },
+  { unit: '091', name: 'Papa, Normandy and Cristeta' },
+  { unit: '095', name: 'Kamra, Rajesh' },
+  { unit: '097', name: 'Atias, Meny' },
+  { unit: '100', name: 'Rouvinskaia and Shvager, Elena and Igor' },
+  { unit: '103', name: 'Montenegro, Aida' },
+  { unit: '107', name: 'Detar, Jeffery W' },
+  { unit: '111', name: 'Moloudi, Mehran' },
+  { unit: '116', name: 'Company LLC, Investment Management' },
+  { unit: '121', name: 'Momijian, Arda' },
+  { unit: '126', name: 'LLC, UNOSTATO' },
+  { unit: '127', name: 'Likholit, Oleg & Irina' },
+]
+
 function fmtUSD(n) {
   if (n === null || n === undefined) return '—'
   return Number(n).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })
@@ -93,7 +142,7 @@ export function useHoaPage(userId, providerToken) {
   const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount, error: yahooError } = useYahooHoaSync(userId, onImported)
   const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount, error: gmailError } = useGmailHoaSync(userId, providerToken, onImported)
 
-  const tabs = ['All', ...CATEGORIES]
+  const tabs = ['All', ...CATEGORIES, 'Directory']
   const visibleItems = showArchived ? items : items.filter(i => !i.archived)
   const filtered = tab === 'All' ? visibleItems : visibleItems.filter(i => i.category === tab)
 
@@ -231,6 +280,32 @@ function HoaFinancials() {
           </table>
         </div>
       )}
+    </div>
+  )
+}
+
+function HoaDirectory() {
+  return (
+    <div className="hoa-fin">
+      <p className="hoa-fin-asof">Unit → owner name directory, compiled from the Aged Receivable Detail section of the Board Member Packets in the HOA Google Drive folder. That report only lists units with a billing history, so this is a partial roster, not every unit in the building.</p>
+      <div className="hoa-fin-table-wrap">
+        <table className="hoa-fin-table hoa-dir-table">
+          <thead>
+            <tr>
+              <th>Unit</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {HOA_UNITS.map(u => (
+              <tr key={u.unit}>
+                <td>{u.unit}</td>
+                <td>{u.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
@@ -414,7 +489,7 @@ function HoaPanelInner({ api }) {
           <button className="hoa-add-btn" style={{ opacity: 0.75, fontSize: '10px' }} onClick={() => api.setShowArchived(a => !a)}>
             {api.showArchived ? 'Hide Archived' : 'Show Archived'}
           </button>
-          {api.tab !== 'Financials' && <button className="hoa-add-btn" onClick={api.openAdd}>+ Add Item</button>}
+          {api.tab !== 'Financials' && api.tab !== 'Directory' && <button className="hoa-add-btn" onClick={api.openAdd}>+ Add Item</button>}
         </div>
       </div>
 
@@ -432,15 +507,16 @@ function HoaPanelInner({ api }) {
           <button
             key={t}
             className={`hoa-tab ${api.tab === t ? 'active' : ''}`}
-            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Financials' ? '#3a5c4a' : CAT_COLORS[t] }}
+            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Financials' ? '#3a5c4a' : t === 'Directory' ? '#7a5c2e' : CAT_COLORS[t] }}
             onClick={() => api.setTab(t)}
           >{t}</button>
         ))}
       </div>
 
       {api.tab === 'Financials' && <HoaFinancials />}
-      {api.tab !== 'Financials' && api.showForm && <HoaForm api={api} />}
-      {api.tab !== 'Financials' && <HoaGroupList groups={api.groups} api={api} />}
+      {api.tab === 'Directory' && <HoaDirectory />}
+      {api.tab !== 'Financials' && api.tab !== 'Directory' && api.showForm && <HoaForm api={api} />}
+      {api.tab !== 'Financials' && api.tab !== 'Directory' && <HoaGroupList groups={api.groups} api={api} />}
     </div>
   )
 }
