@@ -79,9 +79,9 @@
 }
 
 .wywo-tab.active {
-  background: #1a6b45;
-  border-color: #2d9b6a;
-  color: #e8e4d8;
+  background: #a23b3b;
+  border-color: #a23b3b;
+  color: #fff;
 }
 
 .wywo-badge {
@@ -101,7 +101,7 @@
 
 /* THE PAD */
 .wywo-pad {
-  background: #f9cfc8;
+  background: #ffffff;
   border: 3px solid #1a1a1a;
   border-radius: 10px;
   padding: 20px 22px 18px;
@@ -367,8 +367,8 @@
 .wywo-log-list { display: flex; flex-direction: column; gap: 12px; }
 
 .wywo-log-card {
-  background: #f9cfc8;
-  border: 2px solid #c9a09a;
+  background: #ffffff;
+  border: 2px solid #1e3070;
   border-radius: 8px;
   padding: 14px 16px;
   color: #1a1a1a;
@@ -440,7 +440,7 @@
   color: #222;
   margin-top: 6px;
   white-space: pre-wrap;
-  border-top: 1px solid #c9a09a;
+  border-top: 1px solid #1e3070;
   padding-top: 6px;
 }
 
@@ -519,7 +519,7 @@
     max-width: 100%;
     box-shadow: none;
     border: 2px solid #000;
-    background: #f9cfc8 !important;
+    background: #ffffff !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }

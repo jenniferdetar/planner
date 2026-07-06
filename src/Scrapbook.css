@@ -1,11 +1,10 @@
 /*
  * Scrapbook.css
- * Full "vintage Americana" treatment for the Personal page and the
- * Eisenhower Matrix. Loaded after PlannerTheme.css; every rule is scoped
- * under .personal-panel or .em-root so it never leaks into the rest of the
- * app (which keeps the quiet-flourish look from PlannerTheme.css instead),
- * even where a class name is shared — e.g. .goal-card is also used by
- * FinancialPanel outside .personal-panel.
+ * Full "vintage Americana" treatment, now applied app-wide: Personal,
+ * Eisenhower Matrix, Master Tasks, CSEA, Finance, GCU, HOA, iCAAP, and
+ * WYWO. Loaded after PlannerTheme.css; every rule is scoped under each
+ * page's own root class so shared class names (e.g. .goal-card, used by
+ * both Personal and FinancialPanel) don't bleed across pages.
  */
 
 /* ══════════════════════════ Personal page ═══════════════════════════════ */
@@ -331,3 +330,111 @@
   padding-left: 9px !important;
 }
 .em-root .em-assign-btn:hover { background: #a23b3b !important; }
+
+/* ══════════════════════════ Shared kraft-paper ground ═══════════════════ */
+/* Same texture used by .personal-panel/.em-root, reused verbatim for every
+   other page's root wrapper. */
+.master-tasks-wrap,
+.csea-tracker,
+.fin-panel,
+.gcu-panel,
+.hoa-panel,
+.icaap-tracker,
+.wywo-wrap {
+  background-color: #ffffff !important;
+  background-image:
+    radial-gradient(circle at 18% 28%, rgba(30,48,112,0.08) 0, transparent 45%),
+    radial-gradient(circle at 82% 68%, rgba(162,59,59,0.06) 0, transparent 50%),
+    radial-gradient(circle at 55% 10%, rgba(255,255,255,0.28) 0, transparent 40%),
+    repeating-linear-gradient(45deg, rgba(30,48,112,0.03) 0 1px, transparent 1px 3px) !important;
+}
+
+/* ══════════════════════════ Master Tasks ═════════════════════════════════ */
+.master-tasks-wrap .dash-page-header { border-bottom-color: #a23b3b !important; }
+.master-tasks-wrap .dash-card {
+  background: #ffffff !important;
+  border: 1px solid #1e3070;
+  box-shadow: 3px 4px 0 rgba(23,36,82,0.10), 0 1px 6px rgba(0,0,0,0.10);
+  transition: box-shadow 0.18s;
+}
+.master-tasks-wrap .dash-master-grid > .dash-card:nth-child(odd)  { transform: rotate(-0.5deg); }
+.master-tasks-wrap .dash-master-grid > .dash-card:nth-child(even) { transform: rotate(0.5deg); }
+.master-tasks-wrap .dash-card:hover { box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14); }
+
+/* ══════════════════════════ CSEA ═════════════════════════════════════════ */
+.csea-tracker .csea-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
+.csea-tracker .csea-tab.active { border-bottom-color: #ffffff !important; }
+.csea-tracker .csea-stats { background: linear-gradient(#1e3070, #142057) !important; border-bottom-color: #a23b3b !important; }
+
+.csea-tracker .issue-card,
+.csea-tracker .interaction-group,
+.csea-tracker .rif-summary-card {
+  background: #ffffff !important;
+  box-shadow: 3px 4px 0 rgba(23,36,82,0.10), 0 1px 6px rgba(0,0,0,0.10) !important;
+}
+.csea-tracker .csea-interactions-grid > .issue-card:nth-child(odd),
+.csea-tracker .csea-interactions-grid > .interaction-group:nth-child(odd) { transform: rotate(-0.5deg); }
+.csea-tracker .csea-interactions-grid > .issue-card:nth-child(even),
+.csea-tracker .csea-interactions-grid > .interaction-group:nth-child(even) { transform: rotate(0.5deg); }
+.csea-tracker .issue-card:hover,
+.csea-tracker .interaction-group:hover {
+  box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14) !important;
+}
+
+/* ══════════════════════════ Finance ══════════════════════════════════════ */
+.fin-panel .fin-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
+.fin-panel .fin-tab.active { border-bottom-color: #ffffff !important; }
+.fin-panel .budget-header { border-bottom: 2px solid #a23b3b !important; }
+
+.fin-panel .goal-card {
+  background: #ffffff !important;
+  box-shadow: 3px 4px 0 rgba(23,36,82,0.10), 0 1px 6px rgba(0,0,0,0.10) !important;
+}
+.fin-panel .fin-goals-grid > .goal-card:nth-child(odd)  { transform: rotate(-0.5deg); }
+.fin-panel .fin-goals-grid > .goal-card:nth-child(even) { transform: rotate(0.5deg); }
+.fin-panel .goal-card:hover {
+  box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14) !important;
+}
+.fin-panel .fin-goal:nth-child(even) { border-left-color: #a23b3b !important; }
+
+/* ══════════════════════════ GCU ══════════════════════════════════════════ */
+.gcu-panel .gcu-progress-section { border-bottom: 3px solid #a23b3b !important; }
+.gcu-panel .gcu-group {
+  background: #ffffff !important;
+  box-shadow: 3px 4px 0 rgba(23,36,82,0.08), 0 1px 6px rgba(0,0,0,0.06) !important;
+}
+.gcu-panel .gcu-group-label { border-bottom: 2px solid #a23b3b !important; }
+
+/* ══════════════════════════ HOA ══════════════════════════════════════════ */
+.hoa-panel .hoa-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
+.hoa-panel .hoa-tab.active { border-bottom-color: #ffffff !important; }
+.hoa-panel .hoa-header { border-bottom: 2px solid #a23b3b !important; }
+.hoa-panel .hoa-stats { background: linear-gradient(#1e3070, #142057) !important; }
+
+.hoa-panel .hoa-group,
+.hoa-panel .hoa-group-card.standalone {
+  background: #ffffff !important;
+  box-shadow: 3px 4px 0 rgba(23,36,82,0.10), 0 1px 6px rgba(0,0,0,0.10) !important;
+}
+.hoa-panel .hoa-groups > .hoa-group:nth-child(odd),
+.hoa-panel .hoa-groups > .hoa-group-card.standalone:nth-child(odd) { transform: rotate(-0.5deg); }
+.hoa-panel .hoa-groups > .hoa-group:nth-child(even),
+.hoa-panel .hoa-groups > .hoa-group-card.standalone:nth-child(even) { transform: rotate(0.5deg); }
+.hoa-panel .hoa-group:hover,
+.hoa-panel .hoa-group-card.standalone:hover {
+  box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14) !important;
+}
+
+/* ══════════════════════════ iCAAP ════════════════════════════════════════ */
+.icaap-tracker .icaap-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
+.icaap-tracker .icaap-tab.active { border-bottom-color: #ffffff !important; }
+.icaap-tracker .icaap-stats { background: linear-gradient(#1e3070, #142057) !important; }
+.icaap-tracker .icaap-card {
+  background: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+
+/* ══════════════════════════ WYWO ═════════════════════════════════════════ */
+.wywo-wrap .wywo-log-card {
+  box-shadow: 3px 4px 0 rgba(23,36,82,0.08), 0 1px 6px rgba(0,0,0,0.06) !important;
+}

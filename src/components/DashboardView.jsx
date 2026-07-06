@@ -464,7 +464,7 @@ export default function DashboardView({
 
         {/* MASTER TASKS */}
         {section === 'master' && (
-          <>
+          <div className="master-tasks-wrap">
             <div className="dash-page-header">
               <h1 className="dash-page-title">Master Tasks</h1>
               <span className="dash-badge">{(masterTasks || []).length} total</span>
@@ -489,7 +489,7 @@ export default function DashboardView({
                 )
               })}
             </div>
-          </>
+          </div>
         )}
 
         {/* MODULE PANELS */}
