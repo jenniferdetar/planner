@@ -89,6 +89,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
   const [tab, setTab] = useState('dashboard')
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
   const [extraHoursTab, setExtraHoursTab] = useState('profdev')
+  const [showArchivedExtraHours, setShowArchivedExtraHours] = useState(false)
   const [noteText, setNoteText] = useState('')
   const [noteSource, setNoteSource] = useState('')
   const [linkTitle, setLinkTitle] = useState('')
@@ -173,25 +174,13 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       )}
 
       {tab === 'extrahours' && (
-        <div className="icaap-extrahours">
-          <div className="icaap-extrahours-tabs">
-            <button
-              className={`icaap-extrahours-tab ${extraHoursTab === 'profdev' ? 'active' : ''}`}
-              onClick={() => setExtraHoursTab('profdev')}
-            >Prof. Development 09-27-25</button>
-            <button
-              className={`icaap-extrahours-tab ${extraHoursTab === 'winterbreak' ? 'active' : ''}`}
-              onClick={() => setExtraHoursTab('winterbreak')}
-            >Winter Break 2025–2026</button>
-            <button
-              className={`icaap-extrahours-tab ${extraHoursTab === 'may2026' ? 'active' : ''}`}
-              onClick={() => setExtraHoursTab('may2026')}
-            >May 2026</button>
-          </div>
-          {extraHoursTab === 'profdev' && <IcaapNotePanel userId={userId} noteKey="profdev-09-27-25" title="Professional Development — 09-27-25" color="#7ba7e0" />}
-          {extraHoursTab === 'winterbreak' && <IcaapNotePanel userId={userId} noteKey="winter-break-2025-2026" title="Winter Break 2025–2026" color="#7ba7e0" />}
-          {extraHoursTab === 'may2026' && <IcaapNotePanel userId={userId} noteKey="may-2026" title="May 2026" color="#7ba7e0" />}
-        </div>
+        <ExtraHoursPanel
+          userId={userId}
+          extraHoursTab={extraHoursTab}
+          setExtraHoursTab={setExtraHoursTab}
+          showArchived={showArchivedExtraHours}
+          setShowArchived={setShowArchivedExtraHours}
+        />
       )}
 
       {tab === 'notes' && (
@@ -1438,6 +1427,43 @@ function parseTable(content) {
   const headers = lines[firstTableLine].split('\t').map(h => h.trim())
   const rows = lines.slice(firstTableLine + 1).map(l => l.split('\t').map(c => c.trim()))
   return { preamble, headers, rows }
+}
+
+const EXTRA_HOURS_EVENTS = [
+  { key: 'profdev', noteKey: 'profdev-09-27-25', tabLabel: 'Prof. Development 09-27-25', title: 'Professional Development — 09-27-25' },
+  { key: 'winterbreak', noteKey: 'winter-break-2025-2026', tabLabel: 'Winter Break 2025–2026', title: 'Winter Break 2025–2026' },
+  { key: 'may2026', noteKey: 'may-2026', tabLabel: 'May 2026', title: 'May 2026' },
+]
+
+function ExtraHoursPanel({ userId, extraHoursTab, setExtraHoursTab, showArchived, setShowArchived }) {
+  const archivedFlags = {
+    profdev: useIcaapNote(userId, 'profdev-09-27-25').archived,
+    winterbreak: useIcaapNote(userId, 'winter-break-2025-2026').archived,
+    may2026: useIcaapNote(userId, 'may-2026').archived,
+  }
+  const visibleEvents = EXTRA_HOURS_EVENTS.filter(e => showArchived || !archivedFlags[e.key])
+  const active = visibleEvents.some(e => e.key === extraHoursTab) ? extraHoursTab : visibleEvents[0]?.key
+
+  return (
+    <div className="icaap-extrahours">
+      <div className="icaap-extrahours-tabs">
+        {visibleEvents.map(e => (
+          <button
+            key={e.key}
+            className={`icaap-extrahours-tab ${active === e.key ? 'active' : ''}`}
+            onClick={() => setExtraHoursTab(e.key)}
+          >{e.tabLabel}</button>
+        ))}
+        <button className="icaap-archive-btn icaap-extrahours-archive-toggle" onClick={() => setShowArchived(v => !v)}>
+          {showArchived ? 'Hide Archived' : 'Show Archived'}
+        </button>
+      </div>
+      {visibleEvents.length === 0 && <p className="icaap-empty">No active Extra Hours events — click "Show Archived" to view past events.</p>}
+      {EXTRA_HOURS_EVENTS.filter(e => e.key === active).map(e => (
+        <IcaapNotePanel key={e.key} userId={userId} noteKey={e.noteKey} title={e.title} color="#7ba7e0" />
+      ))}
+    </div>
+  )
 }
 
 function IcaapNotePanel({ userId, noteKey, title, color }) {

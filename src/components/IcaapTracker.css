@@ -721,6 +721,12 @@
   border-bottom-color: #1e3070;
 }
 
+.icaap-extrahours-archive-toggle {
+  margin-left: auto;
+  margin-bottom: 8px;
+  align-self: center;
+}
+
 /* Note panel */
 /* ── Transcripts table ──────────────────────────────────────────────────── */
 .tr-panel {
