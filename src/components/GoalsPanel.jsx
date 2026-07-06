@@ -51,7 +51,7 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
           </div>
           <div className="goals-grid">
             {orderedCategories.map((category, idx) => {
-              const color = idx % 2 === 0 ? '#1e3070' : '#ffb81c'
+              const color = idx % 2 === 0 ? '#1e3070' : '#a23b3b'
               const goals = byCategory[category] || []
               return (
                 <div key={category} className="goal-card">
