@@ -42,7 +42,7 @@
   transition: color 0.15s, border-color 0.15s;
 }
 
-.personal-inline-tab.active { color: #fff; border-bottom-color: #ffb81c; }
+.personal-inline-tab.active { color: #fff; border-bottom-color: #a23b3b; }
 .personal-inline-tab:hover:not(.active) { color: #fff; }
 
 /* Framework strip */

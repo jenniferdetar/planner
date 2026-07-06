@@ -94,7 +94,7 @@
 }
 
 .fin-tab:hover { color: #fff; }
-.fin-tab.active { color: #fff; border-bottom-color: #ffb81c; }
+.fin-tab.active { color: #fff; border-bottom-color: #a23b3b; }
 
 .fin-page-header {
   display: flex;

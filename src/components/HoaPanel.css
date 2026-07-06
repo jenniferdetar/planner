@@ -95,7 +95,7 @@
 .hoa-stat-num {
   font-size: 20px;
   font-weight: 700;
-  color: #ffb81c;
+  color: #a23b3b;
   line-height: 1;
 }
 .hoa-stat-lbl {
@@ -136,7 +136,7 @@
   transition: color 0.15s, border-color 0.15s;
 }
 .hoa-tab:hover { color: #fff; }
-.hoa-tab.active { color: #fff; border-bottom-color: #ffb81c; }
+.hoa-tab.active { color: #fff; border-bottom-color: #a23b3b; }
 
 /* Form */
 .hoa-form {
@@ -266,8 +266,8 @@
   box-shadow: 0 2px 6px rgba(30,48,112,0.10), 0 8px 20px rgba(30,48,112,0.06);
   transition: box-shadow 0.18s, transform 0.18s;
 }
-.hoa-group:nth-child(even) { border-left-color: #ffb81c; }
-.hoa-group:nth-child(even) .hoa-group-header { border-bottom-color: #ffb81c; }
+.hoa-group:nth-child(even) { border-left-color: #a23b3b; }
+.hoa-group:nth-child(even) .hoa-group-header { border-bottom-color: #a23b3b; }
 .hoa-group:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
 .hoa-group.expanded { grid-column: 1 / -1; }
 
@@ -296,7 +296,7 @@
 .hoa-group-count {
   font-size: 11px;
   font-weight: 700;
-  background: #ffb81c;
+  background: #a23b3b;
   color: #1e3070;
   padding: 1px 7px;
   border-radius: 2px;
@@ -333,7 +333,7 @@
   box-shadow: 0 2px 6px rgba(30,48,112,0.10), 0 8px 20px rgba(30,48,112,0.06);
   transition: box-shadow 0.18s, transform 0.18s;
 }
-.hoa-group-card.standalone:nth-child(even) { border-left-color: #ffb81c; background: #fff; }
+.hoa-group-card.standalone:nth-child(even) { border-left-color: #a23b3b; background: #fff; }
 .hoa-group-card.standalone:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
 
 .hoa-group-card-header {
