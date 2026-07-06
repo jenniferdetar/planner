@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="260" viewBox="0 0 260 260">
+  <rect width="260" height="260" fill="#fbf9f4"/>
+  <g fill="none" stroke="#cdc6ae" stroke-width="1" stroke-linecap="round" opacity="0.55">
+    <!-- umbel motif A -->
+    <g transform="translate(40,50) rotate(-10)">
+      <path d="M0,0 C 4,18 8,32 6,46"/>
+      <path d="M6,46 L -10,30 M6,46 L -14,42 M6,46 L 8,28 M6,46 L 18,34 M6,46 L 16,46 M6,46 L 2,60 M6,46 L -6,58"/>
+      <circle cx="-10" cy="30" r="1.4" fill="#cdc6ae" stroke="none"/>
+      <circle cx="-14" cy="42" r="1.2" fill="#cdc6ae" stroke="none"/>
+      <circle cx="8" cy="28" r="1.4" fill="#cdc6ae" stroke="none"/>
+      <circle cx="18" cy="34" r="1.2" fill="#cdc6ae" stroke="none"/>
+      <circle cx="16" cy="46" r="1.3" fill="#cdc6ae" stroke="none"/>
+      <circle cx="2" cy="60" r="1.2" fill="#cdc6ae" stroke="none"/>
+      <circle cx="-6" cy="58" r="1.3" fill="#cdc6ae" stroke="none"/>
+    </g>
+    <!-- branch motif B -->
+    <g transform="translate(170,30) rotate(18)">
+      <path d="M0,0 C 10,20 -6,38 8,60 C 16,74 4,86 12,100"/>
+      <ellipse cx="6" cy="14" rx="5" ry="2" transform="rotate(30 6 14)"/>
+      <ellipse cx="-3" cy="30" rx="5" ry="2" transform="rotate(-25 -3 30)"/>
+      <ellipse cx="10" cy="52" rx="5" ry="2" transform="rotate(20 10 52)"/>
+      <ellipse cx="0" cy="72" rx="5" ry="2" transform="rotate(-30 0 72)"/>
+      <ellipse cx="9" cy="92" rx="5" ry="2" transform="rotate(15 9 92)"/>
+    </g>
+    <!-- umbel motif A (smaller, mirrored) -->
+    <g transform="translate(120,150) rotate(150) scale(0.8)">
+      <path d="M0,0 C 4,18 8,32 6,46"/>
+      <path d="M6,46 L -10,30 M6,46 L -14,42 M6,46 L 8,28 M6,46 L 18,34 M6,46 L 16,46 M6,46 L 2,60 M6,46 L -6,58"/>
+      <circle cx="-10" cy="30" r="1.4" fill="#cdc6ae" stroke="none"/>
+      <circle cx="-14" cy="42" r="1.2" fill="#cdc6ae" stroke="none"/>
+      <circle cx="8" cy="28" r="1.4" fill="#cdc6ae" stroke="none"/>
+      <circle cx="18" cy="34" r="1.2" fill="#cdc6ae" stroke="none"/>
+      <circle cx="16" cy="46" r="1.3" fill="#cdc6ae" stroke="none"/>
+      <circle cx="2" cy="60" r="1.2" fill="#cdc6ae" stroke="none"/>
+      <circle cx="-6" cy="58" r="1.3" fill="#cdc6ae" stroke="none"/>
+    </g>
+    <!-- small branch motif C -->
+    <g transform="translate(210,180) rotate(-30) scale(0.7)">
+      <path d="M0,0 C 10,20 -6,38 8,60"/>
+      <ellipse cx="6" cy="14" rx="5" ry="2" transform="rotate(30 6 14)"/>
+      <ellipse cx="-3" cy="30" rx="5" ry="2" transform="rotate(-25 -3 30)"/>
+      <ellipse cx="10" cy="52" rx="5" ry="2" transform="rotate(20 10 52)"/>
+    </g>
+    <!-- scattered leaf sprigs to fill gaps -->
+    <g transform="translate(60,190) rotate(60) scale(0.6)">
+      <path d="M0,0 C 8,14 -4,26 6,40"/>
+      <ellipse cx="4" cy="10" rx="4" ry="1.6" transform="rotate(30 4 10)"/>
+      <ellipse cx="-2" cy="22" rx="4" ry="1.6" transform="rotate(-25 -2 22)"/>
+      <ellipse cx="5" cy="34" rx="4" ry="1.6" transform="rotate(20 5 34)"/>
+    </g>
+    <g transform="translate(220,90) rotate(100) scale(0.55)">
+      <path d="M0,0 C 4,18 8,32 6,46"/>
+      <path d="M6,46 L -10,30 M6,46 L 8,28 M6,46 L 16,46 M6,46 L -6,58"/>
+      <circle cx="-10" cy="30" r="1.4" fill="#cdc6ae" stroke="none"/>
+      <circle cx="8" cy="28" r="1.4" fill="#cdc6ae" stroke="none"/>
+      <circle cx="16" cy="46" r="1.3" fill="#cdc6ae" stroke="none"/>
+      <circle cx="-6" cy="58" r="1.3" fill="#cdc6ae" stroke="none"/>
+    </g>
+  </g>
+</svg>
