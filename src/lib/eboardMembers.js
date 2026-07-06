@@ -37,6 +37,7 @@ export const STATE_MEMBERS = [
   'Jerry White',
   'Jessica Albert',
   'Travel Requests',
+  'Chandra Battaion',
 ]
 
 function toSet(names) {
