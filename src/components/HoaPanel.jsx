@@ -326,8 +326,8 @@ function HoaDirectory() {
     const found = byUnit[unit]
     return { unit, name: found?.name || '', owed: found?.owed }
   })
-  const half = Math.ceil(allUnits.length / 2)
-  const columns = [allUnits.slice(0, half), allUnits.slice(half)]
+  const third = Math.ceil(allUnits.length / 3)
+  const columns = [allUnits.slice(0, third), allUnits.slice(third, third * 2), allUnits.slice(third * 2)]
 
   return (
     <div className="hoa-fin">

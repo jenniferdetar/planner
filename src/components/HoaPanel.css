@@ -498,7 +498,11 @@
 .hoa-fin-table td.pos { color: #2e7d32; }
 .hoa-fin-table td.neg { color: #cc0000; }
 
-.hoa-dir-table th:nth-child(2), .hoa-dir-table td:nth-child(2) { text-align: left; white-space: normal; }
+.hoa-dir-table { table-layout: fixed; }
+.hoa-dir-table th:nth-child(1), .hoa-dir-table td:nth-child(1) { width: 20%; }
+.hoa-dir-table th:nth-child(2), .hoa-dir-table td:nth-child(2) { width: 55%; text-align: left; white-space: normal; word-break: break-word; }
+.hoa-dir-table th:nth-child(3), .hoa-dir-table td:nth-child(3) { width: 25%; }
+.hoa-dir-table td { height: 36px; padding-top: 4px; padding-bottom: 4px; vertical-align: middle; }
 .hoa-dir-table td.neg { color: #cc0000; }
 
 .hoa-dir-cols {
@@ -508,7 +512,7 @@
 }
 .hoa-dir-cols .hoa-fin-table-wrap { flex: 1 1 0; min-width: 0; }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .hoa-dir-cols { flex-direction: column; }
 }
 
