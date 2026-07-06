@@ -304,7 +304,7 @@
 }
 
 .checklist-role-select {
-  font-size: 12px;
+  font-size: 10px;
   padding: 2px 3px;
   border: 1px solid #e0ddd7;
   border-radius: 3px;
@@ -313,6 +313,9 @@
   width: 100%;
   max-width: 110px;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .checklist-table td {
