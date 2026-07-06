@@ -19,7 +19,6 @@
     repeating-linear-gradient(45deg, rgba(30,48,112,0.03) 0 1px, transparent 1px 3px) !important;
 }
 
-.personal-panel .goals-panel,
 .personal-panel .roles-list-wrap,
 .personal-panel .roles-content,
 .personal-panel .roles-detail,
@@ -35,6 +34,11 @@
 .personal-panel .wants-panel,
 .personal-panel .mantra-section {
   background: transparent !important;
+}
+
+/* Sample: subtle botanical texture on My Goals only (see GoalsPanel.css) */
+.personal-panel .goals-panel {
+  background: #ffffff url('/botanical-pattern.svg') repeat !important;
 }
 
 /* ─── Tab strip → ribbon ──────────────────────────────────────────────────── */
