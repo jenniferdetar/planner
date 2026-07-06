@@ -59,6 +59,27 @@ const SAMPLES_DETAR_DEFAULTS = [
   { name: 'Elias Sikorowski', birth_year: '2013', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 4 },
   { name: 'Brasen J Sikorowski', birth_year: '2016', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 5 },
   { name: 'Jacob Sikorowski', birth_year: '2018', death_year: '', relationship: 'nephew', generation: 1, side: "Chris Sikorowski's", sort_order: 6 },
+
+  // ── Jeff's grandparents (generation -2) ──
+  { name: 'Wayne Allen Detar', birth_year: '1926', death_year: '2015', relationship: 'grandfather', generation: -2, side: "Paternal (Jeff's - Detar)", sort_order: 6 },
+  { name: 'Janet Lee Pine', birth_year: '1933', death_year: '1999', relationship: 'grandmother', generation: -2, side: "Paternal (Jeff's - Detar)", sort_order: 7 },
+  { name: 'Clarence A Borders', birth_year: '1927', death_year: '2004', relationship: 'grandfather', generation: -2, side: "Maternal (Jeff's - Borders)", sort_order: 8 },
+  { name: 'Dorothy B Kiepien', birth_year: '1929', death_year: '2006', relationship: 'grandmother', generation: -2, side: "Maternal (Jeff's - Borders)", sort_order: 9 },
+
+  // ── Jeff's parents (generation -1) ──
+  { name: 'Thomas Lee DeTar', birth_year: '1953', death_year: '', relationship: 'parent', generation: -1, side: "Paternal (Jeff's - Detar)", sort_order: 18 },
+  { name: 'Susan F Borders', birth_year: '1954', death_year: '', relationship: 'parent', generation: -1, side: "Maternal (Jeff's - Borders)", sort_order: 19 },
+
+  // ── Jeff's siblings (generation 0) ──
+  { name: 'Nicole Lederman', birth_year: '1986', death_year: '', relationship: 'half-sibling', generation: 0, side: "Jeff's", sort_order: 7 },
+  { name: 'Jeremy Lee DeTar', birth_year: '1977', death_year: '', relationship: 'brother', generation: 0, side: "Jeff's", sort_order: 8 },
+  { name: 'Tamara Petty', birth_year: '', death_year: '', relationship: 'sister-in-law', generation: 0, side: "Jeff's", sort_order: 9 },
+  { name: 'Brienne D Detar', birth_year: '1979', death_year: '', relationship: 'sister', generation: 0, side: "Jeff's", sort_order: 10 },
+
+  // ── Jeff's nieces/nephews (generation 1) ──
+  { name: 'Ethan DeTar', birth_year: '', death_year: '', relationship: 'nephew', generation: 1, side: "Jeremy Lee DeTar's", sort_order: 7 },
+  { name: 'Lincoln DeTar', birth_year: '', death_year: '', relationship: 'nephew', generation: 1, side: "Jeremy Lee DeTar's", sort_order: 8 },
+  { name: 'Harrison DeTar', birth_year: '2009', death_year: '', relationship: 'nephew', generation: 1, side: "Jeremy Lee DeTar's", sort_order: 9 },
 ]
 
 const BLANK = { name: '', birth_year: '', death_year: '', relationship: 'brother', generation: 0, side: '', notes: '', likes: '', dislikes: '' }
@@ -103,11 +124,9 @@ export default function FamilyTreePanel({ members = [], onAddMember, onUpdateMem
           <p className="ft-subtitle">Samples-Detar Family</p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          {members.length === 0 && (
-            <button className="ft-add-btn ft-import-btn" onClick={handleImport} disabled={importing}>
-              {importing ? 'Importing…' : '⬇ Import from Ancestry'}
-            </button>
-          )}
+          <button className="ft-add-btn ft-import-btn" onClick={handleImport} disabled={importing}>
+            {importing ? 'Importing…' : members.length === 0 ? '⬇ Import from Ancestry' : '⬇ Import Missing Family'}
+          </button>
           <button className="ft-add-btn" onClick={openAdd}>+ Add Member</button>
         </div>
       </div>
