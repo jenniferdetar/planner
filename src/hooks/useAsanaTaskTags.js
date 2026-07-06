@@ -25,10 +25,3 @@ export function useAsanaTaskTags() {
 
   return { tags, cycleTag }
 }
-
-export const TAG_COLORS = {
-  CSEA:  '#b87a38',
-  iCAAP: '#3a5c4a',
-  Roles: '#8a4848',
-  GCU:   '#5a7848',
-}

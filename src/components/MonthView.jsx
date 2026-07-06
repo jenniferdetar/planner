@@ -90,7 +90,6 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
           const isToday = !cell.overflow && sameDay(cellDate, today)
           const isSelected = !cell.overflow && sameDay(cellDate, selectedDate)
           const dateKey = toDateStr(cellDate)
-          const counts = taskCounts?.[dateKey]
           const gcalBlocks = (timeBlocks || []).filter(b => b.startIso?.startsWith(dateKey))
 
           return (

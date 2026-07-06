@@ -36,43 +36,45 @@ export default function WantsPanel({ providerToken }) {
         </div>
       </div>
 
-      {error && (
-        <div className="wants-error">
-          {error.includes('401') || error.includes('403')
-            ? 'Sign out and sign back in with Google to refresh access.'
-            : error}
-        </div>
-      )}
+      <div className="wants-body">
+        {error && (
+          <div className="wants-error">
+            {error.includes('401') || error.includes('403')
+              ? 'Sign out and sign back in with Google to refresh access.'
+              : error}
+          </div>
+        )}
 
-      {loading && <div className="wants-loading">Loading…</div>}
+        {loading && <div className="wants-loading">Loading…</div>}
 
-      {!loading && !error && (
-        <div className="wants-list">
-          {wants.map(want => (
-            <div
-              key={want.num}
-              className={`wants-item ${editingNum === want.num ? 'editing' : ''}`}
-              onClick={() => editingNum !== want.num && startEdit(want)}
-            >
-              <span className="wants-num">{want.num}.</span>
-              {editingNum === want.num ? (
-                <input
-                  ref={inputRef}
-                  className="wants-input"
-                  value={editText}
-                  onChange={e => setEditText(e.target.value)}
-                  onBlur={() => commitEdit(want)}
-                  onKeyDown={e => handleKeyDown(e, want)}
-                />
-              ) : (
-                <span className={`wants-text ${!want.text ? 'empty' : ''}`}>
-                  {want.text || 'Click to add…'}
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+        {!loading && !error && (
+          <div className="wants-list">
+            {wants.map(want => (
+              <div
+                key={want.num}
+                className={`wants-item ${editingNum === want.num ? 'editing' : ''}`}
+                onClick={() => editingNum !== want.num && startEdit(want)}
+              >
+                <span className="wants-num">{want.num}.</span>
+                {editingNum === want.num ? (
+                  <input
+                    ref={inputRef}
+                    className="wants-input"
+                    value={editText}
+                    onChange={e => setEditText(e.target.value)}
+                    onBlur={() => commitEdit(want)}
+                    onKeyDown={e => handleKeyDown(e, want)}
+                  />
+                ) : (
+                  <span className={`wants-text ${!want.text ? 'empty' : ''}`}>
+                    {want.text || 'Click to add…'}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

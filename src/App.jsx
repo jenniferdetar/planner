@@ -1,12 +1,11 @@
 import './PlannerTheme.css'
 import './Scrapbook.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { supabase, signOut, signInWithGoogle } from './lib/supabase'
-import { useMasterTasks, useDailyTasks, useMeetings, useNotes, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
+import { useMasterTasks, useDailyTasks, useMeetings, useTaskCounts, useMeetingsInRange } from './hooks/usePlannerData'
 import { useDailyLog } from './hooks/useDailyLog'
 import { useWeeklyTasks } from './hooks/useWeeklyTasks'
-import { usePlannerSections } from './hooks/usePlannerSections'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
 import { useCseaIssues, useMemberInteractions, useCseaNotes, useCseaIssueNotes } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
@@ -14,7 +13,6 @@ import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useIcaapNotes } from './hooks/useIcaapNotes'
 import { useTransactions, useBills, useFinancialGoals, usePaychecks } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
-import { useAsanaTaskTags } from './hooks/useAsanaTaskTags'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
 import { useLibrary } from './hooks/useLibrary'
@@ -22,14 +20,6 @@ import { useFamilyTree } from './hooks/useFamilyTree'
 import DashboardView from './components/DashboardView'
 import LoginScreen from './components/LoginScreen'
 import './App.css'
-
-const QUOTES = [
-  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
-  { text: "Focus on being productive instead of busy.", author: "Tim Ferriss" },
-  { text: "It's not about having time, it's about making time.", author: "Unknown" },
-  { text: "Done is better than perfect.", author: "Sheryl Sandberg" },
-  { text: "Small steps every day.", author: "Unknown" },
-]
 
 // Color palette for Supabase-created time blocks
 const BLOCK_COLORS = ['#2d7a4f', '#1e4d31', '#4a90d9', '#e05c5c', '#f0a040', '#9b59b6']
@@ -60,24 +50,21 @@ export default function App() {
   const { session, user, providerToken, loading, clearProviderToken } = useAuth()
   const [selectedDate, setSelectedDate] = useState(today)
   const [view, setView] = useState('day')
-  const [personalSubTab, setPersonalSubTab] = useState('log')
   const [calViewYear, setCalViewYear] = useState(today.getFullYear())
   const [calViewMonth, setCalViewMonth] = useState(today.getMonth())
 
   const userId = user?.id ?? null
-  const quote = QUOTES[today.getDate() % QUOTES.length]
   const dateStr = selectedDate.toISOString().split('T')[0]
 
   const { tasks: masterTasks, addTask: addMasterTask, updateTask: updateMasterTask, deleteTask: deleteMasterTask } = useMasterTasks(userId)
   const { tasks: dailyTasks, addTask: addDailyTask, toggleTask: toggleDailyTask, deleteTask: deleteDailyTask, updateTaskDescription } = useDailyTasks(userId, selectedDate)
-  const { meetings, addMeeting, bulkAddMeetings, deleteMeeting } = useMeetings(userId, selectedDate)
-  const { content: noteContent, onChange: onNoteChange } = useNotes(userId, selectedDate)
+  const { meetings, addMeeting, deleteMeeting } = useMeetings(userId, selectedDate)
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction, showArchived: showArchivedInteractions, setShowArchived: setShowArchivedInteractions } = useMemberInteractions(userId)
   const { notes: cseaNotes, addNote: addCseaNote, deleteNote: deleteCseaNote } = useCseaNotes(userId)
   const { notesByIssue: cseaIssueNotes, addNote: addCseaIssueNote, deleteNote: deleteCseaIssueNote } = useCseaIssueNotes(userId)
-  const { masterTasks: asanaTasks, todayTasks: asanaTodayTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, projects: asanaProjects, status: asanaStatus, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes, addTask: addAsanaTask, refresh: refreshAsana } = useAsanaTasks()
+  const { masterTasks: asanaTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
@@ -87,8 +74,6 @@ export default function App() {
   const { notes: icaapNotes, addNote: addIcaapNote, deleteNote: deleteIcaapNote } = useIcaapNotes(userId)
   const { books, addBook, updateStatus: updateBookStatus, updateChapter: updateBookChapter, deleteBook, importDefaults: importBooks, reload: reloadBooks, coverSync: bookCoverSync, fetchCovers: fetchBookCovers } = useLibrary(userId)
   const { members: familyMembers, addMember: addFamilyMember, updateMember: updateFamilyMember, deleteMember: deleteFamilyMember, importDefaults: importFamilyDefaults } = useFamilyTree(userId)
-  const { sections, updateSection } = usePlannerSections(userId)
-  const { tags: asanaTaskTags, cycleTag: cycleAsanaTaskTag } = useAsanaTaskTags()
   const { tasksByDate: weeklyTasks, toggleTask: toggleWeeklyTask, addTask: addWeeklyTask } = useWeeklyTasks(userId, selectedDate)
   const { addEntry: addLogEntry } = useDailyLog(userId, dateStr)
 
@@ -115,7 +100,6 @@ export default function App() {
   }
 
   // Merge Asana tasks into local lists — only tasks due within the current week
-  const allMasterTasks = masterTasks
   const _ws = new Date(selectedDate); _ws.setDate(_ws.getDate() - _ws.getDay())
   const _we = new Date(_ws); _we.setDate(_we.getDate() + 6)
   const _weekStart = _ws.toISOString().split('T')[0]

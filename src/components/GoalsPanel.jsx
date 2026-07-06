@@ -46,8 +46,7 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
       {(section === 'all' || section === 'goals') && (
         <div className="goals-section">
           <div className="goals-section-header">
-            <span className="goals-trophy">🏆</span>
-            <h3 className="goals-title">My Personal Goals</h3>
+            <h3 className="goals-title"><span className="goals-trophy">🏆</span> My Personal Goals</h3>
           </div>
           <div className="goals-grid">
             {orderedCategories.map((category, idx) => {
@@ -124,6 +123,9 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
 
       {(section === 'all' || section === 'checklist') && (
         <div className="checklist-section">
+          <div className="goals-section-header">
+            <h3 className="goals-title">Monthly Checklist</h3>
+          </div>
           <table className="checklist-table">
             <thead>
               <tr>

@@ -4,7 +4,6 @@ import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
 import { useIcaapNote } from '../hooks/useIcaapNote'
-import { employeeMap } from '../data/employeeLookup'
 
 const CATEGORIES = ['Task', 'Meeting', 'Research', 'Review', 'Report', 'Follow-up', 'Other']
 const PRIORITIES = ['Low', 'Medium', 'High']
@@ -352,9 +351,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
   )
 }
 
-const ATTENDANCE_STATUSES = ['Present', 'Absent', 'Excused']
-const ATTENDANCE_STATUS_COLORS = { Present: '#5cb85c', Absent: '#e05c5c', Excused: '#f0a040' }
-
 function getWeekDates(anchorDate) {
   const d = new Date(anchorDate + 'T12:00:00')
   const day = d.getDay() // 0=Sun
@@ -449,7 +445,6 @@ function AttendanceCell({ status, timeIn, notes, onStatusChange, onTimeChange, o
   const [timeVal, setTimeVal] = useState(timeIn)
   const [notesVal, setNotesVal] = useState(notes ?? '')
   const [editingNotes, setEditingNotes] = useState(false)
-  const timer = useRef(null)
 
   if (timeVal !== timeIn && !editingTime) setTimeVal(timeIn)
   if (notesVal !== (notes ?? '') && !editingNotes) setNotesVal(notes ?? '')
@@ -528,46 +523,6 @@ function AttendanceCell({ status, timeIn, notes, onStatusChange, onTimeChange, o
         )
       )}
     </td>
-  )
-}
-
-function AsanaTaskRow({ task, onComplete, onUpdateNotes }) {
-  const [expanded, setExpanded] = useState(false)
-  const [notesText, setNotesText] = useState(task.notes || '')
-  const saveTimer = useRef(null)
-
-  function handleNotesChange(e) {
-    const val = e.target.value
-    setNotesText(val)
-    clearTimeout(saveTimer.current)
-    saveTimer.current = setTimeout(() => onUpdateNotes?.(task.id, val), 800)
-  }
-
-  return (
-    <div className="asana-task-row">
-      <div className="asana-task-header">
-        <button
-          className="asana-row-check-btn"
-          onClick={() => onComplete?.(task.id)}
-          title="Mark complete"
-        />
-        <span className="asana-task-title" onClick={() => setExpanded(e => !e)}>{task.title}</span>
-        {task.due_on && <span className="asana-task-due">📅 {task.due_on}</span>}
-        <span className="icaap-chevron" onClick={() => setExpanded(e => !e)}>{expanded ? '▾' : '▸'}</span>
-      </div>
-      {expanded && (
-        <div className="asana-task-body">
-          <textarea
-            className="icaap-input"
-            placeholder="Notes…"
-            value={notesText}
-            onChange={handleNotesChange}
-            rows={3}
-            style={{ resize: 'vertical', width: '100%' }}
-          />
-        </div>
-      )}
-    </div>
   )
 }
 
@@ -1104,320 +1059,6 @@ function IcaapNoteGroup({ note: n, onDelete }) {
   )
 }
 
-// ── Transcripts ───────────────────────────────────────────────────────────────
-
-const PROGRAM_ADVISERS = {
-  'AA/ASD': 'Eberardo Rodriguez',
-  'AA/BiLAA': 'Zina Dixon',
-  'AA/ECSE (Year 2 only)': 'Eberardo Rodriguez',
-  'AA/RLAA': 'Wendy Marrero & Rene Gaudet',
-  'CENTSE': 'Eberardo Rodriguez',
-  'Induction Program': 'Maikai Finnell & Wendy Marrero',
-  'Portfolio (Preliminary Clinical Practice)': 'Stephen Maccarone',
-  'Preliminary Added Specialty Programs': 'Eberardo Rodriguez',
-  'Preliminary ECSE': 'Eberardo Rodriguez',
-  'Preliminary MMSN/MMD': 'Eberardo Rodriguez',
-  'Preliminary MOD/ESN': 'Eberardo Rodriguez',
-  'Preliminary Multiple Subject': 'Rene Gaudet',
-  'Preliminary Single Subject': 'Zina Dixon',
-  'TPSL': 'Eberardo Rodriguez',
-}
-
-const TRANSCRIPT_COL_WIDTHS = {
-  'en': 75,
-  "teacher's name": 150,
-  'request from': 100,
-  'date request received': 115,
-  'program': 140,
-  'nature of inquiry': 200,
-  'sent to icaap program adviser': 155,
-  'date sent': 100,
-  'by': 70,
-  'notes': 170,
-  'date return from the program adviser': 130,
-  'date returned to salary allocation unit': 130,
-  'sent to whom': 145,
-}
-
-function colWidth(header) {
-  const key = header.toLowerCase().trim()
-  for (const [k, w] of Object.entries(TRANSCRIPT_COL_WIDTHS)) {
-    if (key.includes(k) || k.includes(key)) return w
-  }
-  return 120
-}
-
-function isLongCol(header) {
-  return /inquiry|nature|notes/i.test(header)
-}
-
-function fmtDateLong(iso) {
-  if (!iso) return ''
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-  const [y, m, d] = iso.split('-').map(Number)
-  return `${months[m - 1]} ${String(d).padStart(2, '0')} ${y}`
-}
-
-const BLANK_ENTRY = {
-  en: '', name: '', requestFrom: 'Teacher', dateReceived: '',
-  program: '', adviser: '', inquiry: '', dateSent: '',
-  by: 'J. Detar', notes: '', dateReturn: '', dateReturnedSAU: '', sentTo: '',
-}
-
-function TranscriptsCell({ value, onChange, long }) {
-  const [editing, setEditing] = useState(false)
-  const [val, setVal] = useState(value)
-
-  if (!editing && val !== value) setVal(value)
-
-  function commit() {
-    setEditing(false)
-    if (val !== value) onChange(val)
-  }
-
-  if (editing) {
-    return long ? (
-      <textarea
-        className="tr-cell-input tr-cell-input-long"
-        value={val}
-        onChange={e => setVal(e.target.value)}
-        onBlur={commit}
-        onKeyDown={e => { if (e.key === 'Escape') { setVal(value); setEditing(false) } }}
-        autoFocus
-        rows={3}
-      />
-    ) : (
-      <input
-        className="tr-cell-input"
-        value={val}
-        onChange={e => setVal(e.target.value)}
-        onBlur={commit}
-        onKeyDown={e => {
-          if (e.key === 'Enter') commit()
-          if (e.key === 'Escape') { setVal(value); setEditing(false) }
-        }}
-        autoFocus
-      />
-    )
-  }
-
-  return (
-    <span
-      className={`tr-cell-view${long ? ' long' : ''}${!value ? ' empty' : ''}`}
-      onClick={() => setEditing(true)}
-      title={value || undefined}
-    >
-      {value || '—'}
-    </span>
-  )
-}
-
-function TranscriptsPanel({ userId }) {
-  const { content, handleChange, saved } = useIcaapNote(userId, 'transcripts-2025-2026')
-  const [showForm, setShowForm] = useState(false)
-  const [pasteMode, setPasteMode] = useState(false)
-  const [entry, setEntry] = useState(BLANK_ENTRY)
-  const table = parseTable(content)
-
-  function saveTable(headers, rows) {
-    handleChange([headers.join('\t'), ...rows.map(r => r.join('\t'))].join('\n'))
-  }
-
-  function setField(key, value) {
-    setEntry(prev => {
-      const next = { ...prev, [key]: value }
-      if (key === 'program') next.adviser = PROGRAM_ADVISERS[value] || ''
-      if (key === 'en') {
-        const found = employeeMap.get(value.trim())
-        if (found) next.name = found
-      }
-      return next
-    })
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault()
-    if (!table) return
-    const newRow = [
-      entry.en, entry.name, entry.requestFrom,
-      fmtDateLong(entry.dateReceived), entry.program, entry.inquiry,
-      entry.adviser, fmtDateLong(entry.dateSent), entry.by,
-      entry.notes, fmtDateLong(entry.dateReturn),
-      fmtDateLong(entry.dateReturnedSAU), entry.sentTo,
-    ]
-    saveTable(table.headers, [...table.rows, newRow])
-    setEntry(BLANK_ENTRY)
-    setShowForm(false)
-  }
-
-  function updateCell(ri, ci, value) {
-    if (!table) return
-    saveTable(table.headers, table.rows.map((row, i) => {
-      if (i !== ri) return row
-      const updated = [...row]
-      updated[ci] = value
-      return updated
-    }))
-  }
-
-  function deleteRow(ri) {
-    if (!table) return
-    saveTable(table.headers, table.rows.filter((_, i) => i !== ri))
-  }
-
-  return (
-    <div className="tr-panel">
-      <div className="tr-toolbar">
-        <a
-          className="tr-title tr-title-link"
-          href="https://lausd-my.sharepoint.com/:x:/r/personal/jennifer_detar_lausd_net/Documents/2025-2026%20Transcripts.xlsx?d=wf58c588a79ec4907a35067c636778268&csf=1&web=1&e=1f8pLN"
-          target="_blank"
-          rel="noopener noreferrer"
-        >2025–2026 Transcripts ↗</a>
-        <div className="tr-toolbar-right">
-          {saved && <span className="icaap-note-saved">Saved ✓</span>}
-          {!pasteMode && (
-            <button className="tr-add-btn" onClick={() => { setShowForm(f => !f); setPasteMode(false) }}>
-              {showForm ? '✕ Cancel' : '+ New Entry'}
-            </button>
-          )}
-          <button className="icaap-note-edit-btn" onClick={() => { setPasteMode(m => !m); setShowForm(false) }}>
-            {pasteMode ? 'View Table' : 'Paste from Excel'}
-          </button>
-        </div>
-      </div>
-
-      {showForm && !pasteMode && (
-        <form className="tr-form" onSubmit={handleSubmit}>
-          <div className="tr-form-row">
-            <label className="tr-fg tr-fg-sm">
-              <span>EN</span>
-              <input className="tr-fi" value={entry.en} onChange={e => setField('en', e.target.value)} placeholder="Employee #" />
-            </label>
-            <label className="tr-fg tr-fg-lg">
-              <span>Teacher's Name{employeeMap.get(entry.en?.trim()) === entry.name && entry.name ? ' ✓' : ''}</span>
-              <input className="tr-fi" value={entry.name} onChange={e => setField('name', e.target.value)} placeholder="Full name (auto-fills from EN)" required />
-            </label>
-            <label className="tr-fg">
-              <span>Request From</span>
-              <select className="tr-fi" value={entry.requestFrom} onChange={e => setField('requestFrom', e.target.value)}>
-                <option>Teacher</option>
-                <option>Salary Credit Assistant</option>
-              </select>
-            </label>
-            <label className="tr-fg">
-              <span>Date Received</span>
-              <input className="tr-fi" type="date" value={entry.dateReceived} onChange={e => setField('dateReceived', e.target.value)} />
-            </label>
-          </div>
-
-          <div className="tr-form-row">
-            <label className="tr-fg tr-fg-lg">
-              <span>Program</span>
-              <select className="tr-fi" value={entry.program} onChange={e => setField('program', e.target.value)} required>
-                <option value="">— Select Program —</option>
-                {Object.keys(PROGRAM_ADVISERS).map(p => <option key={p} value={p}>{p}</option>)}
-              </select>
-            </label>
-            <label className="tr-fg tr-fg-lg">
-              <span>iCAAP Programme Adviser</span>
-              <input className="tr-fi tr-fi-adviser" value={entry.adviser} onChange={e => setField('adviser', e.target.value)} placeholder="Auto-filled from Program" readOnly={!!PROGRAM_ADVISERS[entry.program]} />
-            </label>
-          </div>
-
-          <div className="tr-form-row">
-            <label className="tr-fg tr-fg-full">
-              <span>Nature of Inquiry</span>
-              <textarea className="tr-fi tr-fi-ta" rows={3} value={entry.inquiry} onChange={e => setField('inquiry', e.target.value)} placeholder="Describe the request…" />
-            </label>
-          </div>
-
-          <div className="tr-form-row">
-            <label className="tr-fg">
-              <span>Date Sent</span>
-              <input className="tr-fi" type="date" value={entry.dateSent} onChange={e => setField('dateSent', e.target.value)} />
-            </label>
-            <label className="tr-fg tr-fg-sm">
-              <span>By</span>
-              <input className="tr-fi" value={entry.by} onChange={e => setField('by', e.target.value)} />
-            </label>
-            <label className="tr-fg tr-fg-lg">
-              <span>Notes</span>
-              <input className="tr-fi" value={entry.notes} onChange={e => setField('notes', e.target.value)} placeholder="e.g. Sent to email@example.com" />
-            </label>
-          </div>
-
-          <div className="tr-form-row">
-            <label className="tr-fg">
-              <span>Date Return from Adviser</span>
-              <input className="tr-fi" type="date" value={entry.dateReturn} onChange={e => setField('dateReturn', e.target.value)} />
-            </label>
-            <label className="tr-fg">
-              <span>Date Returned to SAU</span>
-              <input className="tr-fi" type="date" value={entry.dateReturnedSAU} onChange={e => setField('dateReturnedSAU', e.target.value)} />
-            </label>
-            <label className="tr-fg tr-fg-lg">
-              <span>Sent To Whom</span>
-              <input className="tr-fi" value={entry.sentTo} onChange={e => setField('sentTo', e.target.value)} placeholder="Institution or email" />
-            </label>
-          </div>
-
-          <div className="tr-form-actions">
-            <button type="button" className="tr-cancel-btn" onClick={() => { setShowForm(false); setEntry(BLANK_ENTRY) }}>Cancel</button>
-            <button type="submit" className="tr-submit-btn">Add Entry</button>
-          </div>
-        </form>
-      )}
-
-      {pasteMode ? (
-        <textarea
-          className="icaap-note-textarea"
-          value={content}
-          onChange={e => handleChange(e.target.value)}
-          placeholder="Paste data from Excel or a web table (tab-separated, first row = column headers)…"
-          autoFocus
-        />
-      ) : !table ? (
-        <div className="tr-empty">
-          <p>No entries yet.</p>
-          <button className="tr-add-btn" onClick={() => setShowForm(true)}>+ New Entry</button>
-        </div>
-      ) : (
-        <div className="tr-table-wrap">
-          <table className="tr-table">
-            <thead>
-              <tr>
-                {table.headers.map((h, i) => (
-                  <th key={i} className="tr-th" style={{ minWidth: colWidth(h) }}>{h}</th>
-                ))}
-                <th className="tr-th tr-th-del" />
-              </tr>
-            </thead>
-            <tbody>
-              {table.rows.map((row, ri) => (
-                <tr key={ri} className="tr-tr">
-                  {table.headers.map((h, ci) => (
-                    <td key={ci} className="tr-td">
-                      <TranscriptsCell
-                        value={row[ci] ?? ''}
-                        onChange={v => updateCell(ri, ci, v)}
-                        long={isLongCol(h)}
-                      />
-                    </td>
-                  ))}
-                  <td className="tr-td tr-td-del">
-                    <button className="icaap-row-delete-btn" onClick={() => deleteRow(ri)}>×</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  )
-}
-
 function parseTable(content) {
   const lines = content.split('\n').filter(l => l.trim())
   if (lines.length < 2) return null
@@ -1631,7 +1272,6 @@ const AREA_COLORS = {
 
 function PayrollSchedule() {
   const today = new Date()
-  const todayStr = today.toISOString().split('T')[0]
 
   function parseDate(str) {
     return new Date(str.replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s*/, ''))

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { SHELVES } from '../hooks/useLibrary'
 import { useYahooBookSync } from '../hooks/useYahooBookSync'
 import { supabase } from '../lib/supabase'
@@ -147,6 +147,15 @@ export default function LibraryPanel({ userId, books, onAddBook, onUpdateStatus,
   const [brokenCovers, setBrokenCovers] = useState(() => new Set())
 
   const missingCoverCount = books.filter(b => !b.cover_url).length
+
+  const autoFetchStarted = useRef(false)
+  useEffect(() => {
+    if (autoFetchStarted.current) return
+    if (missingCoverCount > 0 && !bookCoverSync?.syncing) {
+      autoFetchStarted.current = true
+      onFetchBookCovers?.()
+    }
+  }, [missingCoverCount, bookCoverSync?.syncing, onFetchBookCovers])
 
   const isWantToRead = activeShelf === WANT_TO_READ_TAB
 

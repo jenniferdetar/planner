@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { fetchWorkspaces, fetchMyTasks, asanaTaskToMaster, completeAsanaTask, updateAsanaTaskNotes, createTask, findOrCreateProject, fetchProjects } from '../lib/asana'
+import { fetchWorkspaces, asanaTaskToMaster, completeAsanaTask, updateAsanaTaskNotes, createTask, findOrCreateProject, fetchProjects } from '../lib/asana'
 
 const POLL_INTERVAL = 60 * 1000 // 1 minute
 

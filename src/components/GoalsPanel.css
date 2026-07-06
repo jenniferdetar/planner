@@ -9,19 +9,18 @@
 
 /* Goals section */
 .goals-section {
-  padding: 12px 16px 16px;
+  padding: 0 0 16px;
 }
 
 .goals-section-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  justify-content: center;
-  height: 34px;
   box-sizing: border-box;
-  padding: 0 16px;
+  padding: 10px 16px 8px;
+  border-bottom: 2px solid #0d1a40;
   background: #1e3070;
   flex-shrink: 0;
+  margin-bottom: 12px;
 }
 
 .goals-trophy {
@@ -30,18 +29,20 @@
 
 .goals-title {
   font-family: 'Nunito', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .goals-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
+  padding: 0 16px;
 }
 
 .goal-card {
@@ -247,7 +248,12 @@
 
 /* Checklist */
 .checklist-section {
-  padding: 0 16px 10px;
+  padding: 0 0 10px;
+}
+
+.checklist-section .checklist-table {
+  margin: 0 16px;
+  width: calc(100% - 32px);
 }
 
 .checklist-title {
