@@ -220,7 +220,7 @@ function BillsTab({ bills, onAdd, onToggle, onDelete }) {
       <div className="budget-table-wrap">
         {bills.length === 0 && <p className="fin-empty">No bills added yet</p>}
         {bills.length > 0 && (
-          <table className="budget-table">
+          <table className="budget-table bills-table">
             <thead>
               <tr>
                 <th className="budget-th cat">Bill</th>
