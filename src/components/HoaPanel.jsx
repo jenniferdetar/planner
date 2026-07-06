@@ -115,6 +115,7 @@ const HOA_UNITS = [
   { unit: '063', name: 'Maria Ayala' },
   { unit: '064', name: 'Alla Timakov', owed: 220.40 },
   { unit: '065', name: 'Maria Fernandez', owed: 0.21 },
+  { unit: '067', name: 'Norma Valencia' },
   { unit: '069', name: 'Marta R. Moreno' },
   { unit: '070', name: 'Guillermo Marquez' },
   { unit: '072', name: 'Pedro Valencia', owed: 103.86 },
