@@ -16,6 +16,7 @@ export const EBOARD_MEMBERS = [
   // Union Stewards
   'Helen Lopez',
   'Marcia Scott',
+  'Linda Perez',
 ]
 
 // CSEA Labor Relations Representatives assigned to the chapter.
@@ -25,10 +26,13 @@ export const LABOR_REPS = [
   'Matthew Korn',
   'Jennifer Rener',
   'Espie Medellin',
+  'Elliott Keegan',
 ]
 
 // Area I Council members/officers.
-export const AREA_I_MEMBERS = []
+export const AREA_I_MEMBERS = [
+  'Melissa- CSEA 129',
+]
 
 // CSEA state-level officers/staff, and state-level contacts/topics.
 export const STATE_MEMBERS = [
@@ -37,6 +41,8 @@ export const STATE_MEMBERS = [
   'Jerry White',
   'Jessica Albert',
   'Travel Requests',
+  'Chandra Battaion',
+  'Costa y Valles CVFO',
 ]
 
 function toSet(names) {
