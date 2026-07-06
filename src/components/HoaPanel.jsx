@@ -82,6 +82,7 @@ const HOA_FINANCIALS = HOA_FINANCIALS_RAW.map(m => {
 // `owed` is each unit's current receivable balance as of the latest packet
 // (May 2026) — omitted where the unit had no open balance in that packet.
 const HOA_UNITS = [
+  { unit: '001', name: 'Emelly Gutierrez' },
   { unit: '005', name: 'Neda Ardani' },
   { unit: '006', name: 'CIW GROUP LLC' },
   { unit: '008', name: 'Esmith Estrada', owed: 100.00 },
