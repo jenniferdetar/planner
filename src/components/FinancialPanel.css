@@ -1036,6 +1036,10 @@
 .budget-th.cat { text-align: left; }
 .budget-th.del-col { width: 28px; }
 
+.bills-table { table-layout: fixed; }
+.bills-table .budget-th.cat,
+.bills-table .budget-td.cat { width: 30%; }
+
 .budget-section-hd {
   color: #fff !important;
   font-size: 10px;
