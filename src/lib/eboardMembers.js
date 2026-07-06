@@ -19,7 +19,13 @@ export const EBOARD_MEMBERS = [
 ]
 
 // CSEA Labor Relations Representatives assigned to the chapter.
-export const LABOR_REPS = []
+export const LABOR_REPS = [
+  'Emily Raab',
+  'Christopher Crump',
+  'Matthew Korn',
+  'Jennifer Rener',
+  'Espie Medellin',
+]
 
 // Area I Council members/officers.
 export const AREA_I_MEMBERS = []
