@@ -231,7 +231,8 @@
   font-size: 13px;
 }
 
-.zbb-tracker-env-name {
+.zbb-tracker-env-row > span.zbb-tracker-env-name {
+  font-size: 11px;
   display: flex;
   align-items: flex-start;
   gap: 4px;
