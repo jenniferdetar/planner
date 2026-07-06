@@ -133,6 +133,7 @@ const HOA_UNITS = [
   { unit: '100', name: 'Elena Rouvinskaia and Igor Shvager' },
   { unit: '103', name: 'Aida Montenegro' },
   { unit: '105', name: 'Chien Hung Tsou Juei Chen' },
+  { unit: '106', name: 'Heather Lembcke' },
   { unit: '107', name: 'Jeffery W Detar', owed: 336.84 },
   { unit: '109', name: 'Ida Tedjo' },
   { unit: '111', name: 'Mehran Moloudi', owed: 978.90 },
