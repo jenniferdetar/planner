@@ -7,6 +7,7 @@ export const SKIPPED_SENDER_EMAILS = [
   'n0rmavalencia@hotmail.com',
   'detar.jennifer@yahoo.com',
   'eolvera@lbpm.com',
+  'shohsfield@hotmail.com',
 ]
 
 export function isSkippedSender(email) {
