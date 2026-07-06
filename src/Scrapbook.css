@@ -433,8 +433,13 @@
   background: #ffffff !important;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
 }
+.icaap-tracker .icaap-list > .icaap-card:nth-child(odd)  { transform: rotate(-0.5deg); }
+.icaap-tracker .icaap-list > .icaap-card:nth-child(even) { transform: rotate(0.5deg); }
+.icaap-tracker .icaap-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important; }
 
 /* ══════════════════════════ WYWO ═════════════════════════════════════════ */
 .wywo-wrap .wywo-log-card {
   box-shadow: 3px 4px 0 rgba(23,36,82,0.08), 0 1px 6px rgba(0,0,0,0.06) !important;
 }
+.wywo-wrap .wywo-log-list > .wywo-log-card:nth-child(odd)  { transform: rotate(-0.5deg); }
+.wywo-wrap .wywo-log-list > .wywo-log-card:nth-child(even) { transform: rotate(0.5deg); }
