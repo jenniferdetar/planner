@@ -217,31 +217,51 @@ function BillsTab({ bills, onAdd, onToggle, onDelete }) {
         </form>
       )}
 
-      <div className="fin-bill-grid">
+      <div className="budget-table-wrap">
         {bills.length === 0 && <p className="fin-empty">No bills added yet</p>}
-        {unpaid.map((b, i) => <BillCard key={b.id} bill={b} index={i} onToggle={onToggle} onDelete={onDelete} />)}
-        {paid.length > 0 && unpaid.length > 0 && <div className="fin-bill-grid-sep">Paid</div>}
-        {paid.map((b, i) => <BillCard key={b.id} bill={b} index={unpaid.length + i} onToggle={onToggle} onDelete={onDelete} />)}
+        {bills.length > 0 && (
+          <table className="budget-table">
+            <thead>
+              <tr>
+                <th className="budget-th cat">Bill</th>
+                <th className="budget-th">Amount</th>
+                <th className="budget-th">Due</th>
+                <th className="budget-th">Method</th>
+                <th className="budget-th">Paid</th>
+                <th className="budget-th del-col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {unpaid.map((b, i) => <BillRow key={b.id} bill={b} index={i} onToggle={onToggle} onDelete={onDelete} />)}
+              {paid.length > 0 && unpaid.length > 0 && (
+                <tr><td colSpan={6} className="fin-bill-table-sep">Paid</td></tr>
+              )}
+              {paid.map((b, i) => <BillRow key={b.id} bill={b} index={unpaid.length + i} onToggle={onToggle} onDelete={onDelete} />)}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   )
 }
 
-function BillCard({ bill, index, onToggle, onDelete }) {
+function BillRow({ bill, onToggle, onDelete }) {
   const suffix = bill.due_day === 1 ? 'st' : bill.due_day === 2 ? 'nd' : bill.due_day === 3 ? 'rd' : 'th'
-  const color = PALETTE[index % PALETTE.length]
   return (
-    <div className={`fin-bill-card ${bill.paid ? 'paid' : ''}`} onClick={() => onToggle(bill.id)}>
-      <div className="fin-bill-card-top" style={{ background: color }} />
-      <button className="fin-bill-card-delete" onClick={e => { e.stopPropagation(); onDelete(bill.id) }}>✕</button>
-      <div className="fin-bill-card-name">{bill.name}</div>
-      <div className="fin-bill-card-amount">{fmt(bill.amount)}</div>
-      <div className="fin-bill-card-meta">
-        {bill.due_day && <span>Due {bill.due_day}{suffix}</span>}
+    <tr className={`budget-row${bill.paid ? ' paid' : ''}`}>
+      <td className="budget-td cat">{bill.name}</td>
+      <td className="budget-td num">{fmt(bill.amount)}</td>
+      <td className="budget-td num">{bill.due_day ? `${bill.due_day}${suffix}` : <span className="budget-empty">—</span>}</td>
+      <td className="budget-td">
         {bill.payment_method && <span className={`fin-bill-method ${bill.payment_method === 'Cash' ? 'cash' : 'billpay'}`}>{bill.payment_method}</span>}
-      </div>
-      {bill.paid && <div className="fin-bill-card-paid-badge">✓ Paid</div>}
-    </div>
+      </td>
+      <td className="budget-td num">
+        <input type="checkbox" checked={!!bill.paid} onChange={() => onToggle(bill.id)} />
+      </td>
+      <td className="budget-td del-col">
+        <span className="budget-del" onClick={() => onDelete(bill.id)}>✕</span>
+      </td>
+    </tr>
   )
 }
 

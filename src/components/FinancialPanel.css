@@ -358,42 +358,17 @@
 .fin-delete-btn:hover { color: #cc0000; border-color: #cc0000; }
 
 /* Bills */
-.fin-bill-grid {
-  padding: 8px 10px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  align-content: start;
-}
+.budget-row.paid .budget-td.cat { color: #bbb; text-decoration: line-through; }
+.budget-row.paid .budget-td.num { color: #aaa; }
 
-.fin-bill-grid-sep {
-  grid-column: 1 / -1;
+.fin-bill-table-sep {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: #ccc;
-  padding: 4px 0 0;
-}
-
-.fin-bill-card {
+  padding: 6px 10px 2px;
   background: #fff;
-  border: 1px solid #d9e8f0;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: box-shadow 0.15s, transform 0.15s;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 90px;
-}
-
-.fin-bill-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.09); transform: translateY(-2px); }
-
-.fin-bill-card-top {
-  height: 7px;
-  flex-shrink: 0;
 }
 
 .fin-bill-card-delete {
@@ -415,48 +390,6 @@
 }
 
 .fin-bill-card-delete:hover { color: #cc0000; border-color: #cc0000; }
-
-.fin-bill-card-name {
-  font-size: 11px;
-  font-weight: 600;
-  color: #555;
-  padding: 6px 10px 2px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.fin-bill-card.paid .fin-bill-card-name { color: #bbb; text-decoration: line-through; }
-
-.fin-bill-card-amount {
-  font-size: 14px;
-  font-weight: 700;
-  color: #1e3070;
-  padding: 2px 8px 4px;
-  line-height: 1;
-  flex: 1;
-}
-
-.fin-bill-card.paid .fin-bill-card-amount { color: #aaa; }
-
-.fin-bill-card-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 10px 8px;
-  font-size: 9px;
-  color: #bbb;
-}
-
-.fin-bill-card-paid-badge {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  font-size: 9px;
-  font-weight: 700;
-  color: #41a700;
-  letter-spacing: 0.5px;
-}
 
 .fin-bill-method { font-size: 9px; font-weight: 600; padding: 1px 5px; border-radius: 3px; }
 .fin-bill-method.billpay { background: #dce6f5; color: #1e3070; }
@@ -1433,9 +1366,5 @@
     background: #1e3070;
     color: #fff;
     border-color: #1e3070;
-  }
-
-  .fin-bill-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
