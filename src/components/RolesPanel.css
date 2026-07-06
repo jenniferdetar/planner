@@ -113,7 +113,7 @@
   transition: box-shadow 0.18s, transform 0.18s;
 }
 .roles-card:nth-child(even) { border-left-color: #a23b3b; }
-.roles-card:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
+.roles-card:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); }
 
 .roles-card-icon { font-size: 22px; flex-shrink: 0; }
 
