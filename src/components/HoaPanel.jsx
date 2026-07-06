@@ -82,6 +82,7 @@ const HOA_FINANCIALS = HOA_FINANCIALS_RAW.map(m => {
 // `owed` is each unit's current receivable balance as of the latest packet
 // (May 2026) — omitted where the unit had no open balance in that packet.
 const HOA_UNITS = [
+  { unit: '001', name: 'Emelly Gutierrez' },
   { unit: '005', name: 'Neda Ardani' },
   { unit: '006', name: 'CIW GROUP LLC' },
   { unit: '008', name: 'Esmith Estrada', owed: 100.00 },
@@ -115,6 +116,7 @@ const HOA_UNITS = [
   { unit: '063', name: 'Maria Ayala' },
   { unit: '064', name: 'Alla Timakov', owed: 220.40 },
   { unit: '065', name: 'Maria Fernandez', owed: 0.21 },
+  { unit: '067', name: 'Norma Valencia' },
   { unit: '069', name: 'Marta R. Moreno' },
   { unit: '070', name: 'Guillermo Marquez' },
   { unit: '072', name: 'Pedro Valencia', owed: 103.86 },
@@ -133,6 +135,7 @@ const HOA_UNITS = [
   { unit: '100', name: 'Elena Rouvinskaia and Igor Shvager' },
   { unit: '103', name: 'Aida Montenegro' },
   { unit: '105', name: 'Chien Hung Tsou Juei Chen' },
+  { unit: '106', name: 'Heather Lembcke' },
   { unit: '107', name: 'Jeffery W Detar', owed: 336.84 },
   { unit: '109', name: 'Ida Tedjo' },
   { unit: '111', name: 'Mehran Moloudi', owed: 978.90 },
