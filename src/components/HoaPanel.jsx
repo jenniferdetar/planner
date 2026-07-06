@@ -79,75 +79,82 @@ const HOA_FINANCIALS = HOA_FINANCIALS_RAW.map(m => {
 // with a nonzero balance in a given month, so this is a partial roster
 // (whichever units have shown up with a charge across the sampled packets),
 // not a complete list of every unit in the building.
+// `owed` is each unit's current receivable balance as of the latest packet
+// (May 2026) — omitted where the unit had no open balance in that packet.
 const HOA_UNITS = [
   { unit: '005', name: 'Neda Ardani' },
   { unit: '006', name: 'CIW GROUP LLC' },
-  { unit: '008', name: 'Esmith Estrada' },
-  { unit: '009', name: 'Vanessa P. Ojinaga' },
-  { unit: '010', name: 'Carmen Arredondo' },
-  { unit: '014', name: 'Salik Subhan' },
-  { unit: '015', name: 'Araceli Torivio' },
-  { unit: '017', name: 'Vitelio Miranda' },
-  { unit: '018', name: 'Michael Gold' },
+  { unit: '008', name: 'Esmith Estrada', owed: 100.00 },
+  { unit: '009', name: 'Vanessa P. Ojinaga', owed: 3981.59 },
+  { unit: '010', name: 'Carmen Arredondo', owed: 3551.69 },
+  { unit: '014', name: 'Salik Subhan', owed: 139.21 },
+  { unit: '015', name: 'Araceli Torivio', owed: 42678.90 },
+  { unit: '017', name: 'Vitelio Miranda', owed: 0.21 },
+  { unit: '018', name: 'Michael Gold', owed: -30.00 },
   { unit: '019', name: 'Luis E. Melara & Edgard A Domingo' },
   { unit: '021', name: 'Emely Tereza Gutierrez' },
-  { unit: '022', name: 'Nikolaos Linaritakis' },
+  { unit: '022', name: 'Nikolaos Linaritakis', owed: 51.93 },
   { unit: '023', name: 'Gregorio Palomino, Trustee of the Palomino FT' },
   { unit: '024', name: 'ARKBEC LLC' },
   { unit: '025', name: 'Patrick Taylor' },
   { unit: '026', name: 'Maria Lozano' },
-  { unit: '029', name: 'Kirill Gliadkovsky' },
+  { unit: '029', name: 'Kirill Gliadkovsky', owed: 272.80 },
   { unit: '030', name: 'Mario Torres' },
   { unit: '031', name: 'Alicia Sandoval' },
   { unit: '036', name: 'Franklin Ascencio' },
   { unit: '037', name: 'Domingo Sy' },
-  { unit: '040', name: 'Roxana Ramos' },
-  { unit: '045', name: 'Lisa D. Magee' },
+  { unit: '040', name: 'Roxana Ramos', owed: 241.00 },
+  { unit: '045', name: 'Lisa D. Magee', owed: 6486.47 },
   { unit: '046', name: 'Victor Roberto' },
-  { unit: '048', name: 'Carlos Alberto & Yeny Aracely Rivera' },
+  { unit: '048', name: 'Carlos Alberto & Yeny Aracely Rivera', owed: 7392.40 },
   { unit: '050', name: 'Abbas Golmohammadi' },
-  { unit: '051', name: 'Marta Ruiz' },
+  { unit: '051', name: 'Marta Ruiz', owed: 4480.90 },
   { unit: '052', name: 'Wilmer Rivas' },
   { unit: '060', name: 'Ted Ibrahim' },
   { unit: '062', name: 'Afsaneh Naderi' },
   { unit: '063', name: 'Maria Ayala' },
-  { unit: '064', name: 'Alla Timakov' },
-  { unit: '065', name: 'Maria Fernandez' },
+  { unit: '064', name: 'Alla Timakov', owed: 220.40 },
+  { unit: '065', name: 'Maria Fernandez', owed: 0.21 },
   { unit: '069', name: 'Marta R. Moreno' },
   { unit: '070', name: 'Guillermo Marquez' },
-  { unit: '072', name: 'Pedro Valencia' },
+  { unit: '072', name: 'Pedro Valencia', owed: 103.86 },
   { unit: '075', name: 'Isabel Garzon' },
   { unit: '079', name: 'Marivi Yusunggay Silva' },
   { unit: '081', name: 'Bharat Patel' },
   { unit: '084', name: 'Ceena Holzer' },
   { unit: '086', name: 'Igor Shvager' },
   { unit: '087', name: 'Carla Ramos' },
-  { unit: '088', name: 'Alfredo Ruiz & Alejandra Flores' },
+  { unit: '088', name: 'Alfredo Ruiz & Alejandra Flores', owed: 133.86 },
   { unit: '090', name: 'Anita Carter' },
-  { unit: '091', name: 'Normandy and Cristeta Papa' },
+  { unit: '091', name: 'Normandy and Cristeta Papa', owed: 542.28 },
   { unit: '092', name: 'Llona Abramova & Stan Arutti' },
-  { unit: '095', name: 'Rajesh Kamra' },
+  { unit: '095', name: 'Rajesh Kamra', owed: 80938.20 },
   { unit: '097', name: 'Meny Atias' },
   { unit: '100', name: 'Elena Rouvinskaia and Igor Shvager' },
   { unit: '103', name: 'Aida Montenegro' },
   { unit: '105', name: 'Chien Hung Tsou Juei Chen' },
-  { unit: '107', name: 'Jeffery W Detar' },
+  { unit: '107', name: 'Jeffery W Detar', owed: 336.84 },
   { unit: '109', name: 'Ida Tedjo' },
-  { unit: '111', name: 'Mehran Moloudi' },
+  { unit: '111', name: 'Mehran Moloudi', owed: 978.90 },
   { unit: '114', name: 'Carlos & Carolina Recavarren' },
   { unit: '116', name: 'Investment Management Company LLC' },
   { unit: '119', name: 'Scott Mallory & Paul Reynolds' },
   { unit: '120', name: 'Alla Klush' },
-  { unit: '121', name: 'Arda Momijian' },
+  { unit: '121', name: 'Arda Momijian', owed: 3958.90 },
   { unit: '122', name: 'Unostato LLC' },
   { unit: '123', name: 'Cynthia Larson' },
   { unit: '126', name: 'Unostato LLC' },
-  { unit: '127', name: 'Oleg & Irina Likholit' },
+  { unit: '127', name: 'Oleg & Irina Likholit', owed: 3794.90 },
 ]
 
 function fmtUSD(n) {
   if (n === null || n === undefined) return '—'
   return Number(n).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })
+}
+
+function fmtOwed(n) {
+  if (n === null || n === undefined) return ''
+  return Number(n).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
 }
 
 // Shared state so the header/stats/form and the item groups can render on
@@ -310,17 +317,18 @@ const TOTAL_UNITS = 150
 
 function HoaDirectory() {
   const byUnit = {}
-  HOA_UNITS.forEach(u => { byUnit[u.unit] = u.name })
+  HOA_UNITS.forEach(u => { byUnit[u.unit] = u })
   const allUnits = Array.from({ length: TOTAL_UNITS }, (_, i) => {
     const unit = String(i + 1).padStart(3, '0')
-    return { unit, name: byUnit[unit] || '' }
+    const found = byUnit[unit]
+    return { unit, name: found?.name || '', owed: found?.owed }
   })
   const half = Math.ceil(allUnits.length / 2)
   const columns = [allUnits.slice(0, half), allUnits.slice(half)]
 
   return (
     <div className="hoa-fin">
-      <p className="hoa-fin-asof">Unit → owner name directory, compiled from the Aged Receivable Detail section of the Board Member Packets in the HOA Google Drive folder. That report only lists units with a billing history, so units with no name on file are left blank.</p>
+      <p className="hoa-fin-asof">Unit → owner name directory, compiled from the Aged Receivable Detail section of the Board Member Packets in the HOA Google Drive folder. Owed reflects each unit's balance as of the latest packet (May 2026); units with no name or balance on file are left blank.</p>
       <div className="hoa-dir-cols">
         {columns.map((col, i) => (
           <div className="hoa-fin-table-wrap" key={i}>
@@ -329,6 +337,7 @@ function HoaDirectory() {
                 <tr>
                   <th>Unit</th>
                   <th>Name</th>
+                  <th>Owed</th>
                 </tr>
               </thead>
               <tbody>
@@ -336,6 +345,7 @@ function HoaDirectory() {
                   <tr key={u.unit}>
                     <td>{u.unit}</td>
                     <td>{u.name || <span className="budget-empty">—</span>}</td>
+                    <td className={u.owed < 0 ? 'neg' : undefined}>{u.owed != null ? fmtOwed(u.owed) : <span className="budget-empty">—</span>}</td>
                   </tr>
                 ))}
               </tbody>
