@@ -498,7 +498,8 @@
 .hoa-fin-table td.pos { color: #2e7d32; }
 .hoa-fin-table td.neg { color: #cc0000; }
 
-.hoa-dir-table th:not(:first-child), .hoa-dir-table td:not(:first-child) { text-align: left; white-space: normal; }
+.hoa-dir-table th:nth-child(2), .hoa-dir-table td:nth-child(2) { text-align: left; white-space: normal; }
+.hoa-dir-table td.neg { color: #cc0000; }
 
 .hoa-dir-cols {
   display: flex;
