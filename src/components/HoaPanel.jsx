@@ -306,27 +306,42 @@ function HoaFinancials() {
   )
 }
 
+const TOTAL_UNITS = 150
+
 function HoaDirectory() {
+  const byUnit = {}
+  HOA_UNITS.forEach(u => { byUnit[u.unit] = u.name })
+  const allUnits = Array.from({ length: TOTAL_UNITS }, (_, i) => {
+    const unit = String(i + 1).padStart(3, '0')
+    return { unit, name: byUnit[unit] || '' }
+  })
+  const half = Math.ceil(allUnits.length / 2)
+  const columns = [allUnits.slice(0, half), allUnits.slice(half)]
+
   return (
     <div className="hoa-fin">
-      <p className="hoa-fin-asof">Unit → owner name directory, compiled from the Aged Receivable Detail section of the Board Member Packets in the HOA Google Drive folder. That report only lists units with a billing history, so this is a partial roster, not every unit in the building.</p>
-      <div className="hoa-fin-table-wrap">
-        <table className="hoa-fin-table hoa-dir-table">
-          <thead>
-            <tr>
-              <th>Unit</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {HOA_UNITS.map(u => (
-              <tr key={u.unit}>
-                <td>{u.unit}</td>
-                <td>{u.name}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <p className="hoa-fin-asof">Unit → owner name directory, compiled from the Aged Receivable Detail section of the Board Member Packets in the HOA Google Drive folder. That report only lists units with a billing history, so units with no name on file are left blank.</p>
+      <div className="hoa-dir-cols">
+        {columns.map((col, i) => (
+          <div className="hoa-fin-table-wrap" key={i}>
+            <table className="hoa-fin-table hoa-dir-table">
+              <thead>
+                <tr>
+                  <th>Unit</th>
+                  <th>Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {col.map(u => (
+                  <tr key={u.unit}>
+                    <td>{u.unit}</td>
+                    <td>{u.name || <span className="budget-empty">—</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
     </div>
   )
