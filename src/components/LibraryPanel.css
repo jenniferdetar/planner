@@ -70,7 +70,7 @@
   background: transparent;
   color: #fff;
   font-weight: 600;
-  border-bottom-color: #ffb81c;
+  border-bottom-color: #a23b3b;
 }
 
 .want-to-read-tab {
@@ -80,8 +80,8 @@
 
 
 .shelf-badge {
-  background: rgba(255,184,28,0.25);
-  color: #ffb81c;
+  background: rgba(162,59,59,0.25);
+  color: #a23b3b;
   border-radius: 10px;
   font-size: 10px;
   font-weight: 600;
@@ -138,7 +138,7 @@
 .reading-task-btn:hover { background: rgba(255,255,255,0.28); }
 
 .import-btn {
-  background: #ffb81c;
+  background: #a23b3b;
   color: #1e3070;
   border: none;
   border-radius: 8px;

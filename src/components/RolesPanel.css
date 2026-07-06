@@ -112,7 +112,7 @@
   width: 100%;
   transition: box-shadow 0.18s, transform 0.18s;
 }
-.roles-card:nth-child(even) { border-left-color: #ffb81c; }
+.roles-card:nth-child(even) { border-left-color: #a23b3b; }
 .roles-card:hover { box-shadow: 0 4px 10px rgba(30,48,112,0.14), 0 14px 30px rgba(30,48,112,0.14); transform: translateY(-3px); }
 
 .roles-card-icon { font-size: 22px; flex-shrink: 0; }
@@ -318,7 +318,7 @@
 .roles-linked-cat {
   font-size: 10px;
   font-weight: 700;
-  color: #ffb81c;
+  color: #a23b3b;
   background: #1e3070;
   border-radius: 3px;
   padding: 1px 6px;
