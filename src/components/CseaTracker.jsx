@@ -5,7 +5,7 @@ import { useGmailCseaSync } from '../hooks/useGmailCseaSync'
 import { useYahooMailSync } from '../hooks/useYahooMailSync'
 import ContractReference from './ContractReference'
 import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifIntake'
-import { isEboardMember } from '../lib/eboardMembers'
+import { isEboardMember, isLaborRep, isAreaIMember, isStateMember } from '../lib/eboardMembers'
 import './CseaTracker.css'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
@@ -372,6 +372,14 @@ export function CseaTrackerInner({ api }) {
   )
 }
 
+function memberCategory(member) {
+  if (isEboardMember(member)) return 'eboard'
+  if (isLaborRep(member)) return 'labor-reps'
+  if (isAreaIMember(member)) return 'area1'
+  if (isStateMember(member)) return 'state'
+  return 'members'
+}
+
 function InteractionsPanel({ api }) {
   const [subTab, setSubTab] = useState('members')
 
@@ -381,6 +389,9 @@ function InteractionsPanel({ api }) {
         <div className="csea-filter-pills">
           <button className={`filter-pill ${subTab === 'members' ? 'active' : ''}`} onClick={() => setSubTab('members')}>Members</button>
           <button className={`filter-pill ${subTab === 'eboard' ? 'active' : ''}`} onClick={() => setSubTab('eboard')}>E-Board</button>
+          <button className={`filter-pill ${subTab === 'labor-reps' ? 'active' : ''}`} onClick={() => setSubTab('labor-reps')}>Labor Reps</button>
+          <button className={`filter-pill ${subTab === 'area1' ? 'active' : ''}`} onClick={() => setSubTab('area1')}>Area I</button>
+          <button className={`filter-pill ${subTab === 'state' ? 'active' : ''}`} onClick={() => setSubTab('state')}>State</button>
         </div>
         <button className="csea-archive-toggle" onClick={api.onToggleArchived}>
           {api.showArchived ? 'Hide Archived' : 'Show Archived'}
@@ -439,7 +450,7 @@ function InteractionsPanel({ api }) {
             })
             return groups
           }, {})
-        ).filter(([member]) => isEboardMember(member) === (subTab === 'eboard'))
+        ).filter(([member]) => memberCategory(member) === subTab)
           .sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
           <MemberInteractionGroup key={member} member={member} items={items} onUpdate={api.onUpdateInteraction} workLocations={api.workLocations} />
         ))}
