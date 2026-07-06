@@ -700,63 +700,6 @@
 .interaction-doc-link { font-size: 11px; color: var(--csea-blue); text-decoration: none; margin-top: 2px; }
 .interaction-doc-link:hover { text-decoration: underline; }
 
-/* ── Asana tasks ─────────────────────────────────────────────────────────── */
-.asana-task-row {
-  background: #fff;
-  border: 1px solid var(--csea-light-gray);
-  border-left: 3px solid var(--csea-blue);
-  border-radius: 3px;
-  margin-bottom: 6px;
-  overflow: hidden;
-}
-
-.asana-task-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  user-select: none;
-}
-
-.asana-row-check-btn {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  border-radius: 2px;
-  border: 2px solid var(--csea-border);
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
-  transition: border-color 0.15s, background 0.15s;
-}
-.asana-row-check-btn:hover { border-color: var(--csea-success); background: #f0fce8; }
-
-.asana-task-title { flex: 1; font-size: 13px; font-weight: 400; color: var(--csea-blue); line-height: 1.4; cursor: pointer; }
-.asana-task-due { font-size: 11px; color: var(--csea-dark-gray); }
-
-.asana-task-body {
-  padding: 0 12px 10px;
-  border-top: 1px solid var(--csea-light-gray);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.asana-task-actions { display: flex; gap: 8px; }
-
-.asana-complete-btn {
-  background: var(--csea-success);
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  padding: 5px 14px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Open Sans', sans-serif;
-}
-.asana-complete-btn:hover { background: #338500; }
-
 /* ── Member search ───────────────────────────────────────────────────────── */
 .member-search { position: relative; width: 100%; }
 

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import './WeekView.css'
 import { toDateStr } from '../utils/dateUtils'
 import { useHabitCompletions } from '../hooks/useHabitCompletions'
-import { usePersonalChecklist } from '../hooks/usePersonalChecklist'
 import { useMeetingsInRange } from '../hooks/usePlannerData'
 import { useWeeklyTasks } from '../hooks/useWeeklyTasks'
 
@@ -128,8 +127,6 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
   const { isCompleted, toggle: toggleHabit } = useHabitCompletions(userId, weekStart, weekEnd)
   const weekMeetings = useMeetingsInRange(userId, weekStart, weekEnd)
   const { tasksByDate, toggleTask, addTask: addWeekTask } = useWeeklyTasks(userId, weekStart)
-  const { tasks: monthlyTasks, isChecked: isMonthChecked, toggle: toggleMonthTask } = usePersonalChecklist(userId)
-  const weekMonth = weekStart.getMonth() + 1
 
   const days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart)

@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { signOut } from '../lib/supabase'
 import './Sidebar.css'
 
-export const TASK_AREAS = ['CSEA', 'Finance', 'GCU', 'iCAAP', 'Personal', 'General']
-
 export const SECTION_LINKS = [
   { key: 'roles',    label: 'Roles',    color: '#73a882', icon: '👤', placeholder: 'List your key roles in life and work…\n\n• Role 1\n• Role 2' },
   { key: 'goals',    label: 'Goals',    color: '#8bc34a', icon: '🎯', placeholder: 'Your most important goals…\n\n• Goal 1\n• Goal 2' },

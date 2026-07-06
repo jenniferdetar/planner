@@ -9,7 +9,7 @@ import { isEboardMember, isLaborRep, isAreaIMember, isStateMember } from '../lib
 import './CseaTracker.css'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
-  const { search, setSearch, results, loading } = useCseaMembers()
+  const { search, setSearch, results } = useCseaMembers()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -603,45 +603,6 @@ function InteractionCard({ interaction: i, onUpdate }) {
       {i.point_of_contact && <p className="interaction-poc-text">Contact: {i.point_of_contact}</p>}
       {i.meeting_doc_url && (
         <a className="interaction-doc-link" href={i.meeting_doc_url} target="_blank" rel="noreferrer">📄 Meeting Notes</a>
-      )}
-    </div>
-  )
-}
-
-function CseaAsanaTaskRow({ task, onComplete, onUpdateNotes }) {
-  const [expanded, setExpanded] = useState(false)
-  const [notesText, setNotesText] = useState(task.notes || '')
-  const saveTimer = useRef(null)
-
-  function handleNotesChange(e) {
-    const val = e.target.value
-    setNotesText(val)
-    clearTimeout(saveTimer.current)
-    saveTimer.current = setTimeout(() => onUpdateNotes?.(task.id, val), 800)
-  }
-
-  return (
-    <div className="asana-task-row">
-      <div className="asana-task-header">
-        <button
-          className="asana-row-check-btn"
-          onClick={() => onComplete?.(task.id)}
-          title="Mark complete"
-        />
-        <span className="asana-task-title" onClick={() => setExpanded(e => !e)}>{task.title}</span>
-        {task.due_on && <span className="asana-task-due">📅 {task.due_on}</span>}
-        <span className="issue-chevron" onClick={() => setExpanded(e => !e)}>{expanded ? '▾' : '▸'}</span>
-      </div>
-      {expanded && (
-        <div className="asana-task-body">
-          <textarea
-            className="csea-textarea"
-            placeholder="Notes…"
-            value={notesText}
-            onChange={handleNotesChange}
-            rows={3}
-          />
-        </div>
       )}
     </div>
   )

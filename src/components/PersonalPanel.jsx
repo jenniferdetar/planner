@@ -24,15 +24,6 @@ const SUB_TABS = [
   { key: 'family',    label: 'Family',            color: '#5cb85c' },
 ]
 
-// Clickable framework flow shown above content
-const FRAMEWORK = [
-  { key: 'mission',   label: 'Mission' },
-  { key: 'mantra',    label: 'Mantra' },
-  { key: 'roles',     label: 'Roles' },
-  { key: 'goals',     label: 'Goals' },
-  { key: 'checklist', label: 'Checklist' },
-]
-
 export default function PersonalPanel({
   userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers,
   familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
@@ -69,7 +60,6 @@ export default function PersonalPanel({
   }
 
   const activeColor = visibleTabs.find(t => t.key === subTab)?.color || '#73a882'
-  const visibleFramework = FRAMEWORK.filter(f => visibleTabs.find(t => t.key === f.key))
 
   return (
     <div className="personal-panel">
