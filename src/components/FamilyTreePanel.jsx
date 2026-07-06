@@ -70,6 +70,17 @@ const SAMPLES_DETAR_DEFAULTS = [
   { name: 'Thomas Lee DeTar', birth_year: '1953', death_year: '', relationship: 'parent', generation: -1, side: "Paternal (Jeff's - Detar)", sort_order: 18 },
   { name: 'Susan F Borders', birth_year: '1954', death_year: '', relationship: 'parent', generation: -1, side: "Maternal (Jeff's - Borders)", sort_order: 19 },
 
+  // ── Jeff's aunts & uncles (generation -1) ──
+  { name: 'Larry Allen DeTar', birth_year: '1950', death_year: '2021', relationship: 'uncle', generation: -1, side: "Paternal (Jeff's - Detar)", sort_order: 20 },
+  { name: 'Karen Nyquist', birth_year: '', death_year: '', relationship: 'aunt', generation: -1, side: "Paternal (Jeff's - Detar)", sort_order: 21 },
+  { name: 'Julie A Detar', birth_year: '1951', death_year: '', relationship: 'aunt', generation: -1, side: "Paternal (Jeff's - Detar)", sort_order: 22 },
+  { name: 'Lawrence S Gaunt', birth_year: '1949', death_year: '', relationship: 'uncle', generation: -1, side: "Paternal (Jeff's - Detar)", sort_order: 23 },
+  { name: 'Harold W Borders', birth_year: '1935', death_year: '1952', relationship: 'uncle', generation: -1, side: "Maternal (Jeff's - Borders)", sort_order: 24 },
+  { name: 'Shari Borders', birth_year: '', death_year: '', relationship: 'aunt', generation: -1, side: "Maternal (Jeff's - Borders)", sort_order: 25 },
+  { name: 'Orin T Borders', birth_year: '1948', death_year: '', relationship: 'uncle', generation: -1, side: "Maternal (Jeff's - Borders)", sort_order: 26 },
+  { name: 'Alice Kazue Tani', birth_year: '1947', death_year: '', relationship: 'aunt', generation: -1, side: "Maternal (Jeff's - Borders)", sort_order: 27 },
+  { name: 'Jeffrey A Borders', birth_year: '1952', death_year: '', relationship: 'uncle', generation: -1, side: "Maternal (Jeff's - Borders)", sort_order: 28 },
+
   // ── Jeff's siblings (generation 0) ──
   { name: 'Nicole Lederman', birth_year: '1986', death_year: '', relationship: 'half-sibling', generation: 0, side: "Jeff's", sort_order: 7 },
   { name: 'Jeremy Lee DeTar', birth_year: '1977', death_year: '', relationship: 'brother', generation: 0, side: "Jeff's", sort_order: 8 },
