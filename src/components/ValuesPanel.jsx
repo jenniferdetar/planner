@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { usePersonalValues } from '../hooks/usePersonalValues'
 import './ValuesPanel.css'
 
-// Cards cycle through this palette by position so the grid always has
-// visual variety, instead of relying on someone picking a color per value.
-const PALETTE = ['#c0392b', '#2980b9', '#27ae60', '#8e44ad', '#e67e22', '#d4a017', '#16a085']
+// Cards alternate red/navy by position so the grid has visual variety
+// while staying within the app's red/white/navy palette.
+const PALETTE = ['#a23b3b', '#1e3070']
 
 export default function ValuesPanel({ userId }) {
   const { values, addValue, updateValue, deleteValue } = usePersonalValues(userId)

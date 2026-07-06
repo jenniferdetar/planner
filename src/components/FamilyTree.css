@@ -29,9 +29,9 @@
 
 /* ── Header ── */
 .ft-header {
-  padding: 20px 32px 16px;
-  background: var(--ft-green);
-  border-bottom: 3px solid var(--ft-green-dark);
+  padding: 10px 16px 8px;
+  background: #1e3070;
+  border-bottom: 2px solid #0d1a40;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -41,14 +41,15 @@
 
 .ft-title {
   font-family: 'Nunito', sans-serif;
-  font-size: 22px;
+  font-size: 14px;
+  font-weight: 600;
   color: #fff;
-  margin: 0 0 3px;
+  margin: 0 0 2px;
 }
 
 .ft-subtitle {
   font-size: 12px;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.65);
   margin: 0;
 }
 
@@ -286,7 +287,7 @@
 .ft-modal h3 {
   font-family: 'Nunito', sans-serif;
   font-size: 18px;
-  color: var(--ft-green);
+  color: #1e3070;
   margin: 0 0 18px;
 }
 
@@ -323,7 +324,7 @@
 .ft-form-row input:focus,
 .ft-form-row select:focus,
 .ft-form-row textarea:focus {
-  border-color: var(--ft-green);
+  border-color: #1e3070;
 }
 
 .ft-form-row textarea { resize: vertical; min-height: 70px; }
@@ -360,16 +361,15 @@
 .ft-modal-cancel:hover { background: #e0dbd0; }
 
 .ft-modal-save {
-  background: var(--ft-green);
+  background: #1e3070;
   color: #fff;
   font-weight: 700;
 }
 
-.ft-modal-save:hover { background: var(--ft-green-dark); }
+.ft-modal-save:hover { background: #0d1a40; }
 
 @media (max-width: 768px) {
-  .ft-header { padding: 14px 16px 12px; }
+  .ft-header { padding: 10px 16px 8px; }
   .ft-body { padding: 14px 16px 20px; }
-  .ft-title { font-size: 18px; }
   .ft-card { min-width: 140px; }
 }
