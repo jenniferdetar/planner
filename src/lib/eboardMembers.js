@@ -30,8 +30,14 @@ export const LABOR_REPS = [
 // Area I Council members/officers.
 export const AREA_I_MEMBERS = []
 
-// CSEA state-level officers/staff.
-export const STATE_MEMBERS = []
+// CSEA state-level officers/staff, and state-level contacts/topics.
+export const STATE_MEMBERS = [
+  'CSEA Member Benefits',
+  "CSEA's 100th Annual Conference",
+  'Jerry White',
+  'Jessica Albert',
+  'Travel Requests',
+]
 
 function toSet(names) {
   return new Set(names.map(n => n.trim().toLowerCase()))
