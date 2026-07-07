@@ -385,7 +385,7 @@ function BudgetTrackerSection({ sectionName, envelopes, allocations, spending, o
             >
               <span className="zbb-tracker-env-name">
                 <span className="zbb-tracker-chevron">{expanded ? '▾' : '▸'}</span>
-                <span className="zbb-tracker-env-name-text">{env.name}</span>
+                <span className="zbb-tracker-env-name-text" title={env.name}>{env.name}</span>
               </span>
               <span className="zbb-tracker-num">
                 {budgeted > 0 ? fmt(budgeted) : <span className="zbb-zero">—</span>}
