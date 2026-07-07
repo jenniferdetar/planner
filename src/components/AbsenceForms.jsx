@@ -79,7 +79,7 @@ function FormHeader({ formNo, sideLabel, title, showSubTemp, data, set }) {
         <div className="afm-title">{title}</div>
       </div>
 
-      <div className="afm-section-label">Employee Information (Please Print)</div>
+      <div className="afm-section-label">EMPLOYEE INFORMATION (Please Print)</div>
       <div className="afm-grid afm-employee-grid">
         <Cell label="Last Name"><TextInput value={data.lastName} onChange={v => set('lastName', v)} /></Cell>
         <Cell label="First Name"><TextInput value={data.firstName} onChange={v => set('firstName', v)} /></Cell>
@@ -98,7 +98,7 @@ function FormHeader({ formNo, sideLabel, title, showSubTemp, data, set }) {
         </Cell>
       </div>
 
-      <div className="afm-section-label">Reason for Absence</div>
+      <div className="afm-section-label">REASON FOR ABSENCE</div>
       <div className="afm-reason-dates">
         <div className="afm-reason-line">
           <span className="afm-q-num">1.</span>
@@ -261,7 +261,7 @@ function IllnessForm({ data, setData }) {
         NOTE: Absences "A" through "D" may qualify as Illness leave; "D", and "E" as Personal Necessity; "E" may also be Kin-Care.
       </p>
 
-      <div className="afm-section-label">FMLA/CFRA Information</div>
+      <div className="afm-section-label">FMLA/CFRA INFORMATION</div>
       <div className="afm-approval-row">
         <span>4. Is the absence due to a "serious health condition" (see separate FMLA form for Definitions)?</span>
         <YesNo value={data.q4} onChange={v => set('q4', v)} />
@@ -272,7 +272,7 @@ function IllnessForm({ data, setData }) {
         <YesNo value={data.q5} onChange={v => set('q5', v)} />
       </div>
 
-      <div className="afm-section-label">Important LAUSD Information</div>
+      <div className="afm-section-label">IMPORTANT LAUSD INFORMATION</div>
       <p className="afm-note callout">
         'Physician Statement' is required if absence is over 5 consecutive days or if required by Administrator under LAUSD
         Rules. 'FMLA Certification of Health Care Provider' is required if FMLA/CFRA protections are being requested for
@@ -292,7 +292,7 @@ function IllnessForm({ data, setData }) {
         <span>For Administrator/Supervisor: Is the FMLA supporting documentation received/on file?</span>
         <YesNo value={data.fmlaOnFile} onChange={v => set('fmlaOnFile', v)} />
       </div>
-      <div className="afm-section-label small">Administrator/Supervisor's Acknowledgment/Approval</div>
+      <div className="afm-section-label small">Administrator/Supervisor's Acknowledgment/Approval:</div>
       <AdminAckRow data={data} set={set} />
       <ApprovalBlock data={data} set={set} />
 
@@ -441,7 +441,7 @@ function NonIllnessForm({ data, setData }) {
         <span>Is there an FMLA/CFRA/PDL Approved Designation Notice on file that covers this absence?</span>
         <YesNo value={data.designationOnFile} onChange={v => set('designationOnFile', v)} />
       </div>
-      <div className="afm-section-label small">Administrator/Supervisor's Acknowledgment</div>
+      <div className="afm-section-label small">Administrator/Supervisor's Acknowledgment:</div>
       <AdminAckRow data={data} set={set} />
       <ApprovalBlock data={data} set={set} />
 
