@@ -366,12 +366,28 @@
 /* ── Print ── */
 @media print {
   .afm-no-print { display: none !important; }
-  .afm-wrap { background: #fff; overflow: visible; }
-  .afm-scroll { overflow: visible; padding: 0; }
+  .afm-wrap {
+    background: #fff;
+    overflow: visible !important;
+    display: block !important;
+  }
+  .afm-scroll {
+    overflow: visible !important;
+    display: block !important;
+    padding: 0;
+  }
   .afm-page { border: none; max-width: 100%; box-shadow: none; }
   .afm-box.checked { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .afm-section-label { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .afm-side-label { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .afm-side-label {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    /* The form now spans multiple printed pages; anchor the label near
+       the top instead of stretching (and bleeding an empty bar) across all of them. */
+    top: 60px;
+    bottom: auto;
+    height: 260px;
+  }
 }
 
 /* ── Mobile ── */
