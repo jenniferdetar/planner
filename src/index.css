@@ -43,6 +43,17 @@ input, textarea {
 /* ── Global font size & weight ── */
 * { font-size: 14px; font-weight: 400; line-height: 24px; }
 
+/* ── Print: the app shell is built for a fixed-height on-screen layout with
+   overflow:hidden scroll containers at every level. Left as-is, printing
+   clips everything past one screen-height, producing blank pages. Reset
+   the base flow here; component stylesheets reset their own containers. ── */
+@media print {
+  html, body, #root {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
 /* ── Global heading colors (component-level overrides take precedence) ── */
 h1 { color: #1e3070; }
 h2 { color: #1e3070; }
