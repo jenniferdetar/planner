@@ -808,6 +808,7 @@ function DebtSnowballTab({ userId }) {
 
 function NetWorthTab({ userId }) {
   const [items, setItems] = useState([])
+  const [linkedDebtTotals, setLinkedDebtTotals] = useState({}) // net_worth_item_id -> sum(total_payoff) from Debt Snowball
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({ item: '', value: '', debt: '', link_url: '' })
@@ -816,9 +817,25 @@ function NetWorthTab({ userId }) {
 
   useEffect(() => {
     if (!userId) return
-    supabase.from('net_worth_items').select('*').eq('user_id', userId).order('sort_order')
-      .then(({ data }) => { if (data) setItems(data); setLoading(false) })
+    Promise.all([
+      supabase.from('net_worth_items').select('*').eq('user_id', userId).order('sort_order'),
+      supabase.from('debts').select('net_worth_item_id, total_payoff').eq('user_id', userId).not('net_worth_item_id', 'is', null),
+    ]).then(([itemsRes, debtsRes]) => {
+      if (itemsRes.data) setItems(itemsRes.data)
+      const totals = {}
+      for (const d of debtsRes.data || []) {
+        totals[d.net_worth_item_id] = (totals[d.net_worth_item_id] || 0) + Number(d.total_payoff)
+      }
+      setLinkedDebtTotals(totals)
+      setLoading(false)
+    })
   }, [userId])
+
+  // Debt Snowball is the source of truth for any item with linked debts (e.g. the
+  // mortgage+HELOC on the house); everything else keeps its manually-entered debt.
+  function debtFor(row) {
+    return row.id in linkedDebtTotals ? linkedDebtTotals[row.id] : Number(row.debt)
+  }
 
   async function handleAdd(e) {
     e.preventDefault()
@@ -857,7 +874,7 @@ function NetWorthTab({ userId }) {
   }
 
   const totalValue = items.reduce((s, r) => s + Number(r.value), 0)
-  const totalDebt = items.reduce((s, r) => s + Number(r.debt), 0)
+  const totalDebt = items.reduce((s, r) => s + debtFor(r), 0)
   const netWorth = totalValue - totalDebt
 
   return (
@@ -920,7 +937,9 @@ function NetWorthTab({ userId }) {
             </thead>
             <tbody>
               {items.map(row => {
-                const equity = Number(row.value) - Number(row.debt)
+                const isLinked = row.id in linkedDebtTotals
+                const debt = debtFor(row)
+                const equity = Number(row.value) - debt
                 return (
                   <tr key={row.id} className="budget-row">
                     <td className="budget-td cat">
@@ -969,7 +988,11 @@ function NetWorthTab({ userId }) {
                       )}
                     </td>
                     <td className="budget-td num">
-                      {editCell?.id === row.id && editCell.field === 'debt' ? (
+                      {isLinked ? (
+                        <span className="nw-debt-synced" title="Synced from Debt Snowball — edit the linked debt(s) there">
+                          {fmt(debt)}
+                        </span>
+                      ) : editCell?.id === row.id && editCell.field === 'debt' ? (
                         <input className="budget-input" type="number" autoFocus value={editVal}
                           onChange={e => setEditVal(e.target.value)}
                           onBlur={() => saveField(row, 'debt', editVal)}

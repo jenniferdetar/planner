@@ -1104,6 +1104,13 @@
   outline: none;
   vertical-align: middle;
 }
+
+/* Debt figure computed live from linked Debt Snowball rows — not directly editable here */
+.nw-debt-synced {
+  cursor: help;
+  border-bottom: 1px dashed #b8c4dd;
+}
+
 .budget-empty { color: #ccc; }
 
 .budget-input {
