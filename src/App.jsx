@@ -7,7 +7,7 @@ import { useMasterTasks, useDailyTasks, useMeetings, useTaskCounts, useMeetingsI
 import { useDailyLog } from './hooks/useDailyLog'
 import { useWeeklyTasks } from './hooks/useWeeklyTasks'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
-import { useCseaIssues, useMemberInteractions, useCseaNotes, useCseaIssueNotes } from './hooks/useCseaData'
+import { useCseaIssues, useMemberInteractions, useCseaNotes, useCseaIssueNotes, useCseaPersonnelCommissionCases, useCseaPersonnelCommissionNotes } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useIcaapNotes } from './hooks/useIcaapNotes'
@@ -64,6 +64,8 @@ export default function App() {
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction, showArchived: showArchivedInteractions, setShowArchived: setShowArchivedInteractions } = useMemberInteractions(userId)
   const { notes: cseaNotes, addNote: addCseaNote, deleteNote: deleteCseaNote } = useCseaNotes(userId)
   const { notesByIssue: cseaIssueNotes, addNote: addCseaIssueNote, deleteNote: deleteCseaIssueNote } = useCseaIssueNotes(userId)
+  const { cases: cseaPcCases, addCase: addCseaPcCase, updateCaseStatus: updateCseaPcStatus, deleteCase: deleteCseaPcCase } = useCseaPersonnelCommissionCases(userId)
+  const { notesByCase: cseaPcNotes, addNote: addCseaPcNote, deleteNote: deleteCseaPcNote } = useCseaPersonnelCommissionNotes(userId)
   const { masterTasks: asanaTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
@@ -245,6 +247,13 @@ export default function App() {
         cseaIssueNotes={cseaIssueNotes}
         onAddCseaIssueNote={addCseaIssueNote}
         onDeleteCseaIssueNote={deleteCseaIssueNote}
+        cseaPcCases={cseaPcCases}
+        onAddCseaPcCase={addCseaPcCase}
+        onUpdateCseaPcStatus={updateCseaPcStatus}
+        onDeleteCseaPcCase={deleteCseaPcCase}
+        cseaPcNotes={cseaPcNotes}
+        onAddCseaPcNote={addCseaPcNote}
+        onDeleteCseaPcNote={deleteCseaPcNote}
         icaapItems={icaapItems}
         onAddIcaapItem={addIcaapItem}
         onUpdateIcaapItem={updateIcaapItem}
