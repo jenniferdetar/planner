@@ -1073,6 +1073,37 @@
 
 .budget-cell-val { cursor: pointer; }
 .budget-cell-val:hover { color: #1e3070; }
+
+/* Net Worth item name + optional link */
+.nw-item-name { display: inline; }
+.nw-item-link { color: #1e3070; text-decoration: underline; text-decoration-color: #c8d3e8; text-underline-offset: 2px; }
+.nw-item-link:hover { text-decoration-color: #1e3070; }
+
+.nw-link-btn {
+  margin-left: 6px;
+  font-size: 11px;
+  color: #bbb;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
+  vertical-align: middle;
+  transition: color 0.15s;
+}
+.budget-row:hover .nw-link-btn { color: #888; }
+.nw-link-btn:hover { color: #1e3070 !important; }
+
+.nw-link-input {
+  margin-left: 6px;
+  width: 220px;
+  font-size: 11px;
+  font-family: inherit;
+  padding: 2px 6px;
+  border: 1px solid #1e3070;
+  border-radius: 4px;
+  outline: none;
+  vertical-align: middle;
+}
 .budget-empty { color: #ccc; }
 
 .budget-input {

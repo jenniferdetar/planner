@@ -810,7 +810,7 @@ function NetWorthTab({ userId }) {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ item: '', value: '', debt: '' })
+  const [form, setForm] = useState({ item: '', value: '', debt: '', link_url: '' })
   const [editCell, setEditCell] = useState(null)
   const [editVal, setEditVal] = useState('')
 
@@ -828,11 +828,12 @@ function NetWorthTab({ userId }) {
       item: form.item.trim(),
       value: parseFloat(form.value) || 0,
       debt: parseFloat(form.debt) || 0,
+      link_url: form.link_url.trim() || null,
       sort_order: items.length,
     }
     const { data } = await supabase.from('net_worth_items').insert(payload).select().single()
     if (data) setItems(i => [...i, data])
-    setForm({ item: '', value: '', debt: '' })
+    setForm({ item: '', value: '', debt: '', link_url: '' })
     setShowForm(false)
   }
 
@@ -840,6 +841,13 @@ function NetWorthTab({ userId }) {
     const val = parseFloat(value) || 0
     await supabase.from('net_worth_items').update({ [field]: val }).eq('id', row.id)
     setItems(i => i.map(x => x.id === row.id ? { ...x, [field]: val } : x))
+    setEditCell(null)
+  }
+
+  async function saveLink(row, value) {
+    const val = value.trim() || null
+    await supabase.from('net_worth_items').update({ link_url: val }).eq('id', row.id)
+    setItems(i => i.map(x => x.id === row.id ? { ...x, link_url: val } : x))
     setEditCell(null)
   }
 
@@ -888,6 +896,8 @@ function NetWorthTab({ userId }) {
             <input className="fin-input amount" type="number" placeholder="Debt owed" step="0.01" min="0"
               value={form.debt} onChange={e => setForm(f => ({ ...f, debt: e.target.value }))} />
           </div>
+          <input className="fin-input" type="url" placeholder="Link (optional)" value={form.link_url}
+            onChange={e => setForm(f => ({ ...f, link_url: e.target.value }))} />
           <div className="fin-form-actions">
             <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
             <button type="submit" className="fin-save">Save</button>
@@ -913,7 +923,38 @@ function NetWorthTab({ userId }) {
                 const equity = Number(row.value) - Number(row.debt)
                 return (
                   <tr key={row.id} className="budget-row">
-                    <td className="budget-td cat">{row.item}</td>
+                    <td className="budget-td cat">
+                      <span className="nw-item-name">
+                        {row.link_url ? (
+                          <a href={row.link_url} target="_blank" rel="noopener noreferrer" className="nw-item-link" title={row.link_url}>
+                            {row.item}
+                          </a>
+                        ) : row.item}
+                      </span>
+                      {editCell?.id === row.id && editCell.field === 'link_url' ? (
+                        <input
+                          className="nw-link-input"
+                          type="url"
+                          autoFocus
+                          placeholder="https://…"
+                          value={editVal}
+                          onChange={e => setEditVal(e.target.value)}
+                          onBlur={() => saveLink(row, editVal)}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') saveLink(row, editVal)
+                            if (e.key === 'Escape') setEditCell(null)
+                          }}
+                        />
+                      ) : (
+                        <button
+                          className="nw-link-btn"
+                          title={row.link_url ? 'Edit link' : 'Add link'}
+                          onClick={() => { setEditCell({ id: row.id, field: 'link_url' }); setEditVal(row.link_url || '') }}
+                        >
+                          {row.link_url ? '🔗' : '+ link'}
+                        </button>
+                      )}
+                    </td>
                     <td className="budget-td num">
                       {editCell?.id === row.id && editCell.field === 'value' ? (
                         <input className="budget-input" type="number" autoFocus value={editVal}
