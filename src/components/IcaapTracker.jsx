@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useQuickLinks } from '../hooks/useQuickLinks'
+import AbsenceForms from './AbsenceForms'
 import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
@@ -158,6 +159,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
+        <button className={`icaap-tab ${tab === 'forms' ? 'active' : ''}`} onClick={() => setTab('forms')}>Forms</button>
       </div>
 
       {tab === 'dashboard' && <IcaapDashboard />}
@@ -270,7 +272,9 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
 
       {tab === 'payroll' && <PayrollSchedule />}
 
-      <div className="icaap-toolbar" style={{ display: (tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links' || tab === 'payroll') ? 'none' : undefined }}>
+      {tab === 'forms' && <AbsenceForms />}
+
+      <div className="icaap-toolbar" style={{ display: (tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links' || tab === 'payroll' || tab === 'forms') ? 'none' : undefined }}>
         {tab === 'list' ? (
           <div className="icaap-filter-pills">
             {['active', 'done', 'all', 'archived'].map(f => (
