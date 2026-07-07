@@ -232,7 +232,7 @@
 }
 
 .zbb-tracker-env-row > span.zbb-tracker-env-name {
-  font-size: 11px;
+  font-size: 11pt;
   display: flex;
   align-items: flex-start;
   gap: 4px;
@@ -243,8 +243,8 @@
 
 .zbb-tracker-env-name-text {
   white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .zbb-tracker-chevron {
