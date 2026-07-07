@@ -208,7 +208,7 @@
 }
 
 .zbb-tracker-section-name { text-align: left; }
-.zbb-tracker-section-num  { text-align: right; }
+.zbb-tracker-section-num  { text-align: right; font-variant-numeric: tabular-nums; }
 
 /* Item rows — cream/yellow */
 .zbb-tracker-env-wrap {
@@ -257,6 +257,7 @@
 .zbb-tracker-num {
   text-align: right;
   color: #444;
+  font-variant-numeric: tabular-nums;
 }
 
 .zbb-tracker-num.ok      { color: #2e7d32; font-weight: 600; }
@@ -294,7 +295,7 @@
 }
 
 .zbb-tracker-subtotal-label { color: #2e7d32; text-align: left; }
-.zbb-tracker-subtotal-num   { color: #2e7d32; text-align: right; }
+.zbb-tracker-subtotal-num   { color: #2e7d32; text-align: right; font-variant-numeric: tabular-nums; }
 .zbb-tracker-subtotal-num.over { color: #c0392b; }
 
 /* Add envelope button */
