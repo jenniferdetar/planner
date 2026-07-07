@@ -737,34 +737,3 @@ button.dash-inspiration-card {
     display: none;
   }
 }
-
-/* ── Print ── */
-@media print {
-  .dash-outer {
-    height: auto !important;
-    width: auto !important;
-    overflow: visible !important;
-    display: block !important;
-  }
-
-  .dash-sidebar {
-    display: none !important;
-  }
-
-  .dash-main {
-    overflow: visible !important;
-    padding: 0 !important;
-    display: block !important;
-  }
-
-  .dash-panel-wrap {
-    overflow: visible !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    display: block !important;
-  }
-
-  .dash-panel-wrap > * {
-    min-height: 0 !important;
-  }
-}

@@ -1724,16 +1724,3 @@
   white-space: nowrap;
   letter-spacing: 0.3px;
 }
-
-/* ── Print ── */
-@media print {
-  .icaap-tracker {
-    overflow: visible !important;
-    display: block !important;
-  }
-
-  .icaap-stats,
-  .icaap-tabs {
-    display: none !important;
-  }
-}

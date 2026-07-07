@@ -43,12 +43,13 @@ input, textarea {
 /* ── Global font size & weight ── */
 * { font-size: 14px; font-weight: 400; line-height: 24px; }
 
-/* ── Print: the app shell is built for a fixed-height on-screen layout with
-   overflow:hidden scroll containers at every level. Left as-is, printing
-   clips everything past one screen-height, producing blank pages. Reset
-   the base flow here; component stylesheets reset their own containers. ── */
+/* ── Print: html/body are height:100%+overflow:hidden for the on-screen app
+   shell. Printable features render into a body-level frame (see
+   WhileYouWereOut.css's body > * print rule) rather than printing the app
+   shell directly, but that frame is still a descendant of body/html, so
+   reset those two here to avoid clipping it. ── */
 @media print {
-  html, body, #root {
+  html, body {
     height: auto !important;
     overflow: visible !important;
   }

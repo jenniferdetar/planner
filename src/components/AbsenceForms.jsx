@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import './AbsenceForms.css'
 
 // ─── Generic field primitives ─────────────────────────────────────────────────
@@ -479,9 +480,40 @@ export default function AbsenceForms() {
     else setNonIllness(blankNonIllness)
   }
 
+  // The app has a global print rule (see WhileYouWereOut.css) that hides
+  // everything under <body> except an explicit print target, so any
+  // printable feature needs its own body-level target with high enough
+  // specificity to opt back in. Render the current form's live state to
+  // static markup (so typed values/checkboxes are captured correctly,
+  // unlike a stale DOM clone) into a frame appended directly to <body>.
+  function handlePrint() {
+    const formEl = which === 'illness'
+      ? <IllnessForm data={illness} setData={() => {}} />
+      : <NonIllnessForm data={nonIllness} setData={() => {}} />
+    const html = renderToStaticMarkup(formEl)
+
+    const frame = document.createElement('div')
+    frame.id = 'afm-print-frame'
+    frame.innerHTML = html
+    document.body.appendChild(frame)
+
+    const style = document.createElement('style')
+    style.textContent = `@media print { #afm-print-frame { display: block !important; } }`
+    document.head.appendChild(style)
+
+    function cleanup() {
+      frame.remove()
+      style.remove()
+      window.removeEventListener('afterprint', cleanup)
+    }
+    window.addEventListener('afterprint', cleanup)
+
+    window.print()
+  }
+
   return (
     <div className="afm-wrap">
-      <div className="afm-toolbar afm-no-print">
+      <div className="afm-toolbar">
         <div className="afm-form-switch">
           <button className={`afm-switch-btn ${which === 'illness' ? 'active' : ''}`} onClick={() => setWhich('illness')}>
             Illness / Family Illness / New Child
@@ -492,7 +524,7 @@ export default function AbsenceForms() {
         </div>
         <div className="afm-toolbar-actions">
           <button className="afm-clear-btn" onClick={clearCurrent}>Clear Form</button>
-          <button className="afm-print-btn" onClick={() => window.print()}>Print</button>
+          <button className="afm-print-btn" onClick={handlePrint}>Print</button>
         </div>
       </div>
 
