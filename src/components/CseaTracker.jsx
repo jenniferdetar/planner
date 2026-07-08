@@ -5,6 +5,7 @@ import { useGmailCseaSync } from '../hooks/useGmailCseaSync'
 import { useYahooMailSync } from '../hooks/useYahooMailSync'
 import ContractReference from './ContractReference'
 import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifIntake'
+import { MEMBER_BENEFITS_CONTACTS } from '../data/memberBenefitsContacts'
 import { isEboardMember, isLaborRep, isAreaIMember, isStateMember } from '../lib/eboardMembers'
 import './CseaTracker.css'
 
@@ -190,6 +191,7 @@ export function CseaTrackerInner({ api }) {
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
         <button className={`csea-tab ${tab === 'pc' ? 'active' : ''}`} onClick={() => setTab('pc')}>Personnel Commission {api.activePcCases.length > 0 && <span className="csea-tab-badge">{api.activePcCases.length}</span>}</button>
+        <button className={`csea-tab ${tab === 'benefits' ? 'active' : ''}`} onClick={() => setTab('benefits')}>Member Benefits</button>
         <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
       </div>
 
@@ -399,6 +401,8 @@ export function CseaTrackerInner({ api }) {
       )}
 
       {tab === 'pc' && <PersonnelCommissionPanel api={api} />}
+
+      {tab === 'benefits' && <MemberBenefitsPanel />}
 
       {tab === 'rif' && <RifIntakePanel />}
     </div>
@@ -647,6 +651,29 @@ function InteractionsPanel({ api }) {
         ).filter(([member]) => memberCategory(member) === subTab)
           .sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
           <MemberInteractionGroup key={member} member={member} items={items} onUpdate={api.onUpdateInteraction} workLocations={api.workLocations} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function MemberBenefitsPanel() {
+  return (
+    <div className="csea-panel">
+      <div className="csea-toolbar">
+        <span className="csea-toolbar-label">Member Benefits Committee — Contacts</span>
+        <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{MEMBER_BENEFITS_CONTACTS.length} <span className="csea-inline-lbl">Contacts</span></span>
+      </div>
+
+      <div className="csea-issue-list csea-interactions-grid">
+        {MEMBER_BENEFITS_CONTACTS.map(c => (
+          <div key={c.email} className="interaction-card">
+            <div className="interaction-header">
+              <span className="interaction-group-name" style={{ fontSize: 13 }}>{c.name}</span>
+            </div>
+            <p className="interaction-who-text">{c.role}</p>
+            <a className="interaction-doc-link" href={`mailto:${c.email}`}>✉ {c.email}</a>
+          </div>
         ))}
       </div>
     </div>
