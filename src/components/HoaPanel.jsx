@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { useHoaItems, CATEGORIES, PRIORITIES, STATUSES } from '../hooks/useHoaItems'
 import { useYahooHoaSync } from '../hooks/useYahooHoaSync'
 import { useGmailHoaSync } from '../hooks/useGmailHoaSync'
+import { useNotionHoaSync } from '../hooks/useNotionHoaSync'
 import './HoaPanel.css'
 
 const STATUS_COLORS = {
@@ -173,6 +174,7 @@ export function useHoaPage(userId, providerToken) {
   const onImported = useCallback(() => reload?.(), [reload])
   const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount, error: yahooError } = useYahooHoaSync(userId, onImported)
   const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount, error: gmailError } = useGmailHoaSync(userId, providerToken, onImported)
+  const { sync: syncNotion, syncing: notionSyncing, newCount: notionNewCount, error: notionError } = useNotionHoaSync(userId, onImported)
 
   const tabs = ['All', ...CATEGORIES, 'Directory']
   const visibleItems = showArchived ? items : items.filter(i => !i.archived)
@@ -232,6 +234,7 @@ export function useHoaPage(userId, providerToken) {
     tabs, tab, setTab, showForm, setShowForm, form, setForm, editId, setEditId, showArchived, setShowArchived,
     syncYahoo, yahooSyncing, yahooNewCount, yahooError,
     syncGmail, gmailSyncing, gmailNewCount, gmailError, hasGmailToken: !!providerToken,
+    syncNotion, notionSyncing, notionNewCount, notionError,
     counts, loading, filtered,
     groups: groupEntries,
     openAdd, openEdit, handleSubmit, deleteItem,
@@ -536,6 +539,18 @@ function HoaPanelInner({ api }) {
               {api.gmailNewCount > 0 && <span className="hoa-sync-badge">{api.gmailNewCount}</span>}
             </button>
           )}
+          <button
+            className={`hoa-sync-btn${api.notionSyncing ? ' spinning' : ''}`}
+            onClick={api.syncNotion}
+            disabled={api.notionSyncing}
+            title={api.notionError || (api.notionNewCount != null ? `Last sync: ${api.notionNewCount} new` : 'Sync Notion Open Items')}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 4h16v16H4z"/>
+              <path d="M8 8h8M8 12h8M8 16h5"/>
+            </svg>
+            {api.notionNewCount > 0 && <span className="hoa-sync-badge">{api.notionNewCount}</span>}
+          </button>
           <button className="hoa-add-btn" style={{ opacity: 0.75, fontSize: '10px' }} onClick={() => api.setShowArchived(a => !a)}>
             {api.showArchived ? 'Hide Archived' : 'Show Archived'}
           </button>
