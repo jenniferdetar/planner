@@ -907,15 +907,19 @@ function ImportHoursModal({ onClose, onImport }) {
 }
 
 function IcaapDashboard() {
-  const { rows, loading, importPaylogRows, importHoursRows, updateHoursWorked, updateApprovalDate, updatePaylogDate } = useIcaapDashboard()
+  const { rows, loading, importPaylogRows, importHoursRows, updateHoursWorked, updateApprovalDate, updatePaylogDate, setArchived } = useIcaapDashboard()
   const [selectedMonth, setSelectedMonth] = useState(CURRENT_MONTH)
   const [search, setSearch] = useState('')
   const [showImport, setShowImport] = useState(false)
   const [showImportHours, setShowImportHours] = useState(false)
   const [missingOnly, setMissingOnly] = useState(false)
+  const [showArchived, setShowArchived] = useState(false)
 
   const month = DASHBOARD_MONTHS.find(m => m.key === selectedMonth)
-  const filtered = rows.filter(r => r.name.toLowerCase().includes(search.toLowerCase()))
+  const archivedCount = rows.filter(r => r.archived).length
+  const filtered = rows
+    .filter(r => showArchived ? r.archived : !r.archived)
+    .filter(r => r.name.toLowerCase().includes(search.toLowerCase()))
 
   const submitted = filtered.filter(r => !!r.hw[month?.key]).length
   const paylogged = filtered.filter(r => !!r.ps[month?.paylogKey]).length
@@ -964,6 +968,12 @@ function IcaapDashboard() {
           >
             Missing info {missingOnly && `(${displayRows.length})`}
           </button>
+          <button
+            className={`filter-pill ${showArchived ? 'active' : ''}`}
+            onClick={() => setShowArchived(a => !a)}
+          >
+            {showArchived ? `Archived (${archivedCount})` : 'Show Archived'}
+          </button>
           <button className="dash-import-btn" onClick={() => setShowImportHours(true)}>↑ Import Hours</button>
           <button className="dash-import-btn" onClick={() => setShowImport(true)}>↑ Import Paylog</button>
         </div>
@@ -987,6 +997,7 @@ function IcaapDashboard() {
                 <th className="dash-th" style={{ color: '#AAAA9E' }}>Hours Worked</th>
                 <th className="dash-th" style={{ color: '#AAAA9E' }}>Paylog Submitted</th>
                 <th className="dash-th" style={{ color: '#AAAA9E' }}>Approved</th>
+                <th className="dash-th" style={{ color: '#AAAA9E' }}></th>
               </tr>
             </thead>
             <tbody>
@@ -1019,6 +1030,11 @@ function IcaapDashboard() {
                       value={r.ad[month?.key] ?? ''}
                       onSave={v => updateApprovalDate(r.name, month?.key, v)}
                     />
+                  </td>
+                  <td className="dash-cell">
+                    <button className="icaap-archive-btn" onClick={() => setArchived(r.name, !r.archived)}>
+                      {r.archived ? 'Unarchive' : 'Archive'}
+                    </button>
                   </td>
                 </tr>
               ))}
