@@ -225,6 +225,90 @@ export function useCseaIssueNotes(userId) {
   return { notesByIssue, addNote, deleteNote }
 }
 
+export function useCseaPersonnelCommissionCases(userId) {
+  const [cases, setCases] = useState([])
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('csea_personnel_commission_cases')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .then(({ data }) => setCases(data || []))
+  }, [userId])
+
+  async function addCase(fields) {
+    const { data } = await supabase
+      .from('csea_personnel_commission_cases')
+      .insert({ ...fields, user_id: userId })
+      .select()
+      .single()
+    if (data) setCases((prev) => [data, ...prev])
+  }
+
+  async function updateCaseStatus(id, status) {
+    const { data } = await supabase
+      .from('csea_personnel_commission_cases')
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single()
+    if (data) setCases((prev) => prev.map((c) => (c.id === id ? data : c)))
+  }
+
+  async function deleteCase(id) {
+    await supabase.from('csea_personnel_commission_cases').delete().eq('id', id)
+    setCases((prev) => prev.filter((c) => c.id !== id))
+  }
+
+  return { cases, addCase, updateCaseStatus, deleteCase }
+}
+
+export function useCseaPersonnelCommissionNotes(userId) {
+  const [notesByCase, setNotesByCase] = useState({})
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('csea_personnel_commission_notes')
+      .select('*')
+      .eq('user_id', userId)
+      .order('note_date', { ascending: true })
+      .then(({ data }) => {
+        const grouped = {}
+        for (const n of (data || [])) {
+          if (!grouped[n.case_id]) grouped[n.case_id] = []
+          grouped[n.case_id].push(n)
+        }
+        setNotesByCase(grouped)
+      })
+  }, [userId])
+
+  async function addNote(caseId, noteText, noteDate) {
+    const { data } = await supabase
+      .from('csea_personnel_commission_notes')
+      .insert({ case_id: caseId, note_text: noteText, note_date: noteDate || null, user_id: userId })
+      .select()
+      .single()
+    if (data) {
+      setNotesByCase(prev => ({
+        ...prev,
+        [caseId]: [...(prev[caseId] || []), data],
+      }))
+    }
+  }
+
+  async function deleteNote(caseId, noteId) {
+    await supabase.from('csea_personnel_commission_notes').delete().eq('id', noteId)
+    setNotesByCase(prev => ({
+      ...prev,
+      [caseId]: (prev[caseId] || []).filter(n => n.id !== noteId),
+    }))
+  }
+
+  return { notesByCase, addNote, deleteNote }
+}
+
 export function useCseaNotes(userId) {
   const [notes, setNotes] = useState([])
 

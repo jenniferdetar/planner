@@ -65,8 +65,13 @@ export function useIcaapDashboard() {
     const name = hw['Name']
     const ps = paylogSubmission.find(p => p['Employee Name'] === name) || {}
     const ad = approvalDates.find(a => a['Name'] === name) || {}
-    return { name, hw, ps, ad }
+    return { name, hw, ps, ad, archived: !!hw.archived }
   })
+
+  async function setArchived(name, archived) {
+    await supabase.from('hours_worked').update({ archived }).eq('Name', name)
+    setHoursWorked(prev => prev.map(r => r['Name'] === name ? { ...r, archived } : r))
+  }
 
   // Import parsed CSV rows: [{ name, monthCol, dateValue }]
   async function importPaylogRows(parsedRows) {
@@ -113,5 +118,5 @@ export function useIcaapDashboard() {
     setPaylogSubmission(prev => prev.map(r => r['Employee Name'] === name ? { ...r, [paylogKey]: val } : r))
   }
 
-  return { rows, loading, importPaylogRows, importHoursRows, updateHoursWorked, updateApprovalDate, updatePaylogDate, refresh: fetchAll }
+  return { rows, loading, importPaylogRows, importHoursRows, updateHoursWorked, updateApprovalDate, updatePaylogDate, setArchived, refresh: fetchAll }
 }
