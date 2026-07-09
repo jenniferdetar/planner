@@ -1,6 +1,9 @@
-// Maps a raw row from the Notion "Open Items" data source (see api/notion-hoa.js)
-// to an hoa_items record. Notion's schema is structured, so this is a direct
-// field mapping rather than the keyword-guessing hoaEmail.js does for emails.
+// Maps a raw item from the Notion HOA workspace (see api/notion-hoa.js) to an
+// hoa_items record. Most items come from plain child pages nested under an
+// Open Items bucket or a Completed items page rather than from structured
+// Notion properties, so category/status are largely inferred from which
+// bucket/page an item lives under (see api/notion-hoa.js SECTIONS) rather
+// than read off a Notion select field.
 const STATUS_MAP = {
   Open: 'Not Started',
   'In progress': 'In Progress',
@@ -8,10 +11,19 @@ const STATUS_MAP = {
 }
 
 const CATEGORY_MAP = {
+  // Legacy "Category " select values from data-source rows.
   Insurance: 'Insurance',
   Maintenance: 'Maintenance',
   Admin: 'General',
   Incident: 'Legal',
+  // Bucket/Completed-items page names for nested child pages.
+  Financials: 'Financials',
+  Maintainence: 'Maintenance',
+  'Maintaince & Repairs': 'Maintenance',
+  Incidents: 'Legal',
+  'Cleaning Scope of Work': 'Maintenance',
+  Legal: 'Legal',
+  Governance: 'General',
 }
 
 export function notionItemToHoaItem(item) {
