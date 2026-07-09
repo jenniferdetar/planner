@@ -621,6 +621,8 @@
 
   /* Compact dashboard toolbar */
   .dash-toolbar {
+    flex-direction: column;
+    align-items: stretch;
     padding: 8px 10px 6px;
     gap: 6px;
   }
@@ -1086,7 +1088,10 @@
   background: #fff;
   border-bottom: 1px solid #d9e8f0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 8px;
   flex-shrink: 0;
 }
