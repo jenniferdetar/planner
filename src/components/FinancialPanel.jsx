@@ -1252,12 +1252,11 @@ function LaundryTab({ userId }) {
         <div className="budget-header-titles">
           <h2 className="budget-title">Laundry Tracker</h2>
           <span className="fin-toolbar-label">Log a wash or dry cycle</span>
+          <span className="laundry-note">
+            Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75 for 45 min base (7 quarters), +1 quarter = +6 min
+          </span>
         </div>
         <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Log Load</button>
-      </div>
-
-      <div className="laundry-note">
-        Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75 for 45 min base (7 quarters), +1 quarter = +6 min
       </div>
 
       <div className="budget-summary-bar">

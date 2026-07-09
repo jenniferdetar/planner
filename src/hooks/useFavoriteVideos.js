@@ -53,11 +53,10 @@ export function useFavoriteVideos(userId) {
       }
       thumbnail_url = `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`
     } else {
-      // TikTok
+      // TikTok — routed through our own API since TikTok's oEmbed endpoint
+      // doesn't reliably support cross-origin requests from the browser.
       try {
-        const res = await fetch(
-          `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`
-        )
+        const res = await fetch(`/api/tiktok-oembed?url=${encodeURIComponent(url)}`)
         if (res.ok) {
           const meta = await res.json()
           title = meta.title || title
