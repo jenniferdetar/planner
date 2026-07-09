@@ -285,6 +285,23 @@
   background: rgba(30,48,112,0.04);
 }
 
+.gcu-course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: #555;
+}
+
+.gcu-course-meta strong {
+  color: var(--gcu);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-size: 9px;
+  margin-right: 4px;
+}
+
 /* gcu-controls is a flex row; no override needed on desktop */
 .gcu-controls {
   display: flex;

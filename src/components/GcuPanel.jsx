@@ -5,7 +5,7 @@ export const GCU_COURSES = [
   // Completed
   { code: 'UNV-504', name: 'Introduction to Graduate Studies in the Liberal Arts', credits: 2, type: 'completed', start: '5/20/2021', end: '6/16/2021', description: 'Introduction to graduate-level academic expectations, research, and writing in the liberal arts.' },
   // Core Courses — sorted oldest to newest by start date
-  { code: 'ADM-624', name: 'Public Governance', credits: 4, type: 'core', start: '7/16/2026', end: '9/9/2026', description: 'Best practices in public governance, transparency, participation, and accountability.' },
+  { code: 'ADM-624', name: 'Public Governance', credits: 4, type: 'core', start: '7/16/2026', end: '9/9/2026', section: 'O501', instructor: 'LoPorto, Johanna', location: 'Online', description: 'Best practices in public governance, transparency, participation, and accountability.' },
   { code: 'ADM-530', name: 'Public and Nonprofit Administration', credits: 4, type: 'core', start: '9/10/2026', end: '11/4/2026', description: 'Principles and practices of managing public and nonprofit organizations; structure, accountability, and service delivery.' },
   { code: 'HRM-635', name: 'Acquiring, Developing, and Leveraging Human Capital', credits: 4, type: 'core', start: '11/5/2026', end: '1/6/2027', description: 'Strategic human resource management in the public sector: recruitment, development, and retention of talent.' },
   { code: 'ADM-560', name: 'Influence, Power, and Politics in Public Administration', credits: 4, type: 'core', start: '1/7/2027', end: '3/3/2027', description: 'How power dynamics and political forces shape public administration decisions and outcomes.' },
@@ -107,7 +107,16 @@ function CourseGroup({ label, courses, api }) {
               </div>
             </div>
             {isOpen && (
-              <div className="gcu-course-desc">{course.description}</div>
+              <div className="gcu-course-desc">
+                {(course.section || course.instructor || course.location) && (
+                  <div className="gcu-course-meta">
+                    {course.section && <span><strong>Section</strong> {course.section}</span>}
+                    {course.instructor && <span><strong>Instructor</strong> {course.instructor}</span>}
+                    {course.location && <span><strong>Location</strong> {course.location}</span>}
+                  </div>
+                )}
+                {course.description}
+              </div>
             )}
           </div>
         )
