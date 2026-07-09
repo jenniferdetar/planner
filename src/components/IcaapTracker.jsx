@@ -149,19 +149,13 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
               <div key={l.id} className="interaction-group">
                 <div className="interaction-group-header">
                   <a href={l.url} target="_blank" rel="noopener noreferrer" className="interaction-group-name quick-link-anchor">{l.title}</a>
+                  {l.created_at && (
+                    <span className="interaction-date-badge">
+                      {new Date(l.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                    </span>
+                  )}
                   <button className="interaction-delete-btn" title="Delete" onClick={() => deleteLink(l.id)}>✕</button>
                 </div>
-                {l.created_at && (
-                  <div className="interaction-group-items">
-                    <div className="interaction-card">
-                      <div className="interaction-header">
-                        <span className="interaction-date-badge">
-                          {new Date(l.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             ))}
           </div>
