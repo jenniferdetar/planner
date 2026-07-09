@@ -191,7 +191,6 @@ export function CseaTrackerInner({ api }) {
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
         <button className={`csea-tab ${tab === 'pc' ? 'active' : ''}`} onClick={() => setTab('pc')}>Personnel Commission {api.activePcCases.length > 0 && <span className="csea-tab-badge">{api.activePcCases.length}</span>}</button>
-        <button className={`csea-tab ${tab === 'benefits' ? 'active' : ''}`} onClick={() => setTab('benefits')}>Member Benefits</button>
         <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
       </div>
 
@@ -396,8 +395,6 @@ export function CseaTrackerInner({ api }) {
 
       {tab === 'pc' && <PersonnelCommissionPanel api={api} />}
 
-      {tab === 'benefits' && <MemberBenefitsPanel />}
-
       {tab === 'rif' && <RifIntakePanel />}
     </div>
   )
@@ -594,7 +591,13 @@ function InteractionsPanel({ api }) {
         <button className="csea-add-btn" onClick={() => api.setShowAddInteraction(true)}>+ Log Contact</button>
       </div>
 
-      {api.showAddInteraction && (
+      <div className="csea-toolbar">
+        <div className="csea-filter-pills">
+          <button className={`filter-pill ${subTab === 'benefits' ? 'active' : ''}`} onClick={() => setSubTab('benefits')}>Member Benefits</button>
+        </div>
+      </div>
+
+      {subTab !== 'benefits' && api.showAddInteraction && (
         <form className="csea-form" onSubmit={api.handleAddInteraction}>
           <div className="csea-form-row">
             <div className="csea-type-btns">
@@ -626,50 +629,41 @@ function InteractionsPanel({ api }) {
         </form>
       )}
 
-      <div className="csea-issue-list csea-interactions-grid">
-        {api.interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
-        {Object.entries(
-          api.interactions.reduce((groups, i) => {
-            const raw = i.member_name || 'Unknown'
-            // Expand "Group Chat (Name1, Name2, ...)" into individual names
-            const gcMatch = raw.match(/^Group Chat\s*\((.+)\)$/i)
-            const keys = gcMatch
-              ? gcMatch[1].split(',').map(n => n.trim()).filter(Boolean)
-              : [raw]
-            keys.forEach(key => {
-              if (!groups[key]) groups[key] = []
-              groups[key].push(i)
-            })
-            return groups
-          }, {})
-        ).filter(([member]) => memberCategory(member) === subTab)
-          .sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
-          <MemberInteractionGroup key={member} member={member} items={items} onUpdate={api.onUpdateInteraction} workLocations={api.workLocations} />
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function MemberBenefitsPanel() {
-  return (
-    <div className="csea-panel">
-      <div className="csea-toolbar">
-        <span className="csea-toolbar-label">Member Benefits Committee — Contacts</span>
-        <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{MEMBER_BENEFITS_CONTACTS.length} <span className="csea-inline-lbl">Contacts</span></span>
-      </div>
-
-      <div className="csea-issue-list csea-interactions-grid">
-        {MEMBER_BENEFITS_CONTACTS.map(c => (
-          <div key={c.email} className="interaction-card">
-            <div className="interaction-header">
-              <span className="interaction-group-name" style={{ fontSize: 13 }}>{c.name}</span>
+      {subTab === 'benefits' ? (
+        <div className="csea-issue-list csea-interactions-grid">
+          {MEMBER_BENEFITS_CONTACTS.map(c => (
+            <div key={c.email} className="interaction-card">
+              <div className="interaction-header">
+                <span className="interaction-group-name" style={{ fontSize: 13 }}>{c.name}</span>
+              </div>
+              <p className="interaction-who-text">{c.role}</p>
+              <a className="interaction-doc-link" href={`mailto:${c.email}`}>✉ {c.email}</a>
             </div>
-            <p className="interaction-who-text">{c.role}</p>
-            <a className="interaction-doc-link" href={`mailto:${c.email}`}>✉ {c.email}</a>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="csea-issue-list csea-interactions-grid">
+          {api.interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
+          {Object.entries(
+            api.interactions.reduce((groups, i) => {
+              const raw = i.member_name || 'Unknown'
+              // Expand "Group Chat (Name1, Name2, ...)" into individual names
+              const gcMatch = raw.match(/^Group Chat\s*\((.+)\)$/i)
+              const keys = gcMatch
+                ? gcMatch[1].split(',').map(n => n.trim()).filter(Boolean)
+                : [raw]
+              keys.forEach(key => {
+                if (!groups[key]) groups[key] = []
+                groups[key].push(i)
+              })
+              return groups
+            }, {})
+          ).filter(([member]) => memberCategory(member) === subTab)
+            .sort(([a], [b]) => a.localeCompare(b)).map(([member, items]) => (
+            <MemberInteractionGroup key={member} member={member} items={items} onUpdate={api.onUpdateInteraction} workLocations={api.workLocations} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
