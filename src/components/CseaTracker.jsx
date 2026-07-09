@@ -581,6 +581,7 @@ function InteractionsPanel({ api }) {
           <button className={`filter-pill ${subTab === 'labor-reps' ? 'active' : ''}`} onClick={() => setSubTab('labor-reps')}>Labor Reps</button>
           <button className={`filter-pill ${subTab === 'area1' ? 'active' : ''}`} onClick={() => setSubTab('area1')}>Area I</button>
           <button className={`filter-pill ${subTab === 'state' ? 'active' : ''}`} onClick={() => setSubTab('state')}>State</button>
+          <button className={`filter-pill ${subTab === 'benefits' ? 'active' : ''}`} onClick={() => setSubTab('benefits')}>Member Benefits</button>
         </div>
         <button className="csea-archive-toggle" onClick={api.onToggleArchived}>
           {api.showArchived ? 'Hide Archived' : 'Show Archived'}
@@ -589,12 +590,6 @@ function InteractionsPanel({ api }) {
           {api.syncing ? 'Syncing…' : api.hasSynced ? `↻ Sync${api.totalNewCount > 0 ? ` (+${api.totalNewCount})` : ''}` : '↻ Sync'}
         </button>
         <button className="csea-add-btn" onClick={() => api.setShowAddInteraction(true)}>+ Log Contact</button>
-      </div>
-
-      <div className="csea-toolbar">
-        <div className="csea-filter-pills">
-          <button className={`filter-pill ${subTab === 'benefits' ? 'active' : ''}`} onClick={() => setSubTab('benefits')}>Member Benefits</button>
-        </div>
       </div>
 
       {subTab !== 'benefits' && api.showAddInteraction && (
