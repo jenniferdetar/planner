@@ -35,7 +35,6 @@ const NAV_ITEMS = [
   { key: 'today',    label: 'Today',        color: '#9ca3af', group: 'day' },
   { key: 'week',     label: 'Week',         color: '#9ca3af', group: 'day' },
   { key: 'month',    label: 'Month',        color: '#9ca3af', group: 'day' },
-  { key: 'master',   label: 'Master Tasks', mobileLabel: 'Tasks', color: '#1e5799', group: 'module' },
   { key: 'csea',     label: 'CSEA',         color: '#b87a38', group: 'module' },
   { key: 'finance',  label: 'Finance',      color: '#8a5a3a', group: 'module' },
   { key: 'gcu',      label: 'GCU',          color: '#5a7848', group: 'module' },
@@ -346,6 +345,34 @@ export default function DashboardView({
               </div>
             </div>
 
+            {/* Master Tasks */}
+            <div className="master-tasks-wrap">
+              <div className="dash-page-header">
+                <h1 className="dash-page-title">Master Tasks</h1>
+                <span className="dash-badge">{(masterTasks || []).length} total</span>
+              </div>
+              <div className="dash-master-grid">
+                {Object.entries(categoryMap).map(([cat, tasks]) => {
+                  const color = CATEGORY_COLORS[cat] || '#aaa'
+                  return (
+                    <div key={cat} className="dash-card">
+                      <div className="dash-card-header" style={{ borderBottomColor: color }}>
+                        <span className="dash-card-title">{cat}</span>
+                        <span className="dash-badge">{tasks.length}</span>
+                      </div>
+                      {tasks.map(t => (
+                        <div key={t.id} className="dash-master-row">
+                          <span className="dash-master-dot" style={{ background: color }} />
+                          <span className="dash-task-text">{t.title}</span>
+                          <button className="dash-row-del" onClick={() => onDeleteMasterTask(t.id)}>✕</button>
+                        </div>
+                      ))}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
             {/* Daily Log */}
             <div className="dash-card dash-card-full">
               <div className="dash-card-header">
@@ -461,36 +488,6 @@ export default function DashboardView({
               timeBlocks={calendarBlocks || timeBlocks}
               onMonthChange={onMonthChange}
             />
-          </div>
-        )}
-
-        {/* MASTER TASKS */}
-        {section === 'master' && (
-          <div className="master-tasks-wrap">
-            <div className="dash-page-header">
-              <h1 className="dash-page-title">Master Tasks</h1>
-              <span className="dash-badge">{(masterTasks || []).length} total</span>
-            </div>
-            <div className="dash-master-grid">
-              {Object.entries(categoryMap).map(([cat, tasks]) => {
-                const color = CATEGORY_COLORS[cat] || '#aaa'
-                return (
-                  <div key={cat} className="dash-card">
-                    <div className="dash-card-header" style={{ borderBottomColor: color }}>
-                      <span className="dash-card-title">{cat}</span>
-                      <span className="dash-badge">{tasks.length}</span>
-                    </div>
-                    {tasks.map(t => (
-                      <div key={t.id} className="dash-master-row">
-                        <span className="dash-master-dot" style={{ background: color }} />
-                        <span className="dash-task-text">{t.title}</span>
-                        <button className="dash-row-del" onClick={() => onDeleteMasterTask(t.id)}>✕</button>
-                      </div>
-                    ))}
-                  </div>
-                )
-              })}
-            </div>
           </div>
         )}
 

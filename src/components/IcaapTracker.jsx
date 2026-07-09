@@ -6,54 +6,6 @@ import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
 import { useIcaapNote } from '../hooks/useIcaapNote'
 
-const CATEGORIES = ['Task', 'Meeting', 'Research', 'Review', 'Report', 'Follow-up', 'Other']
-const PRIORITIES = ['Low', 'Medium', 'High']
-const STATUSES = ['To Do', 'In Progress', 'Done', 'Blocked']
-
-const STATUS_COLORS = {
-  'To Do': '#888',
-  'In Progress': '#4a90d9',
-  'Done': '#5cb85c',
-  'Blocked': '#e05c5c',
-}
-const PRIORITY_COLORS = { High: '#e05c5c', Medium: '#f0a040', Low: '#5c9ee0' }
-const CAT_COLOR = '#9b59b6'
-
-const BASE_ASANA = 'https://app.asana.com/api/1.0'
-
-async function pushToAsana(token, workspaceGid, item) {
-  if (!token) throw new Error('No Asana token configured')
-  const res = await fetch(`${BASE_ASANA}/tasks`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      data: {
-        name: item.title,
-        notes: item.description || '',
-        due_on: item.due_date || null,
-        workspace: workspaceGid,
-        assignee: 'me',
-      },
-    }),
-  })
-  if (!res.ok) throw new Error(`Asana error ${res.status}`)
-  const { data } = await res.json()
-  return data.gid
-}
-
-async function getFirstWorkspace(token) {
-  const res = await fetch(`${BASE_ASANA}/workspaces`, {
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
-  })
-  if (!res.ok) throw new Error(`Asana workspaces ${res.status}`)
-  const { data } = await res.json()
-  return data[0]?.gid ?? null
-}
-
 function IcaapStatsBar({ items }) {
   const nonArchived = items.filter(i => !i.archived)
   const counts = {
@@ -84,7 +36,7 @@ function IcaapStatsBar({ items }) {
   )
 }
 
-export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, onDeleteItem, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
+export default function IcaapTracker({ userId, items, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'icaap')
   const [tab, setTab] = useState('dashboard')
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
@@ -94,59 +46,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
   const [noteSource, setNoteSource] = useState('')
   const [linkTitle, setLinkTitle] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
-  const [filter, setFilter] = useState('active')
-  const [showForm, setShowForm] = useState(false)
-  const [pushingId, setPushingId] = useState(null)
-  const [pushResult, setPushResult] = useState({}) // id -> 'ok' | 'err'
-
-  const blankForm = {
-    title: '', category: 'Task', priority: 'Medium',
-    status: 'To Do', description: '', due_date: '',
-  }
-  const [form, setForm] = useState(blankForm)
-
-  const token = import.meta.env.VITE_ASANA_TOKEN
-
-  const nonArchived = items.filter(i => !i.archived)
-  const archivedItems = items.filter(i => i.archived)
-  const done = nonArchived.filter(i => i.status === 'Done')
-  const activeItems = nonArchived.filter(i => i.status !== 'Done')
-  const displayItems = filter === 'active' ? activeItems
-    : filter === 'done' ? done
-    : filter === 'archived' ? archivedItems
-    : nonArchived
-
-  async function handleAdd(e) {
-    e.preventDefault()
-    if (!form.title.trim()) return
-    await onAddItem({
-      title: form.title.trim(),
-      category: form.category,
-      priority: form.priority,
-      status: form.status,
-      description: form.description.trim() || null,
-      due_date: form.due_date || null,
-    })
-    setForm(blankForm)
-    setShowForm(false)
-  }
-
-  async function handlePushToAsana(item) {
-    if (!token) { alert('No Asana token set (VITE_ASANA_TOKEN)'); return }
-    setPushingId(item.id)
-    try {
-      const wsGid = await getFirstWorkspace(token)
-      if (!wsGid) throw new Error('No Asana workspace found')
-      const gid = await pushToAsana(token, wsGid, item)
-      await onUpdateItem(item.id, { asana_gid: gid })
-      setPushResult(r => ({ ...r, [item.id]: 'ok' }))
-    } catch (err) {
-      console.error('Asana push failed:', err)
-      setPushResult(r => ({ ...r, [item.id]: 'err' }))
-    } finally {
-      setPushingId(null)
-    }
-  }
 
   return (
     <div className="icaap-tracker">
@@ -155,7 +54,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
         <button className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
         <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
-        <button className={`icaap-tab ${tab === 'list' ? 'active' : ''}`} onClick={() => setTab('list')}>Tasks</button>
         <button className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
@@ -220,7 +118,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       )}
 
       {tab === 'links' && (
-        <div className="icaap-panel">
+        <div className="icaap-notes-section">
           <form className="icaap-notes-form" onSubmit={async (e) => {
             e.preventDefault()
             if (!linkTitle.trim() || !linkUrl.trim()) return
@@ -273,84 +171,6 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       {tab === 'payroll' && <PayrollSchedule />}
 
       {tab === 'forms' && <AbsenceForms />}
-
-      <div className="icaap-toolbar" style={{ display: (tab === 'attendance' || tab === 'extrahours' || tab === 'notes' || tab === 'links' || tab === 'payroll' || tab === 'forms') ? 'none' : undefined }}>
-        {tab === 'list' ? (
-          <div className="icaap-filter-pills">
-            {['active', 'done', 'all', 'archived'].map(f => (
-              <button key={f} className={`filter-pill ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
-                {f.charAt(0).toUpperCase() + f.slice(1)}{f === 'archived' && archivedItems.length > 0 ? ` (${archivedItems.length})` : ''}
-              </button>
-            ))}
-          </div>
-        ) : <span />}
-        <button className="icaap-add-btn" onClick={() => setShowForm(true)}>+ Add Item</button>
-      </div>
-
-      {showForm && tab !== 'attendance' && tab !== 'notes' && (
-        <form className="icaap-form" onSubmit={handleAdd}>
-          <input className="icaap-input" placeholder="Title *" value={form.title}
-            onChange={e => setForm(f => ({ ...f, title: e.target.value }))} autoFocus />
-          <div className="icaap-form-row">
-            <div className="icaap-type-btns">
-              {CATEGORIES.map(c => (
-                <button key={c} type="button"
-                  className={`type-btn ${form.category === c ? 'active' : ''}`}
-                  style={{ '--tc': CAT_COLOR }}
-                  onClick={() => setForm(f => ({ ...f, category: c }))}
-                >{c}</button>
-              ))}
-            </div>
-          </div>
-          <textarea className="icaap-textarea" placeholder="Description" rows={3} value={form.description}
-            onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
-          <div className="icaap-form-row">
-            <input className="icaap-input icaap-date-input" type="date" value={form.due_date}
-              onChange={e => setForm(f => ({ ...f, due_date: e.target.value }))} />
-          </div>
-          <div className="icaap-form-row">
-            <div className="icaap-priority-btns">
-              {PRIORITIES.map(p => (
-                <button key={p} type="button"
-                  className={`priority-btn ${form.priority === p ? 'active' : ''}`}
-                  style={{ '--pc': PRIORITY_COLORS[p] }}
-                  onClick={() => setForm(f => ({ ...f, priority: p }))}
-                >{p}</button>
-              ))}
-            </div>
-            <div className="icaap-status-btns">
-              {STATUSES.map(s => (
-                <button key={s} type="button"
-                  className={`status-btn ${form.status === s ? 'active' : ''}`}
-                  style={{ '--sc': STATUS_COLORS[s] }}
-                  onClick={() => setForm(f => ({ ...f, status: s }))}
-                >{s}</button>
-              ))}
-            </div>
-          </div>
-          <div className="icaap-form-actions">
-            <button type="button" className="icaap-cancel" onClick={() => { setShowForm(false); setForm(blankForm) }}>Cancel</button>
-            <button type="submit" className="icaap-save">Save</button>
-          </div>
-        </form>
-      )}
-
-      {tab === 'list' && (
-        <div className="icaap-list">
-          {displayItems.length === 0 && (
-            <p className="icaap-empty">No items yet — add one above</p>
-          )}
-          {displayItems.map(item => (
-            <ItemCard key={item.id} item={item}
-              onUpdateItem={onUpdateItem}
-              onDeleteItem={onDeleteItem}
-              onPushToAsana={handlePushToAsana}
-              pushing={pushingId === item.id}
-              pushResult={pushResult[item.id]}
-            />
-          ))}
-        </div>
-      )}
     </div>
   )
 }
@@ -527,63 +347,6 @@ function AttendanceCell({ status, timeIn, notes, onStatusChange, onTimeChange, o
         )
       )}
     </td>
-  )
-}
-
-function ItemCard({ item, onUpdateItem, onDeleteItem, onPushToAsana, pushing, pushResult }) {
-  const [expanded, setExpanded] = useState(false)
-
-  return (
-    <div className={`icaap-card ${item.status === 'Done' ? 'done' : ''}`}>
-      <div className="icaap-card-header" onClick={() => setExpanded(e => !e)}>
-        <span className="icaap-cat-badge" style={{ background: '#9b59b622', color: CAT_COLOR }}>
-          {item.category}
-        </span>
-        <span className="icaap-card-title">{item.title}</span>
-        <span className="icaap-card-priority" style={{ color: PRIORITY_COLORS[item.priority] }}>
-          {item.priority}
-        </span>
-        <span className="icaap-card-status" style={{ background: STATUS_COLORS[item.status] + '22', color: STATUS_COLORS[item.status] }}>
-          {item.status}
-        </span>
-        <span className="icaap-chevron">{expanded ? '▾' : '▸'}</span>
-      </div>
-
-      {expanded && (
-        <div className="icaap-card-body">
-          {item.due_date && <div className="icaap-detail">📅 Due {item.due_date}</div>}
-          {item.description && <div className="icaap-desc">{item.description}</div>}
-
-          <div className="icaap-card-actions">
-            <div className="icaap-status-change-btns">
-              {STATUSES.filter(s => s !== item.status).map(s => (
-                <button key={s} className="status-change-btn" style={{ '--sc': STATUS_COLORS[s] }}
-                  onClick={() => onUpdateItem(item.id, { status: s })}>
-                  → {s}
-                </button>
-              ))}
-            </div>
-            <div className="icaap-card-right-actions">
-              {item.asana_gid ? (
-                <span className="asana-synced-badge">✓ In Asana</span>
-              ) : (
-                <button
-                  className={`asana-push-btn ${pushing ? 'pushing' : ''} ${pushResult === 'err' ? 'err' : ''}`}
-                  onClick={() => onPushToAsana(item)}
-                  disabled={pushing}
-                >
-                  {pushing ? '…' : pushResult === 'ok' ? '✓ Pushed' : pushResult === 'err' ? '✗ Failed' : '↑ Asana'}
-                </button>
-              )}
-              <button className="icaap-archive-btn" onClick={() => onUpdateItem(item.id, { archived: !item.archived })}>
-                {item.archived ? 'Unarchive' : 'Archive'}
-              </button>
-              <button className="icaap-delete-btn" onClick={() => onDeleteItem(item.id)}>Delete</button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
   )
 }
 

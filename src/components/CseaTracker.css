@@ -915,6 +915,27 @@
   color: var(--csea-blue);
 }
 
+.rif-summary-card-wide {
+  flex: 2;
+  min-width: 340px;
+}
+
+.rif-summary-cols {
+  column-count: 2;
+  column-gap: 0;
+}
+
+.rif-summary-cols-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--csea-light-gray);
+  break-inside: avoid;
+}
+
 .rif-action-dot {
   display: inline-block;
   width: 8px;
