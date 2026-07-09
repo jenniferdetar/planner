@@ -950,9 +950,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 14px 6px;
+  padding: 8px 14px;
   background: #1e3070;
   flex-shrink: 0;
+}
+
+.budget-header-titles {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
 }
 
 .budget-title {
