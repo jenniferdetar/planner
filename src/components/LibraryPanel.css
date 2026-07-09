@@ -120,6 +120,18 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.library-header-actions::-webkit-scrollbar {
+  display: none;
+}
+
+.library-header-actions > * {
   flex-shrink: 0;
 }
 
