@@ -111,10 +111,10 @@ function BillsTab({ bills, onAdd, onToggle, onDelete }) {
   return (
     <div className="fin-content">
       <div className="budget-header">
-        <h2 className="budget-title">Bills</h2>
-      </div>
-      <div className="fin-toolbar">
-        <span className="fin-toolbar-label">{unpaid.length} bills remaining</span>
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Bills</h2>
+          <span className="fin-toolbar-label">{unpaid.length} bills remaining</span>
+        </div>
         <button className="fin-add-btn" onClick={() => setShowForm(true)}>+ Add Bill</button>
       </div>
 
