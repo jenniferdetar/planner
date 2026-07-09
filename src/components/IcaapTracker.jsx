@@ -220,7 +220,7 @@ export default function IcaapTracker({ userId, items, onAddItem, onUpdateItem, o
       )}
 
       {tab === 'links' && (
-        <div className="icaap-panel">
+        <div className="icaap-notes-section">
           <form className="icaap-notes-form" onSubmit={async (e) => {
             e.preventDefault()
             if (!linkTitle.trim() || !linkUrl.trim()) return
