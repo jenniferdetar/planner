@@ -59,6 +59,11 @@ export default function PersonalLinksPanel({ userId }) {
                 <a href={link.url} target="_blank" rel="noopener noreferrer" className="interaction-group-name quick-link-anchor">
                   {link.title}
                 </a>
+                {link.created_at && (
+                  <span className="interaction-date-badge">
+                    {new Date(link.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                  </span>
+                )}
                 <button
                   className="interaction-delete-btn"
                   onClick={() => deleteLink(link.id)}
@@ -67,17 +72,6 @@ export default function PersonalLinksPanel({ userId }) {
                   ✕
                 </button>
               </div>
-              {link.created_at && (
-                <div className="interaction-group-items">
-                  <div className="interaction-card">
-                    <div className="interaction-header">
-                      <span className="interaction-date-badge">
-                        {new Date(link.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           ))}
         </div>
