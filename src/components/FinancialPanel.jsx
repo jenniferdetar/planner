@@ -582,7 +582,18 @@ function DebtSnowballTab({ userId }) {
   return (
     <div className="budget-wrap">
       <div className="budget-header">
-        <h2 className="budget-title">Debt Snowball</h2>
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Debt Snowball</h2>
+          <span className="fin-toolbar-label">
+            Smallest balance first — snowball order
+            {rows.length > 0 && (
+              <span className="debt-payoff-caveat">
+                {' '}· {overallMonths != null ? `~${overallMonths} mo to debt-free` : '100+ years to debt-free'} at current minimums (excludes interest)
+              </span>
+            )}
+          </span>
+        </div>
+        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Debt</button>
       </div>
 
       <div className="budget-summary-bar">
@@ -598,18 +609,6 @@ function DebtSnowballTab({ userId }) {
           <span className="budget-summary-lbl">Debt-Free By</span>
           <span className="budget-summary-val">{rows.length > 0 ? payoffLabel(overallMonths) : '—'}</span>
         </div>
-      </div>
-
-      <div className="fin-toolbar">
-        <span className="fin-toolbar-label">
-          Smallest balance first — snowball order
-          {rows.length > 0 && (
-            <span className="debt-payoff-caveat">
-              {' '}· {overallMonths != null ? `~${overallMonths} mo to debt-free` : '100+ years to debt-free'} at current minimums (excludes interest)
-            </span>
-          )}
-        </span>
-        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Debt</button>
       </div>
 
       {showForm && (
@@ -878,7 +877,11 @@ function NetWorthTab({ userId }) {
   return (
     <div className="budget-wrap">
       <div className="budget-header">
-        <h2 className="budget-title">Net Worth</h2>
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Net Worth</h2>
+          <span className="fin-toolbar-label">Assets and what's owed against them</span>
+        </div>
+        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Item</button>
       </div>
 
       <div className="budget-summary-bar">
@@ -894,11 +897,6 @@ function NetWorthTab({ userId }) {
           <span className="budget-summary-lbl">Net Worth</span>
           <span className="budget-summary-val" style={{ color: netWorth >= 0 ? '#1a6b2a' : '#e05c5c' }}>{fmt(netWorth)}</span>
         </div>
-      </div>
-
-      <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Assets and what's owed against them</span>
-        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Item</button>
       </div>
 
       {showForm && (
@@ -1073,8 +1071,6 @@ function SinkingFundsTab({ userId }) {
     <div className="fin-content">
       <div className="budget-header">
         <h2 className="budget-title">Sinking Funds</h2>
-      </div>
-      <div className="fin-toolbar">
         <span className="coins-total-badge">{fmt(total)}</span>
         <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Add Fund</button>
       </div>
@@ -1253,10 +1249,10 @@ function LaundryTab({ userId }) {
   return (
     <div className="fin-content laundry-content">
       <div className="budget-header">
-        <h2 className="budget-title">Laundry Tracker</h2>
-      </div>
-      <div className="fin-toolbar">
-        <span className="fin-toolbar-label">Log a wash or dry cycle</span>
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Laundry Tracker</h2>
+          <span className="fin-toolbar-label">Log a wash or dry cycle</span>
+        </div>
         <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Log Load</button>
       </div>
 
@@ -1450,14 +1446,13 @@ function NotesTab({ userId }) {
   return (
     <div className="fin-content">
       <div className="budget-header">
-        <h2 className="budget-title">Financial Notes</h2>
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Financial Notes</h2>
+          <span className="fin-toolbar-label">Dated notes, reminders, account details</span>
+        </div>
+        <button className="fin-add-btn" onClick={() => setShowAdd(true)}>+ Add Note</button>
       </div>
       <div className="csea-panel">
-        <div className="csea-toolbar">
-          <span className="fin-toolbar-label">Dated notes, reminders, account details</span>
-          <button className="csea-add-btn" onClick={() => setShowAdd(true)}>+ Add Note</button>
-        </div>
-
         {showAdd && (
           <form className="csea-form" onSubmit={handleAdd}>
             <div className="csea-notes-form-row">
