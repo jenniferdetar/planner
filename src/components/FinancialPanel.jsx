@@ -370,8 +370,6 @@ function CoinsTab({ userId }) {
     <div className="fin-content">
       <div className="budget-header">
         <h2 className="budget-title">Cash on Hand</h2>
-      </div>
-      <div className="fin-toolbar">
         <span className="coins-total-badge">{fmt(total)}</span>
         {saving && <span style={{ fontSize: 11, color: '#999' }}>Saving…</span>}
         <button className="fin-cancel" onClick={reset}>Reset</button>
