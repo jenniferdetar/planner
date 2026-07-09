@@ -694,18 +694,16 @@ function RifIntakePanel() {
       </div>
 
       <div className="rif-summary-row">
-        <div className="rif-summary-card">
+        <div className="rif-summary-card rif-summary-card-wide">
           <div className="rif-summary-title">Summary by Platform</div>
-          <table className="rif-summary-table">
-            <tbody>
-              {platformCounts.map(([platform, count]) => (
-                <tr key={platform}>
-                  <td>{platform}</td>
-                  <td className="rif-summary-count">{count}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="rif-summary-cols">
+            {platformCounts.map(([platform, count]) => (
+              <div key={platform} className="rif-summary-cols-item">
+                <span>{platform}</span>
+                <span className="rif-summary-count">{count}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="rif-summary-card">
           <div className="rif-summary-title">RIF / Demotion Breakdown</div>
