@@ -9,8 +9,8 @@ export const MEMBER_BENEFITS_CONTACTS = [
   { name: 'Michelle Mavis', role: 'Area E Representative', email: 'irishprnces24@yahoo.com' },
   { name: 'Gloria Sixtos', role: 'Area F Representative', email: 'gsixtoscsea@gmail.com' },
   { name: 'Adriana Trujillo Juarez', role: 'Area G Representative', email: 'adriana66_7@msn.com' },
-  { name: 'Eliana Dopudja', role: 'Committee Member', email: 'edopudja@gmail.com' },
-  { name: 'Jennifer Detar', role: 'Committee Member', email: 'jennifermsamples@gmail.com' },
+  { name: 'Eliana Dopudja', role: 'Area H Representative', email: 'edopudja@gmail.com' },
+  { name: 'Jennifer Detar', role: 'Area I Representative', email: 'jennifermsamples@gmail.com' },
   { name: 'Lisa Hoffman', role: 'Committee Member', email: 'hoffman.lisa1@gmail.com' },
   { name: 'Debb Jachens', role: 'CSEA Staff', email: 'DJACHENS@csea.com' },
 ]
