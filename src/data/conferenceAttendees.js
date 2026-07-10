@@ -1,0 +1,21 @@
+// CSEA Conference attendee roster
+export const CONFERENCE_ATTENDEES = [
+  { name: 'Alejanda Vllatoro', attending: 'Yes', basis: 'E basis', position: 'SR, Office Tech' },
+  { name: 'Anita Persoff', attending: 'Yes', basis: 'C basis', position: 'Library Tech' },
+  { name: 'Armani Lee', attending: 'Yes', basis: 'A basis', position: 'Ass. Project Engineer1' },
+  { name: 'Belva Douglas', attending: 'Yes', basis: '', position: 'Retired' },
+  { name: 'Karla Salazar', attending: 'Yes', basis: 'E basis', position: 'Senior Office Tec' },
+  { name: 'Carmen Obasi', attending: 'Yes', basis: 'C basis', position: 'Resource Navigatot' },
+  { name: 'Carol Turckel', attending: 'Yes', basis: 'C basis', position: 'Library Tech' },
+  { name: 'Edith Chavez', attending: 'Yes', basis: 'A basis', position: 'Sr. Secretary' },
+  { name: 'Christan Williams', attending: 'Yes', basis: 'A basis', position: 'Coordinating Financial Manager' },
+  { name: 'Franny Parrish', attending: 'Yes', basis: 'C basis', position: 'Library Tech' },
+  { name: 'Gema Larios', attending: 'Yes', basis: 'C basis', position: 'Library Tech' },
+  { name: 'Helen Lopez', attending: 'Yes', basis: 'C basis', position: 'Library Tech' },
+  { name: 'Hilda-Rodriguez Guzman', attending: 'Yes', basis: 'C basis', position: 'Resource Navigatot' },
+  { name: 'Marcia Scott', attending: 'Yes', basis: 'A basis', position: 'HR Specialist III' },
+  { name: 'Ricardo Nigrete', attending: 'Yes', basis: 'A basis', position: 'Administrative Staff Aide' },
+  { name: 'Ricardo Chin', attending: 'Yes', basis: 'B basis', position: 'ITCSR' },
+  { name: 'Ron Baucume', attending: 'Yes', basis: '', position: 'Retired' },
+  { name: 'Sharon Kim', attending: 'Yes', basis: 'A basis', position: 'Ass Computer applications Spec working as Benefits Manager' },
+]

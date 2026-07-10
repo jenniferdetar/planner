@@ -6,6 +6,7 @@ import { useYahooMailSync } from '../hooks/useYahooMailSync'
 import ContractReference from './ContractReference'
 import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifIntake'
 import { MEMBER_BENEFITS_CONTACTS } from '../data/memberBenefitsContacts'
+import { CONFERENCE_ATTENDEES } from '../data/conferenceAttendees'
 import { isEboardMember, isLaborRep, isAreaIMember, isStateMember } from '../lib/eboardMembers'
 import './CseaTracker.css'
 
@@ -192,6 +193,7 @@ export function CseaTrackerInner({ api }) {
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
         <button className={`csea-tab ${tab === 'pc' ? 'active' : ''}`} onClick={() => setTab('pc')}>Personnel Commission {api.activePcCases.length > 0 && <span className="csea-tab-badge">{api.activePcCases.length}</span>}</button>
         <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
+        <button className={`csea-tab ${tab === 'conference' ? 'active' : ''}`} onClick={() => setTab('conference')}>Conference <span className="csea-tab-badge">{CONFERENCE_ATTENDEES.length}</span></button>
       </div>
 
       {tab === 'issues' && (
@@ -396,6 +398,8 @@ export function CseaTrackerInner({ api }) {
       {tab === 'pc' && <PersonnelCommissionPanel api={api} />}
 
       {tab === 'rif' && <RifIntakePanel />}
+
+      {tab === 'conference' && <ConferencePanel />}
     </div>
   )
 }
@@ -736,6 +740,44 @@ function RifIntakePanel() {
                       {r.action}
                     </span>
                   </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ConferencePanel() {
+  return (
+    <div className="csea-panel">
+      <div className="csea-toolbar">
+        <span className="csea-toolbar-label">Conference</span>
+        <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{CONFERENCE_ATTENDEES.length} <span className="csea-inline-lbl">Attendees</span></span>
+      </div>
+
+      <div className="csea-issue-list" style={{ padding: '0 16px 16px' }}>
+        <div className="rif-table-wrap">
+          <table className="rif-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Attending</th>
+                <th>Basis</th>
+                <th>Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {CONFERENCE_ATTENDEES.map((a, i) => (
+                <tr key={a.name}>
+                  <td>{i + 1}</td>
+                  <td>{a.name}</td>
+                  <td>{a.attending}</td>
+                  <td>{a.basis}</td>
+                  <td>{a.position}</td>
                 </tr>
               ))}
             </tbody>
