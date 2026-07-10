@@ -27,6 +27,7 @@ export const LABOR_REPS = [
   'Jennifer Rener',
   'Espie Medellin',
   'Elliott Keegan',
+  'Luis Rivas',
 ]
 
 // Area I Council members/officers.
