@@ -2,18 +2,22 @@ import { parseWebformText, webformToInteraction } from './webformParser'
 import { isSkippedSender } from './interactionSkipList'
 import { summarizeEmailBody } from './emailSummary'
 
-export async function fetchYahooCseaEmails() {
-  const res = await fetch('/api/yahoo-sync', { method: 'POST', signal: AbortSignal.timeout(35000) })
+// member_interactions still dedupes on the `yahoo_message_id` column — it's
+// provider-agnostic (just the mail sync UID) and renaming it would require
+// a database migration, so it's reused here for the iCloud IMAP UID too.
+
+export async function fetchICloudCseaEmails() {
+  const res = await fetch('/api/icloud-sync', { method: 'POST', signal: AbortSignal.timeout(35000) })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw new Error(body.error || `Yahoo CSEA sync error ${res.status}`)
+    throw new Error(body.error || `iCloud CSEA sync error ${res.status}`)
   }
   const data = await res.json()
   return data.messages || []
 }
 
 // Try webform parse first; fall back to a generic interaction from subject/body.
-export function parseYahooEmailToInteraction(msg) {
+export function parseICloudEmailToInteraction(msg) {
   if (isSkippedSender(msg.from)) return null
 
   // Attempt structured webform parse

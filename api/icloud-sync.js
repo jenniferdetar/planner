@@ -1,25 +1,26 @@
 import { ImapFlow } from 'imapflow'
 import { simpleParser } from 'mailparser'
 
-// Reads all emails from the Yahoo Mail CSEA / Chapter 500 folder over IMAP.
-// Falls back to searching INBOX by sender if no dedicated folder is found.
+// Reads all emails from the iCloud Mail CSEA / Chapter 500 folder over IMAP.
+// Falls back to searching INBOX for CSEA senders or webform-submission
+// subjects if no dedicated folder is found.
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
     return
   }
 
-  const { YAHOO_EMAIL, YAHOO_APP_PASSWORD } = process.env
-  if (!YAHOO_EMAIL || !YAHOO_APP_PASSWORD) {
-    res.status(500).json({ error: 'Yahoo Mail is not configured' })
+  const { ICLOUD_EMAIL, ICLOUD_APP_PASSWORD } = process.env
+  if (!ICLOUD_EMAIL || !ICLOUD_APP_PASSWORD) {
+    res.status(500).json({ error: 'iCloud Mail is not configured' })
     return
   }
 
   const client = new ImapFlow({
-    host: 'imap.mail.yahoo.com',
+    host: 'imap.mail.me.com',
     port: 993,
     secure: true,
-    auth: { user: YAHOO_EMAIL, pass: YAHOO_APP_PASSWORD },
+    auth: { user: ICLOUD_EMAIL, pass: ICLOUD_APP_PASSWORD },
     logger: false,
     connectionTimeout: 10000,
     greetingTimeout: 10000,
@@ -37,7 +38,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ messages, folder: csea || 'INBOX (search)' })
   } catch (err) {
-    console.error('Yahoo CSEA IMAP sync error:', err)
+    console.error('iCloud CSEA IMAP sync error:', err)
     res.status(502).json({ error: err.message })
   } finally {
     await client.logout().catch(() => {})
@@ -64,10 +65,13 @@ async function readFolder(client, folderPath) {
   }
 }
 
+// Matches CSEA senders as well as webform-submission emails.
 async function searchInbox(client) {
   const lock = await client.getMailboxLock('INBOX')
   try {
-    const uids = await client.search({ from: 'csea.com' })
+    const uids = await client.search({
+      or: [{ from: 'csea.com' }, { subject: 'Webform submission from' }],
+    })
     const recent = (uids || []).slice(-100)
     return await fetchMessages(client, recent)
   } finally {

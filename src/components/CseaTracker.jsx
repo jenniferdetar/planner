@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useCseaMembers, useWorkLocations } from '../hooks/useCseaData'
 import { useQuickLinks } from '../hooks/useQuickLinks'
-import { useGmailCseaSync } from '../hooks/useGmailCseaSync'
-import { useYahooMailSync } from '../hooks/useYahooMailSync'
+import { useICloudMailSync } from '../hooks/useICloudMailSync'
 import ContractReference from './ContractReference'
 import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifIntake'
 import { MEMBER_BENEFITS_CONTACTS } from '../data/memberBenefitsContacts'
@@ -72,7 +71,7 @@ const PC_STATUS_COLORS = {
 }
 const PC_OPEN_STATUSES = ['Intake', 'Filed', 'Scheduled', 'Hearing Held']
 
-export function useCseaPage({ userId, providerToken, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote, pcCases = [], onAddPcCase, onUpdatePcStatus, onDeletePcCase, pcCaseNotes = {}, onAddPcCaseNote, onDeletePcCaseNote }) {
+export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote, pcCases = [], onAddPcCase, onUpdatePcStatus, onDeletePcCase, pcCaseNotes = {}, onAddPcCaseNote, onDeletePcCaseNote }) {
   const workLocations = useWorkLocations()
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
   const [linkTitle, setLinkTitle] = useState('')
@@ -105,24 +104,14 @@ export function useCseaPage({ userId, providerToken, issues, onAddIssue, onUpdat
     case_number: '', description: '', hearing_date: '', point_of_contact: '',
   })
 
-  const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount } = useGmailCseaSync(providerToken)
-  const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount } = useYahooMailSync()
-
-  const syncing = gmailSyncing || yahooSyncing
-  const totalNewCount = (gmailNewCount ?? 0) + (yahooNewCount ?? 0)
-  const hasSynced = gmailNewCount != null || yahooNewCount != null
-
-  function syncAll() {
-    setHasSyncedOnce(true)
-    if (providerToken) syncGmail()
-    syncYahoo()
-  }
+  const { sync: syncAll, syncing, newCount: totalNewCount, lastSynced } = useICloudMailSync()
+  const hasSynced = lastSynced != null
 
   // Auto-sync once when the right page mounts (used to trigger on the
   // Interactions sub-tab specifically).
   useEffect(() => {
-    if (!hasSyncedOnce) syncAll()
-  }, [providerToken])
+    if (!hasSyncedOnce) { setHasSyncedOnce(true); syncAll() }
+  }, [])
 
   const activeIssues = issues.filter(i => i.status === 'Open' || i.status === 'In Progress')
   const resolvedIssues = issues.filter(i => i.status === 'Resolved' || i.status === 'Closed')
@@ -590,7 +579,7 @@ function InteractionsPanel({ api }) {
         <button className="csea-archive-toggle" onClick={api.onToggleArchived}>
           {api.showArchived ? 'Hide Archived' : 'Show Archived'}
         </button>
-        <button className="csea-gmail-sync-btn" onClick={api.syncAll} disabled={api.syncing}>
+        <button className="csea-mail-sync-btn" onClick={api.syncAll} disabled={api.syncing} title="Sync iCloud Mail">
           {api.syncing ? 'Syncing…' : api.hasSynced ? `↻ Sync${api.totalNewCount > 0 ? ` (+${api.totalNewCount})` : ''}` : '↻ Sync'}
         </button>
         <button className="csea-add-btn" onClick={() => api.setShowAddInteraction(true)}>+ Log Contact</button>

@@ -232,7 +232,7 @@
 
 .csea-add-btn:hover { background: #001f4a; }
 
-.csea-gmail-sync-btn {
+.csea-mail-sync-btn {
   font-size: 12px;
   font-weight: 600;
   color: #1e3070;
@@ -244,8 +244,8 @@
   font-family: 'Open Sans', sans-serif;
   transition: background 0.15s, color 0.15s;
 }
-.csea-gmail-sync-btn:hover:not(:disabled) { background: #1e3070; color: #fff; }
-.csea-gmail-sync-btn:disabled { opacity: 0.5; cursor: default; }
+.csea-mail-sync-btn:hover:not(:disabled) { background: #1e3070; color: #fff; }
+.csea-mail-sync-btn:disabled { opacity: 0.5; cursor: default; }
 
 /* ── Form ──────────────────────────────────────────────────────────────── */
 .csea-form {

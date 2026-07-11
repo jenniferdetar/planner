@@ -117,7 +117,7 @@ export function useMemberInteractions(userId) {
 
     if (!userId) return
 
-    // Realtime: INSERT/UPDATE/DELETE from any source (including Gmail sync) updates state immediately
+    // Realtime: INSERT/UPDATE/DELETE from any source (including iCloud Mail sync) updates state immediately
     const channel = supabase
       .channel('member_interactions')
       .on(

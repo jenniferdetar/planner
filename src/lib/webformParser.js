@@ -2,7 +2,6 @@ import { isSkippedSender } from './interactionSkipList'
 import { summarizeEmailBody } from './emailSummary'
 
 // Parses CSEA union webform submission text into structured fields.
-// Shared by Gmail and Yahoo Mail sync, since both deliver the same email format.
 export function parseWebformText(text) {
   function field(label) {
     const re = new RegExp(label + '\\s*\\n([^\\n]+)', 'i')

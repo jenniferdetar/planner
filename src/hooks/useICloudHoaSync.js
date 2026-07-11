@@ -1,52 +1,57 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { emailToHoaItem } from '../lib/hoaEmail'
-import { fetchHoaElevatorEmails, fetchGmailHoaMessage, gmailMessageToEmail } from '../lib/gmailHoa'
 
-export function useGmailHoaSync(userId, providerToken, onImported) {
+export function useICloudHoaSync(userId, onImported) {
   const [syncing, setSyncing] = useState(false)
   const [newCount, setNewCount] = useState(null)
   const [error, setError] = useState(null)
 
   const sync = useCallback(async () => {
-    if (!providerToken || syncing) return
+    if (syncing) return
     setSyncing(true)
     setNewCount(null)
     setError(null)
 
     try {
-      const messages = await fetchHoaElevatorEmails(providerToken)
+      const res = await fetch('/api/icloud-hoa', { method: 'POST', signal: AbortSignal.timeout(35000) })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || `iCloud HOA sync error ${res.status}`)
+      }
+      const data = await res.json()
+      const messages = data.messages || []
+
       if (!messages.length) { setNewCount(0); setSyncing(false); return }
 
-      const ids = messages.map(m => m.id)
+      const uids = messages.map(m => m.id)
       const { data: existing } = await supabase
         .from('hoa_items')
-        .select('gmail_message_id')
-        .in('gmail_message_id', ids)
+        .select('yahoo_uid')
+        .in('yahoo_uid', uids)
         .eq('user_id', userId)
-      const existingIds = new Set((existing || []).map(r => r.gmail_message_id))
+      const existingUids = new Set((existing || []).map(r => r.yahoo_uid))
 
-      const toImport = messages.filter(m => !existingIds.has(m.id))
+      const toImport = messages.filter(m => !existingUids.has(m.id))
       let imported = 0
 
       for (const msg of toImport) {
-        const full = await fetchGmailHoaMessage(providerToken, msg.id)
-        const record = emailToHoaItem(gmailMessageToEmail(full))
+        const record = emailToHoaItem(msg)
         const { error: insertError } = await supabase
           .from('hoa_items')
-          .insert({ ...record, gmail_message_id: msg.id, user_id: userId })
+          .insert({ ...record, yahoo_uid: msg.id, user_id: userId })
         if (!insertError) imported++
       }
 
       setNewCount(imported)
       if (imported > 0) onImported?.()
     } catch (err) {
-      console.error('Gmail HOA sync error:', err)
+      console.error('iCloud HOA sync error:', err)
       setError(err.message)
     } finally {
       setSyncing(false)
     }
-  }, [providerToken, syncing, userId, onImported])
+  }, [syncing, userId, onImported])
 
   return { sync, syncing, newCount, error }
 }

@@ -1,8 +1,7 @@
 import { summarizeEmailBody } from './emailSummary'
 
 // Turns a { subject, text, date } email into an hoa_items record, guessing
-// a category from subject/body keywords. Shared by the Yahoo and Gmail HOA
-// sync paths so both categorize the same way.
+// a category from subject/body keywords.
 export function emailToHoaItem(msg) {
   const subject = (msg.subject || '').trim()
   const body = (msg.text || '').trim()
