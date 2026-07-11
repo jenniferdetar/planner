@@ -19,17 +19,17 @@ export default async function handler(req, res) {
     return
   }
 
-  const { YAHOO_EMAIL, YAHOO_APP_PASSWORD } = process.env
-  if (!YAHOO_EMAIL || !YAHOO_APP_PASSWORD) {
-    res.status(500).json({ error: 'Yahoo Mail is not configured' })
+  const { ICLOUD_EMAIL, ICLOUD_APP_PASSWORD } = process.env
+  if (!ICLOUD_EMAIL || !ICLOUD_APP_PASSWORD) {
+    res.status(500).json({ error: 'iCloud Mail is not configured' })
     return
   }
 
   const client = new ImapFlow({
-    host: 'imap.mail.yahoo.com',
+    host: 'imap.mail.me.com',
     port: 993,
     secure: true,
-    auth: { user: YAHOO_EMAIL, pass: YAHOO_APP_PASSWORD },
+    auth: { user: ICLOUD_EMAIL, pass: ICLOUD_APP_PASSWORD },
     logger: false,
     connectionTimeout: 10000,
     greetingTimeout: 10000,
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ messages, folders })
   } catch (err) {
-    console.error('Yahoo HOA IMAP error:', err)
+    console.error('iCloud HOA IMAP error:', err)
     res.status(502).json({ error: err.message })
   } finally {
     await client.logout().catch(() => {})

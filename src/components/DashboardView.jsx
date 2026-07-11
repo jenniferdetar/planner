@@ -496,7 +496,6 @@ export default function DashboardView({
           <div className="dash-panel-wrap">
             <CseaTracker
               userId={userId}
-              providerToken={providerToken}
               issues={cseaIssues || []}
               onAddIssue={onAddCseaIssue}
               onUpdateStatus={onUpdateCseaStatus}
@@ -575,7 +574,7 @@ export default function DashboardView({
         )}
         {section === 'hoa' && (
           <div className="dash-panel-wrap">
-            <HoaPanel userId={userId} providerToken={providerToken} />
+            <HoaPanel userId={userId} />
           </div>
         )}
         {section === 'matrix' && (

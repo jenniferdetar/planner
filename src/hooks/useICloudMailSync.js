@@ -1,48 +1,49 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
-import { fetchCseaWebformEmails, fetchEmailBody, parseEmailToInteraction } from '../lib/gmailCsea'
+import { fetchICloudCseaEmails, parseICloudEmailToInteraction } from '../lib/icloudMail'
 
-export function useGmailCseaSync(providerToken) {
+export function useICloudMailSync() {
   const [syncing, setSyncing] = useState(false)
   const [lastSynced, setLastSynced] = useState(null)
   const [newCount, setNewCount] = useState(null)
+  const [error, setError] = useState(null)
 
   const sync = useCallback(async () => {
-    if (!providerToken || syncing) return
+    if (syncing) return
     setSyncing(true)
     setNewCount(null)
+    setError(null)
 
     try {
-      const messages = await fetchCseaWebformEmails(providerToken)
+      const messages = await fetchICloudCseaEmails()
       if (!messages.length) { setLastSynced(new Date()); setSyncing(false); setNewCount(0); return }
 
-      // Get already-imported message IDs
       const ids = messages.map(m => m.id)
       const { data: existing } = await supabase
         .from('member_interactions')
-        .select('gmail_message_id')
-        .in('gmail_message_id', ids)
-      const existingIds = new Set((existing || []).map(r => r.gmail_message_id))
+        .select('yahoo_message_id')
+        .in('yahoo_message_id', ids)
+      const existingIds = new Set((existing || []).map(r => r.yahoo_message_id))
 
       const toImport = messages.filter(m => !existingIds.has(m.id))
       let imported = 0
 
       for (const msg of toImport) {
-        const full = await fetchEmailBody(providerToken, msg.id)
-        const record = parseEmailToInteraction(full)
+        const record = parseICloudEmailToInteraction(msg)
         if (!record) continue
-        const { error } = await supabase.from('member_interactions').insert(record)
-        if (!error) imported++
+        const { error: insertError } = await supabase.from('member_interactions').insert(record)
+        if (!insertError) imported++
       }
 
       setNewCount(imported)
       setLastSynced(new Date())
     } catch (err) {
-      console.error('Gmail CSEA sync error:', err)
+      console.error('iCloud Mail sync error:', err)
+      setError(err.message)
     } finally {
       setSyncing(false)
     }
-  }, [providerToken, syncing])
+  }, [syncing])
 
-  return { sync, syncing, lastSynced, newCount }
+  return { sync, syncing, lastSynced, newCount, error }
 }

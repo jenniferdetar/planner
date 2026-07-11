@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
-export function useYahooBookSync(userId, onImported) {
+export function useICloudBookSync(userId, onImported) {
   const [syncing, setSyncing] = useState(false)
   const [newCount, setNewCount] = useState(null)
   const [error, setError] = useState(null)
@@ -13,10 +13,10 @@ export function useYahooBookSync(userId, onImported) {
     setError(null)
 
     try {
-      const res = await fetch('/api/yahoo-books', { method: 'POST', signal: AbortSignal.timeout(35000) })
+      const res = await fetch('/api/icloud-books', { method: 'POST', signal: AbortSignal.timeout(35000) })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
-        throw new Error(body.error || `Yahoo Books sync error ${res.status}`)
+        throw new Error(body.error || `iCloud Books sync error ${res.status}`)
       }
       const data = await res.json()
       const orders = data.orders || []
@@ -50,7 +50,7 @@ export function useYahooBookSync(userId, onImported) {
       setNewCount(imported)
       if (imported > 0) onImported?.()
     } catch (err) {
-      console.error('Yahoo Books sync error:', err)
+      console.error('iCloud Books sync error:', err)
       setError(err.message)
     } finally {
       setSyncing(false)

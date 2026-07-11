@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useHoaItems, CATEGORIES, PRIORITIES, STATUSES } from '../hooks/useHoaItems'
-import { useYahooHoaSync } from '../hooks/useYahooHoaSync'
-import { useGmailHoaSync } from '../hooks/useGmailHoaSync'
+import { useICloudHoaSync } from '../hooks/useICloudHoaSync'
 import { useNotionHoaSync } from '../hooks/useNotionHoaSync'
 import './HoaPanel.css'
 
@@ -163,7 +162,7 @@ function fmtOwed(n) {
 
 // Shared state so the header/stats/form and the item groups can render on
 // separate binder pages while staying in sync.
-export function useHoaPage(userId, providerToken) {
+export function useHoaPage(userId) {
   const { items, loading, addItem, updateItem, deleteItem, reload } = useHoaItems(userId)
   const [tab, setTab] = useState('All')
   const [showForm, setShowForm] = useState(false)
@@ -172,8 +171,7 @@ export function useHoaPage(userId, providerToken) {
   const [showArchived, setShowArchived] = useState(false)
 
   const onImported = useCallback(() => reload?.(), [reload])
-  const { sync: syncYahoo, syncing: yahooSyncing, newCount: yahooNewCount, error: yahooError } = useYahooHoaSync(userId, onImported)
-  const { sync: syncGmail, syncing: gmailSyncing, newCount: gmailNewCount, error: gmailError } = useGmailHoaSync(userId, providerToken, onImported)
+  const { sync: syncMail, syncing: mailSyncing, newCount: mailNewCount, error: mailError } = useICloudHoaSync(userId, onImported)
   const { sync: syncNotion, syncing: notionSyncing, newCount: notionNewCount, error: notionError } = useNotionHoaSync(userId, onImported)
 
   const tabs = ['All', ...CATEGORIES, 'Directory']
@@ -232,8 +230,7 @@ export function useHoaPage(userId, providerToken) {
 
   return {
     tabs, tab, setTab, showForm, setShowForm, form, setForm, editId, setEditId, showArchived, setShowArchived,
-    syncYahoo, yahooSyncing, yahooNewCount, yahooError,
-    syncGmail, gmailSyncing, gmailNewCount, gmailError, hasGmailToken: !!providerToken,
+    syncMail, mailSyncing, mailNewCount, mailError,
     syncNotion, notionSyncing, notionNewCount, notionError,
     counts, loading, filtered,
     groups: groupEntries,
@@ -513,32 +510,18 @@ function HoaPanelInner({ api }) {
         <span className="hoa-header-title">Park Reseda HOA</span>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button
-            className={`hoa-sync-btn${api.yahooSyncing ? ' spinning' : ''}`}
-            onClick={api.syncYahoo}
-            disabled={api.yahooSyncing}
-            title={api.yahooError || (api.yahooNewCount != null ? `Last sync: ${api.yahooNewCount} new` : 'Sync Yahoo HOA emails')}
+            className={`hoa-sync-btn${api.mailSyncing ? ' spinning' : ''}`}
+            onClick={api.syncMail}
+            disabled={api.mailSyncing}
+            title={api.mailError || (api.mailNewCount != null ? `Last sync: ${api.mailNewCount} new` : 'Sync iCloud HOA emails')}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M23 4v6h-6"/>
               <path d="M1 20v-6h6"/>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
             </svg>
-            {api.yahooNewCount > 0 && <span className="hoa-sync-badge">{api.yahooNewCount}</span>}
+            {api.mailNewCount > 0 && <span className="hoa-sync-badge">{api.mailNewCount}</span>}
           </button>
-          {api.hasGmailToken && (
-            <button
-              className={`hoa-sync-btn${api.gmailSyncing ? ' spinning' : ''}`}
-              onClick={api.syncGmail}
-              disabled={api.gmailSyncing}
-              title={api.gmailError || (api.gmailNewCount != null ? `Last sync: ${api.gmailNewCount} new` : 'Sync Gmail for elevator-related emails')}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 4h16v16H4z"/>
-                <path d="m4 6 8 7 8-7"/>
-              </svg>
-              {api.gmailNewCount > 0 && <span className="hoa-sync-badge">{api.gmailNewCount}</span>}
-            </button>
-          )}
           <button
             className={`hoa-sync-btn${api.notionSyncing ? ' spinning' : ''}`}
             onClick={api.syncNotion}
@@ -586,7 +569,7 @@ function HoaPanelInner({ api }) {
   )
 }
 
-export default function HoaPanel({ userId, providerToken }) {
-  const api = useHoaPage(userId, providerToken)
+export default function HoaPanel({ userId }) {
+  const api = useHoaPage(userId)
   return <HoaPanelInner api={api} />
 }
