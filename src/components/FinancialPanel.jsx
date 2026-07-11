@@ -1133,7 +1133,7 @@ function SinkingFundsTab({ userId }) {
 // ─── Laundry Tracker ────────────────────────────────────────────────────────
 
 const MACHINE_TYPES = [
-  { key: 'top_load', label: 'Top Load Washer', costPerLoad: 1.75, defaultMinutes: 40, type: 'wash' },
+  { key: 'top_load', label: 'Top Load Washer', costPerLoad: 2.00, defaultMinutes: 45, type: 'wash' },
   { key: 'front_load', label: 'Front Load Washer', costPerLoad: 2.00, defaultMinutes: null, type: 'wash' },
   { key: 'dryer', label: 'Dryer', costPerLoad: 1.75, defaultMinutes: 45, type: 'dry' },
 ]
@@ -1171,8 +1171,8 @@ function LaundryTab({ userId }) {
     type: 'wash',
     machine_type: 'top_load',
     loads: 1,
-    quarters: 7,
-    minutes: 40,
+    quarters: 8,
+    minutes: 45,
     notes: '',
   })
   const [loading, setLoading] = useState(true)
@@ -1219,7 +1219,7 @@ function LaundryTab({ userId }) {
     const { data } = await supabase.from('laundry_sessions').insert(payload).select().single()
     if (data) setSessions(s => [data, ...s])
     setShowForm(false)
-    setForm({ session_date: new Date().toISOString().split('T')[0], type: 'wash', machine_type: 'top_load', loads: 1, quarters: 7, minutes: 40, notes: '' })
+    setForm({ session_date: new Date().toISOString().split('T')[0], type: 'wash', machine_type: 'top_load', loads: 1, quarters: 8, minutes: 45, notes: '' })
   }
 
   async function deleteSession(id) {
@@ -1253,7 +1253,7 @@ function LaundryTab({ userId }) {
           <h2 className="budget-title">Laundry Tracker</h2>
           <span className="fin-toolbar-label">Log a wash or dry cycle</span>
           <span className="laundry-note">
-            Top Load: $1.75 (7 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75 for 45 min base (7 quarters), +1 quarter = +6 min
+            Top Load: $2.00 (8 quarters) · Front Load: $2.00 (8 quarters) · Dryer: $1.75 for 45 min base (7 quarters), +1 quarter = +6 min
           </span>
         </div>
         <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>+ Log Load</button>
