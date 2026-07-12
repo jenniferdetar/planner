@@ -5,6 +5,7 @@ import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
 import { useIcaapNote } from '../hooks/useIcaapNote'
+import { useNotionIcaapSync } from '../hooks/useNotionIcaapSync'
 
 function IcaapStatsBar({ items }) {
   const nonArchived = items.filter(i => !i.archived)
@@ -36,8 +37,9 @@ function IcaapStatsBar({ items }) {
   )
 }
 
-export default function IcaapTracker({ userId, items, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
+export default function IcaapTracker({ userId, items, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote, onReloadItems }) {
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'icaap')
+  const { sync: syncNotion, syncing: notionSyncing, newCount: notionNewCount, error: notionError } = useNotionIcaapSync(userId, onReloadItems)
   const [tab, setTab] = useState('dashboard')
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
   const [extraHoursTab, setExtraHoursTab] = useState('profdev')
@@ -58,6 +60,19 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
         <button className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
         <button className={`icaap-tab ${tab === 'forms' ? 'active' : ''}`} onClick={() => setTab('forms')}>Forms</button>
+        <button
+          className={`icaap-sync-btn${notionSyncing ? ' spinning' : ''}`}
+          onClick={syncNotion}
+          disabled={notionSyncing}
+          title={notionError || (notionNewCount != null ? `Last sync: ${notionNewCount} new` : 'Sync iCAAP items from Notion')}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M23 4v6h-6"/>
+            <path d="M1 20v-6h6"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          {notionNewCount > 0 && <span className="icaap-sync-badge">{notionNewCount}</span>}
+        </button>
       </div>
 
       {tab === 'dashboard' && <IcaapDashboard />}
