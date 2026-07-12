@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useCseaMembers, useWorkLocations } from '../hooks/useCseaData'
 import { useQuickLinks } from '../hooks/useQuickLinks'
-import { useICloudMailSync } from '../hooks/useICloudMailSync'
+import { useNotionCseaSync } from '../hooks/useNotionCseaSync'
 import ContractReference from './ContractReference'
 import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifIntake'
 import { MEMBER_BENEFITS_CONTACTS } from '../data/memberBenefitsContacts'
@@ -104,7 +104,7 @@ export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDele
     case_number: '', description: '', hearing_date: '', point_of_contact: '',
   })
 
-  const { sync: syncAll, syncing, newCount: totalNewCount, lastSynced } = useICloudMailSync()
+  const { sync: syncAll, syncing, newCount: totalNewCount, lastSynced } = useNotionCseaSync()
   const hasSynced = lastSynced != null
 
   // Auto-sync once when the right page mounts (used to trigger on the
@@ -579,7 +579,7 @@ function InteractionsPanel({ api }) {
         <button className="csea-archive-toggle" onClick={api.onToggleArchived}>
           {api.showArchived ? 'Hide Archived' : 'Show Archived'}
         </button>
-        <button className="csea-mail-sync-btn" onClick={api.syncAll} disabled={api.syncing} title="Sync iCloud Mail">
+        <button className="csea-mail-sync-btn" onClick={api.syncAll} disabled={api.syncing} title="Sync member interactions from Notion">
           {api.syncing ? 'Syncing…' : api.hasSynced ? `↻ Sync${api.totalNewCount > 0 ? ` (+${api.totalNewCount})` : ''}` : '↻ Sync'}
         </button>
         <button className="csea-add-btn" onClick={() => api.setShowAddInteraction(true)}>+ Log Contact</button>

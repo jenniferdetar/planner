@@ -115,7 +115,7 @@ export default function DashboardView({
   cseaIssueNotes, onAddCseaIssueNote, onDeleteCseaIssueNote,
   cseaPcCases, onAddCseaPcCase, onUpdateCseaPcStatus, onDeleteCseaPcCase,
   cseaPcNotes, onAddCseaPcNote, onDeleteCseaPcNote,
-  icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
+  icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem, onReloadIcaapItems,
   asanaIcaapTasks, attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
   icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
   transactions, onAddTransaction, onDeleteTransaction,
@@ -532,6 +532,7 @@ export default function DashboardView({
               onAddItem={onAddIcaapItem}
               onUpdateItem={onUpdateIcaapItem}
               onDeleteItem={onDeleteIcaapItem}
+              onReloadItems={onReloadIcaapItems}
               asanaTasks={asanaIcaapTasks || []}
               onCompleteAsanaTask={onCompleteAsanaTask}
               onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}

@@ -71,7 +71,7 @@ export default function App() {
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
   const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
   const { paychecks, addPaycheck, updatePaycheckAmount, togglePaycheckBill, deletePaycheck } = usePaychecks(userId)
-  const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
+  const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem, reload: reloadIcaapItems } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { notes: icaapNotes, addNote: addIcaapNote, deleteNote: deleteIcaapNote } = useIcaapNotes(userId)
   const { books, addBook, updateStatus: updateBookStatus, updateChapter: updateBookChapter, deleteBook, importDefaults: importBooks, reload: reloadBooks, coverSync: bookCoverSync, fetchCovers: fetchBookCovers } = useLibrary(userId)
@@ -258,6 +258,7 @@ export default function App() {
         onAddIcaapItem={addIcaapItem}
         onUpdateIcaapItem={updateIcaapItem}
         onDeleteIcaapItem={deleteIcaapItem}
+        onReloadIcaapItems={reloadIcaapItems}
         asanaIcaapTasks={asanaIcaapTasks}
         attendanceRecords={attendanceRecords}
         onUpsertAttendance={upsertAttendance}
