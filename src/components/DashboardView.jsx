@@ -131,7 +131,7 @@ export default function DashboardView({
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   onPushGcuToAsana, gcuPushing,
-  books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks,
+  books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers,
   familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
   onSignOut,
 }) {
@@ -632,6 +632,8 @@ export default function DashboardView({
               onDeleteBook={onDeleteBook}
               onImportBooks={onImportBooks}
               onReloadBooks={onReloadBooks}
+              bookCoverSync={bookCoverSync}
+              onFetchBookCovers={onFetchBookCovers}
               familyMembers={familyMembers}
               onAddFamilyMember={onAddFamilyMember}
               onUpdateFamilyMember={onUpdateFamilyMember}
