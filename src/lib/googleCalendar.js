@@ -66,10 +66,26 @@ export async function fetchCalendarEvents(providerToken, startDate, endDate) {
   const forbidden = results.filter(r => r.status === 'rejected' && r.reason?.forbidden).length
   if (forbidden >= Math.ceil(CALENDARS.length / 2)) throw new Error('GOOGLE_AUTH_EXPIRED')
 
-  return results
-    .filter((r) => r.status === 'fulfilled')
-    .flatMap((r) => r.value)
-    .filter((e) => !e.allDay)
+  return dedupeAcrossCalendars(
+    results
+      .filter((r) => r.status === 'fulfilled')
+      .flatMap((r) => r.value)
+      .filter((e) => !e.allDay)
+  )
+}
+
+// The same invite (e.g. a shared HOA meeting) can land on more than one of
+// the calendars above, producing exact duplicates once flattened. Collapse
+// same title + same start/end time to a single entry, keeping the first
+// occurrence (earliest calendar in CALENDARS order).
+function dedupeAcrossCalendars(events) {
+  const seen = new Set()
+  return events.filter((e) => {
+    const key = `${(e.title || '').trim().toLowerCase()}|${e.startIso}|${e.endIso}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
 }
 
 export function eventToTimeBlock(event) {
