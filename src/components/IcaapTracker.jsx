@@ -42,6 +42,7 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
   const [extraHoursTab, setExtraHoursTab] = useState('profdev')
   const [showArchivedExtraHours, setShowArchivedExtraHours] = useState(false)
+  const [notesSubTab, setNotesSubTab] = useState('general')
   const [noteText, setNoteText] = useState('')
   const [noteSource, setNoteSource] = useState('')
   const [linkTitle, setLinkTitle] = useState('')
@@ -84,36 +85,58 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
 
       {tab === 'notes' && (
         <div className="icaap-notes-section">
-          <form className="icaap-notes-form" onSubmit={async (e) => {
-            e.preventDefault()
-            if (!noteText.trim()) return
-            await onAddIcaapNote?.(noteText.trim(), noteSource.trim())
-            setNoteText('')
-            setNoteSource('')
-          }}>
-            <textarea
-              className="icaap-textarea"
-              placeholder="Note *"
-              rows={2}
-              value={noteText}
-              onChange={e => setNoteText(e.target.value)}
-            />
-            <div className="icaap-notes-form-row">
-              <input
-                className="icaap-input"
-                placeholder="Source (optional)"
-                value={noteSource}
-                onChange={e => setNoteSource(e.target.value)}
-              />
-              <button type="submit" className="icaap-save">Add</button>
-            </div>
-          </form>
-          <div className="csea-issue-list csea-interactions-grid">
-            {icaapNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
-            {icaapNotes.map(n => (
-              <IcaapNoteGroup key={n.id} note={n} onDelete={onDeleteIcaapNote} />
+          <div className="icaap-extrahours-tabs">
+            <button
+              className={`icaap-extrahours-tab ${notesSubTab === 'general' ? 'active' : ''}`}
+              onClick={() => setNotesSubTab('general')}
+            >General</button>
+            {NOTES_DATA_TABS.map(t => (
+              <button
+                key={t.key}
+                className={`icaap-extrahours-tab ${notesSubTab === t.key ? 'active' : ''}`}
+                onClick={() => setNotesSubTab(t.key)}
+              >{t.tabLabel}</button>
             ))}
           </div>
+
+          {notesSubTab === 'general' && (
+            <>
+              <form className="icaap-notes-form" onSubmit={async (e) => {
+                e.preventDefault()
+                if (!noteText.trim()) return
+                await onAddIcaapNote?.(noteText.trim(), noteSource.trim())
+                setNoteText('')
+                setNoteSource('')
+              }}>
+                <textarea
+                  className="icaap-textarea"
+                  placeholder="Note *"
+                  rows={2}
+                  value={noteText}
+                  onChange={e => setNoteText(e.target.value)}
+                />
+                <div className="icaap-notes-form-row">
+                  <input
+                    className="icaap-input"
+                    placeholder="Source (optional)"
+                    value={noteSource}
+                    onChange={e => setNoteSource(e.target.value)}
+                  />
+                  <button type="submit" className="icaap-save">Add</button>
+                </div>
+              </form>
+              <div className="csea-issue-list csea-interactions-grid">
+                {icaapNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
+                {icaapNotes.map(n => (
+                  <IcaapNoteGroup key={n.id} note={n} onDelete={onDeleteIcaapNote} />
+                ))}
+              </div>
+            </>
+          )}
+
+          {NOTES_DATA_TABS.filter(t => t.key === notesSubTab).map(t => (
+            <IcaapNotePanel key={t.key} userId={userId} noteKey={t.noteKey} title={t.title} color="#7ba7e0" />
+          ))}
         </div>
       )}
 
@@ -851,6 +874,11 @@ const EXTRA_HOURS_EVENTS = [
   { key: 'profdev', noteKey: 'profdev-09-27-25', tabLabel: 'Prof. Development 09-27-25', title: 'Professional Development — 09-27-25' },
   { key: 'winterbreak', noteKey: 'winter-break-2025-2026', tabLabel: 'Winter Break 2025–2026', title: 'Winter Break 2025–2026' },
   { key: 'may2026', noteKey: 'may-2026', tabLabel: 'May 2026', title: 'May 2026' },
+]
+
+const NOTES_DATA_TABS = [
+  { key: 'prc-2026-27', noteKey: 'prc-submission-2026-2027', tabLabel: 'PRC Submission 26-27', title: 'iCAAP Prof Experts PRC Submission (2026-2027)' },
+  { key: 'august-2026-prc', noteKey: 'august-2026-prof-expert-submission', tabLabel: 'August 2026 Submission', title: 'August 2026 iCAAP Prof Expert Submission List' },
 ]
 
 function ExtraHoursPanel({ userId, extraHoursTab, setExtraHoursTab, showArchived, setShowArchived }) {
