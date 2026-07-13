@@ -846,8 +846,12 @@
   white-space: nowrap;
 }
 
+.icaap-data-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
 .icaap-data-table tbody tr:nth-child(even) {
-  background: #f5f7fa;
+  background: #dbe4f0;
 }
 
 .icaap-data-table tbody td {
