@@ -14,7 +14,8 @@ import EisenhowerMatrix from './EisenhowerMatrix'
 import PersonalPanel from './PersonalPanel'
 import WeekView from './WeekView'
 import MonthView from './MonthView'
-import { sameDay } from '../utils/dateUtils'
+import { sameDay, toDateStr } from '../utils/dateUtils'
+import { useWeeklyTasks } from '../hooks/useWeeklyTasks'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const SHORT_MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -54,6 +55,13 @@ function fmtTime(ts) {
   const [h, m] = ts.split(':').map(Number)
   const period = h >= 12 ? 'PM' : 'AM'
   return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${period}`
+}
+
+function fmtDueDate(dateStr) {
+  if (!dateStr) return ''
+  const [y, m, day] = dateStr.split('-').map(Number)
+  const d = new Date(y, m - 1, day)
+  return `${DAY_NAMES[d.getDay()].slice(0, 3)} ${SHORT_MONTH[d.getMonth()]} ${d.getDate()}`
 }
 
 function DashMiniCal({ selectedDate, onDateChange }) {
@@ -171,6 +179,11 @@ export default function DashboardView({
 
   const pending = (dailyTasks || []).filter(t => !t.completed)
   const done    = (dailyTasks || []).filter(t =>  t.completed)
+
+  const { tasksByDate: weekTasksByDate, toggleTask: onToggleWeekCardTask } = useWeeklyTasks(userId, selectedDate)
+  const weekTasksFlat = Object.values(weekTasksByDate)
+    .flat()
+    .sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''))
 
   const categoryMap = {}
   ;(masterTasks || []).forEach(t => {
@@ -341,6 +354,29 @@ export default function DashboardView({
                         {b.source !== 'gcal' && <button className="dash-row-del" onClick={() => onDeleteBlock(b.id)}>✕</button>}
                       </div>
                     ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Week */}
+            <div className="master-tasks-wrap">
+              <div className="dash-page-header">
+                <h1 className="dash-page-title">Week</h1>
+                <span className="dash-badge">{weekTasksFlat.length} total</span>
+              </div>
+              <div className="dash-card">
+                <div className="dash-task-list">
+                  {weekTasksFlat.map(t => (
+                    <div key={t.id} className={`dash-task-row${t.completed ? ' done' : ''}`}>
+                      <button className={`dash-check${t.completed ? ' done' : ''}`} onClick={() => onToggleWeekCardTask(t.id, t.due_date)}>
+                        <span className={`dash-circle${t.completed ? ' checked' : ''}`} />
+                      </button>
+                      <span className="dash-task-due">{fmtDueDate(t.due_date)}</span>
+                      <span className="dash-task-text">{t.title}</span>
+                    </div>
+                  ))}
+                  {weekTasksFlat.length === 0 &&
+                    <p className="dash-empty">No tasks due this week</p>}
                 </div>
               </div>
             </div>
