@@ -293,6 +293,18 @@
 }
 .dash-task-row.done .dash-task-text { text-decoration: line-through; color: #9ca3af; }
 
+.dash-task-due {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f3f4f6;
+  border-radius: 20px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.dash-task-row.done .dash-task-due { color: #d1d5db; }
+
 .dash-row-del {
   background: none;
   border: none;
