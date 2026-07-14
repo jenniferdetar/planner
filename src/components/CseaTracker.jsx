@@ -5,6 +5,7 @@ import { useICloudMailSync } from '../hooks/useICloudMailSync'
 import ContractReference from './ContractReference'
 import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifIntake'
 import { MEMBER_BENEFITS_CONTACTS } from '../data/memberBenefitsContacts'
+import { LABOR_REP_CONTACTS } from '../data/laborRepContacts'
 import { CONFERENCE_ATTENDEES } from '../data/conferenceAttendees'
 import { isEboardMember, isLaborRep, isAreaIMember, isStateMember } from '../lib/eboardMembers'
 import './CseaTracker.css'
@@ -631,6 +632,16 @@ function InteractionsPanel({ api }) {
         </div>
       ) : (
         <div className="csea-issue-list csea-interactions-grid">
+          {subTab === 'labor-reps' && LABOR_REP_CONTACTS.map(c => (
+            <div key={c.email} className="interaction-card">
+              <div className="interaction-header">
+                <span className="interaction-group-name" style={{ fontSize: 13 }}>{c.name}</span>
+              </div>
+              <p className="interaction-who-text">{c.areas}</p>
+              <a className="interaction-doc-link" href={`mailto:${c.email}`}>✉ {c.email}</a>
+              <p className="interaction-who-text">{c.phone}</p>
+            </div>
+          ))}
           {api.interactions.length === 0 && <p className="csea-empty">No interactions logged yet</p>}
           {Object.entries(
             api.interactions.reduce((groups, i) => {
