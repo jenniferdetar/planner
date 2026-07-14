@@ -31,6 +31,16 @@
   color: var(--csea-body);
 }
 
+/* Tabs with short content (e.g. Conference) shrink to fit instead of
+   stretching to fill the dashboard card, avoiding a large empty gap. */
+.csea-tracker.csea-tracker--compact {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+.csea-tracker--compact .csea-panel {
+  flex: 0 1 auto;
+}
+
 /* ── Stats row ─────────────────────────────────────────────────────────── */
 .csea-stats {
   display: flex;

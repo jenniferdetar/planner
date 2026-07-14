@@ -173,7 +173,7 @@ export function CseaTrackerInner({ api }) {
   const [tab, setTab] = useState('issues')
 
   return (
-    <div className="csea-tracker">
+    <div className={`csea-tracker${tab === 'conference' ? ' csea-tracker--compact' : ''}`}>
       <div className="csea-tabs">
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions {api.interactions.length > 0 && <span className="csea-tab-badge">{new Set(api.interactions.map(i => i.member_name || 'Unknown')).size}</span>}</button>
@@ -757,6 +757,8 @@ function ConferencePanel() {
                 <th>Attending</th>
                 <th>Basis</th>
                 <th>Position</th>
+                <th>Shirt Size</th>
+                <th>Shirt Status</th>
               </tr>
             </thead>
             <tbody>
@@ -767,6 +769,8 @@ function ConferencePanel() {
                   <td>{a.attending}</td>
                   <td>{a.basis}</td>
                   <td>{a.position}</td>
+                  <td>{a.shirtSize || '—'}</td>
+                  <td>{a.shirtStatus || '—'}</td>
                 </tr>
               ))}
             </tbody>
