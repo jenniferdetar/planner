@@ -749,7 +749,7 @@ function ConferencePanel() {
 
       <div className="csea-issue-list" style={{ padding: '0 16px 16px' }}>
         <div className="rif-table-wrap">
-          <table className="rif-table">
+          <table className="rif-table rif-table--wrap">
             <thead>
               <tr>
                 <th>#</th>
@@ -765,12 +765,12 @@ function ConferencePanel() {
               {CONFERENCE_ATTENDEES.map((a, i) => (
                 <tr key={a.name}>
                   <td>{i + 1}</td>
-                  <td>{a.name}</td>
+                  <td><span className="rif-cell-clamp">{a.name}</span></td>
                   <td>{a.attending}</td>
                   <td>{a.basis}</td>
-                  <td>{a.position}</td>
+                  <td><span className="rif-cell-clamp">{a.position}</span></td>
                   <td>{a.shirtSize || '—'}</td>
-                  <td>{a.shirtStatus || '—'}</td>
+                  <td><span className="rif-cell-clamp">{a.shirtStatus || '—'}</span></td>
                 </tr>
               ))}
             </tbody>
