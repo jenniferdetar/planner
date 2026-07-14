@@ -93,9 +93,8 @@
   flex: 1;
   overflow-y: auto;
   padding: 4px 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
+  columns: 2;
+  column-gap: 10px;
 }
 
 .em-q-empty {
@@ -114,6 +113,7 @@
   padding: 2px 2px;
   border-radius: 4px;
   position: relative;
+  break-inside: avoid;
 }
 .em-task-row:hover { background: rgba(30,48,112,0.05); }
 
