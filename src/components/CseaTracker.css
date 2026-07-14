@@ -31,21 +31,6 @@
   color: var(--csea-body);
 }
 
-/* Tabs with short content (e.g. Conference) shrink to fit instead of
-   stretching to fill the dashboard card, avoiding a large empty gap.
-   The dash-panel-wrap card itself also collapses so no empty box is
-   left below the shrunk tracker. */
-.csea-tracker.csea-tracker--compact {
-  flex: 0 1 auto;
-  min-height: 0;
-}
-.csea-tracker--compact .csea-panel {
-  flex: 0 1 auto;
-}
-.dash-panel-wrap:has(.csea-tracker--compact) {
-  flex: 0 1 auto;
-}
-
 /* ── Stats row ─────────────────────────────────────────────────────────── */
 .csea-stats {
   display: flex;
@@ -965,6 +950,17 @@
   max-height: 60vh;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Conference table: fill the available card height instead of capping
+   at 60vh, so leftover space reads as part of the table, not a gap. */
+.csea-issue-list.csea-issue-list--fill {
+  flex: 1;
+  min-height: 0;
+}
+.rif-table-wrap.rif-table-wrap--fill {
+  max-height: none;
+  height: 100%;
 }
 
 .rif-table {

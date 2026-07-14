@@ -173,7 +173,7 @@ export function CseaTrackerInner({ api }) {
   const [tab, setTab] = useState('issues')
 
   return (
-    <div className={`csea-tracker${tab === 'conference' ? ' csea-tracker--compact' : ''}`}>
+    <div className="csea-tracker">
       <div className="csea-tabs">
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions {api.interactions.length > 0 && <span className="csea-tab-badge">{new Set(api.interactions.map(i => i.member_name || 'Unknown')).size}</span>}</button>
@@ -747,8 +747,8 @@ function ConferencePanel() {
         <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{CONFERENCE_ATTENDEES.length} <span className="csea-inline-lbl">Attendees</span></span>
       </div>
 
-      <div className="csea-issue-list" style={{ padding: '0 16px 16px' }}>
-        <div className="rif-table-wrap">
+      <div className="csea-issue-list csea-issue-list--fill" style={{ padding: '0 16px 16px' }}>
+        <div className="rif-table-wrap rif-table-wrap--fill">
           <table className="rif-table rif-table--wrap">
             <thead>
               <tr>
