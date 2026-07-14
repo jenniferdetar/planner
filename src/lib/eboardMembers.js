@@ -33,6 +33,7 @@ export const LABOR_REPS = [
 // Area I Council members/officers.
 export const AREA_I_MEMBERS = [
   'Melissa- CSEA 129',
+  'Kennisha Green',
 ]
 
 // CSEA state-level officers/staff, and state-level contacts/topics.
