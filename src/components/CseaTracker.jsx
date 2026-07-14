@@ -177,7 +177,7 @@ export function CseaTrackerInner({ api }) {
       <div className="csea-tabs">
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions {api.interactions.length > 0 && <span className="csea-tab-badge">{new Set(api.interactions.map(i => i.member_name || 'Unknown')).size}</span>}</button>
-        <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Topics {api.cseaNotes.length > 0 && <span className="csea-tab-badge">{api.cseaNotes.length}</span>}</button>
+        <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {api.cseaNotes.length > 0 && <span className="csea-tab-badge">{api.cseaNotes.length}</span>}</button>
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
         <button className={`csea-tab ${tab === 'pc' ? 'active' : ''}`} onClick={() => setTab('pc')}>Personnel Commission {api.activePcCases.length > 0 && <span className="csea-tab-badge">{api.activePcCases.length}</span>}</button>
@@ -267,7 +267,7 @@ export function CseaTrackerInner({ api }) {
         <div className="csea-panel">
           <div className="csea-toolbar">
             <span />
-            <button className="csea-add-btn" onClick={() => api.setShowAddNote(true)}>+ Add Topic</button>
+            <button className="csea-add-btn" onClick={() => api.setShowAddNote(true)}>+ Add Note</button>
           </div>
 
           {api.showAddNote && (
@@ -309,7 +309,7 @@ export function CseaTrackerInner({ api }) {
           )}
 
           <div className="csea-issue-list csea-interactions-grid">
-            {api.cseaNotes.length === 0 && <p className="csea-empty">No topics yet</p>}
+            {api.cseaNotes.length === 0 && <p className="csea-empty">No notes yet</p>}
             {api.cseaNotes.map(n => (
               <CseaNoteGroup key={n.id} note={n} onDelete={api.onDeleteCseaNote} />
             ))}
