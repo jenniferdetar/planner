@@ -34,6 +34,7 @@ export const LABOR_REPS = [
 export const AREA_I_MEMBERS = [
   'Melissa- CSEA 129',
   'Kennisha Green',
+  'Costa y Valles CVFO',
 ]
 
 // CSEA state-level officers/staff, and state-level contacts/topics.
@@ -44,7 +45,6 @@ export const STATE_MEMBERS = [
   'Jessica Albert',
   'Travel Requests',
   'Chandra Battaion',
-  'Costa y Valles CVFO',
   'Kat Teitgen',
   'Kenneth DeJonge',
 ]
