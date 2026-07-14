@@ -32,12 +32,17 @@
 }
 
 /* Tabs with short content (e.g. Conference) shrink to fit instead of
-   stretching to fill the dashboard card, avoiding a large empty gap. */
+   stretching to fill the dashboard card, avoiding a large empty gap.
+   The dash-panel-wrap card itself also collapses so no empty box is
+   left below the shrunk tracker. */
 .csea-tracker.csea-tracker--compact {
   flex: 0 1 auto;
   min-height: 0;
 }
 .csea-tracker--compact .csea-panel {
+  flex: 0 1 auto;
+}
+.dash-panel-wrap:has(.csea-tracker--compact) {
   flex: 0 1 auto;
 }
 
@@ -993,6 +998,37 @@
 
 .rif-table tbody tr:hover {
   background: #f7f9fc;
+}
+
+/* Conference table: wrap long text and keep every row the same height
+   instead of forcing a horizontal scrollbar. */
+.rif-table.rif-table--wrap {
+  min-width: 0;
+  table-layout: fixed;
+}
+.rif-table--wrap th:nth-child(1), .rif-table--wrap td:nth-child(1) { width: 4%; }
+.rif-table--wrap th:nth-child(2), .rif-table--wrap td:nth-child(2) { width: 16%; }
+.rif-table--wrap th:nth-child(3), .rif-table--wrap td:nth-child(3) { width: 9%; }
+.rif-table--wrap th:nth-child(4), .rif-table--wrap td:nth-child(4) { width: 9%; }
+.rif-table--wrap th:nth-child(5), .rif-table--wrap td:nth-child(5) { width: 28%; }
+.rif-table--wrap th:nth-child(6), .rif-table--wrap td:nth-child(6) { width: 10%; }
+.rif-table--wrap th:nth-child(7), .rif-table--wrap td:nth-child(7) { width: 24%; }
+.rif-table--wrap th {
+  white-space: normal;
+}
+.rif-table--wrap td {
+  white-space: normal;
+  word-break: break-word;
+  height: 52px;
+  box-sizing: border-box;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.rif-cell-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .rif-action-badge {
