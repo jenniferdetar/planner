@@ -33,6 +33,7 @@ export const LABOR_REPS = [
 // Area I Council members/officers.
 export const AREA_I_MEMBERS = [
   'Melissa- CSEA 129',
+  'Kennisha Green',
 ]
 
 // CSEA state-level officers/staff, and state-level contacts/topics.
@@ -44,6 +45,8 @@ export const STATE_MEMBERS = [
   'Travel Requests',
   'Chandra Battaion',
   'Costa y Valles CVFO',
+  'Kat Teitgen',
+  'Kenneth DeJonge',
 ]
 
 function toSet(names) {
