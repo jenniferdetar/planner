@@ -209,6 +209,7 @@
   border: 1.5px solid #f5f7fa;
   border-radius: 8px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .em-unassigned-hdr {
