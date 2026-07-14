@@ -225,6 +225,8 @@
 .em-unassigned-list {
   display: flex;
   flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
 }
 
 .em-unassigned-row {
