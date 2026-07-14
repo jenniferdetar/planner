@@ -45,6 +45,8 @@ export const STATE_MEMBERS = [
   'Travel Requests',
   'Chandra Battaion',
   'Costa y Valles CVFO',
+  'Kat Teitgen',
+  'Kenneth DeJonge',
 ]
 
 function toSet(names) {
