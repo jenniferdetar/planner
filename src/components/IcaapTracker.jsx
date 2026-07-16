@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useQuickLinks } from '../hooks/useQuickLinks'
 import AbsenceForms from './AbsenceForms'
+import IcaapProgramsPanel from './IcaapProgramsPanel'
 import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { useIcaapDashboard, DASHBOARD_MONTHS, normalizePaylogMonth } from '../hooks/useIcaapDashboard'
@@ -53,6 +54,7 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
       <IcaapStatsBar items={items} />
       <div className="icaap-tabs">
         <button className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
+        <button className={`icaap-tab ${tab === 'programs' ? 'active' : ''}`} onClick={() => setTab('programs')}>Programs</button>
         <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
         <button className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
@@ -62,6 +64,8 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
       </div>
 
       {tab === 'dashboard' && <IcaapDashboard />}
+
+      {tab === 'programs' && <IcaapProgramsPanel />}
 
       {tab === 'attendance' && (
         <AttendancePanel
