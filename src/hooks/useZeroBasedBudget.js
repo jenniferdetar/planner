@@ -12,7 +12,7 @@ const DEFAULT_SECTIONS = [
   {
     section: 'Housing',
     envelopes: [
-      ['Mortgage', 2025],
+      ['Mortgage', 2050],
       ['HOA', 600],
       ['HELOC (California Credit Union)', 357],
       ['Spectrum', 197],
