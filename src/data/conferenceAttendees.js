@@ -1,6 +1,6 @@
 // CSEA Conference attendee roster
 export const CONFERENCE_ATTENDEES = [
-  { name: 'Alejanda Vllatoro', attending: 'Yes', basis: 'E basis', position: 'Senior Office Technician', shirtSize: 'SML', shirtStatus: 'Payment Pending' },
+  { name: 'Alejanda Vllatoro', attending: 'Yes', basis: 'E basis', position: 'Senior Office Technician', shirtSize: 'SML', shirtStatus: 'Payment Pending Detar will deliver and collect' },
   { name: 'Anita Persoff', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: '', shirtStatus: 'No response yet' },
   { name: 'Armani Lee', attending: 'Yes', basis: 'A basis', position: 'Associate Project Engineer I', shirtSize: 'MED', shirtStatus: 'Pending (Cash to Jennifer)' },
   { name: 'Belva Douglas', attending: 'Yes', basis: '', position: 'Retired', shirtSize: 'XL', shirtStatus: 'Paid (Venmo)' },
@@ -8,14 +8,14 @@ export const CONFERENCE_ATTENDEES = [
   { name: 'Carmen Obasi', attending: 'Yes', basis: 'C basis', position: 'Student and Family Resources Navigator', shirtSize: '', shirtStatus: 'No response yet' },
   { name: 'Carol Turckel', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: '', shirtStatus: 'No response yet' },
   { name: 'Edith Chavez', attending: 'Yes', basis: 'A basis', position: 'Senior Secretary', shirtSize: 'MED', shirtStatus: 'Pending (pay at Conference)' },
-  { name: 'Christan Williams', attending: 'Yes', basis: 'A basis', position: 'Coordinating Financial Manager', shirtSize: 'SML', shirtStatus: 'Payment Pending' },
+  { name: 'Christan Williams', attending: 'Yes', basis: 'A basis', position: 'Coordinating Financial Manager', shirtSize: 'SML', shirtStatus: 'Payment Pending Detar will deliver and collect' },
   { name: 'Franny Parrish', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: '', shirtStatus: 'No response yet' },
-  { name: 'Gema Larios', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: 'MED', shirtStatus: 'Payment Pending' },
+  { name: 'Gema Larios', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: 'MED', shirtStatus: 'Payment Pending Detar will deliver and collect' },
   { name: 'Helen Lopez', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: 'LRG', shirtStatus: 'Pending (pay Jennifer)' },
   { name: 'Hilda-Rodriguez Guzman', attending: 'Yes', basis: 'C basis', position: 'Student and Family Resources Navigator', shirtSize: 'LRG', shirtStatus: 'Paid (Venmo)' },
-  { name: 'Marcia Scott', attending: 'Yes', basis: 'A basis', position: 'Human Resources Specialist III', shirtSize: 'LRG (unisex) / XL–1X (women’s)', shirtStatus: 'Payment Pending' },
-  { name: 'Ricardo Nigrete', attending: 'Yes', basis: 'A basis', position: 'Administrative Staff Aide', shirtSize: 'XL', shirtStatus: 'Payment Pending' },
+  { name: 'Marcia Scott', attending: 'Yes', basis: 'A basis', position: 'Human Resources Specialist III', shirtSize: 'LRG (unisex) / XL–1X (women’s)', shirtStatus: 'Payment Pending Detar will deliver and collect' },
+  { name: 'Ricardo Nigrete', attending: 'Yes', basis: 'A basis', position: 'Administrative Staff Aide', shirtSize: 'XL', shirtStatus: 'Payment Pending Detar will deliver and collect' },
   { name: 'Ricardo Chin', attending: 'No', basis: '', position: '', shirtSize: '', shirtStatus: '' },
-  { name: 'Ron Baucume', attending: 'Yes', basis: '', position: 'Retired', shirtSize: 'LRG', shirtStatus: 'Payment Pending' },
+  { name: 'Ron Baucume', attending: 'Yes', basis: '', position: 'Retired', shirtSize: 'LRG', shirtStatus: 'Payment Pending Detar will deliver and collect' },
   { name: 'Sharon Kim', attending: 'Yes', basis: 'A basis', position: 'Associate Computer Applications Specialist (working as Benefits Manager)', shirtSize: 'SML', shirtStatus: 'Pending (Venmo)' },
 ]
