@@ -434,8 +434,17 @@ function CoinsTab({ userId }) {
 
 // ─── Debt Snowball ──────────────────────────────────────────────────────────
 
-// Simulates the snowball month by month (no interest — balances only move via
-// minimum payments, plus the full rolled-in payment once a debt becomes the
+// Debt names carry their APR in parens, e.g. "Mastercard Inspire ****0902 (17.90%)"
+// or "Chevrolet Equinox (SchoolsFirst FCU, 4.94%)". Pulls the number right before
+// the closing paren; debts with no rate on file (settlements, deferred loans) get 0%.
+function extractRate(name) {
+  const m = /([\d.]+)\s*%\)/.exec(name || '')
+  return m ? parseFloat(m[1]) : 0
+}
+
+// Simulates the snowball month by month. Interest accrues monthly on every
+// outstanding balance before that month's payments are applied, then minimum
+// payments move (plus the full rolled-in payment once a debt becomes the
 // active target). Rows must already be sorted smallest-balance-first.
 function simulateSnowball(rows) {
   const n = rows.length
@@ -444,6 +453,7 @@ function simulateSnowball(rows) {
 
   const balances = rows.map(r => r.total_payoff)
   const mins = rows.map(r => r.minimum_payment)
+  const rates = rows.map(r => r.rate || 0)
   const MAX_MONTHS = 1200 // 100-year safety cap
 
   balances.forEach((b, i) => { if (b <= 0.005) monthsPaidOff[i] = 0 })
@@ -451,6 +461,9 @@ function simulateSnowball(rows) {
   let month = 0
   while (monthsPaidOff.includes(null) && month < MAX_MONTHS) {
     month++
+    for (let j = 0; j < n; j++) {
+      if (monthsPaidOff[j] === null) balances[j] *= 1 + rates[j] / 100 / 12
+    }
     const target = monthsPaidOff.findIndex(m => m === null)
     // Every already-paid-off debt's minimum permanently rolls into whichever debt is currently active
     const rolledIn = mins.reduce((s, m, j) => (monthsPaidOff[j] !== null ? s + m : s), 0)
@@ -545,18 +558,24 @@ function DebtSnowballTab({ userId }) {
       if (!groupMap.has(d.group_name)) groupMap.set(d.group_name, [])
       groupMap.get(d.group_name).push(d)
     } else {
-      singles.push({ isGroup: false, key: d.id, name: d.name, total_payoff: Number(d.total_payoff), minimum_payment: Number(d.minimum_payment), owner: d.owner || '', goalMonths: d.goal_months ?? null, debt: d })
+      singles.push({ isGroup: false, key: d.id, name: d.name, total_payoff: Number(d.total_payoff), minimum_payment: Number(d.minimum_payment), rate: extractRate(d.name), owner: d.owner || '', goalMonths: d.goal_months ?? null, debt: d })
     }
   })
   const groups = Array.from(groupMap.entries()).map(([name, members]) => {
     const ownerSet = new Set(members.map(m => m.owner || ''))
     const goalSet = new Set(members.map(m => m.goal_months ?? null))
+    const groupBalance = members.reduce((s, m) => s + Number(m.total_payoff), 0)
+    // Blend member APRs weighted by balance, since a group can mix rates (e.g. Sallie Mae 14.75%/10.75%)
+    const blendedRate = groupBalance > 0
+      ? members.reduce((s, m) => s + Number(m.total_payoff) * extractRate(m.name), 0) / groupBalance
+      : 0
     return {
       isGroup: true,
       key: `group:${name}`,
       name,
-      total_payoff: members.reduce((s, m) => s + Number(m.total_payoff), 0),
+      total_payoff: groupBalance,
       minimum_payment: members.reduce((s, m) => s + Number(m.minimum_payment), 0),
+      rate: blendedRate,
       members: [...members].sort((a, b) => Number(a.total_payoff) - Number(b.total_payoff)),
       owner: ownerSet.size === 1 ? [...ownerSet][0] : 'Mixed',
       goalMonths: goalSet.size === 1 ? [...goalSet][0] : null,
@@ -588,7 +607,7 @@ function DebtSnowballTab({ userId }) {
             Smallest balance first — snowball order
             {rows.length > 0 && (
               <span className="debt-payoff-caveat">
-                {' '}· {overallMonths != null ? `~${overallMonths} mo to debt-free` : '100+ years to debt-free'} at current minimums (excludes interest)
+                {' '}· {overallMonths != null ? `~${overallMonths} mo to debt-free` : '100+ years to debt-free'} at current minimums, incl. interest
               </span>
             )}
           </span>
