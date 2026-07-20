@@ -697,6 +697,10 @@
 }
 .interaction-delete-btn:hover { color: #cc0000; }
 .interaction-disc-text { font-size: 13px; color: var(--csea-body); line-height: 1.5; margin: 0; white-space: pre-wrap; }
+.fin-note-line { font-size: 13px; color: var(--csea-body); line-height: 1.5; white-space: pre-wrap; }
+.fin-note-checkbox-row { display: flex; align-items: flex-start; gap: 6px; font-size: 13px; color: var(--csea-body); line-height: 1.5; cursor: pointer; }
+.fin-note-checkbox-row input[type="checkbox"] { margin-top: 3px; cursor: pointer; flex-shrink: 0; }
+.fin-note-checked { text-decoration: line-through; opacity: 0.6; }
 .interaction-who-text { font-size: 11px; color: var(--csea-dark-gray); margin: 0; }
 .interaction-poc-text { font-size: 11px; color: var(--csea-dark-gray); margin: 0; }
 .interaction-doc-link { font-size: 11px; color: var(--csea-blue); text-decoration: none; margin-top: 2px; }

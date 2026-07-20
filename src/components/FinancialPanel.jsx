@@ -1440,10 +1440,44 @@ function LaundryTab({ userId }) {
 
 // ─── Notes ──────────────────────────────────────────────────────────────────
 
-function FinNoteGroup({ note: n, onDelete }) {
+const CHECKBOX_LINE = /^(\s*)(☐|☑)(.*)$/
+
+function NoteBody({ text, onToggleLine }) {
+  const lines = text.split('\n')
+  return (
+    <div className="interaction-disc-text">
+      {lines.map((line, i) => {
+        const match = line.match(CHECKBOX_LINE)
+        if (match) {
+          const [, indent, mark, rest] = match
+          const checked = mark === '☑'
+          return (
+            <label key={i} className="fin-note-checkbox-row" style={{ paddingLeft: indent.length * 6 }}>
+              <input type="checkbox" checked={checked} onChange={() => onToggleLine(i)} />
+              <span className={checked ? 'fin-note-checked' : ''}>{rest.replace(/^\s/, '')}</span>
+            </label>
+          )
+        }
+        return <div key={i} className="fin-note-line">{line || ' '}</div>
+      })}
+    </div>
+  )
+}
+
+function FinNoteGroup({ note: n, onDelete, onUpdate }) {
   const [collapsed, setCollapsed] = useState(true)
   const snippet = n.note.length > 60 ? n.note.slice(0, 60).trim() + '…' : n.note
   const title = n.topic || snippet
+
+  async function toggleLine(idx) {
+    const lines = n.note.split('\n')
+    const line = lines[idx]
+    lines[idx] = line.includes('☐') ? line.replace('☐', '☑') : line.replace('☑', '☐')
+    const newText = lines.join('\n')
+    onUpdate?.(n.id, newText)
+    await supabase.from('financial_notes').update({ note: newText }).eq('id', n.id)
+  }
+
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
       <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
@@ -1462,7 +1496,7 @@ function FinNoteGroup({ note: n, onDelete }) {
               <button className="interaction-delete-btn" title="Delete" onClick={() => onDelete?.(n.id)}>✕</button>
             </div>
             {n.source && <p className="interaction-who-text">Source: {n.source}</p>}
-            <p className="interaction-disc-text">{n.note}</p>
+            <NoteBody text={n.note} onToggleLine={toggleLine} />
           </div>
         </div>
       )}
@@ -1500,6 +1534,10 @@ function NotesTab({ userId }) {
   async function deleteNote(id) {
     await supabase.from('financial_notes').delete().eq('id', id)
     setNotes(n => n.filter(x => x.id !== id))
+  }
+
+  function updateNoteText(id, newText) {
+    setNotes(ns => ns.map(x => (x.id === id ? { ...x, note: newText } : x)))
   }
 
   return (
@@ -1546,7 +1584,7 @@ function NotesTab({ userId }) {
         <div className="csea-issue-list csea-interactions-grid">
           {!loading && notes.length === 0 && <p className="csea-empty">No notes yet</p>}
           {notes.map(n => (
-            <FinNoteGroup key={n.id} note={n} onDelete={deleteNote} />
+            <FinNoteGroup key={n.id} note={n} onDelete={deleteNote} onUpdate={updateNoteText} />
           ))}
         </div>
       </div>
