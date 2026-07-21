@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from 'react'
 import { supabase } from '../lib/supabase'
 import './FinancialPanel.css'
 import './CseaTracker.css'
-import ZeroBasedBudget from './ZeroBasedBudget'
+import BudgetByPaycheck from './BudgetByPaycheck'
 
 const TAB_LABELS = {
   coins: 'Cash on Hand',
@@ -76,7 +76,7 @@ function FinancialPanelInner({ api }) {
       {api.tab === 'bills' && <BillsTab bills={api.bills} onAdd={api.onAddBill} onToggle={api.onToggleBillPaid} onDelete={api.onDeleteBill} />}
       {api.tab === 'goals' && <GoalsTab goals={api.goals} onUpdate={api.onUpdateGoalAmount} />}
       {api.tab === 'coins' && <CoinsTab userId={api.userId} />}
-      {api.tab === 'budget' && <ZeroBasedBudget userId={api.userId} bills={api.bills} />}
+      {api.tab === 'budget' && <BudgetByPaycheck userId={api.userId} />}
       {api.tab === 'debt' && <DebtSnowballTab userId={api.userId} />}
       {api.tab === 'networth' && <NetWorthTab userId={api.userId} />}
       {api.tab === 'savings' && <SinkingFundsTab userId={api.userId} />}
