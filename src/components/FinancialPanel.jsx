@@ -1,8 +1,7 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, useMemo, Fragment } from 'react'
 import { supabase } from '../lib/supabase'
 import './FinancialPanel.css'
 import './CseaTracker.css'
-import ZeroBasedBudget from './ZeroBasedBudget'
 
 const TAB_LABELS = {
   coins: 'Cash on Hand',
@@ -76,7 +75,7 @@ function FinancialPanelInner({ api }) {
       {api.tab === 'bills' && <BillsTab bills={api.bills} onAdd={api.onAddBill} onToggle={api.onToggleBillPaid} onDelete={api.onDeleteBill} />}
       {api.tab === 'goals' && <GoalsTab goals={api.goals} onUpdate={api.onUpdateGoalAmount} />}
       {api.tab === 'coins' && <CoinsTab userId={api.userId} />}
-      {api.tab === 'budget' && <ZeroBasedBudget userId={api.userId} bills={api.bills} />}
+      {api.tab === 'budget' && <PayPeriodBudgetTab userId={api.userId} />}
       {api.tab === 'debt' && <DebtSnowballTab userId={api.userId} />}
       {api.tab === 'networth' && <NetWorthTab userId={api.userId} />}
       {api.tab === 'savings' && <SinkingFundsTab userId={api.userId} />}
@@ -428,6 +427,806 @@ function CoinsTab({ userId }) {
           </table>
         </div>
       </div>
+    </div>
+  )
+}
+
+// ─── Pay Period Budget ───────────────────────────────────────────────────────
+// Ported from the "Budget by Paycheck" app: every paycheck gets its own budget
+// with Income, Bills, Expenses, Savings, and Debt, each tracked as Budget vs.
+// Actual. Reference presets auto-fill a line item's budget by name; the
+// Transaction Tracker is the only place actuals get recorded.
+
+const PP_SECTION_DEFS = [
+  { key: 'income', label: 'Income', showDueDate: true, dueDateLabel: 'Date', budgetSource: 'manual' },
+  { key: 'bill', label: 'Bills', showDueDate: true, dueDateLabel: 'Due date', showPaid: true },
+  { key: 'expense', label: 'Expenses' },
+  { key: 'savings', label: 'Savings', showSinkingFund: true },
+  { key: 'debt', label: 'Debt' },
+]
+
+const PP_REF_SECTIONS = ['bill', 'expense', 'savings', 'debt']
+
+// A starter set of categories drawn from the original Budget by Paycheck
+// Excel template's References sheet, to save re-typing common line items.
+const PP_STARTER_PRESETS = [
+  { section: 'bill', name: 'ADT', defaultAmount: 50 },
+  { section: 'bill', name: 'Apple Music', defaultAmount: 13 },
+  { section: 'bill', name: 'Auto Insurance', defaultAmount: 417 },
+  { section: 'bill', name: 'Cleaning Lady', defaultAmount: 200 },
+  { section: 'bill', name: 'Department of Water & Power', defaultAmount: 50 },
+  { section: 'bill', name: 'Home Owners Association', defaultAmount: 380 },
+  { section: 'bill', name: 'Laundry', defaultAmount: 80 },
+  { section: 'bill', name: 'Mortgage/Rent', defaultAmount: null },
+  { section: 'bill', name: 'Registration', defaultAmount: 500 },
+  { section: 'bill', name: 'Spectrum', defaultAmount: 120 },
+  { section: 'bill', name: 'Verizon', defaultAmount: null },
+  { section: 'expense', name: 'Auto Maintenance', defaultAmount: null },
+  { section: 'expense', name: 'Clothing', defaultAmount: null },
+  { section: 'expense', name: 'Gas', defaultAmount: 300 },
+  { section: 'expense', name: 'Groceries', defaultAmount: 300 },
+  { section: 'expense', name: 'Hair', defaultAmount: null },
+  { section: 'expense', name: 'Manicure/Pedicure', defaultAmount: null },
+  { section: 'expense', name: 'Tithe', defaultAmount: null },
+  { section: 'expense', name: 'Travel', defaultAmount: null },
+  { section: 'savings', name: 'Health Savings Account', defaultAmount: null },
+  { section: 'savings', name: 'Savings - House', defaultAmount: null },
+  { section: 'savings', name: 'Savings - Other', defaultAmount: null },
+  { section: 'savings', name: 'Vacation', defaultAmount: null },
+  { section: 'debt', name: 'Auto Payment', defaultAmount: 463 },
+  { section: 'debt', name: 'Home Equity Line of Credit', defaultAmount: null },
+  { section: 'debt', name: 'Credit Card 1', defaultAmount: null },
+  { section: 'debt', name: 'Credit Card 2', defaultAmount: null },
+]
+
+function ppFmt(n) {
+  const v = Number(n) || 0
+  return v.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2 })
+}
+
+function ppFmtDate(value) {
+  if (!value) return ''
+  const d = new Date(`${value}T00:00:00`)
+  if (Number.isNaN(d.getTime())) return ''
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+function ppTodayISO() {
+  return new Date().toISOString().slice(0, 10)
+}
+
+// Conservative budgeting convention: round money going out up (never
+// under-budget an expense), and money coming in down (never over-count income).
+function ppRoundForSection(value, section) {
+  const n = Number(value)
+  if (value === '' || value == null || Number.isNaN(n)) return 0
+  return section === 'income' ? Math.floor(n) : Math.ceil(n)
+}
+
+function PayPeriodLineSection({ def, items, referenceOptions, computeBudget, computeActual, onAdd, onUpdate, onDelete }) {
+  const [name, setName] = useState('')
+  const [dueDate, setDueDate] = useState('')
+  const [budgetAmount, setBudgetAmount] = useState('')
+  const [adding, setAdding] = useState(false)
+
+  const manualBudget = def.budgetSource === 'manual'
+  const budgetTotal = items.reduce((acc, item) => acc + computeBudget(item), 0)
+  const actualTotal = items.reduce((acc, item) => acc + computeActual(item), 0)
+  const extraCols = (def.showDueDate ? 1 : 0) + (def.showSinkingFund ? 1 : 0) + (def.showPaid ? 1 : 0)
+
+  function handlePickReference(value) {
+    setName(value)
+    if (manualBudget) return
+    const match = referenceOptions.find(r => r.name === value)
+    if (match && match.default_amount != null) setBudgetAmount(String(match.default_amount))
+  }
+
+  async function handleAdd(e) {
+    e.preventDefault()
+    if (!name.trim()) return
+    setAdding(true)
+    try {
+      await onAdd({
+        name: name.trim(),
+        due_date: def.showDueDate && dueDate ? dueDate : null,
+        budget_amount: budgetAmount ? ppRoundForSection(budgetAmount, def.key) : 0,
+      })
+      setName('')
+      setDueDate('')
+      setBudgetAmount('')
+    } finally {
+      setAdding(false)
+    }
+  }
+
+  const datalistId = `pp-refs-${def.key}`
+
+  return (
+    <div className="budget-wrap pp-section">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">{def.label}</h2>
+        </div>
+      </div>
+      <div className="budget-table-wrap">
+        <table className="budget-table">
+          <thead>
+            <tr>
+              <th className="budget-th cat">Item</th>
+              {def.showDueDate && <th className="budget-th">{def.dueDateLabel}</th>}
+              {def.showSinkingFund && <th className="budget-th">Sinking fund</th>}
+              <th className="budget-th">Budget</th>
+              <th className="budget-th">Actual</th>
+              {def.showPaid && <th className="budget-th">Paid</th>}
+              <th className="budget-th del-col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map(item => (
+              <tr key={item.id} className="budget-row">
+                <td className="budget-td cat">{item.name}</td>
+                {def.showDueDate && (
+                  <td className="budget-td num">{ppFmtDate(item.due_date) || <span className="budget-empty">—</span>}</td>
+                )}
+                {def.showSinkingFund && (
+                  <td className="budget-td num">
+                    <input type="checkbox" checked={!!item.is_sinking_fund} onChange={e => onUpdate(item.id, { is_sinking_fund: e.target.checked })} />
+                  </td>
+                )}
+                <td className="budget-td num">{ppFmt(computeBudget(item))}</td>
+                <td className="budget-td num">{ppFmt(computeActual(item))}</td>
+                {def.showPaid && (
+                  <td className="budget-td num">
+                    <input type="checkbox" checked={!!item.is_paid} onChange={e => onUpdate(item.id, { is_paid: e.target.checked })} />
+                  </td>
+                )}
+                <td className="budget-td del-col">
+                  <span className="budget-del" onClick={() => onDelete(item.id)}>✕</span>
+                </td>
+              </tr>
+            ))}
+            {items.length === 0 && (
+              <tr><td colSpan={3 + extraCols} className="budget-td"><span className="budget-empty">No items yet</span></td></tr>
+            )}
+          </tbody>
+          <tfoot>
+            <tr className="budget-net-row">
+              <td className="budget-td cat">Total</td>
+              {def.showDueDate && <td></td>}
+              {def.showSinkingFund && <td></td>}
+              <td className="budget-td num net-val">{ppFmt(budgetTotal)}</td>
+              <td className="budget-td num net-val">{ppFmt(actualTotal)}</td>
+              {def.showPaid && <td></td>}
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <form className="fin-form" onSubmit={handleAdd}>
+        <input
+          className="fin-input"
+          list={datalistId}
+          placeholder={`Add ${def.label.toLowerCase()} item…`}
+          value={name}
+          onChange={e => handlePickReference(e.target.value)}
+        />
+        <datalist id={datalistId}>
+          {referenceOptions.map(r => <option key={r.id} value={r.name} />)}
+        </datalist>
+        <div className="fin-form-row">
+          {def.showDueDate && (
+            <input className="fin-input" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
+          )}
+          <input
+            className="fin-input amount"
+            type="number" step="0.01"
+            placeholder={manualBudget ? 'Budget' : 'From References'}
+            value={budgetAmount}
+            readOnly={!manualBudget}
+            title={manualBudget ? undefined : "Budget comes from the matching References preset"}
+            onChange={e => manualBudget && setBudgetAmount(e.target.value)}
+          />
+        </div>
+        <div className="fin-form-actions">
+          <button type="submit" className="fin-save" disabled={adding}>{adding ? '…' : 'Add'}</button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+function PayPeriodSummaryTable({ rows, remainingBudget, remainingActual }) {
+  return (
+    <div className="budget-wrap pp-section">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Summary</h2>
+        </div>
+      </div>
+      <div className="budget-table-wrap">
+        <table className="budget-table">
+          <thead>
+            <tr>
+              <th className="budget-th cat">Total</th>
+              <th className="budget-th">Budget</th>
+              <th className="budget-th">Actual</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(row => (
+              <tr key={row.label} className="budget-row">
+                <td className="budget-td cat">{row.label}</td>
+                <td className="budget-td num">{ppFmt(row.budget)}</td>
+                <td className="budget-td num">{ppFmt(row.actual)}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="budget-net-row">
+              <td className="budget-td cat">Remaining</td>
+              <td className="budget-td num net-val">{ppFmt(remainingBudget)}</td>
+              <td className="budget-td num net-val">{ppFmt(remainingActual)}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+function PayPeriodTransactionTracker({ entries, lineItems, onAdd, onDelete }) {
+  const [entryDate, setEntryDate] = useState(ppTodayISO())
+  const [lineItemId, setLineItemId] = useState(lineItems[0]?.id || '')
+  const [amount, setAmount] = useState('')
+  const [description, setDescription] = useState('')
+  const [adding, setAdding] = useState(false)
+
+  const itemsById = Object.fromEntries(lineItems.map(i => [i.id, i]))
+  const total = entries.reduce((s, e) => s + (Number(e.amount) || 0), 0)
+
+  const itemsBySection = PP_SECTION_DEFS
+    .map(def => ({ def, items: lineItems.filter(i => i.section === def.key) }))
+    .filter(g => g.items.length > 0)
+
+  async function handleAdd(e) {
+    e.preventDefault()
+    if (!lineItemId || !amount) return
+    setAdding(true)
+    try {
+      const section = itemsById[lineItemId]?.section
+      await onAdd({ entry_date: entryDate, line_item_id: lineItemId, amount: ppRoundForSection(amount, section), description })
+      setAmount('')
+      setDescription('')
+    } finally {
+      setAdding(false)
+    }
+  }
+
+  return (
+    <div className="budget-wrap pp-section">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Transaction Tracker</h2>
+          <span className="fin-toolbar-label">Log what actually happened</span>
+        </div>
+      </div>
+
+      {lineItems.length === 0 ? (
+        <p className="fin-empty">Add income, bills, expenses, savings, or debt above before logging transactions.</p>
+      ) : (
+        <>
+          <form className="fin-form" onSubmit={handleAdd}>
+            <div className="fin-form-row">
+              <input className="fin-input" type="date" value={entryDate} onChange={e => setEntryDate(e.target.value)} />
+              <select className="fin-input" value={lineItemId} onChange={e => setLineItemId(e.target.value)}>
+                {itemsBySection.map(group => (
+                  <optgroup key={group.def.key} label={group.def.label}>
+                    {group.items.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+            <div className="fin-form-row">
+              <input className="fin-input amount" type="number" step="0.01" placeholder="Amount" value={amount} onChange={e => setAmount(e.target.value)} required />
+              <input className="fin-input" placeholder="Description (optional)" value={description} onChange={e => setDescription(e.target.value)} />
+            </div>
+            <div className="fin-form-actions">
+              <button type="submit" className="fin-save" disabled={adding}>{adding ? '…' : 'Log'}</button>
+            </div>
+          </form>
+
+          <div className="budget-table-wrap">
+            <table className="budget-table">
+              <thead>
+                <tr>
+                  <th className="budget-th">Date</th>
+                  <th className="budget-th cat">Category</th>
+                  <th className="budget-th cat">Description</th>
+                  <th className="budget-th">Amount</th>
+                  <th className="budget-th del-col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {entries.map(entry => {
+                  const item = itemsById[entry.line_item_id]
+                  const sectionLabel = item && PP_SECTION_DEFS.find(d => d.key === item.section)?.label
+                  return (
+                    <tr key={entry.id} className="budget-row">
+                      <td className="budget-td num">{ppFmtDate(entry.entry_date)}</td>
+                      <td className="budget-td cat">
+                        {item?.name || <span className="budget-empty">—</span>}
+                        {sectionLabel && <span className="fin-toolbar-label" style={{ marginLeft: 4, color: '#aaa' }}>({sectionLabel})</span>}
+                      </td>
+                      <td className="budget-td cat">{entry.description || <span className="budget-empty">—</span>}</td>
+                      <td className="budget-td num">{ppFmt(entry.amount)}</td>
+                      <td className="budget-td del-col">
+                        <span className="budget-del" onClick={() => onDelete(entry.id)}>✕</span>
+                      </td>
+                    </tr>
+                  )
+                })}
+                {entries.length === 0 && (
+                  <tr><td colSpan={5} className="budget-td"><span className="budget-empty">No transactions logged yet</span></td></tr>
+                )}
+              </tbody>
+              <tfoot>
+                <tr className="budget-net-row">
+                  <td className="budget-td cat" colSpan={3}>Total</td>
+                  <td className="budget-td num net-val">{ppFmt(total)}</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function PayPeriodDetail({ userId, period, onBack, onDatesChange }) {
+  const [items, setItems] = useState([])
+  const [entries, setEntries] = useState([])
+  const [references, setReferences] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  async function refreshItems() {
+    const { data } = await supabase.from('pay_period_line_items').select('*').eq('pay_period_id', period.id).order('name')
+    setItems(data || [])
+  }
+
+  async function refreshEntries() {
+    const { data } = await supabase.from('pay_period_expense_entries').select('*').eq('pay_period_id', period.id).order('entry_date', { ascending: false })
+    setEntries(data || [])
+  }
+
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      setLoading(true)
+      const [itemsRes, entriesRes, refsRes] = await Promise.all([
+        supabase.from('pay_period_line_items').select('*').eq('pay_period_id', period.id).order('name'),
+        supabase.from('pay_period_expense_entries').select('*').eq('pay_period_id', period.id).order('entry_date', { ascending: false }),
+        supabase.from('budget_reference_items').select('*').eq('user_id', userId).order('section').order('name'),
+      ])
+      if (cancelled) return
+      setItems(itemsRes.data || [])
+      setEntries(entriesRes.data || [])
+      setReferences(refsRes.data || [])
+      setLoading(false)
+    }
+    load()
+    return () => { cancelled = true }
+  }, [period.id, userId])
+
+  const bySection = useMemo(() => {
+    const groups = { income: [], bill: [], expense: [], savings: [], debt: [] }
+    items.forEach(item => groups[item.section]?.push(item))
+    return groups
+  }, [items])
+
+  const actualById = useMemo(() => {
+    const map = {}
+    entries.forEach(e => {
+      if (!e.line_item_id) return
+      map[e.line_item_id] = (map[e.line_item_id] || 0) + (Number(e.amount) || 0)
+    })
+    return map
+  }, [entries])
+
+  const referenceAmountByKey = useMemo(() => {
+    const map = {}
+    references.forEach(r => {
+      if (r.default_amount != null) map[`${r.section}:${r.name}`] = Number(r.default_amount)
+    })
+    return map
+  }, [references])
+
+  function computeActual(item) { return actualById[item.id] || 0 }
+  function computeBudget(item) {
+    const live = referenceAmountByKey[`${item.section}:${item.name}`]
+    return live != null ? live : Number(item.budget_amount) || 0
+  }
+
+  const referencesBySection = useMemo(() => {
+    const groups = { bill: [], expense: [], savings: [], debt: [] }
+    references.forEach(r => groups[r.section]?.push(r))
+    return groups
+  }, [references])
+
+  async function handleAdd(section, fields) {
+    await supabase.from('pay_period_line_items').insert({ pay_period_id: period.id, user_id: userId, section, ...fields })
+    await refreshItems()
+  }
+
+  async function handleUpdate(id, fields) {
+    await supabase.from('pay_period_line_items').update(fields).eq('id', id)
+    await refreshItems()
+  }
+
+  async function handleDelete(id) {
+    await supabase.from('pay_period_expense_entries').delete().eq('line_item_id', id)
+    await supabase.from('pay_period_line_items').delete().eq('id', id)
+    await refreshItems()
+    await refreshEntries()
+  }
+
+  async function handleAddEntry(fields) {
+    await supabase.from('pay_period_expense_entries').insert({ pay_period_id: period.id, user_id: userId, ...fields })
+    await refreshEntries()
+  }
+
+  async function handleDeleteEntry(id) {
+    await supabase.from('pay_period_expense_entries').delete().eq('id', id)
+    await refreshEntries()
+  }
+
+  if (loading) return <div className="fin-content"><p className="fin-empty">Loading…</p></div>
+
+  const incomeBudget = bySection.income.reduce((a, i) => a + computeBudget(i), 0)
+  const incomeActual = bySection.income.reduce((a, i) => a + computeActual(i), 0)
+  const billsBudget = bySection.bill.reduce((a, i) => a + computeBudget(i), 0)
+  const billsActual = bySection.bill.reduce((a, i) => a + computeActual(i), 0)
+  const expensesBudget = bySection.expense.reduce((a, i) => a + computeBudget(i), 0)
+  const expensesActual = bySection.expense.reduce((a, i) => a + computeActual(i), 0)
+  const savingsBudget = bySection.savings.reduce((a, i) => a + computeBudget(i), 0)
+  const savingsActual = bySection.savings.reduce((a, i) => a + computeActual(i), 0)
+  const debtBudget = bySection.debt.reduce((a, i) => a + computeBudget(i), 0)
+  const debtActual = bySection.debt.reduce((a, i) => a + computeActual(i), 0)
+  const remainingBudget = incomeBudget - (billsBudget + expensesBudget + savingsBudget + debtBudget)
+  const remainingActual = incomeActual - (billsActual + expensesActual + savingsActual + debtActual)
+
+  return (
+    <div className="fin-content pp-detail">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <button className="pp-back-link" onClick={onBack}>← All pay periods</button>
+          <h2 className="budget-title">{period.label || 'Pay Period'}</h2>
+        </div>
+      </div>
+
+      <div className="pp-period-dates">
+        <span>For the period:</span>
+        <input className="fin-input" type="date" value={period.start_date} onChange={e => onDatesChange('start_date', e.target.value)} />
+        <span>to</span>
+        <input className="fin-input" type="date" value={period.end_date} onChange={e => onDatesChange('end_date', e.target.value)} />
+      </div>
+
+      {PP_SECTION_DEFS.map(def => (
+        <PayPeriodLineSection
+          key={def.key}
+          def={def}
+          items={bySection[def.key]}
+          referenceOptions={referencesBySection[def.key] || []}
+          computeBudget={computeBudget}
+          computeActual={computeActual}
+          onAdd={fields => handleAdd(def.key, fields)}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+        />
+      ))}
+
+      <PayPeriodSummaryTable
+        rows={[
+          { label: 'Income', budget: incomeBudget, actual: incomeActual },
+          { label: 'Bills', budget: billsBudget, actual: billsActual },
+          { label: 'Expenses', budget: expensesBudget, actual: expensesActual },
+          { label: 'Savings', budget: savingsBudget, actual: savingsActual },
+          { label: 'Debt', budget: debtBudget, actual: debtActual },
+        ]}
+        remainingBudget={remainingBudget}
+        remainingActual={remainingActual}
+      />
+
+      <PayPeriodTransactionTracker entries={entries} lineItems={items} onAdd={handleAddEntry} onDelete={handleDeleteEntry} />
+    </div>
+  )
+}
+
+function PayPeriodsList({ userId, onSelect }) {
+  const [periods, setPeriods] = useState(null)
+  const [totalsByPeriod, setTotalsByPeriod] = useState({})
+  const [showForm, setShowForm] = useState(false)
+  const [label, setLabel] = useState('')
+  const [startDate, setStartDate] = useState(ppTodayISO())
+  const [endDate, setEndDate] = useState(ppTodayISO())
+  const [saving, setSaving] = useState(false)
+
+  async function refresh() {
+    const { data } = await supabase.from('pay_periods').select('*').eq('user_id', userId).order('start_date', { ascending: false })
+    const periodsData = data || []
+    setPeriods(periodsData)
+
+    const totalsEntries = await Promise.all(periodsData.map(async p => {
+      const [itemsRes, entriesRes] = await Promise.all([
+        supabase.from('pay_period_line_items').select('*').eq('pay_period_id', p.id),
+        supabase.from('pay_period_expense_entries').select('*').eq('pay_period_id', p.id),
+      ])
+      const items = itemsRes.data || []
+      const txns = entriesRes.data || []
+      const actualById = {}
+      txns.forEach(e => { if (e.line_item_id) actualById[e.line_item_id] = (actualById[e.line_item_id] || 0) + (Number(e.amount) || 0) })
+      const actual = item => actualById[item.id] || 0
+      const income = items.filter(i => i.section === 'income').reduce((a, i) => a + actual(i), 0)
+      const outflow = items.filter(i => i.section !== 'income').reduce((a, i) => a + actual(i), 0)
+      return [p.id, { income, outflow, remaining: income - outflow }]
+    }))
+    setTotalsByPeriod(Object.fromEntries(totalsEntries))
+  }
+
+  useEffect(() => { if (userId) refresh() }, [userId])
+
+  async function handleCreate(e) {
+    e.preventDefault()
+    setSaving(true)
+    const { data, error } = await supabase.from('pay_periods')
+      .insert({ user_id: userId, label: label.trim() || null, start_date: startDate, end_date: endDate })
+      .select().single()
+    setSaving(false)
+    if (error || !data) return
+    setShowForm(false)
+    setLabel('')
+    await refresh()
+    onSelect(data)
+  }
+
+  async function handleDelete(id, e) {
+    e.stopPropagation()
+    await supabase.from('pay_period_expense_entries').delete().eq('pay_period_id', id)
+    await supabase.from('pay_period_line_items').delete().eq('pay_period_id', id)
+    await supabase.from('pay_periods').delete().eq('id', id)
+    await refresh()
+  }
+
+  const overall = useMemo(() => {
+    const values = Object.values(totalsByPeriod)
+    return {
+      income: values.reduce((s, v) => s + v.income, 0),
+      outflow: values.reduce((s, v) => s + v.outflow, 0),
+      remaining: values.reduce((s, v) => s + v.remaining, 0),
+    }
+  }, [totalsByPeriod])
+
+  return (
+    <div className="fin-content">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Pay Periods</h2>
+          <span className="fin-toolbar-label">Every paycheck gets its own budget</span>
+        </div>
+        <button className="fin-add-btn" onClick={() => setShowForm(s => !s)}>{showForm ? 'Cancel' : '+ New pay period'}</button>
+      </div>
+
+      {showForm && (
+        <form className="fin-form" onSubmit={handleCreate}>
+          <input className="fin-input" placeholder="Label (e.g. July 1–15 paycheck)" value={label} onChange={e => setLabel(e.target.value)} />
+          <div className="fin-form-row">
+            <input className="fin-input" type="date" required value={startDate} onChange={e => setStartDate(e.target.value)} />
+            <input className="fin-input" type="date" required value={endDate} onChange={e => setEndDate(e.target.value)} />
+          </div>
+          <div className="fin-form-actions">
+            <button type="submit" className="fin-save" disabled={saving}>{saving ? 'Creating…' : 'Create'}</button>
+          </div>
+        </form>
+      )}
+
+      {periods === null && <p className="fin-empty">Loading…</p>}
+      {periods !== null && periods.length === 0 && <p className="fin-empty">No pay periods yet. Create your first one to start budgeting.</p>}
+
+      {periods !== null && periods.length > 0 && (
+        <>
+          <div className="budget-summary-bar">
+            <div className="budget-summary-item">
+              <span className="budget-summary-lbl">Actual Income</span>
+              <span className="budget-summary-val income">{ppFmt(overall.income)}</span>
+            </div>
+            <div className="budget-summary-item">
+              <span className="budget-summary-lbl">Actual Spent</span>
+              <span className="budget-summary-val">{ppFmt(overall.outflow)}</span>
+            </div>
+            <div className="budget-summary-item">
+              <span className="budget-summary-lbl">Net Remaining</span>
+              <span className="budget-summary-val" style={{ color: overall.remaining < 0 ? '#cc0000' : '#41a700' }}>{ppFmt(overall.remaining)}</span>
+            </div>
+          </div>
+
+          <div className="pp-period-grid">
+            {periods.map(p => {
+              const totals = totalsByPeriod[p.id] || { income: 0, outflow: 0, remaining: 0 }
+              return (
+                <div key={p.id} className="pp-period-card" onClick={() => onSelect(p)}>
+                  <div className="pp-period-card-head">
+                    <h3>{p.label || 'Pay Period'}</h3>
+                    <span className="budget-del" onClick={e => handleDelete(p.id, e)}>✕</span>
+                  </div>
+                  <p className="pp-period-card-dates">{ppFmtDate(p.start_date)} – {ppFmtDate(p.end_date)}</p>
+                  <div className="pp-period-card-totals">
+                    <div><span>Income</span><strong>{ppFmt(totals.income)}</strong></div>
+                    <div><span>Spent</span><strong>{ppFmt(totals.outflow)}</strong></div>
+                    <div style={{ color: totals.remaining < 0 ? '#cc0000' : '#41a700' }}><span>Remaining</span><strong>{ppFmt(totals.remaining)}</strong></div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function ReferencesSubTab({ userId }) {
+  const [items, setItems] = useState(null)
+  const [drafts, setDrafts] = useState(Object.fromEntries(PP_REF_SECTIONS.map(s => [s, { name: '', amount: '' }])))
+  const [seeding, setSeeding] = useState(false)
+
+  async function refresh() {
+    const { data } = await supabase.from('budget_reference_items').select('*').eq('user_id', userId).order('section').order('name')
+    setItems(data || [])
+  }
+
+  useEffect(() => { if (userId) refresh() }, [userId])
+
+  async function handleAdd(section, e) {
+    e.preventDefault()
+    const draft = drafts[section]
+    if (!draft.name.trim()) return
+    await supabase.from('budget_reference_items').insert({
+      user_id: userId, section, name: draft.name.trim(),
+      default_amount: draft.amount ? Math.ceil(Number(draft.amount)) : null,
+    })
+    setDrafts(d => ({ ...d, [section]: { name: '', amount: '' } }))
+    await refresh()
+  }
+
+  async function handleUpdateAmount(id, amount) {
+    await supabase.from('budget_reference_items').update({ default_amount: amount === '' ? null : Math.ceil(Number(amount)) || 0 }).eq('id', id)
+    await refresh()
+  }
+
+  async function handleDelete(id) {
+    await supabase.from('budget_reference_items').delete().eq('id', id)
+    await refresh()
+  }
+
+  async function handleSeedStarters() {
+    setSeeding(true)
+    try {
+      const rows = PP_STARTER_PRESETS.map(p => ({
+        user_id: userId, section: p.section, name: p.name,
+        default_amount: p.defaultAmount != null ? Math.ceil(p.defaultAmount) : null,
+      }))
+      await supabase.from('budget_reference_items').insert(rows)
+      await refresh()
+    } finally {
+      setSeeding(false)
+    }
+  }
+
+  return (
+    <div className="fin-content">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">References</h2>
+          <span className="fin-toolbar-label">Reusable presets — auto-fill a pay period's budget</span>
+        </div>
+        {items && items.length === 0 && (
+          <button className="fin-add-btn" onClick={handleSeedStarters} disabled={seeding}>{seeding ? 'Loading…' : 'Load starter categories'}</button>
+        )}
+      </div>
+
+      {items === null && <p className="fin-empty">Loading…</p>}
+
+      {items !== null && (
+        <div className="pp-references-grid">
+          {PP_REF_SECTIONS.map(section => {
+            const sectionItems = items.filter(i => i.section === section)
+            const draft = drafts[section]
+            const label = PP_SECTION_DEFS.find(d => d.key === section)?.label || section
+            return (
+              <div className="budget-wrap pp-section" key={section}>
+                <div className="budget-header">
+                  <div className="budget-header-titles"><h2 className="budget-title">{label}</h2></div>
+                </div>
+                <div className="budget-table-wrap">
+                  <table className="budget-table">
+                    <thead>
+                      <tr>
+                        <th className="budget-th cat">Item</th>
+                        <th className="budget-th">Default amount</th>
+                        <th className="budget-th del-col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sectionItems.map(item => (
+                        <tr key={item.id} className="budget-row">
+                          <td className="budget-td cat">{item.name}</td>
+                          <td className="budget-td num">
+                            <input
+                              className="budget-input"
+                              type="number" step="1"
+                              defaultValue={item.default_amount ?? ''}
+                              onBlur={e => handleUpdateAmount(item.id, e.target.value)}
+                            />
+                          </td>
+                          <td className="budget-td del-col">
+                            <span className="budget-del" onClick={() => handleDelete(item.id)}>✕</span>
+                          </td>
+                        </tr>
+                      ))}
+                      {sectionItems.length === 0 && (
+                        <tr><td colSpan={3} className="budget-td"><span className="budget-empty">No presets yet</span></td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                <form className="fin-form" onSubmit={e => handleAdd(section, e)}>
+                  <input className="fin-input" placeholder="Item name…" value={draft.name}
+                    onChange={e => setDrafts(d => ({ ...d, [section]: { ...d[section], name: e.target.value } }))} />
+                  <div className="fin-form-row">
+                    <input className="fin-input amount" type="number" step="1" placeholder="Default amount" value={draft.amount}
+                      onChange={e => setDrafts(d => ({ ...d, [section]: { ...d[section], amount: e.target.value } }))} />
+                    <button type="submit" className="fin-save">Add</button>
+                  </div>
+                </form>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function PayPeriodBudgetTab({ userId }) {
+  const [subView, setSubView] = useState('periods') // 'periods' | 'references'
+  const [selectedPeriod, setSelectedPeriod] = useState(null)
+
+  async function handleDatesChange(field, value) {
+    const { data } = await supabase.from('pay_periods').update({ [field]: value }).eq('id', selectedPeriod.id).select().single()
+    if (data) setSelectedPeriod(data)
+  }
+
+  if (selectedPeriod) {
+    return (
+      <PayPeriodDetail
+        userId={userId}
+        period={selectedPeriod}
+        onBack={() => setSelectedPeriod(null)}
+        onDatesChange={handleDatesChange}
+      />
+    )
+  }
+
+  return (
+    <div className="pp-root">
+      <div className="pp-subnav">
+        <button className={`pp-subnav-btn ${subView === 'periods' ? 'active' : ''}`} onClick={() => setSubView('periods')}>Pay Periods</button>
+        <button className={`pp-subnav-btn ${subView === 'references' ? 'active' : ''}`} onClick={() => setSubView('references')}>References</button>
+      </div>
+      {subView === 'periods' && <PayPeriodsList userId={userId} onSelect={setSelectedPeriod} />}
+      {subView === 'references' && <ReferencesSubTab userId={userId} />}
     </div>
   )
 }
