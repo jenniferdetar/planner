@@ -542,13 +542,13 @@ function PayPeriodLineSection({ def, items, referenceOptions, computeBudget, com
   const datalistId = `pp-refs-${def.key}`
 
   return (
-    <div className="budget-wrap pp-section">
+    <div className="pp-card pp-section">
       <div className="budget-header">
         <div className="budget-header-titles">
           <h2 className="budget-title">{def.label}</h2>
         </div>
       </div>
-      <div className="budget-table-wrap">
+      <div className="pp-table-wrap">
         <table className="budget-table">
           <thead>
             <tr>
@@ -638,13 +638,13 @@ function PayPeriodLineSection({ def, items, referenceOptions, computeBudget, com
 
 function PayPeriodSummaryTable({ rows, remainingBudget, remainingActual }) {
   return (
-    <div className="budget-wrap pp-section">
+    <div className="pp-card pp-section">
       <div className="budget-header">
         <div className="budget-header-titles">
           <h2 className="budget-title">Summary</h2>
         </div>
       </div>
-      <div className="budget-table-wrap">
+      <div className="pp-table-wrap">
         <table className="budget-table">
           <thead>
             <tr>
@@ -704,7 +704,7 @@ function PayPeriodTransactionTracker({ entries, lineItems, onAdd, onDelete }) {
   }
 
   return (
-    <div className="budget-wrap pp-section">
+    <div className="pp-card pp-section">
       <div className="budget-header">
         <div className="budget-header-titles">
           <h2 className="budget-title">Transaction Tracker</h2>
@@ -736,7 +736,7 @@ function PayPeriodTransactionTracker({ entries, lineItems, onAdd, onDelete }) {
             </div>
           </form>
 
-          <div className="budget-table-wrap">
+          <div className="pp-table-wrap">
             <table className="budget-table">
               <thead>
                 <tr>
@@ -1145,11 +1145,11 @@ function ReferencesSubTab({ userId }) {
             const draft = drafts[section]
             const label = PP_SECTION_DEFS.find(d => d.key === section)?.label || section
             return (
-              <div className="budget-wrap pp-section" key={section}>
+              <div className="pp-card pp-section" key={section}>
                 <div className="budget-header">
                   <div className="budget-header-titles"><h2 className="budget-title">{label}</h2></div>
                 </div>
-                <div className="budget-table-wrap">
+                <div className="pp-table-wrap">
                   <table className="budget-table">
                     <thead>
                       <tr>

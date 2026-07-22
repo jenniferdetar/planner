@@ -1447,6 +1447,22 @@
 .pp-section { margin-bottom: 10px; }
 .pp-section:last-child { margin-bottom: 0; }
 
+/* Unlike .budget-wrap (a single full-height panel with flex:1 + overflow:hidden),
+   .pp-card sizes to its own content — several of these get stacked vertically
+   inside a scrolling .fin-content, so none of them can claim flex-grown space
+   or they'd all get squeezed down to just their header. */
+.pp-card {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.pp-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .pp-period-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
