@@ -605,6 +605,7 @@ export default function DashboardView({
               onTogglePaycheckBill={onTogglePaycheckBill}
               onDeletePaycheck={onDeletePaycheck}
               userId={userId}
+              providerToken={providerToken}
             />
           </div>
         )}
