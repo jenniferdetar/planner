@@ -438,14 +438,14 @@ function CoinsTab({ userId }) {
 // Transaction Tracker is the only place actuals get recorded.
 
 const PP_SECTION_DEFS = [
-  { key: 'income', label: 'Income', showDueDate: true, dueDateLabel: 'Date', budgetSource: 'manual' },
+  { key: 'income', label: 'Income', showDueDate: true, dueDateLabel: 'Date' },
   { key: 'bill', label: 'Bills', showDueDate: true, dueDateLabel: 'Due date', showPaid: true },
   { key: 'expense', label: 'Expenses' },
   { key: 'savings', label: 'Savings', showSinkingFund: true },
   { key: 'debt', label: 'Debt' },
 ]
 
-const PP_REF_SECTIONS = ['bill', 'expense', 'savings', 'debt']
+const PP_REF_SECTIONS = ['income', 'bill', 'expense', 'savings', 'debt']
 
 // A starter set of categories drawn from the original Budget by Paycheck
 // Excel template's References sheet, to save re-typing common line items.
@@ -850,7 +850,7 @@ function PayPeriodDetail({ userId, period, onBack, onDatesChange }) {
   }
 
   const referencesBySection = useMemo(() => {
-    const groups = { bill: [], expense: [], savings: [], debt: [] }
+    const groups = { income: [], bill: [], expense: [], savings: [], debt: [] }
     references.forEach(r => groups[r.section]?.push(r))
     return groups
   }, [references])
