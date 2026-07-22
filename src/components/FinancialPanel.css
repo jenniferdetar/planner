@@ -1390,6 +1390,124 @@
   margin-left: auto;
 }
 
+/* ── Pay Period Budget ── */
+.pp-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.pp-subnav {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border-bottom: 2px solid #d9e8f0;
+  flex-shrink: 0;
+}
+
+.pp-subnav-btn {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #999;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.pp-subnav-btn:hover { color: #1e3070; }
+.pp-subnav-btn.active { color: #1e3070; border-bottom-color: #1e3070; }
+
+.pp-back-link {
+  background: none;
+  border: none;
+  color: #dce6f5;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+.pp-back-link:hover { text-decoration: underline; }
+
+.pp-period-dates {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.pp-section { margin-bottom: 10px; }
+.pp-section:last-child { margin-bottom: 0; }
+
+.pp-period-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  padding: 10px 14px;
+  align-content: start;
+}
+
+.pp-period-card {
+  background: #fff;
+  border: 1px solid #d9e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+.pp-period-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.09); }
+
+.pp-period-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.pp-period-card-head h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e3070;
+}
+
+.pp-period-card-dates {
+  font-size: 11px;
+  color: #aaa;
+  margin: 2px 0 8px;
+}
+
+.pp-period-card-totals {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+.pp-period-card-totals > div {
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  color: #aaa;
+}
+.pp-period-card-totals strong {
+  font-size: 13px;
+  color: #1e3070;
+}
+
+.pp-references-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+  padding: 10px 14px;
+  align-content: start;
+}
+
 @media (max-width: 768px) {
   .fin-tabs {
     background: #f5f5f5;
