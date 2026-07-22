@@ -1524,6 +1524,21 @@
   align-content: start;
 }
 
+.pp-ref-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.pp-sync-status {
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
+  max-width: 260px;
+}
+.pp-sync-status.error { color: #f5b3b3; }
+
 @media (max-width: 768px) {
   .fin-tabs {
     background: #f5f5f5;

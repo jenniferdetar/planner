@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, Fragment } from 'react'
 import { supabase } from '../lib/supabase'
+import { useCheckBreakdownSync } from '../hooks/useCheckBreakdownSync'
 import './FinancialPanel.css'
 import './CseaTracker.css'
 
@@ -21,7 +22,7 @@ export function useFinancialPage({
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
   goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   paychecks = [], onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
-  userId,
+  userId, providerToken,
 }) {
   const [tab, setTab] = useState('bills')
 
@@ -36,7 +37,7 @@ export function useFinancialPage({
     bills, onAddBill, onToggleBillPaid, onDeleteBill,
     goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
     paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
-    userId, tab, setTab, totalIncome, totalExpenses, unpaidBills,
+    userId, providerToken, tab, setTab, totalIncome, totalExpenses, unpaidBills,
   }
 }
 
@@ -75,7 +76,7 @@ function FinancialPanelInner({ api }) {
       {api.tab === 'bills' && <BillsTab bills={api.bills} onAdd={api.onAddBill} onToggle={api.onToggleBillPaid} onDelete={api.onDeleteBill} />}
       {api.tab === 'goals' && <GoalsTab goals={api.goals} onUpdate={api.onUpdateGoalAmount} />}
       {api.tab === 'coins' && <CoinsTab userId={api.userId} />}
-      {api.tab === 'budget' && <PayPeriodBudgetTab userId={api.userId} />}
+      {api.tab === 'budget' && <PayPeriodBudgetTab userId={api.userId} providerToken={api.providerToken} />}
       {api.tab === 'debt' && <DebtSnowballTab userId={api.userId} />}
       {api.tab === 'networth' && <NetWorthTab userId={api.userId} />}
       {api.tab === 'savings' && <SinkingFundsTab userId={api.userId} />}
@@ -1076,7 +1077,7 @@ function PayPeriodsList({ userId, onSelect }) {
   )
 }
 
-function ReferencesSubTab({ userId }) {
+function ReferencesSubTab({ userId, providerToken }) {
   const [items, setItems] = useState(null)
   const [drafts, setDrafts] = useState(Object.fromEntries(PP_REF_SECTIONS.map(s => [s, { name: '', amount: '' }])))
   const [seeding, setSeeding] = useState(false)
@@ -1085,6 +1086,8 @@ function ReferencesSubTab({ userId }) {
     const { data } = await supabase.from('budget_reference_items').select('*').eq('user_id', userId).order('section').order('name')
     setItems(data || [])
   }
+
+  const { sync: syncCheckBreakdown, syncing, result: syncResult, error: syncError } = useCheckBreakdownSync(userId, providerToken, refresh)
 
   useEffect(() => { if (userId) refresh() }, [userId])
 
@@ -1131,9 +1134,22 @@ function ReferencesSubTab({ userId }) {
           <h2 className="budget-title">References</h2>
           <span className="fin-toolbar-label">Reusable presets — auto-fill a pay period's budget</span>
         </div>
-        {items && items.length === 0 && (
-          <button className="fin-add-btn" onClick={handleSeedStarters} disabled={seeding}>{seeding ? 'Loading…' : 'Load starter categories'}</button>
-        )}
+        <div className="pp-ref-actions">
+          {syncResult && !syncError && (
+            <span className="pp-sync-status">
+              {syncResult.updated + syncResult.inserted === 0
+                ? 'Already up to date'
+                : `Synced — ${syncResult.inserted} added, ${syncResult.updated} updated`}
+            </span>
+          )}
+          {syncError && <span className="pp-sync-status error">{syncError}</span>}
+          <button className="fin-add-btn" onClick={syncCheckBreakdown} disabled={syncing} title="Pull the Reference Sheet from your Check Breakdown spreadsheet in Google Drive">
+            {syncing ? 'Syncing…' : '⟳ Sync from Check Breakdown'}
+          </button>
+          {items && items.length === 0 && (
+            <button className="fin-add-btn" onClick={handleSeedStarters} disabled={seeding}>{seeding ? 'Loading…' : 'Load starter categories'}</button>
+          )}
+        </div>
       </div>
 
       {items === null && <p className="fin-empty">Loading…</p>}
@@ -1199,7 +1215,7 @@ function ReferencesSubTab({ userId }) {
   )
 }
 
-function PayPeriodBudgetTab({ userId }) {
+function PayPeriodBudgetTab({ userId, providerToken }) {
   const [subView, setSubView] = useState('periods') // 'periods' | 'references'
   const [selectedPeriod, setSelectedPeriod] = useState(null)
 
@@ -1226,7 +1242,7 @@ function PayPeriodBudgetTab({ userId }) {
         <button className={`pp-subnav-btn ${subView === 'references' ? 'active' : ''}`} onClick={() => setSubView('references')}>References</button>
       </div>
       {subView === 'periods' && <PayPeriodsList userId={userId} onSelect={setSelectedPeriod} />}
-      {subView === 'references' && <ReferencesSubTab userId={userId} />}
+      {subView === 'references' && <ReferencesSubTab userId={userId} providerToken={providerToken} />}
     </div>
   )
 }
