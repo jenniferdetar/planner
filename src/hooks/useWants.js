@@ -13,7 +13,9 @@ const COLS = { num: 'A', text: 'B', category: 'C', answered: 'D', date: 'E', not
 // The tab it lives on isn't necessarily named "Sheet1", so we discover the real name at import time.
 const OLD_GRID_RANGE = 'A1:H20'
 
-export const CATEGORIES = ['Faith', 'Health', 'Career', 'Education', 'CSEA', 'Home', 'Finances', 'Jeff', 'Other']
+// Alphabetical — controls dropdown and filter-chip order. Matching precedence
+// lives in CATEGORY_RULES below and is intentionally independent of this order.
+export const CATEGORIES = ['Career', 'CSEA', 'Education', 'Faith', 'Finances', 'Health', 'Home', 'Jeff', 'Other']
 
 const CATEGORY_RULES = [
   [/church|god|discern|decern/i, 'Faith'],
