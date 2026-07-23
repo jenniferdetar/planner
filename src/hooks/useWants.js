@@ -9,8 +9,9 @@ const LIST_RANGE = `${LIST_TAB}!A2:F`
 const HEADERS = ['#', 'Want', 'Category', 'Answered', 'Date answered', 'Notes']
 const COLS = { num: 'A', text: 'B', category: 'C', answered: 'D', date: 'E', notes: 'F' }
 
-// Legacy grid: pairs of (num, text) columns — A-B = 1-20, C-D = 21-40, E-F = 41-60, G-H = 61-80
-const OLD_RANGE = 'Sheet1!A1:H20'
+// Legacy grid: pairs of (num, text) columns — A-B = 1-20, C-D = 21-40, E-F = 41-60, G-H = 61-80.
+// The tab it lives on isn't necessarily named "Sheet1", so we discover the real name at import time.
+const OLD_GRID_RANGE = 'A1:H20'
 
 export const CATEGORIES = ['Faith', 'Health', 'Career', 'Home', 'Finances', 'Jeff', 'Other']
 
@@ -42,6 +43,11 @@ async function sheetsError(res) {
   err.status = res.status
   err.googleMessage = msg
   return err
+}
+
+// Wrap a tab title for use in an A1 range, escaping embedded single quotes.
+function quoteTitle(title) {
+  return `'${title.replace(/'/g, "''")}'`
 }
 
 function parseLegacy(values) {
@@ -129,6 +135,19 @@ export function useWants(providerToken) {
 
   useEffect(() => { load() }, [load])
 
+  // Returns the spreadsheet's tabs as { title, index }, ordered left to right.
+  async function getSheets() {
+    const res = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?fields=sheets.properties(title,index)`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
+    if (!res.ok) throw await sheetsError(res)
+    const data = await res.json()
+    return (data.sheets || [])
+      .map((s) => s.properties)
+      .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
+  }
+
   async function ensureTab() {
     const res = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}:batchUpdate`,
@@ -153,8 +172,13 @@ export function useWants(providerToken) {
     setSaving(true)
     setError(null)
     try {
-      const res = await apiGet(OLD_RANGE)
-      if (!res.ok) throw new Error(`Could not read existing list: ${res.status}`)
+      // The old grid lives on the first tab that isn't our new List tab —
+      // discover its real name rather than assuming "Sheet1".
+      const sheetsMeta = await getSheets()
+      const source = sheetsMeta.find((s) => s.title !== LIST_TAB)
+      if (!source) throw new Error('Could not find a tab to import your wants from.')
+      const res = await apiGet(`${quoteTitle(source.title)}!${OLD_GRID_RANGE}`)
+      if (!res.ok) throw await sheetsError(res)
       const data = await res.json()
       const legacy = parseLegacy(data.values)
 
