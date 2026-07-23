@@ -6,6 +6,7 @@ const CATEGORY_COLORS = {
   Faith: '#7b5ea7',
   Health: '#3a9188',
   Career: '#3164a0',
+  Education: '#cc7a29',
   Home: '#5cb85c',
   Finances: '#4a7a6a',
   Jeff: '#a23b3b',
