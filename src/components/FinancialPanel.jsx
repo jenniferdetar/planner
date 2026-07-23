@@ -1346,8 +1346,141 @@ function buildSnowballRows(debtsList) {
   return [...groups, ...singles].sort((a, b) => a.total_payoff - b.total_payoff || b.rate - a.rate)
 }
 
+// ─── Loan terms (variable-rate index/margin, interest-only draw, maturity) ───
+// HELOCs and similar loans carry structure the balance/minimum can't capture:
+// a variable rate, an interest-only draw period, and a maturity date. These
+// helpers render that on a single (non-grouped) debt.
+const TERM_FIELDS = ['rate_index', 'rate_margin', 'draw_end_date', 'maturity_date', 'notes']
+
+function hasLoanTerms(debt) {
+  return !!debt && TERM_FIELDS.some(f => debt[f] != null && debt[f] !== '')
+}
+
+function fmtTermMonth(dateStr) {
+  if (!dateStr) return null
+  const d = new Date(`${dateStr}T12:00:00`)
+  if (Number.isNaN(d.getTime())) return null
+  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
+
+function monthsUntil(dateStr) {
+  if (!dateStr) return null
+  const d = new Date(`${dateStr}T12:00:00`)
+  if (Number.isNaN(d.getTime())) return null
+  const now = new Date()
+  return (d.getFullYear() - now.getFullYear()) * 12 + (d.getMonth() - now.getMonth())
+}
+
+function rateSummary(debt) {
+  if (!debt.rate_index) return null
+  const margin = debt.rate_margin != null && debt.rate_margin !== '' ? ` + ${Number(debt.rate_margin)}%` : ''
+  return `${debt.rate_index}${margin}`
+}
+
+// A one-line status for the draw period: interest-only vs. amortizing, and how
+// far off the conversion is — the moment the minimum payment jumps.
+function drawStatusHint(drawEndDate) {
+  const m = monthsUntil(drawEndDate)
+  if (m == null) return null
+  const label = fmtTermMonth(drawEndDate)
+  if (m <= 0) return `Amortizing repayment phase (interest-only draw ended ${label})`
+  const yrs = Math.floor(m / 12)
+  const mos = m % 12
+  const span = yrs > 0 ? `${yrs}y ${mos}m` : `${mos}m`
+  return `Interest-only until ${label} (~${span} away), then amortizes`
+}
+
+function termsSummary(debt) {
+  const parts = []
+  const rate = rateSummary(debt)
+  if (rate) parts.push(rate)
+  if (debt.draw_end_date) {
+    const m = monthsUntil(debt.draw_end_date)
+    parts.push(m != null && m <= 0
+      ? `amortizing (draw ended ${fmtTermMonth(debt.draw_end_date)})`
+      : `interest-only until ${fmtTermMonth(debt.draw_end_date)}`)
+  }
+  if (debt.maturity_date) parts.push(`matures ${fmtTermMonth(debt.maturity_date)}`)
+  return parts.join(' · ')
+}
+
+// Editable detail panel shown when a single debt's terms row is expanded.
+function DebtTermsDetail({ debt, colSpan, onSave }) {
+  const [draft, setDraft] = useState({
+    rate_index: debt.rate_index || '',
+    rate_margin: debt.rate_margin ?? '',
+    draw_end_date: debt.draw_end_date || '',
+    maturity_date: debt.maturity_date || '',
+    notes: debt.notes || '',
+  })
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  function set(field, val) { setDraft(d => ({ ...d, [field]: val })); setSaved(false) }
+
+  async function handleSave() {
+    setSaving(true)
+    try {
+      await onSave(debt.id, {
+        rate_index: draft.rate_index.trim() || null,
+        rate_margin: draft.rate_margin === '' ? null : (parseFloat(draft.rate_margin) || 0),
+        draw_end_date: draft.draw_end_date || null,
+        maturity_date: draft.maturity_date || null,
+        notes: draft.notes.trim() || null,
+      })
+      setSaved(true)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const hint = drawStatusHint(draft.draw_end_date)
+
+  return (
+    <tr className="budget-row debt-terms-row">
+      <td className="budget-td" colSpan={colSpan}>
+        <div className="debt-terms-panel">
+          <div className="debt-terms-grid">
+            <label className="debt-terms-field">
+              <span>Rate index</span>
+              <input className="fin-input" placeholder="e.g. WSJ Prime" value={draft.rate_index}
+                onChange={e => set('rate_index', e.target.value)} />
+            </label>
+            <label className="debt-terms-field">
+              <span>Margin (%)</span>
+              <input className="fin-input" type="number" step="0.001" placeholder="e.g. 2.5" value={draft.rate_margin}
+                onChange={e => set('rate_margin', e.target.value)} />
+            </label>
+            <label className="debt-terms-field">
+              <span>Interest-only draw ends</span>
+              <input className="fin-input" type="date" value={draft.draw_end_date}
+                onChange={e => set('draw_end_date', e.target.value)} />
+            </label>
+            <label className="debt-terms-field">
+              <span>Maturity date</span>
+              <input className="fin-input" type="date" value={draft.maturity_date}
+                onChange={e => set('maturity_date', e.target.value)} />
+            </label>
+            <label className="debt-terms-field debt-terms-notes-field">
+              <span>Notes</span>
+              <textarea className="fin-input" rows={2} placeholder="Anything else about the terms…" value={draft.notes}
+                onChange={e => set('notes', e.target.value)} />
+            </label>
+          </div>
+          <div className="debt-terms-footer">
+            {hint && <span className="debt-terms-hint">{hint}</span>}
+            <button type="button" className="fin-save" onClick={handleSave} disabled={saving}>
+              {saving ? 'Saving…' : saved ? 'Saved ✓' : 'Save terms'}
+            </button>
+          </div>
+        </div>
+      </td>
+    </tr>
+  )
+}
+
 // One row of the Debt Snowball table, plus its expanded group members if any.
-function DebtSnowballRow({ row, editCell, setEditCell, editVal, setEditVal, saveField, saveOwner, saveGoal, deleteDebt, expanded, toggleExpand }) {
+function DebtSnowballRow({ row, editCell, setEditCell, editVal, setEditVal, saveField, saveOwner, saveGoal, saveTerms, deleteDebt, expanded, toggleExpand }) {
   return (
     <Fragment key={row.key}>
       <tr className="budget-row">
@@ -1362,7 +1495,19 @@ function DebtSnowballRow({ row, editCell, setEditCell, editVal, setEditVal, save
               {row.name}
               <span className="debt-group-count">({row.members.length} loans — show breakdown)</span>
             </button>
-          ) : row.name}
+          ) : (
+            <div className="debt-single-cell">
+              <div className="debt-single-head">
+                <span className="debt-single-name">{row.name}</span>
+                <button type="button" className="debt-terms-toggle" onClick={() => toggleExpand(row.key)}>
+                  {expanded[row.key] ? '▾ terms' : (hasLoanTerms(row.debt) ? '▸ terms' : '＋ terms')}
+                </button>
+              </div>
+              {!expanded[row.key] && hasLoanTerms(row.debt) && termsSummary(row.debt) && (
+                <span className="debt-terms-summary">{termsSummary(row.debt)}</span>
+              )}
+            </div>
+          )}
         </td>
         <td className="budget-td num">
           {row.isGroup ? fmt(row.total_payoff) : (
@@ -1431,6 +1576,10 @@ function DebtSnowballRow({ row, editCell, setEditCell, editVal, setEditVal, save
         </td>
       </tr>
 
+      {!row.isGroup && expanded[row.key] && (
+        <DebtTermsDetail debt={row.debt} colSpan={8} onSave={saveTerms} />
+      )}
+
       {row.isGroup && expanded[row.name] && row.members.map(m => (
         <tr key={m.id} className="budget-row debt-group-member-row">
           <td className="budget-td cat debt-group-member-name">{m.name}</td>
@@ -1488,10 +1637,11 @@ function DebtSnowballTab({ userId }) {
   const [debts, setDebts] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ name: '', total_payoff: '', minimum_payment: '', group_name: '', owner: '', goal_months: '' })
+  const [form, setForm] = useState({ name: '', total_payoff: '', minimum_payment: '', group_name: '', owner: '', goal_months: '', rate_index: '', rate_margin: '', draw_end_date: '', maturity_date: '', notes: '' })
+  const [showTerms, setShowTerms] = useState(false)
   const [editCell, setEditCell] = useState(null) // { id, field }
   const [editVal, setEditVal] = useState('')
-  const [expanded, setExpanded] = useState({}) // { [groupName]: bool }
+  const [expanded, setExpanded] = useState({}) // { [groupName | debtId]: bool }
 
   useEffect(() => {
     if (!userId) return
@@ -1510,10 +1660,16 @@ function DebtSnowballTab({ userId }) {
       group_name: form.group_name.trim() || null,
       owner: form.owner.trim() || null,
       goal_months: form.goal_months.trim() === '' ? null : parseInt(form.goal_months, 10) || null,
+      rate_index: form.rate_index.trim() || null,
+      rate_margin: form.rate_margin.trim() === '' ? null : parseFloat(form.rate_margin) || 0,
+      draw_end_date: form.draw_end_date || null,
+      maturity_date: form.maturity_date || null,
+      notes: form.notes.trim() || null,
     }
     const { data } = await supabase.from('debts').insert(payload).select().single()
     if (data) setDebts(d => [...d, data])
-    setForm({ name: '', total_payoff: '', minimum_payment: '', group_name: '', owner: '', goal_months: '' })
+    setForm({ name: '', total_payoff: '', minimum_payment: '', group_name: '', owner: '', goal_months: '', rate_index: '', rate_margin: '', draw_end_date: '', maturity_date: '', notes: '' })
+    setShowTerms(false)
     setShowForm(false)
   }
 
@@ -1536,6 +1692,11 @@ function DebtSnowballTab({ userId }) {
     await supabase.from('debts').update({ goal_months: val }).in('id', ids)
     setDebts(d => d.map(x => ids.includes(x.id) ? { ...x, goal_months: val } : x))
     setEditCell(null)
+  }
+
+  async function saveTerms(id, fields) {
+    await supabase.from('debts').update(fields).eq('id', id)
+    setDebts(d => d.map(x => x.id === id ? { ...x, ...fields } : x))
   }
 
   async function deleteDebt(id) {
@@ -1623,6 +1784,38 @@ function DebtSnowballTab({ userId }) {
           </div>
           <input className="fin-input" type="number" min="0" step="1" placeholder="Payoff goal in months (optional, e.g. 60 for 5 years)" value={form.goal_months}
             onChange={e => setForm(f => ({ ...f, goal_months: e.target.value }))} />
+          <button type="button" className="debt-terms-toggle debt-terms-toggle--form" onClick={() => setShowTerms(s => !s)}>
+            {showTerms ? '▾ Loan terms' : '▸ Loan terms (optional — rate index, interest-only draw, maturity)'}
+          </button>
+          {showTerms && (
+            <div className="debt-terms-grid debt-terms-grid--form">
+              <label className="debt-terms-field">
+                <span>Rate index</span>
+                <input className="fin-input" placeholder="e.g. WSJ Prime" value={form.rate_index}
+                  onChange={e => setForm(f => ({ ...f, rate_index: e.target.value }))} />
+              </label>
+              <label className="debt-terms-field">
+                <span>Margin (%)</span>
+                <input className="fin-input" type="number" step="0.001" placeholder="e.g. 2.5" value={form.rate_margin}
+                  onChange={e => setForm(f => ({ ...f, rate_margin: e.target.value }))} />
+              </label>
+              <label className="debt-terms-field">
+                <span>Interest-only draw ends</span>
+                <input className="fin-input" type="date" value={form.draw_end_date}
+                  onChange={e => setForm(f => ({ ...f, draw_end_date: e.target.value }))} />
+              </label>
+              <label className="debt-terms-field">
+                <span>Maturity date</span>
+                <input className="fin-input" type="date" value={form.maturity_date}
+                  onChange={e => setForm(f => ({ ...f, maturity_date: e.target.value }))} />
+              </label>
+              <label className="debt-terms-field debt-terms-notes-field">
+                <span>Notes</span>
+                <textarea className="fin-input" rows={2} placeholder="Anything else about the terms…" value={form.notes}
+                  onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
+              </label>
+            </div>
+          )}
           <div className="fin-form-actions">
             <button type="button" className="fin-cancel" onClick={() => setShowForm(false)}>Cancel</button>
             <button type="submit" className="fin-save">Save</button>
@@ -1650,7 +1843,7 @@ function DebtSnowballTab({ userId }) {
               {rows.map(row => (
                 <DebtSnowballRow key={row.key} row={row} editCell={editCell} setEditCell={setEditCell}
                   editVal={editVal} setEditVal={setEditVal} saveField={saveField} saveOwner={saveOwner}
-                  saveGoal={saveGoal} deleteDebt={deleteDebt} expanded={expanded} toggleExpand={toggleExpand} />
+                  saveGoal={saveGoal} saveTerms={saveTerms} deleteDebt={deleteDebt} expanded={expanded} toggleExpand={toggleExpand} />
               ))}
               {mortgageRows.length > 0 && (
                 <tr className="budget-row debt-section-divider">
@@ -1660,7 +1853,7 @@ function DebtSnowballTab({ userId }) {
               {mortgageRows.map(row => (
                 <DebtSnowballRow key={row.key} row={row} editCell={editCell} setEditCell={setEditCell}
                   editVal={editVal} setEditVal={setEditVal} saveField={saveField} saveOwner={saveOwner}
-                  saveGoal={saveGoal} deleteDebt={deleteDebt} expanded={expanded} toggleExpand={toggleExpand} />
+                  saveGoal={saveGoal} saveTerms={saveTerms} deleteDebt={deleteDebt} expanded={expanded} toggleExpand={toggleExpand} />
               ))}
               <tr className="budget-net-row">
                 <td className="budget-td cat">TOTAL</td>
