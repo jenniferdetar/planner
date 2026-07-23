@@ -1,30 +1,85 @@
-import { useState, useRef } from 'react'
-import { useWants } from '../hooks/useWants'
+import { useState, useMemo } from 'react'
+import { useWants, CATEGORIES } from '../hooks/useWants'
 import './WantsPanel.css'
 
+const CATEGORY_COLORS = {
+  Faith: '#7b5ea7',
+  Health: '#3a9188',
+  Career: '#3164a0',
+  Home: '#5cb85c',
+  Finances: '#4a7a6a',
+  Jeff: '#a23b3b',
+  Other: '#8a8a8a',
+}
+
+function EditableText({ value, placeholder, onSave, className }) {
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState(value)
+
+  function start() {
+    setDraft(value)
+    setEditing(true)
+  }
+  function commit() {
+    setEditing(false)
+    if (draft !== value) onSave(draft)
+  }
+
+  if (editing) {
+    return (
+      <input
+        className="wants-input"
+        autoFocus
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') { e.preventDefault(); commit() }
+          if (e.key === 'Escape') setEditing(false)
+        }}
+      />
+    )
+  }
+  return (
+    <span className={`${className} ${!value ? 'empty' : ''}`} onClick={start}>
+      {value || placeholder}
+    </span>
+  )
+}
+
 export default function WantsPanel({ providerToken }) {
-  const { wants, loading, error, saving, reload, updateWant } = useWants(providerToken)
-  const [editingNum, setEditingNum] = useState(null)
-  const [editText, setEditText] = useState('')
-  const inputRef = useRef(null)
+  const {
+    wants, loading, error, saving, needsSetup,
+    reload, migrate, updateField, toggleAnswered, addWant,
+  } = useWants(providerToken)
 
-  function startEdit(want) {
-    setEditingNum(want.num)
-    setEditText(want.text)
-    setTimeout(() => inputRef.current?.focus(), 0)
+  const [filterCat, setFilterCat] = useState('All')
+  const [hideAnswered, setHideAnswered] = useState(false)
+  const [newText, setNewText] = useState('')
+
+  const answeredCount = wants.filter((w) => w.answered).length
+  const pct = wants.length ? Math.round((answeredCount / wants.length) * 100) : 0
+
+  const usedCategories = useMemo(
+    () => CATEGORIES.filter((c) => wants.some((w) => w.category === c)),
+    [wants]
+  )
+
+  const visible = wants.filter((w) => {
+    if (filterCat !== 'All' && w.category !== filterCat) return false
+    if (hideAnswered && w.answered) return false
+    return true
+  })
+
+  async function handleAdd(e) {
+    e.preventDefault()
+    const text = newText.trim()
+    if (!text || saving) return
+    await addWant(text)
+    setNewText('')
   }
 
-  async function commitEdit(want) {
-    if (editText !== want.text) {
-      await updateWant(want, editText)
-    }
-    setEditingNum(null)
-  }
-
-  function handleKeyDown(e, want) {
-    if (e.key === 'Enter') { e.preventDefault(); commitEdit(want) }
-    if (e.key === 'Escape') { setEditingNum(null) }
-  }
+  const showEmptyState = !loading && !error && (needsSetup || wants.length === 0)
 
   return (
     <div className="wants-panel">
@@ -47,32 +102,118 @@ export default function WantsPanel({ providerToken }) {
 
         {loading && <div className="wants-loading">Loading…</div>}
 
-        {!loading && !error && (
-          <div className="wants-list">
-            {wants.map(want => (
-              <div
-                key={want.num}
-                className={`wants-item ${editingNum === want.num ? 'editing' : ''}`}
-                onClick={() => editingNum !== want.num && startEdit(want)}
-              >
-                <span className="wants-num">{want.num}.</span>
-                {editingNum === want.num ? (
-                  <input
-                    ref={inputRef}
-                    className="wants-input"
-                    value={editText}
-                    onChange={e => setEditText(e.target.value)}
-                    onBlur={() => commitEdit(want)}
-                    onKeyDown={e => handleKeyDown(e, want)}
-                  />
-                ) : (
-                  <span className={`wants-text ${!want.text ? 'empty' : ''}`}>
-                    {want.text || 'Click to add…'}
-                  </span>
-                )}
-              </div>
-            ))}
+        {showEmptyState && (
+          <div className="wants-setup">
+            <h3 className="wants-setup-title">Set up your Wants list</h3>
+            <p className="wants-setup-text">
+              This builds a clean, single list on a new <strong>List</strong> tab in your sheet —
+              your original grid stays exactly as it is. Your existing wants are imported,
+              duplicates removed, and each one is sorted into a category so you can track which
+              prayers have been answered.
+            </p>
+            <button className="wants-setup-btn" onClick={migrate} disabled={saving}>
+              {saving ? 'Importing…' : 'Import my existing wants'}
+            </button>
           </div>
+        )}
+
+        {!loading && !error && !showEmptyState && (
+          <>
+            <div className="wants-progress">
+              <div className="wants-progress-label">
+                <span>{answeredCount} of {wants.length} answered 🙏</span>
+                <span>{pct}%</span>
+              </div>
+              <div className="wants-progress-track">
+                <div className="wants-progress-fill" style={{ width: `${pct}%` }} />
+              </div>
+            </div>
+
+            <div className="wants-filters">
+              <button
+                className={`wants-chip ${filterCat === 'All' ? 'active' : ''}`}
+                onClick={() => setFilterCat('All')}
+              >All</button>
+              {usedCategories.map((c) => (
+                <button
+                  key={c}
+                  className={`wants-chip ${filterCat === c ? 'active' : ''}`}
+                  style={{ '--chip-color': CATEGORY_COLORS[c] }}
+                  onClick={() => setFilterCat(c)}
+                >{c}</button>
+              ))}
+              <label className="wants-hide-toggle">
+                <input
+                  type="checkbox"
+                  checked={hideAnswered}
+                  onChange={(e) => setHideAnswered(e.target.checked)}
+                />
+                Hide answered
+              </label>
+            </div>
+
+            <form className="wants-add-form" onSubmit={handleAdd}>
+              <input
+                className="wants-add-input"
+                placeholder="Add a new want…"
+                value={newText}
+                onChange={(e) => setNewText(e.target.value)}
+              />
+              <button type="submit" className="wants-add-btn" disabled={saving || !newText.trim()}>
+                + Add
+              </button>
+            </form>
+
+            <div className="wants-list">
+              {visible.length === 0 && (
+                <p className="wants-loading">Nothing here with this filter.</p>
+              )}
+              {visible.map((want) => (
+                <div key={want.rowIndex} className={`wants-row ${want.answered ? 'answered' : ''}`}>
+                  <button
+                    className={`wants-check ${want.answered ? 'on' : ''}`}
+                    onClick={() => toggleAnswered(want)}
+                    title={want.answered ? 'Mark as not yet answered' : 'Mark as answered'}
+                  >
+                    {want.answered ? '✓' : ''}
+                  </button>
+
+                  <span className="wants-num">{want.num}</span>
+
+                  <div className="wants-main">
+                    <EditableText
+                      className="wants-text"
+                      value={want.text}
+                      placeholder="Click to add…"
+                      onSave={(v) => updateField(want, 'text', v)}
+                    />
+                    <div className="wants-meta">
+                      <EditableText
+                        className="wants-notes"
+                        value={want.notes}
+                        placeholder="+ note"
+                        onSave={(v) => updateField(want, 'notes', v)}
+                      />
+                      {want.answered && want.date && (
+                        <span className="wants-date">answered {want.date}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <select
+                    className="wants-cat-select"
+                    value={want.category || 'Other'}
+                    onChange={(e) => updateField(want, 'category', e.target.value)}
+                    style={{ '--cat-color': CATEGORY_COLORS[want.category] || CATEGORY_COLORS.Other }}
+                  >
+                    {CATEGORIES.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>
