@@ -94,9 +94,24 @@ export default function WantsPanel({ providerToken }) {
       <div className="wants-body">
         {error && (
           <div className="wants-error">
-            {error.includes('401') || error.includes('403')
-              ? 'Sign out and sign back in with Google to refresh access.'
-              : error}
+            {/insufficient authentication scopes|scope_insufficient|insufficient permission/i.test(error) ? (
+              <>
+                <strong>Google didn't grant Sheets access.</strong> Sign out, sign back in, and on the
+                Google permission screen make sure the <em>Google Sheets</em> checkbox is ticked before
+                continuing.
+                <span className="wants-error-detail">Google says: {error}</span>
+              </>
+            ) : /has not been used in project|is disabled|SERVICE_DISABLED/i.test(error) ? (
+              <>
+                <strong>The Google Sheets API is turned off for this app's Google project.</strong> It has
+                to be enabled once in the Google Cloud console, then wait a minute and reload.
+                <span className="wants-error-detail">Google says: {error}</span>
+              </>
+            ) : /401|unauthenticated|invalid credentials|invalid authentication/i.test(error) ? (
+              'Your Google sign-in expired. Sign out and sign back in to refresh access.'
+            ) : (
+              error
+            )}
           </div>
         )}
 
