@@ -1214,6 +1214,62 @@
   letter-spacing: 0.3px;
 }
 
+/* ─── Loan terms (rate index/margin, interest-only draw, maturity) ───────── */
+.debt-single-cell { display: flex; flex-direction: column; gap: 2px; }
+.debt-single-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.debt-single-name { font-weight: 600; }
+
+.debt-terms-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: #3164a0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.debt-terms-toggle:hover { text-decoration: underline; }
+.debt-terms-toggle--form { align-self: flex-start; margin: 2px 0; }
+
+.debt-terms-summary {
+  font-size: 11px;
+  font-weight: 400;
+  color: #7a8aa0;
+  font-style: italic;
+}
+
+.debt-terms-row .budget-td { background: #f4f7fb; }
+.debt-terms-panel { display: flex; flex-direction: column; gap: 10px; padding: 4px 2px; }
+
+.debt-terms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+.debt-terms-grid--form { margin: 4px 0; }
+
+.debt-terms-field { display: flex; flex-direction: column; gap: 3px; }
+.debt-terms-field > span {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #7a8aa0;
+}
+.debt-terms-field .fin-input { width: 100%; }
+.debt-terms-field textarea.fin-input { resize: vertical; min-height: 38px; font-family: inherit; }
+.debt-terms-notes-field { grid-column: 1 / -1; }
+
+.debt-terms-footer { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+.debt-terms-hint {
+  margin-right: auto;
+  font-size: 12px;
+  color: #4a6a8a;
+  font-weight: 600;
+}
+
 /* ─── Laundry Tracker ────────────────────────────────────── */
 .laundry-content { overflow-y: auto; }
 
