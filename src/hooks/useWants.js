@@ -13,13 +13,14 @@ const COLS = { num: 'A', text: 'B', category: 'C', answered: 'D', date: 'E', not
 // The tab it lives on isn't necessarily named "Sheet1", so we discover the real name at import time.
 const OLD_GRID_RANGE = 'A1:H20'
 
-export const CATEGORIES = ['Faith', 'Health', 'Career', 'Education', 'Home', 'Finances', 'Jeff', 'Other']
+export const CATEGORIES = ['Faith', 'Health', 'Career', 'Education', 'CSEA', 'Home', 'Finances', 'Jeff', 'Other']
 
 const CATEGORY_RULES = [
   [/church|god|discern|decern/i, 'Faith'],
   [/health|weigh|\blbs\b|medication|doctor|meal prep|spices|spaghetti|freeze dryer|dentures/i, 'Health'],
   [/\bgcu\b|\bmpa\b|master'?s|\bdegree\b|graduat|university|college|semester|diploma|coursework/i, 'Education'],
-  [/travel agent|csea|union|conference|delegate|work from home|side hu|amazon|storefront|coupon|member intern/i, 'Career'],
+  [/csea|\bunion\b|conference|delegate|member intern|labor rep|e-?board|bargaining|steward|release time/i, 'CSEA'],
+  [/travel agent|work from home|side hu|amazon|storefront|coupon/i, 'Career'],
   [/house|home|acre|cleaner|laundry|chef|\bcar\b/i, 'Home'],
   [/pay off|saving|checking|\$|net worth|bankruptcy|debt|income|financial manager|money/i, 'Finances'],
   [/jeff|sex with/i, 'Jeff'],
