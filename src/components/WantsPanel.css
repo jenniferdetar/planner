@@ -65,6 +65,14 @@
   color: #c0392b;
   font-size: 12px;
   padding: 8px 12px;
+  line-height: 1.5;
+}
+.wants-error-detail {
+  display: block;
+  margin-top: 6px;
+  color: #a06060;
+  font-size: 11px;
+  font-style: italic;
 }
 
 .wants-loading {

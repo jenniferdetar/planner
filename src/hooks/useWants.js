@@ -32,6 +32,18 @@ function getToken(providerToken) {
   return providerToken || localStorage.getItem('gcal_provider_token')
 }
 
+// Pull Google's descriptive message out of a failed Sheets API response so the
+// UI can show the real reason (expired token vs. missing scope vs. API disabled)
+// instead of a generic "something went wrong".
+async function sheetsError(res) {
+  const body = await res.json().catch(() => null)
+  const msg = body?.error?.message || ''
+  const err = new Error(msg || `Sheets API error: ${res.status}`)
+  err.status = res.status
+  err.googleMessage = msg
+  return err
+}
+
 function parseLegacy(values) {
   const items = []
   if (!values) return items
@@ -73,7 +85,7 @@ export function useWants(providerToken) {
         body: JSON.stringify({ range, majorDimension: 'ROWS', values }),
       }
     )
-    if (!res.ok) throw new Error(`Save error: ${res.status}`)
+    if (!res.ok) throw await sheetsError(res)
   }
 
   const load = useCallback(async () => {
@@ -84,16 +96,15 @@ export function useWants(providerToken) {
       const res = await apiGet(LIST_RANGE)
       if (res.status === 400) {
         // Range can't be parsed because the List tab doesn't exist yet.
-        const body = await res.json().catch(() => null)
-        const msg = body?.error?.message || ''
-        if (/unable to parse range|not found/i.test(msg)) {
+        const err = await sheetsError(res)
+        if (/unable to parse range|not found/i.test(err.googleMessage)) {
           setNeedsSetup(true)
           setWants([])
           return
         }
-        throw new Error(msg || 'Sheets API error: 400')
+        throw err
       }
-      if (!res.ok) throw new Error(`Sheets API error: ${res.status}`)
+      if (!res.ok) throw await sheetsError(res)
       const data = await res.json()
       const rows = data.values || []
       const parsed = rows
