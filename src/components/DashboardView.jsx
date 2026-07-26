@@ -124,6 +124,7 @@ export default function DashboardView({
   cseaPcCases, onAddCseaPcCase, onUpdateCseaPcStatus, onDeleteCseaPcCase,
   cseaPcNotes, onAddCseaPcNote, onDeleteCseaPcNote,
   cseaCredReports, onAddCseaCredReport, onUpdateCseaCredReport, onDeleteCseaCredReport,
+  cseaDelegateCards, onAddCseaDelegateCard, onUpdateCseaDelegateCard, onDeleteCseaDelegateCard,
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   asanaIcaapTasks, attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
   icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
@@ -562,6 +563,10 @@ export default function DashboardView({
               onAddCredReport={onAddCseaCredReport}
               onUpdateCredReport={onUpdateCseaCredReport}
               onDeleteCredReport={onDeleteCseaCredReport}
+              delegateCards={cseaDelegateCards || []}
+              onAddDelegateCard={onAddCseaDelegateCard}
+              onUpdateDelegateCard={onUpdateCseaDelegateCard}
+              onDeleteDelegateCard={onDeleteCseaDelegateCard}
             />
           </div>
         )}
