@@ -1089,3 +1089,299 @@
     flex-wrap: wrap;
   }
 }
+
+/* ============================================================
+   Conference — Credentials Committee Report
+   ============================================================ */
+.cred-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: auto;
+  padding-top: 14px;
+}
+
+.cred-intro {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--csea-dark-gray);
+  background: var(--csea-light-blue);
+  border: 1px solid var(--csea-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.cred-card {
+  border: 1px solid var(--csea-border);
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.cred-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  background: var(--csea-blue);
+  color: #fff;
+}
+
+.cred-collapse {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.cred-card-org {
+  font-weight: 800;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.cred-card-sub {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.cred-card-name {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.cred-delete {
+  background: transparent;
+  border: none;
+  color: #fff;
+  opacity: 0.8;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0 2px;
+}
+.cred-delete:hover { opacity: 1; }
+
+.cred-card-body {
+  padding: 14px 16px 16px;
+}
+
+.cred-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.cred-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--csea-dark-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.cred-field input { min-width: 140px; }
+.cred-field-wide { flex: 1; }
+.cred-field-wide input { min-width: 200px; width: 100%; }
+
+.cred-section-title {
+  margin: 16px 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--csea-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--csea-light-blue);
+  padding-bottom: 4px;
+}
+
+.cred-chapter-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cred-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.cred-line-label {
+  flex: 1;
+  font-size: 12.5px;
+  color: var(--csea-body);
+}
+
+.cred-num {
+  width: 76px;
+  flex: none;
+  padding: 6px 8px;
+  border: 1px solid var(--csea-border);
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
+  color: var(--csea-body);
+  background: #fff;
+}
+.cred-num:focus {
+  outline: none;
+  border-color: var(--csea-blue);
+}
+
+.cred-table-wrap {
+  overflow-x: auto;
+}
+
+.cred-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.cred-table th {
+  background: var(--csea-light-blue);
+  color: var(--csea-blue);
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 7px 8px;
+  text-align: center;
+  border-bottom: 2px solid var(--csea-border);
+}
+
+.cred-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--csea-light-gray);
+  text-align: center;
+}
+
+.cred-table-rowhead {
+  text-align: left !important;
+  color: var(--csea-body);
+}
+.cred-table th.cred-table-rowhead { background: var(--csea-light-blue); }
+
+.cred-table .cred-num {
+  width: 68px;
+}
+
+.cred-total-row td {
+  border-top: 2px solid var(--csea-border);
+  border-bottom: none;
+  font-weight: 800;
+  color: var(--csea-blue);
+}
+.cred-total-row .cred-table-rowhead {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}
+
+.cred-total-cell {
+  font-weight: 800;
+  color: var(--csea-blue);
+  font-size: 14px;
+}
+
+.cred-grand-total {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--csea-light-blue);
+  border-radius: 8px;
+}
+.cred-grand-total .cred-line-label {
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: var(--csea-blue);
+}
+
+.cred-add-session {
+  align-self: flex-start;
+  background: var(--csea-blue);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cred-add-session:hover { background: #182658; }
+
+/* Delegate Business Report Card additions */
+.cred-section-note {
+  font-weight: 600;
+  font-size: 10.5px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--csea-dark-gray);
+  font-style: italic;
+}
+
+.cred-prompt {
+  margin: 0 0 6px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--csea-dark-gray);
+}
+
+.cred-card-body .csea-textarea {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.cred-speaker-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.cred-speaker-row .csea-input { flex: 1; min-width: 0; }
+
+.cred-speaker-remove {
+  flex: none;
+  background: transparent;
+  border: 1px solid var(--csea-border);
+  border-radius: 6px;
+  color: var(--csea-dark-gray);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 9px;
+  line-height: 1;
+}
+.cred-speaker-remove:hover {
+  border-color: var(--csea-error);
+  color: var(--csea-error);
+}
+
+.cred-add-inline {
+  align-self: flex-start;
+  background: transparent;
+  color: var(--csea-blue);
+  border: 1px dashed var(--csea-blue);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 2px;
+}
+.cred-add-inline:hover { background: var(--csea-light-blue); }

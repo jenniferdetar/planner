@@ -72,7 +72,7 @@ const PC_STATUS_COLORS = {
 }
 const PC_OPEN_STATUSES = ['Intake', 'Filed', 'Scheduled', 'Hearing Held']
 
-export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote, pcCases = [], onAddPcCase, onUpdatePcStatus, onDeletePcCase, pcCaseNotes = {}, onAddPcCaseNote, onDeletePcCaseNote }) {
+export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote, pcCases = [], onAddPcCase, onUpdatePcStatus, onDeletePcCase, pcCaseNotes = {}, onAddPcCaseNote, onDeletePcCaseNote, credReports = [], onAddCredReport, onUpdateCredReport, onDeleteCredReport, delegateCards = [], onAddDelegateCard, onUpdateDelegateCard, onDeleteDelegateCard }) {
   const workLocations = useWorkLocations()
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
   const [linkTitle, setLinkTitle] = useState('')
@@ -167,6 +167,8 @@ export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDele
     showAddPcCase, setShowAddPcCase, pcFilter, setPcFilter, pcForm, setPcForm,
     displayPcCases, activePcCases, handleAddPcCase, onUpdatePcStatus, onDeletePcCase,
     pcCaseNotes, onAddPcCaseNote, onDeletePcCaseNote,
+    credReports, onAddCredReport, onUpdateCredReport, onDeleteCredReport,
+    delegateCards, onAddDelegateCard, onUpdateDelegateCard, onDeleteDelegateCard,
   }
 }
 
@@ -389,7 +391,7 @@ export function CseaTrackerInner({ api }) {
 
       {tab === 'rif' && <RifIntakePanel />}
 
-      {tab === 'conference' && <ConferencePanel />}
+      {tab === 'conference' && <ConferencePanel api={api} />}
     </div>
   )
 }
@@ -750,44 +752,462 @@ function RifIntakePanel() {
   )
 }
 
-function ConferencePanel() {
+function ConferencePanel({ api }) {
+  const [subTab, setSubTab] = useState('attendees')
+
   return (
     <div className="csea-panel">
       <div className="csea-toolbar">
-        <span className="csea-toolbar-label">Conference</span>
-        <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{CONFERENCE_ATTENDEES.length} <span className="csea-inline-lbl">Attendees</span></span>
+        <div className="csea-filter-pills">
+          <button className={`filter-pill ${subTab === 'attendees' ? 'active' : ''}`} onClick={() => setSubTab('attendees')}>Attendees</button>
+          <button className={`filter-pill ${subTab === 'credentials' ? 'active' : ''}`} onClick={() => setSubTab('credentials')}>Credentials Report</button>
+          <button className={`filter-pill ${subTab === 'delegate' ? 'active' : ''}`} onClick={() => setSubTab('delegate')}>Delegate Report Card</button>
+        </div>
+        {subTab === 'attendees' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{CONFERENCE_ATTENDEES.length} <span className="csea-inline-lbl">Attendees</span></span>}
+        {subTab === 'credentials' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.credReports.length} <span className="csea-inline-lbl">Sessions</span></span>}
+        {subTab === 'delegate' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.delegateCards.length} <span className="csea-inline-lbl">Days</span></span>}
       </div>
 
-      <div className="csea-issue-list csea-issue-list--fill" style={{ padding: '0 16px 16px' }}>
-        <div className="rif-table-wrap rif-table-wrap--fill">
-          <table className="rif-table rif-table--wrap">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Attending</th>
-                <th>Basis</th>
-                <th>Position</th>
-                <th>Shirt Size</th>
-                <th>Shirt Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {CONFERENCE_ATTENDEES.map((a, i) => (
-                <tr key={a.name}>
-                  <td>{i + 1}</td>
-                  <td><span className="rif-cell-clamp">{a.name}</span></td>
-                  <td>{a.attending}</td>
-                  <td>{a.basis}</td>
-                  <td><span className="rif-cell-clamp">{a.position}</span></td>
-                  <td>{a.shirtSize || '—'}</td>
-                  <td><span className="rif-cell-clamp">{a.shirtStatus || '—'}</span></td>
+      {subTab === 'attendees' ? (
+        <div className="csea-issue-list csea-issue-list--fill" style={{ padding: '0 16px 16px' }}>
+          <div className="rif-table-wrap rif-table-wrap--fill">
+            <table className="rif-table rif-table--wrap">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Attending</th>
+                  <th>Basis</th>
+                  <th>Position</th>
+                  <th>Shirt Size</th>
+                  <th>Shirt Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {CONFERENCE_ATTENDEES.map((a, i) => (
+                  <tr key={a.name}>
+                    <td>{i + 1}</td>
+                    <td><span className="rif-cell-clamp">{a.name}</span></td>
+                    <td>{a.attending}</td>
+                    <td>{a.basis}</td>
+                    <td><span className="rif-cell-clamp">{a.position}</span></td>
+                    <td>{a.shirtSize || '—'}</td>
+                    <td><span className="rif-cell-clamp">{a.shirtStatus || '—'}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
+      ) : subTab === 'credentials' ? (
+        <CredentialsReportPanel api={api} />
+      ) : (
+        <DelegateReportPanel api={api} />
+      )}
+    </div>
+  )
+}
+
+const CRED_CHAPTER_ROWS = [
+  { key: 'chapters_authorized', label: 'No. of Chapters Authorized' },
+  { key: 'chapters_registered', label: 'No. of Chapters with Registered Delegates' },
+  { key: 'chapters_attending', label: 'No. of Chapters IN ATTENDANCE as of this report' },
+]
+
+const CRED_DELEGATE_ROWS = [
+  { key: 'bod', label: 'No. of Board of Directors Members' },
+  { key: 'scc', label: 'No. of Standing Committee Chairs' },
+  { key: 'life', label: 'No. of Life Members' },
+  { key: 'retiree', label: 'No. of Retiree Unit Executive Board Members' },
+  { key: 'regional', label: 'No. of Regional Representatives' },
+  { key: 'chapter', label: 'No. of Chapter Delegates' },
+]
+
+function CredentialsReportPanel({ api }) {
+  async function handleAdd() {
+    const n = api.credReports.length + 1
+    await api.onAddCredReport?.({ session_name: `Business Meeting ${n}` })
+  }
+
+  return (
+    <div className="csea-issue-list csea-issue-list--fill cred-panel" style={{ padding: '0 16px 16px' }}>
+      <p className="cred-intro">
+        Report of Credentials Committee — one entry per business meeting session.
+        The printed form repeats the same information on its top and bottom halves;
+        a single entry here covers both.
+      </p>
+
+      {api.credReports.length === 0 && (
+        <p className="csea-empty">No sessions yet. Add one for each business meeting.</p>
+      )}
+
+      {api.credReports.map((report) => (
+        <CredentialsReportCard
+          key={report.id}
+          report={report}
+          onUpdate={api.onUpdateCredReport}
+          onDelete={api.onDeleteCredReport}
+        />
+      ))}
+
+      <button className="cred-add-session" onClick={handleAdd}>+ Add Session</button>
+    </div>
+  )
+}
+
+function CredentialsReportCard({ report, onUpdate, onDelete }) {
+  const [draft, setDraft] = useState(() => ({
+    session_name: report.session_name || '',
+    report_date: report.report_date || '',
+    report_time: report.report_time || '',
+    data: {
+      chapters_authorized: '', chapters_registered: '', chapters_attending: '',
+      others_attendance: '',
+      delegates: {},
+      ...(report.data || {}),
+    },
+  }))
+  const [collapsed, setCollapsed] = useState(false)
+
+  function commit(next) {
+    onUpdate?.(report.id, {
+      session_name: next.session_name,
+      report_date: next.report_date || null,
+      report_time: next.report_time,
+      data: next.data,
+    })
+  }
+
+  function setHeader(field, value) {
+    setDraft((d) => ({ ...d, [field]: value }))
+  }
+
+  function setChapter(key, value) {
+    setDraft((d) => ({ ...d, data: { ...d.data, [key]: value } }))
+  }
+
+  function setDelegate(row, col, value) {
+    setDraft((d) => ({
+      ...d,
+      data: {
+        ...d.data,
+        delegates: {
+          ...d.data.delegates,
+          [row]: { ...(d.data.delegates?.[row] || {}), [col]: value },
+        },
+      },
+    }))
+  }
+
+  const num = (v) => (v === '' || v == null ? 0 : Number(v) || 0)
+  const totalDelegates = CRED_DELEGATE_ROWS.reduce(
+    (sum, r) => sum + num(draft.data.delegates?.[r.key]?.attending), 0
+  )
+  const totalAttendance = totalDelegates + num(draft.data.others_attendance)
+
+  return (
+    <div className={`cred-card ${collapsed ? 'collapsed' : ''}`}>
+      <div className="cred-card-header">
+        <button className="cred-collapse" onClick={() => setCollapsed((c) => !c)} title={collapsed ? 'Expand' : 'Collapse'}>
+          {collapsed ? '▸' : '▾'}
+        </button>
+        <span className="cred-card-org">California School Employees Association</span>
+        <span className="cred-card-sub">Report of Credentials Committee</span>
+        <span className="cred-card-name">{draft.session_name || 'Untitled Session'}</span>
+        <button className="cred-delete" onClick={() => onDelete?.(report.id)} title="Delete session">✕</button>
       </div>
+
+      {!collapsed && (
+        <div className="cred-card-body">
+          <div className="cred-meta">
+            <label className="cred-field">
+              <span>Date</span>
+              <input className="csea-input" type="date" value={draft.report_date}
+                onChange={(e) => setHeader('report_date', e.target.value)}
+                onBlur={() => commit({ ...draft, report_date: draft.report_date })} />
+            </label>
+            <label className="cred-field">
+              <span>Time</span>
+              <input className="csea-input" placeholder="e.g. 9:00 AM" value={draft.report_time}
+                onChange={(e) => setHeader('report_time', e.target.value)}
+                onBlur={() => commit(draft)} />
+            </label>
+            <label className="cred-field cred-field-wide">
+              <span>Session</span>
+              <input className="csea-input" placeholder="e.g. Morning Business Meeting" value={draft.session_name}
+                onChange={(e) => setHeader('session_name', e.target.value)}
+                onBlur={() => commit(draft)} />
+            </label>
+          </div>
+
+          <div className="cred-section-title">Chapter Report</div>
+          <div className="cred-chapter-grid">
+            {CRED_CHAPTER_ROWS.map((r) => (
+              <div key={r.key} className="cred-line">
+                <span className="cred-line-label">{r.label}</span>
+                <input className="cred-num" type="number" inputMode="numeric" min="0"
+                  value={draft.data[r.key] ?? ''}
+                  onChange={(e) => setChapter(r.key, e.target.value)}
+                  onBlur={() => commit(draft)} />
+              </div>
+            ))}
+          </div>
+
+          <div className="cred-section-title">Delegate Report</div>
+          <div className="cred-table-wrap">
+            <table className="cred-table">
+              <thead>
+                <tr>
+                  <th className="cred-table-rowhead"></th>
+                  <th>Authorized</th>
+                  <th>Registered</th>
+                  <th>Attending</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CRED_DELEGATE_ROWS.map((r) => (
+                  <tr key={r.key}>
+                    <td className="cred-table-rowhead">{r.label}</td>
+                    {['authorized', 'registered', 'attending'].map((col) => (
+                      <td key={col}>
+                        <input className="cred-num" type="number" inputMode="numeric" min="0"
+                          value={draft.data.delegates?.[r.key]?.[col] ?? ''}
+                          onChange={(e) => setDelegate(r.key, col, e.target.value)}
+                          onBlur={() => commit(draft)} />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                <tr className="cred-total-row">
+                  <td className="cred-table-rowhead">TOTAL DELEGATES IN ATTENDANCE</td>
+                  <td></td>
+                  <td></td>
+                  <td className="cred-total-cell">{totalDelegates}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="cred-section-title">Others in Attendance</div>
+          <div className="cred-line">
+            <span className="cred-line-label">Honor Roll, Conference Committee Members, Guests, Visitors, Staff</span>
+            <input className="cred-num" type="number" inputMode="numeric" min="0"
+              value={draft.data.others_attendance ?? ''}
+              onChange={(e) => setChapter('others_attendance', e.target.value)}
+              onBlur={() => commit(draft)} />
+          </div>
+
+          <div className="cred-line cred-grand-total">
+            <span className="cred-line-label">TOTAL IN ATTENDANCE</span>
+            <span className="cred-total-cell">{totalAttendance}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const DELEGATE_CRED_ROWS = [
+  { key: 'chapters_authorized', label: 'Number of CSEA Chapters Authorized', chapterCount: true },
+  { key: 'chapters_in_attendance', label: 'Number of Chapters IN ATTENDANCE', chapterCount: true },
+  { key: 'association_officers', label: 'Number of Association Officers' },
+  { key: 'standing_committee_chairs', label: 'Number of Standing Committee Chairpersons' },
+  { key: 'life_members', label: 'Number of Life Members' },
+  { key: 'retiree_board_members', label: 'Number of Retiree Unit Executive Board Members' },
+  { key: 'regional_representatives', label: 'Number of Regional Representatives' },
+  { key: 'chapter_delegates', label: 'Number of Chapter Delegates' },
+  { key: 'others_in_attendance', label: 'Others in Attendance (Honor Roll, Conference Committee Members, Guests, Visitors, Staff)' },
+]
+
+function DelegateReportPanel({ api }) {
+  async function handleAdd() {
+    const n = api.delegateCards.length + 1
+    await api.onAddDelegateCard?.({ day_label: `Day ${n}` })
+  }
+
+  return (
+    <div className="csea-issue-list csea-issue-list--fill cred-panel" style={{ padding: '0 16px 16px' }}>
+      <p className="cred-intro">
+        Delegate Business Report Card — report critical Conference business back to your
+        chapter membership. Add one card per Conference day; each covers that day's business.
+      </p>
+
+      {api.delegateCards.length === 0 && (
+        <p className="csea-empty">No days yet. Add a card for each day of Conference.</p>
+      )}
+
+      {api.delegateCards.map((card) => (
+        <DelegateReportCard
+          key={card.id}
+          card={card}
+          onUpdate={api.onUpdateDelegateCard}
+          onDelete={api.onDeleteDelegateCard}
+        />
+      ))}
+
+      <button className="cred-add-session" onClick={handleAdd}>+ Add Day</button>
+    </div>
+  )
+}
+
+function DelegateReportCard({ card, onUpdate, onDelete }) {
+  const [draft, setDraft] = useState(() => {
+    const d = card.data || {}
+    return {
+      day_label: card.day_label || '',
+      report_date: card.report_date || '',
+      credentials: { ...(d.credentials || {}) },
+      provider_area: d.provider_area || '',
+      speakers: d.speakers && d.speakers.length ? d.speakers : [{ speaker: '', topic: '' }, { speaker: '', topic: '' }],
+      education_day: d.education_day || '',
+      resolutions: { number: '', passed: '', failed: '', stood_out: '', ...(d.resolutions || {}) },
+      budget: d.budget || '',
+      overall: d.overall || '',
+      networking: d.networking || '',
+    }
+  })
+  const [collapsed, setCollapsed] = useState(false)
+
+  function commit(next) {
+    const state = next || draft
+    onUpdate?.(card.id, {
+      day_label: state.day_label,
+      report_date: state.report_date || null,
+      data: {
+        credentials: state.credentials,
+        provider_area: state.provider_area,
+        speakers: state.speakers,
+        education_day: state.education_day,
+        resolutions: state.resolutions,
+        budget: state.budget,
+        overall: state.overall,
+        networking: state.networking,
+      },
+    })
+  }
+
+  const set = (field, value) => setDraft((d) => ({ ...d, [field]: value }))
+  const setCred = (key, value) => setDraft((d) => ({ ...d, credentials: { ...d.credentials, [key]: value } }))
+  const setRes = (key, value) => setDraft((d) => ({ ...d, resolutions: { ...d.resolutions, [key]: value } }))
+  const setSpeaker = (idx, key, value) => setDraft((d) => ({
+    ...d,
+    speakers: d.speakers.map((s, i) => (i === idx ? { ...s, [key]: value } : s)),
+  }))
+  const addSpeaker = () => setDraft((d) => ({ ...d, speakers: [...d.speakers, { speaker: '', topic: '' }] }))
+  const removeSpeaker = (idx) => setDraft((d) => {
+    const speakers = d.speakers.filter((_, i) => i !== idx)
+    const next = { ...d, speakers: speakers.length ? speakers : [{ speaker: '', topic: '' }] }
+    commit(next)
+    return next
+  })
+
+  const num = (v) => (v === '' || v == null ? 0 : Number(v) || 0)
+  const totalAttendance = DELEGATE_CRED_ROWS
+    .filter((r) => !r.chapterCount)
+    .reduce((sum, r) => sum + num(draft.credentials[r.key]), 0)
+
+  return (
+    <div className={`cred-card ${collapsed ? 'collapsed' : ''}`}>
+      <div className="cred-card-header">
+        <button className="cred-collapse" onClick={() => setCollapsed((c) => !c)} title={collapsed ? 'Expand' : 'Collapse'}>
+          {collapsed ? '▸' : '▾'}
+        </button>
+        <span className="cred-card-org">California School Employees Association</span>
+        <span className="cred-card-sub">Delegate Business Report Card</span>
+        <span className="cred-card-name">{draft.day_label || 'Untitled Day'}</span>
+        <button className="cred-delete" onClick={() => onDelete?.(card.id)} title="Delete day">✕</button>
+      </div>
+
+      {!collapsed && (
+        <div className="cred-card-body">
+          <div className="cred-meta">
+            <label className="cred-field cred-field-wide">
+              <span>Day</span>
+              <input className="csea-input" placeholder="e.g. Day 1 – Monday" value={draft.day_label}
+                onChange={(e) => set('day_label', e.target.value)} onBlur={() => commit()} />
+            </label>
+            <label className="cred-field">
+              <span>Date</span>
+              <input className="csea-input" type="date" value={draft.report_date}
+                onChange={(e) => set('report_date', e.target.value)} onBlur={() => commit()} />
+            </label>
+          </div>
+
+          <div className="cred-section-title">Credentials Report <span className="cred-section-note">(use final Wednesday Credentials Report)</span></div>
+          <div className="cred-chapter-grid">
+            {DELEGATE_CRED_ROWS.map((r) => (
+              <div key={r.key} className="cred-line">
+                <span className="cred-line-label">{r.label}</span>
+                <input className="cred-num" type="number" inputMode="numeric" min="0"
+                  value={draft.credentials[r.key] ?? ''}
+                  onChange={(e) => setCred(r.key, e.target.value)} onBlur={() => commit()} />
+              </div>
+            ))}
+          </div>
+          <div className="cred-line cred-grand-total">
+            <span className="cred-line-label">TOTAL NUMBER IN ATTENDANCE</span>
+            <span className="cred-total-cell">{totalAttendance}</span>
+          </div>
+
+          <div className="cred-section-title">Provider Area</div>
+          <p className="cred-prompt">What one benefit did you learn about that you could share with other members of the chapter?</p>
+          <textarea className="csea-textarea" rows={2} value={draft.provider_area}
+            onChange={(e) => set('provider_area', e.target.value)} onBlur={() => commit()} />
+
+          <div className="cred-section-title">Speakers</div>
+          <p className="cred-prompt">Which speaker(s) stood out in your mind, and what did they cover?</p>
+          {draft.speakers.map((s, i) => (
+            <div key={i} className="cred-speaker-row">
+              <input className="csea-input" placeholder="Speaker" value={s.speaker}
+                onChange={(e) => setSpeaker(i, 'speaker', e.target.value)} onBlur={() => commit()} />
+              <input className="csea-input" placeholder="Topic" value={s.topic}
+                onChange={(e) => setSpeaker(i, 'topic', e.target.value)} onBlur={() => commit()} />
+              <button type="button" className="cred-speaker-remove" title="Remove speaker" onClick={() => removeSpeaker(i)}>✕</button>
+            </div>
+          ))}
+          <button type="button" className="cred-add-inline" onClick={addSpeaker}>+ Add Speaker</button>
+
+          <div className="cred-section-title">Education Day</div>
+          <p className="cred-prompt">Which session did you attend and what was the value you received from your attendance? What information would benefit all members?</p>
+          <textarea className="csea-textarea" rows={2} value={draft.education_day}
+            onChange={(e) => set('education_day', e.target.value)} onBlur={() => commit()} />
+
+          <div className="cred-section-title">Resolutions Report</div>
+          <div className="cred-chapter-grid">
+            <div className="cred-line">
+              <span className="cred-line-label">Number of Resolutions</span>
+              <input className="cred-num" type="number" inputMode="numeric" min="0" value={draft.resolutions.number ?? ''}
+                onChange={(e) => setRes('number', e.target.value)} onBlur={() => commit()} />
+            </div>
+            <div className="cred-line">
+              <span className="cred-line-label">Number Passed/Approved</span>
+              <input className="cred-num" type="number" inputMode="numeric" min="0" value={draft.resolutions.passed ?? ''}
+                onChange={(e) => setRes('passed', e.target.value)} onBlur={() => commit()} />
+            </div>
+            <div className="cred-line">
+              <span className="cred-line-label">Number Failed</span>
+              <input className="cred-num" type="number" inputMode="numeric" min="0" value={draft.resolutions.failed ?? ''}
+                onChange={(e) => setRes('failed', e.target.value)} onBlur={() => commit()} />
+            </div>
+          </div>
+          <p className="cred-prompt">Which Resolution stood out and why?</p>
+          <textarea className="csea-textarea" rows={2} value={draft.resolutions.stood_out}
+            onChange={(e) => setRes('stood_out', e.target.value)} onBlur={() => commit()} />
+
+          <div className="cred-section-title">Budget</div>
+          <p className="cred-prompt">Present any highlights of the budget review and vote.</p>
+          <textarea className="csea-textarea" rows={2} value={draft.budget}
+            onChange={(e) => set('budget', e.target.value)} onBlur={() => commit()} />
+
+          <div className="cred-section-title">Overall</div>
+          <p className="cred-prompt">Name one thing from your Conference experience that motivated you:</p>
+          <textarea className="csea-textarea" rows={2} value={draft.overall}
+            onChange={(e) => set('overall', e.target.value)} onBlur={() => commit()} />
+          <p className="cred-prompt">What networking opportunities did you take advantage of?</p>
+          <textarea className="csea-textarea" rows={2} value={draft.networking}
+            onChange={(e) => set('networking', e.target.value)} onBlur={() => commit()} />
+        </div>
+      )}
     </div>
   )
 }
