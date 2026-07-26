@@ -752,6 +752,72 @@ function RifIntakePanel() {
   )
 }
 
+function isShirtPaid(a) {
+  return (a.shirtStatus || '').trim().toLowerCase().startsWith('paid')
+}
+
+function AttendeesTable({ attendees }) {
+  return (
+    <div className="rif-table-wrap conf-table-wrap">
+      <table className="rif-table rif-table--wrap">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Attending</th>
+            <th>Basis</th>
+            <th>Position</th>
+            <th>Shirt Size</th>
+            <th>Shirt Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {attendees.map((a, i) => (
+            <tr key={a.name}>
+              <td>{i + 1}</td>
+              <td><span className="rif-cell-clamp">{a.name}</span></td>
+              <td>{a.attending}</td>
+              <td>{a.basis}</td>
+              <td><span className="rif-cell-clamp">{a.position}</span></td>
+              <td>{a.shirtSize || '—'}</td>
+              <td><span className="rif-cell-clamp">{a.shirtStatus || '—'}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function AttendeesPanel() {
+  const paid = CONFERENCE_ATTENDEES.filter(isShirtPaid)
+  const outstanding = CONFERENCE_ATTENDEES.filter((a) => !isShirtPaid(a))
+
+  return (
+    <div className="csea-issue-list csea-issue-list--fill conf-attendees" style={{ padding: '0 16px 16px' }}>
+      <div className="conf-section">
+        <div className="conf-section-header conf-section-header--outstanding">
+          <span>Outstanding</span>
+          <span className="conf-section-count">{outstanding.length}</span>
+        </div>
+        {outstanding.length === 0
+          ? <p className="csea-empty">Everyone has paid 🎉</p>
+          : <AttendeesTable attendees={outstanding} />}
+      </div>
+
+      <div className="conf-section">
+        <div className="conf-section-header conf-section-header--paid">
+          <span>Paid</span>
+          <span className="conf-section-count">{paid.length}</span>
+        </div>
+        {paid.length === 0
+          ? <p className="csea-empty">No payments recorded yet</p>
+          : <AttendeesTable attendees={paid} />}
+      </div>
+    </div>
+  )
+}
+
 function ConferencePanel({ api }) {
   const [subTab, setSubTab] = useState('attendees')
 
@@ -763,42 +829,18 @@ function ConferencePanel({ api }) {
           <button className={`filter-pill ${subTab === 'credentials' ? 'active' : ''}`} onClick={() => setSubTab('credentials')}>Credentials Report</button>
           <button className={`filter-pill ${subTab === 'delegate' ? 'active' : ''}`} onClick={() => setSubTab('delegate')}>Delegate Report Card</button>
         </div>
-        {subTab === 'attendees' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{CONFERENCE_ATTENDEES.length} <span className="csea-inline-lbl">Attendees</span></span>}
+        {subTab === 'attendees' && (
+          <span className="conf-attendee-stats">
+            <span className="csea-inline-stat" style={{ color: 'var(--csea-dark-orange)' }}>{CONFERENCE_ATTENDEES.filter(a => !isShirtPaid(a)).length} <span className="csea-inline-lbl">Outstanding</span></span>
+            <span className="csea-inline-stat" style={{ color: 'var(--csea-success)' }}>{CONFERENCE_ATTENDEES.filter(isShirtPaid).length} <span className="csea-inline-lbl">Paid</span></span>
+          </span>
+        )}
         {subTab === 'credentials' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.credReports.length} <span className="csea-inline-lbl">Sessions</span></span>}
         {subTab === 'delegate' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.delegateCards.length} <span className="csea-inline-lbl">Days</span></span>}
       </div>
 
       {subTab === 'attendees' ? (
-        <div className="csea-issue-list csea-issue-list--fill" style={{ padding: '0 16px 16px' }}>
-          <div className="rif-table-wrap rif-table-wrap--fill">
-            <table className="rif-table rif-table--wrap">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Attending</th>
-                  <th>Basis</th>
-                  <th>Position</th>
-                  <th>Shirt Size</th>
-                  <th>Shirt Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {CONFERENCE_ATTENDEES.map((a, i) => (
-                  <tr key={a.name}>
-                    <td>{i + 1}</td>
-                    <td><span className="rif-cell-clamp">{a.name}</span></td>
-                    <td>{a.attending}</td>
-                    <td>{a.basis}</td>
-                    <td><span className="rif-cell-clamp">{a.position}</span></td>
-                    <td>{a.shirtSize || '—'}</td>
-                    <td><span className="rif-cell-clamp">{a.shirtStatus || '—'}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <AttendeesPanel />
       ) : subTab === 'credentials' ? (
         <CredentialsReportPanel api={api} />
       ) : (

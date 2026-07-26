@@ -1391,3 +1391,51 @@
   margin-top: 2px;
 }
 .cred-add-inline:hover { background: var(--csea-light-blue); }
+
+/* Conference attendees — split into Outstanding / Paid sections */
+.conf-attendee-stats {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.csea-issue-list.conf-attendees {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 14px;
+}
+
+.conf-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.conf-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 7px 12px;
+  border-radius: 8px 8px 0 0;
+  color: #fff;
+}
+.conf-section-header--outstanding { background: var(--csea-dark-orange); }
+.conf-section-header--paid { background: var(--csea-success); }
+
+.conf-section-count {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  padding: 1px 9px;
+  font-size: 11px;
+}
+
+.conf-table-wrap {
+  max-height: none;
+}
