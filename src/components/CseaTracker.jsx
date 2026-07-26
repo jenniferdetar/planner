@@ -756,6 +756,16 @@ function isShirtPaid(a) {
   return (a.shirtStatus || '').trim().toLowerCase().startsWith('paid')
 }
 
+function hasShirtSize(a) {
+  return !!(a.shirtSize && a.shirtSize.trim())
+}
+
+// "Outstanding" = still owes for a shirt: not yet paid and actually ordering
+// a shirt. Anyone with no shirt size (not buying one) drops to the lower area.
+function isOutstanding(a) {
+  return !isShirtPaid(a) && hasShirtSize(a)
+}
+
 function AttendeesTable({ attendees }) {
   return (
     <div className="rif-table-wrap conf-table-wrap">
@@ -790,8 +800,8 @@ function AttendeesTable({ attendees }) {
 }
 
 function AttendeesPanel() {
-  const paid = CONFERENCE_ATTENDEES.filter(isShirtPaid)
-  const outstanding = CONFERENCE_ATTENDEES.filter((a) => !isShirtPaid(a))
+  const outstanding = CONFERENCE_ATTENDEES.filter(isOutstanding)
+  const paid = CONFERENCE_ATTENDEES.filter((a) => !isOutstanding(a))
 
   return (
     <div className="csea-issue-list csea-issue-list--fill conf-attendees" style={{ padding: '0 16px 16px' }}>
@@ -831,8 +841,8 @@ function ConferencePanel({ api }) {
         </div>
         {subTab === 'attendees' && (
           <span className="conf-attendee-stats">
-            <span className="csea-inline-stat" style={{ color: 'var(--csea-dark-orange)' }}>{CONFERENCE_ATTENDEES.filter(a => !isShirtPaid(a)).length} <span className="csea-inline-lbl">Outstanding</span></span>
-            <span className="csea-inline-stat" style={{ color: 'var(--csea-success)' }}>{CONFERENCE_ATTENDEES.filter(isShirtPaid).length} <span className="csea-inline-lbl">Paid</span></span>
+            <span className="csea-inline-stat" style={{ color: 'var(--csea-dark-orange)' }}>{CONFERENCE_ATTENDEES.filter(isOutstanding).length} <span className="csea-inline-lbl">Outstanding</span></span>
+            <span className="csea-inline-stat" style={{ color: 'var(--csea-success)' }}>{CONFERENCE_ATTENDEES.filter(a => !isOutstanding(a)).length} <span className="csea-inline-lbl">Paid</span></span>
           </span>
         )}
         {subTab === 'credentials' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.credReports.length} <span className="csea-inline-lbl">Sessions</span></span>}
