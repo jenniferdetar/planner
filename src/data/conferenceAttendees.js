@@ -9,7 +9,7 @@ export const CONFERENCE_ATTENDEES = [
   { name: 'Carol Turckel', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: '', shirtStatus: 'No response yet' },
   { name: 'Edith Chavez', attending: 'Yes', basis: 'A basis', position: 'Senior Secretary', shirtSize: 'MED', shirtStatus: 'Pending (pay at Conference)' },
   { name: 'Christan Williams', attending: 'Yes', basis: 'A basis', position: 'Coordinating Financial Manager', shirtSize: 'SML', shirtStatus: 'Payment Pending' },
-  { name: 'Franny Parrish', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: '', shirtStatus: 'No response yet' },
+  { name: 'Franny Parrish', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: '', shirtStatus: 'Paid (Venmo)' },
   { name: 'Gema Larios', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: 'MED', shirtStatus: 'Paid (Cash)' },
   { name: 'Helen Lopez', attending: 'Yes', basis: 'C basis', position: 'Library Technician', shirtSize: 'LRG', shirtStatus: 'Paid (Cash)' },
   { name: 'Hilda-Rodriguez Guzman', attending: 'Yes', basis: 'C basis', position: 'Student and Family Resources Navigator', shirtSize: 'LRG', shirtStatus: 'Paid (Venmo)' },
