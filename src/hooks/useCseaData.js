@@ -309,6 +309,60 @@ export function useCseaPersonnelCommissionNotes(userId) {
   return { notesByCase, addNote, deleteNote }
 }
 
+export function useCseaCredentialsReports(userId) {
+  const [reports, setReports] = useState([])
+
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('csea_credentials_reports')
+      .select('*')
+      .eq('user_id', userId)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true })
+      .then(({ data }) => setReports(data || []))
+  }, [userId])
+
+  async function addReport(fields = {}) {
+    const nextOrder = reports.length
+      ? Math.max(...reports.map((r) => r.sort_order || 0)) + 1
+      : 0
+    const { data } = await supabase
+      .from('csea_credentials_reports')
+      .insert({
+        user_id: userId,
+        session_name: fields.session_name || '',
+        report_date: fields.report_date || null,
+        report_time: fields.report_time || '',
+        data: fields.data || {},
+        sort_order: nextOrder,
+      })
+      .select()
+      .single()
+    if (data) setReports((prev) => [...prev, data])
+    return data
+  }
+
+  async function updateReport(id, patch) {
+    // Optimistic update so live typing stays responsive
+    setReports((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)))
+    const { data } = await supabase
+      .from('csea_credentials_reports')
+      .update({ ...patch, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single()
+    if (data) setReports((prev) => prev.map((r) => (r.id === id ? data : r)))
+  }
+
+  async function deleteReport(id) {
+    await supabase.from('csea_credentials_reports').delete().eq('id', id)
+    setReports((prev) => prev.filter((r) => r.id !== id))
+  }
+
+  return { reports, addReport, updateReport, deleteReport }
+}
+
 export function useCseaNotes(userId) {
   const [notes, setNotes] = useState([])
 

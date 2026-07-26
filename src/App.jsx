@@ -7,7 +7,7 @@ import { useMasterTasks, useDailyTasks, useMeetings, useTaskCounts, useMeetingsI
 import { useDailyLog } from './hooks/useDailyLog'
 import { useWeeklyTasks } from './hooks/useWeeklyTasks'
 import { useCalendarEvents } from './hooks/useCalendarEvents'
-import { useCseaIssues, useMemberInteractions, useCseaNotes, useCseaIssueNotes, useCseaPersonnelCommissionCases, useCseaPersonnelCommissionNotes } from './hooks/useCseaData'
+import { useCseaIssues, useMemberInteractions, useCseaNotes, useCseaIssueNotes, useCseaPersonnelCommissionCases, useCseaPersonnelCommissionNotes, useCseaCredentialsReports } from './hooks/useCseaData'
 import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useIcaapNotes } from './hooks/useIcaapNotes'
@@ -66,6 +66,7 @@ export default function App() {
   const { notesByIssue: cseaIssueNotes, addNote: addCseaIssueNote, deleteNote: deleteCseaIssueNote } = useCseaIssueNotes(userId)
   const { cases: cseaPcCases, addCase: addCseaPcCase, updateCaseStatus: updateCseaPcStatus, deleteCase: deleteCseaPcCase } = useCseaPersonnelCommissionCases(userId)
   const { notesByCase: cseaPcNotes, addNote: addCseaPcNote, deleteNote: deleteCseaPcNote } = useCseaPersonnelCommissionNotes(userId)
+  const { reports: cseaCredReports, addReport: addCseaCredReport, updateReport: updateCseaCredReport, deleteReport: deleteCseaCredReport } = useCseaCredentialsReports(userId)
   const { masterTasks: asanaTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
@@ -254,6 +255,10 @@ export default function App() {
         cseaPcNotes={cseaPcNotes}
         onAddCseaPcNote={addCseaPcNote}
         onDeleteCseaPcNote={deleteCseaPcNote}
+        cseaCredReports={cseaCredReports}
+        onAddCseaCredReport={addCseaCredReport}
+        onUpdateCseaCredReport={updateCseaCredReport}
+        onDeleteCseaCredReport={deleteCseaCredReport}
         icaapItems={icaapItems}
         onAddIcaapItem={addIcaapItem}
         onUpdateIcaapItem={updateIcaapItem}
