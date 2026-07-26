@@ -1097,8 +1097,14 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  overflow: auto;
+  overflow-y: auto;
   padding-top: 14px;
+}
+
+/* Keep each card at its natural height so the panel scrolls through the
+   full form instead of flex-shrinking the cards to fit the viewport. */
+.cred-panel > * {
+  flex: 0 0 auto;
 }
 
 .cred-intro {
