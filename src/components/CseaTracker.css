@@ -1439,3 +1439,14 @@
 .conf-table-wrap {
   max-height: none;
 }
+
+.conf-section-funds {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2px 12px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: none;
+}
