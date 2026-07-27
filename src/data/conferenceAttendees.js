@@ -16,6 +16,6 @@ export const CONFERENCE_ATTENDEES = [
   { name: 'Marcia Scott', attending: 'Yes', basis: 'A basis', position: 'Human Resources Specialist III', shirtSize: 'LRG (unisex) / XL–1X (women’s)', shirtStatus: 'Paid (Venmo)' },
   { name: 'Ricardo Nigrete', attending: 'Yes', basis: 'A basis', position: 'Administrative Staff Aide', shirtSize: 'XL', shirtStatus: 'Payment Pending' },
   { name: 'Ricardo Chin', attending: 'No', basis: '', position: '', shirtSize: '', shirtStatus: '' },
-  { name: 'Ron Baucume', attending: 'Yes', basis: '', position: 'Retired', shirtSize: 'LRG', shirtStatus: 'Payment Pending' },
+  { name: 'Ron Baucume', attending: 'Yes', basis: '', position: 'Retired', shirtSize: 'LRG', shirtStatus: 'Paid $20, owes $5', paid: 20 },
   { name: 'Sharon Kim', attending: 'Yes', basis: 'A basis', position: 'Associate Computer Applications Specialist (working as Benefits Manager)', shirtSize: 'SML', shirtStatus: 'Pending (Venmo)' },
 ]
