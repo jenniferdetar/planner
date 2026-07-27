@@ -752,6 +752,8 @@ function RifIntakePanel() {
   )
 }
 
+const SHIRT_PRICE = 25
+
 function isShirtPaid(a) {
   return (a.shirtStatus || '').trim().toLowerCase().startsWith('paid')
 }
@@ -760,10 +762,27 @@ function hasShirtSize(a) {
   return !!(a.shirtSize && a.shirtSize.trim())
 }
 
-// "Outstanding" = still owes for a shirt: not yet paid and actually ordering
-// a shirt. Anyone with no shirt size (not buying one) drops to the lower area.
+// Dollars this attendee owes for a shirt ($0 if they aren't ordering one).
+function shirtOwed(a) {
+  return hasShirtSize(a) ? SHIRT_PRICE : 0
+}
+
+// Dollars already collected. An explicit `paid` amount (e.g. a partial
+// payment) wins; otherwise a "Paid" status counts as paid in full.
+function shirtPaid(a) {
+  if (!hasShirtSize(a)) return 0
+  if (typeof a.paid === 'number') return Math.min(a.paid, SHIRT_PRICE)
+  return isShirtPaid(a) ? SHIRT_PRICE : 0
+}
+
+function shirtDue(a) {
+  return shirtOwed(a) - shirtPaid(a)
+}
+
+// "Outstanding" = still owes money for a shirt. Anyone fully paid, or not
+// ordering a shirt (no size), drops to the lower area.
 function isOutstanding(a) {
-  return !isShirtPaid(a) && hasShirtSize(a)
+  return shirtDue(a) > 0
 }
 
 function AttendeesTable({ attendees }) {
@@ -799,15 +818,16 @@ function AttendeesTable({ attendees }) {
   )
 }
 
-const SHIRT_PRICE = 25
-
-function shirtFunds(list) {
-  return list.filter(hasShirtSize).length * SHIRT_PRICE
-}
+const sumBy = (list, fn) => list.reduce((sum, a) => sum + fn(a), 0)
 
 function AttendeesPanel() {
   const outstanding = CONFERENCE_ATTENDEES.filter(isOutstanding)
   const paid = CONFERENCE_ATTENDEES.filter((a) => !isOutstanding(a))
+
+  // Money still owed vs. money already collected — across everyone, so a
+  // partial payment shows up in both totals (still due, already collected).
+  const totalDue = sumBy(CONFERENCE_ATTENDEES, shirtDue)
+  const totalCollected = sumBy(CONFERENCE_ATTENDEES, shirtPaid)
 
   return (
     <div className="csea-issue-list csea-issue-list--fill conf-attendees" style={{ padding: '0 16px 16px' }}>
@@ -815,7 +835,7 @@ function AttendeesPanel() {
         <div className="conf-section-header conf-section-header--outstanding">
           <span>Outstanding</span>
           <span className="conf-section-count">{outstanding.length}</span>
-          <span className="conf-section-funds">${shirtFunds(outstanding)} due</span>
+          <span className="conf-section-funds">${totalDue} due</span>
         </div>
         {outstanding.length === 0
           ? <p className="csea-empty">Everyone has paid 🎉</p>
@@ -826,7 +846,7 @@ function AttendeesPanel() {
         <div className="conf-section-header conf-section-header--paid">
           <span>Paid</span>
           <span className="conf-section-count">{paid.length}</span>
-          <span className="conf-section-funds">${shirtFunds(paid)} collected</span>
+          <span className="conf-section-funds">${totalCollected} collected</span>
         </div>
         {paid.length === 0
           ? <p className="csea-empty">No payments recorded yet</p>
