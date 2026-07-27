@@ -799,6 +799,12 @@ function AttendeesTable({ attendees }) {
   )
 }
 
+const SHIRT_PRICE = 25
+
+function shirtFunds(list) {
+  return list.filter(hasShirtSize).length * SHIRT_PRICE
+}
+
 function AttendeesPanel() {
   const outstanding = CONFERENCE_ATTENDEES.filter(isOutstanding)
   const paid = CONFERENCE_ATTENDEES.filter((a) => !isOutstanding(a))
@@ -809,6 +815,7 @@ function AttendeesPanel() {
         <div className="conf-section-header conf-section-header--outstanding">
           <span>Outstanding</span>
           <span className="conf-section-count">{outstanding.length}</span>
+          <span className="conf-section-funds">${shirtFunds(outstanding)} due</span>
         </div>
         {outstanding.length === 0
           ? <p className="csea-empty">Everyone has paid 🎉</p>
@@ -819,6 +826,7 @@ function AttendeesPanel() {
         <div className="conf-section-header conf-section-header--paid">
           <span>Paid</span>
           <span className="conf-section-count">{paid.length}</span>
+          <span className="conf-section-funds">${shirtFunds(paid)} collected</span>
         </div>
         {paid.length === 0
           ? <p className="csea-empty">No payments recorded yet</p>
