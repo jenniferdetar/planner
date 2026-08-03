@@ -7,6 +7,7 @@ import { RIF_INTAKE, rifPlatformSummary, rifActionSummary } from '../data/rifInt
 import { MEMBER_BENEFITS_CONTACTS } from '../data/memberBenefitsContacts'
 import { LABOR_REP_CONTACTS } from '../data/laborRepContacts'
 import { CONFERENCE_ATTENDEES } from '../data/conferenceAttendees'
+import { STANDING_COMMITTEES, OTHER_APPOINTMENTS } from '../data/committeeAppointments'
 import { isEboardMember, isLaborRep, isAreaIMember, isStateMember } from '../lib/eboardMembers'
 import './CseaTracker.css'
 
@@ -200,6 +201,7 @@ export function CseaTrackerInner({ api }) {
         <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Topics {api.cseaNotes.length > 0 && <span className="csea-tab-badge">{api.cseaNotes.length}</span>}</button>
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
+        <button className={`csea-tab ${tab === 'committees' ? 'active' : ''}`} onClick={() => setTab('committees')}>Committees <span className="csea-tab-badge">{STANDING_COMMITTEES.length + OTHER_APPOINTMENTS.length}</span></button>
         <button className={`csea-tab ${tab === 'pc' ? 'active' : ''}`} onClick={() => setTab('pc')}>Personnel Commission {api.activePcCases.length > 0 && <span className="csea-tab-badge">{api.activePcCases.length}</span>}</button>
         <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
         {!conferenceArchived && (
@@ -409,11 +411,65 @@ export function CseaTrackerInner({ api }) {
         </div>
       )}
 
+      {tab === 'committees' && <CommitteesPanel />}
+
       {tab === 'pc' && <PersonnelCommissionPanel api={api} />}
 
       {tab === 'rif' && <RifIntakePanel />}
 
       {tab === 'conference' && !conferenceArchived && <ConferencePanel api={api} onArchive={archiveConference} />}
+    </div>
+  )
+}
+
+function CommitteeCard({ committee }) {
+  return (
+    <div className="committee-card">
+      <div className="committee-card-header">
+        <span className="committee-card-name">{committee.name}</span>
+        <span className="committee-card-count">{committee.members.length}</span>
+      </div>
+      <ul className="committee-member-list">
+        {committee.members.map((m, i) => (
+          <li key={i} className={`committee-member ${m.role ? 'is-lead' : ''}`}>
+            <span className="committee-member-name">
+              {m.title && <span className="committee-member-title">{m.title} </span>}
+              {m.name}
+              {m.note && <span className="committee-member-note"> — {m.note}</span>}
+            </span>
+            {m.role && <span className="committee-role-badge">{m.role}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function CommitteesPanel() {
+  return (
+    <div className="csea-panel">
+      <div className="csea-toolbar">
+        <span className="csea-toolbar-label">Standing Committee Appointments — 2026</span>
+        <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{STANDING_COMMITTEES.length} <span className="csea-inline-lbl">Committees</span></span>
+      </div>
+
+      <div className="csea-issue-list csea-issue-list--fill committee-panel" style={{ padding: '0 16px 16px' }}>
+        <div className="committee-grid">
+          {STANDING_COMMITTEES.map((c) => (
+            <CommitteeCard key={c.name} committee={c} />
+          ))}
+        </div>
+
+        <div className="committee-section-note">
+          Not committees, but appointments are made per the Chapter Constitution.
+        </div>
+
+        <div className="committee-grid">
+          {OTHER_APPOINTMENTS.map((c) => (
+            <CommitteeCard key={c.name} committee={c} />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
