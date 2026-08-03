@@ -1491,3 +1491,116 @@
   letter-spacing: 0.3px;
   text-transform: none;
 }
+
+/* ── Committee Appointments ───────────────────────────────────────────────── */
+.committee-panel {
+  overflow-y: auto;
+}
+
+.committee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  padding-top: 16px;
+}
+
+.committee-card {
+  border: 1px solid var(--csea-border);
+  border-left: 6px solid var(--csea-blue);
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.committee-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--csea-light-blue);
+  border-bottom: 1px solid var(--csea-border);
+}
+
+.committee-card-name {
+  font-weight: 800;
+  font-size: 13.5px;
+  color: var(--csea-blue);
+}
+
+.committee-card-count {
+  margin-left: auto;
+  background: var(--csea-blue);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 1px 9px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.committee-member-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.committee-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  color: var(--csea-body);
+}
+
+.committee-member + .committee-member {
+  border-top: 1px solid var(--csea-light-gray);
+}
+
+.committee-member.is-lead {
+  background: #fafcff;
+}
+
+.committee-member-name {
+  flex: 1;
+}
+
+.committee-member.is-lead .committee-member-name {
+  font-weight: 700;
+  color: var(--csea-blue);
+}
+
+.committee-member-title {
+  color: var(--csea-dark-gray);
+  font-weight: 600;
+}
+
+.committee-member-note {
+  color: var(--csea-dark-gray);
+  font-style: italic;
+  font-size: 11.5px;
+}
+
+.committee-role-badge {
+  background: var(--csea-blue);
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.committee-section-note {
+  margin-top: 22px;
+  padding: 10px 12px;
+  border-left: 4px solid var(--csea-gold);
+  background: #fbf4f4;
+  color: var(--csea-body);
+  font-size: 12.5px;
+  font-style: italic;
+  border-radius: 0 6px 6px 0;
+}
