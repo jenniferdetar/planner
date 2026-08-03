@@ -25,7 +25,7 @@ export const STANDING_COMMITTEES = [
     members: [
       { name: 'Ron Baucume', role: 'Committee Chair' },
       { name: 'Belva Douglas' },
-      { name: 'Demy Scott' },
+      { name: 'Demetria Scott' },
       { name: 'Marcia Scott' },
       { name: 'Jennifer Detar' },
     ],
