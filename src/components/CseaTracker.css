@@ -737,6 +737,30 @@
   flex-shrink: 0;
 }
 .interaction-delete-btn:hover { color: #cc0000; }
+.csea-note-archive-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--csea-blue);
+  color: var(--csea-blue);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+.csea-note-archive-btn:hover { background: var(--csea-light-blue); }
+.csea-note-archive-btn + .interaction-delete-btn { margin-left: 0; }
+.csea-note-archived-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--csea-dark-gray);
+  background: var(--csea-light-gray);
+  border-radius: 12px;
+  padding: 1px 8px;
+  flex-shrink: 0;
+}
 .interaction-disc-text { font-size: 13px; color: var(--csea-body); line-height: 1.5; margin: 0; white-space: pre-wrap; }
 .fin-note-line { font-size: 13px; color: var(--csea-body); line-height: 1.5; white-space: pre-wrap; }
 .fin-note-checkbox-row { display: flex; align-items: flex-start; gap: 6px; font-size: 13px; color: var(--csea-body); line-height: 1.5; cursor: pointer; }

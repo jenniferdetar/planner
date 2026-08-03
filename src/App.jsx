@@ -62,7 +62,7 @@ export default function App() {
   const taskCounts = useTaskCounts(userId)
   const { issues: cseaIssues, addIssue: addCseaIssue, updateIssueStatus: updateCseaStatus, deleteIssue: deleteCseaIssue } = useCseaIssues(userId)
   const { interactions: cseaInteractions, addInteraction: addCseaInteraction, updateInteraction: updateCseaInteraction, showArchived: showArchivedInteractions, setShowArchived: setShowArchivedInteractions } = useMemberInteractions(userId)
-  const { notes: cseaNotes, addNote: addCseaNote, deleteNote: deleteCseaNote } = useCseaNotes(userId)
+  const { notes: cseaNotes, addNote: addCseaNote, archiveNote: archiveCseaNote, deleteNote: deleteCseaNote, showArchived: showArchivedNotes, setShowArchived: setShowArchivedNotes } = useCseaNotes(userId)
   const { notesByIssue: cseaIssueNotes, addNote: addCseaIssueNote, deleteNote: deleteCseaIssueNote } = useCseaIssueNotes(userId)
   const { cases: cseaPcCases, addCase: addCseaPcCase, updateCaseStatus: updateCseaPcStatus, deleteCase: deleteCseaPcCase } = useCseaPersonnelCommissionCases(userId)
   const { notesByCase: cseaPcNotes, addNote: addCseaPcNote, deleteNote: deleteCseaPcNote } = useCseaPersonnelCommissionNotes(userId)
@@ -245,7 +245,10 @@ export default function App() {
         onUpdateAsanaTaskNotes={updateAsanaNotes}
         cseaNotes={cseaNotes}
         onAddCseaNote={addCseaNote}
+        onArchiveCseaNote={archiveCseaNote}
         onDeleteCseaNote={deleteCseaNote}
+        showArchivedNotes={showArchivedNotes}
+        onToggleArchivedNotes={() => setShowArchivedNotes(v => !v)}
         cseaIssueNotes={cseaIssueNotes}
         onAddCseaIssueNote={addCseaIssueNote}
         onDeleteCseaIssueNote={deleteCseaIssueNote}
