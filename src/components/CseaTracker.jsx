@@ -172,8 +172,25 @@ export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDele
   }
 }
 
+const CONFERENCE_ARCHIVED_KEY = 'csea_conference_archived'
+
 export function CseaTrackerInner({ api }) {
   const [tab, setTab] = useState('issues')
+  const [conferenceArchived, setConferenceArchived] = useState(() => {
+    try { return localStorage.getItem(CONFERENCE_ARCHIVED_KEY) === '1' } catch { return false }
+  })
+
+  function archiveConference() {
+    setConferenceArchived(true)
+    try { localStorage.setItem(CONFERENCE_ARCHIVED_KEY, '1') } catch { /* ignore */ }
+    setTab((t) => (t === 'conference' ? 'issues' : t))
+  }
+
+  function unarchiveConference() {
+    setConferenceArchived(false)
+    try { localStorage.removeItem(CONFERENCE_ARCHIVED_KEY) } catch { /* ignore */ }
+    setTab('conference')
+  }
 
   return (
     <div className="csea-tracker">
@@ -185,7 +202,12 @@ export function CseaTrackerInner({ api }) {
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
         <button className={`csea-tab ${tab === 'pc' ? 'active' : ''}`} onClick={() => setTab('pc')}>Personnel Commission {api.activePcCases.length > 0 && <span className="csea-tab-badge">{api.activePcCases.length}</span>}</button>
         <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
-        <button className={`csea-tab ${tab === 'conference' ? 'active' : ''}`} onClick={() => setTab('conference')}>Conference <span className="csea-tab-badge">{CONFERENCE_ATTENDEES.length}</span></button>
+        {!conferenceArchived && (
+          <button className={`csea-tab ${tab === 'conference' ? 'active' : ''}`} onClick={() => setTab('conference')}>Conference <span className="csea-tab-badge">{CONFERENCE_ATTENDEES.length}</span></button>
+        )}
+        {conferenceArchived && (
+          <button className="csea-tab csea-tab--restore" onClick={unarchiveConference} title="Restore the archived Conference page">Conference ↩ Archived</button>
+        )}
       </div>
 
       {tab === 'issues' && (
@@ -391,7 +413,7 @@ export function CseaTrackerInner({ api }) {
 
       {tab === 'rif' && <RifIntakePanel />}
 
-      {tab === 'conference' && <ConferencePanel api={api} />}
+      {tab === 'conference' && !conferenceArchived && <ConferencePanel api={api} onArchive={archiveConference} />}
     </div>
   )
 }
@@ -856,7 +878,7 @@ function AttendeesPanel() {
   )
 }
 
-function ConferencePanel({ api }) {
+function ConferencePanel({ api, onArchive }) {
   const [subTab, setSubTab] = useState('attendees')
 
   return (
@@ -867,14 +889,19 @@ function ConferencePanel({ api }) {
           <button className={`filter-pill ${subTab === 'credentials' ? 'active' : ''}`} onClick={() => setSubTab('credentials')}>Credentials Report</button>
           <button className={`filter-pill ${subTab === 'delegate' ? 'active' : ''}`} onClick={() => setSubTab('delegate')}>Delegate Report Card</button>
         </div>
-        {subTab === 'attendees' && (
-          <span className="conf-attendee-stats">
-            <span className="csea-inline-stat" style={{ color: 'var(--csea-dark-orange)' }}>{CONFERENCE_ATTENDEES.filter(isOutstanding).length} <span className="csea-inline-lbl">Outstanding</span></span>
-            <span className="csea-inline-stat" style={{ color: 'var(--csea-success)' }}>{CONFERENCE_ATTENDEES.filter(a => !isOutstanding(a)).length} <span className="csea-inline-lbl">Paid</span></span>
-          </span>
-        )}
-        {subTab === 'credentials' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.credReports.length} <span className="csea-inline-lbl">Sessions</span></span>}
-        {subTab === 'delegate' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.delegateCards.length} <span className="csea-inline-lbl">Days</span></span>}
+        <div className="conf-toolbar-right">
+          {subTab === 'attendees' && (
+            <span className="conf-attendee-stats">
+              <span className="csea-inline-stat" style={{ color: 'var(--csea-dark-orange)' }}>{CONFERENCE_ATTENDEES.filter(isOutstanding).length} <span className="csea-inline-lbl">Outstanding</span></span>
+              <span className="csea-inline-stat" style={{ color: 'var(--csea-success)' }}>{CONFERENCE_ATTENDEES.filter(a => !isOutstanding(a)).length} <span className="csea-inline-lbl">Paid</span></span>
+            </span>
+          )}
+          {subTab === 'credentials' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.credReports.length} <span className="csea-inline-lbl">Sessions</span></span>}
+          {subTab === 'delegate' && <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{api.delegateCards.length} <span className="csea-inline-lbl">Days</span></span>}
+          {onArchive && (
+            <button className="conf-archive-btn" onClick={onArchive} title="Archive the entire Conference page">Archive Page</button>
+          )}
+        </div>
       </div>
 
       {subTab === 'attendees' ? (
