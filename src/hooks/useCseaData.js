@@ -418,16 +418,18 @@ export function useCseaDelegateReportCards(userId) {
 
 export function useCseaNotes(userId) {
   const [notes, setNotes] = useState([])
+  const [showArchived, setShowArchived] = useState(false)
 
   useEffect(() => {
     if (!userId) return
-    supabase
+    let q = supabase
       .from('csea_notes')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
-      .then(({ data }) => setNotes(data || []))
-  }, [userId])
+    if (!showArchived) q = q.eq('archived', false)
+    q.then(({ data }) => setNotes(data || []))
+  }, [userId, showArchived])
 
   async function addNote(note, source, topic) {
     const { data } = await supabase
@@ -438,10 +440,26 @@ export function useCseaNotes(userId) {
     if (data) setNotes((prev) => [data, ...prev])
   }
 
+  async function archiveNote(id, archived = true) {
+    const { data } = await supabase
+      .from('csea_notes')
+      .update({ archived })
+      .eq('id', id)
+      .select()
+      .single()
+    if (!data) return
+    // Drop from the list when it no longer matches the current filter
+    if (!showArchived && archived) {
+      setNotes((prev) => prev.filter((n) => n.id !== id))
+    } else {
+      setNotes((prev) => prev.map((n) => (n.id === id ? data : n)))
+    }
+  }
+
   async function deleteNote(id) {
     await supabase.from('csea_notes').delete().eq('id', id)
     setNotes((prev) => prev.filter((n) => n.id !== id))
   }
 
-  return { notes, addNote, deleteNote }
+  return { notes, addNote, archiveNote, deleteNote, showArchived, setShowArchived }
 }

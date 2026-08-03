@@ -73,7 +73,7 @@ const PC_STATUS_COLORS = {
 }
 const PC_OPEN_STATUSES = ['Intake', 'Filed', 'Scheduled', 'Hearing Held']
 
-export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onDeleteCseaNote, issueNotes = {}, onAddIssueNote, onDeleteIssueNote, pcCases = [], onAddPcCase, onUpdatePcStatus, onDeletePcCase, pcCaseNotes = {}, onAddPcCaseNote, onDeletePcCaseNote, credReports = [], onAddCredReport, onUpdateCredReport, onDeleteCredReport, delegateCards = [], onAddDelegateCard, onUpdateDelegateCard, onDeleteDelegateCard }) {
+export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDeleteIssue, interactions, onAddInteraction, onUpdateInteraction, showArchived, onToggleArchived, asanaTasks = [], onCompleteAsanaTask, onUpdateAsanaTaskNotes, cseaNotes = [], onAddCseaNote, onArchiveCseaNote, onDeleteCseaNote, showArchivedNotes, onToggleArchivedNotes, issueNotes = {}, onAddIssueNote, onDeleteIssueNote, pcCases = [], onAddPcCase, onUpdatePcStatus, onDeletePcCase, pcCaseNotes = {}, onAddPcCaseNote, onDeletePcCaseNote, credReports = [], onAddCredReport, onUpdateCredReport, onDeleteCredReport, delegateCards = [], onAddDelegateCard, onUpdateDelegateCard, onDeleteDelegateCard }) {
   const workLocations = useWorkLocations()
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'csea')
   const [linkTitle, setLinkTitle] = useState('')
@@ -163,6 +163,7 @@ export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDele
     syncing, totalNewCount, hasSynced, syncAll,
     issues, onUpdateStatus, onDeleteIssue, interactions, onUpdateInteraction,
     showArchived, onToggleArchived, cseaNotes, onDeleteCseaNote, onAddCseaNote,
+    onArchiveCseaNote, showArchivedNotes, onToggleArchivedNotes,
     issueNotes, onAddIssueNote, onDeleteIssueNote,
     displayIssues, counts, handleAddIssue, handleAddInteraction,
     showAddPcCase, setShowAddPcCase, pcFilter, setPcFilter, pcForm, setPcForm,
@@ -293,7 +294,9 @@ export function CseaTrackerInner({ api }) {
       {tab === 'notes' && (
         <div className="csea-panel">
           <div className="csea-toolbar">
-            <span />
+            <button className="csea-archive-toggle" onClick={api.onToggleArchivedNotes}>
+              {api.showArchivedNotes ? 'Hide Archived' : 'Show Archived'}
+            </button>
             <button className="csea-add-btn" onClick={() => api.setShowAddNote(true)}>+ Add Topic</button>
           </div>
 
@@ -338,7 +341,7 @@ export function CseaTrackerInner({ api }) {
           <div className="csea-issue-list csea-interactions-grid">
             {api.cseaNotes.length === 0 && <p className="csea-empty">No topics yet</p>}
             {api.cseaNotes.map(n => (
-              <CseaNoteGroup key={n.id} note={n} onDelete={api.onDeleteCseaNote} />
+              <CseaNoteGroup key={n.id} note={n} onArchive={api.onArchiveCseaNote} onDelete={api.onDeleteCseaNote} />
             ))}
           </div>
         </div>
@@ -1395,12 +1398,13 @@ function MemberInteractionGroup({ member, items, onUpdate, workLocations }) {
   )
 }
 
-function CseaNoteGroup({ note: n, onDelete }) {
+function CseaNoteGroup({ note: n, onArchive, onDelete }) {
   const [collapsed, setCollapsed] = useState(true)
   return (
     <div className={`interaction-group${collapsed ? '' : ' expanded'}`}>
       <div className="interaction-group-header" style={{ cursor: 'pointer' }} onClick={() => setCollapsed(c => !c)}>
         <span className="interaction-group-name">{n.topic || 'Topic'}</span>
+        {n.archived && <span className="csea-note-archived-badge">Archived</span>}
         {n.created_at && (
           <span className="interaction-date-badge">{new Date(n.created_at).toLocaleDateString()}</span>
         )}
@@ -1410,6 +1414,15 @@ function CseaNoteGroup({ note: n, onDelete }) {
         <div className="interaction-group-items">
           <div className="interaction-card">
             <div className="interaction-header">
+              {onArchive && (
+                <button
+                  className="csea-note-archive-btn"
+                  title={n.archived ? 'Unarchive' : 'Archive'}
+                  onClick={() => onArchive(n.id, !n.archived)}
+                >
+                  {n.archived ? 'Unarchive' : 'Archive'}
+                </button>
+              )}
               <button className="interaction-delete-btn" title="Delete" onClick={() => onDelete?.(n.id)}>✕</button>
             </div>
             <p className="interaction-disc-text">{n.note}</p>
