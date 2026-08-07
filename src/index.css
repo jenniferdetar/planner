@@ -43,15 +43,90 @@ input, textarea {
 /* ── Global font size & weight ── */
 * { font-size: 14px; font-weight: 400; line-height: 24px; }
 
-/* ── Print: html/body are height:100%+overflow:hidden for the on-screen app
-   shell. Printable features render into a body-level frame (see
-   WhileYouWereOut.css's body > * print rule) rather than printing the app
-   shell directly, but that frame is still a descendant of body/html, so
-   reset those two here to avoid clipping it. ── */
+/* ── Print: every page prints on US Letter (8.5in × 11in) ──
+   Two printing paths share this stylesheet:
+   1. Form documents (While You Were Out / Absence request forms) whose Print
+      buttons inject a body-level frame (#wywo-print-frame / #afm-print-frame)
+      and print only that frame.
+   2. General page printing (plain Print / Ctrl+P) of whatever dashboard view
+      is on screen.
+   Both are laid out for letter-size paper below. ── */
+/* @page is document-global — one declaration governs every printed sheet.
+   0.25in keeps the dense Absence request form on a single page while giving
+   general planner pages a comfortable, standard margin. */
+@page {
+  size: 8.5in 11in;
+  margin: 0.25in;
+}
+
 @media print {
+  /* The on-screen shell pins html/body to 100% height + overflow:hidden.
+     Reset so printed content flows and paginates across letter sheets. */
   html, body {
     height: auto !important;
     overflow: visible !important;
+    background: #fff !important;
+  }
+
+  /* Render backgrounds/badges/shaded fields faithfully on paper. */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* When a form Print button has injected its body-level frame, hide the
+     whole app shell so only that form prints. (The frame is a sibling of
+     #root and shows itself via its own injected style.) */
+  body:has(#wywo-print-frame, #afm-print-frame) > #root {
+    display: none !important;
+  }
+
+  /* ── General dashboard printing (no form frame present) ──
+     These rules only take effect when #root is visible, i.e. no form frame
+     is up, so they need no extra guard. Flow the current view down the page
+     at full letter width. */
+  .dash-outer {
+    display: block !important;
+    height: auto !important;
+    width: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+  .dash-main {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  /* Navigation and floating controls are not content — drop them. */
+  .dash-sidebar,
+  .view-mode-toggle,
+  .mobile-nav,
+  .dash-add-row,
+  .dash-row-del {
+    display: none !important;
+  }
+
+  /* Panels are scroll containers on screen; let them expand fully on paper. */
+  .dash-panel-wrap,
+  .dash-panel-wrap > * {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    flex: none !important;
+  }
+
+  /* The Today grid is a fixed-height two-column grid on screen. */
+  .dash-today-grid {
+    height: auto !important;
+  }
+
+  /* Avoid splitting a card across two sheets when it can fit on one. */
+  .dash-card {
+    overflow: visible !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 }
 

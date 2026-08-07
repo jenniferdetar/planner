@@ -358,15 +358,10 @@
 
 /* ── Print ── */
 /* The Print button renders the current form's live state into a
-   #afm-print-frame appended directly to <body> (see AbsenceForms.jsx) —
-   a global print rule elsewhere in the app hides everything under body
-   except an explicit opt-in target, so this id selector is what makes
-   the frame's content visible when printing. */
-@page {
-  size: letter;
-  margin: 0.25in;
-}
-
+   #afm-print-frame appended directly to <body> (see AbsenceForms.jsx). A
+   frame-aware global rule in index.css hides the app shell (#root) whenever
+   this frame is present, so only the form prints. The page size/margin for
+   letter-size printing is set once, globally, by @page in index.css. */
 @media print {
   #afm-print-frame {
     display: block !important;
