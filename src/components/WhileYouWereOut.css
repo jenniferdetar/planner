@@ -505,12 +505,13 @@
   }
 }
 
-/* ── PRINT ───────────────────────────────────────────── */
+/* ── PRINT ───────────────────────────────────────────────
+   The Print button injects a #wywo-print-frame into <body> and prints that
+   (see WhileYouWereOut.jsx). The app shell is hidden for print by a
+   frame-aware global rule in index.css, so this file no longer needs to
+   hide everything itself. */
 @media print {
-  /* Hide everything on the page */
-  body > * { display: none !important; }
-
-  /* Show only the pad */
+  /* Show the pad at letter width when printing the live pad directly. */
   body .wywo-print-target {
     display: block !important;
     position: fixed;
