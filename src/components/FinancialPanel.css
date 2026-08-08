@@ -1240,6 +1240,35 @@
   font-style: italic;
 }
 
+/* Settlement (debt-consolidation) payoff cell: negotiated amount is primary,
+   original balance shown struck through beneath it. */
+.debt-payoff-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.debt-settle-amt { font-weight: 700; color: #1a6b2a; }
+.debt-payoff-orig {
+  font-size: 10px;
+  color: #9aa7ba;
+  text-decoration: line-through;
+  cursor: pointer;
+}
+.debt-payoff-orig:hover { color: #1e3070; }
+.debt-settle-add {
+  font-size: 10px;
+  color: #9aa7ba;
+  cursor: pointer;
+}
+.debt-settle-add:hover { color: #1a6b2a; }
+.debt-settle-status {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #5a6b8a;
+  background: #e6ecf6;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
 .debt-terms-row .budget-td { background: #f4f7fb; }
 .debt-terms-panel { display: flex; flex-direction: column; gap: 10px; padding: 4px 2px; }
 
