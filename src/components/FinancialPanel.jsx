@@ -1257,6 +1257,19 @@ function extractRate(name) {
   return m ? parseFloat(m[1]) : 0
 }
 
+// A debt in a settlement program is "settled" once a payoff amount has been
+// negotiated with the creditor. Until then settlement_amount is null.
+function isSettled(d) {
+  return d && d.settlement_amount != null && d.settlement_amount !== ''
+}
+
+// The balance the snowball should actually attack. Once a settlement is
+// negotiated, the negotiated amount is what clears the debt — not the original
+// balance — so ordering, simulation, and totals all run off this figure.
+function effectivePayoff(d) {
+  return isSettled(d) ? Number(d.settlement_amount) : Number(d.total_payoff)
+}
+
 // Simulates the snowball month by month. Interest accrues monthly on every
 // outstanding balance before that month's payments are applied, then minimum
 // payments move (plus the full rolled-in payment once a debt becomes the
@@ -1320,16 +1333,16 @@ function buildSnowballRows(debtsList) {
       if (!groupMap.has(d.group_name)) groupMap.set(d.group_name, [])
       groupMap.get(d.group_name).push(d)
     } else {
-      singles.push({ isGroup: false, key: d.id, name: d.name, total_payoff: Number(d.total_payoff), minimum_payment: Number(d.minimum_payment), rate: extractRate(d.name), owner: d.owner || '', goalMonths: d.goal_months ?? null, debt: d })
+      singles.push({ isGroup: false, key: d.id, name: d.name, total_payoff: effectivePayoff(d), minimum_payment: Number(d.minimum_payment), rate: extractRate(d.name), owner: d.owner || '', goalMonths: d.goal_months ?? null, debt: d })
     }
   })
   const groups = Array.from(groupMap.entries()).map(([name, members]) => {
     const ownerSet = new Set(members.map(m => m.owner || ''))
     const goalSet = new Set(members.map(m => m.goal_months ?? null))
-    const groupBalance = members.reduce((s, m) => s + Number(m.total_payoff), 0)
-    // Blend member APRs weighted by balance, since a group can mix rates (e.g. Sallie Mae 14.75%/10.75%)
+    const groupBalance = members.reduce((s, m) => s + effectivePayoff(m), 0)
+    // Blend member APRs weighted by (effective) balance, since a group can mix rates (e.g. Sallie Mae 14.75%/10.75%)
     const blendedRate = groupBalance > 0
-      ? members.reduce((s, m) => s + Number(m.total_payoff) * extractRate(m.name), 0) / groupBalance
+      ? members.reduce((s, m) => s + effectivePayoff(m) * extractRate(m.name), 0) / groupBalance
       : 0
     return {
       isGroup: true,
@@ -1338,7 +1351,7 @@ function buildSnowballRows(debtsList) {
       total_payoff: groupBalance,
       minimum_payment: members.reduce((s, m) => s + Number(m.minimum_payment), 0),
       rate: blendedRate,
-      members: [...members].sort((a, b) => Number(a.total_payoff) - Number(b.total_payoff)),
+      members: [...members].sort((a, b) => effectivePayoff(a) - effectivePayoff(b)),
       owner: ownerSet.size === 1 ? [...ownerSet][0] : 'Mixed',
       goalMonths: goalSet.size === 1 ? [...goalSet][0] : null,
     }
@@ -1479,8 +1492,67 @@ function DebtTermsDetail({ debt, colSpan, onSave }) {
   )
 }
 
+// The "Total Payoff" cell for a concrete debt (a single row or a group member).
+// Once a settlement is negotiated, the negotiated amount is what the snowball
+// attacks, so it becomes the primary figure with the original balance shown
+// struck through beneath it. Both are click-to-edit; a not-yet-settled debt
+// still in the program gets a "＋ settlement" affordance and a status pill.
+function PayoffCell({ debt, editCell, setEditCell, editVal, setEditVal, saveField, saveSettlement }) {
+  const settled = isSettled(debt)
+  const editingPayoff = editCell?.id === debt.id && editCell.field === 'total_payoff'
+  const editingSettle = editCell?.id === debt.id && editCell.field === 'settlement_amount'
+
+  if (editingSettle) {
+    return (
+      <input className="budget-input" type="number" autoFocus value={editVal}
+        onChange={e => setEditVal(e.target.value)}
+        onBlur={() => saveSettlement(debt, editVal)}
+        onKeyDown={e => e.key === 'Enter' && saveSettlement(debt, editVal)}
+        min="0" step="0.01" placeholder="settlement $ (blank = pending)" />
+    )
+  }
+  if (editingPayoff) {
+    return (
+      <input className="budget-input" type="number" autoFocus value={editVal}
+        onChange={e => setEditVal(e.target.value)}
+        onBlur={() => saveField(debt, 'total_payoff', editVal)}
+        onKeyDown={e => e.key === 'Enter' && saveField(debt, 'total_payoff', editVal)}
+        min="0" step="0.01" />
+    )
+  }
+
+  const startPayoff = () => { setEditCell({ id: debt.id, field: 'total_payoff' }); setEditVal(String(debt.total_payoff)) }
+  const startSettle = () => { setEditCell({ id: debt.id, field: 'settlement_amount' }); setEditVal(settled ? String(debt.settlement_amount) : '') }
+  const statusPill = debt.settlement_status && (
+    <span className="debt-settle-status" title={debt.settlement_fee != null ? `Settlement fee ${fmt(debt.settlement_fee)}` : undefined}>
+      {debt.settlement_status}
+    </span>
+  )
+
+  if (settled) {
+    return (
+      <div className="debt-payoff-cell">
+        <span className="budget-cell-val debt-settle-amt" title="Negotiated settlement — click to edit" onClick={startSettle}>
+          {fmt(debt.settlement_amount)}
+        </span>
+        <span className="debt-payoff-orig" title="Original balance — click to edit" onClick={startPayoff}>
+          was {fmt(debt.total_payoff)}
+        </span>
+        {statusPill}
+      </div>
+    )
+  }
+  return (
+    <div className="debt-payoff-cell">
+      <span className="budget-cell-val" onClick={startPayoff}>{fmt(debt.total_payoff)}</span>
+      <span className="debt-settle-add" title="Enter a negotiated settlement amount" onClick={startSettle}>＋ settlement</span>
+      {statusPill}
+    </div>
+  )
+}
+
 // One row of the Debt Snowball table, plus its expanded group members if any.
-function DebtSnowballRow({ row, editCell, setEditCell, editVal, setEditVal, saveField, saveOwner, saveGoal, saveTerms, deleteDebt, expanded, toggleExpand }) {
+function DebtSnowballRow({ row, editCell, setEditCell, editVal, setEditVal, saveField, saveSettlement, saveOwner, saveGoal, saveTerms, deleteDebt, expanded, toggleExpand }) {
   return (
     <Fragment key={row.key}>
       <tr className="budget-row">
@@ -1511,17 +1583,8 @@ function DebtSnowballRow({ row, editCell, setEditCell, editVal, setEditVal, save
         </td>
         <td className="budget-td num">
           {row.isGroup ? fmt(row.total_payoff) : (
-            editCell?.id === row.debt.id && editCell.field === 'total_payoff' ? (
-              <input className="budget-input" type="number" autoFocus value={editVal}
-                onChange={e => setEditVal(e.target.value)}
-                onBlur={() => saveField(row.debt, 'total_payoff', editVal)}
-                onKeyDown={e => e.key === 'Enter' && saveField(row.debt, 'total_payoff', editVal)}
-                min="0" step="0.01" />
-            ) : (
-              <span className="budget-cell-val" onClick={() => { setEditCell({ id: row.debt.id, field: 'total_payoff' }); setEditVal(String(row.debt.total_payoff)) }}>
-                {fmt(row.total_payoff)}
-              </span>
-            )
+            <PayoffCell debt={row.debt} editCell={editCell} setEditCell={setEditCell} editVal={editVal}
+              setEditVal={setEditVal} saveField={saveField} saveSettlement={saveSettlement} />
           )}
         </td>
         <td className="budget-td num">
@@ -1584,17 +1647,8 @@ function DebtSnowballRow({ row, editCell, setEditCell, editVal, setEditVal, save
         <tr key={m.id} className="budget-row debt-group-member-row">
           <td className="budget-td cat debt-group-member-name">{m.name}</td>
           <td className="budget-td num">
-            {editCell?.id === m.id && editCell.field === 'total_payoff' ? (
-              <input className="budget-input" type="number" autoFocus value={editVal}
-                onChange={e => setEditVal(e.target.value)}
-                onBlur={() => saveField(m, 'total_payoff', editVal)}
-                onKeyDown={e => e.key === 'Enter' && saveField(m, 'total_payoff', editVal)}
-                min="0" step="0.01" />
-            ) : (
-              <span className="budget-cell-val" onClick={() => { setEditCell({ id: m.id, field: 'total_payoff' }); setEditVal(String(m.total_payoff)) }}>
-                {fmt(m.total_payoff)}
-              </span>
-            )}
+            <PayoffCell debt={m} editCell={editCell} setEditCell={setEditCell} editVal={editVal}
+              setEditVal={setEditVal} saveField={saveField} saveSettlement={saveSettlement} />
           </td>
           <td className="budget-td num">
             {editCell?.id === m.id && editCell.field === 'minimum_payment' ? (
@@ -1680,6 +1734,17 @@ function DebtSnowballTab({ userId }) {
     setEditCell(null)
   }
 
+  // Settlement amount is nullable — an empty value clears it back to "pending"
+  // (original balance drives the snowball again). Distinct from saveField, which
+  // coerces blanks to 0.
+  async function saveSettlement(debt, value) {
+    const raw = String(value ?? '').trim()
+    const val = raw === '' ? null : (parseFloat(raw) || 0)
+    await supabase.from('debts').update({ settlement_amount: val }).eq('id', debt.id)
+    setDebts(d => d.map(x => x.id === debt.id ? { ...x, settlement_amount: val } : x))
+    setEditCell(null)
+  }
+
   async function saveOwner(ids, value) {
     const val = value.trim() || null
     await supabase.from('debts').update({ owner: val }).in('id', ids)
@@ -1731,7 +1796,7 @@ function DebtSnowballTab({ userId }) {
     return { ...row, newPayment: row.minimum_payment, monthsToPayoff: mp[0] }
   })
 
-  const totalPayoff = debts.reduce((s, d) => s + Number(d.total_payoff), 0)
+  const totalPayoff = debts.reduce((s, d) => s + effectivePayoff(d), 0)
   const totalMinimum = debts.reduce((s, d) => s + Number(d.minimum_payment), 0)
 
   return (
@@ -1842,7 +1907,7 @@ function DebtSnowballTab({ userId }) {
             <tbody>
               {rows.map(row => (
                 <DebtSnowballRow key={row.key} row={row} editCell={editCell} setEditCell={setEditCell}
-                  editVal={editVal} setEditVal={setEditVal} saveField={saveField} saveOwner={saveOwner}
+                  editVal={editVal} setEditVal={setEditVal} saveField={saveField} saveSettlement={saveSettlement} saveOwner={saveOwner}
                   saveGoal={saveGoal} saveTerms={saveTerms} deleteDebt={deleteDebt} expanded={expanded} toggleExpand={toggleExpand} />
               ))}
               {mortgageRows.length > 0 && (
@@ -1852,7 +1917,7 @@ function DebtSnowballTab({ userId }) {
               )}
               {mortgageRows.map(row => (
                 <DebtSnowballRow key={row.key} row={row} editCell={editCell} setEditCell={setEditCell}
-                  editVal={editVal} setEditVal={setEditVal} saveField={saveField} saveOwner={saveOwner}
+                  editVal={editVal} setEditVal={setEditVal} saveField={saveField} saveSettlement={saveSettlement} saveOwner={saveOwner}
                   saveGoal={saveGoal} saveTerms={saveTerms} deleteDebt={deleteDebt} expanded={expanded} toggleExpand={toggleExpand} />
               ))}
               <tr className="budget-net-row">
