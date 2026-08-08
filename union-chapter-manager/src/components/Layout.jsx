@@ -12,6 +12,7 @@ import InteractionsPanel from './InteractionsPanel'
 import IssuesPanel from './IssuesPanel'
 import NotesPanel from './NotesPanel'
 import LinksPanel from './LinksPanel'
+import LearnPanel from './LearnPanel'
 import SettingsPanel from './SettingsPanel'
 
 const TABS = [
@@ -21,6 +22,7 @@ const TABS = [
   { id: 'issues', label: 'Issues' },
   { id: 'notes', label: 'Notes' },
   { id: 'links', label: 'Links' },
+  { id: 'learn', label: 'Learn' },
   { id: 'settings', label: 'Settings' },
 ]
 
@@ -84,6 +86,7 @@ export default function Layout({ user, org }) {
         {tab === 'issues' && <IssuesPanel issues={issues} memberList={members.members} />}
         {tab === 'notes' && <NotesPanel notes={notes} />}
         {tab === 'links' && <LinksPanel links={links} />}
+        {tab === 'learn' && <LearnPanel />}
         {tab === 'settings' && <SettingsPanel user={user} org={org} />}
       </main>
     </div>

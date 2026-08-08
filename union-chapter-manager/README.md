@@ -28,7 +28,18 @@ level, so one deployment can serve many chapters as a subscription product.
 | **Issues** | Grievance/case tracker: status (Open → In Progress → Resolved → Closed), priority, and a per-issue update timeline |
 | **Notes** | Free-form chapter notes / topics |
 | **Links** | Quick links (contract PDF, benefits portal, forms) |
+| **Learn** | Free micro-lessons + an upsell for a paid course — the top of a course→SaaS funnel |
 | **Settings** | Switch chapters, share the join code, create/join more chapters |
+
+### Course + SaaS funnel
+
+The **Learn** tab doubles as marketing: its free lessons teach a slice of the
+workflow the app implements, then point to a paid course. Lesson and course
+content is configured in [`src/lib/lessons.js`](src/lib/lessons.js) — set
+`COURSE.url` to your course platform page. The strategy behind it is written up
+in [`docs/course-outline.md`](docs/course-outline.md) (the course itself) and
+[`docs/funnel.md`](docs/funnel.md) (how the lead magnet → course → subscription
+loop works, with conversion math).
 
 ---
 

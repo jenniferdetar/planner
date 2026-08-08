@@ -242,3 +242,62 @@
 .timeline-date { color: var(--text-muted); font-size: 0.78rem; white-space: nowrap; }
 
 .loading { text-align: center; color: var(--text-muted); padding: 3rem; }
+
+/* ============================== Learn tab ============================== */
+.course-hero {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem;
+  box-shadow: var(--shadow-lg);
+}
+.course-hero h3 { color: #fff; font-size: 1.25rem; margin: 0.2rem 0; }
+.course-hero p { color: rgba(255, 255, 255, 0.85); margin: 0 0 0.6rem; max-width: 46ch; }
+.course-hero-body { flex: 1 1 300px; }
+.course-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(193, 102, 47, 0.18);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+.course-bullets { margin: 0.4rem 0 0; padding-left: 1.1rem; }
+.course-bullets li { color: rgba(255, 255, 255, 0.85); font-size: 0.86rem; margin: 0.2rem 0; }
+.course-hero-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+.course-price { font-size: 1.6rem; font-weight: 700; }
+.course-hero-cta .btn { background: var(--accent); }
+.course-hero-cta .btn:hover { background: #a95524; }
+
+.lesson { padding: 0; overflow: hidden; }
+.lesson-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  background: none;
+  border: none;
+  padding: 1rem;
+  text-align: left;
+}
+.lesson-meta { display: flex; align-items: center; gap: 0.6rem; }
+.lesson-chevron { color: var(--text-muted); }
+.lesson-body {
+  padding: 0 1rem 1rem;
+  border-top: 1px solid var(--border);
+}
+.lesson-body p { color: var(--text); font-size: 0.92rem; line-height: 1.55; margin: 0.7rem 0 0; }
