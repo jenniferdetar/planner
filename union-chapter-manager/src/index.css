@@ -1,0 +1,104 @@
+:root {
+  --navy: #1f3a5f;
+  --navy-dark: #16293f;
+  --blue: #2f6fb0;
+  --blue-light: #eaf1f9;
+  --accent: #c1662f;
+  --green: #2e7d5b;
+  --red: #c0392b;
+  --amber: #b8860b;
+
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --border: #dce3ec;
+  --text: #1c2733;
+  --text-muted: #64748b;
+
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(31, 58, 95, 0.08), 0 1px 2px rgba(31, 58, 95, 0.06);
+  --shadow-lg: 0 8px 24px rgba(31, 58, 95, 0.12);
+
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: var(--text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+a {
+  color: var(--blue);
+}
+
+/* ---- shared form controls ---- */
+.field {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(47, 111, 176, 0.15);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--navy);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.15s, opacity 0.15s;
+}
+.btn:hover { background: var(--navy-dark); }
+.btn:disabled { opacity: 0.55; cursor: default; }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--navy);
+  border-color: var(--border);
+}
+.btn-secondary:hover { background: var(--blue-light); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.3rem 0.5rem;
+  border: none;
+}
+.btn-ghost:hover { color: var(--red); }
+
+.btn-sm { padding: 0.35rem 0.7rem; font-size: 0.82rem; }
