@@ -1604,3 +1604,113 @@
   font-style: italic;
   border-radius: 0 6px 6px 0;
 }
+
+/* ── Trainings & Events tab ─────────────────────────────────── */
+.training-panel {
+  overflow-y: auto;
+}
+
+.training-year-group {
+  margin-top: 16px;
+}
+
+.training-year-heading {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--csea-blue);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.training-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border: 1px solid var(--csea-border);
+  border-left: 6px solid var(--csea-blue);
+  border-radius: 8px;
+  background: #ffffff;
+  margin-bottom: 8px;
+}
+
+.training-row.cancelled {
+  border-left-color: #cc0000;
+  background: #fbf4f4;
+  opacity: 0.75;
+}
+
+.training-row.cancelled .training-title {
+  text-decoration: line-through;
+}
+
+.training-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 54px;
+  padding: 4px 0;
+  background: var(--csea-light-blue);
+  border-radius: 6px;
+  line-height: 1.15;
+}
+
+.training-date-weekday {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--csea-dark-gray);
+}
+
+.training-date-monthday {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--csea-blue);
+}
+
+.training-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.training-title {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--csea-body);
+}
+
+.training-note {
+  font-size: 12px;
+  color: var(--csea-dark-gray);
+  margin-top: 2px;
+}
+
+.training-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  max-width: 40%;
+}
+
+.training-tag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  color: var(--tt);
+  background: color-mix(in srgb, var(--tt) 14%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--tt) 35%, #ffffff);
+}
