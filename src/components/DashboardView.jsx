@@ -350,7 +350,7 @@ export default function DashboardView({
                 <span className="dash-badge">{weekTasksFlat.length} total</span>
               </div>
               <div className="dash-card">
-                <div className="dash-task-list">
+                <div className="dash-task-list dash-task-list-cols">
                   {weekTasksFlat.map(t => (
                     <div key={t.id} className={`dash-task-row${t.completed ? ' done' : ''}`}>
                       <button className={`dash-check${t.completed ? ' done' : ''}`} onClick={() => onToggleWeekCardTask(t.id, t.due_date)}>
