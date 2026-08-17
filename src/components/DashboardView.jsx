@@ -22,16 +22,6 @@ const SHORT_MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 const SHORT_DAY   = ['S','M','T','W','T','F','S']
 
-const CATEGORY_COLORS = {
-  'CSEA':                 '#b87a38',
-  'LAUSD / iCAAP':        '#3a5c4a',
-  'GCU':                  '#5a7848',
-  'Household Finances':   '#8a5a3a',
-  'Jeff':                 '#7a4a6a',
-  'Home':                 '#4a7a6a',
-  'Personal Development': '#6a5a8a',
-}
-
 const NAV_ITEMS = [
   { key: 'today',    label: 'Today',        color: '#9ca3af', group: 'day' },
   { key: 'week',     label: 'Week',         color: '#9ca3af', group: 'day' },
@@ -111,7 +101,7 @@ export default function DashboardView({
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
   timeBlocks, onAddBlock, onDeleteBlock,
   calendarBlocks,
-  masterTasks, onAddMasterTask, onDeleteMasterTask, onUpdateMasterTask,
+  masterTasks, onUpdateMasterTask,
   weeklyTasks, onToggleWeeklyTask, onAddWeeklyTask,
   taskCounts, onMonthChange,
   calAuthExpired, onReconnectGoogle, calEventCount,
@@ -186,13 +176,6 @@ export default function DashboardView({
   const weekTasksFlat = Object.values(weekTasksByDate)
     .flat()
     .sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''))
-
-  const categoryMap = {}
-  ;(masterTasks || []).forEach(t => {
-    const cat = t.category || 'Other'
-    if (!categoryMap[cat]) categoryMap[cat] = []
-    categoryMap[cat].push(t)
-  })
 
   function handleAddTask(e) {
     e.preventDefault()
@@ -367,7 +350,7 @@ export default function DashboardView({
                 <span className="dash-badge">{weekTasksFlat.length} total</span>
               </div>
               <div className="dash-card">
-                <div className="dash-task-list">
+                <div className="dash-task-list dash-task-list-cols">
                   {weekTasksFlat.map(t => (
                     <div key={t.id} className={`dash-task-row${t.completed ? ' done' : ''}`}>
                       <button className={`dash-check${t.completed ? ' done' : ''}`} onClick={() => onToggleWeekCardTask(t.id, t.due_date)}>
@@ -380,34 +363,6 @@ export default function DashboardView({
                   {weekTasksFlat.length === 0 &&
                     <p className="dash-empty">No tasks due this week</p>}
                 </div>
-              </div>
-            </div>
-
-            {/* Master Tasks */}
-            <div className="master-tasks-wrap">
-              <div className="dash-page-header">
-                <h1 className="dash-page-title">Master Tasks</h1>
-                <span className="dash-badge">{(masterTasks || []).length} total</span>
-              </div>
-              <div className="dash-master-grid">
-                {Object.entries(categoryMap).map(([cat, tasks]) => {
-                  const color = CATEGORY_COLORS[cat] || '#aaa'
-                  return (
-                    <div key={cat} className="dash-card">
-                      <div className="dash-card-header" style={{ borderBottomColor: color }}>
-                        <span className="dash-card-title">{cat}</span>
-                        <span className="dash-badge">{tasks.length}</span>
-                      </div>
-                      {tasks.map(t => (
-                        <div key={t.id} className="dash-master-row">
-                          <span className="dash-master-dot" style={{ background: color }} />
-                          <span className="dash-task-text">{t.title}</span>
-                          <button className="dash-row-del" onClick={() => onDeleteMasterTask(t.id)}>✕</button>
-                        </div>
-                      ))}
-                    </div>
-                  )
-                })}
               </div>
             </div>
 

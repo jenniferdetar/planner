@@ -253,6 +253,16 @@
   padding: 4px 0;
 }
 
+/* Multi-column layout: distributes rows evenly across 2-3 columns,
+   dropping to fewer columns as the container narrows. */
+.dash-task-list-cols {
+  columns: 3 240px;
+  column-gap: 24px;
+}
+.dash-task-list-cols .dash-task-row {
+  break-inside: avoid;
+}
+
 .dash-task-row {
   display: flex;
   align-items: center;
