@@ -69,8 +69,20 @@
   color: #fff;
 }
 
+.salloc-lookup-hint {
+  margin: 0;
+  padding: 12px 20px 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.salloc-lookup-hint strong {
+  color: #1e3070;
+}
+
 .salloc-table-wrap {
-  padding: 20px;
+  padding: 12px 20px 20px;
   overflow-x: auto;
 }
 
@@ -109,9 +121,18 @@
   color: #1e3070;
 }
 
+/* Alpha is the primary lookup column — emphasized and highlighted. */
+.salloc-alpha-col {
+  color: #1e3070 !important;
+}
+
 .salloc-alpha {
-  font-variant-numeric: tabular-nums;
-  color: #555;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e3070;
+  letter-spacing: 0.2px;
+  border-left: 3px solid #1e3070;
+  background: #eef2fb;
 }
 
 .salloc-center {
