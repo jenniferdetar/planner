@@ -11,7 +11,7 @@ import { useCseaIssues, useMemberInteractions, useCseaNotes, useCseaIssueNotes, 
 import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useIcaapNotes } from './hooks/useIcaapNotes'
-import { useTransactions, useBills, useFinancialGoals, usePaychecks } from './hooks/useFinancialData'
+import { useTransactions, useBills, usePaychecks } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
@@ -71,7 +71,6 @@ export default function App() {
   const { masterTasks: asanaTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
   const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
   const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
-  const { goals, addGoal, updateGoalAmount, deleteGoal } = useFinancialGoals(userId)
   const { paychecks, addPaycheck, updatePaycheckAmount, togglePaycheckBill, deletePaycheck } = usePaychecks(userId)
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
@@ -282,10 +281,6 @@ export default function App() {
         onAddBill={addBill}
         onToggleBillPaid={toggleBillPaid}
         onDeleteBill={deleteBill}
-        goals={goals}
-        onAddGoal={addGoal}
-        onUpdateGoalAmount={updateGoalAmount}
-        onDeleteGoal={deleteGoal}
         paychecks={paychecks}
         onAddPaycheck={addPaycheck}
         onUpdatePaycheckAmount={updatePaycheckAmount}

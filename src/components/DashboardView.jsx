@@ -120,7 +120,6 @@ export default function DashboardView({
   icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
   transactions, onAddTransaction, onDeleteTransaction,
   bills, onAddBill, onToggleBillPaid, onDeleteBill,
-  goals, onAddGoal, onUpdateGoalAmount, onDeleteGoal,
   paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   onPushGcuToAsana, gcuPushing,
   books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers,
@@ -560,10 +559,6 @@ export default function DashboardView({
               onAddBill={onAddBill}
               onToggleBillPaid={onToggleBillPaid}
               onDeleteBill={onDeleteBill}
-              goals={goals || []}
-              onAddGoal={onAddGoal}
-              onUpdateGoalAmount={onUpdateGoalAmount}
-              onDeleteGoal={onDeleteGoal}
               paychecks={paychecks || []}
               onAddPaycheck={onAddPaycheck}
               onUpdatePaycheckAmount={onUpdatePaycheckAmount}
