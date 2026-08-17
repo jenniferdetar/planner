@@ -29,7 +29,7 @@ function formatTime(timeStr) {
   const [h, m] = timeStr.split(':').map(Number)
   const suffix = h >= 12 ? 'PM' : 'AM'
   const h12 = h % 12 || 12
-  return m === 0 ? `${h12} ${suffix}` : `${h12}:${String(m).padStart(2,'0')} ${suffix}`
+  return `${String(h12).padStart(2,'0')}:${String(m).padStart(2,'0')} ${suffix}`
 }
 
 function meetingToBlock(meeting, fallbackColor) {
