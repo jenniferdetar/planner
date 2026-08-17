@@ -9,29 +9,32 @@ const WORK_SCHEDULES = [
   '7:30 am - 4:30 pm (Hour Lunch)',
 ]
 
+// Names in "First Last" format, roster sorted by last name.
 const SCHEDULE = [
-  { sca: 'Barrera, Roberta',   group: 2, ext: '29040', alpha: 'A - BRING',        hub: 'North', lunch: '1:30 - 2:30',  break: '11:00 - 11:20' },
-  { sca: 'Velasquez, Clara',   group: 2, ext: '29064', alpha: 'BRINH - DEC',      hub: 'West',  lunch: '12:00 - 1:00', break: '3:10 - 3:30' },
-  { sca: 'Hardy, Tasha',       group: 1, ext: '12480', alpha: 'DED - GILA',       hub: 'North', lunch: '12:00 - 1:00', break: '10:00 - 10:20' },
-  { sca: 'Hamptonie, Danita',  group: 2, ext: '29048', alpha: 'GILB - JIL',       hub: 'West',  lunch: '1:30 - 2:30',  break: '10:00 - 10:20' },
-  { sca: 'Mendoza, Marcia',    group: 1, ext: '15296', alpha: 'JIM - MARTE',      hub: 'South', lunch: '1:30 - 2:30',  break: '11:00 - 11:20' },
-  { sca: 'Natividad, Cecile',  group: 1, ext: '16138', alpha: 'MARTF - OHAR',     hub: 'North', lunch: '12:30 - 1:30', break: '10:30 - 10:50' },
-  { sca: 'Mejia, Maria',       group: 2, ext: '29050', alpha: 'OHAS - RIVERA, K', hub: 'East',  lunch: '12:00 - 1:00', break: '3:10 - 3:30' },
-  { sca: 'Rito, Veronica',     group: 1, ext: '29056', alpha: 'RIVERA, L - SWA',  hub: 'East',  lunch: '12:30 - 1:30', break: '10:40 - 11:00' },
-  { sca: 'Deserine Estrada',   group: 2, ext: '29034', alpha: 'SWB - Z',          hub: 'South', lunch: '12:30 - 1:30', break: '3:10 - 3:30' },
-  { sca: 'Brenda Neblett',     group: 1, ext: '18331', alpha: 'SUPV',             hub: 'West',  lunch: '1:00 - 2:00',  break: '11:00 - 11:20' },
+  { sca: 'Roberta Barrera',  group: 2, ext: '29040', alpha: 'A - BRING',        hub: 'North', lunch: '1:30 - 2:30',  break: '11:00 - 11:20' },
+  { sca: 'Deserine Estrada', group: 2, ext: '29034', alpha: 'SWB - Z',          hub: 'South', lunch: '12:30 - 1:30', break: '3:10 - 3:30' },
+  { sca: 'Danita Hamptonie', group: 2, ext: '29048', alpha: 'GILB - JIL',       hub: 'West',  lunch: '1:30 - 2:30',  break: '10:00 - 10:20' },
+  { sca: 'Tasha Hardy',      group: 1, ext: '12480', alpha: 'DED - GILA',       hub: 'North', lunch: '12:00 - 1:00', break: '10:00 - 10:20' },
+  { sca: 'Maria Mejia',      group: 2, ext: '29050', alpha: 'OHAS - RIVERA, K', hub: 'East',  lunch: '12:00 - 1:00', break: '3:10 - 3:30' },
+  { sca: 'Marcia Mendoza',   group: 1, ext: '15296', alpha: 'JIM - MARTE',      hub: 'South', lunch: '1:30 - 2:30',  break: '11:00 - 11:20' },
+  { sca: 'Cecile Natividad', group: 1, ext: '16138', alpha: 'MARTF - OHAR',     hub: 'North', lunch: '12:30 - 1:30', break: '10:30 - 10:50' },
+  { sca: 'Brenda Neblett',   group: 1, ext: '18331', alpha: 'SUPV',             hub: 'West',  lunch: '1:00 - 2:00',  break: '11:00 - 11:20' },
+  { sca: 'Veronica Rito',    group: 1, ext: '29056', alpha: 'RIVERA, L - SWA',  hub: 'East',  lunch: '12:30 - 1:30', break: '10:40 - 11:00' },
+  { sca: 'Clara Velasquez',  group: 2, ext: '29064', alpha: 'BRINH - DEC',      hub: 'West',  lunch: '12:00 - 1:00', break: '3:10 - 3:30' },
 ]
 
 // Audit of D & G-Table Projections / Futures / ETK-TK Requirements
+// (evaluator → auditor pairings preserved; rows sorted by evaluator last name)
 const AUDITS = [
-  { evaluator: 'Clara',    auditor: 'Maria' },
-  { evaluator: 'Maria',    auditor: 'Tasha' },
-  { evaluator: 'Tasha',    auditor: 'Veronica' },
-  { evaluator: 'Veronica', auditor: 'Clara' },
+  { evaluator: 'Tasha Hardy',     auditor: 'Veronica Rito' },
+  { evaluator: 'Maria Mejia',     auditor: 'Tasha Hardy' },
+  { evaluator: 'Veronica Rito',   auditor: 'Clara Velasquez' },
+  { evaluator: 'Clara Velasquez', auditor: 'Maria Mejia' },
 ]
 
 // Self-Audits of D & G-Table Projections / Futures / ETK-TK Requirements
-const SELF_AUDITS = ['Roberta', 'Danita', 'Cecile', 'Marcia', 'Deserine']
+// (sorted by last name)
+const SELF_AUDITS = ['Roberta Barrera', 'Deserine Estrada', 'Danita Hamptonie', 'Marcia Mendoza', 'Cecile Natividad']
 
 const HUB_COLORS = {
   North: '#2a78d6',
