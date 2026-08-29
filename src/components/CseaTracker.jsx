@@ -8,6 +8,7 @@ import { MEMBER_BENEFITS_CONTACTS } from '../data/memberBenefitsContacts'
 import { LABOR_REP_CONTACTS } from '../data/laborRepContacts'
 import { CONFERENCE_ATTENDEES } from '../data/conferenceAttendees'
 import { STANDING_COMMITTEES, OTHER_APPOINTMENTS } from '../data/committeeAppointments'
+import { CVFO_TRAINING_EVENTS } from '../data/cvfoTrainingEvents'
 import { isEboardMember, isLaborRep, isAreaIMember, isStateMember } from '../lib/eboardMembers'
 import './CseaTracker.css'
 
@@ -202,6 +203,7 @@ export function CseaTrackerInner({ api }) {
         <button className={`csea-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {api.quickLinks.length > 0 && <span className="csea-tab-badge">{api.quickLinks.length}</span>}</button>
         <button className={`csea-tab ${tab === 'contract' ? 'active' : ''}`} onClick={() => setTab('contract')}>Contract/Constitution</button>
         <button className={`csea-tab ${tab === 'committees' ? 'active' : ''}`} onClick={() => setTab('committees')}>Committees <span className="csea-tab-badge">{STANDING_COMMITTEES.length + OTHER_APPOINTMENTS.length}</span></button>
+        <button className={`csea-tab ${tab === 'trainings' ? 'active' : ''}`} onClick={() => setTab('trainings')}>Trainings & Events <span className="csea-tab-badge">{CVFO_TRAINING_EVENTS.length}</span></button>
         <button className={`csea-tab ${tab === 'pc' ? 'active' : ''}`} onClick={() => setTab('pc')}>Personnel Commission {api.activePcCases.length > 0 && <span className="csea-tab-badge">{api.activePcCases.length}</span>}</button>
         <button className={`csea-tab ${tab === 'rif' ? 'active' : ''}`} onClick={() => setTab('rif')}>RIF Intake <span className="csea-tab-badge">{RIF_INTAKE.length}</span></button>
         {!conferenceArchived && (
@@ -413,6 +415,8 @@ export function CseaTrackerInner({ api }) {
 
       {tab === 'committees' && <CommitteesPanel />}
 
+      {tab === 'trainings' && <TrainingsEventsPanel />}
+
       {tab === 'pc' && <PersonnelCommissionPanel api={api} />}
 
       {tab === 'rif' && <RifIntakePanel />}
@@ -469,6 +473,83 @@ function CommitteesPanel() {
             <CommitteeCard key={c.name} committee={c} />
           ))}
         </div>
+      </div>
+    </div>
+  )
+}
+
+const TRAINING_TAG_COLORS = {
+  'Virtual': '#3164a0',
+  'In Person': '#41a700',
+  'By Invitation': '#8e2a2a',
+  'FYI': '#53575a',
+  'Fall': '#f7941d',
+  'Winter/Spring': '#9b59b6',
+  'Evening': '#1e3070',
+  'Cancelled': '#cc0000',
+}
+
+// Group the flat, chronological event list into year buckets while keeping
+// the original date ordering within each year.
+function groupTrainingsByYear(events) {
+  const groups = []
+  let current = null
+  for (const evt of events) {
+    const year = evt.date.slice(0, 4)
+    if (!current || current.year !== year) {
+      current = { year, events: [] }
+      groups.push(current)
+    }
+    current.events.push(evt)
+  }
+  return groups
+}
+
+function TrainingEventRow({ event }) {
+  const d = new Date(event.date + 'T12:00:00')
+  const weekday = d.toLocaleDateString('en-US', { weekday: 'short' })
+  const monthDay = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+
+  return (
+    <div className={`training-row ${event.cancelled ? 'cancelled' : ''}`}>
+      <div className="training-date">
+        <span className="training-date-weekday">{weekday}</span>
+        <span className="training-date-monthday">{monthDay}</span>
+      </div>
+      <div className="training-body">
+        <div className="training-title">{event.title}</div>
+        {event.note && <div className="training-note">{event.note}</div>}
+      </div>
+      {event.tags.length > 0 && (
+        <div className="training-tags">
+          {event.tags.map((t) => (
+            <span key={t} className="training-tag" style={{ '--tt': TRAINING_TAG_COLORS[t] || '#53575a' }}>{t}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function TrainingsEventsPanel() {
+  const groups = groupTrainingsByYear(CVFO_TRAINING_EVENTS)
+
+  return (
+    <div className="csea-panel">
+      <div className="csea-toolbar">
+        <span className="csea-toolbar-label">CVFO Training &amp; Event Dates — 2026–2027</span>
+        <span className="csea-inline-stat" style={{ color: 'var(--csea-blue)' }}>{CVFO_TRAINING_EVENTS.length} <span className="csea-inline-lbl">Dates</span></span>
+      </div>
+
+      <div className="csea-issue-list csea-issue-list--fill training-panel" style={{ padding: '0 16px 16px' }}>
+        {groups.map((g) => (
+          <div key={g.year} className="training-year-group">
+            <div className="training-year-heading">{g.year}</div>
+            {g.events.map((evt, i) => (
+              <TrainingEventRow key={`${evt.date}-${i}`} event={evt} />
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   )
