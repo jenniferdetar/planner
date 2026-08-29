@@ -109,7 +109,8 @@ export default function DashboardView({
   cseaInteractions, onAddCseaInteraction, onUpdateCseaInteraction,
   showArchivedInteractions, onToggleArchivedInteractions,
   asanaCseaTasks, onCompleteAsanaTask, onUpdateAsanaTaskNotes,
-  cseaNotes, onAddCseaNote, onDeleteCseaNote,
+  cseaNotes, onAddCseaNote, onArchiveCseaNote, onDeleteCseaNote,
+  showArchivedNotes, onToggleArchivedNotes,
   cseaIssueNotes, onAddCseaIssueNote, onDeleteCseaIssueNote,
   cseaPcCases, onAddCseaPcCase, onUpdateCseaPcStatus, onDeleteCseaPcCase,
   cseaPcNotes, onAddCseaPcNote, onDeleteCseaPcNote,
@@ -502,7 +503,10 @@ export default function DashboardView({
               onUpdateAsanaTaskNotes={onUpdateAsanaTaskNotes}
               cseaNotes={cseaNotes || []}
               onAddCseaNote={onAddCseaNote}
+              onArchiveCseaNote={onArchiveCseaNote}
               onDeleteCseaNote={onDeleteCseaNote}
+              showArchivedNotes={showArchivedNotes}
+              onToggleArchivedNotes={onToggleArchivedNotes}
               issueNotes={cseaIssueNotes || {}}
               onAddIssueNote={onAddCseaIssueNote}
               onDeleteIssueNote={onDeleteCseaIssueNote}
