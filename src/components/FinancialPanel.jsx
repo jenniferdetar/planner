@@ -69,7 +69,7 @@ function FinancialPanelInner({ api }) {
 
       {api.tab === 'bills' && <BillsTab bills={api.bills} onAdd={api.onAddBill} onToggle={api.onToggleBillPaid} onDelete={api.onDeleteBill} />}
       {api.tab === 'coins' && <CoinsTab userId={api.userId} />}
-      {api.tab === 'budget' && <PayPeriodBudgetTab userId={api.userId} providerToken={api.providerToken} />}
+      {api.tab === 'budget' && <PayPeriodBudgetTab userId={api.userId} providerToken={api.providerToken} bills={api.bills} onToggleBillPaid={api.onToggleBillPaid} />}
       {api.tab === 'debt' && <DebtSnowballTab userId={api.userId} />}
       {api.tab === 'laundry' && <LaundryTab userId={api.userId} />}
       {api.tab === 'notes' && <NotesTab userId={api.userId} />}
@@ -1103,8 +1103,792 @@ function ReferencesSubTab({ userId, providerToken }) {
   )
 }
 
-function PayPeriodBudgetTab({ userId, providerToken }) {
-  const [subView, setSubView] = useState('periods') // 'periods' | 'references'
+// ─── Bill Calendar ──────────────────────────────────────────────────────────
+// Ported from the "Bill & Debt Payment Calendar" bonus sheet in the Budget by
+// Paycheck template: bills (with a monthly due day) laid out on a month grid,
+// plus a running due/paid/remaining tally for the selected month.
+
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const DOW_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+function BillCalendarSubTab({ userId, bills = [], onToggleBillPaid }) {
+  const now = new Date()
+  const [year, setYear] = useState(now.getFullYear())
+  const [month, setMonth] = useState(now.getMonth()) // 0-indexed
+
+  // Every monthly/annual bill with a due day lands on the calendar. Weekly bills
+  // have no single day, so they're listed separately below rather than pinned.
+  const dueBills = bills.filter(b => b.due_day && b.frequency !== 'weekly')
+  const billsByDay = useMemo(() => {
+    const map = {}
+    dueBills.forEach(b => {
+      const day = Math.min(31, Math.max(1, b.due_day))
+      if (!map[day]) map[day] = []
+      map[day].push(b)
+    })
+    return map
+  }, [bills, month, year])
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const firstWeekday = new Date(year, month, 1).getDay()
+  const cells = []
+  for (let i = 0; i < firstWeekday; i++) cells.push(null)
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d)
+  while (cells.length % 7 !== 0) cells.push(null)
+
+  const isCurrentMonth = year === now.getFullYear() && month === now.getMonth()
+  const todayDay = now.getDate()
+
+  const totalDue = dueBills.reduce((s, b) => s + Number(b.amount || 0), 0)
+  const paidTotal = dueBills.filter(b => b.paid).reduce((s, b) => s + Number(b.amount || 0), 0)
+  const remaining = totalDue - paidTotal
+
+  function statusOf(b) {
+    if (b.paid) return { label: 'Paid', cls: 'paid' }
+    if (isCurrentMonth && b.due_day < todayDay) return { label: 'Overdue', cls: 'overdue' }
+    return { label: 'Due', cls: 'due' }
+  }
+
+  function shift(delta) {
+    let m = month + delta, y = year
+    if (m < 0) { m = 11; y-- }
+    if (m > 11) { m = 0; y++ }
+    setMonth(m); setYear(y)
+  }
+
+  return (
+    <div className="fin-content">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Bill Calendar</h2>
+          <span className="fin-toolbar-label">{dueBills.length} scheduled bills</span>
+        </div>
+        <div className="cal-nav">
+          <button className="cal-nav-btn" onClick={() => shift(-1)}>‹</button>
+          <span className="cal-nav-label">{MONTH_NAMES[month]} {year}</span>
+          <button className="cal-nav-btn" onClick={() => shift(1)}>›</button>
+        </div>
+      </div>
+
+      <div className="budget-summary-bar">
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Total Due</span>
+          <span className="budget-summary-val">{fmt(totalDue)}</span>
+        </div>
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Paid</span>
+          <span className="budget-summary-val income">{fmt(paidTotal)}</span>
+        </div>
+        <div className="budget-summary-item">
+          <span className="budget-summary-lbl">Remaining</span>
+          <span className="budget-summary-val" style={{ color: remaining > 0 ? '#cc0000' : '#41a700' }}>{fmt(remaining)}</span>
+        </div>
+      </div>
+
+      {dueBills.length === 0 ? (
+        <p className="fin-empty">No bills with a due day yet. Add bills (with a due day) in the Bills tab and they'll appear here.</p>
+      ) : (
+        <div className="cal-wrap">
+          <div className="cal-grid">
+            {DOW_LABELS.map(d => <div key={d} className="cal-dow">{d}</div>)}
+            {cells.map((day, i) => {
+              const dayBills = day ? (billsByDay[day] || []) : []
+              const dayTotal = dayBills.reduce((s, b) => s + Number(b.amount || 0), 0)
+              const isToday = isCurrentMonth && day === todayDay
+              return (
+                <div key={i} className={`cal-cell${day ? '' : ' empty'}${isToday ? ' today' : ''}`}>
+                  {day && (
+                    <>
+                      <div className="cal-cell-head">
+                        <span className="cal-cell-day">{day}</span>
+                        {dayTotal > 0 && <span className="cal-cell-total">{ppFmt(dayTotal)}</span>}
+                      </div>
+                      <div className="cal-cell-bills">
+                        {dayBills.map(b => {
+                          const st = statusOf(b)
+                          return (
+                            <button
+                              key={b.id}
+                              className={`cal-bill-pill ${st.cls}`}
+                              title={`${b.name} — ${fmt(b.amount)} · ${st.label} (click to toggle paid)`}
+                              onClick={() => onToggleBillPaid && onToggleBillPaid(b.id)}
+                            >
+                              <span className="cal-bill-name">{b.name}</span>
+                              <span className="cal-bill-amt">{ppFmt(b.amount)}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="cal-legend">
+            <span className="cal-legend-item"><i className="cal-dot due" />Due</span>
+            <span className="cal-legend-item"><i className="cal-dot overdue" />Overdue</span>
+            <span className="cal-legend-item"><i className="cal-dot paid" />Paid</span>
+            <span className="cal-legend-hint">Tap a bill to mark it paid</span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Spending Dashboard ─────────────────────────────────────────────────────
+// Ported from the "Expenses Dashboard" of the Expense Tracker template: takes
+// the actuals already logged against pay-period line items and rolls them up by
+// section and by category for a chosen month, with a category breakdown chart.
+
+function monthKey(dateStr) {
+  return (dateStr || '').slice(0, 7) // YYYY-MM
+}
+
+function fmtMonthKey(key) {
+  if (!key) return ''
+  const [y, m] = key.split('-')
+  return `${MONTH_NAMES[Number(m) - 1]} ${y}`
+}
+
+function SpendingDashboardSubTab({ userId }) {
+  const [entries, setEntries] = useState([])
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [selectedMonth, setSelectedMonth] = useState('all')
+
+  useEffect(() => {
+    if (!userId) return
+    let cancelled = false
+    async function load() {
+      setLoading(true)
+      const [entRes, itemRes] = await Promise.all([
+        supabase.from('pay_period_expense_entries').select('*').eq('user_id', userId).order('entry_date', { ascending: false }),
+        supabase.from('pay_period_line_items').select('*').eq('user_id', userId),
+      ])
+      if (cancelled) return
+      setEntries(entRes.data || [])
+      setItems(itemRes.data || [])
+      setLoading(false)
+    }
+    load()
+    return () => { cancelled = true }
+  }, [userId])
+
+  const itemsById = useMemo(() => Object.fromEntries(items.map(i => [i.id, i])), [items])
+
+  const months = useMemo(() => {
+    const set = new Set(entries.map(e => monthKey(e.entry_date)).filter(Boolean))
+    return Array.from(set).sort().reverse()
+  }, [entries])
+
+  const filtered = useMemo(() => {
+    if (selectedMonth === 'all') return entries
+    return entries.filter(e => monthKey(e.entry_date) === selectedMonth)
+  }, [entries, selectedMonth])
+
+  // Roll the month's actuals up two ways: by section (Income/Bills/…) for the
+  // summary tiles, and by individual line-item name for the breakdown chart.
+  const { bySection, byCategory, totalOut, totalIn } = useMemo(() => {
+    const sec = { income: 0, bill: 0, expense: 0, savings: 0, debt: 0 }
+    const cat = {}
+    let out = 0, incm = 0
+    filtered.forEach(e => {
+      const item = itemsById[e.line_item_id]
+      const section = item?.section || 'expense'
+      const amt = Number(e.amount) || 0
+      sec[section] = (sec[section] || 0) + amt
+      if (section === 'income') { incm += amt } else {
+        out += amt
+        const name = item?.name || 'Uncategorized'
+        cat[name] = (cat[name] || 0) + amt
+      }
+    })
+    const catRows = Object.entries(cat).map(([name, total]) => ({ name, total })).sort((a, b) => b.total - a.total)
+    return { bySection: sec, byCategory: catRows, totalOut: out, totalIn: incm }
+  }, [filtered, itemsById])
+
+  const maxCat = byCategory.reduce((m, c) => Math.max(m, c.total), 0)
+  const SECTION_TILES = [
+    { key: 'income', label: 'Income', color: '#41a700' },
+    { key: 'bill', label: 'Bills', color: '#1e3070' },
+    { key: 'expense', label: 'Expenses', color: '#c77b3a' },
+    { key: 'savings', label: 'Savings', color: '#2a8a7a' },
+    { key: 'debt', label: 'Debt', color: '#a23b3b' },
+  ]
+
+  return (
+    <div className="fin-content">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Spending Dashboard</h2>
+          <span className="fin-toolbar-label">Where the money actually went</span>
+        </div>
+        <select className="budget-month-sel" value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)}>
+          <option value="all">All time</option>
+          {months.map(m => <option key={m} value={m}>{fmtMonthKey(m)}</option>)}
+        </select>
+      </div>
+
+      {loading ? (
+        <p className="fin-empty">Loading…</p>
+      ) : entries.length === 0 ? (
+        <p className="fin-empty">No transactions logged yet. Log spending against a pay period's line items and it will roll up here.</p>
+      ) : (
+        <>
+          <div className="dash-tiles">
+            {SECTION_TILES.map(t => (
+              <div key={t.key} className="dash-tile" style={{ borderTopColor: t.color }}>
+                <span className="dash-tile-lbl">{t.label}</span>
+                <span className="dash-tile-val" style={{ color: t.color }}>{fmt(bySection[t.key] || 0)}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="dash-netline">
+            <span>Money in <strong className="income">{fmt(totalIn)}</strong></span>
+            <span>Money out <strong>{fmt(totalOut)}</strong></span>
+            <span>Net <strong style={{ color: totalIn - totalOut < 0 ? '#cc0000' : '#41a700' }}>{fmt(totalIn - totalOut)}</strong></span>
+          </div>
+
+          <div className="dash-section-title">Spending by category</div>
+          {byCategory.length === 0 ? (
+            <p className="fin-empty">No outflow recorded for this period.</p>
+          ) : (
+            <div className="dash-cat-list">
+              {byCategory.map(c => {
+                const pct = totalOut > 0 ? (c.total / totalOut) * 100 : 0
+                return (
+                  <div key={c.name} className="dash-cat-row">
+                    <div className="dash-cat-head">
+                      <span className="dash-cat-name">{c.name}</span>
+                      <span className="dash-cat-amt">{fmt(c.total)} <span className="dash-cat-pct">{pct.toFixed(0)}%</span></span>
+                    </div>
+                    <div className="dash-cat-bar-wrap">
+                      <div className="dash-cat-bar" style={{ width: `${maxCat > 0 ? (c.total / maxCat) * 100 : 0}%` }} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  )
+}
+
+// ─── Emergency Fund Calculator & Tracker ────────────────────────────────────
+// Ported from the Emergency Fund Calculator & Tracker template: monthly
+// essential-expense categories drive 1-, 3-, and N-month savings goals; a
+// contribution log tracks progress and projects a "fully funded by" date.
+
+const EF_STARTER_CATEGORIES = [
+  { name: 'Mortgage / Rent', monthly_avg: 0 },
+  { name: 'Utilities', monthly_avg: 0 },
+  { name: 'Groceries', monthly_avg: 0 },
+  { name: 'Insurance', monthly_avg: 0 },
+  { name: 'Transportation / Gas', monthly_avg: 0 },
+  { name: 'Phone & Internet', monthly_avg: 0 },
+  { name: 'Minimum Debt Payments', monthly_avg: 0 },
+  { name: 'Healthcare', monthly_avg: 0 },
+]
+
+// EOMONTH(balanceDate, monthsNeeded-1): the last day of the month `monthsNeeded`
+// months of contributions out. monthsNeeded 0 means the goal is already met.
+function efFundedByDate(balanceDateISO, monthsNeeded) {
+  if (!balanceDateISO || monthsNeeded == null) return null
+  const d = new Date(`${balanceDateISO}T00:00:00`)
+  if (Number.isNaN(d.getTime())) return null
+  if (monthsNeeded <= 0) return d
+  return new Date(d.getFullYear(), d.getMonth() + monthsNeeded, 0)
+}
+
+function efFmtDate(d) {
+  if (!d) return '—'
+  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
+
+function EmergencyFundGoalCard({ label, goal, saved, monthlyContribution, balanceDate, accent }) {
+  const remaining = Math.max(0, goal - saved)
+  const pct = goal > 0 ? Math.min(100, (saved / goal) * 100) : 0
+  const monthsNeeded = remaining <= 0 ? 0 : (monthlyContribution > 0 ? Math.ceil(remaining / monthlyContribution) : null)
+  const fundedBy = efFundedByDate(balanceDate, monthsNeeded)
+  const completed = remaining <= 0 && goal > 0
+  return (
+    <div className="ef-goal-card" style={{ borderTopColor: accent }}>
+      <div className="ef-goal-head">
+        <span className="ef-goal-label">{label}</span>
+        {completed && <span className="ef-goal-check">✅</span>}
+      </div>
+      <div className="ef-goal-target" style={{ color: accent }}>{fmt(goal)}</div>
+      <div className="ef-goal-bar-wrap">
+        <div className="ef-goal-bar" style={{ width: `${pct}%`, background: accent }} />
+      </div>
+      <div className="ef-goal-stats">
+        <div><span>Saved</span><strong>{fmt(saved)}</strong></div>
+        <div><span>Remaining</span><strong>{fmt(remaining)}</strong></div>
+        <div><span>Funded by</span><strong>{completed ? 'Done' : (monthsNeeded == null ? 'Set contribution' : efFmtDate(fundedBy))}</strong></div>
+      </div>
+    </div>
+  )
+}
+
+function EmergencyFundSubTab({ userId }) {
+  const [config, setConfig] = useState(null)
+  const [categories, setCategories] = useState([])
+  const [entries, setEntries] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [catDraft, setCatDraft] = useState({ name: '', monthly_avg: '' })
+  const [entryDraft, setEntryDraft] = useState({ entry_date: ppTodayISO(), amount: '', note: '' })
+  const [seeding, setSeeding] = useState(false)
+
+  useEffect(() => {
+    if (!userId) return
+    let cancelled = false
+    async function load() {
+      setLoading(true)
+      const [cfgRes, catRes, entRes] = await Promise.all([
+        supabase.from('emergency_fund').select('*').eq('user_id', userId).maybeSingle(),
+        supabase.from('emergency_fund_categories').select('*').eq('user_id', userId).order('sort_order').order('created_at'),
+        supabase.from('emergency_fund_entries').select('*').eq('user_id', userId).order('entry_date', { ascending: false }),
+      ])
+      if (cancelled) return
+      setConfig(cfgRes.data || { balance_date: ppTodayISO(), current_balance: 0, monthly_contribution: 0, months_to_cover: 6 })
+      setCategories(catRes.data || [])
+      setEntries(entRes.data || [])
+      setLoading(false)
+    }
+    load()
+    return () => { cancelled = true }
+  }, [userId])
+
+  async function saveConfig(patch) {
+    const next = { ...config, ...patch }
+    setConfig(next)
+    await supabase.from('emergency_fund').upsert({
+      user_id: userId,
+      balance_date: next.balance_date || null,
+      current_balance: Number(next.current_balance) || 0,
+      monthly_contribution: Number(next.monthly_contribution) || 0,
+      months_to_cover: parseInt(next.months_to_cover) || 0,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id' })
+  }
+
+  async function addCategory(e) {
+    e.preventDefault()
+    if (!catDraft.name.trim()) return
+    const { data } = await supabase.from('emergency_fund_categories').insert({
+      user_id: userId, name: catDraft.name.trim(), monthly_avg: Number(catDraft.monthly_avg) || 0, sort_order: categories.length,
+    }).select().single()
+    if (data) setCategories(c => [...c, data])
+    setCatDraft({ name: '', monthly_avg: '' })
+  }
+
+  async function updateCategoryAmount(id, amount) {
+    const val = amount === '' ? 0 : Number(amount) || 0
+    await supabase.from('emergency_fund_categories').update({ monthly_avg: val }).eq('id', id)
+    setCategories(c => c.map(x => x.id === id ? { ...x, monthly_avg: val } : x))
+  }
+
+  async function deleteCategory(id) {
+    await supabase.from('emergency_fund_categories').delete().eq('id', id)
+    setCategories(c => c.filter(x => x.id !== id))
+  }
+
+  async function seedStarters() {
+    setSeeding(true)
+    try {
+      const rows = EF_STARTER_CATEGORIES.map((c, i) => ({ user_id: userId, name: c.name, monthly_avg: c.monthly_avg, sort_order: i }))
+      const { data } = await supabase.from('emergency_fund_categories').insert(rows).select()
+      if (data) setCategories(data)
+    } finally {
+      setSeeding(false)
+    }
+  }
+
+  async function addEntry(e) {
+    e.preventDefault()
+    if (!entryDraft.amount) return
+    const { data } = await supabase.from('emergency_fund_entries').insert({
+      user_id: userId, entry_date: entryDraft.entry_date, amount: Number(entryDraft.amount) || 0, note: entryDraft.note.trim() || null,
+    }).select().single()
+    if (data) setEntries(en => [data, ...en])
+    setEntryDraft({ entry_date: ppTodayISO(), amount: '', note: '' })
+  }
+
+  async function deleteEntry(id) {
+    await supabase.from('emergency_fund_entries').delete().eq('id', id)
+    setEntries(en => en.filter(x => x.id !== id))
+  }
+
+  if (loading || !config) return <div className="fin-content"><p className="fin-empty">Loading…</p></div>
+
+  const monthlyTotal = categories.reduce((s, c) => s + Number(c.monthly_avg || 0), 0)
+  const contributed = entries.reduce((s, e) => s + Number(e.amount || 0), 0)
+  const saved = (Number(config.current_balance) || 0) + contributed
+  const monthlyContribution = Number(config.monthly_contribution) || 0
+  const N = parseInt(config.months_to_cover) || 6
+
+  return (
+    <div className="fin-content">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Emergency Fund</h2>
+          <span className="fin-toolbar-label">Cover {N} months of essentials</span>
+        </div>
+      </div>
+
+      <div className="ef-inputs">
+        <label className="ef-field">
+          <span>Balance date</span>
+          <input className="fin-input" type="date" value={config.balance_date || ''} onChange={e => saveConfig({ balance_date: e.target.value })} />
+        </label>
+        <label className="ef-field">
+          <span>Starting balance</span>
+          <input className="fin-input" type="number" step="0.01" defaultValue={config.current_balance ?? 0} onBlur={e => saveConfig({ current_balance: e.target.value })} />
+        </label>
+        <label className="ef-field">
+          <span>Monthly contribution</span>
+          <input className="fin-input" type="number" step="0.01" defaultValue={config.monthly_contribution ?? 0} onBlur={e => saveConfig({ monthly_contribution: e.target.value })} />
+        </label>
+        <label className="ef-field">
+          <span>Months to cover</span>
+          <input className="fin-input" type="number" step="1" min="1" defaultValue={config.months_to_cover ?? 6} onBlur={e => saveConfig({ months_to_cover: e.target.value })} />
+        </label>
+      </div>
+
+      <div className="ef-goals">
+        <EmergencyFundGoalCard label="1-Month Goal" goal={monthlyTotal} saved={saved} monthlyContribution={monthlyContribution} balanceDate={config.balance_date} accent="#41a700" />
+        <EmergencyFundGoalCard label="3-Months Goal" goal={monthlyTotal * 3} saved={saved} monthlyContribution={monthlyContribution} balanceDate={config.balance_date} accent="#1e3070" />
+        <EmergencyFundGoalCard label={`${N}-Months Goal`} goal={monthlyTotal * N} saved={saved} monthlyContribution={monthlyContribution} balanceDate={config.balance_date} accent="#a23b3b" />
+      </div>
+
+      <div className="ef-columns">
+        <div className="pp-card pp-section ef-col">
+          <div className="budget-header">
+            <div className="budget-header-titles"><h2 className="budget-title">Monthly Essentials</h2></div>
+            {categories.length === 0 && (
+              <button className="fin-add-btn" onClick={seedStarters} disabled={seeding}>{seeding ? 'Loading…' : 'Load starters'}</button>
+            )}
+          </div>
+          <div className="pp-table-wrap">
+            <table className="budget-table">
+              <thead>
+                <tr>
+                  <th className="budget-th cat">Category</th>
+                  <th className="budget-th">Monthly avg</th>
+                  <th className="budget-th del-col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map(c => (
+                  <tr key={c.id} className="budget-row">
+                    <td className="budget-td cat">{c.name}</td>
+                    <td className="budget-td num">
+                      <input className="budget-input" type="number" step="0.01" defaultValue={c.monthly_avg ?? 0} onBlur={e => updateCategoryAmount(c.id, e.target.value)} />
+                    </td>
+                    <td className="budget-td del-col"><span className="budget-del" onClick={() => deleteCategory(c.id)}>✕</span></td>
+                  </tr>
+                ))}
+                {categories.length === 0 && (
+                  <tr><td colSpan={3} className="budget-td"><span className="budget-empty">No categories yet</span></td></tr>
+                )}
+              </tbody>
+              <tfoot>
+                <tr className="budget-net-row">
+                  <td className="budget-td cat">Monthly total</td>
+                  <td className="budget-td num net-val">{fmt(monthlyTotal)}</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <form className="fin-form" onSubmit={addCategory}>
+            <input className="fin-input" placeholder="Category name…" value={catDraft.name} onChange={e => setCatDraft(d => ({ ...d, name: e.target.value }))} />
+            <div className="fin-form-row">
+              <input className="fin-input amount" type="number" step="0.01" placeholder="Monthly avg" value={catDraft.monthly_avg} onChange={e => setCatDraft(d => ({ ...d, monthly_avg: e.target.value }))} />
+              <button type="submit" className="fin-save">Add</button>
+            </div>
+          </form>
+        </div>
+
+        <div className="pp-card pp-section ef-col">
+          <div className="budget-header">
+            <div className="budget-header-titles">
+              <h2 className="budget-title">Contributions</h2>
+              <span className="fin-toolbar-label">{fmt(contributed)} logged</span>
+            </div>
+          </div>
+          <form className="fin-form" onSubmit={addEntry}>
+            <div className="fin-form-row">
+              <input className="fin-input" type="date" value={entryDraft.entry_date} onChange={e => setEntryDraft(d => ({ ...d, entry_date: e.target.value }))} />
+              <input className="fin-input amount" type="number" step="0.01" placeholder="Amount" value={entryDraft.amount} onChange={e => setEntryDraft(d => ({ ...d, amount: e.target.value }))} required />
+            </div>
+            <div className="fin-form-row">
+              <input className="fin-input" placeholder="Note (optional)" value={entryDraft.note} onChange={e => setEntryDraft(d => ({ ...d, note: e.target.value }))} />
+              <button type="submit" className="fin-save">Log</button>
+            </div>
+          </form>
+          <div className="pp-table-wrap">
+            <table className="budget-table">
+              <thead>
+                <tr>
+                  <th className="budget-th">Date</th>
+                  <th className="budget-th cat">Note</th>
+                  <th className="budget-th">Amount</th>
+                  <th className="budget-th del-col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {entries.map(en => (
+                  <tr key={en.id} className="budget-row">
+                    <td className="budget-td num">{ppFmtDate(en.entry_date)}</td>
+                    <td className="budget-td cat">{en.note || <span className="budget-empty">—</span>}</td>
+                    <td className="budget-td num">{fmt(en.amount)}</td>
+                    <td className="budget-td del-col"><span className="budget-del" onClick={() => deleteEntry(en.id)}>✕</span></td>
+                  </tr>
+                ))}
+                {entries.length === 0 && (
+                  <tr><td colSpan={4} className="budget-td"><span className="budget-empty">No contributions logged yet</span></td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Debt Strategy (Snowball vs Avalanche vs Minimum) ───────────────────────
+// Ported from the Debt Payoff "Strategy Analysis" dashboard: simulate paying
+// off the same debts three ways so the interest and time each one costs can be
+// compared side by side, factoring in an optional extra monthly payment.
+
+// General month-by-month payoff simulator. Interest accrues monthly, then
+// payments apply. `rolling` strategies (snowball/avalanche) throw every freed-up
+// minimum plus the extra payment at whichever debt `orderFn` ranks first;
+// `minimum` pays each debt only its own minimum. Returns months to debt-free,
+// total interest paid, and total paid.
+function simulatePayoffStrategy(debts, orderFn, extraPayment, rolling) {
+  const items = debts.map(d => ({ balance: Number(d.balance) || 0, minimum: Number(d.minimum) || 0, rate: Number(d.rate) || 0, paidMonth: null }))
+  if (items.length === 0) return { months: 0, totalInterest: 0, totalPaid: 0 }
+  const MAX_MONTHS = 1200
+  let month = 0, totalInterest = 0, totalPaid = 0
+  items.forEach(it => { if (it.balance <= 0.005) it.paidMonth = 0 })
+
+  while (items.some(it => it.paidMonth === null) && month < MAX_MONTHS) {
+    month++
+    items.forEach(it => {
+      if (it.paidMonth === null) {
+        const interest = it.balance * (it.rate / 100 / 12)
+        it.balance += interest
+        totalInterest += interest
+      }
+    })
+    const unpaid = items.filter(it => it.paidMonth === null)
+    if (rolling) {
+      const freed = items.reduce((s, it) => it.paidMonth !== null ? s + it.minimum : s, 0)
+      let pool = (Number(extraPayment) || 0) + freed
+      unpaid.forEach(it => {
+        const pay = Math.min(it.minimum, it.balance)
+        it.balance -= pay; totalPaid += pay
+      })
+      const targets = orderFn([...unpaid])
+      for (const it of targets) {
+        if (pool <= 0.005) break
+        if (it.balance <= 0.005) continue
+        const pay = Math.min(pool, it.balance)
+        it.balance -= pay; totalPaid += pay; pool -= pay
+      }
+    } else {
+      unpaid.forEach(it => {
+        const pay = Math.min(it.minimum, it.balance)
+        it.balance -= pay; totalPaid += pay
+      })
+    }
+    items.forEach(it => { if (it.paidMonth === null && it.balance <= 0.005) it.paidMonth = month })
+  }
+  const done = items.every(it => it.paidMonth !== null)
+  return { months: done ? month : null, totalInterest, totalPaid }
+}
+
+const SNOWBALL_ORDER = arr => arr.sort((a, b) => a.balance - b.balance || b.rate - a.rate)
+const AVALANCHE_ORDER = arr => arr.sort((a, b) => b.rate - a.rate || a.balance - b.balance)
+
+function DebtStrategySubTab({ userId }) {
+  const [debts, setDebts] = useState([])
+  const [extraPayment, setExtraPayment] = useState(0)
+  const [strategy, setStrategy] = useState('snowball')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!userId) return
+    let cancelled = false
+    async function load() {
+      setLoading(true)
+      const [debtRes, setRes] = await Promise.all([
+        supabase.from('debts').select('*').eq('user_id', userId),
+        supabase.from('debt_payoff_settings').select('*').eq('user_id', userId).maybeSingle(),
+      ])
+      if (cancelled) return
+      setDebts(debtRes.data || [])
+      if (setRes.data) { setExtraPayment(Number(setRes.data.extra_payment) || 0); setStrategy(setRes.data.strategy || 'snowball') }
+      setLoading(false)
+    }
+    load()
+    return () => { cancelled = true }
+  }, [userId])
+
+  async function saveSettings(patch) {
+    const next = { extra_payment: extraPayment, strategy, ...patch }
+    await supabase.from('debt_payoff_settings').upsert({
+      user_id: userId, extra_payment: Number(next.extra_payment) || 0, strategy: next.strategy, updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id' })
+  }
+
+  // The mortgage sits outside the payoff race (Ramsey's Baby Step 6), matching
+  // the Debt Snowball tab's exclusion.
+  const activeDebts = useMemo(() => debts.filter(d => !isMortgageDebt(d)).map(d => ({
+    id: d.id,
+    name: d.name,
+    balance: effectivePayoff(d),
+    minimum: Number(d.minimum_payment) || 0,
+    rate: extractRate(d.name),
+  })).filter(d => d.balance > 0), [debts])
+
+  const results = useMemo(() => ({
+    minimum: simulatePayoffStrategy(activeDebts, null, 0, false),
+    snowball: simulatePayoffStrategy(activeDebts, SNOWBALL_ORDER, extraPayment, true),
+    avalanche: simulatePayoffStrategy(activeDebts, AVALANCHE_ORDER, extraPayment, true),
+  }), [activeDebts, extraPayment])
+
+  const payoffOrder = useMemo(() => {
+    const ordered = strategy === 'avalanche' ? AVALANCHE_ORDER([...activeDebts]) : SNOWBALL_ORDER([...activeDebts])
+    return ordered
+  }, [activeDebts, strategy])
+
+  const totalBalance = activeDebts.reduce((s, d) => s + d.balance, 0)
+  const totalMin = activeDebts.reduce((s, d) => s + d.minimum, 0)
+
+  function monthsLabel(m) {
+    if (m == null) return '100+ yrs'
+    const y = Math.floor(m / 12), mo = m % 12
+    return y > 0 ? `${y}y ${mo}m` : `${mo}m`
+  }
+
+  const minInterest = results.minimum.totalInterest
+  const STRATS = [
+    { key: 'minimum', label: 'Minimum Only', desc: 'No extra, no rolling', color: '#8a95a8' },
+    { key: 'snowball', label: 'Snowball', desc: 'Lowest balance first', color: '#1e3070' },
+    { key: 'avalanche', label: 'Avalanche', desc: 'Highest interest first', color: '#a23b3b' },
+  ]
+
+  return (
+    <div className="fin-content">
+      <div className="budget-header">
+        <div className="budget-header-titles">
+          <h2 className="budget-title">Debt Strategy</h2>
+          <span className="fin-toolbar-label">Snowball vs Avalanche vs Minimum</span>
+        </div>
+      </div>
+
+      {loading ? (
+        <p className="fin-empty">Loading…</p>
+      ) : activeDebts.length === 0 ? (
+        <p className="fin-empty">No non-mortgage debts on file. Add debts in the Debt Snowball tab and compare payoff strategies here.</p>
+      ) : (
+        <>
+          <div className="budget-summary-bar">
+            <div className="budget-summary-item">
+              <span className="budget-summary-lbl">Total Balance</span>
+              <span className="budget-summary-val">{fmt(totalBalance)}</span>
+            </div>
+            <div className="budget-summary-item">
+              <span className="budget-summary-lbl">Total Minimums</span>
+              <span className="budget-summary-val">{fmt(totalMin)}</span>
+            </div>
+            <div className="budget-summary-item">
+              <span className="budget-summary-lbl">Extra / Month</span>
+              <span className="budget-summary-val income">{fmt(extraPayment)}</span>
+            </div>
+          </div>
+
+          <div className="ds-extra-row">
+            <label className="ef-field">
+              <span>Extra monthly payment</span>
+              <input
+                className="fin-input" type="number" step="0.01" min="0"
+                defaultValue={extraPayment}
+                onBlur={e => { const v = Number(e.target.value) || 0; setExtraPayment(v); saveSettings({ extra_payment: v }) }}
+              />
+            </label>
+            <p className="ds-extra-hint">The extra is thrown at the top-priority debt each month, then rolls forward as debts clear.</p>
+          </div>
+
+          <div className="ds-cards">
+            {STRATS.map(s => {
+              const r = results[s.key]
+              const saved = minInterest - r.totalInterest
+              return (
+                <div key={s.key} className={`ds-card${strategy === s.key ? ' active' : ''}`} style={{ borderTopColor: s.color }}
+                  onClick={() => { if (s.key !== 'minimum') { setStrategy(s.key); saveSettings({ strategy: s.key }) } }}>
+                  <div className="ds-card-head">
+                    <span className="ds-card-label" style={{ color: s.color }}>{s.label}</span>
+                    <span className="ds-card-desc">{s.desc}</span>
+                  </div>
+                  <div className="ds-card-stat">
+                    <span className="ds-card-stat-lbl">Debt-free in</span>
+                    <span className="ds-card-stat-val">{monthsLabel(r.months)}</span>
+                    <span className="ds-card-stat-sub">{r.months != null ? payoffLabel(r.months) : ''}</span>
+                  </div>
+                  <div className="ds-card-stat">
+                    <span className="ds-card-stat-lbl">Interest paid</span>
+                    <span className="ds-card-stat-val">{fmt(r.totalInterest)}</span>
+                    {s.key !== 'minimum' && saved > 0.5 && <span className="ds-card-stat-sub saved">saves {fmt(saved)}</span>}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="dash-section-title">Payoff order — {strategy === 'avalanche' ? 'Avalanche' : 'Snowball'}</div>
+          <div className="pp-table-wrap">
+            <table className="budget-table">
+              <thead>
+                <tr>
+                  <th className="budget-th cat">#</th>
+                  <th className="budget-th cat">Debt</th>
+                  <th className="budget-th">Balance</th>
+                  <th className="budget-th">Minimum</th>
+                  <th className="budget-th">Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payoffOrder.map((d, i) => (
+                  <tr key={d.id} className="budget-row">
+                    <td className="budget-td cat">{i + 1}</td>
+                    <td className="budget-td cat">{d.name}</td>
+                    <td className="budget-td num">{fmt(d.balance)}</td>
+                    <td className="budget-td num">{fmt(d.minimum)}</td>
+                    <td className="budget-td num">{d.rate ? `${d.rate.toFixed(2)}%` : '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function PayPeriodBudgetTab({ userId, providerToken, bills, onToggleBillPaid }) {
+  const [subView, setSubView] = useState('periods')
   const [selectedPeriod, setSelectedPeriod] = useState(null)
 
   async function handleDatesChange(field, value) {
@@ -1123,13 +1907,27 @@ function PayPeriodBudgetTab({ userId, providerToken }) {
     )
   }
 
+  const SUBVIEWS = [
+    { key: 'periods', label: 'Pay Periods' },
+    { key: 'calendar', label: 'Bill Calendar' },
+    { key: 'spending', label: 'Spending' },
+    { key: 'emergency', label: 'Emergency Fund' },
+    { key: 'strategy', label: 'Debt Strategy' },
+    { key: 'references', label: 'References' },
+  ]
+
   return (
     <div className="pp-root">
       <div className="pp-subnav">
-        <button className={`pp-subnav-btn ${subView === 'periods' ? 'active' : ''}`} onClick={() => setSubView('periods')}>Pay Periods</button>
-        <button className={`pp-subnav-btn ${subView === 'references' ? 'active' : ''}`} onClick={() => setSubView('references')}>References</button>
+        {SUBVIEWS.map(v => (
+          <button key={v.key} className={`pp-subnav-btn ${subView === v.key ? 'active' : ''}`} onClick={() => setSubView(v.key)}>{v.label}</button>
+        ))}
       </div>
       {subView === 'periods' && <PayPeriodsList userId={userId} onSelect={setSelectedPeriod} />}
+      {subView === 'calendar' && <BillCalendarSubTab userId={userId} bills={bills} onToggleBillPaid={onToggleBillPaid} />}
+      {subView === 'spending' && <SpendingDashboardSubTab userId={userId} />}
+      {subView === 'emergency' && <EmergencyFundSubTab userId={userId} />}
+      {subView === 'strategy' && <DebtStrategySubTab userId={userId} />}
       {subView === 'references' && <ReferencesSubTab userId={userId} providerToken={providerToken} />}
     </div>
   )
