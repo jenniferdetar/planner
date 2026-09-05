@@ -199,23 +199,27 @@
 }
 .wants-add-btn:disabled { opacity: 0.5; cursor: default; }
 
-/* ---- List ---- */
+/* ---- List (card grid) ---- */
 .wants-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  align-items: start;
 }
 
 .wants-row {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   background: #fff;
   border: 1px solid #d9e8f0;
-  border-radius: 8px;
-  transition: box-shadow 0.15s, opacity 0.15s;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s;
 }
+.wants-row:hover { transform: translateY(-1px); }
+.wants-list > .wants-loading { grid-column: 1 / -1; }
 .wants-row:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
 .wants-row.answered { background: #f4faf4; border-color: #cfe8cf; }
 
