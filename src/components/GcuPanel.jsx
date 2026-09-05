@@ -74,6 +74,7 @@ function CourseGroup({ label, courses, api }) {
   return (
     <div className="gcu-group">
       <div className="gcu-group-label" dangerouslySetInnerHTML={{ __html: label }} />
+      <div className="gcu-course-grid">
       {courses.map(course => {
         const status = statuses[course.code]
         const isOpen = expanded === course.code
@@ -121,6 +122,7 @@ function CourseGroup({ label, courses, api }) {
           </div>
         )
       })}
+      </div>
     </div>
   )
 }
