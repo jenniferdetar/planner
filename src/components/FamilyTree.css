@@ -121,18 +121,18 @@
 
 .ft-card {
   background-color: #fff;
-  border: 1px solid #e0dbd0;
+  border: 1px solid #d9e8f0;
   border-radius: 10px;
   padding: 0 14px;
   min-width: 170px;
   max-width: 220px;
   flex: 1;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   position: relative;
-  transition: box-shadow 0.15s;
+  transition: box-shadow 0.15s, transform 0.15s;
 }
 
-.ft-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+.ft-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
 
 .ft-card.ft-self {
   border-color: var(--ft-green);
