@@ -374,11 +374,14 @@
 
 .wywo-log-card {
   background: #ffffff;
-  border: 2px solid #1e3070;
-  border-radius: 8px;
+  border: 1px solid #d9e8f0;
+  border-radius: 10px;
   padding: 14px 16px;
   color: #1a1a1a;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: box-shadow 0.15s, transform 0.15s;
 }
+.wywo-log-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
 
 .wywo-log-card.wywo-log-urgent {
   border-color: #cc0000;
