@@ -35,7 +35,6 @@
 .personal-panel,
 .library-panel,
 .gcu-panel,
-.wywo-wrap,
 .goals-panel,
 .section-panel,
 .right-panel {
@@ -237,9 +236,6 @@ select:focus {
 .goal-card      { background: var(--pt-bg-card) !important; border-color: var(--pt-border) !important; }
 .goal-card-header { border-bottom-color: var(--pt-border) !important; }
 
-/* ─── WYWO panel ─────────────────────────────────────────────────────────── */
-.wywo-wrap      { background: var(--pt-bg) !important; color: var(--pt-text) !important; }
-
 /* ─── Right panel (notes / mini calendar on desktop) ─────────────────────── */
 .right-panel    { background: var(--pt-bg) !important; }
 .mini-cal       { border-color: var(--pt-border) !important; }
@@ -364,7 +360,6 @@ select:focus {
 .budget-title,
 .gcu-page-title,
 .hoa-header-title,
-.wywo-title,
 .ft-title,
 .goals-title,
 .roles-list-title,
@@ -393,7 +388,6 @@ select:focus {
 .budget-title::before,
 .gcu-page-title::before,
 .hoa-header-title::before,
-.wywo-title::before,
 .ft-title::before,
 .goals-title::before,
 .roles-list-title::before,

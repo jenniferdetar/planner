@@ -8,7 +8,6 @@ import CseaTracker from './CseaTracker'
 import IcaapTracker from './IcaapTracker'
 import GcuPanel from './GcuPanel'
 import FinancialPanel from './FinancialPanel'
-import WhileYouWereOut from './WhileYouWereOut'
 import HoaPanel from './HoaPanel'
 import EisenhowerMatrix from './EisenhowerMatrix'
 import PersonalPanel from './PersonalPanel'
@@ -33,7 +32,6 @@ const NAV_ITEMS = [
   { key: 'icaap',    label: 'iCAAP',        color: '#3a5c4a', group: 'module' },
   { key: 'personal', label: 'Personal',     color: '#6a5a8a', group: 'module' },
   { key: 'matrix',   label: 'Matrix',       color: '#9ca3af', group: 'module' },
-  { key: 'wywo',     label: 'WYWO',         color: '#9ca3af', group: 'module' },
 ]
 
 function firstLine(text) {
@@ -603,11 +601,6 @@ export default function DashboardView({
               subTab={personalSubTab}
               onSubTabChange={setPersonalSubTab}
             />
-          </div>
-        )}
-        {section === 'wywo' && (
-          <div className="dash-panel-wrap">
-            <WhileYouWereOut userId={userId} />
           </div>
         )}
 
