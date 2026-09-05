@@ -480,7 +480,7 @@ export default function AbsenceForms() {
     else setNonIllness(blankNonIllness)
   }
 
-  // The app has a global print rule (see WhileYouWereOut.css) that hides
+  // The app has a global print rule (see index.css) that hides
   // everything under <body> except an explicit print target, so any
   // printable feature needs its own body-level target with high enough
   // specificity to opt back in. Render the current form's live state to

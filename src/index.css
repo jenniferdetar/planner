@@ -45,9 +45,8 @@ input, textarea {
 
 /* ── Print: every page prints on US Letter (8.5in × 11in) ──
    Two printing paths share this stylesheet:
-   1. Form documents (While You Were Out / Absence request forms) whose Print
-      buttons inject a body-level frame (#wywo-print-frame / #afm-print-frame)
-      and print only that frame.
+   1. Absence request forms whose Print button injects a body-level frame
+      (#afm-print-frame) and prints only that frame.
    2. General page printing (plain Print / Ctrl+P) of whatever dashboard view
       is on screen.
    Both are laid out for letter-size paper below. ── */
@@ -77,7 +76,7 @@ input, textarea {
   /* When a form Print button has injected its body-level frame, hide the
      whole app shell so only that form prints. (The frame is a sibling of
      #root and shows itself via its own injected style.) */
-  body:has(#wywo-print-frame, #afm-print-frame) > #root {
+  body:has(#afm-print-frame) > #root {
     display: none !important;
   }
 
