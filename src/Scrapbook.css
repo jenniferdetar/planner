@@ -373,6 +373,23 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
 }
 
+/* Pushpin accent (tryout) — the Matrix "pinned index card" dot on HOA's
+   clean navy-ribbon group cards. Not on the badge-carrying item cards. */
+.hoa-panel .hoa-group { position: relative; }
+.hoa-panel .hoa-group::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e0715a, #a23b3b 70%);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+  z-index: 2;
+}
+
 /* ══════════════════════════ iCAAP ════════════════════════════════════════ */
 .icaap-tracker .icaap-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
 .icaap-tracker .icaap-tab.active { border-bottom-color: #ffffff !important; }
