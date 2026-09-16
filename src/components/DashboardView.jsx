@@ -7,7 +7,6 @@ import './DashboardView.css'
 import CseaTracker from './CseaTracker'
 import IcaapTracker from './IcaapTracker'
 import GcuPanel from './GcuPanel'
-import FinancialPanel from './FinancialPanel'
 import HoaPanel from './HoaPanel'
 import EisenhowerMatrix from './EisenhowerMatrix'
 import PersonalPanel from './PersonalPanel'
@@ -26,7 +25,6 @@ const NAV_ITEMS = [
   { key: 'week',     label: 'Week',         color: '#9ca3af', group: 'day' },
   { key: 'month',    label: 'Month',        color: '#9ca3af', group: 'day' },
   { key: 'csea',     label: 'CSEA',         color: '#b87a38', group: 'module' },
-  { key: 'finance',  label: 'Finance',      color: '#8a5a3a', group: 'module' },
   { key: 'gcu',      label: 'GCU',          color: '#5a7848', group: 'module' },
   { key: 'hoa',      label: 'HOA',          color: '#4a7a6a', group: 'module' },
   { key: 'icaap',    label: 'iCAAP',        color: '#3a5c4a', group: 'module' },
@@ -116,9 +114,6 @@ export default function DashboardView({
   icaapItems, onAddIcaapItem, onUpdateIcaapItem, onDeleteIcaapItem,
   asanaIcaapTasks, attendanceRecords, onUpsertAttendance, onUpdateAttendanceNotes,
   icaapNotes, onAddIcaapNote, onDeleteIcaapNote,
-  transactions, onAddTransaction, onDeleteTransaction,
-  bills, onAddBill, onToggleBillPaid, onDeleteBill,
-  paychecks, onAddPaycheck, onUpdatePaycheckAmount, onTogglePaycheckBill, onDeletePaycheck,
   onPushGcuToAsana, gcuPushing,
   books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers,
   familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
@@ -545,26 +540,6 @@ export default function DashboardView({
         {section === 'gcu' && (
           <div className="dash-panel-wrap">
             <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
-          </div>
-        )}
-        {section === 'finance' && (
-          <div className="dash-panel-wrap">
-            <FinancialPanel
-              transactions={transactions || []}
-              onAddTransaction={onAddTransaction}
-              onDeleteTransaction={onDeleteTransaction}
-              bills={bills || []}
-              onAddBill={onAddBill}
-              onToggleBillPaid={onToggleBillPaid}
-              onDeleteBill={onDeleteBill}
-              paychecks={paychecks || []}
-              onAddPaycheck={onAddPaycheck}
-              onUpdatePaycheckAmount={onUpdatePaycheckAmount}
-              onTogglePaycheckBill={onTogglePaycheckBill}
-              onDeletePaycheck={onDeletePaycheck}
-              userId={userId}
-              providerToken={providerToken}
-            />
           </div>
         )}
         {section === 'hoa' && (
