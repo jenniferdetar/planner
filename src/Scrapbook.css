@@ -1,10 +1,10 @@
 /*
  * Scrapbook.css
  * Full "vintage Americana" treatment, now applied app-wide: Personal,
- * Eisenhower Matrix, Master Tasks, CSEA, Finance, GCU, HOA, iCAAP, and
+ * Eisenhower Matrix, Master Tasks, CSEA, GCU, HOA, iCAAP, and
  * WYWO. Loaded after PlannerTheme.css; every rule is scoped under each
- * page's own root class so shared class names (e.g. .goal-card, used by
- * both Personal and FinancialPanel) don't bleed across pages.
+ * page's own root class so shared class names (e.g. .goal-card) don't
+ * bleed across pages.
  */
 
 /* ══════════════════════════ Personal page ═══════════════════════════════ */
@@ -340,7 +340,6 @@
    other page's root wrapper. */
 .master-tasks-wrap,
 .csea-tracker,
-.fin-panel,
 .gcu-panel,
 .hoa-panel,
 .icaap-tracker {
@@ -383,22 +382,6 @@
 .csea-tracker .interaction-group:hover {
   box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14) !important;
 }
-
-/* ══════════════════════════ Finance ══════════════════════════════════════ */
-.fin-panel .fin-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
-.fin-panel .fin-tab.active { border-bottom-color: #ffffff !important; }
-.fin-panel .budget-header { border-bottom: 2px solid #a23b3b !important; }
-
-.fin-panel .goal-card {
-  background: #ffffff !important;
-  box-shadow: 3px 4px 0 rgba(23,36,82,0.10), 0 1px 6px rgba(0,0,0,0.10) !important;
-}
-.fin-panel .fin-goals-grid > .goal-card:nth-child(odd)  { transform: rotate(-0.5deg); }
-.fin-panel .fin-goals-grid > .goal-card:nth-child(even) { transform: rotate(0.5deg); }
-.fin-panel .goal-card:hover {
-  box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14) !important;
-}
-.fin-panel .fin-goal:nth-child(even) { border-left-color: #a23b3b !important; }
 
 /* ══════════════════════════ GCU ══════════════════════════════════════════ */
 .gcu-panel .gcu-progress-section { border-bottom: 3px solid #a23b3b !important; }

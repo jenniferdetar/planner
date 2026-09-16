@@ -11,7 +11,6 @@ import { useCseaIssues, useMemberInteractions, useCseaNotes, useCseaIssueNotes, 
 import { useIcaapItems } from './hooks/useIcaapData'
 import { useIcaapAttendance } from './hooks/useIcaapAttendance'
 import { useIcaapNotes } from './hooks/useIcaapNotes'
-import { useTransactions, useBills, usePaychecks } from './hooks/useFinancialData'
 import { useAsanaTasks } from './hooks/useAsanaTasks'
 import { fetchWorkspaces, findOrCreateProject, createTask } from './lib/asana'
 import { GCU_COURSES } from './components/GcuPanel'
@@ -69,9 +68,6 @@ export default function App() {
   const { reports: cseaCredReports, addReport: addCseaCredReport, updateReport: updateCseaCredReport, deleteReport: deleteCseaCredReport } = useCseaCredentialsReports(userId)
   const { cards: cseaDelegateCards, addCard: addCseaDelegateCard, updateCard: updateCseaDelegateCard, deleteCard: deleteCseaDelegateCard } = useCseaDelegateReportCards(userId)
   const { masterTasks: asanaTasks, cseaTasks: asanaCseaTasks, icaapTasks: asanaIcaapTasks, completeTask: completeAsanaTask, updateTaskNotes: updateAsanaNotes } = useAsanaTasks()
-  const { transactions, addTransaction, deleteTransaction } = useTransactions(userId)
-  const { bills, addBill, toggleBillPaid, deleteBill } = useBills(userId)
-  const { paychecks, addPaycheck, updatePaycheckAmount, togglePaycheckBill, deletePaycheck } = usePaychecks(userId)
   const { items: icaapItems, addItem: addIcaapItem, updateItem: updateIcaapItem, deleteItem: deleteIcaapItem } = useIcaapItems(userId)
   const { records: attendanceRecords, upsertAttendance, updateNotes: updateAttendanceNotes } = useIcaapAttendance(userId)
   const { notes: icaapNotes, addNote: addIcaapNote, deleteNote: deleteIcaapNote } = useIcaapNotes(userId)
@@ -274,18 +270,6 @@ export default function App() {
         icaapNotes={icaapNotes}
         onAddIcaapNote={addIcaapNote}
         onDeleteIcaapNote={deleteIcaapNote}
-        transactions={transactions}
-        onAddTransaction={addTransaction}
-        onDeleteTransaction={deleteTransaction}
-        bills={bills}
-        onAddBill={addBill}
-        onToggleBillPaid={toggleBillPaid}
-        onDeleteBill={deleteBill}
-        paychecks={paychecks}
-        onAddPaycheck={addPaycheck}
-        onUpdatePaycheckAmount={updatePaycheckAmount}
-        onTogglePaycheckBill={togglePaycheckBill}
-        onDeletePaycheck={deletePaycheck}
         onPushGcuToAsana={handlePushGcuToAsana}
         gcuPushing={gcuPushing}
         books={books}
