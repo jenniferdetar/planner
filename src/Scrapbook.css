@@ -8,6 +8,9 @@
  */
 
 /* ══════════════════════════ Personal page ═══════════════════════════════ */
+/* Aligned to the clean Matrix family: single leading ★ on section titles,
+   navy-ribbon headers, plain grounds — the heavier scrapbook flourishes
+   (double flanking stars, goal-card corner stars, botanical texture) removed. */
 
 /* ─── Kraft-paper ground ──────────────────────────────────────────────────── */
 .personal-panel {
@@ -32,13 +35,9 @@
 .personal-panel .values-list-wrap,
 .personal-panel .values-list-content,
 .personal-panel .wants-panel,
-.personal-panel .mantra-section {
-  background: transparent !important;
-}
-
-/* Sample: subtle botanical texture on My Goals only (see GoalsPanel.css) */
+.personal-panel .mantra-section,
 .personal-panel .goals-panel {
-  background: #ffffff url('/botanical-pattern.svg') repeat !important;
+  background: transparent !important;
 }
 
 /* ─── Tab strip → ribbon ──────────────────────────────────────────────────── */
@@ -107,21 +106,22 @@
   align-items: center;
   gap: 8px;
 }
-.personal-panel .goals-title::before, .personal-panel .goals-title::after,
-.personal-panel .roles-list-title::before, .personal-panel .roles-list-title::after,
-.personal-panel .library-title::before, .personal-panel .library-title::after,
-.personal-panel .videos-title::before, .personal-panel .videos-title::after,
-.personal-panel .links-title::before, .personal-panel .links-title::after,
-.personal-panel .values-list-title::before, .personal-panel .values-list-title::after,
-.personal-panel .mantra-title::before, .personal-panel .mantra-title::after {
+/* Single leading star, matching the Matrix quadrant labels (.em-q-label) */
+.personal-panel .goals-title::before,
+.personal-panel .roles-list-title::before,
+.personal-panel .library-title::before,
+.personal-panel .videos-title::before,
+.personal-panel .links-title::before,
+.personal-panel .values-list-title::before,
+.personal-panel .mantra-title::before {
   content: "\2605";
   color: #a23b3b;
   font-size: 0.75em;
 }
 
-/* Light header (Wants) — white plaque instead of navy */
+/* Wants header → navy ribbon, matching the other section headers */
 .personal-panel .wants-header {
-  background: #ffffff !important;
+  background: linear-gradient(#1e3070, #142057) !important;
   border-bottom: 2px solid #a23b3b !important;
   margin: 0 -12px 4px;
   padding: 10px 12px 8px !important;
@@ -129,11 +129,12 @@
 .personal-panel .wants-title {
   font-family: Georgia, 'Iowan Old Style', serif !important;
   letter-spacing: 0.06em !important;
+  color: #ffffff !important;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.personal-panel .wants-title::before, .personal-panel .wants-title::after {
+.personal-panel .wants-title::before {
   content: "\2605";
   color: #a23b3b;
   font-size: 0.75em;
@@ -167,22 +168,6 @@
 .personal-panel .value-group:hover {
   box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14) !important;
 }
-
-/* .goal-card has overflow:hidden (rounded corners), so the corner stars sit
-   just inside the edge rather than straddling it. */
-.personal-panel .goal-card { position: relative; }
-.personal-panel .goal-card::before,
-.personal-panel .goal-card::after {
-  content: "\2605";
-  position: absolute;
-  top: 4px;
-  font-size: 8px;
-  color: #a23b3b;
-  opacity: 0.75;
-  z-index: 1;
-}
-.personal-panel .goal-card::before { left: 6px; }
-.personal-panel .goal-card::after { right: 6px; }
 
 .personal-panel .book-card-spine { border-top-color: #a23b3b !important; }
 .personal-panel .video-thumb { background: #872f2f !important; }

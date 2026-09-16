@@ -4,7 +4,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  background: #ffffff url('/botanical-pattern.svg') repeat;
+  background: #ffffff;
 }
 
 /* Goals section */
