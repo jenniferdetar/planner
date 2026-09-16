@@ -422,3 +422,93 @@
 .icaap-tracker .icaap-list > .icaap-card:nth-child(odd)  { transform: rotate(-0.5deg); }
 .icaap-tracker .icaap-list > .icaap-card:nth-child(even) { transform: rotate(0.5deg); }
 .icaap-tracker .icaap-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important; }
+
+/* ══════════════════════ Unified Matrix-style tables ══════════════════════ */
+/* Give every module page's tables the same clean "index-card + navy header"
+   treatment as the Eisenhower Matrix quadrants: a white card shell with a
+   #1e3070 hairline, a navy serif header row accented in barn-red (#a23b3b),
+   hairline row separators, gentle zebra striping, and a navy hover tint.
+   Scoped per page root so the Today/Week/Month dashboard tables are untouched. */
+.csea-tracker [class*="table"][class*="wrap"],
+.gcu-panel [class*="table"][class*="wrap"],
+.hoa-panel [class*="table"][class*="wrap"],
+.icaap-tracker [class*="table"][class*="wrap"],
+.personal-panel [class*="table"][class*="wrap"] {
+  background: #ffffff !important;
+  border: 1px solid #1e3070 !important;
+  border-radius: 10px !important;
+  box-shadow: 3px 4px 0 rgba(23,36,82,0.08), 0 1px 6px rgba(0,0,0,0.08) !important;
+  overflow: auto !important;
+}
+
+.csea-tracker table,
+.gcu-panel table,
+.hoa-panel table,
+.icaap-tracker table,
+.personal-panel table {
+  border-collapse: collapse !important;
+  background: transparent !important;
+}
+
+/* Header row → navy ribbon, matching .em-q-header */
+.csea-tracker table thead th,
+.gcu-panel table thead th,
+.hoa-panel table thead th,
+.icaap-tracker table thead th,
+.personal-panel table thead th {
+  background: linear-gradient(#1e3070, #142057) !important;
+  color: #ffffff !important;
+  font-family: Georgia, 'Iowan Old Style', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  border-bottom: 2px solid #a23b3b !important;
+  border-right: 1px solid rgba(255,255,255,0.12) !important;
+}
+.csea-tracker table thead th:last-child,
+.gcu-panel table thead th:last-child,
+.hoa-panel table thead th:last-child,
+.icaap-tracker table thead th:last-child,
+.personal-panel table thead th:last-child { border-right: none !important; }
+
+/* Body cells → hairline separators + navy serif text */
+.csea-tracker table tbody td,
+.gcu-panel table tbody td,
+.hoa-panel table tbody td,
+.icaap-tracker table tbody td,
+.personal-panel table tbody td {
+  border-bottom: 1px solid rgba(30,48,112,0.14) !important;
+  color: #1e3070 !important;
+}
+.csea-tracker table tbody tr:nth-child(even),
+.gcu-panel table tbody tr:nth-child(even),
+.hoa-panel table tbody tr:nth-child(even),
+.icaap-tracker table tbody tr:nth-child(even),
+.personal-panel table tbody tr:nth-child(even) {
+  background: rgba(30,48,112,0.03) !important;
+}
+.csea-tracker table tbody tr:hover,
+.gcu-panel table tbody tr:hover,
+.hoa-panel table tbody tr:hover,
+.icaap-tracker table tbody tr:hover,
+.personal-panel table tbody tr:hover {
+  background: rgba(30,48,112,0.07) !important;
+}
+
+/* Count chips → barn-red pill, matching the Matrix .em-q-count badge */
+.csea-tab-badge,
+.icaap-tab-badge,
+.committee-card-count,
+.conf-section-count,
+.hoa-group-count,
+.interaction-group-count,
+.issue-notes-count,
+.rif-summary-count {
+  background: #a23b3b !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  padding: 0 7px !important;
+  font-weight: 700 !important;
+  min-width: 18px !important;
+  text-align: center !important;
+}
