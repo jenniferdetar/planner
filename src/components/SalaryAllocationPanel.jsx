@@ -4,11 +4,6 @@ import './SalaryAllocationPanel.css'
 // 2026-2027 School Year · Effective 08/10/2026
 // Source: Salary_Allocation_Lunch_Schedules_08102026.pdf
 
-const WORK_SCHEDULES = [
-  '8:00 am - 5:00 pm (Hour Lunch)',
-  '7:30 am - 4:30 pm (Hour Lunch)',
-]
-
 // Names in "First Last" format. Sorted by Alpha caseload range (A→Z) so you
 // can find a member's last name and see which SCA to contact; SUPV last.
 const SCHEDULE = [
@@ -37,17 +32,6 @@ export default function SalaryAllocationPanel() {
       <div className="salloc-header">
         <h2 className="salloc-title">Salary Allocation — Alpha Work, Lunch &amp; Break Schedules</h2>
         <span className="salloc-subtitle">2026–2027 School Year · Effective 08/10/2026</span>
-        <p className="salloc-note">
-          Work schedules are divided by two groups, with one group taking the 8:00–5:00 shift each week.
-        </p>
-        <div className="salloc-shifts">
-          {WORK_SCHEDULES.map((s, i) => (
-            <span className="salloc-shift" key={s}>
-              <span className="salloc-shift-lbl">Work Schedule {i + 1}</span>
-              <span className="salloc-shift-time">{s}</span>
-            </span>
-          ))}
-        </div>
       </div>
 
       <p className="salloc-lookup-hint">
