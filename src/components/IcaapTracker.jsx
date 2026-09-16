@@ -53,7 +53,7 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
       <IcaapStatsBar items={items} />
       <div className="icaap-tabs">
         <button className={`icaap-tab ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
-        <button className={`icaap-tab ${tab === 'salaryalloc' ? 'active' : ''}`} onClick={() => setTab('salaryalloc')}>Salary Allocation Lunch Schedules (08-10-2026)</button>
+        <button className={`icaap-tab ${tab === 'salaryalloc' ? 'active' : ''}`} onClick={() => setTab('salaryalloc')}>Salary Allocation</button>
         <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
         <button className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
