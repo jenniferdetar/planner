@@ -349,6 +349,28 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
 }
 
+/* Pushpin accent on CSEA's clean navy-ribbon shelf cards (committee,
+   interaction/note/quick-link groups, credentials sessions). Not on the
+   issue cards or RIF summaries, whose headers carry semantic badges. */
+.csea-tracker .committee-card,
+.csea-tracker .interaction-group,
+.csea-tracker .cred-card { position: relative; }
+.csea-tracker .committee-card::before,
+.csea-tracker .interaction-group::before,
+.csea-tracker .cred-card::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e0715a, #a23b3b 70%);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+  z-index: 2;
+}
+
 /* ══════════════════════════ GCU ══════════════════════════════════════════ */
 .gcu-panel .gcu-progress-section { border-bottom: 3px solid #a23b3b !important; }
 .gcu-panel .gcu-group {
@@ -373,8 +395,8 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
 }
 
-/* Pushpin accent (tryout) — the Matrix "pinned index card" dot on HOA's
-   clean navy-ribbon group cards. Not on the badge-carrying item cards. */
+/* Pushpin accent — the Matrix "pinned index card" dot on HOA's clean
+   navy-ribbon group cards. Not on the badge-carrying item cards. */
 .hoa-panel .hoa-group { position: relative; }
 .hoa-panel .hoa-group::before {
   content: "";
