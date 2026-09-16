@@ -512,3 +512,58 @@
   min-width: 18px !important;
   text-align: center !important;
 }
+
+/* ══════════════════ Navy-ribbon section headers ══════════════════════════ */
+/* Card-based sections (not just tables) get the same navy ribbon as the
+   Eisenhower Matrix quadrant header (.em-q-header): a #1e3070→#142057 bar
+   accented in barn-red, white Georgia-serif title, and a red ★ before the
+   name. Applied only to the clean "shelf" headers whose content is a title +
+   count/toggle — item-level headers that carry semantic color coding
+   (paid/outstanding, category/priority/status, per-note colors, case status)
+   are deliberately left alone so their meaning survives. */
+.csea-tracker .committee-card-header,
+.csea-tracker .interaction-group-header,
+.csea-tracker .cred-card-header,
+.hoa-panel .hoa-group-header {
+  background: linear-gradient(#1e3070, #142057) !important;
+  border-bottom: 2px solid #a23b3b !important;
+}
+
+/* Title text → white serif, mirroring .em-q-label */
+.csea-tracker .committee-card-header .committee-card-name,
+.csea-tracker .interaction-group-header .interaction-group-name,
+.csea-tracker .cred-card-header .cred-card-org,
+.csea-tracker .cred-card-header .cred-card-sub,
+.csea-tracker .cred-card-header .cred-card-name,
+.hoa-panel .hoa-group-header .hoa-group-name {
+  color: #ffffff !important;
+  font-family: Georgia, 'Iowan Old Style', serif !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* Red ★ before the primary section title, like the Matrix quadrant labels */
+.csea-tracker .committee-card-header .committee-card-name::before,
+.csea-tracker .interaction-group-header .interaction-group-name::before,
+.hoa-panel .hoa-group-header .hoa-group-name::before {
+  content: "\2605";
+  color: #e0715a;
+  font-size: 0.85em;
+  margin-right: 6px;
+}
+
+/* Toggles / collapse / delete controls in the ribbon → legible on navy */
+.csea-tracker .interaction-group-header .interaction-group-toggle,
+.csea-tracker .interaction-group-header .interaction-delete-btn,
+.csea-tracker .cred-card-header .cred-collapse,
+.csea-tracker .cred-card-header .cred-delete,
+.hoa-panel .hoa-group-header .hoa-group-toggle {
+  color: #ffffff !important;
+}
+
+/* Date chip inside a ribbon → translucent white pill */
+.csea-tracker .interaction-group-header .interaction-date-badge {
+  background: rgba(255,255,255,0.18) !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  padding: 0 7px !important;
+}
