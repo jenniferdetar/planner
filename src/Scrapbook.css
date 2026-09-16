@@ -149,7 +149,7 @@
 .personal-panel .value-group {
   background: #ffffff !important;
   border-color: #1e3070 !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
   transform: none !important;
   transition: box-shadow 0.18s !important;
 }
@@ -157,7 +157,7 @@
 .personal-panel .book-card:hover,
 .personal-panel .video-card:hover,
 .personal-panel .value-group:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
 }
 
 .personal-panel .book-card-spine { border-top-color: #a23b3b !important; }
@@ -182,7 +182,7 @@
 .personal-panel .roles-card {
   background: #ffffff !important;
   border-left-color: #a23b3b !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
 .personal-panel .roles-card:nth-child(even) { border-left-color: #1e3070 !important; }
 .personal-panel .roles-card-name { font-family: Georgia, 'Iowan Old Style', serif !important; }
@@ -242,11 +242,11 @@
 .em-root .em-quadrant {
   background: #ffffff !important;
   border-color: #1e3070 !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
   transition: box-shadow 0.18s;
 }
 .em-root .em-quadrant:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
 }
 /* .em-quadrant has overflow:hidden, so the pin sits just inside the top
    edge rather than straddling it. */
@@ -288,7 +288,7 @@
 .em-root .em-unassigned {
   background: #ffffff !important;
   border-color: #1e3070 !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
 .em-root .em-unassigned-hdr {
   background: linear-gradient(#1e3070, #142057) !important;
@@ -328,10 +328,10 @@
 .master-tasks-wrap .dash-card {
   background: #ffffff !important;
   border: 1px solid #1e3070;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
   transition: box-shadow 0.18s;
 }
-.master-tasks-wrap .dash-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.master-tasks-wrap .dash-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
 
 /* ══════════════════════════ CSEA ═════════════════════════════════════════ */
 .csea-tracker .csea-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
@@ -342,11 +342,11 @@
 .csea-tracker .interaction-group,
 .csea-tracker .rif-summary-card {
   background: #ffffff !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
 .csea-tracker .issue-card:hover,
 .csea-tracker .interaction-group:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
 }
 
 /* Pushpin accent on the clean navy-ribbon shelf cards (CSEA committee,
@@ -380,7 +380,7 @@
 .gcu-panel .gcu-progress-section { border-bottom: 3px solid #a23b3b !important; }
 .gcu-panel .gcu-group {
   background: #ffffff !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
 .gcu-panel .gcu-group-label { border-bottom: 2px solid #a23b3b !important; }
 
@@ -393,11 +393,11 @@
 .hoa-panel .hoa-group,
 .hoa-panel .hoa-group-card.standalone {
   background: #ffffff !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
 .hoa-panel .hoa-group:hover,
 .hoa-panel .hoa-group-card.standalone:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
 }
 
 /* Pushpin accent — the Matrix "pinned index card" dot on HOA's clean
@@ -423,9 +423,9 @@
 .icaap-tracker .icaap-stats { background: linear-gradient(#1e3070, #142057) !important; }
 .icaap-tracker .icaap-card {
   background: #ffffff !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
-.icaap-tracker .icaap-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important; }
+.icaap-tracker .icaap-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important; }
 
 /* ══════════════════════ Unified Matrix-style tables ══════════════════════ */
 /* Give every module page's tables the same clean "index-card + navy header"
@@ -441,7 +441,7 @@
   background: #ffffff !important;
   border: 1px solid #1e3070 !important;
   border-radius: 10px !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
   overflow: auto !important;
 }
 
