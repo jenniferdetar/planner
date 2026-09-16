@@ -31,44 +31,6 @@
   margin-top: 5px;
 }
 
-.salloc-note {
-  font-size: 12px;
-  line-height: 1.5;
-  color: rgba(255,255,255,0.75);
-  margin: 10px 0 0;
-}
-
-.salloc-shifts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.salloc-shift {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 8px 14px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 8px;
-}
-
-.salloc-shift-lbl {
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-}
-
-.salloc-shift-time {
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-}
-
 .salloc-lookup-hint {
   margin: 0;
   padding: 12px 20px 0;
