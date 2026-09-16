@@ -349,15 +349,20 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
 }
 
-/* Pushpin accent on CSEA's clean navy-ribbon shelf cards (committee,
-   interaction/note/quick-link groups, credentials sessions). Not on the
-   issue cards or RIF summaries, whose headers carry semantic badges. */
+/* Pushpin accent on the clean navy-ribbon shelf cards (CSEA committee,
+   interaction/note/quick-link groups, credentials sessions; iCAAP notes &
+   links; Personal links). Not on the issue cards or RIF summaries, whose
+   headers carry semantic badges. */
 .csea-tracker .committee-card,
 .csea-tracker .interaction-group,
-.csea-tracker .cred-card { position: relative; }
+.csea-tracker .cred-card,
+.icaap-tracker .interaction-group,
+.personal-panel .interaction-group { position: relative; }
 .csea-tracker .committee-card::before,
 .csea-tracker .interaction-group::before,
-.csea-tracker .cred-card::before {
+.csea-tracker .cred-card::before,
+.icaap-tracker .interaction-group::before,
+.personal-panel .interaction-group::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -523,6 +528,8 @@
 .csea-tracker .committee-card-header,
 .csea-tracker .interaction-group-header,
 .csea-tracker .cred-card-header,
+.icaap-tracker .interaction-group-header,
+.personal-panel .interaction-group-header,
 .hoa-panel .hoa-group-header {
   background: linear-gradient(#1e3070, #142057) !important;
   border-bottom: 2px solid #a23b3b !important;
@@ -534,6 +541,8 @@
 .csea-tracker .cred-card-header .cred-card-org,
 .csea-tracker .cred-card-header .cred-card-sub,
 .csea-tracker .cred-card-header .cred-card-name,
+.icaap-tracker .interaction-group-header .interaction-group-name,
+.personal-panel .interaction-group-header .interaction-group-name,
 .hoa-panel .hoa-group-header .hoa-group-name {
   color: #ffffff !important;
   font-family: Georgia, 'Iowan Old Style', serif !important;
@@ -543,6 +552,8 @@
 /* Red ★ before the primary section title, like the Matrix quadrant labels */
 .csea-tracker .committee-card-header .committee-card-name::before,
 .csea-tracker .interaction-group-header .interaction-group-name::before,
+.icaap-tracker .interaction-group-header .interaction-group-name::before,
+.personal-panel .interaction-group-header .interaction-group-name::before,
 .hoa-panel .hoa-group-header .hoa-group-name::before {
   content: "\2605";
   color: #e0715a;
@@ -555,12 +566,18 @@
 .csea-tracker .interaction-group-header .interaction-delete-btn,
 .csea-tracker .cred-card-header .cred-collapse,
 .csea-tracker .cred-card-header .cred-delete,
+.icaap-tracker .interaction-group-header .interaction-group-toggle,
+.icaap-tracker .interaction-group-header .interaction-delete-btn,
+.personal-panel .interaction-group-header .interaction-group-toggle,
+.personal-panel .interaction-group-header .interaction-delete-btn,
 .hoa-panel .hoa-group-header .hoa-group-toggle {
   color: #ffffff !important;
 }
 
 /* Date chip inside a ribbon → translucent white pill */
-.csea-tracker .interaction-group-header .interaction-date-badge {
+.csea-tracker .interaction-group-header .interaction-date-badge,
+.icaap-tracker .interaction-group-header .interaction-date-badge,
+.personal-panel .interaction-group-header .interaction-date-badge {
   background: rgba(255,255,255,0.18) !important;
   color: #ffffff !important;
   border-radius: 10px !important;

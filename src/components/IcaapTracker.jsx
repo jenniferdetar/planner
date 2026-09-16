@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react'
 import { useQuickLinks } from '../hooks/useQuickLinks'
-import AbsenceForms from './AbsenceForms'
 import SalaryAllocationPanel from './SalaryAllocationPanel'
 import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
@@ -60,7 +59,6 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
         <button className={`icaap-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Notes {icaapNotes.length > 0 && <span className="icaap-tab-badge">{icaapNotes.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
-        <button className={`icaap-tab ${tab === 'forms' ? 'active' : ''}`} onClick={() => setTab('forms')}>Forms</button>
       </div>
 
       {tab === 'dashboard' && <IcaapDashboard />}
@@ -190,8 +188,6 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
       )}
 
       {tab === 'payroll' && <PayrollSchedule />}
-
-      {tab === 'forms' && <AbsenceForms />}
     </div>
   )
 }

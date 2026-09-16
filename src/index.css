@@ -44,15 +44,9 @@ input, textarea {
 * { font-size: 14px; font-weight: 400; line-height: 24px; }
 
 /* ── Print: every page prints on US Letter (8.5in × 11in) ──
-   Two printing paths share this stylesheet:
-   1. Absence request forms whose Print button injects a body-level frame
-      (#afm-print-frame) and prints only that frame.
-   2. General page printing (plain Print / Ctrl+P) of whatever dashboard view
-      is on screen.
-   Both are laid out for letter-size paper below. ── */
-/* @page is document-global — one declaration governs every printed sheet.
-   0.25in keeps the dense Absence request form on a single page while giving
-   general planner pages a comfortable, standard margin. */
+   General page printing (plain Print / Ctrl+P) of whatever dashboard view
+   is on screen, laid out for letter-size paper below. ── */
+/* @page is document-global — one declaration governs every printed sheet. */
 @page {
   size: 8.5in 11in;
   margin: 0.25in;
@@ -73,17 +67,8 @@ input, textarea {
     print-color-adjust: exact !important;
   }
 
-  /* When a form Print button has injected its body-level frame, hide the
-     whole app shell so only that form prints. (The frame is a sibling of
-     #root and shows itself via its own injected style.) */
-  body:has(#afm-print-frame) > #root {
-    display: none !important;
-  }
-
-  /* ── General dashboard printing (no form frame present) ──
-     These rules only take effect when #root is visible, i.e. no form frame
-     is up, so they need no extra guard. Flow the current view down the page
-     at full letter width. */
+  /* ── General dashboard printing ──
+     Flow the current view down the page at full letter width. */
   .dash-outer {
     display: block !important;
     height: auto !important;
