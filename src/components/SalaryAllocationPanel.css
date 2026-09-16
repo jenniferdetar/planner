@@ -169,80 +169,6 @@
   color: #fff;
 }
 
-.salloc-audits {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  padding: 0 20px 20px;
-}
-
-.salloc-card {
-  padding: 14px 16px;
-  background: #fff;
-  border: 1px solid #d9e8f0;
-  border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  transition: box-shadow 0.15s, transform 0.15s;
-}
-.salloc-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
-
-.salloc-card-title {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #888;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.salloc-audit-table {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 13px;
-}
-
-.salloc-audit-table thead th {
-  text-align: left;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #999;
-  padding: 0 8px 6px 0;
-  border-bottom: 1px solid #d9e8f0;
-}
-
-.salloc-audit-table tbody td {
-  padding: 6px 8px 6px 0;
-  color: #333;
-  border-bottom: 1px solid #e7edf3;
-}
-
-.salloc-audit-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.salloc-selfaudit-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.salloc-selfaudit-list li {
-  padding: 5px 12px;
-  background: #fff;
-  border: 1px solid #d9e8f0;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1e3070;
-}
-
 @media (max-width: 768px) {
   .salloc-header {
     padding: 12px 14px 10px;
@@ -252,8 +178,7 @@
     font-size: 15px;
   }
 
-  .salloc-table-wrap,
-  .salloc-audits {
+  .salloc-table-wrap {
     padding-left: 14px;
     padding-right: 14px;
   }

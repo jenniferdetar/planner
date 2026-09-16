@@ -24,19 +24,6 @@ const SCHEDULE = [
   { sca: 'Brenda Neblett',   group: 1, ext: '18331', alpha: 'SUPV',             hub: 'West',  lunch: '1:00 - 2:00',  break: '11:00 - 11:20' },
 ]
 
-// Audit of D & G-Table Projections / Futures / ETK-TK Requirements
-// (evaluator → auditor pairings preserved; rows sorted by evaluator last name)
-const AUDITS = [
-  { evaluator: 'Tasha Hardy',     auditor: 'Veronica Rito' },
-  { evaluator: 'Maria Mejia',     auditor: 'Tasha Hardy' },
-  { evaluator: 'Veronica Rito',   auditor: 'Clara Velasquez' },
-  { evaluator: 'Clara Velasquez', auditor: 'Maria Mejia' },
-]
-
-// Self-Audits of D & G-Table Projections / Futures / ETK-TK Requirements
-// (sorted by last name)
-const SELF_AUDITS = ['Roberta Barrera', 'Deserine Estrada', 'Danita Hamptonie', 'Marcia Mendoza', 'Cecile Natividad']
-
 const HUB_COLORS = {
   North: '#2a78d6',
   South: '#008300',
@@ -98,37 +85,6 @@ export default function SalaryAllocationPanel() {
             ))}
           </tbody>
         </table>
-      </div>
-
-      <div className="salloc-audits">
-        <div className="salloc-card">
-          <span className="salloc-card-title">Audit of D &amp; G-Table Projections / Futures / ETK-TK Requirements</span>
-          <table className="salloc-audit-table">
-            <thead>
-              <tr>
-                <th>Evaluator</th>
-                <th>Auditor</th>
-              </tr>
-            </thead>
-            <tbody>
-              {AUDITS.map(a => (
-                <tr key={a.evaluator}>
-                  <td>{a.evaluator}</td>
-                  <td>{a.auditor}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="salloc-card">
-          <span className="salloc-card-title">Self-Audits of D &amp; G-Table Projections / Futures / ETK-TK Requirements</span>
-          <ul className="salloc-selfaudit-list">
-            {SELF_AUDITS.map(name => (
-              <li key={name}>{name}</li>
-            ))}
-          </ul>
-        </div>
       </div>
     </div>
   )
