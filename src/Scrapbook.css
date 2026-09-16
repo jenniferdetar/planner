@@ -140,33 +140,24 @@
   font-size: 0.75em;
 }
 
-/* ─── Cards → parchment stickers ──────────────────────────────────────────── */
+/* ─── Cards → clean index tiles, straight and uniform like the Matrix ─────── */
+/* No tilt, no "lifted sticker" offset shadow — a flat, aligned grid with a
+   soft shadow, matching the Eisenhower Matrix quadrant tiles. */
 .personal-panel .goal-card,
 .personal-panel .book-card,
 .personal-panel .video-card,
 .personal-panel .value-group {
   background: #ffffff !important;
   border-color: #1e3070 !important;
-  box-shadow: 3px 4px 0 rgba(23,36,82,0.10), 0 1px 6px rgba(0,0,0,0.10) !important;
-  transition: transform 0.18s, box-shadow 0.18s;
-}
-.personal-panel .goals-grid > .goal-card:nth-child(odd),
-.personal-panel .book-grid > .book-card:nth-child(odd),
-.personal-panel .video-grid > .video-card:nth-child(odd),
-.personal-panel .values-grid > .value-group:nth-child(odd) {
-  transform: rotate(-0.6deg);
-}
-.personal-panel .goals-grid > .goal-card:nth-child(even),
-.personal-panel .book-grid > .book-card:nth-child(even),
-.personal-panel .video-grid > .video-card:nth-child(even),
-.personal-panel .values-grid > .value-group:nth-child(even) {
-  transform: rotate(0.6deg);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  transform: none !important;
+  transition: box-shadow 0.18s !important;
 }
 .personal-panel .goal-card:hover,
 .personal-panel .book-card:hover,
 .personal-panel .video-card:hover,
 .personal-panel .value-group:hover {
-  box-shadow: 4px 6px 0 rgba(23,36,82,0.14), 0 4px 14px rgba(0,0,0,0.14) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
 }
 
 .personal-panel .book-card-spine { border-top-color: #a23b3b !important; }
