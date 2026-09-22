@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useDailyInspiration } from '../hooks/useDailyInspiration'
 import { useDailyLog } from '../hooks/useDailyLog'
 import { useMantra } from '../hooks/useMantra'
@@ -56,6 +56,9 @@ const SECTION_TITLES = {
   week: 'Week', month: 'Month', csea: 'CSEA', gcu: 'GCU',
   hoa: 'HOA', icaap: 'iCAAP', matrix: 'Priority Matrix', personal: 'Personal',
 }
+
+// Tab order (top → bottom in the rail) — drives the page-turn direction
+const NAV_ORDER = NAV_ITEMS.map(i => i.key)
 
 function firstLine(text) {
   return (text || '').split('\n').map(l => l.trim()).filter(Boolean)[0] || ''
@@ -118,9 +121,10 @@ function DashMiniCal({ selectedDate, onDateChange }) {
 }
 
 // Every non-Today section is a two-page spread with a centre spine, matching
-// the Today layout: a shared left "cover" page (date + mini-calendar) and the
-// section content on the right page, which turns on the centre binding.
-function PlannerPage({ title, selectedDate, onDateChange, children }) {
+// the Today layout: a shared left "cover" page (date only — the monthly
+// planner lives only on Today) and the section content on the right page,
+// which turns on the centre binding.
+function PlannerPage({ title, selectedDate, children }) {
   const d = selectedDate
   return (
     <div className="fc-spread fc-spread-flex">
@@ -135,9 +139,6 @@ function PlannerPage({ title, selectedDate, onDateChange, children }) {
             <span className="fc-day-count">Day {dayOfYear(d)} · {365 - dayOfYear(d)} remaining</span>
           </div>
         </header>
-        <div className="fc-minical-wrap">
-          <DashMiniCal selectedDate={selectedDate} onDateChange={onDateChange} />
-        </div>
       </section>
       <section className="fc-page fc-page-right">
         <div className="fc-section-label fc-section-label-row">
@@ -177,6 +178,15 @@ export default function DashboardView({
   onSignOut,
 }) {
   const [section, setSection] = useState('today')
+
+  // Page-turn direction: navigating DOWN the tab list turns the page forward
+  // (right → left); navigating UP turns it back (reverse).
+  const prevSectionRef = useRef(section)
+  const prevIdx = NAV_ORDER.indexOf(prevSectionRef.current)
+  const curIdx = NAV_ORDER.indexOf(section)
+  const turnDir = curIdx < prevIdx ? 'up' : 'down'
+  useEffect(() => { prevSectionRef.current = section }, [section])
+
   const { verse } = useDailyInspiration()
   const { mantra } = useMantra(userId)
   const { mission } = useMission(userId)
@@ -262,7 +272,7 @@ export default function DashboardView({
 
       {/* ── Main desk ── */}
       <main className="dash-main">
-        <div className="fc-flip" key={section}>
+        <div className={`fc-flip fc-dir-${turnDir}`} key={section}>
 
         {/* TODAY — daily planner spread */}
         {section === 'today' && (
@@ -482,7 +492,7 @@ export default function DashboardView({
 
         {/* WEEK VIEW */}
         {section === 'week' && (
-          <PlannerPage title="Week" selectedDate={selectedDate} onDateChange={handleDateChange}>
+          <PlannerPage title="Week" selectedDate={selectedDate}>
             <WeekView
               userId={userId}
               selectedDate={selectedDate}
@@ -497,7 +507,7 @@ export default function DashboardView({
 
         {/* MONTH VIEW */}
         {section === 'month' && (
-          <PlannerPage title="Month" selectedDate={selectedDate} onDateChange={handleDateChange}>
+          <PlannerPage title="Month" selectedDate={selectedDate}>
             <MonthView
               selectedDate={selectedDate}
               onDateChange={d => { handleDateChange(d) }}
@@ -510,7 +520,7 @@ export default function DashboardView({
 
         {/* MODULE PANELS */}
         {section === 'csea' && (
-          <PlannerPage title="CSEA" selectedDate={selectedDate} onDateChange={handleDateChange}>
+          <PlannerPage title="CSEA" selectedDate={selectedDate}>
             <CseaTracker
               userId={userId}
               issues={cseaIssues || []}
@@ -550,7 +560,7 @@ export default function DashboardView({
           </PlannerPage>
         )}
         {section === 'icaap' && (
-          <PlannerPage title="iCAAP" selectedDate={selectedDate} onDateChange={handleDateChange}>
+          <PlannerPage title="iCAAP" selectedDate={selectedDate}>
             <IcaapTracker
               userId={userId}
               items={icaapItems || []}
@@ -570,22 +580,22 @@ export default function DashboardView({
           </PlannerPage>
         )}
         {section === 'gcu' && (
-          <PlannerPage title="GCU" selectedDate={selectedDate} onDateChange={handleDateChange}>
+          <PlannerPage title="GCU" selectedDate={selectedDate}>
             <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
           </PlannerPage>
         )}
         {section === 'hoa' && (
-          <PlannerPage title="HOA" selectedDate={selectedDate} onDateChange={handleDateChange}>
+          <PlannerPage title="HOA" selectedDate={selectedDate}>
             <HoaPanel userId={userId} />
           </PlannerPage>
         )}
         {section === 'matrix' && (
-          <PlannerPage title="Priority Matrix" selectedDate={selectedDate} onDateChange={handleDateChange}>
+          <PlannerPage title="Priority Matrix" selectedDate={selectedDate}>
             <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
           </PlannerPage>
         )}
         {section === 'personal' && (
-          <PlannerPage title="Personal" selectedDate={selectedDate} onDateChange={handleDateChange}>
+          <PlannerPage title="Personal" selectedDate={selectedDate}>
             <PersonalPanel
               userId={userId}
               providerToken={providerToken}
