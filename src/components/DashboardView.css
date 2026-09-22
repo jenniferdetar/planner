@@ -758,3 +758,383 @@ button.dash-inspiration-card {
     display: none;
   }
 }
+
+/* ═══ Daily planner spread — ring-bound two-page layout ═══════════════════════ */
+
+.fc-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0) 5%),
+    #5c3d20;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25), 0 6px 20px rgba(0,0,0,0.22);
+  position: relative;
+}
+
+/* Center binding rings */
+.fc-spread::before {
+  content: "";
+  position: absolute;
+  top: 26px;
+  bottom: 26px;
+  left: 50%;
+  width: 20px;
+  transform: translateX(-50%);
+  background-image: radial-gradient(circle at 50% 4px, #2c1c0e 0 3px, transparent 3.5px);
+  background-size: 20px 34px;
+  background-repeat: repeat-y;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.fc-page {
+  background: #fdfbf4;
+  padding: 16px 18px 18px;
+  min-height: 520px;
+  position: relative;
+}
+.fc-page-left {
+  border-radius: 6px 0 0 6px;
+  box-shadow: inset -10px 0 14px -12px rgba(0,0,0,0.28);
+}
+.fc-page-right {
+  border-radius: 0 6px 6px 0;
+  box-shadow: inset 10px 0 14px -12px rgba(0,0,0,0.28);
+}
+
+/* ── Date header ── */
+.fc-day-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #8a1f2b;
+  margin-bottom: 8px;
+}
+.fc-day-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  padding-right: 12px;
+  border-right: 1px solid #e2dcc9;
+}
+.fc-day-name {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #8a1f2b;
+}
+.fc-day-num {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #3a2a17;
+}
+.fc-day-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.fc-day-month {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #3a2a17;
+}
+.fc-day-count {
+  font-size: 11px;
+  color: #9a8f76;
+  letter-spacing: 0.3px;
+}
+
+/* ── Section labels ── */
+.fc-section-label {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #fff;
+  background: #8a1f2b;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin: 12px 0 8px;
+}
+.fc-section-label:first-child { margin-top: 0; }
+.fc-section-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fc-count {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 1px 8px;
+}
+
+/* ── Shared inputs ── */
+.fc-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  border-bottom: 1px solid #d8d0ba;
+  background: transparent;
+  padding: 5px 4px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #3a2a17;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.fc-input:focus { border-bottom-color: #8a1f2b; }
+.fc-input::placeholder { color: #b3a98f; }
+.fc-time { flex: 0 0 auto; width: 96px; }
+
+.fc-btn {
+  background: #3a2a17;
+  color: #fdfbf4;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.fc-btn:hover { background: #5c3d20; }
+
+.fc-appt-add,
+.fc-task-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+/* ── Appointment schedule grid ── */
+.fc-appt-grid {
+  border-top: 1px solid #e7e0cd;
+}
+.fc-appt-row {
+  display: flex;
+  align-items: stretch;
+  min-height: 30px;
+  border-bottom: 1px solid #e7e0cd;
+}
+.fc-appt-hour {
+  flex: 0 0 58px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8a7c60;
+  text-align: right;
+  padding: 6px 10px 0 0;
+  border-right: 1px solid #e7e0cd;
+  white-space: nowrap;
+}
+.fc-appt-slot {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 3px 4px;
+}
+.fc-appt-event {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f6efdd;
+  border-left: 3px solid #8a1f2b;
+  border-radius: 0 4px 4px 0;
+  padding: 3px 8px;
+}
+.fc-appt-time {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8a1f2b;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.fc-appt-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  color: #3a2a17;
+  overflow-wrap: break-word;
+}
+
+/* ── Prioritized task list ── */
+.fc-task-list { margin-bottom: 4px; }
+.fc-task-line {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 2px;
+  border-bottom: 1px solid #ece5d3;
+}
+.fc-task-line:hover { background: rgba(138,31,43,0.03); }
+.fc-task-line.done { opacity: 0.55; }
+
+.fc-task-prio {
+  flex: 0 0 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #8a1f2b;
+  border: 1px solid #d8b4b8;
+  border-radius: 3px;
+}
+.fc-task-mark {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+.fc-mark-box {
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid #a89a7c;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #3a2a17;
+  background: #fff;
+  transition: border-color 0.15s, background 0.15s;
+}
+.fc-task-mark:hover .fc-mark-box { border-color: #8a1f2b; }
+.fc-mark-box.checked { background: #3a2a17; border-color: #3a2a17; color: #fdfbf4; }
+
+.fc-task-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: #3a2a17;
+  overflow-wrap: break-word;
+}
+.fc-task-line.done .fc-task-text { text-decoration: line-through; color: #9a8f76; }
+
+.fc-task-divider {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #b3a98f;
+  padding: 8px 2px 3px;
+}
+
+/* ── Daily record of events (ruled lines) ── */
+.fc-record {
+  background-image: repeating-linear-gradient(
+    #fdfbf4, #fdfbf4 27px, #e7e0cd 27px, #e7e0cd 28px
+  );
+  min-height: 84px;
+  padding-top: 2px;
+}
+.fc-record-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 2px;
+}
+.fc-record-time {
+  flex: 0 0 auto;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #a89a7c;
+  min-width: 58px;
+}
+.fc-record-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: #3a2a17;
+  cursor: pointer;
+  overflow-wrap: break-word;
+}
+.fc-record .fc-input { height: 26px; }
+
+.fc-del {
+  background: none;
+  border: none;
+  color: #cfc6ae;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px 4px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.1s, color 0.1s;
+}
+.fc-appt-event:hover .fc-del,
+.fc-task-line:hover .fc-del,
+.fc-record-line:hover .fc-del { opacity: 1; }
+.fc-del:hover { color: #8a1f2b; }
+
+.fc-empty {
+  font-size: 12px;
+  color: #b3a98f;
+  font-style: italic;
+  padding: 8px 2px;
+  margin: 0;
+}
+
+/* ── This-week strip below the spread ── */
+.fc-week {
+  background: #fdfbf4;
+  border: 1px solid #e2dcc9;
+  border-radius: 8px;
+  padding: 12px 16px 14px;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(92,61,32,0.10);
+}
+.fc-week-list {
+  columns: 2 260px;
+  column-gap: 28px;
+}
+.fc-week-list .fc-task-line { break-inside: avoid; }
+.fc-week-due {
+  flex: 0 0 auto;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #8a7c60;
+  background: #f1ead7;
+  border-radius: 20px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+
+/* ── Mobile: pages stack vertically, rings hidden ── */
+@media (max-width: 768px) {
+  .fc-spread {
+    grid-template-columns: 1fr;
+    padding: 10px;
+    gap: 10px;
+  }
+  .fc-spread::before { display: none; }
+  .fc-page {
+    min-height: 0;
+    border-radius: 6px;
+    box-shadow: none;
+    padding: 14px 14px 16px;
+  }
+  .fc-day-num { font-size: 34px; }
+  .fc-week-list { columns: 1; }
+}
