@@ -1138,34 +1138,50 @@ button.dash-inspiration-card {
    (right → left); going UP turns it back. */
 .fc-page-right,
 .fc-single-page {
-  transform-origin: left center;
   backface-visibility: hidden;
-  animation: fc-page-turn 0.5s cubic-bezier(0.25, 0.7, 0.3, 1);
+  animation: fc-page-turn 0.62s cubic-bezier(0.34, 0.86, 0.4, 1);
   z-index: 2;
 }
+/* Both leaves are hinged on the centre spine: the daily spread's right page
+   pivots on its own left edge (the binding); a full-width section page pivots
+   on its centre line. */
+.fc-page-right { transform-origin: left center; }
+.fc-single-page { transform-origin: center center; }
+
 .fc-dir-up .fc-page-right,
 .fc-dir-up .fc-single-page {
   animation-name: fc-page-turn-back;
 }
-/* Forward turn — new page sweeps in from the right (right → left) */
+/* Forward turn — the leaf lifts and drops right → left */
 @keyframes fc-page-turn {
-  from {
-    transform: perspective(2200px) rotateY(-108deg);
-    box-shadow: -22px 0 40px rgba(0,0,0,0.4);
-  }
-  to {
-    transform: perspective(2200px) rotateY(0deg);
-  }
+  from { transform: perspective(2400px) rotateY(-105deg); }
+  to   { transform: perspective(2400px) rotateY(0deg); }
 }
-/* Back turn — new page sweeps in from the left (left → right) */
+/* Back turn — the leaf lifts and drops left → right */
 @keyframes fc-page-turn-back {
-  from {
-    transform: perspective(2200px) rotateY(108deg);
-    box-shadow: 22px 0 40px rgba(0,0,0,0.4);
-  }
-  to {
-    transform: perspective(2200px) rotateY(0deg);
-  }
+  from { transform: perspective(2400px) rotateY(105deg); }
+  to   { transform: perspective(2400px) rotateY(0deg); }
+}
+/* The soft shadow a real leaf casts as it settles onto the spread */
+.fc-page-right::after,
+.fc-single-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0;
+  background: linear-gradient(100deg, rgba(20,12,4,0.34), rgba(20,12,4,0) 48%);
+  animation: fc-turn-shade 0.62s ease-out;
+}
+.fc-dir-up .fc-page-right::after,
+.fc-dir-up .fc-single-page::after {
+  background: linear-gradient(260deg, rgba(20,12,4,0.34), rgba(20,12,4,0) 48%);
+}
+@keyframes fc-turn-shade {
+  0%   { opacity: 0.85; }
+  55%  { opacity: 0.3; }
+  100% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .fc-page-right,
@@ -1175,35 +1191,44 @@ button.dash-inspiration-card {
     animation: fc-fade 0.2s ease;
     transform: none;
   }
+  .fc-page-right::after,
+  .fc-single-page::after { animation: none; opacity: 0; }
   @keyframes fc-fade { from { opacity: 0 } to { opacity: 1 } }
 }
 
 /* ═══ Full-width binder page (every non-Today section) ═══════════════════════ */
 
+/* Two distinct pages joined at a centre spine: the left/right halves are
+   tinted slightly differently and a soft gutter shadow runs down the middle. */
 .fc-single-page {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: #fdfbf4;
+  background: linear-gradient(90deg, #fdfcf6 0 50%, #f7f3e9 50% 100%);
   border-radius: 8px;
-  padding: 16px 22px 18px 44px;
+  padding: 16px 26px 18px;
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 22px rgba(0,0,0,0.28);
 }
-/* Ring holes down the left binding edge */
+/* Centre spine — the gutter where the two pages meet */
 .fc-single-page::before {
   content: "";
   position: absolute;
-  top: 16px;
-  bottom: 16px;
-  left: 16px;
-  width: 14px;
-  background-image: radial-gradient(circle at 50% 4px, #cdbf9f 0 5px, transparent 5.5px);
-  background-size: 14px 40px;
-  background-repeat: repeat-y;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 72px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg,
+    rgba(60,40,20,0) 0%,
+    rgba(60,40,20,0.10) 42%,
+    rgba(60,40,20,0.18) 50%,
+    rgba(60,40,20,0.10) 58%,
+    rgba(60,40,20,0) 100%);
   pointer-events: none;
+  z-index: 4;
 }
 .fc-single-body {
   flex: 1;
@@ -1326,15 +1351,16 @@ button.dash-inspiration-card {
   .fc-day-num { font-size: 34px; }
   .fc-week-list { columns: 1; }
 
-  /* Full-width section page: usable height, no left ring gutter */
+  /* Single reading page on phones — spine and two-tone collapse away */
   .fc-single-page {
     padding: 14px 14px 16px;
     min-height: 72vh;
+    background: #fdfbf4;
   }
   .fc-single-page::before { display: none; }
 
   /* The right rail is hidden on phones — the existing pill/back nav is used */
   .fc-tab-rail { display: none; }
   .fc-page-right,
-  .fc-single-page { animation-duration: 0.32s; }
+  .fc-single-page { animation-duration: 0.34s; }
 }
