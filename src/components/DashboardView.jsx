@@ -51,6 +51,12 @@ const NAV_ITEMS = [
   { key: 'matrix',   label: 'Matrix',   color: '#7d8a9c', group: 'module' },
 ]
 
+// Section → right-page heading for the two-page spreads
+const SECTION_TITLES = {
+  week: 'Week', month: 'Month', csea: 'CSEA', gcu: 'GCU',
+  hoa: 'HOA', icaap: 'iCAAP', matrix: 'Priority Matrix', personal: 'Personal',
+}
+
 function firstLine(text) {
   return (text || '').split('\n').map(l => l.trim()).filter(Boolean)[0] || ''
 }
@@ -111,16 +117,34 @@ function DashMiniCal({ selectedDate, onDateChange }) {
   )
 }
 
-// A single cream planner page (used for every non-Today section) so all
-// pages share the Today aesthetic: leather desk, ring holes, planner header.
-function PlannerPage({ title, subtitle, children }) {
+// Every non-Today section is a two-page spread with a centre spine, matching
+// the Today layout: a shared left "cover" page (date + mini-calendar) and the
+// section content on the right page, which turns on the centre binding.
+function PlannerPage({ title, selectedDate, onDateChange, children }) {
+  const d = selectedDate
   return (
-    <div className="fc-single-page">
-      <header className="fc-single-head">
-        <span className="fc-single-title">{title}</span>
-        {subtitle && <span className="fc-single-sub">{subtitle}</span>}
-      </header>
-      <div className="fc-single-body">{children}</div>
+    <div className="fc-spread fc-spread-flex">
+      <section className="fc-page fc-page-left fc-page-cover">
+        <header className="fc-day-head">
+          <div className="fc-day-box">
+            <span className="fc-day-name">{DAY_NAMES[d.getDay()]}</span>
+            <span className="fc-day-num">{d.getDate()}</span>
+          </div>
+          <div className="fc-day-meta">
+            <span className="fc-day-month">{MONTH_NAMES[d.getMonth()]} {d.getFullYear()}</span>
+            <span className="fc-day-count">Day {dayOfYear(d)} · {365 - dayOfYear(d)} remaining</span>
+          </div>
+        </header>
+        <div className="fc-minical-wrap">
+          <DashMiniCal selectedDate={selectedDate} onDateChange={onDateChange} />
+        </div>
+      </section>
+      <section className="fc-page fc-page-right">
+        <div className="fc-section-label fc-section-label-row">
+          <span>{title}</span>
+        </div>
+        <div className="fc-single-body">{children}</div>
+      </section>
     </div>
   )
 }
@@ -166,7 +190,6 @@ export default function DashboardView({
 
   const d = selectedDate
   const dateStr = selectedDate.toISOString().split('T')[0]
-  const fullDate = `${DAY_NAMES[d.getDay()]}, ${MONTH_NAMES[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
   const { entries: logEntries, addEntry: addLogEntry, deleteEntry: deleteLogEntry, updateEntry: updateLogEntry } = useDailyLog(userId, dateStr)
   const [logText, setLogText] = useState('')
   const [editingLogId, setEditingLogId] = useState(null)
@@ -459,7 +482,7 @@ export default function DashboardView({
 
         {/* WEEK VIEW */}
         {section === 'week' && (
-          <PlannerPage title="Week" subtitle={fullDate}>
+          <PlannerPage title="Week" selectedDate={selectedDate} onDateChange={handleDateChange}>
             <WeekView
               userId={userId}
               selectedDate={selectedDate}
@@ -474,7 +497,7 @@ export default function DashboardView({
 
         {/* MONTH VIEW */}
         {section === 'month' && (
-          <PlannerPage title="Month" subtitle={fullDate}>
+          <PlannerPage title="Month" selectedDate={selectedDate} onDateChange={handleDateChange}>
             <MonthView
               selectedDate={selectedDate}
               onDateChange={d => { handleDateChange(d) }}
@@ -487,7 +510,7 @@ export default function DashboardView({
 
         {/* MODULE PANELS */}
         {section === 'csea' && (
-          <PlannerPage title="CSEA" subtitle={fullDate}>
+          <PlannerPage title="CSEA" selectedDate={selectedDate} onDateChange={handleDateChange}>
             <CseaTracker
               userId={userId}
               issues={cseaIssues || []}
@@ -527,7 +550,7 @@ export default function DashboardView({
           </PlannerPage>
         )}
         {section === 'icaap' && (
-          <PlannerPage title="iCAAP" subtitle={fullDate}>
+          <PlannerPage title="iCAAP" selectedDate={selectedDate} onDateChange={handleDateChange}>
             <IcaapTracker
               userId={userId}
               items={icaapItems || []}
@@ -547,22 +570,22 @@ export default function DashboardView({
           </PlannerPage>
         )}
         {section === 'gcu' && (
-          <PlannerPage title="GCU" subtitle={fullDate}>
+          <PlannerPage title="GCU" selectedDate={selectedDate} onDateChange={handleDateChange}>
             <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
           </PlannerPage>
         )}
         {section === 'hoa' && (
-          <PlannerPage title="HOA" subtitle={fullDate}>
+          <PlannerPage title="HOA" selectedDate={selectedDate} onDateChange={handleDateChange}>
             <HoaPanel userId={userId} />
           </PlannerPage>
         )}
         {section === 'matrix' && (
-          <PlannerPage title="Priority Matrix" subtitle={fullDate}>
+          <PlannerPage title="Priority Matrix" selectedDate={selectedDate} onDateChange={handleDateChange}>
             <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
           </PlannerPage>
         )}
         {section === 'personal' && (
-          <PlannerPage title="Personal" subtitle={fullDate}>
+          <PlannerPage title="Personal" selectedDate={selectedDate} onDateChange={handleDateChange}>
             <PersonalPanel
               userId={userId}
               providerToken={providerToken}
