@@ -120,32 +120,16 @@ function DashMiniCal({ selectedDate, onDateChange }) {
   )
 }
 
-// Every non-Today section is a two-page spread with a centre spine, matching
-// the Today layout: a shared left "cover" page (date only — the monthly
-// planner lives only on Today) and the section content on the right page,
-// which turns on the centre binding.
-function PlannerPage({ title, selectedDate, children }) {
-  const d = selectedDate
+// Every non-Today section is a single full-width binder page — the content
+// fills the whole spread (both pages). It turns on the left binding like a
+// book page. The monthly planner and the two-page spread stay on Today only.
+function PlannerPage({ title, children }) {
   return (
-    <div className="fc-spread fc-spread-flex">
-      <section className="fc-page fc-page-left fc-page-cover">
-        <header className="fc-day-head">
-          <div className="fc-day-box">
-            <span className="fc-day-name">{DAY_NAMES[d.getDay()]}</span>
-            <span className="fc-day-num">{d.getDate()}</span>
-          </div>
-          <div className="fc-day-meta">
-            <span className="fc-day-month">{MONTH_NAMES[d.getMonth()]} {d.getFullYear()}</span>
-            <span className="fc-day-count">Day {dayOfYear(d)} · {365 - dayOfYear(d)} remaining</span>
-          </div>
-        </header>
-      </section>
-      <section className="fc-page fc-page-right">
-        <div className="fc-section-label fc-section-label-row">
-          <span>{title}</span>
-        </div>
-        <div className="fc-single-body">{children}</div>
-      </section>
+    <div className="fc-single-page">
+      <div className="fc-section-label fc-section-label-row">
+        <span>{title}</span>
+      </div>
+      <div className="fc-single-body">{children}</div>
     </div>
   )
 }
@@ -492,7 +476,7 @@ export default function DashboardView({
 
         {/* WEEK VIEW */}
         {section === 'week' && (
-          <PlannerPage title="Week" selectedDate={selectedDate}>
+          <PlannerPage title="Week">
             <WeekView
               userId={userId}
               selectedDate={selectedDate}
@@ -507,7 +491,7 @@ export default function DashboardView({
 
         {/* MONTH VIEW */}
         {section === 'month' && (
-          <PlannerPage title="Month" selectedDate={selectedDate}>
+          <PlannerPage title="Month">
             <MonthView
               selectedDate={selectedDate}
               onDateChange={d => { handleDateChange(d) }}
@@ -520,7 +504,7 @@ export default function DashboardView({
 
         {/* MODULE PANELS */}
         {section === 'csea' && (
-          <PlannerPage title="CSEA" selectedDate={selectedDate}>
+          <PlannerPage title="CSEA">
             <CseaTracker
               userId={userId}
               issues={cseaIssues || []}
@@ -560,7 +544,7 @@ export default function DashboardView({
           </PlannerPage>
         )}
         {section === 'icaap' && (
-          <PlannerPage title="iCAAP" selectedDate={selectedDate}>
+          <PlannerPage title="iCAAP">
             <IcaapTracker
               userId={userId}
               items={icaapItems || []}
@@ -580,22 +564,22 @@ export default function DashboardView({
           </PlannerPage>
         )}
         {section === 'gcu' && (
-          <PlannerPage title="GCU" selectedDate={selectedDate}>
+          <PlannerPage title="GCU">
             <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
           </PlannerPage>
         )}
         {section === 'hoa' && (
-          <PlannerPage title="HOA" selectedDate={selectedDate}>
+          <PlannerPage title="HOA">
             <HoaPanel userId={userId} />
           </PlannerPage>
         )}
         {section === 'matrix' && (
-          <PlannerPage title="Priority Matrix" selectedDate={selectedDate}>
+          <PlannerPage title="Priority Matrix">
             <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
           </PlannerPage>
         )}
         {section === 'personal' && (
-          <PlannerPage title="Personal" selectedDate={selectedDate}>
+          <PlannerPage title="Personal">
             <PersonalPanel
               userId={userId}
               providerToken={providerToken}
