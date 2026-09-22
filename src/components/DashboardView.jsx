@@ -38,16 +38,17 @@ function dayOfYear(d) {
   return Math.floor((d - start) / 86400000)
 }
 
+// Divider-tab palette — earthy planner tones, one per section
 const NAV_ITEMS = [
-  { key: 'today',    label: 'Today',        color: '#9ca3af', group: 'day' },
-  { key: 'week',     label: 'Week',         color: '#9ca3af', group: 'day' },
-  { key: 'month',    label: 'Month',        color: '#9ca3af', group: 'day' },
-  { key: 'csea',     label: 'CSEA',         color: '#b87a38', group: 'module' },
-  { key: 'gcu',      label: 'GCU',          color: '#5a7848', group: 'module' },
-  { key: 'hoa',      label: 'HOA',          color: '#4a7a6a', group: 'module' },
-  { key: 'icaap',    label: 'iCAAP',        color: '#3a5c4a', group: 'module' },
-  { key: 'personal', label: 'Personal',     color: '#6a5a8a', group: 'module' },
-  { key: 'matrix',   label: 'Matrix',       color: '#9ca3af', group: 'module' },
+  { key: 'today',    label: 'Today',    color: '#c1614a', group: 'day' },
+  { key: 'week',     label: 'Week',     color: '#d99a3f', group: 'day' },
+  { key: 'month',    label: 'Month',    color: '#4f9d8b', group: 'day' },
+  { key: 'csea',     label: 'CSEA',     color: '#b87a38', group: 'module' },
+  { key: 'gcu',      label: 'GCU',      color: '#5a7848', group: 'module' },
+  { key: 'hoa',      label: 'HOA',      color: '#4a7a6a', group: 'module' },
+  { key: 'icaap',    label: 'iCAAP',    color: '#3a5c4a', group: 'module' },
+  { key: 'personal', label: 'Personal', color: '#6a5a8a', group: 'module' },
+  { key: 'matrix',   label: 'Matrix',   color: '#7d8a9c', group: 'module' },
 ]
 
 function firstLine(text) {
@@ -110,6 +111,20 @@ function DashMiniCal({ selectedDate, onDateChange }) {
   )
 }
 
+// A single cream planner page (used for every non-Today section) so all
+// pages share the Today aesthetic: leather desk, ring holes, planner header.
+function PlannerPage({ title, subtitle, children }) {
+  return (
+    <div className="fc-single-page">
+      <header className="fc-single-head">
+        <span className="fc-single-title">{title}</span>
+        {subtitle && <span className="fc-single-sub">{subtitle}</span>}
+      </header>
+      <div className="fc-single-body">{children}</div>
+    </div>
+  )
+}
+
 export default function DashboardView({
   userId, providerToken, selectedDate, onDateChange,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
@@ -151,6 +166,7 @@ export default function DashboardView({
 
   const d = selectedDate
   const dateStr = selectedDate.toISOString().split('T')[0]
+  const fullDate = `${DAY_NAMES[d.getDay()]}, ${MONTH_NAMES[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
   const { entries: logEntries, addEntry: addLogEntry, deleteEntry: deleteLogEntry, updateEntry: updateLogEntry } = useDailyLog(userId, dateStr)
   const [logText, setLogText] = useState('')
   const [editingLogId, setEditingLogId] = useState(null)
@@ -221,53 +237,9 @@ export default function DashboardView({
   return (
     <div className="dash-outer">
 
-      {/* ── Sidebar ── */}
-      <aside className="dash-sidebar">
-        <div className="dash-brand">
-          <span className="dash-brand-icon">&#9670;</span>
-          <span className="dash-brand-name">My Meridian Planner</span>
-        </div>
-
-        {/* Mini calendar */}
-        <DashMiniCal selectedDate={selectedDate} onDateChange={handleDateChange} />
-
-        <nav className="dash-nav">
-          <div className="dash-nav-group-label">Views</div>
-          {NAV_ITEMS.filter(n => n.group === 'day').map(item => (
-            <button
-              key={item.key}
-              className={`dash-nav-item${section === item.key ? ' active' : ''}`}
-              style={section === item.key ? { borderLeftColor: '#6b7280' } : {}}
-              onClick={() => setSection(item.key)}
-            >
-              <span className="dash-nav-dot" style={{ background: item.color }} />
-              {item.label}
-            </button>
-          ))}
-          <div className="dash-nav-group-label" style={{ marginTop: 10 }}>Modules</div>
-          {NAV_ITEMS.filter(n => n.group === 'module').map(item => (
-            <button
-              key={item.key}
-              className={`dash-nav-item${section === item.key ? ' active' : ''}`}
-              style={section === item.key ? { borderLeftColor: item.color } : {}}
-              onClick={() => setSection(item.key)}
-            >
-              <span className="dash-nav-dot" style={{ background: item.color }} />
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="dash-sidebar-foot">
-          {(calAuthExpired || calEventCount === 0) &&
-            <button className="dash-gcal-btn" onClick={onReconnectGoogle}>Connect Google Cal</button>
-          }
-          <button className="dash-signout-btn" onClick={onSignOut}>Sign out</button>
-        </div>
-      </aside>
-
-      {/* ── Main ── */}
+      {/* ── Main desk ── */}
       <main className="dash-main">
+        <div className="fc-flip" key={section}>
 
         {/* TODAY — daily planner spread */}
         {section === 'today' && (
@@ -285,6 +257,10 @@ export default function DashboardView({
                     <span className="fc-day-count">Day {dayOfYear(d)} · {365 - dayOfYear(d)} remaining</span>
                   </div>
                 </header>
+
+                <div className="fc-minical-wrap">
+                  <DashMiniCal selectedDate={selectedDate} onDateChange={handleDateChange} />
+                </div>
 
                 <div className="fc-section-label">Appointment Schedule</div>
 
@@ -483,7 +459,7 @@ export default function DashboardView({
 
         {/* WEEK VIEW */}
         {section === 'week' && (
-          <div className="dash-cal-wrap">
+          <PlannerPage title="Week" subtitle={fullDate}>
             <WeekView
               userId={userId}
               selectedDate={selectedDate}
@@ -493,12 +469,12 @@ export default function DashboardView({
               onToggleTask={onToggleWeeklyTask}
               onAddTask={onAddWeeklyTask}
             />
-          </div>
+          </PlannerPage>
         )}
 
         {/* MONTH VIEW */}
         {section === 'month' && (
-          <div className="dash-cal-wrap">
+          <PlannerPage title="Month" subtitle={fullDate}>
             <MonthView
               selectedDate={selectedDate}
               onDateChange={d => { handleDateChange(d) }}
@@ -506,12 +482,12 @@ export default function DashboardView({
               timeBlocks={calendarBlocks || timeBlocks}
               onMonthChange={onMonthChange}
             />
-          </div>
+          </PlannerPage>
         )}
 
         {/* MODULE PANELS */}
         {section === 'csea' && (
-          <div className="dash-panel-wrap">
+          <PlannerPage title="CSEA" subtitle={fullDate}>
             <CseaTracker
               userId={userId}
               issues={cseaIssues || []}
@@ -548,10 +524,10 @@ export default function DashboardView({
               onUpdateDelegateCard={onUpdateCseaDelegateCard}
               onDeleteDelegateCard={onDeleteCseaDelegateCard}
             />
-          </div>
+          </PlannerPage>
         )}
         {section === 'icaap' && (
-          <div className="dash-panel-wrap">
+          <PlannerPage title="iCAAP" subtitle={fullDate}>
             <IcaapTracker
               userId={userId}
               items={icaapItems || []}
@@ -568,25 +544,25 @@ export default function DashboardView({
               onAddIcaapNote={onAddIcaapNote}
               onDeleteIcaapNote={onDeleteIcaapNote}
             />
-          </div>
+          </PlannerPage>
         )}
         {section === 'gcu' && (
-          <div className="dash-panel-wrap">
+          <PlannerPage title="GCU" subtitle={fullDate}>
             <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
-          </div>
+          </PlannerPage>
         )}
         {section === 'hoa' && (
-          <div className="dash-panel-wrap">
+          <PlannerPage title="HOA" subtitle={fullDate}>
             <HoaPanel userId={userId} />
-          </div>
+          </PlannerPage>
         )}
         {section === 'matrix' && (
-          <div className="dash-panel-wrap">
+          <PlannerPage title="Priority Matrix" subtitle={fullDate}>
             <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
-          </div>
+          </PlannerPage>
         )}
         {section === 'personal' && (
-          <div className="dash-panel-wrap">
+          <PlannerPage title="Personal" subtitle={fullDate}>
             <PersonalPanel
               userId={userId}
               providerToken={providerToken}
@@ -609,10 +585,33 @@ export default function DashboardView({
               subTab={personalSubTab}
               onSubTabChange={setPersonalSubTab}
             />
-          </div>
+          </PlannerPage>
         )}
 
+        </div>{/* /fc-flip */}
       </main>
+
+      {/* ── Right-edge divider tabs ── */}
+      <nav className="fc-tab-rail">
+        <span className="fc-rail-brand">My Meridian Planner</span>
+        <div className="fc-tab-stack">
+          {NAV_ITEMS.map(item => (
+            <button
+              key={item.key}
+              className={`fc-tab${section === item.key ? ' active' : ''}`}
+              style={{ '--tab': item.color }}
+              onClick={() => setSection(item.key)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+        <div className="fc-rail-foot">
+          {(calAuthExpired || calEventCount === 0) &&
+            <button className="fc-rail-btn" onClick={onReconnectGoogle}>Connect Cal</button>}
+          <button className="fc-rail-btn" onClick={onSignOut}>Sign out</button>
+        </div>
+      </nav>
 
       {/* Mobile back-to-today button — shown on all non-Today sections */}
       {section !== 'today' && (
