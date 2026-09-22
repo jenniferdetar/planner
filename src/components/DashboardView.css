@@ -1133,13 +1133,19 @@ button.dash-inspiration-card {
 }
 
 /* Only the page turns, hinged on the centre binding (the right page's left
-   edge) — like a real book page. The left page stays put under it. */
+   edge) — like a real book page. The left page stays put under it. The turn
+   direction follows the tabs: going DOWN the rail turns the page forward
+   (right → left); going UP turns it back. */
 .fc-page-right {
   transform-origin: left center;
   backface-visibility: hidden;
   animation: fc-page-turn 0.5s cubic-bezier(0.25, 0.7, 0.3, 1);
   z-index: 2;
 }
+.fc-dir-up .fc-page-right {
+  animation-name: fc-page-turn-back;
+}
+/* Forward turn — new page sweeps in from the right (right → left) */
 @keyframes fc-page-turn {
   from {
     transform: perspective(2200px) rotateY(-108deg);
@@ -1149,8 +1155,19 @@ button.dash-inspiration-card {
     transform: perspective(2200px) rotateY(0deg);
   }
 }
+/* Back turn — new page sweeps in from the left (left → right) */
+@keyframes fc-page-turn-back {
+  from {
+    transform: perspective(2200px) rotateY(108deg);
+    box-shadow: 22px 0 40px rgba(0,0,0,0.4);
+  }
+  to {
+    transform: perspective(2200px) rotateY(0deg);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  .fc-page-right {
+  .fc-page-right,
+  .fc-dir-up .fc-page-right {
     animation: fc-fade 0.2s ease;
     transform: none;
   }
