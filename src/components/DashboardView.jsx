@@ -20,8 +20,8 @@ const SHORT_MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 const SHORT_DAY   = ['S','M','T','W','T','F','S']
 
-// Appointment-schedule hours for the daily spread (6 AM – 9 PM)
-const APPT_HOURS = Array.from({ length: 16 }, (_, i) => i + 6)
+// Appointment-schedule hours for the daily spread (5 AM – 11 PM)
+const APPT_HOURS = Array.from({ length: 19 }, (_, i) => i + 5)
 
 function hourLabel(h) {
   const period = h >= 12 ? 'PM' : 'AM'
@@ -187,7 +187,7 @@ export default function DashboardView({
   // Group scheduled blocks into their appointment hour (clamped to the visible range)
   const apptByHour = {}
   ;(timeBlocks || []).forEach(b => {
-    const h = Math.min(21, Math.max(6, b.hour ?? 9))
+    const h = Math.min(23, Math.max(5, b.hour ?? 9))
     ;(apptByHour[h] ||= []).push(b)
   })
 
@@ -309,7 +309,7 @@ export default function DashboardView({
                           .slice()
                           .sort((a, b) => (a.startLabel || '').localeCompare(b.startLabel || ''))
                           .map(b => (
-                            <div key={b.id} className="fc-appt-event" style={{ borderLeftColor: b.color || '#8a1f2b' }}>
+                            <div key={b.id} className="fc-appt-event" style={{ borderLeftColor: b.color || '#6b4423' }}>
                               {(b.startLabel || b.endLabel) && (
                                 <span className="fc-appt-time">
                                   {b.startLabel || hourLabel(hour)}{b.endLabel ? `–${b.endLabel}` : ''}
