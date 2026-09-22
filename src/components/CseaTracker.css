@@ -429,7 +429,7 @@
 
 .csea-interactions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   align-content: start;
   gap: 12px;
 }
@@ -1079,6 +1079,10 @@
 }
 
 @media (max-width: 768px) {
+  .csea-interactions-grid {
+    grid-template-columns: 1fr;
+  }
+
   .csea-tabs {
     background: #f5f5f5;
     border-bottom: 1px solid #e0e0e0;
