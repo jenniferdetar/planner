@@ -1136,13 +1136,15 @@ button.dash-inspiration-card {
    edge) — like a real book page. The left page stays put under it. The turn
    direction follows the tabs: going DOWN the rail turns the page forward
    (right → left); going UP turns it back. */
-.fc-page-right {
+.fc-page-right,
+.fc-single-page {
   transform-origin: left center;
   backface-visibility: hidden;
   animation: fc-page-turn 0.5s cubic-bezier(0.25, 0.7, 0.3, 1);
   z-index: 2;
 }
-.fc-dir-up .fc-page-right {
+.fc-dir-up .fc-page-right,
+.fc-dir-up .fc-single-page {
   animation-name: fc-page-turn-back;
 }
 /* Forward turn — new page sweeps in from the right (right → left) */
@@ -1167,38 +1169,42 @@ button.dash-inspiration-card {
 }
 @media (prefers-reduced-motion: reduce) {
   .fc-page-right,
-  .fc-dir-up .fc-page-right {
+  .fc-single-page,
+  .fc-dir-up .fc-page-right,
+  .fc-dir-up .fc-single-page {
     animation: fc-fade 0.2s ease;
     transform: none;
   }
   @keyframes fc-fade { from { opacity: 0 } to { opacity: 1 } }
 }
 
-/* ═══ Section spreads (every non-Today section) ══════════════════════════════ */
+/* ═══ Full-width binder page (every non-Today section) ═══════════════════════ */
 
-/* Fill the desk so the right page can scroll internally */
-.fc-spread-flex {
+.fc-single-page {
   flex: 1;
-  min-height: 0;
-  align-items: stretch;
-}
-.fc-spread-flex .fc-page {
   min-height: 0;
   display: flex;
   flex-direction: column;
-}
-.fc-spread-flex .fc-page-left {
-  overflow-y: auto;
-}
-.fc-spread-flex .fc-page-right {
+  background: #fdfbf4;
+  border-radius: 8px;
+  padding: 16px 22px 18px 44px;
+  position: relative;
   overflow: hidden;
-  padding-top: 14px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.28);
 }
-.fc-page-cover .fc-minical-wrap {
-  max-width: none;
-  margin-top: 14px;
+/* Ring holes down the left binding edge */
+.fc-single-page::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 16px;
+  width: 14px;
+  background-image: radial-gradient(circle at 50% 4px, #cdbf9f 0 5px, transparent 5.5px);
+  background-size: 14px 40px;
+  background-repeat: repeat-y;
+  pointer-events: none;
 }
-
 .fc-single-body {
   flex: 1;
   min-height: 0;
@@ -1320,15 +1326,15 @@ button.dash-inspiration-card {
   .fc-day-num { font-size: 34px; }
   .fc-week-list { columns: 1; }
 
-  /* Sections stack: cover on top, content below, each usably tall */
-  .fc-spread-flex { flex: initial; display: block; }
-  .fc-spread-flex .fc-page-right {
-    overflow: visible;
+  /* Full-width section page: usable height, no left ring gutter */
+  .fc-single-page {
+    padding: 14px 14px 16px;
     min-height: 72vh;
   }
-  .fc-page-cover .fc-minical-wrap { max-width: 250px; }
+  .fc-single-page::before { display: none; }
 
   /* The right rail is hidden on phones — the existing pill/back nav is used */
   .fc-tab-rail { display: none; }
-  .fc-page-right { animation-duration: 0.32s; }
+  .fc-page-right,
+  .fc-single-page { animation-duration: 0.32s; }
 }
