@@ -20,6 +20,24 @@ const SHORT_MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 const SHORT_DAY   = ['S','M','T','W','T','F','S']
 
+// Appointment-schedule hours for the daily spread (5 AM – 11 PM)
+const APPT_HOURS = Array.from({ length: 19 }, (_, i) => i + 5)
+
+function hourLabel(h) {
+  const period = h >= 12 ? 'PM' : 'AM'
+  return `${h % 12 || 12} ${period}`
+}
+
+// Map task priority to a classic A/B/C planner marker
+const PRIORITY_LETTER = { high: 'A', medium: 'B', low: 'C' }
+const PRIORITY_ORDER  = { A: 0, B: 1, C: 2 }
+function priorityLetter(p) { return PRIORITY_LETTER[p] || 'B' }
+
+function dayOfYear(d) {
+  const start = new Date(d.getFullYear(), 0, 0)
+  return Math.floor((d - start) / 86400000)
+}
+
 const NAV_ITEMS = [
   { key: 'today',    label: 'Today',        color: '#9ca3af', group: 'day' },
   { key: 'week',     label: 'Week',         color: '#9ca3af', group: 'day' },
@@ -162,7 +180,16 @@ export default function DashboardView({
   }
 
   const pending = (dailyTasks || []).filter(t => !t.completed)
+    .slice()
+    .sort((a, b) => PRIORITY_ORDER[priorityLetter(a.priority)] - PRIORITY_ORDER[priorityLetter(b.priority)])
   const done    = (dailyTasks || []).filter(t =>  t.completed)
+
+  // Group scheduled blocks into their appointment hour (clamped to the visible range)
+  const apptByHour = {}
+  ;(timeBlocks || []).forEach(b => {
+    const h = Math.min(23, Math.max(5, b.hour ?? 9))
+    ;(apptByHour[h] ||= []).push(b)
+  })
 
   const { tasksByDate: weekTasksByDate, toggleTask: onToggleWeekCardTask } = useWeeklyTasks(userId, selectedDate)
   const weekTasksFlat = Object.values(weekTasksByDate)
@@ -242,157 +269,163 @@ export default function DashboardView({
       {/* ── Main ── */}
       <main className="dash-main">
 
-        {/* TODAY */}
+        {/* TODAY — daily planner spread */}
         {section === 'today' && (
           <>
-            <div className="dash-page-header">
-              <h1 className="dash-page-title">{DAY_NAMES[d.getDay()]}, {MONTH_NAMES[d.getMonth()]} {d.getDate()}</h1>
-              <span className="dash-page-year">{d.getFullYear()}</span>
-            </div>
-            <div className="dash-today-grid">
-              {/* Tasks */}
-              <div className="dash-card">
-                <div className="dash-card-header">
-                  <span className="dash-card-title">Tasks</span>
-                  <span className="dash-badge">{pending.length} pending</span>
-                </div>
-                <form className="dash-add-row" onSubmit={handleAddTask}>
+            <div className="fc-spread">
+              {/* ── Left page: date + appointment schedule ── */}
+              <section className="fc-page fc-page-left">
+                <header className="fc-day-head">
+                  <div className="fc-day-box">
+                    <span className="fc-day-name">{DAY_NAMES[d.getDay()]}</span>
+                    <span className="fc-day-num">{d.getDate()}</span>
+                  </div>
+                  <div className="fc-day-meta">
+                    <span className="fc-day-month">{MONTH_NAMES[d.getMonth()]} {d.getFullYear()}</span>
+                    <span className="fc-day-count">Day {dayOfYear(d)} · {365 - dayOfYear(d)} remaining</span>
+                  </div>
+                </header>
+
+                <div className="fc-section-label">Appointment Schedule</div>
+
+                <form className="fc-appt-add" onSubmit={handleAddBlock}>
                   <input
-                    className="dash-add-input"
+                    className="fc-input"
+                    placeholder="New appointment…"
+                    value={newBlockTitle}
+                    onChange={e => setNewBlockTitle(e.target.value)}
+                  />
+                  <input className="fc-input fc-time" type="time" value={newBlockStart} onChange={e => setNewBlockStart(e.target.value)} />
+                  <input className="fc-input fc-time" type="time" value={newBlockEnd} onChange={e => setNewBlockEnd(e.target.value)} />
+                  <button className="fc-btn" type="submit">Add</button>
+                </form>
+
+                <div className="fc-appt-grid">
+                  {APPT_HOURS.map(hour => (
+                    <div key={hour} className="fc-appt-row">
+                      <span className="fc-appt-hour">{hourLabel(hour)}</span>
+                      <div className="fc-appt-slot">
+                        {(apptByHour[hour] || [])
+                          .slice()
+                          .sort((a, b) => (a.startLabel || '').localeCompare(b.startLabel || ''))
+                          .map(b => (
+                            <div key={b.id} className="fc-appt-event" style={{ borderLeftColor: b.color || '#6b4423' }}>
+                              {(b.startLabel || b.endLabel) && (
+                                <span className="fc-appt-time">
+                                  {b.startLabel || hourLabel(hour)}{b.endLabel ? `–${b.endLabel}` : ''}
+                                </span>
+                              )}
+                              <span className="fc-appt-title">{b.text || b.title}</span>
+                              {b.source !== 'gcal' && (
+                                <button className="fc-del" onClick={() => onDeleteBlock(b.id)}>✕</button>
+                              )}
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* ── Right page: prioritized task list + daily record ── */}
+              <section className="fc-page fc-page-right">
+                <div className="fc-section-label fc-section-label-row">
+                  <span>Prioritized Daily Task List</span>
+                  <span className="fc-count">{pending.length} open</span>
+                </div>
+
+                <form className="fc-task-add" onSubmit={handleAddTask}>
+                  <input
+                    className="fc-input"
                     placeholder="Add a task…"
                     value={newTask}
                     onChange={e => setNewTask(e.target.value)}
                   />
-                  <button className="dash-add-btn" type="submit">Add</button>
+                  <button className="fc-btn" type="submit">Add</button>
                 </form>
-                <div className="dash-task-list">
+
+                <div className="fc-task-list">
                   {pending.map(t => (
-                    <div key={t.id} className="dash-task-row">
-                      <button className="dash-check" onClick={() => onToggleTask(t.id)}>
-                        <span className="dash-circle" />
+                    <div key={t.id} className="fc-task-line">
+                      <span className="fc-task-prio">{priorityLetter(t.priority)}</span>
+                      <button className="fc-task-mark" onClick={() => onToggleTask(t.id)} aria-label="Complete task">
+                        <span className="fc-mark-box" />
                       </button>
-                      <span className="dash-task-text">{t.title}</span>
-                      <button className="dash-row-del" onClick={() => onDeleteTask(t.id)}>✕</button>
+                      <span className="fc-task-text">{t.title}</span>
+                      <button className="fc-del" onClick={() => onDeleteTask(t.id)}>✕</button>
                     </div>
                   ))}
-                  {done.length > 0 && <>
-                    <div className="dash-sep">Completed</div>
-                    {done.map(t => (
-                      <div key={t.id} className="dash-task-row done">
-                        <button className="dash-check done" onClick={() => onToggleTask(t.id)}>
-                          <span className="dash-circle checked" />
-                        </button>
-                        <span className="dash-task-text">{t.title}</span>
-                      </div>
-                    ))}
-                  </>}
+                  {done.length > 0 && <div className="fc-task-divider">Completed</div>}
+                  {done.map(t => (
+                    <div key={t.id} className="fc-task-line done">
+                      <span className="fc-task-prio">{priorityLetter(t.priority)}</span>
+                      <button className="fc-task-mark done" onClick={() => onToggleTask(t.id)} aria-label="Reopen task">
+                        <span className="fc-mark-box checked">✓</span>
+                      </button>
+                      <span className="fc-task-text">{t.title}</span>
+                    </div>
+                  ))}
                   {pending.length === 0 && done.length === 0 &&
-                    <p className="dash-empty">No tasks today</p>}
+                    <p className="fc-empty">No tasks for today</p>}
                 </div>
-              </div>
 
-              {/* Schedule */}
-              <div className="dash-card">
-                <div className="dash-card-header">
-                  <span className="dash-card-title">Schedule</span>
-                  <span className="dash-badge">{(timeBlocks || []).length} blocks</span>
+                <div className="fc-section-label fc-section-label-row">
+                  <span>Daily Record of Events</span>
+                  <span className="fc-count">{logEntries.length}</span>
                 </div>
-                <form className="dash-block-add-form" onSubmit={handleAddBlock}>
+
+                <form className="fc-task-add" onSubmit={handleLogAdd}>
                   <input
-                    className="dash-add-input"
-                    placeholder="Add a block…"
-                    value={newBlockTitle}
-                    onChange={e => setNewBlockTitle(e.target.value)}
+                    className="fc-input"
+                    placeholder="Note an event…"
+                    value={logText}
+                    onChange={e => setLogText(e.target.value)}
                   />
-                  <input
-                    className="dash-block-time-input"
-                    type="time"
-                    value={newBlockStart}
-                    onChange={e => setNewBlockStart(e.target.value)}
-                  />
-                  <input
-                    className="dash-block-time-input"
-                    type="time"
-                    value={newBlockEnd}
-                    onChange={e => setNewBlockEnd(e.target.value)}
-                  />
-                  <button className="dash-add-btn" type="submit">Add</button>
+                  <button className="fc-btn" type="submit">Add</button>
                 </form>
-                <div className="dash-sched-list">
-                  {(timeBlocks || []).length === 0 &&
-                    <p className="dash-empty">No blocks scheduled</p>}
-                  {(timeBlocks || [])
-                    .slice()
-                    .sort((a, b) => (a.hour ?? 0) - (b.hour ?? 0))
-                    .map(b => (
-                      <div key={b.id} className="dash-block-row" style={{ borderLeftColor: b.color || '#1e5799' }}>
-                        <span className="dash-block-time">{b.startLabel || (b.hour != null ? `${b.hour % 12 || 12}:00 ${b.hour >= 12 ? 'PM' : 'AM'}` : '')}–{b.endLabel || ''}</span>
-                        <span className="dash-block-title">{b.text || b.title}</span>
-                        {b.source !== 'gcal' && <button className="dash-row-del" onClick={() => onDeleteBlock(b.id)}>✕</button>}
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
 
-            {/* Week */}
-            <div className="master-tasks-wrap">
-              <div className="dash-page-header">
-                <h1 className="dash-page-title">Week</h1>
-                <span className="dash-badge">{weekTasksFlat.length} total</span>
-              </div>
-              <div className="dash-card">
-                <div className="dash-task-list dash-task-list-cols">
-                  {weekTasksFlat.map(t => (
-                    <div key={t.id} className={`dash-task-row${t.completed ? ' done' : ''}`}>
-                      <button className={`dash-check${t.completed ? ' done' : ''}`} onClick={() => onToggleWeekCardTask(t.id, t.due_date)}>
-                        <span className={`dash-circle${t.completed ? ' checked' : ''}`} />
-                      </button>
-                      <span className="dash-task-due">{fmtDueDate(t.due_date)}</span>
-                      <span className="dash-task-text">{t.title}</span>
+                <div className="fc-record">
+                  {logEntries.map(entry => (
+                    <div key={entry.id} className="fc-record-line">
+                      <span className="fc-record-time">{new Date(entry.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
+                      {editingLogId === entry.id ? (
+                        <input
+                          autoFocus
+                          className="fc-input"
+                          value={editingLogText}
+                          onChange={e => handleLogChange(entry.id, e.target.value)}
+                          onBlur={commitLogEdit}
+                          onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') commitLogEdit() }}
+                        />
+                      ) : (
+                        <span className="fc-record-text" onClick={() => handleLogEdit(entry)}>{entry.entry}</span>
+                      )}
+                      <button className="fc-del" onClick={() => deleteLogEntry(entry.id)}>✕</button>
                     </div>
                   ))}
-                  {weekTasksFlat.length === 0 &&
-                    <p className="dash-empty">No tasks due this week</p>}
+                  {logEntries.length === 0 && <p className="fc-empty">Nothing recorded yet</p>}
                 </div>
-              </div>
+              </section>
             </div>
 
-            {/* Daily Log */}
-            <div className="dash-card dash-card-full">
-              <div className="dash-card-header">
-                <span className="dash-card-title">Daily Log</span>
-                <span className="dash-badge">{logEntries.length} {logEntries.length === 1 ? 'entry' : 'entries'}</span>
+            {/* Week — tasks due this week */}
+            <div className="fc-week">
+              <div className="fc-section-label fc-section-label-row">
+                <span>This Week</span>
+                <span className="fc-count">{weekTasksFlat.length}</span>
               </div>
-              <form className="dash-add-row" onSubmit={handleLogAdd}>
-                <input
-                  className="dash-add-input"
-                  placeholder="What did you do today?"
-                  value={logText}
-                  onChange={e => setLogText(e.target.value)}
-                />
-                <button className="dash-add-btn" type="submit">Add</button>
-              </form>
-              <div className="dash-log-list">
-                {logEntries.map(entry => (
-                  <div key={entry.id} className="dash-task-row">
-                    <span className="dash-log-time">{new Date(entry.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
-                    {editingLogId === entry.id ? (
-                      <input
-                        autoFocus
-                        className="dash-add-input"
-                        value={editingLogText}
-                        onChange={e => handleLogChange(entry.id, e.target.value)}
-                        onBlur={commitLogEdit}
-                        onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') commitLogEdit() }}
-                      />
-                    ) : (
-                      <span className="dash-task-text" style={{ cursor: 'pointer' }} onClick={() => handleLogEdit(entry)}>{entry.entry}</span>
-                    )}
-                    <button className="dash-row-del" onClick={() => deleteLogEntry(entry.id)}>✕</button>
+              <div className="fc-week-list">
+                {weekTasksFlat.map(t => (
+                  <div key={t.id} className={`fc-task-line${t.completed ? ' done' : ''}`}>
+                    <button className={`fc-task-mark${t.completed ? ' done' : ''}`} onClick={() => onToggleWeekCardTask(t.id, t.due_date)} aria-label="Toggle task">
+                      <span className={`fc-mark-box${t.completed ? ' checked' : ''}`}>{t.completed ? '✓' : ''}</span>
+                    </button>
+                    <span className="fc-week-due">{fmtDueDate(t.due_date)}</span>
+                    <span className="fc-task-text">{t.title}</span>
                   </div>
                 ))}
-                {logEntries.length === 0 && <p className="dash-empty">Nothing logged yet</p>}
+                {weekTasksFlat.length === 0 &&
+                  <p className="fc-empty">No tasks due this week</p>}
               </div>
             </div>
 
