@@ -142,7 +142,7 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
         </button>
       </div>
       <div className="gcu-progress-section">
-        <p className="gcu-subtitle">Grand Canyon University · College of Humanities and Social Sciences · <a href="https://newportal.gcu.edu/#!/dashboard" target="_blank" rel="noreferrer" style={{ color: '#a23b3b' }}>Student Portal</a> · <a href="https://tuitionrequest.lausd.net/tr?req=ZWtiQlJHall6V21rUm5pZWMzUGpmdz09" target="_blank" rel="noreferrer" style={{ color: '#a23b3b' }}>Tuition Reimbursement</a></p>
+        <p className="gcu-subtitle">Grand Canyon University · College of Humanities and Social Sciences · <a href="https://newportal.gcu.edu/#!/dashboard" target="_blank" rel="noreferrer" style={{ color: 'var(--sec-soft, #dce6f5)' }}>Student Portal</a> · <a href="https://tuitionrequest.lausd.net/tr?req=ZWtiQlJHall6V21rUm5pZWMzUGpmdz09" target="_blank" rel="noreferrer" style={{ color: 'var(--sec-soft, #dce6f5)' }}>Tuition Reimbursement</a></p>
         <div className="gcu-progress-bar-wrap">
           <div className="gcu-progress-bar" style={{ width: `${(api.done / api.total) * 100}%` }} />
         </div>

@@ -9,14 +9,15 @@ const DAY_NAMES_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Frid
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
+// Alternating shades of the Week tab colour (--sec is set by the page)
 const DAY_COLORS = [
-  '#4a7a6a', // Sunday
-  '#2d5560', // Monday
-  '#3d6a5a', // Tuesday
-  '#1e3342', // Wednesday
-  '#4a7a6a', // Thursday
-  '#2d5560', // Friday
-  '#3d6a5a', // Saturday
+  'var(--sec)', // Sunday
+  'var(--sec-dark)', // Monday
+  'color-mix(in srgb, var(--sec) 80%, #000)', // Tuesday
+  'color-mix(in srgb, var(--sec-dark) 78%, #000)', // Wednesday
+  'var(--sec)', // Thursday
+  'var(--sec-dark)', // Friday
+  'color-mix(in srgb, var(--sec) 80%, #000)', // Saturday
 ]
 
 const PRIORITY_COLORS = { high: '#e05c5c', medium: '#f0a040', low: '#5c9ee0' }
@@ -109,10 +110,10 @@ function habitDays(h) {
 }
 
 const HABIT_COLORS = {
-  'Home Care': '#4a7a6a',
-  'Self Care': '#3d6a5a',
-  'Week Days': '#2d5560',
-  'Weekends': '#1e3342',
+  'Home Care': 'var(--sec)',
+  'Self Care': 'color-mix(in srgb, var(--sec) 80%, #000)',
+  'Week Days': 'var(--sec-dark)',
+  'Weekends': 'color-mix(in srgb, var(--sec-dark) 78%, #000)',
 }
 
 export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks }) {
