@@ -555,7 +555,7 @@ function HoaPanelInner({ api }) {
           <button
             key={t}
             className={`hoa-tab ${api.tab === t ? 'active' : ''}`}
-            style={{ '--tab-col': t === 'All' ? '#1e3070' : t === 'Financials' ? '#3a5c4a' : t === 'Directory' ? '#7a5c2e' : CAT_COLORS[t] }}
+            style={{ '--tab-col': t === 'All' ? 'var(--sec, #1e3070)' : t === 'Financials' ? '#3a5c4a' : t === 'Directory' ? '#7a5c2e' : CAT_COLORS[t] }}
             onClick={() => api.setTab(t)}
           >{t}</button>
         ))}

@@ -16,7 +16,7 @@
   justify-content: center;
   gap: 20px;
   padding: 14px 32px 10px;
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   flex-shrink: 0;
 }
 
@@ -54,7 +54,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1px;
-  background: #d9e8f0;
+  background: var(--sec-soft, #d9e8f0);
   flex-shrink: 0;
 }
 
@@ -142,7 +142,7 @@
 
 /* Motivational banner */
 .week-banner {
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   color: #fff;
   text-align: center;
   font-size: 11px;
@@ -173,13 +173,13 @@
 }
 
 .week-day-row.week-day-today {
-  background: #eef2f7;
+  background: var(--sec-softer, #eef2f7);
 }
 
 .week-day-tasks {
   padding: 8px 14px 8px 16px;
   border-left: 4px solid;
-  border-right: 1px solid #d9e8f0;
+  border-right: 1px solid var(--sec-soft, #d9e8f0);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -251,7 +251,7 @@
 }
 
 .week-add-btn:hover {
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 
 .week-add-form {
@@ -409,9 +409,9 @@
 }
 
 /* ── Palette alternating day rows ── */
-.week-day-row:nth-child(odd)  { background: rgba(30,48,112,0.05); }
-.week-day-row:nth-child(even) { background: rgba(30,48,112,0.05); }
-.week-day-row.week-day-today  { background: #eef2f7 !important; }
+.week-day-row:nth-child(odd)  { background: color-mix(in srgb, var(--sec, #1e3070) 5%, transparent); }
+.week-day-row:nth-child(even) { background: color-mix(in srgb, var(--sec, #1e3070) 5%, transparent); }
+.week-day-row.week-day-today  { background: var(--sec-softer, #eef2f7) !important; }
 
 /* ── Left panel bold ── */
 .week-day-tasks .week-day-label,

@@ -9,7 +9,7 @@
 
 .salloc-header {
   padding: 16px 20px 14px;
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   flex-shrink: 0;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .salloc-lookup-hint strong {
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 
 .salloc-table-wrap {
@@ -108,21 +108,21 @@
 
 .salloc-name {
   font-weight: 600;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 
 /* Alpha is the primary lookup column — emphasized and highlighted. */
 .salloc-alpha-col {
-  color: #1e3070 !important;
+  color: var(--sec, #1e3070) !important;
 }
 
 .salloc-alpha {
   font-size: 15px;
   font-weight: 700;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   letter-spacing: 0.2px;
-  border-left: 3px solid #1e3070;
-  background: #eef2fb;
+  border-left: 3px solid var(--sec, #1e3070);
+  background: var(--sec-softer, #eef2fb);
 }
 
 .salloc-center {

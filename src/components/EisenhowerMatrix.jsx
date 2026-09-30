@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import './EisenhowerMatrix.css'
 
 const QUADRANTS = [
-  { key: 'q1', label: 'Do First',  color: '#1e3070', bg: 'rgba(30,48,112,0.05)', desc: 'Urgent + Important' },
-  { key: 'q2', label: 'Schedule',  color: '#1e3070', bg: 'rgba(30,48,112,0.05)', desc: 'Not Urgent + Important' },
-  { key: 'q3', label: 'Delegate',  color: '#1e3070', bg: 'rgba(30,48,112,0.05)', desc: 'Urgent + Not Important' },
-  { key: 'q4', label: 'Eliminate', color: '#1e3070', bg: 'rgba(30,48,112,0.05)', desc: 'Not Urgent + Not Important' },
+  { key: 'q1', label: 'Do First',  color: 'var(--sec, #1e3070)', bg: 'color-mix(in srgb, var(--sec, #1e3070) 5%, transparent)', desc: 'Urgent + Important' },
+  { key: 'q2', label: 'Schedule',  color: 'var(--sec, #1e3070)', bg: 'color-mix(in srgb, var(--sec, #1e3070) 5%, transparent)', desc: 'Not Urgent + Important' },
+  { key: 'q3', label: 'Delegate',  color: 'var(--sec, #1e3070)', bg: 'color-mix(in srgb, var(--sec, #1e3070) 5%, transparent)', desc: 'Urgent + Not Important' },
+  { key: 'q4', label: 'Eliminate', color: 'var(--sec, #1e3070)', bg: 'color-mix(in srgb, var(--sec, #1e3070) 5%, transparent)', desc: 'Not Urgent + Not Important' },
 ]
 
 // Sunday-start week, matching useWeeklyTasks.js — the tick marks reset each week.

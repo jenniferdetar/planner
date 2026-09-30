@@ -1,15 +1,15 @@
 /* ── CSEA Brand Tokens ──────────────────────────────────────────────────── */
 :root {
   /* Primary */
-  --csea-blue:        #1e3070;
+  --csea-blue:        var(--sec, #1e3070);
   --csea-yellow:      #ffffff;
   /* Secondary */
-  --csea-link:        #1e3070;
-  --csea-light-blue:  #dce6f5;
-  --csea-gold:        #a23b3b;
-  --csea-accent:      #a23b3b;
+  --csea-link:        var(--sec, #1e3070);
+  --csea-light-blue:  var(--sec-soft, #dce6f5);
+  --csea-gold:        var(--sec-dark, #a23b3b);
+  --csea-accent:      var(--sec-dark, #a23b3b);
   --csea-dark-orange: #e0592a;
-  --csea-burgundy:    #8e2a2a;
+  --csea-burgundy:    var(--sec-dark, #8e2a2a);
   /* Neutrals */
   --csea-body:        #222222;
   --csea-dark-gray:   #53575a;
@@ -72,8 +72,8 @@
   display: flex;
   height: 34px;
   box-sizing: border-box;
-  background: #1e3070;
-  border-bottom: 2px solid #0d1a40;
+  background: var(--sec, #1e3070);
+  border-bottom: 2px solid var(--sec-dark, #0d1a40);
   flex-shrink: 0;
   padding: 0 10px;
   gap: 0;
@@ -276,16 +276,16 @@
 .csea-mail-sync-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   background: transparent;
-  border: 1px solid #1e3070;
+  border: 1px solid var(--sec, #1e3070);
   border-radius: 3px;
   padding: 4px 10px;
   cursor: pointer;
   font-family: 'Open Sans', sans-serif;
   transition: background 0.15s, color 0.15s;
 }
-.csea-mail-sync-btn:hover:not(:disabled) { background: #1e3070; color: #fff; }
+.csea-mail-sync-btn:hover:not(:disabled) { background: var(--sec, #1e3070); color: #fff; }
 .csea-mail-sync-btn:disabled { opacity: 0.5; cursor: default; }
 
 /* ── Form ──────────────────────────────────────────────────────────────── */
@@ -424,7 +424,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-  background: #e9edf3;
+  background: var(--sec-soft, #e9edf3);
 }
 
 .csea-interactions-grid {
@@ -444,7 +444,7 @@
 
 .issue-card {
   background: #fff;
-  border: 1px solid #d9e8f0;
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -648,7 +648,7 @@
 /* ── Interaction groups ─────────────────────────────────────────────────── */
 .interaction-group {
   background: #fff;
-  border: 1px solid #d9e8f0;
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -708,7 +708,7 @@
   gap: 4px;
 }
 
-.interaction-card:nth-child(even) { border-left-color: var(--csea-accent); background: #fafcff; }
+.interaction-card:nth-child(even) { border-left-color: var(--csea-accent); background: var(--sec-softer, #fafcff); }
 
 .interaction-header { display: flex; align-items: center; gap: 8px; }
 
@@ -760,7 +760,7 @@
   max-height: 220px;
   overflow-y: auto;
   z-index: 100;
-  box-shadow: 0 4px 12px rgba(30,48,112,0.12);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--sec, #1e3070) 12%, transparent);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -808,7 +808,7 @@
   overflow: hidden;
 }
 
-.csea-note-row:nth-child(odd)  { background: #fafcff; border-left: 3px solid var(--csea-blue); }
+.csea-note-row:nth-child(odd)  { background: var(--sec-softer, #fafcff); border-left: 3px solid var(--csea-blue); }
 .csea-note-row:nth-child(even) { background: #fffef5; border-left: 3px solid var(--csea-accent); }
 
 .csea-note-meta { display: flex; align-items: center; gap: 8px; }
@@ -859,7 +859,7 @@
   padding: 7px 12px;
   background: var(--csea-light-blue);
   color: var(--csea-blue);
-  border: 1px solid var(--csea-border-lt, rgba(30,48,112,0.2));
+  border: 1px solid var(--csea-border-lt, color-mix(in srgb, var(--sec, #1e3070) 20%, transparent));
   border-radius: 4px;
   font-size: 12px;
   font-weight: 700;
@@ -1112,9 +1112,9 @@
   }
 
   .csea-tab.active {
-    background: #1e3070;
+    background: var(--sec, #1e3070);
     color: #fff;
-    border-color: #1e3070;
+    border-color: var(--sec, #1e3070);
     font-weight: 700;
   }
 
@@ -1507,7 +1507,7 @@
 }
 
 .committee-card {
-  border: 1px solid #d9e8f0;
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 10px;
   background: #ffffff;
   overflow: hidden;
@@ -1563,7 +1563,7 @@
 }
 
 .committee-member.is-lead {
-  background: #fafcff;
+  background: var(--sec-softer, #fafcff);
 }
 
 .committee-member-name {

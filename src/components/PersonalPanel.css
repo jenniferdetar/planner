@@ -13,8 +13,8 @@
   height: 34px;
   box-sizing: border-box;
   flex-shrink: 0;
-  background: #1e3070;
-  border-bottom: 2px solid #0d1a40;
+  background: var(--sec, #1e3070);
+  border-bottom: 2px solid var(--sec-dark, #0d1a40);
   padding: 0 10px;
   overflow-x: auto;
   scrollbar-width: none;
@@ -42,7 +42,7 @@
   transition: color 0.15s, border-color 0.15s;
 }
 
-.personal-inline-tab.active { color: #fff; border-bottom-color: #a23b3b; }
+.personal-inline-tab.active { color: #fff; border-bottom-color: var(--sec-dark, #a23b3b); }
 .personal-inline-tab:hover:not(.active) { color: #fff; }
 
 /* Framework strip */
@@ -52,8 +52,8 @@
   flex-wrap: wrap;
   gap: 0;
   padding: 5px 16px;
-  background: #f4f6fb;
-  border-bottom: 1px solid rgba(30,48,112,0.10);
+  background: var(--sec-softer, #f4f6fb);
+  border-bottom: 1px solid color-mix(in srgb, var(--sec, #1e3070) 10%, transparent);
   flex-shrink: 0;
 }
 
@@ -76,8 +76,8 @@
   border-radius: 3px;
   transition: color 0.15s, background 0.15s;
 }
-.pfw-btn:hover { color: #1e3070; background: rgba(30,48,112,0.06); }
-.pfw-btn.active { color: #1e3070; font-weight: 700; }
+.pfw-btn:hover { color: var(--sec, #1e3070); background: color-mix(in srgb, var(--sec, #1e3070) 6%, transparent); }
+.pfw-btn.active { color: var(--sec, #1e3070); font-weight: 700; }
 
 .pfw-arrow {
   font-size: 10px;
@@ -117,20 +117,20 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: #9aaac8;
-  background: #f4f6fb;
-  border: 1px solid #d9e8f0;
+  background: var(--sec-softer, #f4f6fb);
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 6px;
   padding: 6px 14px;
   cursor: pointer;
   transition: color 0.15s, background 0.15s, border-color 0.15s;
 }
 
-.mantra-subtab:hover:not(.active) { color: #1e3070; }
+.mantra-subtab:hover:not(.active) { color: var(--sec, #1e3070); }
 
 .mantra-subtab.active {
   color: #fff;
-  background: #1e3070;
-  border-color: #1e3070;
+  background: var(--sec, #1e3070);
+  border-color: var(--sec, #1e3070);
 }
 
 .mantra-header {
@@ -140,7 +140,7 @@
   gap: 10px;
   margin-bottom: 12px;
   padding: 8px 14px;
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   border-radius: 6px;
 }
 
@@ -183,7 +183,7 @@
 
 .mantra-saved {
   font-size: 11px;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   font-weight: 600;
   letter-spacing: 0.5px;
 }
@@ -198,8 +198,8 @@
   font-style: normal;
   color: #222222;
   background-color: #fff;
-  border: 1px solid #d9e8f0;
-  border-top: 4px solid var(--mantra-color, #1e3070);
+  border: 1px solid var(--sec-soft, #d9e8f0);
+  border-top: 4px solid var(--mantra-color, var(--sec, #1e3070));
   border-radius: 8px;
   outline: none;
   resize: none;
@@ -213,16 +213,16 @@
 
 .mantra-textarea:focus {
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-  border-color: #d9e8f0;
-  border-top-color: var(--mantra-color, #1e3070);
+  border-color: var(--sec-soft, #d9e8f0);
+  border-top-color: var(--mantra-color, var(--sec, #1e3070));
 }
 
 .mantra-content {
   flex: 1;
   overflow-y: auto;
   background-color: #fff;
-  border: 1px solid #d9e8f0;
-  border-top: 4px solid var(--mantra-color, #1e3070);
+  border: 1px solid var(--sec-soft, #d9e8f0);
+  border-top: 4px solid var(--mantra-color, var(--sec, #1e3070));
   border-radius: 8px;
   padding: 28px 32px;
 }
@@ -265,10 +265,10 @@
   .personal-inline-tab:hover:not(.active) { background: #e8e8e8; color: #222; border-color: #aaa; }
 
   .personal-inline-tab.active {
-    background: #1e3070;
+    background: var(--sec, #1e3070);
     color: #fff;
-    border-color: #1e3070;
-    border-bottom-color: #1e3070;
+    border-color: var(--sec, #1e3070);
+    border-bottom-color: var(--sec, #1e3070);
   }
 
   .mantra-section {

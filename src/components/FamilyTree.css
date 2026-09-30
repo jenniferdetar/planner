@@ -30,8 +30,8 @@
 /* ── Header ── */
 .ft-header {
   padding: 10px 16px 8px;
-  background: #1e3070;
-  border-bottom: 2px solid #0d1a40;
+  background: var(--sec, #1e3070);
+  border-bottom: 2px solid var(--sec-dark, #0d1a40);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -121,7 +121,7 @@
 
 .ft-card {
   background-color: #fff;
-  border: 1px solid #d9e8f0;
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 10px;
   padding: 0 14px;
   min-width: 170px;
@@ -251,7 +251,7 @@
   transition: background 0.12s, color 0.12s;
 }
 
-.ft-card-btn:hover { background: #eef2f7; color: #555; }
+.ft-card-btn:hover { background: var(--sec-softer, #eef2f7); color: #555; }
 .ft-card-btn.delete:hover { background: #fce8e8; color: #e05c5c; }
 
 /* ── Empty state ── */
@@ -287,7 +287,7 @@
 .ft-modal h3 {
   font-family: 'Nunito', sans-serif;
   font-size: 18px;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   margin: 0 0 18px;
 }
 
@@ -324,7 +324,7 @@
 .ft-form-row input:focus,
 .ft-form-row select:focus,
 .ft-form-row textarea:focus {
-  border-color: #1e3070;
+  border-color: var(--sec, #1e3070);
 }
 
 .ft-form-row textarea { resize: vertical; min-height: 70px; }
@@ -354,19 +354,19 @@
 }
 
 .ft-modal-cancel {
-  background: #eef2f7;
+  background: var(--sec-softer, #eef2f7);
   color: #666;
 }
 
 .ft-modal-cancel:hover { background: #e0dbd0; }
 
 .ft-modal-save {
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   color: #fff;
   font-weight: 700;
 }
 
-.ft-modal-save:hover { background: #0d1a40; }
+.ft-modal-save:hover { background: var(--sec-dark, #0d1a40); }
 
 @media (max-width: 768px) {
   .ft-header { padding: 10px 16px 8px; }

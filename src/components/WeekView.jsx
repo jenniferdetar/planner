@@ -276,7 +276,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                         key={task.id}
                         className={`week-task-row ${task.completed ? 'done' : ''}`}
                         onClick={() => toggleTask(task.id, dateStr)}
-                        style={isCseaTask ? { background: '#1e3070', borderRadius: '4px', padding: '1px 4px', border: '1.5px solid #cc0000' } : {}}
+                        style={isCseaTask ? { background: 'var(--sec, #1e3070)', borderRadius: '4px', padding: '1px 4px', border: '1.5px solid #cc0000' } : {}}
                       >
                         <span
                           className="week-task-check"
@@ -336,7 +336,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
                     ? 'CSEA ' + rawTitle
                     : rawTitle
                   const pillStyle = isCseaEvent
-                    ? { background: '#1e3070', color: '#f7e84b', border: '1.5px solid #cc0000', fontWeight: 700 }
+                    ? { background: 'var(--sec, #1e3070)', color: '#f7e84b', border: '1.5px solid #cc0000', fontWeight: 700 }
                     : { background: evt.color ?? '#4a90d9', color: contrastColor(evt.color) }
                   return (
                     <div

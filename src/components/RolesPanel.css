@@ -12,8 +12,8 @@
   justify-content: space-between;
   box-sizing: border-box;
   padding: 10px 16px 8px;
-  border-bottom: 2px solid #0d1a40;
-  background: #1e3070;
+  border-bottom: 2px solid var(--sec-dark, #0d1a40);
+  background: var(--sec, #1e3070);
   flex-shrink: 0;
   gap: 12px;
 }
@@ -26,8 +26,8 @@
 }
 
 .roles-add-btn {
-  background: #a23b3b;
-  color: #1e3070;
+  background: var(--sec-dark, #a23b3b);
+  color: var(--sec, #1e3070);
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -64,14 +64,14 @@
   outline: none;
   color: #333;
 }
-.roles-add-input:focus { border-color: #1e3070; }
+.roles-add-input:focus { border-color: var(--sec, #1e3070); }
 
 .roles-add-save {
   padding: 7px 16px;
   font-size: 12px;
   font-weight: 600;
   color: #fff;
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -104,8 +104,8 @@
   align-items: center;
   gap: 14px;
   padding: 16px 18px;
-  border: 1px solid #d9e8f0;
-  border-top: 3px solid #1e3070;
+  border: 1px solid var(--sec-soft, #d9e8f0);
+  border-top: 3px solid var(--sec, #1e3070);
   border-radius: 8px;
   background: #fff;
   cursor: pointer;
@@ -113,7 +113,7 @@
   width: 100%;
   transition: box-shadow 0.15s;
 }
-.roles-card:nth-child(even) { border-top-color: #a23b3b; }
+.roles-card:nth-child(even) { border-top-color: var(--sec-dark, #a23b3b); }
 .roles-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
 
 .roles-card-icon { font-size: 22px; flex-shrink: 0; }
@@ -129,7 +129,7 @@
 .roles-card-name {
   font-size: 14px;
   font-weight: 700;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   font-family: 'Georgia', serif;
 }
 
@@ -167,7 +167,7 @@
 .roles-progress-pct {
   font-size: 11px;
   font-weight: 700;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   min-width: 32px;
   text-align: right;
 }
@@ -198,7 +198,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 24px;
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   flex-shrink: 0;
 }
 
@@ -236,7 +236,7 @@
 .roles-name-input {
   font-family: 'Architects Daughter', cursive;
   font-size: 26px;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   border: none;
   border-bottom: 2px solid #e0ddd7;
   outline: none;
@@ -245,7 +245,7 @@
   width: 100%;
   transition: border-color 0.15s;
 }
-.roles-name-input:focus { border-bottom-color: #1e3070; }
+.roles-name-input:focus { border-bottom-color: var(--sec, #1e3070); }
 
 .roles-purpose-label {
   font-size: 11px;
@@ -264,8 +264,8 @@
   line-height: 26px;
   color: #222;
   background: #fff;
-  border: 1px solid #d9e8f0;
-  border-top: 4px solid #1e3070;
+  border: 1px solid var(--sec-soft, #d9e8f0);
+  border-top: 4px solid var(--sec, #1e3070);
   border-radius: 8px;
   outline: none;
   resize: none;
@@ -310,8 +310,8 @@
   align-items: baseline;
   gap: 8px;
   padding: 5px 10px;
-  background: #f4f6fb;
-  border-left: 3px solid #1e3070;
+  background: var(--sec-softer, #f4f6fb);
+  border-left: 3px solid var(--sec, #1e3070);
   border-radius: 4px;
   font-size: 12px;
 }
@@ -319,8 +319,8 @@
 .roles-linked-cat {
   font-size: 10px;
   font-weight: 700;
-  color: #a23b3b;
-  background: #1e3070;
+  color: var(--sec-dark, #a23b3b);
+  background: var(--sec, #1e3070);
   border-radius: 3px;
   padding: 1px 6px;
   flex-shrink: 0;
