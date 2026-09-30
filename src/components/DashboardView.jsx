@@ -8,6 +8,7 @@ import CseaTracker from './CseaTracker'
 import IcaapTracker from './IcaapTracker'
 import GcuPanel from './GcuPanel'
 import HoaPanel from './HoaPanel'
+import FinancialPanel from './FinancialPanel'
 import EisenhowerMatrix from './EisenhowerMatrix'
 import PersonalPanel from './PersonalPanel'
 import WeekView from './WeekView'
@@ -48,13 +49,14 @@ const NAV_ITEMS = [
   { key: 'hoa',      label: 'HOA',      color: '#4a7a6a', group: 'module' },
   { key: 'icaap',    label: 'iCAAP',    color: '#3a5c4a', group: 'module' },
   { key: 'personal', label: 'Personal', color: '#6a5a8a', group: 'module' },
+  { key: 'financial', label: 'Financial', color: '#1f4e79', group: 'module' },
   { key: 'matrix',   label: 'Matrix',   color: '#7d8a9c', group: 'module' },
 ]
 
 // Section → right-page heading for the two-page spreads
 const SECTION_TITLES = {
   week: 'Week', month: 'Month', csea: 'CSEA', gcu: 'GCU',
-  hoa: 'HOA', icaap: 'iCAAP', matrix: 'Priority Matrix', personal: 'Personal',
+  hoa: 'HOA', icaap: 'iCAAP', matrix: 'Priority Matrix', personal: 'Personal', financial: 'Financial',
 }
 
 // Tab order (top → bottom in the rail) — drives the page-turn direction
@@ -572,6 +574,11 @@ export default function DashboardView({
         {section === 'hoa' && (
           <PlannerPage title="HOA">
             <HoaPanel userId={userId} />
+          </PlannerPage>
+        )}
+        {section === 'financial' && (
+          <PlannerPage title="Financial">
+            <FinancialPanel userId={userId} />
           </PlannerPage>
         )}
         {section === 'matrix' && (
