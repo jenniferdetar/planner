@@ -130,10 +130,6 @@
 }
 
 .salloc-ext,
-.salloc-time {
-  font-variant-numeric: tabular-nums;
-  color: #555;
-}
 
 .salloc-group {
   display: inline-flex;
