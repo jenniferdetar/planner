@@ -1142,11 +1142,11 @@ button.dash-inspiration-card {
   animation: fc-page-turn 0.62s cubic-bezier(0.34, 0.86, 0.4, 1);
   z-index: 2;
 }
-/* Both leaves are hinged on the centre spine: the daily spread's right page
-   pivots on its own left edge (the binding); a full-width section page pivots
-   on its centre line. */
-.fc-page-right { transform-origin: left center; }
-.fc-single-page { transform-origin: center center; }
+/* Every leaf turns exactly like the Today page: hinged on its left edge (the
+   binding), so it swings over and settles flat like a real book page instead
+   of spinning around its middle. */
+.fc-page-right,
+.fc-single-page { transform-origin: left center; }
 
 .fc-dir-up .fc-page-right,
 .fc-dir-up .fc-single-page {
