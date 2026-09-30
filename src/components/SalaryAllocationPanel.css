@@ -48,6 +48,34 @@
   overflow-x: auto;
 }
 
+/* Two side-by-side rosters — one per page of the spread */
+.salloc-tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  padding: 12px 20px 20px;
+  min-width: 0;
+}
+.salloc-tables .salloc-table-wrap {
+  padding: 0;
+  overflow-x: auto;
+  min-width: 0;
+}
+.salloc-tables .salloc-table {
+  min-width: 0;
+  font-size: 12px;
+}
+.salloc-tables .salloc-table th,
+.salloc-tables .salloc-table td {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.salloc-tables .salloc-alpha,
+.salloc-tables .salloc-name {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .salloc-table {
   border-collapse: collapse;
   width: 100%;
@@ -143,5 +171,15 @@
   .salloc-table-wrap {
     padding-left: 14px;
     padding-right: 14px;
+  }
+
+  /* Stack the two rosters on phones */
+  .salloc-tables {
+    grid-template-columns: 1fr;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .salloc-tables .salloc-table {
+    min-width: 560px;
   }
 }
