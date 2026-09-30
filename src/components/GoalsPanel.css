@@ -17,8 +17,8 @@
   align-items: center;
   box-sizing: border-box;
   padding: 10px 16px 8px;
-  border-bottom: 2px solid #0d1a40;
-  background: #1e3070;
+  border-bottom: 2px solid var(--sec-dark, #0d1a40);
+  background: var(--sec, #1e3070);
   flex-shrink: 0;
   margin-bottom: 12px;
 }
@@ -52,7 +52,7 @@
 }
 
 .goal-card {
-  border: 1px solid #d9e8f0;
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
@@ -68,7 +68,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 
 .goal-card-body {
@@ -86,7 +86,7 @@
   gap: 10px;
   padding: 0;
   min-height: 24px;
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid var(--sec-softer, #eef2f7);
 }
 
 .goal-check {
@@ -113,8 +113,8 @@
 .goal-role-badge {
   font-size: 9px;
   font-weight: 700;
-  color: #1e3070;
-  background: rgba(30,48,112,0.08);
+  color: var(--sec, #1e3070);
+  background: color-mix(in srgb, var(--sec, #1e3070) 8%, transparent);
   border-radius: 3px;
   padding: 1px 5px;
   flex-shrink: 1;
@@ -213,7 +213,7 @@
 }
 
 .goal-add-btn:hover {
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 
 .goal-add-form {
@@ -266,7 +266,7 @@
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0 0 10px;
@@ -287,7 +287,7 @@
   color: #999;
   padding: 4px 3px;
   text-align: center;
-  border-bottom: 1px solid #d9e8f0;
+  border-bottom: 1px solid var(--sec-soft, #d9e8f0);
 }
 
 .checklist-table th.task-col {
@@ -380,11 +380,11 @@
 }
 
 .checklist-add-task-btn:hover {
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 
 /* ── Palette alternating rows ── */
-.checklist-table tbody tr:nth-child(odd)  td { background: rgba(30,48,112,0.06); }
-.checklist-table tbody tr:nth-child(even) td { background: rgba(30,48,112,0.03); }
-.checklist-table thead th { background: #1e3070; color: #ffffff; }
-.checklist-table thead th.task-col { background: #1e3070; color: #ffffff; }
+.checklist-table tbody tr:nth-child(odd)  td { background: color-mix(in srgb, var(--sec, #1e3070) 6%, transparent); }
+.checklist-table tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--sec, #1e3070) 3%, transparent); }
+.checklist-table thead th { background: var(--sec, #1e3070); color: #ffffff; }
+.checklist-table thead th.task-col { background: var(--sec, #1e3070); color: #ffffff; }

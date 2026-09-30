@@ -5,14 +5,6 @@ import './GoalsPanel.css'
 
 const CATEGORY_ORDER = ['Physical','Mental','Relational','Self-Care','Hobbies','Home','Career','Financial','Organizational','Screen Time','Learn','CSEA']
 
-function contrastColor(hex) {
-  const c = (hex ?? '#4a7a6a').replace('#', '')
-  const r = parseInt(c.slice(0,2), 16)
-  const g = parseInt(c.slice(2,4), 16)
-  const b = parseInt(c.slice(4,6), 16)
-  return (r * 0.299 + g * 0.587 + b * 0.114) > 160 ? '#1e3342' : '#ffffff'
-}
-
 export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
   const { byCategory, addGoal, updateGoal, deleteGoal } = usePersonalGoals(userId)
   const { tasks: checklistTasks, isChecked, toggle: toggleCheck, addTask, updateTask, deleteTask: deleteChecklistTask } = usePersonalChecklist(userId)
@@ -51,12 +43,12 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
           <div className="goals-grid">
             {orderedCategories.map((category, idx) => {
               // Uniform navy header on every tile, matching the Matrix quadrants
-              const color = '#1e3070'
+              const color = 'var(--sec, #1e3070)'
               const goals = byCategory[category] || []
               return (
                 <div key={category} className="goal-card">
                   <div className="goal-card-header" style={{ background: color }}>
-                    <span className="goal-card-title" style={{ color: contrastColor(color) }}>{category}</span>
+                    <span className="goal-card-title" style={{ color: '#fff' }}>{category}</span>
                   </div>
                   <div className="goal-card-body">
                     {goals.map(g => (
@@ -139,7 +131,7 @@ export default function GoalsPanel({ userId, section = 'all', roles = [] }) {
             </thead>
             <tbody>
               {checklistTasks.map((task, rowIdx) => {
-                const color = '#1e3070'
+                const color = 'var(--sec, #1e3070)'
                 return (
                   <tr key={task.id}>
                     <td className="task-name-cell">

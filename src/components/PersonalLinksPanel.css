@@ -5,18 +5,18 @@
   min-height: 0;
   overflow: hidden;
   background: #ffffff;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 
 .links-header {
   padding: 10px 16px 8px;
-  border-bottom: 2px solid #0d1a40;
+  border-bottom: 2px solid var(--sec-dark, #0d1a40);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-shrink: 0;
-  background: #1e3070;
+  background: var(--sec, #1e3070);
 }
 
 .links-title {
@@ -51,9 +51,9 @@
   flex: 1;
   min-width: 220px;
   background: #fff;
-  border: 1px solid #d9e8f0;
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 7px;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   font-size: 13px;
   padding: 8px 12px;
   outline: none;
@@ -65,12 +65,12 @@
 }
 
 .add-link-input:focus {
-  border-color: #1e3070;
+  border-color: var(--sec, #1e3070);
 }
 
 .add-link-btn {
-  background: #a23b3b;
-  color: #1e3070;
+  background: var(--sec-dark, #a23b3b);
+  color: var(--sec, #1e3070);
   border: none;
   border-radius: 7px;
   font-size: 13px;

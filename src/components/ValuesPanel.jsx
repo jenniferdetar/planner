@@ -4,7 +4,7 @@ import './ValuesPanel.css'
 
 // Cards alternate red/navy by position so the grid has visual variety
 // while staying within the app's red/white/navy palette.
-const PALETTE = ['#a23b3b', '#1e3070']
+const PALETTE = ['#a23b3b', 'var(--sec, #1e3070)']
 
 export default function ValuesPanel({ userId }) {
   const { values, addValue, updateValue, deleteValue } = usePersonalValues(userId)

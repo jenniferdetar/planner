@@ -259,7 +259,7 @@ export default function DashboardView({
 
       {/* ── Main desk ── */}
       <main className="dash-main">
-        <div className={`fc-flip fc-dir-${turnDir}`} key={section}>
+        <div className={`fc-flip fc-dir-${turnDir}`} key={section} style={{ '--tab': NAV_ITEMS.find(i => i.key === section)?.color }}>
 
         {/* TODAY — daily planner spread */}
         {section === 'today' && (

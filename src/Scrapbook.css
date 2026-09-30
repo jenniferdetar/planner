@@ -16,10 +16,10 @@
 .personal-panel {
   background-color: #ffffff !important;
   background-image:
-    radial-gradient(circle at 18% 28%, rgba(30,48,112,0.08) 0, transparent 45%),
-    radial-gradient(circle at 82% 68%, rgba(162,59,59,0.06) 0, transparent 50%),
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--sec, #1e3070) 8%, transparent) 0, transparent 45%),
+    radial-gradient(circle at 82% 68%, color-mix(in srgb, var(--sec-dark, #a23b3b) 6%, transparent) 0, transparent 50%),
     radial-gradient(circle at 55% 10%, rgba(255,255,255,0.28) 0, transparent 40%),
-    repeating-linear-gradient(45deg, rgba(30,48,112,0.03) 0 1px, transparent 1px 3px) !important;
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--sec, #1e3070) 3%, transparent) 0 1px, transparent 1px 3px) !important;
 }
 
 .personal-panel .roles-list-wrap,
@@ -42,7 +42,7 @@
 
 /* ─── Tab strip → ribbon ──────────────────────────────────────────────────── */
 .personal-panel .personal-inline-tabs {
-  background: linear-gradient(#a23b3b, #872f2f) !important;
+  background: linear-gradient(var(--sec-dark, #a23b3b), var(--sec-dark, #872f2f)) !important;
   border-bottom: 3px solid #ffffff !important;
 }
 .personal-panel .personal-inline-tab {
@@ -61,16 +61,16 @@
 }
 
 @media (max-width: 768px) {
-  .personal-panel .personal-inline-tabs { background: #872f2f !important; }
+  .personal-panel .personal-inline-tabs { background: var(--sec-dark, #872f2f) !important; }
   .personal-panel .personal-inline-tab {
     background: #ffffff !important;
-    color: #872f2f !important;
-    border-color: #1e3070 !important;
+    color: var(--sec-dark, #872f2f) !important;
+    border-color: var(--sec, #1e3070) !important;
   }
   .personal-panel .personal-inline-tab.active {
-    background: #872f2f !important;
+    background: var(--sec-dark, #872f2f) !important;
     color: #fff !important;
-    border-color: #872f2f !important;
+    border-color: var(--sec-dark, #872f2f) !important;
   }
 }
 
@@ -89,8 +89,8 @@
 .personal-panel .values-list-header,
 .personal-panel .roles-detail-nav,
 .personal-panel .mantra-header {
-  background: linear-gradient(#1e3070, #142057) !important;
-  border-bottom: 2px solid #a23b3b !important;
+  background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important;
+  border-bottom: 2px solid var(--sec-dark, #a23b3b) !important;
 }
 
 .personal-panel .goals-title,
@@ -115,14 +115,14 @@
 .personal-panel .values-list-title::before,
 .personal-panel .mantra-title::before {
   content: "\2605";
-  color: #a23b3b;
+  color: var(--sec-dark, #a23b3b);
   font-size: 0.75em;
 }
 
 /* Wants header → navy ribbon, matching the other section headers */
 .personal-panel .wants-header {
-  background: linear-gradient(#1e3070, #142057) !important;
-  border-bottom: 2px solid #a23b3b !important;
+  background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important;
+  border-bottom: 2px solid var(--sec-dark, #a23b3b) !important;
   margin: 0 -12px 4px;
   padding: 10px 12px 8px !important;
 }
@@ -136,7 +136,7 @@
 }
 .personal-panel .wants-title::before {
   content: "\2605";
-  color: #a23b3b;
+  color: var(--sec-dark, #a23b3b);
   font-size: 0.75em;
 }
 
@@ -148,7 +148,7 @@
 .personal-panel .video-card,
 .personal-panel .value-group {
   background: #ffffff !important;
-  border-color: #1e3070 !important;
+  border-color: var(--sec, #1e3070) !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
   transform: none !important;
   transition: box-shadow 0.18s !important;
@@ -160,20 +160,20 @@
   box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
 }
 
-.personal-panel .book-card-spine { border-top-color: #a23b3b !important; }
-.personal-panel .video-thumb { background: #872f2f !important; }
+.personal-panel .book-card-spine { border-top-color: var(--sec-dark, #a23b3b) !important; }
+.personal-panel .video-thumb { background: var(--sec-dark, #872f2f) !important; }
 
 .personal-panel .value-group {
   border-left-width: 6px !important;
 }
 
 /* Remaining gold accents (tabs, badges, buttons) → red/white/blue */
-.personal-panel .shelf-tab.active { border-bottom-color: #a23b3b !important; }
-.personal-panel .shelf-badge { background: rgba(162,59,59,0.18) !important; color: #a23b3b !important; }
+.personal-panel .shelf-tab.active { border-bottom-color: var(--sec-dark, #a23b3b) !important; }
+.personal-panel .shelf-badge { background: color-mix(in srgb, var(--sec-dark, #a23b3b) 18%, transparent) !important; color: var(--sec-dark, #a23b3b) !important; }
 .personal-panel .import-btn,
 .personal-panel .add-video-btn,
 .personal-panel .add-link-btn {
-  background: #a23b3b !important;
+  background: var(--sec-dark, #a23b3b) !important;
   color: #ffffff !important;
 }
 .personal-panel .roles-linked-cat { color: #ffffff !important; }
@@ -181,29 +181,29 @@
 /* Role cards (list-style, not tiled) — recolor accent, keep as rows */
 .personal-panel .roles-card {
   background: #ffffff !important;
-  border-left-color: #a23b3b !important;
+  border-left-color: var(--sec-dark, #a23b3b) !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
-.personal-panel .roles-card:nth-child(even) { border-left-color: #1e3070 !important; }
+.personal-panel .roles-card:nth-child(even) { border-left-color: var(--sec, #1e3070) !important; }
 .personal-panel .roles-card-name { font-family: Georgia, 'Iowan Old Style', serif !important; }
 
 /* ─── Mantra / mission content ────────────────────────────────────────────── */
 .personal-panel .mantra-content,
 .personal-panel .mantra-textarea {
   background-color: #ffffff !important;
-  border-color: #1e3070 !important;
+  border-color: var(--sec, #1e3070) !important;
 }
 .personal-panel .mantra-paragraph {
   color: #16233d !important;
 }
 .personal-panel .mantra-subtab {
   background: #ffffff !important;
-  border-color: #1e3070 !important;
-  color: #872f2f !important;
+  border-color: var(--sec, #1e3070) !important;
+  color: var(--sec-dark, #872f2f) !important;
 }
 .personal-panel .mantra-subtab.active {
-  background: #872f2f !important;
-  border-color: #872f2f !important;
+  background: var(--sec-dark, #872f2f) !important;
+  border-color: var(--sec-dark, #872f2f) !important;
   color: #fff !important;
 }
 
@@ -213,7 +213,7 @@
 }
 .personal-panel .checklist-table thead th,
 .personal-panel .checklist-table thead th.task-col {
-  background: linear-gradient(#1e3070, #142057) !important;
+  background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important;
 }
 
 /* ══════════════════════════ Eisenhower Matrix ════════════════════════════ */
@@ -222,16 +222,16 @@
 .em-root {
   background-color: #ffffff !important;
   background-image:
-    radial-gradient(circle at 18% 28%, rgba(30,48,112,0.08) 0, transparent 45%),
-    radial-gradient(circle at 82% 68%, rgba(162,59,59,0.06) 0, transparent 50%),
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--sec, #1e3070) 8%, transparent) 0, transparent 45%),
+    radial-gradient(circle at 82% 68%, color-mix(in srgb, var(--sec-dark, #a23b3b) 6%, transparent) 0, transparent 50%),
     radial-gradient(circle at 55% 10%, rgba(255,255,255,0.28) 0, transparent 40%),
-    repeating-linear-gradient(45deg, rgba(30,48,112,0.03) 0 1px, transparent 1px 3px) !important;
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--sec, #1e3070) 3%, transparent) 0 1px, transparent 1px 3px) !important;
 }
 
 /* ─── Axis headers → ribbon ───────────────────────────────────────────────── */
 .em-root .em-col-header,
 .em-root .em-row-header {
-  background: linear-gradient(#a23b3b, #872f2f) !important;
+  background: linear-gradient(var(--sec-dark, #a23b3b), var(--sec-dark, #872f2f)) !important;
   font-family: Georgia, 'Iowan Old Style', serif;
   letter-spacing: 1.2px;
 }
@@ -241,7 +241,7 @@
 /* ─── Quadrant cards → pinned index cards ─────────────────────────────────── */
 .em-root .em-quadrant {
   background: #ffffff !important;
-  border-color: #1e3070 !important;
+  border-color: var(--sec, #1e3070) !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
   transition: box-shadow 0.18s;
 }
@@ -259,14 +259,14 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e0715a, #a23b3b 70%);
+  background: radial-gradient(circle at 35% 30%, #e0715a, var(--sec-dark, #a23b3b) 70%);
   box-shadow: 0 1px 2px rgba(0,0,0,0.35);
   z-index: 2;
 }
 
 .em-root .em-q-header {
-  background: linear-gradient(#1e3070, #142057) !important;
-  border-bottom: 2px solid #a23b3b !important;
+  background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important;
+  border-bottom: 2px solid var(--sec-dark, #a23b3b) !important;
 }
 .em-root .em-q-label {
   font-family: Georgia, 'Iowan Old Style', serif !important;
@@ -277,35 +277,35 @@
 }
 .em-root .em-q-label::before {
   content: "\2605";
-  color: #a23b3b;
+  color: var(--sec-dark, #a23b3b);
   font-size: 0.85em;
 }
 .em-root .em-q-count {
-  background: #a23b3b !important;
+  background: var(--sec-dark, #a23b3b) !important;
 }
 
 /* ─── Unassigned pile → loose card stack ──────────────────────────────────── */
 .em-root .em-unassigned {
   background: #ffffff !important;
-  border-color: #1e3070 !important;
+  border-color: var(--sec, #1e3070) !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
 .em-root .em-unassigned-hdr {
-  background: linear-gradient(#1e3070, #142057) !important;
+  background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important;
   color: #ffffff !important;
   font-family: Georgia, 'Iowan Old Style', serif !important;
   letter-spacing: 0.06em !important;
-  border-bottom: 2px solid #a23b3b !important;
+  border-bottom: 2px solid var(--sec-dark, #a23b3b) !important;
 }
-.em-root .em-unassigned-row { border-bottom-color: rgba(30,48,112,0.3) !important; }
+.em-root .em-unassigned-row { border-bottom-color: color-mix(in srgb, var(--sec, #1e3070) 30%, transparent) !important; }
 
 .em-root .em-assign-btn {
-  background: #872f2f !important;
+  background: var(--sec-dark, #872f2f) !important;
   border-color: #ffffff !important;
   clip-path: polygon(6% 0%, 100% 0%, 100% 100%, 6% 100%, 0% 50%);
   padding-left: 9px !important;
 }
-.em-root .em-assign-btn:hover { background: #a23b3b !important; }
+.em-root .em-assign-btn:hover { background: var(--sec-dark, #a23b3b) !important; }
 
 /* ══════════════════════════ Shared kraft-paper ground ═══════════════════ */
 /* Same texture used by .personal-panel/.em-root, reused verbatim for every
@@ -317,26 +317,26 @@
 .icaap-tracker {
   background-color: #ffffff !important;
   background-image:
-    radial-gradient(circle at 18% 28%, rgba(30,48,112,0.08) 0, transparent 45%),
-    radial-gradient(circle at 82% 68%, rgba(162,59,59,0.06) 0, transparent 50%),
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--sec, #1e3070) 8%, transparent) 0, transparent 45%),
+    radial-gradient(circle at 82% 68%, color-mix(in srgb, var(--sec-dark, #a23b3b) 6%, transparent) 0, transparent 50%),
     radial-gradient(circle at 55% 10%, rgba(255,255,255,0.28) 0, transparent 40%),
-    repeating-linear-gradient(45deg, rgba(30,48,112,0.03) 0 1px, transparent 1px 3px) !important;
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--sec, #1e3070) 3%, transparent) 0 1px, transparent 1px 3px) !important;
 }
 
 /* ══════════════════════════ Master Tasks ═════════════════════════════════ */
-.master-tasks-wrap .dash-page-header { border-bottom-color: #a23b3b !important; }
+.master-tasks-wrap .dash-page-header { border-bottom-color: var(--sec-dark, #a23b3b) !important; }
 .master-tasks-wrap .dash-card {
   background: #ffffff !important;
-  border: 1px solid #1e3070;
+  border: 1px solid var(--sec, #1e3070);
   box-shadow: 0 3px 8px rgba(0,0,0,0.15);
   transition: box-shadow 0.18s;
 }
 .master-tasks-wrap .dash-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
 
 /* ══════════════════════════ CSEA ═════════════════════════════════════════ */
-.csea-tracker .csea-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
+.csea-tracker .csea-tabs { background: linear-gradient(var(--sec-dark, #a23b3b), var(--sec-dark, #872f2f)) !important; border-bottom: 2px solid #ffffff !important; }
 .csea-tracker .csea-tab.active { border-bottom-color: #ffffff !important; }
-.csea-tracker .csea-stats { background: linear-gradient(#1e3070, #142057) !important; border-bottom-color: #a23b3b !important; }
+.csea-tracker .csea-stats { background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important; border-bottom-color: var(--sec-dark, #a23b3b) !important; }
 
 .csea-tracker .issue-card,
 .csea-tracker .interaction-group,
@@ -371,24 +371,24 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e0715a, #a23b3b 70%);
+  background: radial-gradient(circle at 35% 30%, #e0715a, var(--sec-dark, #a23b3b) 70%);
   box-shadow: 0 1px 2px rgba(0,0,0,0.35);
   z-index: 2;
 }
 
 /* ══════════════════════════ GCU ══════════════════════════════════════════ */
-.gcu-panel .gcu-progress-section { border-bottom: 3px solid #a23b3b !important; }
+.gcu-panel .gcu-progress-section { border-bottom: 3px solid var(--sec-dark, #a23b3b) !important; }
 .gcu-panel .gcu-group {
   background: #ffffff !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
 }
-.gcu-panel .gcu-group-label { border-bottom: 2px solid #a23b3b !important; }
+.gcu-panel .gcu-group-label { border-bottom: 2px solid var(--sec-dark, #a23b3b) !important; }
 
 /* ══════════════════════════ HOA ══════════════════════════════════════════ */
-.hoa-panel .hoa-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
+.hoa-panel .hoa-tabs { background: linear-gradient(var(--sec-dark, #a23b3b), var(--sec-dark, #872f2f)) !important; border-bottom: 2px solid #ffffff !important; }
 .hoa-panel .hoa-tab.active { border-bottom-color: #ffffff !important; }
-.hoa-panel .hoa-header { border-bottom: 2px solid #a23b3b !important; }
-.hoa-panel .hoa-stats { background: linear-gradient(#1e3070, #142057) !important; }
+.hoa-panel .hoa-header { border-bottom: 2px solid var(--sec-dark, #a23b3b) !important; }
+.hoa-panel .hoa-stats { background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important; }
 
 .hoa-panel .hoa-group,
 .hoa-panel .hoa-group-card.standalone {
@@ -412,15 +412,15 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e0715a, #a23b3b 70%);
+  background: radial-gradient(circle at 35% 30%, #e0715a, var(--sec-dark, #a23b3b) 70%);
   box-shadow: 0 1px 2px rgba(0,0,0,0.35);
   z-index: 2;
 }
 
 /* ══════════════════════════ iCAAP ════════════════════════════════════════ */
-.icaap-tracker .icaap-tabs { background: linear-gradient(#a23b3b, #872f2f) !important; border-bottom: 2px solid #ffffff !important; }
+.icaap-tracker .icaap-tabs { background: linear-gradient(var(--sec-dark, #a23b3b), var(--sec-dark, #872f2f)) !important; border-bottom: 2px solid #ffffff !important; }
 .icaap-tracker .icaap-tab.active { border-bottom-color: #ffffff !important; }
-.icaap-tracker .icaap-stats { background: linear-gradient(#1e3070, #142057) !important; }
+.icaap-tracker .icaap-stats { background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important; }
 .icaap-tracker .icaap-card {
   background: #ffffff !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
@@ -430,7 +430,7 @@
 /* ══════════════════════ Unified Matrix-style tables ══════════════════════ */
 /* Give every module page's tables the same clean "index-card + navy header"
    treatment as the Eisenhower Matrix quadrants: a white card shell with a
-   #1e3070 hairline, a navy serif header row accented in barn-red (#a23b3b),
+   var(--sec, #1e3070) hairline, a navy serif header row accented in barn-red (var(--sec-dark, #a23b3b)),
    hairline row separators, gentle zebra striping, and a navy hover tint.
    Scoped per page root so the Today/Week/Month dashboard tables are untouched. */
 .csea-tracker [class*="table"][class*="wrap"],
@@ -439,7 +439,7 @@
 .icaap-tracker [class*="table"][class*="wrap"],
 .personal-panel [class*="table"][class*="wrap"] {
   background: #ffffff !important;
-  border: 1px solid #1e3070 !important;
+  border: 1px solid var(--sec, #1e3070) !important;
   border-radius: 10px !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15) !important;
   overflow: auto !important;
@@ -460,13 +460,13 @@
 .hoa-panel table thead th,
 .icaap-tracker table thead th,
 .personal-panel table thead th {
-  background: linear-gradient(#1e3070, #142057) !important;
+  background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important;
   color: #ffffff !important;
   font-family: Georgia, 'Iowan Old Style', serif !important;
   font-weight: 700 !important;
   letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
-  border-bottom: 2px solid #a23b3b !important;
+  border-bottom: 2px solid var(--sec-dark, #a23b3b) !important;
   border-right: 1px solid rgba(255,255,255,0.12) !important;
 }
 .csea-tracker table thead th:last-child,
@@ -481,22 +481,22 @@
 .hoa-panel table tbody td,
 .icaap-tracker table tbody td,
 .personal-panel table tbody td {
-  border-bottom: 1px solid rgba(30,48,112,0.14) !important;
-  color: #1e3070 !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--sec, #1e3070) 14%, transparent) !important;
+  color: var(--sec, #1e3070) !important;
 }
 .csea-tracker table tbody tr:nth-child(even),
 .gcu-panel table tbody tr:nth-child(even),
 .hoa-panel table tbody tr:nth-child(even),
 .icaap-tracker table tbody tr:nth-child(even),
 .personal-panel table tbody tr:nth-child(even) {
-  background: rgba(30,48,112,0.03) !important;
+  background: color-mix(in srgb, var(--sec, #1e3070) 3%, transparent) !important;
 }
 .csea-tracker table tbody tr:hover,
 .gcu-panel table tbody tr:hover,
 .hoa-panel table tbody tr:hover,
 .icaap-tracker table tbody tr:hover,
 .personal-panel table tbody tr:hover {
-  background: rgba(30,48,112,0.07) !important;
+  background: color-mix(in srgb, var(--sec, #1e3070) 7%, transparent) !important;
 }
 
 /* Count chips → barn-red pill, matching the Matrix .em-q-count badge */
@@ -508,7 +508,7 @@
 .interaction-group-count,
 .issue-notes-count,
 .rif-summary-count {
-  background: #a23b3b !important;
+  background: var(--sec-dark, #a23b3b) !important;
   color: #ffffff !important;
   border-radius: 10px !important;
   padding: 0 7px !important;
@@ -519,7 +519,7 @@
 
 /* ══════════════════ Navy-ribbon section headers ══════════════════════════ */
 /* Card-based sections (not just tables) get the same navy ribbon as the
-   Eisenhower Matrix quadrant header (.em-q-header): a #1e3070→#142057 bar
+   Eisenhower Matrix quadrant header (.em-q-header): a var(--sec, #1e3070)→var(--sec-dark, #142057) bar
    accented in barn-red, white Georgia-serif title, and a red ★ before the
    name. Applied only to the clean "shelf" headers whose content is a title +
    count/toggle — item-level headers that carry semantic color coding
@@ -531,8 +531,8 @@
 .icaap-tracker .interaction-group-header,
 .personal-panel .interaction-group-header,
 .hoa-panel .hoa-group-header {
-  background: linear-gradient(#1e3070, #142057) !important;
-  border-bottom: 2px solid #a23b3b !important;
+  background: linear-gradient(var(--sec, #1e3070), var(--sec-dark, #142057)) !important;
+  border-bottom: 2px solid var(--sec-dark, #a23b3b) !important;
 }
 
 /* Title text → white serif, mirroring .em-q-label */

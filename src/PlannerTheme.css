@@ -6,18 +6,18 @@
 
 /* ─── Design tokens ─────────────────────────────────────────────────────── */
 :root {
-  --pt-bg:         #f5f7fa;   /* CSEA light bg */
-  --pt-bg-alt:     #eef2f7;   /* slightly deeper for alt rows / headers */
+  --pt-bg:         var(--sec-softer, #f5f7fa);   /* CSEA light bg */
+  --pt-bg-alt:     var(--sec-softer, #eef2f7);   /* slightly deeper for alt rows / headers */
   --pt-bg-card:    #ffffff;   /* card surface */
   --pt-border:     #bfbfbf;   /* CSEA border gray */
-  --pt-border-lt:  rgba(30,48,112,0.15); /* subtle line */
+  --pt-border-lt:  color-mix(in srgb, var(--sec, #1e3070) 15%, transparent); /* subtle line */
   --pt-text:       #222222;   /* CSEA body text */
   --pt-text-2:     #53575a;   /* CSEA dark gray */
   --pt-text-muted: #8a8a8a;   /* muted / labels */
-  --pt-accent:     #1e3070;   /* CSEA link blue */
-  --pt-accent2:    #1e3070;   /* CSEA navy */
-  --pt-header-bg:  #1e3070;   /* CSEA primary navy */
-  --pt-header-alt: #dce6f5;   /* CSEA light blue bg */
+  --pt-accent:     var(--sec, #1e3070);   /* CSEA link blue */
+  --pt-accent2:    var(--sec, #1e3070);   /* CSEA navy */
+  --pt-header-bg:  var(--sec, #1e3070);   /* CSEA primary navy */
+  --pt-header-alt: var(--sec-soft, #dce6f5);   /* CSEA light blue bg */
   --pt-line: repeating-linear-gradient(
     transparent, transparent 27px,
     rgba(191,191,191,0.38) 27px,
@@ -50,7 +50,7 @@
 
 .week-title,
 .week-nav-btn {
-  color: #f5f7fa !important;
+  color: var(--sec-softer, #f5f7fa) !important;
 }
 
 /* Month view nav */
@@ -78,10 +78,10 @@
   background: var(--pt-bg) !important;
   border-color: var(--pt-border-lt) !important;
 }
-.month-cell:hover  { background: #f5f7fa !important; }
-.month-cell.today  { background: #f5f7fa !important; }
+.month-cell:hover  { background: var(--sec-softer, #f5f7fa) !important; }
+.month-cell.today  { background: var(--sec-softer, #f5f7fa) !important; }
 .month-cell.selected {
-  background: #f5f7fa !important;
+  background: var(--sec-softer, #f5f7fa) !important;
   outline-color: var(--pt-accent) !important;
 }
 .month-cell-num    { color: var(--pt-text) !important; }
@@ -107,7 +107,7 @@
 .icaap-item-row:hover,
 .fin-row:hover,
 .library-book-row:hover {
-  background: #f5f7fa !important;
+  background: var(--sec-softer, #f5f7fa) !important;
 }
 
 /* ─── Cards ──────────────────────────────────────────────────────────────── */
@@ -177,7 +177,7 @@ select:focus {
 }
 .week-day-row:nth-child(odd)  { background: var(--pt-bg) !important; }
 .week-day-row:nth-child(even) { background: var(--pt-bg-alt) !important; }
-.week-day-row.week-day-today  { background: #f5f7fa !important; }
+.week-day-row.week-day-today  { background: var(--sec-softer, #f5f7fa) !important; }
 
 .week-day-header {
   background: var(--pt-bg-alt) !important;
@@ -267,7 +267,7 @@ select:focus {
 .login-card  {
   background: #fff !important;
   border: 1px solid var(--pt-border) !important;
-  box-shadow: 0 4px 40px rgba(30,48,112,0.12) !important;
+  box-shadow: 0 4px 40px color-mix(in srgb, var(--sec, #1e3070) 12%, transparent) !important;
 }
 .login-name  { color: var(--pt-text) !important; font-family: 'Georgia', serif !important; }
 .login-divider { background: var(--pt-border) !important; }
@@ -290,7 +290,7 @@ select:focus {
 /* ─── Sidebar ────────────────────────────────────────────────────────────── */
 .sidebar {
   background: var(--pt-header-bg) !important;
-  color: #f5f7fa !important;
+  color: var(--sec-softer, #f5f7fa) !important;
 }
 .sidebar-nav-section-label {
   color: rgba(232,228,216,0.45) !important;
@@ -303,13 +303,13 @@ select:focus {
   color: #fff !important;
 }
 .sidebar-nav-item.active {
-  background: rgba(30,48,112,0.22) !important;
+  background: color-mix(in srgb, var(--sec, #1e3070) 22%, transparent) !important;
   border-left-color: var(--pt-accent) !important;
   color: #fff !important;
 }
 .sidebar-logo-text,
 .sidebar-app-name {
-  color: #f5f7fa !important;
+  color: var(--sec-softer, #f5f7fa) !important;
 }
 .sidebar-collapse-btn {
   color: rgba(232,228,216,0.5) !important;
@@ -318,7 +318,7 @@ select:focus {
   color: #fff !important;
   background: rgba(255,255,255,0.08) !important;
 }
-.sidebar-user-name { color: #f5f7fa !important; }
+.sidebar-user-name { color: var(--sec-softer, #f5f7fa) !important; }
 .sidebar-user-email,
 .sidebar-signout { color: rgba(232,228,216,0.5) !important; }
 
@@ -329,7 +329,7 @@ select:focus {
 /* ─── GCU course rows ────────────────────────────────────────────────────── */
 .gcu-course-row:nth-child(odd)  { background: var(--pt-bg) !important; }
 .gcu-course-row:nth-child(even) { background: var(--pt-bg-alt) !important; }
-.gcu-course-row:hover           { background: #f5f7fa !important; }
+.gcu-course-row:hover           { background: var(--sec-softer, #f5f7fa) !important; }
 .gcu-panel { background: var(--pt-bg) !important; }
 .gcu-body  { background: var(--pt-bg) !important; }
 .gcu-course-section { background: var(--pt-bg) !important; border-color: var(--pt-border) !important; }
@@ -415,7 +415,7 @@ select:focus {
 
 /* ─── Real app chrome (DashboardView's own sidebar — Sidebar.jsx is unused) ── */
 .dash-sidebar {
-  background: linear-gradient(180deg, #1e3070, #16244f) !important;
+  background: linear-gradient(180deg, var(--sec, #1e3070), #16244f) !important;
 }
 .dash-brand {
   display: flex !important;
@@ -424,7 +424,7 @@ select:focus {
   padding: 14px 14px 12px !important;
 }
 .dash-brand-icon {
-  color: #a23b3b;
+  color: var(--sec-dark, #a23b3b);
   font-size: 13px;
 }
 .dash-brand-name {

@@ -495,7 +495,7 @@ function PersonnelCommissionPanel({ api }) {
               {PC_CASE_TYPES.map(t => (
                 <button key={t} type="button"
                   className={`type-btn ${api.pcForm.case_type === t ? 'active' : ''}`}
-                  style={{ '--tc': '#1e3070' }}
+                  style={{ '--tc': 'var(--sec, #1e3070)' }}
                   onClick={() => api.setPcForm(f => ({ ...f, case_type: t }))}
                 >{t}</button>
               ))}
@@ -562,7 +562,7 @@ function PcCaseCard({ pcCase, onUpdateStatus, onDelete, notes = [], onAddNote, o
   return (
     <div className={`issue-card ${!PC_OPEN_STATUSES.includes(pcCase.status) ? 'resolved' : ''} ${expanded ? 'expanded' : ''}`}>
       <div className="issue-header" onClick={() => setExpanded(e => !e)}>
-        <span className="issue-type-badge" style={{ background: '#1e307022', color: '#1e3070' }}>
+        <span className="issue-type-badge" style={{ background: 'color-mix(in srgb, var(--sec, #1e3070) 13%, transparent)', color: 'var(--sec, #1e3070)' }}>
           {pcCase.case_type}
         </span>
         <span className="issue-member">{pcCase.member_name}</span>

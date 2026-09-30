@@ -5,18 +5,18 @@
   min-height: 0;
   overflow: hidden;
   background: #ffffff;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 
 .wants-header {
   padding: 10px 16px 8px;
-  border-bottom: 2px solid #0d1a40;
+  border-bottom: 2px solid var(--sec-dark, #0d1a40);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-shrink: 0;
-  background: #1e3070;
+  background: var(--sec, #1e3070);
 }
 
 .wants-title {
@@ -84,7 +84,7 @@
 
 /* ---- First-run setup / import card ---- */
 .wants-setup {
-  border: 1px solid #d9e8f0;
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 10px;
   background: #f7fafc;
   padding: 20px;
@@ -94,7 +94,7 @@
 }
 .wants-setup-title {
   font-size: 16px;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   margin: 0 0 8px;
 }
 .wants-setup-text {
@@ -104,7 +104,7 @@
   margin: 0 0 16px;
 }
 .wants-setup-btn {
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -126,7 +126,7 @@
   justify-content: space-between;
   font-size: 12px;
   font-weight: 600;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
 }
 .wants-progress-track {
   height: 8px;
@@ -149,7 +149,7 @@
   gap: 6px;
 }
 .wants-chip {
-  --chip-color: #1e3070;
+  --chip-color: var(--sec, #1e3070);
   border: 1px solid var(--chip-color);
   color: var(--chip-color);
   background: #fff;
@@ -186,9 +186,9 @@
   font-size: 13px;
   outline: none;
 }
-.wants-add-input:focus { border-color: #1e3070; }
+.wants-add-input:focus { border-color: var(--sec, #1e3070); }
 .wants-add-btn {
-  background: #1e3070;
+  background: var(--sec, #1e3070);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -213,7 +213,7 @@
   gap: 10px;
   padding: 12px 14px;
   background: #fff;
-  border: 1px solid #d9e8f0;
+  border: 1px solid var(--sec-soft, #d9e8f0);
   border-radius: 10px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: box-shadow 0.15s, opacity 0.15s, transform 0.15s;
@@ -246,7 +246,7 @@
   flex-shrink: 0;
   font-size: 11px;
   font-weight: 700;
-  color: #1e3070;
+  color: var(--sec, #1e3070);
   min-width: 22px;
   text-align: right;
   margin-top: 3px;
@@ -299,7 +299,7 @@
   background: transparent;
   color: #222;
   padding: 0;
-  border-bottom: 1px solid #1e3070;
+  border-bottom: 1px solid var(--sec, #1e3070);
 }
 
 .wants-cat-select {
