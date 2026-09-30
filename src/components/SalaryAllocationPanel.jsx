@@ -1,22 +1,22 @@
 import './SalaryAllocationPanel.css'
 
-// Salary Allocation — Alpha Work, Lunch & Break Schedules
+// Salary Allocation — Alpha Work assignments
 // 2026-2027 School Year · Effective 08/10/2026
 // Source: Salary_Allocation_Lunch_Schedules_08102026.pdf
 
 // Names in "First Last" format. Sorted by Alpha caseload range (A→Z) so you
 // can find a member's last name and see which SCA to contact; SUPV last.
 const SCHEDULE = [
-  { sca: 'Roberta Barrera',  group: 2, ext: '29040', alpha: 'A - BRING',        hub: 'North', lunch: '1:30 - 2:30',  break: '11:00 - 11:20' },
-  { sca: 'Clara Velasquez',  group: 2, ext: '29064', alpha: 'BRINH - DEC',      hub: 'West',  lunch: '12:00 - 1:00', break: '3:10 - 3:30' },
-  { sca: 'Tasha Hardy',      group: 1, ext: '12480', alpha: 'DED - GILA',       hub: 'North', lunch: '12:00 - 1:00', break: '10:00 - 10:20' },
-  { sca: 'Danita Hamptonie', group: 2, ext: '29048', alpha: 'GILB - JIL',       hub: 'West',  lunch: '1:30 - 2:30',  break: '10:00 - 10:20' },
-  { sca: 'Marcia Mendoza',   group: 1, ext: '15296', alpha: 'JIM - MARTE',      hub: 'South', lunch: '1:30 - 2:30',  break: '11:00 - 11:20' },
-  { sca: 'Cecile Natividad', group: 1, ext: '16138', alpha: 'MARTF - OHAR',     hub: 'North', lunch: '12:30 - 1:30', break: '10:30 - 10:50' },
-  { sca: 'Maria Mejia',      group: 2, ext: '29050', alpha: 'OHAS - RIVERA, K', hub: 'East',  lunch: '12:00 - 1:00', break: '3:10 - 3:30' },
-  { sca: 'Veronica Rito',    group: 1, ext: '29056', alpha: 'RIVERA, L - SWA',  hub: 'East',  lunch: '12:30 - 1:30', break: '10:40 - 11:00' },
-  { sca: 'Deserine Estrada', group: 2, ext: '29034', alpha: 'SWB - Z',          hub: 'South', lunch: '12:30 - 1:30', break: '3:10 - 3:30' },
-  { sca: 'Brenda Neblett',   group: 1, ext: '18331', alpha: 'SUPV',             hub: 'West',  lunch: '1:00 - 2:00',  break: '11:00 - 11:20' },
+  { sca: 'Roberta Barrera',  group: 2, ext: '29040', alpha: 'A - BRING',        hub: 'North' },
+  { sca: 'Clara Velasquez',  group: 2, ext: '29064', alpha: 'BRINH - DEC',      hub: 'West' },
+  { sca: 'Tasha Hardy',      group: 1, ext: '12480', alpha: 'DED - GILA',       hub: 'North' },
+  { sca: 'Danita Hamptonie', group: 2, ext: '29048', alpha: 'GILB - JIL',       hub: 'West' },
+  { sca: 'Marcia Mendoza',   group: 1, ext: '15296', alpha: 'JIM - MARTE',      hub: 'South' },
+  { sca: 'Cecile Natividad', group: 1, ext: '16138', alpha: 'MARTF - OHAR',     hub: 'North' },
+  { sca: 'Maria Mejia',      group: 2, ext: '29050', alpha: 'OHAS - RIVERA, K', hub: 'East' },
+  { sca: 'Veronica Rito',    group: 1, ext: '29056', alpha: 'RIVERA, L - SWA',  hub: 'East' },
+  { sca: 'Deserine Estrada', group: 2, ext: '29034', alpha: 'SWB - Z',          hub: 'South' },
+  { sca: 'Brenda Neblett',   group: 1, ext: '18331', alpha: 'SUPV',             hub: 'West' },
 ]
 
 const HUB_COLORS = {
@@ -30,7 +30,7 @@ export default function SalaryAllocationPanel() {
   return (
     <div className="salloc-panel">
       <div className="salloc-header">
-        <h2 className="salloc-title">Salary Allocation — Alpha Work, Lunch &amp; Break Schedules</h2>
+        <h2 className="salloc-title">Salary Allocation — Alpha Work</h2>
         <span className="salloc-subtitle">2026–2027 School Year · Effective 08/10/2026</span>
       </div>
 
@@ -52,8 +52,6 @@ export default function SalaryAllocationPanel() {
                   <th>Extension</th>
                   <th>Group</th>
                   <th>HUB</th>
-                  <th>Lunch</th>
-                  <th>Break</th>
                 </tr>
               </thead>
               <tbody>
@@ -68,8 +66,6 @@ export default function SalaryAllocationPanel() {
                     <td className="salloc-center">
                       <span className="salloc-hub" style={{ background: HUB_COLORS[row.hub] || '#888' }}>{row.hub}</span>
                     </td>
-                    <td className="salloc-center salloc-time">{row.lunch}</td>
-                    <td className="salloc-center salloc-time">{row.break}</td>
                   </tr>
                 ))}
               </tbody>
