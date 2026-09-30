@@ -1142,24 +1142,26 @@ button.dash-inspiration-card {
   animation: fc-page-turn 0.62s cubic-bezier(0.34, 0.86, 0.4, 1);
   z-index: 2;
 }
-/* Every leaf turns exactly like the Today page: hinged on its left edge (the
-   binding), so it swings over and settles flat like a real book page instead
-   of spinning around its middle. */
+/* The incoming leaf is hinged on the side it sweeps away from, so the motion
+   reads in the turn direction: a forward turn swings in from the right edge
+   and sweeps right → left; a back turn swings in from the left edge and
+   sweeps left → right. */
 .fc-page-right,
-.fc-single-page { transform-origin: left center; }
+.fc-single-page { transform-origin: right center; }
 
 .fc-dir-up .fc-page-right,
 .fc-dir-up .fc-single-page {
+  transform-origin: left center;
   animation-name: fc-page-turn-back;
 }
-/* Forward turn — the leaf lifts and drops right → left */
+/* Forward turn — the leaf lifts off the right and drops right → left */
 @keyframes fc-page-turn {
-  from { transform: perspective(2400px) rotateY(-105deg); }
+  from { transform: perspective(2400px) rotateY(105deg); }
   to   { transform: perspective(2400px) rotateY(0deg); }
 }
-/* Back turn — the leaf lifts and drops left → right */
+/* Back turn — the leaf lifts off the left and drops left → right */
 @keyframes fc-page-turn-back {
-  from { transform: perspective(2400px) rotateY(105deg); }
+  from { transform: perspective(2400px) rotateY(-105deg); }
   to   { transform: perspective(2400px) rotateY(0deg); }
 }
 /* The soft shadow a real leaf casts as it settles onto the spread */
@@ -1171,12 +1173,12 @@ button.dash-inspiration-card {
   pointer-events: none;
   z-index: 6;
   opacity: 0;
-  background: linear-gradient(100deg, rgba(20,12,4,0.34), rgba(20,12,4,0) 48%);
+  background: linear-gradient(260deg, rgba(20,12,4,0.34), rgba(20,12,4,0) 48%);
   animation: fc-turn-shade 0.62s ease-out;
 }
 .fc-dir-up .fc-page-right::after,
 .fc-dir-up .fc-single-page::after {
-  background: linear-gradient(260deg, rgba(20,12,4,0.34), rgba(20,12,4,0) 48%);
+  background: linear-gradient(100deg, rgba(20,12,4,0.34), rgba(20,12,4,0) 48%);
 }
 @keyframes fc-turn-shade {
   0%   { opacity: 0.85; }
