@@ -38,37 +38,44 @@ export default function SalaryAllocationPanel() {
         Find the member's last name in the <strong>Alpha</strong> range, then contact that SCA about their Salary Allocation.
       </p>
 
-      <div className="salloc-table-wrap">
-        <table className="salloc-table">
-          <thead>
-            <tr>
-              <th className="salloc-alpha-col">Alpha (Caseload Range)</th>
-              <th>SCA — Contact</th>
-              <th>Extension</th>
-              <th>Group</th>
-              <th>HUB</th>
-              <th>Lunch</th>
-              <th>Break</th>
-            </tr>
-          </thead>
-          <tbody>
-            {SCHEDULE.map(row => (
-              <tr key={row.ext}>
-                <td className="salloc-alpha">{row.alpha}</td>
-                <td className="salloc-name">{row.sca}</td>
-                <td className="salloc-center salloc-ext">{row.ext}</td>
-                <td className="salloc-center">
-                  <span className={`salloc-group salloc-group-${row.group}`}>{row.group}</span>
-                </td>
-                <td className="salloc-center">
-                  <span className="salloc-hub" style={{ background: HUB_COLORS[row.hub] || '#888' }}>{row.hub}</span>
-                </td>
-                <td className="salloc-center salloc-time">{row.lunch}</td>
-                <td className="salloc-center salloc-time">{row.break}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="salloc-tables">
+        {[
+          SCHEDULE.slice(0, Math.ceil(SCHEDULE.length / 2)),
+          SCHEDULE.slice(Math.ceil(SCHEDULE.length / 2)),
+        ].map((rows, i) => (
+          <div className="salloc-table-wrap" key={i}>
+            <table className="salloc-table">
+              <thead>
+                <tr>
+                  <th className="salloc-alpha-col">Alpha (Caseload Range)</th>
+                  <th>SCA — Contact</th>
+                  <th>Extension</th>
+                  <th>Group</th>
+                  <th>HUB</th>
+                  <th>Lunch</th>
+                  <th>Break</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map(row => (
+                  <tr key={row.ext}>
+                    <td className="salloc-alpha">{row.alpha}</td>
+                    <td className="salloc-name">{row.sca}</td>
+                    <td className="salloc-center salloc-ext">{row.ext}</td>
+                    <td className="salloc-center">
+                      <span className={`salloc-group salloc-group-${row.group}`}>{row.group}</span>
+                    </td>
+                    <td className="salloc-center">
+                      <span className="salloc-hub" style={{ background: HUB_COLORS[row.hub] || '#888' }}>{row.hub}</span>
+                    </td>
+                    <td className="salloc-center salloc-time">{row.lunch}</td>
+                    <td className="salloc-center salloc-time">{row.break}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
     </div>
   )
