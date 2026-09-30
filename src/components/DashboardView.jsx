@@ -121,11 +121,12 @@ function DashMiniCal({ selectedDate, onDateChange }) {
 }
 
 // Every non-Today section is a single full-width binder page — the content
-// fills the whole spread (both pages). It turns on the left binding like a
-// book page. The monthly planner and the two-page spread stay on Today only.
+// fills the whole spread (both pages). A leaf turns over the centre spine like
+// a book page. The monthly planner and the two-page spread stay on Today only.
 function PlannerPage({ title, children }) {
   return (
     <div className="fc-single-page">
+      <div className="fc-leaf" aria-hidden="true" />
       <div className="fc-section-label fc-section-label-row">
         <span>{title}</span>
       </div>
