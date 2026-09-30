@@ -1133,6 +1133,7 @@ button.dash-inspiration-card {
   --sec-dark: color-mix(in srgb, var(--tab, #1e3070) 55%, #000);
   --sec-soft: color-mix(in srgb, var(--tab, #1e3070) 16%, #fff);
   --sec-softer: color-mix(in srgb, var(--tab, #1e3070) 8%, #fff);
+  --pt-bg: var(--sec-softer);
   --pt-accent: var(--sec);
   --pt-accent2: var(--sec);
   --pt-header-bg: var(--sec);
