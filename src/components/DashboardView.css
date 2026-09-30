@@ -1259,6 +1259,8 @@ button.dash-inspiration-card {
   min-height: 0;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .fc-single-body > * {
   flex: 1;

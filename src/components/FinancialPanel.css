@@ -17,6 +17,8 @@
   min-width: 0;
   text-align: left;
 }
+/* Take the ledger's full height so the binder page scrolls instead of clipping it */
+.fc-single-body > .fin-ledger { flex: 0 0 auto; }
 .fin-ledger *, .fin-ledger *::before, .fin-ledger *::after { box-sizing: border-box; }
 
 .fin-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
