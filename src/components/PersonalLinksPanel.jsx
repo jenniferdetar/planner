@@ -54,16 +54,18 @@ export default function PersonalLinksPanel({ userId }) {
         <div className="csea-issue-list csea-interactions-grid">
           {links.length === 0 && <p className="csea-empty">No links yet. Paste a link above to add one.</p>}
           {links.map(link => (
-            <div key={link.id} className="interaction-group">
-              <div className="interaction-group-header">
-                <a href={link.url} target="_blank" rel="noopener noreferrer" className="interaction-group-name quick-link-anchor">
-                  {link.title}
-                </a>
-                {link.created_at && (
-                  <span className="interaction-date-badge">
-                    {new Date(link.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                  </span>
-                )}
+            <div key={link.id} className="interaction-group link-card">
+              <div className="interaction-group-header link-card-header">
+                <div className="link-card-text">
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="interaction-group-name quick-link-anchor link-card-title">
+                    {link.title}
+                  </a>
+                  {link.created_at && (
+                    <span className="interaction-date-badge link-card-date">
+                      {new Date(link.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                    </span>
+                  )}
+                </div>
                 <button
                   className="interaction-delete-btn"
                   onClick={() => deleteLink(link.id)}
