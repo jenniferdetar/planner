@@ -1136,20 +1136,13 @@ button.dash-inspiration-card {
    edge) — like a real book page. The left page stays put under it. The turn
    direction follows the tabs: going DOWN the rail turns the page forward
    (right → left); going UP turns it back. */
-.fc-page-right,
-.fc-single-page {
+.fc-page-right {
   backface-visibility: hidden;
   animation: fc-page-turn 0.62s cubic-bezier(0.34, 0.86, 0.4, 1);
+  transform-origin: left center;
   z-index: 2;
 }
-/* Every leaf turns exactly like the Today page: hinged on its left edge (the
-   binding), so it swings over and settles flat like a real book page instead
-   of spinning around its middle. */
-.fc-page-right,
-.fc-single-page { transform-origin: left center; }
-
-.fc-dir-up .fc-page-right,
-.fc-dir-up .fc-single-page {
+.fc-dir-up .fc-page-right {
   animation-name: fc-page-turn-back;
 }
 /* Forward turn — the leaf lifts and drops right → left */
@@ -1162,9 +1155,42 @@ button.dash-inspiration-card {
   from { transform: perspective(2400px) rotateY(105deg); }
   to   { transform: perspective(2400px) rotateY(0deg); }
 }
+
+/* A full-width section page can't pivot on the spine itself (it would swing
+   off its outer margin), so a blank leaf turns over the centre spine on top
+   of it instead — the same hinge as the Today page. Going forward the leaf
+   lifts off the left half and settles on the right; going back it mirrors. */
+.fc-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  background: linear-gradient(90deg, #f7f3e9, #fdfcf6);
+  box-shadow: 0 0 18px rgba(20,12,4,0.22);
+  transform-origin: right center;
+  pointer-events: none;
+  z-index: 7;
+  opacity: 0;
+  animation: fc-leaf-turn 0.62s cubic-bezier(0.34, 0.86, 0.4, 1);
+}
+.fc-dir-up .fc-leaf {
+  left: 50%;
+  transform-origin: left center;
+  animation-name: fc-leaf-turn-back;
+}
+@keyframes fc-leaf-turn {
+  0%   { opacity: 1; transform: perspective(2400px) rotateY(0deg); }
+  88%  { opacity: 1; transform: perspective(2400px) rotateY(180deg); }
+  100% { opacity: 0; transform: perspective(2400px) rotateY(180deg); }
+}
+@keyframes fc-leaf-turn-back {
+  0%   { opacity: 1; transform: perspective(2400px) rotateY(0deg); }
+  88%  { opacity: 1; transform: perspective(2400px) rotateY(-180deg); }
+  100% { opacity: 0; transform: perspective(2400px) rotateY(-180deg); }
+}
 /* The soft shadow a real leaf casts as it settles onto the spread */
-.fc-page-right::after,
-.fc-single-page::after {
+.fc-page-right::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -1174,8 +1200,7 @@ button.dash-inspiration-card {
   background: linear-gradient(100deg, rgba(20,12,4,0.34), rgba(20,12,4,0) 48%);
   animation: fc-turn-shade 0.62s ease-out;
 }
-.fc-dir-up .fc-page-right::after,
-.fc-dir-up .fc-single-page::after {
+.fc-dir-up .fc-page-right::after {
   background: linear-gradient(260deg, rgba(20,12,4,0.34), rgba(20,12,4,0) 48%);
 }
 @keyframes fc-turn-shade {
@@ -1185,14 +1210,13 @@ button.dash-inspiration-card {
 }
 @media (prefers-reduced-motion: reduce) {
   .fc-page-right,
-  .fc-single-page,
   .fc-dir-up .fc-page-right,
-  .fc-dir-up .fc-single-page {
+  .fc-single-page {
     animation: fc-fade 0.2s ease;
     transform: none;
   }
-  .fc-page-right::after,
-  .fc-single-page::after { animation: none; opacity: 0; }
+  .fc-page-right::after { animation: none; opacity: 0; }
+  .fc-leaf { display: none; }
   @keyframes fc-fade { from { opacity: 0 } to { opacity: 1 } }
 }
 
