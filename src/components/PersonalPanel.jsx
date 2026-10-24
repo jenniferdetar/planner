@@ -11,6 +11,7 @@ import RolesPanel from './RolesPanel'
 import WantsPanel from './WantsPanel'
 import FamilyTreePanel from './FamilyTreePanel'
 import './PersonalPanel.css'
+import { stackPages } from './spread'
 
 const SUB_TABS = [
   { key: 'goals',     label: 'My Goals',          color: '#e8c97a' },
@@ -27,7 +28,7 @@ const SUB_TABS = [
 export default function PersonalPanel({
   userId, providerToken, books, onAddBook, onUpdateBookStatus, onUpdateBookChapter, onDeleteBook, onImportBooks, onReloadBooks, bookCoverSync, onFetchBookCovers,
   familyMembers, onAddFamilyMember, onUpdateFamilyMember, onDeleteFamilyMember, onImportFamilyDefaults,
-  subTab: subTabProp, onSubTabChange, allowedSubTabs,
+  subTab: subTabProp, onSubTabChange, allowedSubTabs, spread = stackPages,
 }) {
   const visibleTabs = allowedSubTabs ? SUB_TABS.filter(t => allowedSubTabs.includes(t.key)) : SUB_TABS
   const defaultTab = visibleTabs[0]?.key || 'goals'
@@ -61,9 +62,9 @@ export default function PersonalPanel({
 
   const activeColor = visibleTabs.find(t => t.key === subTab)?.color || '#73a882'
 
-  return (
+  return spread(
     <div className="personal-panel">
-      <div className="personal-inline-tabs">
+      <div className="personal-inline-tabs fc-index">
         {visibleTabs.map(t => (
           <button
             key={t.key}
@@ -73,9 +74,9 @@ export default function PersonalPanel({
           >{t.label}</button>
         ))}
       </div>
-
-
-{subTab === 'goals' && <GoalsPanel userId={userId} section="goals" roles={roles} />}
+    </div>,
+    <div className="personal-panel">
+      {subTab === 'goals' && <GoalsPanel userId={userId} section="goals" roles={roles} />}
       {subTab === 'roles' && <RolesPanel userId={userId} roles={roles} />}
       {subTab === 'checklist' && <GoalsPanel userId={userId} section="checklist" roles={roles} />}
       {subTab === 'library' && (

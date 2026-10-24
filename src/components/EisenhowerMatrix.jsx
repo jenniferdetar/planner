@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './EisenhowerMatrix.css'
+import { stackPages } from './spread'
 
 const QUADRANTS = [
   { key: 'q1', label: 'Do First',  color: 'var(--sec, #1e3070)', bg: 'color-mix(in srgb, var(--sec, #1e3070) 5%, transparent)', desc: 'Urgent + Important' },
@@ -15,7 +16,7 @@ function currentWeekStartStr() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-export default function EisenhowerMatrix({ masterTasks = [], onUpdateTask }) {
+export default function EisenhowerMatrix({ masterTasks = [], onUpdateTask, spread = stackPages }) {
   const [pickingFor, setPickingFor] = useState(null)
 
   // Weekly tick marks are local to this screen — they don't touch the shared
@@ -60,7 +61,7 @@ export default function EisenhowerMatrix({ masterTasks = [], onUpdateTask }) {
     setPickingFor(prev => prev === taskId ? null : taskId)
   }
 
-  return (
+  return spread(
     <div className="em-root" onClick={() => setPickingFor(null)}>
       <div className="em-matrix" onClick={e => e.stopPropagation()}>
 
@@ -95,7 +96,8 @@ export default function EisenhowerMatrix({ masterTasks = [], onUpdateTask }) {
           ticked={ticked} onToggleTick={toggleTick}
         />
       </div>
-
+    </div>,
+    <div className="em-root">
       {unassigned.length > 0 && (
         <div className="em-unassigned">
           <div className="em-unassigned-hdr">Unassigned — {unassigned.length} task{unassigned.length !== 1 ? 's' : ''}</div>

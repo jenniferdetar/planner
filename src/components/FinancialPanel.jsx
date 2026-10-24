@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useFinanceLedger } from '../hooks/useFinanceLedger'
 import './FinancialPanel.css'
+import { stackPages } from './spread'
 
 // Paycheck Ledger — plan each check, watch the month add up, log what you spend.
 // Summary tiles first, detail tables below; one working column under a tab bar.
@@ -53,7 +54,7 @@ function Bar({ pct, cls = '' }) {
   return <div className="fin-bar"><i className={cls} style={{ width: `${Math.max(0, Math.min(100, pct))}%` }} /></div>
 }
 
-export default function FinancialPanel({ userId }) {
+export default function FinancialPanel({ userId, spread = stackPages }) {
   const L = useFinanceLedger(userId)
   const todayISO = localISO(new Date())
   const [tab, setTab] = useState(() => { try { return localStorage.getItem('fin.tab') || 'overview' } catch { return 'overview' } })
@@ -729,7 +730,7 @@ export default function FinancialPanel({ userId }) {
   )
   else body = { overview: Overview, checks: Paychecks, month: MonthlyBudget, register: Register, debts: Debts, savings: Savings, setup: Setup }[tab]?.() ?? Overview()
 
-  return (
+  return spread(
     <div className="fin-ledger">
       <header className="fin-top">
         <div>
@@ -741,11 +742,13 @@ export default function FinancialPanel({ userId }) {
           <input type="month" id="finMonth" value={month} onChange={e => e.target.value && setMonth(e.target.value)} />
         </div>
       </header>
-      <nav className="fin-tabs" role="tablist">
+      <nav className="fin-tabs fc-index" role="tablist">
         {TABS.map(([k, l]) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => go(k)}>{l}</button>
         ))}
       </nav>
+    </div>,
+    <div className="fin-ledger">
       <main>{body}</main>
       <div className={`fin-toast${toastMsg ? ' on' : ''}`} role="status" aria-live="polite">{toastMsg}</div>
     </div>

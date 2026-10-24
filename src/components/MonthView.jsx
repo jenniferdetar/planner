@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './MonthView.css'
 import { sameDay, toDateStr } from '../utils/dateUtils'
+import { stackPages } from './spread'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
@@ -24,7 +25,7 @@ function contrastColor(hex) {
 }
 
 
-export default function MonthView({ selectedDate, onDateChange, taskCounts, timeBlocks, onMonthChange }) {
+export default function MonthView({ selectedDate, onDateChange, taskCounts, timeBlocks, onMonthChange, spread = stackPages }) {
   const today = new Date()
   const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
   const [viewMonth, setViewMonth] = useState(selectedDate.getMonth())
@@ -64,57 +65,75 @@ export default function MonthView({ selectedDate, onDateChange, taskCounts, time
     cells.push({ day: d, month: viewMonth + 1, year: viewMonth === 11 ? viewYear + 1 : viewYear, overflow: true })
   }
 
-  return (
-    <div className="month-view">
-      <div className="month-nav">
-        <button className="mnav-btn" onClick={prevMonth}>‹</button>
-        <h2 className="month-title">{MONTH_NAMES[viewMonth]} {viewYear}</h2>
-        <button className="mnav-btn" onClick={nextMonth}>›</button>
-      </div>
-
-      <div className="month-grid">
-        {/* Day-of-week headers */}
-        {DAY_NAMES.map((name, i) => (
-          <div
-            key={name}
-            className="dow-header"
-            style={{ background: DAY_COLORS[i] }}
-          >
-            {name.toUpperCase()}
-          </div>
-        ))}
-
-        {/* Day cells */}
-        {cells.map((cell, idx) => {
-          const cellDate = new Date(cell.year, cell.month, cell.day)
-          const isToday = !cell.overflow && sameDay(cellDate, today)
-          const isSelected = !cell.overflow && sameDay(cellDate, selectedDate)
-          const dateKey = toDateStr(cellDate)
-          const gcalBlocks = (timeBlocks || []).filter(b => b.startIso?.startsWith(dateKey))
-
-          return (
+  // A paper monthly spread: Sun–Wed on the left page, Thu–Sat on the right
+  function half(fromDow, toDow, nav) {
+    const cols = toDow - fromDow + 1
+    return (
+      <div className="month-view">
+        {nav}
+        <div className="month-grid" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+          {/* Day-of-week headers */}
+          {DAY_NAMES.slice(fromDow, toDow + 1).map((name, j) => (
             <div
-              key={idx}
-              className={`month-cell ${cell.overflow ? 'overflow' : ''} ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}`}
-              onClick={() => !cell.overflow && onDateChange(cellDate)}
+              key={name}
+              className="dow-header"
+              style={{ background: DAY_COLORS[fromDow + j] }}
             >
-              <span className={`cell-num ${isToday ? 'today-num' : ''}`}>{cell.day}</span>
-
-              {/* Calendar events */}
-              {!cell.overflow && gcalBlocks.map(block => (
-                <div
-                  key={block.id}
-                  className="cell-event"
-                  style={{ background: block.color ?? '#4a90d9', color: contrastColor(block.color) }}
-                >
-                  {block.startLabel && <span className="cell-event-time">{block.startLabel}</span>}
-                  <span className="cell-event-title">{block.title || block.text}</span>
-                </div>
-              ))}
+              {name.toUpperCase()}
             </div>
-          )
-        })}
+          ))}
+
+          {/* Day cells */}
+          {cells.map((cell, idx) => {
+            const dow = idx % 7
+            if (dow < fromDow || dow > toDow) return null
+            const cellDate = new Date(cell.year, cell.month, cell.day)
+            const isToday = !cell.overflow && sameDay(cellDate, today)
+            const isSelected = !cell.overflow && sameDay(cellDate, selectedDate)
+            const dateKey = toDateStr(cellDate)
+            const gcalBlocks = (timeBlocks || []).filter(b => b.startIso?.startsWith(dateKey))
+
+            return (
+              <div
+                key={idx}
+                className={`month-cell ${cell.overflow ? 'overflow' : ''} ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}`}
+                onClick={() => !cell.overflow && onDateChange(cellDate)}
+              >
+                <span className={`cell-num ${isToday ? 'today-num' : ''}`}>{cell.day}</span>
+
+                {/* Calendar events */}
+                {!cell.overflow && gcalBlocks.map(block => (
+                  <div
+                    key={block.id}
+                    className="cell-event"
+                    style={{ background: block.color ?? '#4a90d9', color: contrastColor(block.color) }}
+                  >
+                    {block.startLabel && <span className="cell-event-time">{block.startLabel}</span>}
+                    <span className="cell-event-title">{block.title || block.text}</span>
+                  </div>
+                ))}
+              </div>
+            )
+          })}
+        </div>
       </div>
-    </div>
+    )
+  }
+
+  return spread(
+    half(0, 3,
+      <div className="month-nav">
+        <button className="mnav-btn" onClick={prevMonth} aria-label="Previous month">‹</button>
+        <h2 className="month-title">{MONTH_NAMES[viewMonth]}</h2>
+        <span className="mnav-spacer" />
+      </div>
+    ),
+    half(4, 6,
+      <div className="month-nav">
+        <span className="mnav-spacer" />
+        <h2 className="month-title">{viewYear}</h2>
+        <button className="mnav-btn" onClick={nextMonth} aria-label="Next month">›</button>
+      </div>
+    ),
   )
 }

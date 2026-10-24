@@ -1,13 +1,68 @@
 /* ─── Dashboard layout ─────────────────────────────────────────────────────── */
 
 .dash-outer {
-  display: flex;
+  --paper: #efeeeb;
+  --leather: #7a4a22;
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 46px;
+  grid-template-rows: 48px minmax(0, 1fr);
   height: 100vh;
   width: 100vw;
+  padding: 0 14px 22px;
+  box-sizing: border-box;
   overflow: hidden;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: #f0f2f5;
   color: #1a2332;
+  /* Pebbled leather: fine SVG grain over a warm brown with a soft vignette */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.09 0 0 0 0 0.03 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 50% 40%, rgba(255,190,120,0.18), rgba(0,0,0,0) 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(30,14,4,0.55) 100%),
+    var(--leather);
+}
+
+/* Cream stitching just inside the edge of the cover */
+.fc-stitch {
+  position: absolute;
+  inset: 9px;
+  width: calc(100% - 18px);
+  height: calc(100% - 18px);
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+.fc-stitch rect {
+  fill: none;
+  stroke: rgba(246, 228, 196, 0.85);
+  stroke-width: 2.2;
+  stroke-dasharray: 16 10;
+  stroke-linecap: round;
+  filter: drop-shadow(0 1px 0 rgba(30, 14, 4, 0.6));
+}
+
+/* Brand + account buttons across the top of the cover */
+.fc-cover-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 34px;
+  position: relative;
+  z-index: 2;
+}
+.fc-cover-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Centre column: the open binder (pages + spine + rings) */
+.dash-binder {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  z-index: 1;
 }
 
 /* ─── Sidebar ──────────────────────────────────────────────────────────────── */
@@ -126,12 +181,12 @@
   min-width: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 16px;
+  /* Equal gutters both sides so the spread stays centred on the spine */
+  scrollbar-gutter: stable both-edges;
+  padding: 4px 0 10px;
   display: flex;
   flex-direction: column;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0) 6%),
-    #5c3d20;
+  background: transparent;
 }
 
 .dash-page-header {
@@ -447,75 +502,6 @@
 
 /* ─── Sidebar mini-calendar ────────────────────────────────────────────────── */
 
-.dash-mini-cal {
-  padding: 6px 10px 4px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.dmc-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3px;
-}
-
-.dmc-nav-btn {
-  background: none;
-  border: none;
-  color: #6b7280;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 1px 4px;
-  border-radius: 4px;
-  line-height: 1;
-  transition: color 0.12s;
-}
-.dmc-nav-btn:hover { color: #e5e7eb; }
-
-.dmc-month-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: #d1d5db;
-  letter-spacing: 0.3px;
-}
-
-.dmc-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0;
-}
-
-.dmc-dow {
-  font-size: 8px;
-  font-weight: 600;
-  color: #4b5563;
-  text-align: center;
-  padding: 2px 0 2px;
-  text-transform: uppercase;
-}
-
-.dmc-cell {
-  background: none;
-  border: none;
-  color: #9ca3af;
-  font-size: 10px;
-  text-align: center;
-  padding: 2px 1px;
-  border-radius: 3px;
-  cursor: pointer;
-  line-height: 1.4;
-  transition: background 0.1s, color 0.1s;
-}
-.dmc-cell:hover { background: rgba(255,255,255,0.08); color: #e5e7eb; }
-.dmc-cell.overflow { visibility: hidden; cursor: default; }
-.dmc-cell.today { color: #fbbf24; font-weight: 700; }
-.dmc-cell.selected {
-  background: #fff;
-  color: #1a2332;
-  font-weight: 700;
-}
-.dmc-cell.today.selected { background: #fbbf24; color: #1a2332; }
-
 /* ─── Nav group labels ─────────────────────────────────────────────────────── */
 
 .dash-nav-group-label {
@@ -555,73 +541,10 @@
 
 /* ─── Daily inspiration row ─────────────────────────────────────────────────── */
 
-.dash-inspiration-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.dash-inspiration-card {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 8px 12px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  text-decoration: none;
-  color: inherit;
-  transition: box-shadow 0.15s, border-color 0.15s;
-}
-.dash-inspiration-card:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border-color: #d1d5db;
-}
-
 button.dash-inspiration-card {
   font: inherit;
   text-align: left;
   cursor: pointer;
-}
-
-.dash-inspiration-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.dash-inspiration-icon {
-  font-size: 16px;
-  flex-shrink: 0;
-  line-height: 1;
-  color: #6b7280;
-}
-
-.dash-inspiration-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #6b7280;
-}
-
-.dash-inspiration-text {
-  font-size: 13px;
-  color: #111827;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.dash-inspiration-sub {
-  font-size: 11px;
-  color: #9ca3af;
-}
-
-.dash-inspiration-loading {
-  font-size: 12px;
-  color: #9ca3af;
-  margin: 0;
 }
 
 /* ─── Calendar views ───────────────────────────────────────────────────────── */
@@ -645,9 +568,14 @@ button.dash-inspiration-card {
 /* ─── Mobile layout ────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .dash-outer {
+    display: flex;
     flex-direction: column;
     height: 100dvh;
+    padding: 0;
   }
+  .fc-stitch { display: none; }
+  .fc-cover-bar { flex: 0 0 40px; padding: 0 14px; }
+  .dash-binder { flex: 1; }
 
   .dash-sidebar {
     display: none;
@@ -769,90 +697,67 @@ button.dash-inspiration-card {
 .fc-spread {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
+  gap: 44px;
   background: transparent;
-  border-radius: 8px;
   position: relative;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.28);
 }
 
-/* Center binding rings */
-.fc-spread::before {
-  content: "";
-  position: absolute;
-  top: 14px;
-  bottom: 14px;
-  left: 50%;
-  width: 20px;
-  transform: translateX(-50%);
-  background-image: radial-gradient(circle at 50% 4px, #2c1c0e 0 3px, transparent 3.5px);
-  background-size: 20px 34px;
-  background-repeat: repeat-y;
-  z-index: 3;
-  pointer-events: none;
-}
-
+/* Paper sheet — soft grain, rounded corners, and a stack of sheets showing
+   underneath along the bottom edge */
 .fc-page {
-  background: #fdfbf4;
-  padding: 16px 18px 18px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+    var(--paper);
+  padding: 18px 22px 20px;
   min-height: 520px;
   position: relative;
 }
 .fc-page-left {
-  border-radius: 6px 0 0 6px;
-  box-shadow: inset -10px 0 14px -12px rgba(0,0,0,0.28);
+  padding-right: 50px; /* clear of the rings */
+  border-radius: 26px 6px 6px 26px;
+  box-shadow:
+    inset -14px 0 16px -14px rgba(0,0,0,0.30),
+    0 3px 0 -1px #dcdbd7, 0 6px 0 -2px #cfceca, 0 9px 0 -3px #c3c2be,
+    0 14px 22px rgba(20,10,2,0.45);
 }
 .fc-page-right {
-  border-radius: 0 6px 6px 0;
-  box-shadow: inset 10px 0 14px -12px rgba(0,0,0,0.28);
+  padding-left: 50px; /* clear of the rings */
+  border-radius: 6px 26px 26px 6px;
+  box-shadow:
+    inset 14px 0 16px -14px rgba(0,0,0,0.30),
+    0 3px 0 -1px #dcdbd7, 0 6px 0 -2px #cfceca, 0 9px 0 -3px #c3c2be,
+    0 14px 22px rgba(20,10,2,0.45);
 }
 
+/* ── Spine + metal rings (overlay on the Today spread) ── */
+.fc-binding {
+  position: absolute;
+  top: 4px;
+  bottom: 10px;
+  left: 50%;
+  width: 0;
+  pointer-events: none;
+  z-index: 8;
+}
+.fc-spine {
+  position: absolute;
+  top: 3%;
+  bottom: 3%;
+  left: -16px;
+  width: 32px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #11151b, #2f3743 45%, #3a4350 55%, #151a21);
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.fc-ring-slot {
+  position: absolute;
+  left: -62px;
+  width: 124px;
+  filter: drop-shadow(0 6px 4px rgba(0,0,0,0.35));
+}
+.fc-ring { display: block; width: 100%; height: auto; }
+
 /* ── Date header ── */
-.fc-day-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--sec, #6b4423);
-  margin-bottom: 8px;
-}
-.fc-day-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-  padding-right: 12px;
-  border-right: 1px solid #e2dcc9;
-}
-.fc-day-name {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--sec, #6b4423);
-}
-.fc-day-num {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 40px;
-  font-weight: 700;
-  color: #3a2a17;
-}
-.fc-day-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.fc-day-month {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 19px;
-  font-weight: 700;
-  color: #3a2a17;
-}
-.fc-day-count {
-  font-size: 11px;
-  color: #9a8f76;
-  letter-spacing: 0.3px;
-}
 
 /* ── Section labels ── */
 .fc-section-label {
@@ -1099,14 +1004,7 @@ button.dash-inspiration-card {
 }
 
 /* ── This-week strip below the spread ── */
-.fc-week {
-  background: #fdfbf4;
-  border: 1px solid #e2dcc9;
-  border-radius: 8px;
-  padding: 12px 16px 14px;
-  margin-top: 10px;
-  box-shadow: 0 2px 8px rgba(92,61,32,0.10);
-}
+
 .fc-week-list {
   columns: 2 260px;
   column-gap: 28px;
@@ -1177,39 +1075,6 @@ button.dash-inspiration-card {
   to   { transform: perspective(2400px) rotateY(0deg); }
 }
 
-/* A full-width section page can't pivot on the spine itself (it would swing
-   off its outer margin), so a blank leaf turns over the centre spine on top
-   of it instead — the same hinge as the Today page. Going forward the leaf
-   lifts off the left half and settles on the right; going back it mirrors. */
-.fc-leaf {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 50%;
-  background: linear-gradient(90deg, #f7f3e9, #fdfcf6);
-  box-shadow: 0 0 18px rgba(20,12,4,0.22);
-  transform-origin: right center;
-  pointer-events: none;
-  z-index: 7;
-  opacity: 0;
-  animation: fc-leaf-turn 0.62s cubic-bezier(0.34, 0.86, 0.4, 1);
-}
-.fc-dir-up .fc-leaf {
-  left: 50%;
-  transform-origin: left center;
-  animation-name: fc-leaf-turn-back;
-}
-@keyframes fc-leaf-turn {
-  0%   { opacity: 1; transform: perspective(2400px) rotateY(0deg); }
-  88%  { opacity: 1; transform: perspective(2400px) rotateY(180deg); }
-  100% { opacity: 0; transform: perspective(2400px) rotateY(180deg); }
-}
-@keyframes fc-leaf-turn-back {
-  0%   { opacity: 1; transform: perspective(2400px) rotateY(0deg); }
-  88%  { opacity: 1; transform: perspective(2400px) rotateY(-180deg); }
-  100% { opacity: 0; transform: perspective(2400px) rotateY(-180deg); }
-}
 /* The soft shadow a real leaf casts as it settles onto the spread */
 .fc-page-right::after {
   content: "";
@@ -1231,155 +1096,227 @@ button.dash-inspiration-card {
 }
 @media (prefers-reduced-motion: reduce) {
   .fc-page-right,
-  .fc-dir-up .fc-page-right,
-  .fc-single-page {
+  .fc-dir-up .fc-page-right {
     animation: fc-fade 0.2s ease;
     transform: none;
   }
   .fc-page-right::after { animation: none; opacity: 0; }
-  .fc-leaf { display: none; }
   @keyframes fc-fade { from { opacity: 0 } to { opacity: 1 } }
 }
 
-/* ═══ Full-width binder page (every non-Today section) ═══════════════════════ */
+/* ═══ Section spreads (every non-Today section) ═════════════════════════════ */
 
-/* Two distinct pages joined at a centre spine: the left/right halves are
-   tinted slightly differently and a soft gutter shadow runs down the middle. */
-.fc-single-page {
+/* Same two sheets as Today, but sized to the binder: each page scrolls on its
+   own, the way a real page holds still while you read down it. */
+.fc-section-spread {
   flex: 1;
+  min-height: 0;
+}
+.fc-section-spread .fc-page {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(90deg, #fdfcf6 0 50%, #f7f3e9 50% 100%);
-  border-radius: 8px;
-  padding: 16px 26px 18px;
-  position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.28);
 }
-/* Centre spine — the gutter where the two pages meet */
-.fc-single-page::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 72px;
-  transform: translateX(-50%);
-  background: linear-gradient(90deg,
-    rgba(60,40,20,0) 0%,
-    rgba(60,40,20,0.10) 42%,
-    rgba(60,40,20,0.18) 50%,
-    rgba(60,40,20,0.10) 58%,
-    rgba(60,40,20,0) 100%);
-  pointer-events: none;
-  z-index: 4;
+.fc-page-title {
+  margin: 4px 0 12px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: 0.2px;
+  color: #26221d;
 }
-.fc-single-body {
+.fc-page-body {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
-.fc-single-body > * {
-  flex: 1;
-  min-height: 0;
+.fc-page-body > * {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+/* Each section's outer wrapper sits straight on the paper — its own page
+   colour, texture and card frame would hide the sheet. (Older theme rules use
+   !important, so these must too.) */
+.fc-section-spread:not(.fc-today) .fc-page-body > * {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
-/* ═══ Right-edge divider tabs ════════════════════════════════════════════════ */
+/* A section's sub-pages listed down the left page, like a binder's index */
+.fc-section-spread .fc-page .fc-index {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  margin: 6px 0 14px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-top: 1px solid #d6d4cf !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  position: static !important;
+  height: auto !important;
+  max-height: none !important;
+}
+.fc-section-spread .fc-page .fc-index > button {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 12px 8px 12px 14px !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #d6d4cf !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  text-align: left !important;
+  color: #2e2a25 !important;
+  opacity: 1 !important;
+  transform: none !important;
+  cursor: pointer;
+  white-space: normal !important;
+}
+.fc-section-spread .fc-page .fc-index > button::before { display: none !important; }
+.fc-section-spread .fc-page .fc-index > button::after {
+  content: "›" !important;
+  display: block !important;
+  margin-left: 12px !important;
+  font-size: 20px;
+  line-height: 1;
+  color: #a8a49c;
+}
+.fc-section-spread .fc-page .fc-index > button:not(:has(span))::after { margin-left: auto !important; }
+.fc-section-spread .fc-page .fc-index > button:hover { background: rgba(0,0,0,0.035) !important; }
+.fc-section-spread .fc-page .fc-index > button:focus-visible { outline: 2px solid var(--sec); outline-offset: -2px; }
+.fc-section-spread .fc-page .fc-index > button.active,
+.fc-section-spread .fc-page .fc-index > button[aria-selected="true"] {
+  font-weight: 600 !important;
+  color: var(--sec) !important;
+  background: color-mix(in srgb, var(--sec) 9%, transparent) !important;
+  box-shadow: inset 4px 0 0 var(--sec) !important;
+}
+.fc-section-spread .fc-page .fc-index > button.active::after,
+.fc-section-spread .fc-page .fc-index > button[aria-selected="true"]::after { color: var(--sec); }
+/* Count badges become grey pills like Opus One's folder counts */
+.fc-section-spread .fc-page .fc-index > button span {
+  min-width: 22px !important;
+  margin-left: auto !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  background: #8f8b84 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+}
 
+/* ═══ Divider tabs on both edges of the binder ══════════════════════════════ */
+
+/* Each tab owns a fixed slot down the rail so it never moves vertically —
+   it only swaps edges as you page past it. */
 .fc-tab-rail {
-  width: 150px;
-  flex-shrink: 0;
-  background:
-    linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0) 22%),
-    #4a3117;
   display: flex;
   flex-direction: column;
-  padding: 16px 0 14px;
-  overflow-y: auto;
-  z-index: 5;
+  padding: 1.5% 0 2%;
+  min-height: 0;
+  position: relative;
+  z-index: 3;
 }
-.fc-rail-brand {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #e7d8bf;
-  text-align: center;
-  padding: 0 10px 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  margin-bottom: 10px;
-}
-.fc-tab-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
+.fc-tab-slot {
   flex: 1;
+  min-height: 0;
+  display: flex;
+  padding: 1px 0;
 }
 .fc-tab {
+  flex: 1;
   border: none;
-  background: var(--tab, #8a7355);
   color: #fff;
   font-family: inherit;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-align: left;
-  padding: 11px 12px;
-  margin-left: 16px;
-  border-radius: 7px 0 0 7px;
+  /* Shrinks on short windows so all fourteen labels still fit their slots */
+  font-size: clamp(9.5px, calc((100vh - 100px) / 80), 12.5px);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  padding: 0;
   cursor: pointer;
-  box-shadow: -2px 2px 5px rgba(0,0,0,0.22);
-  transform: translateX(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* Glossy coloured card stock */
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.20), rgba(255,255,255,0) 45%, rgba(0,0,0,0.14)),
+    var(--tab, #8a7355);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.35);
   transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.12s;
 }
-.fc-tab:hover { transform: translateX(2px); filter: brightness(1.06); }
-.fc-tab.active {
-  transform: translateX(-6px);
-  box-shadow: -5px 3px 10px rgba(0,0,0,0.32);
-  font-weight: 800;
+.fc-tab span {
+  writing-mode: vertical-rl;
+  white-space: nowrap;
 }
-.fc-rail-foot {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px 12px 0 16px;
-  margin-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+.fc-tab-rail-right .fc-tab {
+  margin-right: 8px;
+  border-radius: 0 14px 14px 0;
+  box-shadow: 3px 3px 6px rgba(0,0,0,0.35);
+  transform: translateX(-4px);
+}
+.fc-tab-rail-left .fc-tab {
+  margin-left: 8px;
+  border-radius: 14px 0 0 14px;
+  box-shadow: -3px 3px 6px rgba(0,0,0,0.35);
+  transform: translateX(4px);
+}
+/* Labels on the left edge read bottom-to-top, like a real binder */
+.fc-tab-rail-left .fc-tab span { transform: rotate(180deg); }
+.fc-tab:hover { filter: brightness(1.08); }
+.fc-tab-rail-right .fc-tab:hover { transform: translateX(0); }
+.fc-tab-rail-left .fc-tab:hover { transform: translateX(0); }
+/* The open tab stands proud of the page edge */
+.fc-tab.active {
+  transform: translateX(2px);
+  font-weight: 700;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.45);
+}
+
+.fc-rail-brand {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #f3e3c6;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.5);
 }
 .fc-rail-btn {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.12);
+  border: 1px solid rgba(246,228,196,0.35);
   border-radius: 6px;
-  color: #cbb89a;
+  color: #f3e3c6;
   font-size: 11px;
   font-family: inherit;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 4px 10px;
   transition: background 0.12s, color 0.12s;
 }
-.fc-rail-btn:hover { background: rgba(255,255,255,0.07); color: #f0e6d4; }
+.fc-rail-btn:hover { background: rgba(255,255,255,0.10); color: #fff; }
 
 /* ═══ Mini calendar on the Today page (light theme) ══════════════════════════ */
-
-.fc-minical-wrap {
-  max-width: 250px;
-  margin: 4px 0 6px;
-}
-.fc-minical-wrap .dash-mini-cal { padding: 0; border-bottom: none; }
-.fc-minical-wrap .dmc-nav-btn { color: #8a7c60; }
-.fc-minical-wrap .dmc-nav-btn:hover { color: #3a2a17; }
-.fc-minical-wrap .dmc-month-label { color: #3a2a17; font-size: 11px; }
-.fc-minical-wrap .dmc-dow { color: #a89a7c; font-size: 9px; }
-.fc-minical-wrap .dmc-cell { color: #6b5c40; font-size: 11px; }
-.fc-minical-wrap .dmc-cell:hover { background: #efe7d3; color: #3a2a17; }
-.fc-minical-wrap .dmc-cell.today { color: var(--sec, #6b4423); font-weight: 700; }
-.fc-minical-wrap .dmc-cell.selected { background: var(--sec, #6b4423); color: #fff; }
-.fc-minical-wrap .dmc-cell.today.selected { background: var(--sec, #6b4423); color: #fff; }
 
 /* ── Mobile: pages stack vertically, rings hidden, tabs become a top strip ── */
 @media (max-width: 768px) {
@@ -1388,26 +1325,156 @@ button.dash-inspiration-card {
     gap: 10px;
     box-shadow: none;
   }
-  .fc-spread::before { display: none; }
-  .fc-page {
+  .fc-binding { display: none; }
+  .fc-page,
+  .fc-page-left,
+  .fc-page-right {
     min-height: 0;
-    border-radius: 6px;
+    padding: 14px 14px 16px;
+    border-radius: 14px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     padding: 14px 14px 16px;
   }
-  .fc-day-num { font-size: 34px; }
+  
   .fc-week-list { columns: 1; }
 
-  /* Single reading page on phones — spine and two-tone collapse away */
-  .fc-single-page {
-    padding: 14px 14px 16px;
-    min-height: 72vh;
-    background: #fdfbf4;
-  }
-  .fc-single-page::before { display: none; }
+  /* Section pages stack and grow with their content on phones */
+  .fc-section-spread { flex: 0 0 auto; }
+  .fc-section-spread .fc-page { overflow: visible; }
+  .fc-page-body { flex: none; overflow: visible; }
+  .fc-section-spread .fc-page-body > * { flex: 0 0 auto !important; overflow: visible !important; }
 
-  /* The right rail is hidden on phones — the existing pill/back nav is used */
+  /* The tab rails are hidden on phones — the existing pill/back nav is used */
   .fc-tab-rail { display: none; }
-  .fc-page-right,
-  .fc-single-page { animation-duration: 0.34s; }
+  .fc-page-right { animation-duration: 0.34s; }
+}
+
+/* ═══ Today spread (Opus One style) ══════════════════════════════════════════ */
+
+.fc-today .fc-page { display: flex; flex-direction: column; }
+
+/* Big date on the left, month calendar with week numbers on the right */
+.td-head {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(250px, 1.35fr);
+  align-items: start;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.td-date { display: flex; flex-direction: column; padding-top: 4px; }
+.td-date > span { display: block; line-height: 1; }
+.td-num {
+  line-height: 0.82 !important;
+  font-size: clamp(76px, 9vw, 128px);
+  font-weight: 800;
+  letter-spacing: -4px;
+  color: #111;
+}
+.td-dow { font-size: 32px; font-weight: 500; color: #111; margin-top: 8px; }
+.td-month { font-size: 30px; font-weight: 300; color: #2b2723; margin-top: 10px; }
+
+/* "Add Task ⊕" on a ruled line */
+.td-add {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px dotted #b9b5ad;
+  padding: 4px 0 8px;
+}
+/* Beats the theme's input fill (input:not(...) !important) so the line shows */
+.fc-section-spread.fc-today .td-add > input.td-add-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent !important;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2e2a25;
+  padding: 4px 2px;
+}
+.td-add-input::placeholder { color: #8a857c; }
+.td-add-input:focus { outline: none; }
+.td-add-btn { cursor: pointer; background: transparent; }
+.td-add-btn:hover { background: #5a3a22; color: #fff; }
+
+/* Ruled lines under the task rows, like the paper planner */
+.td-lined .fc-task-line { border-bottom: 1px dotted #c9c5bd; min-height: 36px; }
+
+.td-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 6px;
+  font-size: 19px;
+  font-weight: 400;
+  color: #26221d;
+}
+.td-sub-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: #8f8b84;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.td-foot {
+  flex: 0 0 auto;
+  padding-top: 10px;
+  margin-top: 6px;
+  border-top: 1px solid #dcd9d2;
+  font-size: 12px;
+  color: #6f6a62;
+}
+
+/* Brown band across the top of the right page: verse + weather */
+.td-band {
+  margin: 0 0 10px;
+  padding: 16px 20px 18px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #a7765a, #8b5a3c 30%, #7c4e33);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.td-quote {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 1.45;
+}
+.td-quote:hover { text-decoration: underline; }
+.td-quote-mark { font-size: 28px; line-height: 0; vertical-align: -8px; margin-right: 6px; opacity: 0.85; }
+.td-weather { display: flex; align-items: center; gap: 18px; }
+.td-wx-icon { width: 76px; height: 76px; color: #fff; flex-shrink: 0; }
+.td-wx-place { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
+.td-wx-city { font-size: 26px; font-weight: 600; }
+.td-wx-label { font-size: 20px; font-weight: 300; }
+.td-wx-temps { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: 14px; }
+
+.td-mantra {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  border: none;
+  border-left: 3px solid #8b5a3c;
+  background: rgba(139, 90, 60, 0.07);
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 14px;
+  font-style: italic;
+  text-align: left;
+  color: #3b342c;
+  cursor: pointer;
+}
+.td-muted { color: #8a857c; }
+
+@media (max-width: 768px) {
+  .td-head { grid-template-columns: 1fr; }
+  .td-num { font-size: 84px; }
+  .td-band { padding: 14px; }
+  .td-weather { flex-wrap: wrap; }
 }

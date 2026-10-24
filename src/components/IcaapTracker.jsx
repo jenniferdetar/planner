@@ -5,6 +5,7 @@ import './IcaapTracker.css'
 import { ATTENDANCE_MEMBERS } from '../hooks/useIcaapAttendance'
 import { normalizePaylogMonth } from '../hooks/useIcaapDashboard'
 import { useIcaapNote } from '../hooks/useIcaapNote'
+import { stackPages } from './spread'
 
 function IcaapStatsBar({ items }) {
   const nonArchived = items.filter(i => !i.archived)
@@ -36,7 +37,7 @@ function IcaapStatsBar({ items }) {
   )
 }
 
-export default function IcaapTracker({ userId, items, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote }) {
+export default function IcaapTracker({ userId, items, attendanceRecords = [], onUpsertAttendance, onUpdateAttendanceNotes, icaapNotes = [], onAddIcaapNote, onDeleteIcaapNote, spread = stackPages }) {
   const { links: quickLinks, addLink, deleteLink } = useQuickLinks(userId, 'icaap')
   const [tab, setTab] = useState('salaryalloc')
   const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0])
@@ -48,10 +49,10 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
   const [linkTitle, setLinkTitle] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
 
-  return (
+  return spread(
     <div className="icaap-tracker">
       <IcaapStatsBar items={items} />
-      <div className="icaap-tabs">
+      <div className="icaap-tabs fc-index">
         <button className={`icaap-tab ${tab === 'salaryalloc' ? 'active' : ''}`} onClick={() => setTab('salaryalloc')}>Salary Allocation</button>
         <button className={`icaap-tab ${tab === 'attendance' ? 'active' : ''}`} onClick={() => setTab('attendance')}>Attendance</button>
         <button className={`icaap-tab ${tab === 'extrahours' ? 'active' : ''}`} onClick={() => setTab('extrahours')}>Extra Hours</button>
@@ -59,7 +60,8 @@ export default function IcaapTracker({ userId, items, attendanceRecords = [], on
         <button className={`icaap-tab ${tab === 'links' ? 'active' : ''}`} onClick={() => setTab('links')}>Links {quickLinks.length > 0 && <span className="icaap-tab-badge">{quickLinks.length}</span>}</button>
         <button className={`icaap-tab ${tab === 'payroll' ? 'active' : ''}`} onClick={() => setTab('payroll')}>Payroll</button>
       </div>
-
+    </div>,
+    <div className="icaap-tracker">
       {tab === 'salaryalloc' && <SalaryAllocationPanel />}
 
       {tab === 'attendance' && (

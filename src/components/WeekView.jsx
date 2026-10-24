@@ -4,6 +4,7 @@ import { toDateStr } from '../utils/dateUtils'
 import { useHabitCompletions } from '../hooks/useHabitCompletions'
 import { useMeetingsInRange } from '../hooks/usePlannerData'
 import { useWeeklyTasks } from '../hooks/useWeeklyTasks'
+import { stackPages } from './spread'
 
 const DAY_NAMES_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
@@ -116,7 +117,7 @@ const HABIT_COLORS = {
   'Weekends': 'color-mix(in srgb, var(--sec-dark) 78%, #000)',
 }
 
-export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks }) {
+export default function WeekView({ userId, selectedDate, onDateChange, calendarBlocks, spread = stackPages }) {
   const [weekStart, setWeekStart] = useState(() => getWeekStart(selectedDate))
   const [addingDay, setAddingDay] = useState(null)
   const [newTaskText, setNewTaskText] = useState('')
@@ -170,7 +171,7 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
   const today = new Date()
   today.setHours(0,0,0,0)
 
-  return (
+  return spread(
     <div className="week-view">
       {/* Header */}
       <div className="week-header">
@@ -225,6 +226,8 @@ export default function WeekView({ userId, selectedDate, onDateChange, calendarB
         ))}
       </div>
 
+    </div>,
+    <div className="week-view">
       {/* Motivational banner */}
       <div className="week-banner">✦ ENJOY YOUR FAMILY ♥</div>
 
