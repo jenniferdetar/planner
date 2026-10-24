@@ -13,13 +13,17 @@ import EisenhowerMatrix from './EisenhowerMatrix'
 import PersonalPanel from './PersonalPanel'
 import WeekView from './WeekView'
 import MonthView from './MonthView'
-import { sameDay, toDateStr } from '../utils/dateUtils'
+import MeetingsPanel from './MeetingsPanel'
+import MissionPanel from './MissionPanel'
+import NotesPanel from './NotesPanel'
+import JournalPanel from './JournalPanel'
+import BinderCalendar from './BinderCalendar'
+import { useWeather } from '../hooks/useWeather'
 import { useWeeklyTasks } from '../hooks/useWeeklyTasks'
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const SHORT_MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
-const SHORT_DAY   = ['S','M','T','W','T','F','S']
 
 // Appointment-schedule hours for the daily spread (5 AM – 11 PM)
 const APPT_HOURS = Array.from({ length: 19 }, (_, i) => i + 5)
@@ -44,20 +48,18 @@ const NAV_ITEMS = [
   { key: 'today',    label: 'Today',    color: '#c1614a', group: 'day' },
   { key: 'week',     label: 'Week',     color: '#d99a3f', group: 'day' },
   { key: 'month',    label: 'Month',    color: '#4f9d8b', group: 'day' },
+  { key: 'meetings', label: 'Meetings', color: '#5a3a2b', group: 'day' },
   { key: 'csea',     label: 'CSEA',     color: '#b87a38', group: 'module' },
   { key: 'gcu',      label: 'GCU',      color: '#5a7848', group: 'module' },
   { key: 'hoa',      label: 'HOA',      color: '#4a7a6a', group: 'module' },
   { key: 'icaap',    label: 'iCAAP',    color: '#3a5c4a', group: 'module' },
   { key: 'personal', label: 'Personal', color: '#6a5a8a', group: 'module' },
+  { key: 'mission',  label: 'Mission',  color: '#3f7fb5', group: 'module' },
+  { key: 'notes',    label: 'Notes',    color: '#4a5aa8', group: 'module' },
+  { key: 'journal',  label: 'Journal',  color: '#c79a52', group: 'module' },
   { key: 'financial', label: 'Financial', color: '#1f4e79', group: 'module' },
   { key: 'matrix',   label: 'Matrix',   color: '#7d8a9c', group: 'module' },
 ]
-
-// Section → right-page heading for the two-page spreads
-const SECTION_TITLES = {
-  week: 'Week', month: 'Month', csea: 'CSEA', gcu: 'GCU',
-  hoa: 'HOA', icaap: 'iCAAP', matrix: 'Priority Matrix', personal: 'Personal', financial: 'Financial',
-}
 
 // Tab order (top → bottom in the rail) — drives the page-turn direction
 const NAV_ORDER = NAV_ITEMS.map(i => i.key)
@@ -80,48 +82,6 @@ function fmtDueDate(dateStr) {
   return `${DAY_NAMES[d.getDay()].slice(0, 3)} ${SHORT_MONTH[d.getMonth()]} ${d.getDate()}`
 }
 
-function DashMiniCal({ selectedDate, onDateChange }) {
-  const today = new Date()
-  const [viewYear, setViewYear] = useState(selectedDate.getFullYear())
-  const [viewMonth, setViewMonth] = useState(selectedDate.getMonth())
-
-  const firstDay = new Date(viewYear, viewMonth, 1).getDay()
-  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
-  const daysInPrev = new Date(viewYear, viewMonth, 0).getDate()
-  const cells = []
-  for (let i = firstDay - 1; i >= 0; i--) cells.push({ day: daysInPrev - i, overflow: true })
-  for (let d = 1; d <= daysInMonth; d++) cells.push({ day: d, overflow: false })
-  while (cells.length < 35) cells.push({ day: cells.length - firstDay - daysInMonth + 1, overflow: true })
-
-  function prevMonth() { viewMonth === 0 ? (setViewYear(y => y - 1), setViewMonth(11)) : setViewMonth(m => m - 1) }
-  function nextMonth() { viewMonth === 11 ? (setViewYear(y => y + 1), setViewMonth(0)) : setViewMonth(m => m + 1) }
-
-  return (
-    <div className="dash-mini-cal">
-      <div className="dmc-nav">
-        <button className="dmc-nav-btn" onClick={prevMonth}>‹</button>
-        <span className="dmc-month-label">{SHORT_MONTH[viewMonth]} {viewYear}</span>
-        <button className="dmc-nav-btn" onClick={nextMonth}>›</button>
-      </div>
-      <div className="dmc-grid">
-        {SHORT_DAY.map((d, i) => <span key={i} className="dmc-dow">{d}</span>)}
-        {cells.map((cell, i) => {
-          if (cell.overflow) return <span key={i} className="dmc-cell overflow" />
-          const cellDate = new Date(viewYear, viewMonth, cell.day)
-          const isToday = sameDay(cellDate, today)
-          const isSel   = sameDay(cellDate, selectedDate)
-          return (
-            <button key={i}
-              className={`dmc-cell${isToday ? ' today' : ''}${isSel ? ' selected' : ''}`}
-              onClick={() => onDateChange(cellDate)}
-            >{cell.day}</button>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
 // Every non-Today section is a two-page binder spread, like Today: the section
 // component builds a left page and a right page, and this draws them as two
 // sheets either side of the spine. The section title heads the left page.
@@ -139,6 +99,30 @@ function PlannerSpread({ title, left, right }) {
   )
 }
 const spreadTitled = title => (left, right) => <PlannerSpread title={title} left={left} right={right} />
+
+// Line-drawn weather icon for the Today header
+function WeatherIcon({ kind = 'sun' }) {
+  const sun = (
+    <g>
+      <circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" strokeWidth="5" />
+      {Array.from({ length: 8 }, (_, i) => {
+        const a = (i * Math.PI) / 4
+        return <line key={i} x1={32 + Math.cos(a) * 19} y1={32 + Math.sin(a) * 19} x2={32 + Math.cos(a) * 26} y2={32 + Math.sin(a) * 26}
+          stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+      })}
+    </g>
+  )
+  const cloud = <path d="M18 46h28a10 10 0 0 0 0-20 14 14 0 0 0-27 4 8 8 0 0 0-1 16z" fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinejoin="round" />
+  return (
+    <svg className="td-wx-icon" viewBox="0 0 64 64" aria-hidden="true">
+      {kind === 'sun' && sun}
+      {kind === 'partly' && <><g transform="translate(-8 -8) scale(0.8)">{sun}</g>{cloud}</>}
+      {(kind === 'cloud' || kind === 'rain' || kind === 'snow') && cloud}
+      {kind === 'rain' && [22, 32, 42].map(x => <line key={x} x1={x} y1="52" x2={x - 3} y2="60" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />)}
+      {kind === 'snow' && [22, 32, 42].map(x => <circle key={x} cx={x} cy="56" r="2.5" fill="currentColor" />)}
+    </svg>
+  )
+}
 
 // Stitching around the leather cover — an SVG so the dashes stay long and even
 function BinderStitch() {
@@ -242,6 +226,7 @@ export default function DashboardView({
   useEffect(() => { prevSectionRef.current = section }, [section])
 
   const { verse } = useDailyInspiration()
+  const weather = useWeather()
   const { mantra } = useMantra(userId)
   const { mission } = useMission(userId)
   const mantraLine = firstLine(mantra)
@@ -286,6 +271,9 @@ export default function DashboardView({
     .slice()
     .sort((a, b) => PRIORITY_ORDER[priorityLetter(a.priority)] - PRIORITY_ORDER[priorityLetter(b.priority)])
   const done    = (dailyTasks || []).filter(t =>  t.completed)
+
+  // Days with something on the calendar get a dot in the month calendar
+  const eventDates = new Set((calendarBlocks || []).map(b => b.startIso?.slice(0, 10)).filter(Boolean))
 
   // Group scheduled blocks into their appointment hour (clamped to the visible range)
   const apptByHour = {}
@@ -346,199 +334,185 @@ export default function DashboardView({
         {/* TODAY — daily planner spread */}
         {section === 'today' && (
           <>
-            <div className="fc-spread">
-              {/* ── Left page: date + appointment schedule ── */}
+            <div className="fc-spread fc-section-spread fc-today">
+              {/* ── Left page: the date, month calendar and the day's tasks ── */}
               <section className="fc-page fc-page-left">
-                <header className="fc-day-head">
-                  <div className="fc-day-box">
-                    <span className="fc-day-name">{DAY_NAMES[d.getDay()]}</span>
-                    <span className="fc-day-num">{d.getDate()}</span>
-                  </div>
-                  <div className="fc-day-meta">
-                    <span className="fc-day-month">{MONTH_NAMES[d.getMonth()]} {d.getFullYear()}</span>
-                    <span className="fc-day-count">Day {dayOfYear(d)} · {365 - dayOfYear(d)} remaining</span>
-                  </div>
-                </header>
+                <div className="fc-page-body">
+                  <header className="td-head">
+                    <div className="td-date">
+                      <span className="td-num">{d.getDate()}</span>
+                      <span className="td-dow">{DAY_NAMES[d.getDay()]}</span>
+                      <span className="td-month">{MONTH_NAMES[d.getMonth()]} {d.getFullYear()}</span>
+                    </div>
+                    <div className="td-cal">
+                      <BinderCalendar compact weekNumbers selectedDate={selectedDate} onSelect={handleDateChange} marked={eventDates} />
+                    </div>
+                  </header>
 
-                <div className="fc-minical-wrap">
-                  <DashMiniCal selectedDate={selectedDate} onDateChange={handleDateChange} />
-                </div>
+                  <form className="td-add" onSubmit={handleAddTask}>
+                    <input
+                      className="td-add-input"
+                      placeholder="Add Task"
+                      value={newTask}
+                      onChange={e => setNewTask(e.target.value)}
+                      aria-label="Add a task"
+                    />
+                    <button className="bp-plus td-add-btn" type="submit" aria-label="Add task">+</button>
+                  </form>
 
-                <div className="fc-section-label">Appointment Schedule</div>
-
-                <form className="fc-appt-add" onSubmit={handleAddBlock}>
-                  <input
-                    className="fc-input"
-                    placeholder="New appointment…"
-                    value={newBlockTitle}
-                    onChange={e => setNewBlockTitle(e.target.value)}
-                  />
-                  <input className="fc-input fc-time" type="time" value={newBlockStart} onChange={e => setNewBlockStart(e.target.value)} />
-                  <input className="fc-input fc-time" type="time" value={newBlockEnd} onChange={e => setNewBlockEnd(e.target.value)} />
-                  <button className="fc-btn" type="submit">Add</button>
-                </form>
-
-                <div className="fc-appt-grid">
-                  {APPT_HOURS.map(hour => (
-                    <div key={hour} className="fc-appt-row">
-                      <span className="fc-appt-hour">{hourLabel(hour)}</span>
-                      <div className="fc-appt-slot">
-                        {(apptByHour[hour] || [])
-                          .slice()
-                          .sort((a, b) => (a.startLabel || '').localeCompare(b.startLabel || ''))
-                          .map(b => (
-                            <div key={b.id} className="fc-appt-event" style={{ borderLeftColor: b.color || '#6b4423' }}>
-                              {(b.startLabel || b.endLabel) && (
-                                <span className="fc-appt-time">
-                                  {b.startLabel || hourLabel(hour)}{b.endLabel ? `–${b.endLabel}` : ''}
-                                </span>
-                              )}
-                              <span className="fc-appt-title">{b.text || b.title}</span>
-                              {b.source !== 'gcal' && (
-                                <button className="fc-del" onClick={() => onDeleteBlock(b.id)}>✕</button>
-                              )}
-                            </div>
-                          ))}
+                  <div className="fc-task-list td-lined">
+                    {pending.map(t => (
+                      <div key={t.id} className="fc-task-line">
+                        <span className="fc-task-prio">{priorityLetter(t.priority)}</span>
+                        <button className="fc-task-mark" onClick={() => onToggleTask(t.id)} aria-label="Complete task">
+                          <span className="fc-mark-box" />
+                        </button>
+                        <span className="fc-task-text">{t.title}</span>
+                        <button className="fc-del" onClick={() => onDeleteTask(t.id)} aria-label="Delete task">✕</button>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* ── Right page: prioritized task list + daily record ── */}
-              <section className="fc-page fc-page-right">
-                <div className="fc-section-label fc-section-label-row">
-                  <span>Prioritized Daily Task List</span>
-                  <span className="fc-count">{pending.length} open</span>
-                </div>
-
-                <form className="fc-task-add" onSubmit={handleAddTask}>
-                  <input
-                    className="fc-input"
-                    placeholder="Add a task…"
-                    value={newTask}
-                    onChange={e => setNewTask(e.target.value)}
-                  />
-                  <button className="fc-btn" type="submit">Add</button>
-                </form>
-
-                <div className="fc-task-list">
-                  {pending.map(t => (
-                    <div key={t.id} className="fc-task-line">
-                      <span className="fc-task-prio">{priorityLetter(t.priority)}</span>
-                      <button className="fc-task-mark" onClick={() => onToggleTask(t.id)} aria-label="Complete task">
-                        <span className="fc-mark-box" />
-                      </button>
-                      <span className="fc-task-text">{t.title}</span>
-                      <button className="fc-del" onClick={() => onDeleteTask(t.id)}>✕</button>
-                    </div>
-                  ))}
-                  {done.length > 0 && <div className="fc-task-divider">Completed</div>}
-                  {done.map(t => (
-                    <div key={t.id} className="fc-task-line done">
-                      <span className="fc-task-prio">{priorityLetter(t.priority)}</span>
-                      <button className="fc-task-mark done" onClick={() => onToggleTask(t.id)} aria-label="Reopen task">
-                        <span className="fc-mark-box checked">✓</span>
-                      </button>
-                      <span className="fc-task-text">{t.title}</span>
-                    </div>
-                  ))}
-                  {pending.length === 0 && done.length === 0 &&
-                    <p className="fc-empty">No tasks for today</p>}
-                </div>
-
-                <div className="fc-section-label fc-section-label-row">
-                  <span>Daily Record of Events</span>
-                  <span className="fc-count">{logEntries.length}</span>
-                </div>
-
-                <form className="fc-task-add" onSubmit={handleLogAdd}>
-                  <input
-                    className="fc-input"
-                    placeholder="Note an event…"
-                    value={logText}
-                    onChange={e => setLogText(e.target.value)}
-                  />
-                  <button className="fc-btn" type="submit">Add</button>
-                </form>
-
-                <div className="fc-record">
-                  {logEntries.map(entry => (
-                    <div key={entry.id} className="fc-record-line">
-                      <span className="fc-record-time">{new Date(entry.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
-                      {editingLogId === entry.id ? (
-                        <input
-                          autoFocus
-                          className="fc-input"
-                          value={editingLogText}
-                          onChange={e => handleLogChange(entry.id, e.target.value)}
-                          onBlur={commitLogEdit}
-                          onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') commitLogEdit() }}
-                        />
-                      ) : (
-                        <span className="fc-record-text" onClick={() => handleLogEdit(entry)}>{entry.entry}</span>
-                      )}
-                      <button className="fc-del" onClick={() => deleteLogEntry(entry.id)}>✕</button>
-                    </div>
-                  ))}
-                  {logEntries.length === 0 && <p className="fc-empty">Nothing recorded yet</p>}
-                </div>
-              </section>
-            </div>
-
-            {/* Week — tasks due this week */}
-            <div className="fc-week">
-              <div className="fc-section-label fc-section-label-row">
-                <span>This Week</span>
-                <span className="fc-count">{weekTasksFlat.length}</span>
-              </div>
-              <div className="fc-week-list">
-                {weekTasksFlat.map(t => (
-                  <div key={t.id} className={`fc-task-line${t.completed ? ' done' : ''}`}>
-                    <button className={`fc-task-mark${t.completed ? ' done' : ''}`} onClick={() => onToggleWeekCardTask(t.id, t.due_date)} aria-label="Toggle task">
-                      <span className={`fc-mark-box${t.completed ? ' checked' : ''}`}>{t.completed ? '✓' : ''}</span>
-                    </button>
-                    <span className="fc-week-due">{fmtDueDate(t.due_date)}</span>
-                    <span className="fc-task-text">{t.title}</span>
+                    ))}
+                    {done.length > 0 && <div className="fc-task-divider">Completed</div>}
+                    {done.map(t => (
+                      <div key={t.id} className="fc-task-line done">
+                        <span className="fc-task-prio">{priorityLetter(t.priority)}</span>
+                        <button className="fc-task-mark done" onClick={() => onToggleTask(t.id)} aria-label="Reopen task">
+                          <span className="fc-mark-box checked">✓</span>
+                        </button>
+                        <span className="fc-task-text">{t.title}</span>
+                      </div>
+                    ))}
+                    {pending.length === 0 && done.length === 0 &&
+                      <p className="fc-empty">No tasks for today</p>}
                   </div>
-                ))}
-                {weekTasksFlat.length === 0 &&
-                  <p className="fc-empty">No tasks due this week</p>}
-              </div>
-            </div>
 
-            {/* Daily inspiration */}
-            <div className="dash-inspiration-row">
-              <a className="dash-inspiration-card" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener noreferrer">
-                <div className="dash-inspiration-header">
-                  <span className="dash-inspiration-icon">✝</span>
-                  <span className="dash-inspiration-label">Verse of the Day</span>
+                  {/* Tasks due this week */}
+                  <div className="td-sub">This Week <span className="td-sub-count">{weekTasksFlat.length}</span></div>
+                  <div className="fc-week-list td-lined">
+                    {weekTasksFlat.map(t => (
+                      <div key={t.id} className={`fc-task-line${t.completed ? ' done' : ''}`}>
+                        <button className={`fc-task-mark${t.completed ? ' done' : ''}`} onClick={() => onToggleWeekCardTask(t.id, t.due_date)} aria-label="Toggle task">
+                          <span className={`fc-mark-box${t.completed ? ' checked' : ''}`}>{t.completed ? '✓' : ''}</span>
+                        </button>
+                        <span className="fc-week-due">{fmtDueDate(t.due_date)}</span>
+                        <span className="fc-task-text">{t.title}</span>
+                      </div>
+                    ))}
+                    {weekTasksFlat.length === 0 &&
+                      <p className="fc-empty">No tasks due this week</p>}
+                  </div>
                 </div>
-                {verse
-                  ? <>
-                      <p className="dash-inspiration-text">{verse.text}</p>
-                      <span className="dash-inspiration-sub">{verse.reference}</span>
-                    </>
-                  : <p className="dash-inspiration-loading">Loading…</p>
-                }
-              </a>
-              <button
-                type="button"
-                className="dash-inspiration-card"
-                onClick={() => { setSection('personal'); setPersonalSubTab('mantra') }}
-              >
-                <div className="dash-inspiration-header">
-                  <span className="dash-inspiration-icon">✦</span>
-                  <span className="dash-inspiration-label">Mantra &amp; Mission</span>
+                <footer className="td-foot">
+                  Day {dayOfYear(d)} · {365 - dayOfYear(d)} remaining · {pending.length} open {pending.length === 1 ? 'task' : 'tasks'} · {(timeBlocks || []).length} scheduled
+                </footer>
+              </section>
+
+              {/* ── Right page: quote + weather, schedule, daily notes ── */}
+              <section className="fc-page fc-page-right">
+                <div className="fc-page-body">
+                  <div className="td-band">
+                    <a className="td-quote" href="https://www.bible.com/verse-of-the-day" target="_blank" rel="noopener noreferrer">
+                      <span className="td-quote-mark" aria-hidden="true">“</span>
+                      {verse ? <>{verse.text} <b>{verse.reference}</b></> : 'Loading the verse of the day…'}
+                    </a>
+                    <div className="td-weather">
+                      <WeatherIcon kind={weather?.icon} />
+                      <div className="td-wx-place">
+                        <span className="td-wx-city">{weather?.place || 'Los Angeles'}</span>
+                        <span className="td-wx-label">{weather?.label || '—'}</span>
+                      </div>
+                      {weather && (
+                        <div className="td-wx-temps">
+                          <span>Current {weather.current} °F</span>
+                          <span>High {weather.high} °F</span>
+                          <span>Low {weather.low} °F</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="td-mantra"
+                    onClick={() => setSection('mission')}
+                  >
+                    {(mantraLine || missionLine)
+                      ? <>{mantraLine && <span>{mantraLine}</span>}{missionLine && <span>{missionLine}</span>}</>
+                      : <span className="td-muted">Write your mission statement →</span>}
+                  </button>
+
+                  <div className="td-sub">Schedule</div>
+                  <form className="fc-appt-add" onSubmit={handleAddBlock}>
+                    <input
+                      className="fc-input"
+                      placeholder="New appointment…"
+                      value={newBlockTitle}
+                      onChange={e => setNewBlockTitle(e.target.value)}
+                    />
+                    <input className="fc-input fc-time" type="time" value={newBlockStart} onChange={e => setNewBlockStart(e.target.value)} aria-label="Start time" />
+                    <input className="fc-input fc-time" type="time" value={newBlockEnd} onChange={e => setNewBlockEnd(e.target.value)} aria-label="End time" />
+                    <button className="fc-btn" type="submit">Add</button>
+                  </form>
+
+                  <div className="fc-appt-grid">
+                    {APPT_HOURS.map(hour => (
+                      <div key={hour} className="fc-appt-row">
+                        <span className="fc-appt-hour">{hourLabel(hour)}</span>
+                        <div className="fc-appt-slot">
+                          {(apptByHour[hour] || [])
+                            .slice()
+                            .sort((a, b) => (a.startLabel || '').localeCompare(b.startLabel || ''))
+                            .map(b => (
+                              <div key={b.id} className="fc-appt-event" style={{ borderLeftColor: b.color || '#6b4423' }}>
+                                {(b.startLabel || b.endLabel) && (
+                                  <span className="fc-appt-time">
+                                    {b.startLabel || hourLabel(hour)}{b.endLabel ? `–${b.endLabel}` : ''}
+                                  </span>
+                                )}
+                                <span className="fc-appt-title">{b.text || b.title}</span>
+                                {b.source !== 'gcal' && (
+                                  <button className="fc-del" onClick={() => onDeleteBlock(b.id)} aria-label="Delete appointment">✕</button>
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="td-sub">Daily Notes <span className="td-sub-count">{logEntries.length}</span></div>
+                  <form className="fc-task-add" onSubmit={handleLogAdd}>
+                    <input
+                      className="fc-input"
+                      placeholder="Note something about today…"
+                      value={logText}
+                      onChange={e => setLogText(e.target.value)}
+                    />
+                    <button className="fc-btn" type="submit">Add</button>
+                  </form>
+
+                  <div className="fc-record">
+                    {logEntries.map(entry => (
+                      <div key={entry.id} className="fc-record-line">
+                        <span className="fc-record-time">{new Date(entry.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
+                        {editingLogId === entry.id ? (
+                          <input
+                            autoFocus
+                            className="fc-input"
+                            value={editingLogText}
+                            onChange={e => handleLogChange(entry.id, e.target.value)}
+                            onBlur={commitLogEdit}
+                            onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') commitLogEdit() }}
+                          />
+                        ) : (
+                          <span className="fc-record-text" onClick={() => handleLogEdit(entry)}>{entry.entry}</span>
+                        )}
+                        <button className="fc-del" onClick={() => deleteLogEntry(entry.id)} aria-label="Delete note">✕</button>
+                      </div>
+                    ))}
+                    {logEntries.length === 0 && <p className="fc-empty">Nothing noted yet</p>}
+                  </div>
                 </div>
-                {(mantraLine || missionLine)
-                  ? <>
-                      {mantraLine && <p className="dash-inspiration-text">{mantraLine}</p>}
-                      {missionLine && <p className="dash-inspiration-text">{missionLine}</p>}
-                    </>
-                  : <p className="dash-inspiration-loading">Add your mantra &amp; mission in Personal</p>
-                }
-              </button>
+              </section>
             </div>
 
             {/* Mobile pill nav — only shown on Today page */}
@@ -583,6 +557,19 @@ export default function DashboardView({
               onMonthChange={onMonthChange}
               spread={spreadTitled("Month")}
             />
+        )}
+
+        {section === 'meetings' && (
+          <MeetingsPanel userId={userId} selectedDate={selectedDate} spread={spreadTitled('Meetings')} />
+        )}
+        {section === 'mission' && (
+          <MissionPanel userId={userId} spread={spreadTitled('Mission')} />
+        )}
+        {section === 'notes' && (
+          <NotesPanel userId={userId} spread={spreadTitled('Notes')} />
+        )}
+        {section === 'journal' && (
+          <JournalPanel userId={userId} selectedDate={selectedDate} spread={spreadTitled('Journal')} />
         )}
 
         {/* MODULE PANELS */}

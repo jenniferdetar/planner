@@ -1,0 +1,408 @@
+/* Shared look for the Opus One–style binder pages (Meetings, Mission, Notes,
+   Journal) and the month calendar used on Today and Journal. Quiet ink on
+   paper: thin rules, light headings, the section colour (--sec) for accents. */
+
+.bp-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  color: #2e2a25;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+}
+
+/* ── Heading row: label on the left, "Add ⊕" on the right ── */
+.bp-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.bp-head-sub { font-size: 20px; font-weight: 400; color: #26221d; }
+.bp-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 17px;
+  color: #3b342c;
+  cursor: pointer;
+  padding: 2px 0;
+}
+.bp-plus {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid #5a3a22;
+  color: #5a3a22;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+}
+.bp-add:hover .bp-plus { background: #5a3a22; color: #fff; }
+
+.bp-muted { color: #8a857c; font-size: 13px; }
+.bp-small-cap { font-size: 12px; }
+.bp-empty { color: #8a857c; font-style: italic; margin: 10px 2px; }
+
+.bp-link {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  color: var(--sec, #5a3a22);
+  cursor: pointer;
+  padding: 2px 0;
+}
+.bp-link:hover { text-decoration: underline; }
+
+/* ── Week navigator ── */
+.bp-weeknav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-size: 17px;
+}
+.bp-arrow {
+  border: none;
+  background: none;
+  font-size: 26px;
+  line-height: 1;
+  color: #2e2a25;
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+/* ── Meeting list table ── */
+.bp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.bp-table th {
+  text-align: left;
+  font-weight: 400;
+  font-size: 15px;
+  color: #3b342c;
+  padding: 8px 6px;
+  border-bottom: 1px solid #cfccc5;
+}
+.bp-table th + th { border-left: 1px solid #dcd9d2; }
+.bp-table td { padding: 9px 6px; border-bottom: 1px solid #e0ddd6; vertical-align: top; }
+.bp-table tbody tr { cursor: pointer; }
+.bp-table tbody tr:hover { background: rgba(0,0,0,0.035); }
+.bp-table tbody tr.sel { background: color-mix(in srgb, var(--sec, #5a3a22) 10%, transparent); box-shadow: inset 3px 0 0 var(--sec, #5a3a22); }
+.bp-strong { font-weight: 600; }
+
+/* ── Editor fields ── */
+.bp-title-input {
+  border: none;
+  border-bottom: 1px solid #cfccc5;
+  background: transparent;
+  font: inherit;
+  font-size: 24px;
+  font-weight: 400;
+  padding: 4px 2px 8px;
+  color: #1f1b17;
+}
+.bp-title-input:focus { outline: none; border-bottom-color: var(--sec, #5a3a22); }
+.bp-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.bp-field-grid label, .bp-area { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #6f6a62; }
+.bp-area > span { font-size: 12px; }
+.bp-field-grid input,
+.bp-area textarea,
+.bp-foot select,
+.bp-inline-form input {
+  font: inherit;
+  font-size: 14px;
+  color: #2e2a25;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid #d6d3cc;
+  border-radius: 8px;
+  padding: 7px 9px;
+}
+.bp-area textarea { resize: vertical; line-height: 1.45; }
+.bp-field-grid input:focus,
+.bp-area textarea:focus,
+.bp-inline-form input:focus,
+.bp-search:focus { outline: 2px solid color-mix(in srgb, var(--sec, #5a3a22) 55%, transparent); outline-offset: 0; }
+
+.bp-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+.bp-danger {
+  border: 1px solid #d7b4b0;
+  background: transparent;
+  color: #a03a32;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.bp-danger.armed { background: #a03a32; color: #fff; border-color: #a03a32; }
+
+/* ── Empty right page: big outline icon + hint ── */
+.bp-placeholder { align-items: center; justify-content: center; text-align: center; min-height: 60%; color: #7d7870; padding-top: 18%; }
+.bp-ph-icon { color: #8e8a83; }
+.bp-placeholder p { font-weight: 600; font-size: 16px; margin: 6px 0 0; }
+
+/* ── Notes ── */
+.bp-search-row { display: flex; align-items: center; gap: 10px; }
+.bp-search {
+  font-style: normal !important;
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 14px;
+  padding: 8px 12px 8px 32px;
+  border: 1px solid #dcd9d2;
+  border-radius: 10px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='m20 20-4.5-4.5'/%3E%3C/svg%3E") no-repeat 10px center;
+}
+.bp-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #cfccc5;
+  background: rgba(255,255,255,0.6);
+  font-size: 18px;
+  cursor: pointer;
+  color: #2e2a25;
+}
+.bp-icon-btn:hover { background: #fff; }
+.bp-area-group { margin-top: 14px; display: flex; flex-direction: column; }
+.bp-area-head { display: flex; align-items: center; gap: 8px; font-size: 20px; font-style: italic; font-weight: 500; padding: 4px 0 6px; }
+.bp-area-icon { font-style: normal; }
+.bp-mini-add {
+  margin-left: auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid #cfccc5;
+  background: transparent;
+  font-size: 16px;
+  color: #6f6a62;
+  cursor: pointer;
+}
+.bp-folder {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 6px 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  font-style: italic;
+  color: #2e2a25;
+  cursor: pointer;
+  text-align: left;
+}
+.bp-folder svg { color: #7d7870; flex-shrink: 0; }
+.bp-folder:hover { background: rgba(0,0,0,0.04); }
+.bp-folder.sel { background: color-mix(in srgb, var(--sec, #5a3a22) 10%, transparent); }
+.bp-folder-name { flex: 1; min-width: 0; }
+.bp-count {
+  min-width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #8f8b84;
+  color: #fff;
+  font-size: 13px;
+  font-style: normal;
+}
+.bp-chev { font-size: 22px; color: #5d5850; font-style: normal; }
+.bp-inline-form { display: flex; gap: 8px; margin: 6px 0 4px 16px; }
+.bp-inline-form input { flex: 1; min-width: 0; }
+.bp-inline-form button {
+  border: none;
+  border-radius: 8px;
+  background: var(--sec, #5a3a22);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  padding: 0 14px;
+  cursor: pointer;
+}
+.bp-folder-head { display: flex; align-items: flex-start; justify-content: space-between; color: #2e2a25; }
+.bp-compose { width: 42px; height: 42px; font-size: 22px; }
+.bp-folder-title { font-size: 20px; }
+.bp-toolbar { display: flex; align-items: center; justify-content: space-between; font-weight: 600; border-bottom: 1px solid #dcd9d2; padding-bottom: 8px; }
+.bp-results { display: flex; flex-direction: column; }
+.bp-note-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 10px;
+  border: none;
+  border-bottom: 1px solid #e0ddd6;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.bp-note-row:hover { background: rgba(0,0,0,0.035); }
+.bp-note-row.sel { background: color-mix(in srgb, var(--sec, #5a3a22) 10%, transparent); }
+.bp-note-title { font-weight: 600; font-size: 15px; color: #1f1b17; }
+.bp-note-meta { font-size: 12px; color: #8a857c; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bp-crumb { display: flex; align-items: center; justify-content: space-between; }
+.bp-note-body {
+  flex: 1;
+  min-height: 320px;
+  resize: vertical;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #2e2a25;
+  border: none;
+  padding: 6px 2px;
+  /* Ruled paper */
+  background: repeating-linear-gradient(transparent 0 23px, #d9d6cf 23px 24px);
+  background-attachment: local;
+}
+.bp-note-body:focus { outline: none; }
+
+/* ── Journal ── */
+.bp-shelf {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding: 16px 14px 12px;
+  border-radius: 14px;
+  background: linear-gradient(#e2e1dd, #d8d7d3);
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.12);
+  scroll-snap-type: x mandatory;
+}
+.bp-book {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  scroll-snap-align: start;
+  opacity: 0.8;
+}
+.bp-book.active, .bp-book:hover { opacity: 1; }
+.bp-book-cover {
+  position: relative;
+  width: 92px;
+  height: 120px;
+  border-radius: 4px 10px 10px 4px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.18) 0 6px, rgba(255,255,255,0.10) 6px 9px, transparent 9px), var(--cover, #c8323a);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+  transition: transform 0.15s;
+}
+.bp-book.active .bp-book-cover { transform: translateY(-4px); box-shadow: 0 10px 16px rgba(0,0,0,0.3), 0 0 0 3px #fff; }
+.bp-book-band { position: absolute; top: 0; bottom: 0; right: 14px; width: 5px; background: rgba(0,0,0,0.55); }
+.bp-book-title { font-weight: 700; font-size: 14px; max-width: 120px; text-align: center; }
+.bp-book-sub { font-size: 11px; color: #6f6a62; }
+.bp-entries-head { margin-top: 10px; border-top: 1px solid #dcd9d2; padding-top: 12px; }
+.bp-seg { display: inline-flex; background: #dddcd8; border-radius: 9px; padding: 2px; }
+.bp-seg button {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  padding: 5px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  color: #2e2a25;
+}
+.bp-seg button[aria-selected="true"] { background: #1a73e8; color: #fff; }
+.bp-today-row { display: flex; justify-content: flex-end; }
+.bp-today { color: #d23b2f; font-size: 15px; }
+.bp-date-title { font-size: 24px; font-weight: 600; margin-top: -6px; }
+.bp-hint-card {
+  border: 1px solid #dcd9d2;
+  border-radius: 14px;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.35);
+  color: #5d5850;
+}
+.bp-hint-title { font-weight: 700; font-size: 16px; color: #1f1b17; }
+.bp-hint-card p { margin: 8px 0; }
+.bp-hint-card ol { margin: 0; padding-left: 20px; font-size: 13px; }
+.bp-journal-name {
+  align-self: flex-start;
+  border: none;
+  border-radius: 999px;
+  padding: 3px 12px;
+  background: var(--cover, #c8323a);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.bp-journal-text { min-height: 420px; }
+.bp-entry-card { display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-bottom: 1px solid #e0ddd6; }
+.bp-entry-text { margin: 0; white-space: pre-wrap; line-height: 1.55; }
+
+/* ── Mission ── */
+.bp-mission p { font-size: 17px; line-height: 1.7; margin: 0 0 14px; color: #2e2a25; }
+.bp-mission-edit { min-height: 360px; font-size: 16px; }
+.bp-values .values-list-wrap { background: transparent !important; box-shadow: none !important; }
+
+/* ═══ Month calendar (Today + Journal) ═══════════════════════════════════════ */
+.bc { width: 100%; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+.bc-head { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
+.bc-month {
+  padding: 4px 18px;
+  border-radius: 8px 8px 0 0;
+  background: #8b5a3c;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  min-width: 150px;
+  text-align: center;
+}
+.bc-nav { border: none; background: none; font-size: 26px; line-height: 1; color: #2e2a25; cursor: pointer; padding: 0 6px; }
+.bc-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; }
+.bc-weeks .bc-grid { grid-template-columns: 24px repeat(7, 1fr); }
+.bc-dow { text-align: center; font-size: 12px; color: #4a453e; padding-bottom: 4px; }
+.bc-wk-head { border-right: 1px dotted #b9b5ad; }
+.bc-wk { font-size: 10px; color: #8a857c; display: flex; align-items: center; border-right: 1px dotted #b9b5ad; }
+.bc-day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  color: #2e2a25;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.bc-compact .bc-day { height: 32px; font-size: 13px; }
+.bc-day.out { color: #a8a49c; }
+.bc-day:hover .bc-num { background: rgba(0,0,0,0.06); }
+.bc-num { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; }
+.bc-compact .bc-num { width: 26px; height: 26px; }
+.bc-day.today .bc-num { font-weight: 700; text-decoration: underline; }
+.bc-day.sel .bc-num { background: #111; color: #fff; font-weight: 600; text-decoration: none; }
+.bc-dot { position: absolute; bottom: 1px; width: 5px; height: 5px; border-radius: 50%; background: #8b5a3c; }
+.bc-compact .bc-dot { bottom: -1px; }
+
+/* The app theme gives every field a white fill (!important); on these pages
+   the title line and writing areas sit on the paper so the rules show. */
+.fc-page .bp-wrap input.bp-title-input:not([type="checkbox"]),
+.bp-note-body {
+  background-color: transparent !important;
+}
+.bp-note-body {
+  background-image: repeating-linear-gradient(transparent 0 23px, #d9d6cf 23px 24px) !important;
+  border: none !important;
+}
+.bp-note-body:focus { background-color: rgba(255,255,255,0.25) !important; }
