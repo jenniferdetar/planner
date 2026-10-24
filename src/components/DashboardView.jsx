@@ -137,6 +137,70 @@ function PlannerPage({ title, children }) {
   )
 }
 
+// Stitching around the leather cover — an SVG so the dashes stay long and even
+function BinderStitch() {
+  return (
+    <svg className="fc-stitch" aria-hidden="true">
+      <rect x="0" y="0" width="100%" height="100%" rx="26" ry="26" />
+    </svg>
+  )
+}
+
+// Metal binder rings across the centre spine (Today's two-page spread)
+function BinderRings() {
+  const ring = (
+    <svg viewBox="0 0 120 30" className="fc-ring">
+      <defs>
+        <linearGradient id="fcRingMetal" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#9aa3ad" />
+          <stop offset="0.35" stopColor="#4b545e" />
+          <stop offset="0.7" stopColor="#1f252c" />
+          <stop offset="1" stopColor="#5d6670" />
+        </linearGradient>
+      </defs>
+      <ellipse cx="60" cy="15" rx="52" ry="8" fill="none" stroke="url(#fcRingMetal)" strokeWidth="7" />
+      <path d="M22 9.5 Q60 4 98 9.5" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1.4" strokeLinecap="round" />
+      <circle cx="9" cy="17" r="4.5" fill="#2a3038" />
+      <circle cx="111" cy="17" r="4.5" fill="#2a3038" />
+    </svg>
+  )
+  return (
+    <div className="fc-binding" aria-hidden="true">
+      <div className="fc-spine" />
+      {['14%', '21%', '79%', '86%'].map(top => (
+        <div key={top} className="fc-ring-slot" style={{ top }}>{ring}</div>
+      ))}
+    </div>
+  )
+}
+
+// One edge of the divider-tab rail. Every tab keeps its own slot (so it never
+// jumps up or down); tabs before the open one show on the left edge, the open
+// tab and everything after it on the right — like flipping through a binder.
+function TabRail({ side, section, onSelect }) {
+  const curIdx = NAV_ORDER.indexOf(section)
+  return (
+    <nav className={`fc-tab-rail fc-tab-rail-${side}`}>
+      {NAV_ITEMS.map((item, idx) => {
+        const here = side === 'left' ? idx < curIdx : idx >= curIdx
+        return (
+          <div key={item.key} className="fc-tab-slot">
+            {here && (
+              <button
+                className={`fc-tab${section === item.key ? ' active' : ''}`}
+                style={{ '--tab': item.color }}
+                onClick={() => onSelect(item.key)}
+              >
+                <span>{item.label}</span>
+              </button>
+            )}
+          </div>
+        )
+      })}
+    </nav>
+  )
+}
+
 export default function DashboardView({
   userId, providerToken, selectedDate, onDateChange,
   dailyTasks, onAddTask, onToggleTask, onDeleteTask,
@@ -256,7 +320,22 @@ export default function DashboardView({
 
   return (
     <div className="dash-outer">
+      <BinderStitch />
 
+      {/* ── Top strip on the leather cover ── */}
+      <header className="fc-cover-bar">
+        <span className="fc-rail-brand">My Meridian Planner</span>
+        <div className="fc-cover-actions">
+          {(calAuthExpired || calEventCount === 0) &&
+            <button className="fc-rail-btn" onClick={onReconnectGoogle}>Connect Cal</button>}
+          <button className="fc-rail-btn" onClick={onSignOut}>Sign out</button>
+        </div>
+      </header>
+
+      {/* ── Divider tabs already turned past sit on the left edge ── */}
+      <TabRail side="left" section={section} onSelect={setSection} />
+
+      <div className="dash-binder">
       {/* ── Main desk ── */}
       <main className="dash-main">
         <div className={`fc-flip fc-dir-${turnDir}`} key={section} style={{ '--tab': NAV_ITEMS.find(i => i.key === section)?.color }}>
@@ -616,27 +695,11 @@ export default function DashboardView({
         </div>{/* /fc-flip */}
       </main>
 
-      {/* ── Right-edge divider tabs ── */}
-      <nav className="fc-tab-rail">
-        <span className="fc-rail-brand">My Meridian Planner</span>
-        <div className="fc-tab-stack">
-          {NAV_ITEMS.map(item => (
-            <button
-              key={item.key}
-              className={`fc-tab${section === item.key ? ' active' : ''}`}
-              style={{ '--tab': item.color }}
-              onClick={() => setSection(item.key)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-        <div className="fc-rail-foot">
-          {(calAuthExpired || calEventCount === 0) &&
-            <button className="fc-rail-btn" onClick={onReconnectGoogle}>Connect Cal</button>}
-          <button className="fc-rail-btn" onClick={onSignOut}>Sign out</button>
-        </div>
-      </nav>
+      {section === 'today' && <BinderRings />}
+      </div>{/* /dash-binder */}
+
+      {/* ── The open tab and those still ahead sit on the right edge ── */}
+      <TabRail side="right" section={section} onSelect={setSection} />
 
       {/* Mobile back-to-today button — shown on all non-Today sections */}
       {section !== 'today' && (

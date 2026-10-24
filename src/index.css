@@ -85,6 +85,10 @@ input, textarea {
 
   /* Navigation and floating controls are not content — drop them. */
   .dash-sidebar,
+  .fc-stitch,
+  .fc-cover-bar,
+  .fc-binding,
+  .fc-tab-rail,
   .view-mode-toggle,
   .mobile-nav,
   .dash-add-row,
