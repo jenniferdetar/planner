@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './GcuPanel.css'
+import { stackPages } from './spread'
 
 export const GCU_COURSES = [
   // Completed
@@ -127,9 +128,9 @@ function CourseGroup({ label, courses, api }) {
   )
 }
 
-export default function GcuPanel({ onPushToAsana, pushing }) {
+export default function GcuPanel({ onPushToAsana, pushing, spread = stackPages }) {
   const api = useGcuState()
-  return (
+  return spread(
     <div className="gcu-panel">
       <div className="gcu-page-header">
         <span className="gcu-page-title">MPA – Government &amp; Policy</span>
@@ -154,6 +155,10 @@ export default function GcuPanel({ onPushToAsana, pushing }) {
 
       <div className="gcu-body">
         <CourseGroup label="Completed" courses={api.completed} api={api} />
+      </div>
+    </div>,
+    <div className="gcu-panel">
+      <div className="gcu-body">
         <CourseGroup label="Core Courses" courses={api.core} api={api} />
         <CourseGroup label="Government &amp; Policy Emphasis" courses={api.emphasis} api={api} />
       </div>

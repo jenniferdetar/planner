@@ -10,6 +10,7 @@ import { CONFERENCE_ATTENDEES } from '../data/conferenceAttendees'
 import { STANDING_COMMITTEES, OTHER_APPOINTMENTS } from '../data/committeeAppointments'
 import { isEboardMember, isLaborRep, isAreaIMember, isStateMember } from '../lib/eboardMembers'
 import './CseaTracker.css'
+import { stackPages } from './spread'
 
 function MemberSearch({ value, onChange, placeholder = 'Member name *' }) {
   const { search, setSearch, results } = useCseaMembers()
@@ -175,7 +176,7 @@ export function useCseaPage({ userId, issues, onAddIssue, onUpdateStatus, onDele
 
 const CONFERENCE_ARCHIVED_KEY = 'csea_conference_archived'
 
-export function CseaTrackerInner({ api }) {
+export function CseaTrackerInner({ api, spread }) {
   const [tab, setTab] = useState('issues')
   const [conferenceArchived, setConferenceArchived] = useState(() => {
     try { return localStorage.getItem(CONFERENCE_ARCHIVED_KEY) === '1' } catch { return false }
@@ -193,9 +194,9 @@ export function CseaTrackerInner({ api }) {
     setTab('conference')
   }
 
-  return (
+  return spread(
     <div className="csea-tracker">
-      <div className="csea-tabs">
+      <div className="csea-tabs fc-index">
         <button className={`csea-tab ${tab === 'issues' ? 'active' : ''}`} onClick={() => setTab('issues')}>Issues</button>
         <button className={`csea-tab ${tab === 'interactions' ? 'active' : ''}`} onClick={() => setTab('interactions')}>Interactions {api.interactions.length > 0 && <span className="csea-tab-badge">{new Set(api.interactions.map(i => i.member_name || 'Unknown')).size}</span>}</button>
         <button className={`csea-tab ${tab === 'notes' ? 'active' : ''}`} onClick={() => setTab('notes')}>Topics {api.cseaNotes.length > 0 && <span className="csea-tab-badge">{api.cseaNotes.length}</span>}</button>
@@ -211,7 +212,8 @@ export function CseaTrackerInner({ api }) {
           <button className="csea-tab csea-tab--restore" onClick={unarchiveConference} title="Restore the archived Conference page">Conference ↩ Archived</button>
         )}
       </div>
-
+    </div>,
+    <div className="csea-tracker">
       {tab === 'issues' && (
         <div className="csea-panel">
           <div className="csea-toolbar">
@@ -1537,6 +1539,6 @@ function IssueCard({ issue, onUpdateStatus, onDelete, notes = [], onAddNote, onD
 export default function CseaTracker(props) {
   const api = useCseaPage(props)
   return (
-    <CseaTrackerInner api={api} />
+    <CseaTrackerInner api={api} spread={props.spread || stackPages} />
   )
 }

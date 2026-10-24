@@ -1259,39 +1259,6 @@ button.dash-inspiration-card {
   to   { transform: perspective(2400px) rotateY(0deg); }
 }
 
-/* A full-width section page can't pivot on the spine itself (it would swing
-   off its outer margin), so a blank leaf turns over the centre spine on top
-   of it instead — the same hinge as the Today page. Going forward the leaf
-   lifts off the left half and settles on the right; going back it mirrors. */
-.fc-leaf {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 50%;
-  background: linear-gradient(90deg, #f7f3e9, #fdfcf6);
-  box-shadow: 0 0 18px rgba(20,12,4,0.22);
-  transform-origin: right center;
-  pointer-events: none;
-  z-index: 7;
-  opacity: 0;
-  animation: fc-leaf-turn 0.62s cubic-bezier(0.34, 0.86, 0.4, 1);
-}
-.fc-dir-up .fc-leaf {
-  left: 50%;
-  transform-origin: left center;
-  animation-name: fc-leaf-turn-back;
-}
-@keyframes fc-leaf-turn {
-  0%   { opacity: 1; transform: perspective(2400px) rotateY(0deg); }
-  88%  { opacity: 1; transform: perspective(2400px) rotateY(180deg); }
-  100% { opacity: 0; transform: perspective(2400px) rotateY(180deg); }
-}
-@keyframes fc-leaf-turn-back {
-  0%   { opacity: 1; transform: perspective(2400px) rotateY(0deg); }
-  88%  { opacity: 1; transform: perspective(2400px) rotateY(-180deg); }
-  100% { opacity: 0; transform: perspective(2400px) rotateY(-180deg); }
-}
 /* The soft shadow a real leaf casts as it settles onto the spread */
 .fc-page-right::after {
   content: "";
@@ -1313,65 +1280,135 @@ button.dash-inspiration-card {
 }
 @media (prefers-reduced-motion: reduce) {
   .fc-page-right,
-  .fc-dir-up .fc-page-right,
-  .fc-single-page {
+  .fc-dir-up .fc-page-right {
     animation: fc-fade 0.2s ease;
     transform: none;
   }
   .fc-page-right::after { animation: none; opacity: 0; }
-  .fc-leaf { display: none; }
   @keyframes fc-fade { from { opacity: 0 } to { opacity: 1 } }
 }
 
-/* ═══ Full-width binder page (every non-Today section) ═══════════════════════ */
+/* ═══ Section spreads (every non-Today section) ═════════════════════════════ */
 
-/* Two distinct pages joined at a centre spine: the left/right halves are
-   tinted slightly differently and a soft gutter shadow runs down the middle. */
-.fc-single-page {
+/* Same two sheets as Today, but sized to the binder: each page scrolls on its
+   own, the way a real page holds still while you read down it. */
+.fc-section-spread {
   flex: 1;
+  min-height: 0;
+}
+.fc-section-spread .fc-page {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
-    linear-gradient(90deg, var(--paper) 0 50%, color-mix(in srgb, var(--paper) 96%, #000) 50% 100%);
-  border-radius: 26px;
-  padding: 18px 28px 20px;
-  position: relative;
   overflow: hidden;
-  box-shadow:
-    0 3px 0 -1px #dcdbd7, 0 6px 0 -2px #cfceca, 0 9px 0 -3px #c3c2be,
-    0 14px 22px rgba(20,10,2,0.45);
 }
-/* Centre spine — the gutter where the two pages meet */
-.fc-single-page::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 72px;
-  transform: translateX(-50%);
-  background: linear-gradient(90deg,
-    rgba(60,40,20,0) 0%,
-    rgba(60,40,20,0.10) 42%,
-    rgba(60,40,20,0.18) 50%,
-    rgba(60,40,20,0.10) 58%,
-    rgba(60,40,20,0) 100%);
-  pointer-events: none;
-  z-index: 4;
+.fc-page-title {
+  margin: 4px 0 12px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: 0.2px;
+  color: #26221d;
 }
-.fc-single-body {
+.fc-page-body {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
-.fc-single-body > * {
-  flex: 1;
-  min-height: 0;
+.fc-page-body > * {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+/* Each section's outer wrapper sits straight on the paper — its own page
+   colour, texture and card frame would hide the sheet. (Older theme rules use
+   !important, so these must too.) */
+.fc-section-spread .fc-page-body > * {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* A section's sub-pages listed down the left page, like a binder's index */
+.fc-section-spread .fc-page .fc-index {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  margin: 6px 0 14px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-top: 1px solid #d6d4cf !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  position: static !important;
+  height: auto !important;
+  max-height: none !important;
+}
+.fc-section-spread .fc-page .fc-index > button {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 12px 8px 12px 14px !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #d6d4cf !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  text-align: left !important;
+  color: #2e2a25 !important;
+  opacity: 1 !important;
+  transform: none !important;
+  cursor: pointer;
+  white-space: normal !important;
+}
+.fc-section-spread .fc-page .fc-index > button::before { display: none !important; }
+.fc-section-spread .fc-page .fc-index > button::after {
+  content: "›" !important;
+  display: block !important;
+  margin-left: 12px !important;
+  font-size: 20px;
+  line-height: 1;
+  color: #a8a49c;
+}
+.fc-section-spread .fc-page .fc-index > button:not(:has(span))::after { margin-left: auto !important; }
+.fc-section-spread .fc-page .fc-index > button:hover { background: rgba(0,0,0,0.035) !important; }
+.fc-section-spread .fc-page .fc-index > button:focus-visible { outline: 2px solid var(--sec); outline-offset: -2px; }
+.fc-section-spread .fc-page .fc-index > button.active,
+.fc-section-spread .fc-page .fc-index > button[aria-selected="true"] {
+  font-weight: 600 !important;
+  color: var(--sec) !important;
+  background: color-mix(in srgb, var(--sec) 9%, transparent) !important;
+  box-shadow: inset 4px 0 0 var(--sec) !important;
+}
+.fc-section-spread .fc-page .fc-index > button.active::after,
+.fc-section-spread .fc-page .fc-index > button[aria-selected="true"]::after { color: var(--sec); }
+/* Count badges become grey pills like Opus One's folder counts */
+.fc-section-spread .fc-page .fc-index > button span {
+  min-width: 22px !important;
+  margin-left: auto !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  background: #8f8b84 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
 }
 
 /* ═══ Divider tabs on both edges of the binder ══════════════════════════════ */
@@ -1499,17 +1536,13 @@ button.dash-inspiration-card {
   .fc-day-num { font-size: 34px; }
   .fc-week-list { columns: 1; }
 
-  /* Single reading page on phones — spine and two-tone collapse away */
-  .fc-single-page {
-    padding: 14px 14px 16px;
-    min-height: 72vh;
-    border-radius: 14px;
-    background: var(--paper);
-  }
-  .fc-single-page::before { display: none; }
+  /* Section pages stack and grow with their content on phones */
+  .fc-section-spread { flex: 0 0 auto; }
+  .fc-section-spread .fc-page { overflow: visible; }
+  .fc-page-body { flex: none; overflow: visible; }
+  .fc-section-spread .fc-page-body > * { flex: 0 0 auto !important; overflow: visible !important; }
 
   /* The tab rails are hidden on phones — the existing pill/back nav is used */
   .fc-tab-rail { display: none; }
-  .fc-page-right,
-  .fc-single-page { animation-duration: 0.34s; }
+  .fc-page-right { animation-duration: 0.34s; }
 }

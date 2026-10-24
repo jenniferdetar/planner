@@ -3,6 +3,7 @@ import { useHoaItems, CATEGORIES, PRIORITIES, STATUSES } from '../hooks/useHoaIt
 import { useICloudHoaSync } from '../hooks/useICloudHoaSync'
 import { useNotionHoaSync } from '../hooks/useNotionHoaSync'
 import './HoaPanel.css'
+import { stackPages } from './spread'
 
 const STATUS_COLORS = {
   'Not Started': '#aaa',
@@ -503,8 +504,8 @@ function HoaGroupList({ groups, api }) {
   )
 }
 
-function HoaPanelInner({ api }) {
-  return (
+function HoaPanelInner({ api, spread }) {
+  return spread(
     <div className="hoa-panel">
       <div className="hoa-header">
         <span className="hoa-header-title">Park Reseda HOA</span>
@@ -550,7 +551,7 @@ function HoaPanelInner({ api }) {
         ))}
       </div>
 
-      <div className="hoa-tabs">
+      <div className="hoa-tabs fc-index">
         {api.tabs.map(t => (
           <button
             key={t}
@@ -560,7 +561,8 @@ function HoaPanelInner({ api }) {
           >{t}</button>
         ))}
       </div>
-
+    </div>,
+    <div className="hoa-panel">
       {api.tab === 'Financials' && <HoaFinancials />}
       {api.tab === 'Directory' && <HoaDirectory />}
       {api.tab !== 'Financials' && api.tab !== 'Directory' && api.showForm && <HoaForm api={api} />}
@@ -569,7 +571,7 @@ function HoaPanelInner({ api }) {
   )
 }
 
-export default function HoaPanel({ userId }) {
+export default function HoaPanel({ userId, spread = stackPages }) {
   const api = useHoaPage(userId)
-  return <HoaPanelInner api={api} />
+  return <HoaPanelInner api={api} spread={spread} />
 }

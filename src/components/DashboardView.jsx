@@ -122,20 +122,23 @@ function DashMiniCal({ selectedDate, onDateChange }) {
   )
 }
 
-// Every non-Today section is a single full-width binder page — the content
-// fills the whole spread (both pages). A leaf turns over the centre spine like
-// a book page. The monthly planner and the two-page spread stay on Today only.
-function PlannerPage({ title, children }) {
+// Every non-Today section is a two-page binder spread, like Today: the section
+// component builds a left page and a right page, and this draws them as two
+// sheets either side of the spine. The section title heads the left page.
+function PlannerSpread({ title, left, right }) {
   return (
-    <div className="fc-single-page">
-      <div className="fc-leaf" aria-hidden="true" />
-      <div className="fc-section-label fc-section-label-row">
-        <span>{title}</span>
-      </div>
-      <div className="fc-single-body">{children}</div>
+    <div className="fc-spread fc-section-spread">
+      <section className="fc-page fc-page-left">
+        <h2 className="fc-page-title">{title}</h2>
+        <div className="fc-page-body">{left}</div>
+      </section>
+      <section className="fc-page fc-page-right">
+        <div className="fc-page-body">{right}</div>
+      </section>
     </div>
   )
 }
+const spreadTitled = title => (left, right) => <PlannerSpread title={title} left={left} right={right} />
 
 // Stitching around the leather cover — an SVG so the dashes stay long and even
 function BinderStitch() {
@@ -146,7 +149,7 @@ function BinderStitch() {
   )
 }
 
-// Metal binder rings across the centre spine (Today's two-page spread)
+// Metal binder rings across the centre spine
 function BinderRings() {
   const ring = (
     <svg viewBox="0 0 120 30" className="fc-ring">
@@ -558,7 +561,6 @@ export default function DashboardView({
 
         {/* WEEK VIEW */}
         {section === 'week' && (
-          <PlannerPage title="Week">
             <WeekView
               userId={userId}
               selectedDate={selectedDate}
@@ -567,26 +569,24 @@ export default function DashboardView({
               tasksByDate={weeklyTasks}
               onToggleTask={onToggleWeeklyTask}
               onAddTask={onAddWeeklyTask}
+              spread={spreadTitled("Week")}
             />
-          </PlannerPage>
         )}
 
         {/* MONTH VIEW */}
         {section === 'month' && (
-          <PlannerPage title="Month">
             <MonthView
               selectedDate={selectedDate}
               onDateChange={d => { handleDateChange(d) }}
               taskCounts={taskCounts}
               timeBlocks={calendarBlocks || timeBlocks}
               onMonthChange={onMonthChange}
+              spread={spreadTitled("Month")}
             />
-          </PlannerPage>
         )}
 
         {/* MODULE PANELS */}
         {section === 'csea' && (
-          <PlannerPage title="CSEA">
             <CseaTracker
               userId={userId}
               issues={cseaIssues || []}
@@ -622,11 +622,10 @@ export default function DashboardView({
               onAddDelegateCard={onAddCseaDelegateCard}
               onUpdateDelegateCard={onUpdateCseaDelegateCard}
               onDeleteDelegateCard={onDeleteCseaDelegateCard}
+              spread={spreadTitled("CSEA")}
             />
-          </PlannerPage>
         )}
         {section === 'icaap' && (
-          <PlannerPage title="iCAAP">
             <IcaapTracker
               userId={userId}
               items={icaapItems || []}
@@ -642,31 +641,30 @@ export default function DashboardView({
               icaapNotes={icaapNotes || []}
               onAddIcaapNote={onAddIcaapNote}
               onDeleteIcaapNote={onDeleteIcaapNote}
+              spread={spreadTitled("iCAAP")}
             />
-          </PlannerPage>
         )}
         {section === 'gcu' && (
-          <PlannerPage title="GCU">
-            <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing} />
-          </PlannerPage>
+            <GcuPanel onPushToAsana={onPushGcuToAsana} pushing={gcuPushing}
+              spread={spreadTitled("GCU")}
+            />
         )}
         {section === 'hoa' && (
-          <PlannerPage title="HOA">
-            <HoaPanel userId={userId} />
-          </PlannerPage>
+            <HoaPanel userId={userId}
+              spread={spreadTitled("HOA")}
+            />
         )}
         {section === 'financial' && (
-          <PlannerPage title="Financial">
-            <FinancialPanel userId={userId} />
-          </PlannerPage>
+            <FinancialPanel userId={userId}
+              spread={spreadTitled("Financial")}
+            />
         )}
         {section === 'matrix' && (
-          <PlannerPage title="Priority Matrix">
-            <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask} />
-          </PlannerPage>
+            <EisenhowerMatrix masterTasks={masterTasks || []} onUpdateTask={onUpdateMasterTask}
+              spread={spreadTitled("Priority Matrix")}
+            />
         )}
         {section === 'personal' && (
-          <PlannerPage title="Personal">
             <PersonalPanel
               userId={userId}
               providerToken={providerToken}
@@ -688,14 +686,14 @@ export default function DashboardView({
               onImportFamilyDefaults={onImportFamilyDefaults}
               subTab={personalSubTab}
               onSubTabChange={setPersonalSubTab}
+              spread={spreadTitled("Personal")}
             />
-          </PlannerPage>
         )}
 
         </div>{/* /fc-flip */}
       </main>
 
-      {section === 'today' && <BinderRings />}
+      <BinderRings />
       </div>{/* /dash-binder */}
 
       {/* ── The open tab and those still ahead sit on the right edge ── */}
