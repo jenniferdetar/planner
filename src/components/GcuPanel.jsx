@@ -5,16 +5,16 @@ export const GCU_COURSES = [
   // Completed
   { code: 'UNV-504', name: 'Introduction to Graduate Studies in the Liberal Arts', credits: 2, type: 'completed', start: '5/20/2021', end: '6/16/2021', description: 'Introduction to graduate-level academic expectations, research, and writing in the liberal arts.' },
   // Core Courses — sorted oldest to newest by start date
-  { code: 'ADM-624', name: 'Public Governance', credits: 4, type: 'core', start: '7/16/2026', end: '9/9/2026', section: 'O501', instructor: 'LoPorto, Johanna', location: 'Online', description: 'Best practices in public governance, transparency, participation, and accountability.' },
-  { code: 'ADM-530', name: 'Public and Nonprofit Administration', credits: 4, type: 'core', start: '9/10/2026', end: '11/4/2026', description: 'Principles and practices of managing public and nonprofit organizations; structure, accountability, and service delivery.' },
-  { code: 'HRM-635', name: 'Acquiring, Developing, and Leveraging Human Capital', credits: 4, type: 'core', start: '11/5/2026', end: '1/6/2027', description: 'Strategic human resource management in the public sector: recruitment, development, and retention of talent.' },
-  { code: 'ADM-560', name: 'Influence, Power, and Politics in Public Administration', credits: 4, type: 'core', start: '1/7/2027', end: '3/3/2027', description: 'How power dynamics and political forces shape public administration decisions and outcomes.' },
-  { code: 'ADM-620', name: 'Leading Public Organizations', credits: 4, type: 'core', start: '3/4/2027', end: '4/28/2027', description: 'Leadership practices and qualities necessary to lead public organizations effectively.' },
-  { code: 'ADM-626', name: 'Public Budgeting and Financial Management', credits: 4, type: 'core', start: '4/29/2027', end: '6/23/2027', description: 'Revenue and expenditure structure of the public sector, budget structure and administration.' },
-  { code: 'ADM-614', name: 'Economics for Public Administrators', credits: 4, type: 'core', start: '8/19/2027', end: '10/13/2027', description: 'Explores the role of government in the economy in the context of market failure and social equity.' },
-  { code: 'ADM-640', name: 'Program Evaluation', credits: 4, type: 'core', start: '10/14/2027', end: '12/8/2027', description: 'Capstone. Methods for evaluating the effectiveness of public programs and policies.' },
+  { code: 'ADM-624', name: 'Public Governance', credits: 4, type: 'core', start: '7/16/2026', end: '9/9/2026', section: 'O501', instructor: 'LoPorto, Johanna', location: 'Online', status: 'completed', grade: 'A', description: 'Best practices in public governance, transparency, participation, and accountability.' },
+  { code: 'ADM-530', name: 'Public and Nonprofit Administration', credits: 4, type: 'core', start: '9/10/2026', end: '11/4/2026', section: 'O500', instructor: 'Holmes, Shayla', location: 'Online', status: 'in progress', description: 'Principles and practices of managing public and nonprofit organizations; structure, accountability, and service delivery.' },
+  { code: 'HRM-635', name: 'Acquiring, Developing, and Leveraging Human Capital', credits: 4, type: 'core', start: '11/5/2026', end: '1/6/2027', section: 'O501', instructor: 'Gualco, David', location: 'Online', description: 'Strategic human resource management in the public sector: recruitment, development, and retention of talent.' },
+  { code: 'ADM-560', name: 'Influence, Power, and Politics in Public Administration', credits: 4, type: 'core', start: '1/7/2027', end: '3/3/2027', instructor: 'GCU Staff, Faculty', location: 'Online', description: 'How power dynamics and political forces shape public administration decisions and outcomes.' },
+  { code: 'ADM-620', name: 'Leading Public Organizations', credits: 4, type: 'core', start: '3/4/2027', end: '4/28/2027', instructor: 'GCU Staff, Faculty', location: 'Online', description: 'Leadership practices and qualities necessary to lead public organizations effectively.' },
+  { code: 'ADM-626', name: 'Public Budgeting and Financial Management', credits: 4, type: 'core', start: '4/29/2027', end: '6/23/2027', instructor: 'GCU Staff, Faculty', location: 'Online', description: 'Revenue and expenditure structure of the public sector, budget structure and administration.' },
+  { code: 'ADM-614', name: 'Economics for Public Administrators', credits: 4, type: 'core', start: '8/19/2027', end: '10/13/2027', instructor: 'GCU Staff, Faculty', location: 'Online', description: 'Explores the role of government in the economy in the context of market failure and social equity.' },
+  { code: 'ADM-640', name: 'Program Evaluation', credits: 4, type: 'core', start: '10/14/2027', end: '12/8/2027', instructor: 'GCU Staff, Faculty', location: 'Online', description: 'Capstone. Methods for evaluating the effectiveness of public programs and policies.' },
   // Government & Policy Emphasis
-  { code: 'ADM-634', name: 'Policy Studies', credits: 4, type: 'emphasis', start: '6/24/2027', end: '8/18/2027', description: 'How societal challenges become policy issues; leading theories in policy analysis and the policy-making process.' },
+  { code: 'ADM-634', name: 'Policy Studies', credits: 4, type: 'emphasis', start: '6/24/2027', end: '8/18/2027', instructor: 'GCU Staff, Faculty', location: 'Online', description: 'How societal challenges become policy issues; leading theories in policy analysis and the policy-making process.' },
 ]
 
 const STATUS_CYCLE = ['not started', 'in progress', 'completed']
@@ -41,10 +41,10 @@ function calcGPA(grades) {
 
 export function useGcuState() {
   const [statuses, setStatuses] = useState(() =>
-    Object.fromEntries(GCU_COURSES.map(c => [c.code, c.type === 'completed' ? 'completed' : 'not started']))
+    Object.fromEntries(GCU_COURSES.map(c => [c.code, c.status ?? (c.type === 'completed' ? 'completed' : 'not started')]))
   )
   const [grades, setGrades] = useState(() =>
-    Object.fromEntries(GCU_COURSES.map(c => [c.code, c.type === 'completed' ? 'A' : '']))
+    Object.fromEntries(GCU_COURSES.map(c => [c.code, c.grade ?? (c.type === 'completed' ? 'A' : '')]))
   )
   const [expanded, setExpanded] = useState(null)
 
